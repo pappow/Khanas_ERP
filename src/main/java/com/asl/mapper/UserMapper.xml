@@ -1,0 +1,13 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.UserMapper">
+
+	<select id="getAllUser" resultType="Users">
+		SELECT * FROM Users
+	</select>
+
+	<select id="findByUsername" resultType="Users">
+		SELECT * FROM Users
+	</select>
+
+</mapper>

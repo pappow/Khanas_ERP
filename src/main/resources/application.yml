@@ -26,7 +26,7 @@ spring:
     cache: false
   datasource: 
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost;databaseName=JUNKDB
+    url: jdbc:sqlserver://localhost;databaseName=ASLERP
     username: sa
     password: sql@s3rv3r
     tomcat:
