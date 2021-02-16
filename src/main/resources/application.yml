@@ -1,0 +1,55 @@
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: INFO
+    hibernate: 
+      SQL: DEBUG
+      type: DEBUG
+
+server:
+  servlet:
+    context-path: /asl-erp/
+    session: 
+      persistent: true
+  port: 8081
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  profiles: 
+    active: dev
+  application:
+    name: asl-erp
+  thymeleaf:
+    cache: false
+  datasource: 
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost;databaseName=JUNKDB
+    username: sa
+    password: sql@s3rv3r
+    tomcat:
+      max-wait: 20000
+      max-active: 50
+      max-idle: 20
+      min-idle: 15
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate: 
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        id:
+          new_generator_mappings: false
+  jackson:
+    serialization:
+      indent-output: true
+  banner:
+    location: banner.txt
+
+mybatis: 
+  typeAliasesPackage: com.asl.entity
