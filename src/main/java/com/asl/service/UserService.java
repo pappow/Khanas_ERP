@@ -13,7 +13,8 @@ import com.asl.entity.Users;
 @Component
 public interface UserService {
 
-	public Users save(Users users);
+	public long save(Users user);
+	public long update(Users user);
 	public List<Users> findByUsernameOnly(String username);
 	public List<Users> findBByUsernameAndPassword(String username, String password);
 	public Users findBByUsernameAndBusinessId(String username, String businessId);

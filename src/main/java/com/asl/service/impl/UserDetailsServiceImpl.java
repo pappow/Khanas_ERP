@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Users;
-import com.asl.entity.Xusers;
 import com.asl.model.MyUserDetails;
 import com.asl.service.UserService;
 
@@ -19,7 +18,7 @@ import com.asl.service.UserService;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	//@Autowired private UserService userService;
+	@Autowired private UserService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

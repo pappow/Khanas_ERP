@@ -52,4 +52,16 @@ spring:
     location: banner.txt
 
 mybatis: 
+#  mapper-locations: classpath*:**/mapper/*.xml
   typeAliasesPackage: com.asl.entity
+
+JNDIName: jdbcTemplate
+default: 
+  allow-system-admin: N
+  site-title: ASL <span class="title-divider">POS Report</span>
+  logo-name: asl.png
+  copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
+  im-ex-path: D:/ASL/importexport
+  logging-path: D:/ASL/logs 
+  report: 
+    template-path: D:/ASL/cr-reports

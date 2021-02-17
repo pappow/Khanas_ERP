@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -27,10 +28,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
 	}
 
-//	@Bean
-//	public LogoutSuccessHandler logoutSuccessHandler() {
-//		return new CustomLogoutSuccessHandler();
-//	}
+	@Bean
+	public LogoutSuccessHandler logoutSuccessHandler() {
+		return new CustomLogoutSuccessHandler();
+	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers(
 					"/",
+					"/mapper/**",
 					"/assets/**",
 					"/business",
 					"/login/fakelogin",
@@ -64,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.deleteCookies("JSESSIONID")
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login?logout")
-				//.logoutSuccessHandler(logoutSuccessHandler())
+				.logoutSuccessHandler(logoutSuccessHandler())
 				.permitAll()
 			.and()
 				.exceptionHandling()

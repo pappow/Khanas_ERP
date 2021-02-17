@@ -1,9 +1,11 @@
 package com.asl.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.asl.entity.DataList;
 import com.asl.entity.ListHead;
 
 /**
@@ -12,6 +14,20 @@ import com.asl.entity.ListHead;
  */
 @Mapper
 public interface ListMapper {
+
+	public long saveListHead(ListHead listHead);
+	public long saveDataList(DataList dataList);
+
+	public long updateListHead(ListHead listHead);
+	public long updateDataList(DataList dataList);
+
+	public ListHead findListHeadById(Long listHeadId, String businessId);
+	public DataList findDataListById(Long dataList, String businessId);
+
+	public ListHead findListHeadByListCode(String listCode, String businessId);
+	public List<DataList> findDataListByListCode(String listCode, String businessId);
+
+	public List<DataList> getList(String listCode, String businessId, Map<String, String> listValues);
 
 	public List<ListHead> getAllListHead();
 }

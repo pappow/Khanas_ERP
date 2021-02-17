@@ -1,0 +1,40 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.UserAuditRecordMapper">
+
+	<insert id="save" 
+			parameterType="UserAuditRecord" 
+			useGeneratedKeys="true"
+			keyColumn="recordId"
+			keyProperty="recordId">
+		INSERT INTO UserAuditRecord
+		(
+			userId,
+			businessId,
+			unAuthorizedAccessMessage,
+			ipAddress,
+			loginDate,
+			logoutDate,
+			recordDate
+		)
+		VALUES
+		(
+			#{userId},
+			#{businessId},
+			#{unAuthorizedAccessMessage},
+			#{ipAddress},
+			#{loginDate, jdbcType = TIMESTAMP},
+			#{logoutDate, jdbcType = TIMESTAMP},
+			#{recordDate, jdbcType = TIMESTAMP}
+		)
+	</insert>
+
+	<select id="getAll" resultType="UserAuditRecord">
+		SELECT * FROM UserAuditRecord WHERE businessId=#{businessId}
+	</select>
+
+	<select id="findByUserId" resultType="UserAuditRecord">
+		SELECT * FROM UserAuditRecord WHERE userId=#{userId} AND businessId=#{businessId}
+	</select>
+
+</mapper>

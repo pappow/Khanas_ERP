@@ -2,12 +2,125 @@
 
 <mapper namespace="com.asl.mapper.UserMapper">
 
+	<insert id="save" 
+			parameterType="Users" 
+			useGeneratedKeys="false"
+			keyColumn="username"
+			keyProperty="username">
+		INSERT INTO Users
+		(
+			username,
+			pswd,
+			firstName,
+			lastName,
+			systemAdmin,
+			admin,
+			appUser,
+			driver,
+			subscriber,
+			role1,
+			role2,
+			role3,
+			role4,
+			role5,
+			role6,
+			role7,
+			role8,
+			role9,
+			role10,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			#{username},
+			#{pswd},
+			#{firstName},
+			#{lastName},
+			#{systemAdmin},
+			#{admin},
+			#{appUser},
+			#{driver},
+			#{subscriber},
+			#{role1},
+			#{role2},
+			#{role3},
+			#{role4},
+			#{role5},
+			#{role6},
+			#{role7},
+			#{role8},
+			#{role9},
+			#{role10},
+			#{businessId},
+			#{createdBy},
+			#{lastModifiedBy},
+			#{createdByIP},
+			#{lastModifiedByIP},
+			#{status},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="Users" 
+			useGeneratedKeys="false"
+			keyColumn="username"
+			keyProperty="username">
+		UPDATE 
+			Users 
+		SET
+			pswd=#{pswd},
+			firstName=#{firstName},
+			lastName=#{lastName},
+			systemAdmin=#{systemAdmin},
+			admin=#{admin},
+			appUser=#{appUser},
+			driver=#{driver},
+			subscriber=#{subscriber},
+			role1=#{role1},
+			role2=#{role2},
+			role3=#{role3},
+			role4=#{role4},
+			role5=#{role5},
+			role6=#{role6},
+			role7=#{role7},
+			role8=#{role8},
+			role9=#{role9},
+			role10=#{role10},
+			businessId=#{businessId},
+			createdBy=#{createdBy},
+			lastModifiedBy=#{lastModifiedBy},
+			createdByIP=#{createdByIP},
+			lastModifiedByIP=#{lastModifiedByIP},
+			status=#{status},
+			createDate=#{createDate},
+			updateDate=#{updateDate}
+		WHERE
+			username=#{username}
+	</update>
+
 	<select id="getAllUser" resultType="Users">
-		SELECT * FROM Users
+		SELECT * FROM Users WHERE businessId=#{businessId}
 	</select>
 
 	<select id="findByUsername" resultType="Users">
-		SELECT * FROM Users
+		SELECT * FROM Users WHERE username=#{username}
+	</select>
+
+	<select id="findByUsernameAndBusinessId" resultType="Users">
+		SELECT * FROM Users WHERE username=#{username} AND businessId=#{businessId}
+	</select>
+
+	<select id="findByUsernameAndPassword" resultType="Users">
+		SELECT * FROM Users WHERE username=#{username} AND pswd=#{password}
 	</select>
 
 </mapper>

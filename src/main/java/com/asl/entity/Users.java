@@ -42,63 +42,63 @@ public class Users extends AbstractModel<String> {
 	@Column(name = "lastName")
 	private String lastName;
 
-	@Column(name = "systemAdmin")
+	@Column(name = "systemAdmin", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean systemAdmin;
 
-	@Column(name = "admin")
+	@Column(name = "admin", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean admin;
 
-	@Column(name = "appUser")
+	@Column(name = "appUser", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean appUser;
 
-	@Column(name = "driver")
+	@Column(name = "driver", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean driver;
 
-	@Column(name = "subscriber")
+	@Column(name = "subscriber", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean subscriber;
 
-	@Column(name = "role1")
+	@Column(name = "role1", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role1;
 
-	@Column(name = "role2")
+	@Column(name = "role2", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role2;
 
-	@Column(name = "role3")
+	@Column(name = "role3", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role3;
 
-	@Column(name = "role4")
+	@Column(name = "role4", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role4;
 
-	@Column(name = "role5")
+	@Column(name = "role5", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role5;
 
-	@Column(name = "role6")
+	@Column(name = "role6", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role6;
 
-	@Column(name = "role7")
+	@Column(name = "role7", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role7;
 
-	@Column(name = "role8")
+	@Column(name = "role8", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role8;
 
-	@Column(name = "role9")
+	@Column(name = "role9", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role9;
 
-	@Column(name = "role10")
+	@Column(name = "role10", length = 1)
 	@Convert(converter = BooleanToYesNo.class)
 	private Boolean role10;
 
