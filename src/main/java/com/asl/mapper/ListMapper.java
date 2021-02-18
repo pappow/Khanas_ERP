@@ -21,13 +21,13 @@ public interface ListMapper {
 	public long updateListHead(ListHead listHead);
 	public long updateDataList(DataList dataList);
 
-	public ListHead findListHeadById(Long listHeadId, String businessId);
-	public DataList findDataListById(Long dataList, String businessId);
+	public ListHead findListHeadById(Long listHeadId);
+	public DataList findDataListById(Long listId);
 
 	public ListHead findListHeadByListCode(String listCode, String businessId);
 	public List<DataList> findDataListByListCode(String listCode, String businessId);
 
-	public List<DataList> getList(String listCode, String businessId, Map<String, String> listValues);
+	public List<DataList> getList(String listCode, String businessId, Map<String, String> params);
 
-	public List<ListHead> getAllListHead();
+	public List<ListHead> getAllListHead(String businessId);
 }

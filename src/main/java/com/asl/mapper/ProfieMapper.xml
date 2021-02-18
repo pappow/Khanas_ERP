@@ -1,0 +1,82 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileMapper">
+
+	<insert id="save" 
+			parameterType="Profile" 
+			useGeneratedKeys="true"
+			keyColumn="profileId"
+			keyProperty="profileId">
+		INSERT INTO Profile
+		(
+			profileCode,
+			description,
+			profileType,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			#{profileCode},
+			#{description},
+			#{profileType},
+			#{businessId},
+			#{createdBy},
+			#{lastModifiedBy},
+			#{createdByIP},
+			#{lastModifiedByIP},
+			#{status},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="Profile" 
+			useGeneratedKeys="true"
+			keyColumn="profileId"
+			keyProperty="profileId">
+		UPDATE Profile
+		SET
+			profileCode=#{profileCode},
+			description=#{description},
+			profileType=#{profileType},
+			businessId=#{businessId},
+			createdBy=#{createdBy},
+			lastModifiedBy=#{lastModifiedBy},
+			createdByIP=#{createdByIP},
+			lastModifiedByIP=#{lastModifiedByIP},
+			status=#{status},
+			createDate=#{createDate},
+			updateDate=#{updateDate}
+		WHERE
+			profileId=#{profileId}
+	</update>
+
+	<select id="findByProfileId" resultType="Profile">
+		SELECT * FROM Profile WHERE profileId=#{profileId}
+	</select>
+
+	<select id="findByProfileCodeAndProfileType" resultType="Profile">
+		SELECT * FROM Profile WHERE profileCode=#{profileCode} AND profileType=#{profileType} AND businessId=#{businessId}
+	</select>
+
+	<select id="getAllProfiles" resultType="Profile">
+		SELECT 
+			* 
+		FROM 
+			Profile 
+		WHERE 
+			businessId=#{businessId}
+			<if test="profileType != null and profileType != ''">
+				AND profileType=#{profileType}
+			</if>
+	</select>
+
+</mapper>

@@ -230,8 +230,83 @@
 			listId=#{listId}
 	</update>
 
+	<select id="findListHeadById" resultType="ListHead">
+		SELECT * FROM ListHead WHERE listHeadId=#{listHeadId}
+	</select>
+
+	<select id="findDataListById" resultType="DataList">
+		SELECT * FROM DataList WHERE listId=#{listId}
+	</select>
+
+	<select id="findListHeadByListCode" resultType="ListHead">
+		SELECT * FROM ListHead WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="findDataListByListCode" resultType="DataList">
+		SELECT * FROM DataList WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="getList" resultType="DataList">
+		SELECT 
+			* 
+		FROM 
+			DataList 
+		WHERE 
+			listCode=#{listCode} 
+			AND businessId=#{businessId}
+			AND status='L'
+			<if test="params.listValue1 != null and paramslistValue1 != ''">
+				AND listValue1=#{params.listValue1}
+			</if>
+			<if test="params.listValue2 != null and params.listValue2 != ''">
+				AND listValue2=#{params.listValue2}
+			</if>
+			<if test="params.listValue3 != null and params.listValue3 != ''">
+				AND listValue3=#{params.listValue3}
+			</if>
+			<if test="params.listValue4 != null and params.listValue4 != ''">
+				AND listValue4=#{params.listValue4}
+			</if>
+			<if test="params.listValue5 != null and params.listValue5 != ''">
+				AND listValue5=#{params.listValue5}
+			</if>
+			<if test="params.listValue6 != null and params.listValue6 != ''">
+				AND listValue6=#{params.listValue6}
+			</if>
+			<if test="params.listValue7 != null and params.listValue7 != ''">
+				AND listValue7=#{params.listValue7}
+			</if>
+			<if test="params.listValue8 != null and params.listValue8 != ''">
+				AND listValue8=#{params.listValue8}
+			</if>
+			<if test="params.listValue9 != null and params.listValue9 != ''">
+				AND listValue9=#{params.listValue9}
+			</if>
+			<if test="params.listValue10 != null and params.listValue10 != ''">
+				AND listValue10=#{params.listValue10}
+			</if>
+			<if test="params.listValue11 != null and params.listValue11 != ''">
+				AND listValue11=#{params.listValue11}
+			</if>
+			<if test="params.listValue12 != null and params.listValue12 != ''">
+				AND listValue12=#{params.listValue12}
+			</if>
+			<if test="params.listValue13 != null and params.listValue13 != ''">
+				AND listValue13=#{params.listValue13}
+			</if>
+			<if test="params.listValue14 != null and params.listValue14 != ''">
+				AND listValue14=#{params.listValue14}
+			</if>
+			<if test="params.listValue15 != null and params.listValue15 != ''">
+				AND listValue15=#{params.listValue15}
+			</if>
+			<if test="params.listValue16 != null and params.listValue16 != ''">
+				AND listValue16=#{params.listValue16}
+			</if>
+	</select>
+
 	<select id="getAllListHead" resultType="ListHead">
-		select * from lh
+		SELECT * FROM ListHead WHERE businessId=#{businessId}
 	</select>
 
 </mapper>

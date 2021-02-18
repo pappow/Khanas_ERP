@@ -1,0 +1,82 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileAllocationMapper">
+
+	<insert id="save" 
+			parameterType="ProfileAllocation" 
+			useGeneratedKeys="true"
+			keyColumn="paid"
+			keyProperty="paid">
+		INSERT INTO ProfileAllocation
+		(
+			username,
+			reportProfileId,
+			menuProfileId,
+			userProfileId,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			#{username},
+			#{reportProfileId},
+			#{menuProfileId},
+			#{userProfileId},
+			#{businessId},
+			#{createdBy},
+			#{lastModifiedBy},
+			#{createdByIP},
+			#{lastModifiedByIP},
+			#{status},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="ProfileAllocation" 
+			useGeneratedKeys="true"
+			keyColumn="paid"
+			keyProperty="paid">
+		UPDATE
+			ProfileAllocation
+		SET
+			username=#{username},
+			reportProfileId=#{reportProfileId},
+			menuProfileId=#{menuProfileId},
+			userProfileId=#{userProfileId},
+			businessId=#{businessId},
+			createdBy=#{createdBy},
+			lastModifiedBy=#{lastModifiedBy},
+			createdByIP=#{createdByIP},
+			lastModifiedByIP=#{lastModifiedByIP},
+			status=#{status},
+			createDate=#{createDate},
+			updateDate=#{updateDate}
+		WHERE
+			paid=#{paid}
+	</update>
+
+	<select id="findById" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE profileAllocationId=#{profileAllocationId}
+	</select>
+
+	<select id="getAllProfileAllocation" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE businessId=#{businessId}
+	</select>
+
+	<select id="findByUsername" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE username=#{username} AND businessId=#{businessId}
+	</select>
+
+	<select id="findByUsernameAndPassword" resultType="Users">
+		SELECT * FROM Users WHERE username=#{username} AND pswd=#{password}
+	</select>
+
+</mapper>

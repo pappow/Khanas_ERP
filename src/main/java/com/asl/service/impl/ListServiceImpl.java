@@ -84,13 +84,13 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	@Override
 	public ListHead findListHeadById(Long listHeadId) {
 		if(listHeadId == null) return null;
-		return listMapper.findListHeadById(listHeadId, sessionManager.getBusinessId());
+		return listMapper.findListHeadById(listHeadId);
 	}
 
 	@Override
 	public DataList findDataListById(Long dataListId) {
 		if(dataListId == null) return null;
-		return listMapper.findDataListById(dataListId, sessionManager.getBusinessId());
+		return listMapper.findDataListById(dataListId);
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 
 	@Override
 	public List<ListHead> getAllListHead() {
-		List<ListHead> list = listMapper.getAllListHead();
+		List<ListHead> list = listMapper.getAllListHead(sessionManager.getBusinessId());
 		if(list == null) return Collections.emptyList();
 		return list;
 	}

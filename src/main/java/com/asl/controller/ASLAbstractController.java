@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.asl.config.AppConfig;
+import com.asl.model.MenuProfile;
 import com.asl.model.ResponseHelper;
+import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
+import com.asl.service.ProfileService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,8 +35,8 @@ public class ASLAbstractController {
 	@Autowired protected ASLSessionManager sessionManager;
 	@Autowired protected ResponseHelper responseHelper;
 	@Autowired protected Validator validator;
-//	@Autowired protected ModelValidator modelValidator;
-//	@Autowired protected ProfileService profileService;
+	@Autowired protected ModelValidator modelValidator;
+	@Autowired protected ProfileService profileService;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {
@@ -54,12 +57,12 @@ public class ASLAbstractController {
 //	public ReportProfile getLoggedInUserReportProfile() {
 //		return profileService.getLoggedInUserReportProfile();
 //	}
-//
-//	@ModelAttribute("menuProfile")
-//	public MenuProfile getLoggedInUserMenuProfile() {
-//		return profileService.getLoggedInUserMenuProfile();
-//	}
-//
+
+	@ModelAttribute("menuProfile")
+	public MenuProfile getLoggedInUserMenuProfile() {
+		return profileService.getLoggedInUserMenuProfile();
+	}
+
 //	protected ReportFieldService getReportFieldService(ReportMenu reportMenu) {
 //		if(reportMenu == null) return null;
 //		try {
@@ -69,7 +72,7 @@ public class ASLAbstractController {
 //			return null;
 //		}
 //	}
-//
+
 //	protected ImportExportService getImportExportService(String module) {
 //		if(StringUtils.isBlank(module)) return null;
 //		try {

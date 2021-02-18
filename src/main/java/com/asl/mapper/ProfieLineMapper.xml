@@ -1,0 +1,85 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileLineMapper">
+
+	<insert id="save" 
+			parameterType="ProfileLine" 
+			useGeneratedKeys="true"
+			keyColumn="profileLineId"
+			keyProperty="profileLineId">
+		INSERT INTO ProfileLine
+		(
+			profileId,
+			profileCode,
+			profileType,
+			enabled,
+			display,
+			required,
+			screenPrompt,
+			seqn,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			#{profileId},
+			#{profileCode},
+			#{profileType},
+			#{enabled},
+			#{display},
+			#{required},
+			#{screenPrompt},
+			#{seqn},
+			#{businessId},
+			#{createdBy},
+			#{lastModifiedBy},
+			#{createdByIP},
+			#{lastModifiedByIP},
+			#{status},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="ProfileLine" 
+			useGeneratedKeys="true"
+			keyColumn="profileLineId"
+			keyProperty="profileLineId">
+		UPDATE ProfileLine
+		SET
+			profileId=#{profileId}
+			profileCode=#{profileCode},
+			profileType=#{profileType},
+			enabled=#{enabled},
+			display=#{display},
+			required=#{required},
+			screenPrompt=#{screenPrompt},
+			seqn=#{seqn},
+			businessId=#{businessId},
+			createdBy=#{createdBy},
+			lastModifiedBy=#{lastModifiedBy},
+			createdByIP=#{createdByIP},
+			lastModifiedByIP=#{lastModifiedByIP},
+			status=#{status},
+			createDate=#{createDate},
+			updateDate=#{updateDate}
+		WHERE
+			profileLineId=#{profileLineId}
+	</update>
+
+	<select id="findById" resultType="ProfileLine">
+		SELECT * FROM ProfileLine WHERE profileLineId=#{profileLineId}
+	</select>
+
+	<select id="getAllByProfileIdAndProfileType" resultType="ProfileLine">
+		SELECT * FROM ProfileLine WHERE profileId=#{profileId} AND profileType=#{profileType} AND businessId=#{businessId}
+	</select>
+
+</mapper>
