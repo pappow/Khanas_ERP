@@ -83,11 +83,11 @@
 				<div class="row">
 					<div class="col-md-12 content-area">
 						<!-- Section data maintenance -->
-						<section id="data-maintenance" style="margin-top: 10px;">
+						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1><i class="fas fa-chevron-down"></i> Choose Your Organization</h1>
+								<h1>Choose Your Organization</h1>
 							</div>
-							<div class="section-body togglebox">
+							<div class="section-body">
 								<div th:if="${param.error}" style="color: red; margin-top: 20px !important; font-size: 20px; text-align: center; margin-top: -10px;">Please don't tamper with data. This incident will be reported to the System Admin</div>
 
 								<div th:each="business : ${businesses}" class="business-box">

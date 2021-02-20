@@ -19,6 +19,12 @@ h1.brand-name{
 	padding: 20px 10px;
 }
 
+a.btn.nodisplay{
+	display: none !important;
+}
+.form-action-button{
+	padding: 0px 0px 10px 0px; text-align: center;
+}
 
 /*
 === Nav bar
@@ -177,7 +183,7 @@ input.file-input-control{
     padding: 0px;
     font-size: 10px;
 }
-.sorting_asc:after, .sorting:after{
+.sorting_asc:after, .sorting:after, .sorting_desc:after{
 	line-height: 12px;
 }
 

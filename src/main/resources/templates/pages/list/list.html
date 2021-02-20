@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Coders Knowledge</title>
+		<title>List Maintenance</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -29,15 +29,6 @@
 										<li class="active"><a th:href="@{/system/list}">List</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
-									<ul class="nav navbar-nav navbar-right navbar-action-buttons">
-										<li th:if="${not #strings.isEmpty(listHead.listHeadId)}" class="add-btn editmode"><a th:href="@{/system/list}">Add</a></li>
-										<li th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.status.description == 'Live'}" class="update-btn editmode"><a href="#">Update</a></li>
-										<li th:classappend="${not #strings.isEmpty(listHead.listHeadId) ? 'nodisplay' : ''}" class="confirm-btn viewmode"><a href="#">Confirm</a></li>
-										<li th:classappend="${not #strings.isEmpty(listHead.listHeadId) ? 'nodisplay' : ''}" class="cancel-btn viewmode"><a href="#">Cancel</a></li>
-										<li th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.status.description == 'Live'}" class="archive-btn editmode"><a th:href="@{/system/list/archive/} + ${listHead.listHeadId}" class="archive-btn-link">Archive</a></li>
-										<li th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.status.description == 'Deleted'}" class="restore-btn editmode"><a th:href="@{/system/list/restore/}  + ${listHead.listHeadId}" class="restore-btn-link">Restore</a></li>
-										<li th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId) and listHead.status.description == 'Live'}" class="copy-btn editmode"><a th:href="@{/system/list/}  + ${listHead.listHeadId} + '/copy'">Copy</a></li>
-									</ul>
 								</div>
 							</div>
 						</div>
@@ -59,15 +50,18 @@
 									<div class="section-header sectionbartoggle">
 										<h1>List Head</h1>
 									</div>
-									<div class="btn-group btn-group-justified" style="margin: 10px 0 10px 0">
-										<a href="#" class="btn btn-sm btn-default">Confirm</a>
-										<a href="#" class="btn btn-sm btn-default">Cancel</a>
-										<a href="#" class="btn btn-sm btn-default">Update</a>
-										<a href="#" class="btn btn-sm btn-default">Archive</a>
-										<a href="#" class="btn btn-sm btn-default">Top</a>
-										<a href="#" class="btn btn-sm btn-default">Previous</a>
-										<a href="#" class="btn btn-sm btn-default">Next</a>
-										<a href="#" class="btn btn-sm btn-default">Bottom</a>
+									<div class="form-action-button">
+										<a th:href="@{/system/list}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:if="${#strings.isEmpty(listHead.listHeadId)}" th:href="@{/system/list}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${not #strings.isEmpty(listHead.listHeadId)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.status.description == 'Live'}" th:href="@{/system/list/archive/} + ${listHead.listHeadId}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.status.description == 'Deleted'}" th:href="@{/system/list/restore/} + ${listHead.listHeadId}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId) and listHead.status.description == 'Live'}" th:href="@{/system/list/}  + ${listHead.listHeadId} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
+										<!-- Form Pagination -->
+										<a th:href="@{/formpaging/jump/top?table=ListHead&column=listHeadId&redirectUrl=/system/list}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
+										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(listHead.listHeadId) ? 'start' : listHead.listHeadId} + '?table=ListHead&column=listHeadId&redirectUrl=/system/list'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
+										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(listHead.listHeadId) ? 'start' : listHead.listHeadId} + '?table=ListHead&column=listHeadId&redirectUrl=/system/list'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
+										<a th:href="@{/formpaging/jump/bottom?table=ListHead&column=listHeadId&redirectUrl=/system/list}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/system/list/save}" th:object="${listHead}" method="post">
@@ -254,8 +248,8 @@
 											<th th:if="${not #strings.isEmpty(listHead.prompt14)}" th:text="${listHead.prompt14}">id</th>
 											<th th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${listHead.prompt15}">id</th>
 											<th th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${listHead.prompt16}">id</th>
-											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/new/show', data-target-modal='listmodal'" disabled="disabled"><i class="fas fa-plus"></i></button>
+											<th data-nosort="Y" style="text-align: right;" th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId)}">
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/new/show', data-target-modal='listmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -278,8 +272,8 @@
 											<td th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${list.listValue15}">id</td>
 											<td th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${list.listValue16}">id</td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/show', data-target-modal='listmodal'" disabled="disabled"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/archive'" disabled="disabled"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/show', data-target-modal='listmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/archive'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

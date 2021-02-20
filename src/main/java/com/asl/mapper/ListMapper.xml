@@ -306,7 +306,7 @@
 	</select>
 
 	<select id="getAllListHead" resultType="ListHead">
-		SELECT * FROM ListHead WHERE businessId=#{businessId}
+		SELECT * FROM ListHead WHERE businessId=#{businessId} ORDER BY listHeadid ASC
 	</select>
 
 </mapper>

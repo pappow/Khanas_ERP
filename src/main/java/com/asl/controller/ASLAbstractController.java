@@ -12,6 +12,7 @@ import com.asl.model.MenuProfile;
 import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
+import com.asl.service.FormPagingService;
 import com.asl.service.ProfileService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class ASLAbstractController {
 	@Autowired protected Validator validator;
 	@Autowired protected ModelValidator modelValidator;
 	@Autowired protected ProfileService profileService;
+	@Autowired protected FormPagingService formPagingService;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {

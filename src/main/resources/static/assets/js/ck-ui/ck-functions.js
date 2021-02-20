@@ -96,7 +96,9 @@ function triggerUpdateButton(){
 	console.log('%cTrigger update button...', 'color: green');
 
 	$('li.editmode').addClass('nodisplay');
+	$('a.btn.editmode').addClass('nodisplay');
 	$('li.viewmode').removeClass('nodisplay');
+	$('a.btn.viewmode').removeClass('nodisplay');
 	$('#mainform .form-control, #mainform .form-control-input2').removeAttr('disabled');
 
 	if($('table.datatable').length > 0){
@@ -116,7 +118,9 @@ function triggerUpdateButtonSpecific(tableId){
 	console.log('%cTrigger update button...', 'color: green');
 
 	$('li.editmode').addClass('nodisplay');
+	$('a.btn.editmode').addClass('nodisplay');
 	$('li.viewmode').removeClass('nodisplay');
+	$('a.btn.viewmode').removeClass('nodisplay');
 	$('#mainform .form-control, #mainform .form-control-input2').removeAttr('disabled');
 
 	if($('table#' + tableId).length > 0){

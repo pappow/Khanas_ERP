@@ -1,0 +1,29 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.FormPagingMapper">
+
+	<select id="getSeilingRecord" resultType="Long">
+		SELECT 
+			TOP 1 ${columnName}
+		FROM 
+			${tableName} 
+		ORDER BY ${columnName} ${direction}
+	</select>
+
+	<select id="getExpectedRecord" resultType="Long">
+		SELECT 
+			TOP 1 ${columnName}
+		FROM 
+			${tableName} 
+		WHERE
+		<if test="direction == 'next'">
+			${columnName} &gt; #{currentId}
+			ORDER BY ${columnName} ASC
+		</if>
+		<if test="direction == 'prev'">
+			${columnName} &lt; #{currentId}
+			ORDER BY ${columnName} DESC
+		</if>
+	</select>
+
+</mapper>

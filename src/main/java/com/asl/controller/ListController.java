@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.DataList;
@@ -337,5 +338,4 @@ public class ListController extends ASLAbstractController {
 		ol.setPrompt16(nl.getPrompt16());
 		ol.setNotes(nl.getNotes());
 	}
-	
 }

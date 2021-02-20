@@ -64,9 +64,16 @@ ck.ui.config.editmode = function(){
 	$('ul.navbar-action-buttons').find('li').off('click').on('click', function(e){
 		e.stopPropagation();
 	});
+	$('div.form-action-button').find('a.btn').off('click').on('click', function(e){
+		e.stopPropagation();
+	});
 
 	var editmodetriggered = false;
 	if($('li.add-btn.editmode').length > 0 && !editmodetriggered){
+		editmodetriggered = true;
+		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
+	}
+	if($('a.btn.add-btn.editmode').length > 0 && !editmodetriggered){
 		editmodetriggered = true;
 		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
 	}
@@ -74,11 +81,23 @@ ck.ui.config.editmode = function(){
 		editmodetriggered = true;
 		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
 	}
+	if($('a.btn.update-btn.editmode').length > 0 && !editmodetriggered){
+		editmodetriggered = true;
+		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
+	}
 	if($('li.archive-btn.editmode').length > 0 && !editmodetriggered){
 		editmodetriggered = true;
 		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
 	}
+	if($('a.btn.archive-btn.editmode').length > 0 && !editmodetriggered){
+		editmodetriggered = true;
+		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
+	}
 	if($('li.copy-btn.editmode').length > 0 && !editmodetriggered){
+		editmodetriggered = true;
+		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
+	}
+	if($('a.btn.copy-btn.editmode').length > 0 && !editmodetriggered){
 		editmodetriggered = true;
 		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
 	}
@@ -91,10 +110,22 @@ ck.ui.config.editmode = function(){
 			triggerUpdateButton();
 		});
 	}
+	if($('a.btn.update-btn').length > 0){
+		$('a.btn.update-btn').off('click').on('click', function(e){
+			e.preventDefault();
+			submitMainForm();
+		});
+	}
 
 	// Bind cancel button event if available
 	if($('li.cancel-btn.viewmode').length > 0){
 		$('li.cancel-btn.viewmode').off('click').on('click', function(e){
+			e.preventDefault();
+			triggerCancelButton();
+		});
+	}
+	if($('a.btn.cancel-btn.viewmode').length > 0){
+		$('a.btn.cancel-btn.viewmode').off('click').on('click', function(e){
 			e.preventDefault();
 			triggerCancelButton();
 		});
@@ -107,6 +138,12 @@ ck.ui.config.editmode = function(){
 			submitMainForm();
 		});
 	}
+	if($('a.btn.confirm-btn').length > 0){
+		$('a.btn.confirm-btn').off('click').on('click', function(e){
+			e.preventDefault();
+			submitMainForm();
+		});
+	}
 
 	// Bind archive button event
 	if($('li.archive-btn.editmode').length > 0){
@@ -115,10 +152,22 @@ ck.ui.config.editmode = function(){
 			submitMainForm($(this).attr('href'));
 		});
 	}
+	if($('a.btn.archive-btn-link').length > 0){
+		$('a.btn.archive-btn-link').off('click').on('click', function(e){
+			e.preventDefault();
+			submitMainForm($(this).attr('href'));
+		});
+	}
 
 	// Bind archive button event
 	if($('li.restore-btn.editmode').length > 0){
 		$('a.restore-btn-link').off('click').on('click', function(e){
+			e.preventDefault();
+			submitMainForm($(this).attr('href'));
+		});
+	}
+	if($('a.btn.restore-btn-link').length > 0){
+		$('a.btn.restore-btn-link').off('click').on('click', function(e){
 			e.preventDefault();
 			submitMainForm($(this).attr('href'));
 		});
