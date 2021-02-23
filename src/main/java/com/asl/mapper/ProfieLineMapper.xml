@@ -3,12 +3,10 @@
 <mapper namespace="com.asl.mapper.ProfileLineMapper">
 
 	<insert id="save" 
-			parameterType="ProfileLine" 
-			useGeneratedKeys="true"
-			keyColumn="profileLineId"
-			keyProperty="profileLineId">
+			parameterType="ProfileLine">
 		INSERT INTO ProfileLine
-		(
+		(	
+			profileLineId,
 			profileId,
 			profileCode,
 			profileType,
@@ -28,48 +26,46 @@
 		)
 		VALUES
 		(
-			#{profileId},
-			#{profileCode},
-			#{profileType},
-			#{enabled},
-			#{display},
-			#{required},
-			#{screenPrompt},
-			#{seqn},
-			#{businessId},
-			#{createdBy},
-			#{lastModifiedBy},
-			#{createdByIP},
-			#{lastModifiedByIP},
-			#{status},
-			#{createDate},
-			#{updateDate}
+			PROFILE_LINE_SEQ.nextval,
+			#{profileId, jdbcType=NUMBER},
+			#{profileCode, jdbcType=VARCHAR},
+			#{profileType, jdbcType=VARCHAR},
+			#{enabled, jdbcType=NUMBER},
+			#{display, jdbcType=NUMBER},
+			#{required, jdbcType=NUMBER},
+			#{screenPrompt, jdbcType=VARCHAR},
+			#{seqn, jdbcType=NUMBER},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=DATE},
+			#{updateDate, jdbcType=DATE}
 		)
 	</insert>
 
 	<update id="update" 
-			parameterType="ProfileLine" 
-			useGeneratedKeys="true"
-			keyColumn="profileLineId"
-			keyProperty="profileLineId">
+			parameterType="ProfileLine">
 		UPDATE ProfileLine
 		SET
-			profileId=#{profileId}
-			profileCode=#{profileCode},
-			profileType=#{profileType},
-			enabled=#{enabled},
-			display=#{display},
-			required=#{required},
-			screenPrompt=#{screenPrompt},
-			seqn=#{seqn},
-			businessId=#{businessId},
-			createdBy=#{createdBy},
-			lastModifiedBy=#{lastModifiedBy},
-			createdByIP=#{createdByIP},
-			lastModifiedByIP=#{lastModifiedByIP},
-			status=#{status},
-			createDate=#{createDate},
-			updateDate=#{updateDate}
+			profileId=#{profileId, jdbcType=NUMBER}
+			profileCode=#{profileCode, jdbcType=VARCHAR},
+			profileType=#{profileType, jdbcType=VARCHAR},
+			enabled=#{enabled, jdbcType=NUMBER},
+			display=#{display, jdbcType=NUMBER},
+			required=#{required, jdbcType=NUMBER},
+			screenPrompt=#{screenPrompt, jdbcType=VARCHAR},
+			seqn=#{seqn, jdbcType=NUMBER},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=DATE},
+			updateDate=#{updateDate, jdbcType=DATE}
 		WHERE
 			profileLineId=#{profileLineId}
 	</update>

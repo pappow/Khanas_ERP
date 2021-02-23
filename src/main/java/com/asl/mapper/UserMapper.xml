@@ -3,10 +3,7 @@
 <mapper namespace="com.asl.mapper.UserMapper">
 
 	<insert id="save" 
-			parameterType="Users" 
-			useGeneratedKeys="false"
-			keyColumn="username"
-			keyProperty="username">
+			parameterType="Users">
 		INSERT INTO Users
 		(
 			username,
@@ -70,10 +67,7 @@
 	</insert>
 
 	<update id="update" 
-			parameterType="Users" 
-			useGeneratedKeys="false"
-			keyColumn="username"
-			keyProperty="username">
+			parameterType="Users">
 		UPDATE 
 			Users 
 		SET

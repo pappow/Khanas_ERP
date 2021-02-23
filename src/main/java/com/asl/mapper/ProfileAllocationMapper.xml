@@ -23,18 +23,18 @@
 		VALUES
 		(
 			PROFILE_ALLOCATION_SEQ.nextval,
-			#{username},
-			#{reportProfileId},
-			#{menuProfileId},
-			#{userProfileId},
-			#{businessId},
-			#{createdBy},
-			#{lastModifiedBy},
-			#{createdByIP},
-			#{lastModifiedByIP},
-			#{status},
-			#{createDate},
-			#{updateDate}
+			#{username, jdbcType=VARCHAR},
+			#{reportProfileId, jdbcType=NUMBER},
+			#{menuProfileId, jdbcType=NUMBER},
+			#{userProfileId, jdbcType=NUMBER},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=DATE},
+			#{updateDate, jdbcType=DATE}
 		)
 	</insert>
 
@@ -43,18 +43,18 @@
 		UPDATE
 			ProfileAllocation
 		SET
-			username=#{username},
-			reportProfileId=#{reportProfileId},
-			menuProfileId=#{menuProfileId},
-			userProfileId=#{userProfileId},
-			businessId=#{businessId},
-			createdBy=#{createdBy},
-			lastModifiedBy=#{lastModifiedBy},
-			createdByIP=#{createdByIP},
-			lastModifiedByIP=#{lastModifiedByIP},
-			status=#{status},
-			createDate=#{createDate},
-			updateDate=#{updateDate}
+			username=#{username, jdbcType=VARCHAR},
+			reportProfileId=#{reportProfileId, jdbcType=NUMBER},
+			menuProfileId=#{menuProfileId, jdbcType=NUMBER},
+			userProfileId=#{userProfileId, jdbcType=NUMBER},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=DATE},
+			updateDate=#{updateDate, jdbcType=DATE}
 		WHERE
 			paid=#{paid}
 	</update>

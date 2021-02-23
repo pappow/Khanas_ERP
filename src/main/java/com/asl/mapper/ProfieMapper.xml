@@ -3,12 +3,10 @@
 <mapper namespace="com.asl.mapper.ProfileMapper">
 
 	<insert id="save" 
-			parameterType="Profile" 
-			useGeneratedKeys="true"
-			keyColumn="profileId"
-			keyProperty="profileId">
+			parameterType="Profile">
 		INSERT INTO Profile
 		(
+			profileId,
 			profileCode,
 			description,
 			profileType,
@@ -23,17 +21,18 @@
 		)
 		VALUES
 		(
-			#{profileCode},
-			#{description},
-			#{profileType},
-			#{businessId},
-			#{createdBy},
-			#{lastModifiedBy},
-			#{createdByIP},
-			#{lastModifiedByIP},
-			#{status},
-			#{createDate},
-			#{updateDate}
+			PROFILE_SEQ.nextval,
+			#{profileCode,jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{profileType, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=DATE},
+			#{updateDate, jdbcType=DATE}
 		)
 	</insert>
 
@@ -44,17 +43,17 @@
 			keyProperty="profileId">
 		UPDATE Profile
 		SET
-			profileCode=#{profileCode},
-			description=#{description},
-			profileType=#{profileType},
-			businessId=#{businessId},
-			createdBy=#{createdBy},
-			lastModifiedBy=#{lastModifiedBy},
-			createdByIP=#{createdByIP},
-			lastModifiedByIP=#{lastModifiedByIP},
-			status=#{status},
-			createDate=#{createDate},
-			updateDate=#{updateDate}
+			profileCode=#{profileCode, jdbcType=VARCHAR},
+			description=#{description, jdbcType=VARCHAR},
+			profileType=#{profileType, jdbcType=VARCHAR},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=DATE},
+			updateDate=#{updateDate, jdbcType=DATE}
 		WHERE
 			profileId=#{profileId}
 	</update>

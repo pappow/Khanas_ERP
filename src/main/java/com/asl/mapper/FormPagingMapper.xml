@@ -4,24 +4,28 @@
 
 	<select id="getSeilingRecord" resultType="Long">
 		SELECT 
-			TOP 1 ${columnName}
+			${columnName}
 		FROM 
 			${tableName} 
+		WHERE
+			ROWNUM = 1
 		ORDER BY ${columnName} ${direction}
 	</select>
 
 	<select id="getExpectedRecord" resultType="Long">
 		SELECT 
-			TOP 1 ${columnName}
+			${columnName}
 		FROM 
 			${tableName} 
 		WHERE
 		<if test="direction == 'next'">
 			${columnName} &gt; #{currentId}
+			AND ROWNUM = 1
 			ORDER BY ${columnName} ASC
 		</if>
 		<if test="direction == 'prev'">
 			${columnName} &lt; #{currentId}
+			AND ROWNUM = 1
 			ORDER BY ${columnName} DESC
 		</if>
 	</select>
