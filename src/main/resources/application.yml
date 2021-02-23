@@ -25,10 +25,10 @@ spring:
   thymeleaf:
     cache: false
   datasource: 
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost;databaseName=ASLERP
-    username: sa
-    password: sql@s3rv3r
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@103.231.135.60:1521:orcl
+    username: res_erp
+    password: res_erp
     tomcat:
       max-wait: 20000
       max-active: 50
@@ -42,7 +42,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate: 
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        dialect: org.hibernate.dialect.Oracle10gDialect
         id:
           new_generator_mappings: false
   jackson:

@@ -1,6 +1,7 @@
 package com.asl.model.pagination;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.Data;
@@ -12,8 +13,8 @@ import lombok.Data;
 @Data
 public class PagingTable {
 
-	private String defaultShow;
-	private List<Integer> showRecords; 
+	private int defaultShow = 10;
+	private List<Integer> showRecords = new ArrayList<>(Arrays.asList(10,20,50,100));
 	private String hint;
 	private List<HeaderColumn> headers = new ArrayList<>();
 	private List<List<BodyRecord>> records = new ArrayList<>();

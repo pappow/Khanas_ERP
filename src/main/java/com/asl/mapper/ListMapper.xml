@@ -3,13 +3,11 @@
 <mapper namespace="com.asl.mapper.ListMapper">
 
 	<insert id="saveListHead" 
-			parameterType="ListHead" 
-			useGeneratedKeys="true"
-			keyColumn="listHeadId"
-			keyProperty="listHeadId">
+			parameterType="ListHead">
 
 		INSERT INTO ListHead
 		(
+			listHeadId,
 			listCode,
 			description,
 			prompt1,
@@ -40,6 +38,7 @@
 		)
 		VALUES
 		(
+			LIST_HEAD_SEQ.nextval,
 			#{listCode},
 			#{description},
 			#{prompt1},
@@ -71,10 +70,7 @@
 	</insert>
 
 	<update id="updateListHead" 
-			parameterType="ListHead" 
-			useGeneratedKeys="true"
-			keyColumn="listHeadId"
-			keyProperty="listHeadId">
+			parameterType="ListHead">
 
 		UPDATE
 			ListHead
@@ -111,13 +107,11 @@
 	</update>
 
 	<insert id="saveDataList" 
-			parameterType="DataList" 
-			useGeneratedKeys="true"
-			keyColumn="listId"
-			keyProperty="listId">
+			parameterType="DataList">
 
 		INSERT INTO DataList
 		(
+			listId,
 			listCode,
 			description,
 			listValue1,
@@ -152,6 +146,7 @@
 		)
 		VALUES
 		(
+			DATA_LIST_SEQ.nextval,
 			#{listCode},
 			#{description},
 			#{listValue1},
@@ -187,10 +182,7 @@
 	</insert>
 
 	<update id="updateDataList" 
-			parameterType="DataList" 
-			useGeneratedKeys="true"
-			keyColumn="listId"
-			keyProperty="listId">
+			parameterType="DataList">
 
 		UPDATE 
 			DataList

@@ -3,12 +3,10 @@
 <mapper namespace="com.asl.mapper.ProfileAllocationMapper">
 
 	<insert id="save" 
-			parameterType="ProfileAllocation" 
-			useGeneratedKeys="true"
-			keyColumn="paid"
-			keyProperty="paid">
+			parameterType="ProfileAllocation">
 		INSERT INTO ProfileAllocation
 		(
+			paid,
 			username,
 			reportProfileId,
 			menuProfileId,
@@ -24,6 +22,7 @@
 		)
 		VALUES
 		(
+			PROFILE_ALLOCATION_SEQ.nextval,
 			#{username},
 			#{reportProfileId},
 			#{menuProfileId},
@@ -40,10 +39,7 @@
 	</insert>
 
 	<update id="update" 
-			parameterType="ProfileAllocation" 
-			useGeneratedKeys="true"
-			keyColumn="paid"
-			keyProperty="paid">
+			parameterType="ProfileAllocation">
 		UPDATE
 			ProfileAllocation
 		SET

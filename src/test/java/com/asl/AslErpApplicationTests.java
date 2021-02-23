@@ -1,5 +1,6 @@
 package com.asl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,8 @@ class AslErpApplicationTests {
 	void saveUserAuditRecord() {
 		UserAuditRecord aur = new UserAuditRecord();
 		aur.setUserId("admin");
-		aur.setBusinessId("900010");
+		aur.setBusinessId("D900010");
+		aur.setRecordDate(new Date());
 		long count = userAuditRecordService.save(aur);
 		System.out.println(count);
 	}
@@ -34,7 +36,7 @@ class AslErpApplicationTests {
 		user.setStatus(RecordStatus.L);
 		user.setBusinessId("900010");
 		user.setPswd("1234");
-		user.setSystemAdmin(Boolean.TRUE);
+		user.setSystemAdmin(true);
 		long count = userService.save(user);
 		System.out.println(count);
 	}

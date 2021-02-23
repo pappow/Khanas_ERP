@@ -3,12 +3,10 @@
 <mapper namespace="com.asl.mapper.UserAuditRecordMapper">
 
 	<insert id="save" 
-			parameterType="UserAuditRecord" 
-			useGeneratedKeys="true"
-			keyColumn="recordId"
-			keyProperty="recordId">
+			parameterType="UserAuditRecord" >
 		INSERT INTO UserAuditRecord
 		(
+			recordId,
 			userId,
 			businessId,
 			unAuthorizedAccessMessage,
@@ -19,13 +17,14 @@
 		)
 		VALUES
 		(
-			#{userId},
-			#{businessId},
-			#{unAuthorizedAccessMessage},
-			#{ipAddress},
-			#{loginDate, jdbcType = TIMESTAMP},
-			#{logoutDate, jdbcType = TIMESTAMP},
-			#{recordDate, jdbcType = TIMESTAMP}
+			USER_AUDIT_RECORD_SEQ.nextval,
+			#{userId, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{unAuthorizedAccessMessage, jdbcType=VARCHAR},
+			#{ipAddress, jdbcType=VARCHAR},
+			#{loginDate, jdbcType=TIMESTAMP},
+			#{logoutDate, jdbcType=TIMESTAMP},
+			#{recordDate, jdbcType=TIMESTAMP}
 		)
 	</insert>
 

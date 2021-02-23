@@ -11,11 +11,11 @@
 		(
 			username,
 			pswd,
-			firstName,
-			lastName,
-			systemAdmin,
+			firstname,
+			lastname,
+			systemadmin,
 			admin,
-			appUser,
+			appuser,
 			driver,
 			subscriber,
 			role1,
@@ -28,14 +28,14 @@
 			role8,
 			role9,
 			role10,
-			businessId,
-			createdBy,
-			lastModifiedBy,
-			createdByIP,
-			lastModifiedByIP,
+			businessid,
+			createdby,
+			lastmodifiedby,
+			createdbyip,
+			lastmodifiedbyip,
 			status,
-			createDate,
-			updateDate
+			createdate,
+			updatedate
 		)
 		VALUES
 		(
