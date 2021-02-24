@@ -81,7 +81,7 @@ public class ListController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Listhead saved successfully");
-			responseHelper.setRedirectUrl("/system/list/" + listHead.getListHeadId());
+			responseHelper.setRedirectUrl("/system/list/");
 			return responseHelper.getResponse();
 		}
 

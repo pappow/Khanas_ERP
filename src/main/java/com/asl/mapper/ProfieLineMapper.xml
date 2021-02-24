@@ -27,14 +27,14 @@
 		VALUES
 		(
 			PROFILE_LINE_SEQ.nextval,
-			#{profileId, jdbcType=NUMBER},
+			#{profileId, jdbcType=BIGINT},
 			#{profileCode, jdbcType=VARCHAR},
 			#{profileType, jdbcType=VARCHAR},
-			#{enabled, jdbcType=NUMBER},
-			#{display, jdbcType=NUMBER},
-			#{required, jdbcType=NUMBER},
+			#{enabled, jdbcType=BIGINT},
+			#{display, jdbcType=BIGINT},
+			#{required, jdbcType=BIGINT},
 			#{screenPrompt, jdbcType=VARCHAR},
-			#{seqn, jdbcType=NUMBER},
+			#{seqn, jdbcType=BIGINT},
 			#{businessId, jdbcType=VARCHAR},
 			#{createdBy, jdbcType=VARCHAR},
 			#{lastModifiedBy, jdbcType=VARCHAR},
@@ -50,14 +50,14 @@
 			parameterType="ProfileLine">
 		UPDATE ProfileLine
 		SET
-			profileId=#{profileId, jdbcType=NUMBER}
+			profileId=#{profileId, jdbcType=BIGINT}
 			profileCode=#{profileCode, jdbcType=VARCHAR},
 			profileType=#{profileType, jdbcType=VARCHAR},
-			enabled=#{enabled, jdbcType=NUMBER},
-			display=#{display, jdbcType=NUMBER},
-			required=#{required, jdbcType=NUMBER},
+			enabled=#{enabled, jdbcType=BIGINT},
+			display=#{display, jdbcType=BIGINT},
+			required=#{required, jdbcType=BIGINT},
 			screenPrompt=#{screenPrompt, jdbcType=VARCHAR},
-			seqn=#{seqn, jdbcType=NUMBER},
+			seqn=#{seqn, jdbcType=BIGINT},
 			businessId=#{businessId, jdbcType=VARCHAR},
 			createdBy=#{createdBy, jdbcType=VARCHAR},
 			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},

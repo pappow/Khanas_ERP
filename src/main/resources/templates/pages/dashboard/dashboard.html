@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Business</title>
+		<title>Dashboard</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -48,6 +48,28 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
+									<tr>
+										<td colspan="2">Master Setup</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/mastersetup/partymaster}">Party Master</a></td>
+										<td>
+											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/mastersetup/itemmaster}">Item Master</a></td>
+										<td>
+											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/mastersetup/cap}">Code And Parameters</a></td>
+										<td>
+											<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 									<tr>
 										<td colspan="2">System</td>
 									</tr>

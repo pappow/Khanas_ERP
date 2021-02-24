@@ -24,9 +24,9 @@
 		(
 			PROFILE_ALLOCATION_SEQ.nextval,
 			#{username, jdbcType=VARCHAR},
-			#{reportProfileId, jdbcType=NUMBER},
-			#{menuProfileId, jdbcType=NUMBER},
-			#{userProfileId, jdbcType=NUMBER},
+			#{reportProfileId, jdbcType=BIGINT},
+			#{menuProfileId, jdbcType=BIGINT},
+			#{userProfileId, jdbcType=BIGINT},
 			#{businessId, jdbcType=VARCHAR},
 			#{createdBy, jdbcType=VARCHAR},
 			#{lastModifiedBy, jdbcType=VARCHAR},
@@ -44,9 +44,9 @@
 			ProfileAllocation
 		SET
 			username=#{username, jdbcType=VARCHAR},
-			reportProfileId=#{reportProfileId, jdbcType=NUMBER},
-			menuProfileId=#{menuProfileId, jdbcType=NUMBER},
-			userProfileId=#{userProfileId, jdbcType=NUMBER},
+			reportProfileId=#{reportProfileId, jdbcType=BIGINT},
+			menuProfileId=#{menuProfileId, jdbcType=BIGINT},
+			userProfileId=#{userProfileId, jdbcType=BIGINT},
 			businessId=#{businessId, jdbcType=VARCHAR},
 			createdBy=#{createdBy, jdbcType=VARCHAR},
 			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},

@@ -1,0 +1,104 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.XcodesMapper">
+
+	<insert id="saveXcodes" 
+			parameterType="Xcodes">
+
+		INSERT INTO Xcodes
+		(
+			xtype,
+			xcode,
+			xdescdet,
+			xprops,
+			xacc,
+			xAccDisc,
+			xAccVat,
+			xAccAit,
+			xAccPur,
+			xAccAdj,
+			xAccCash,
+			xAccBank,
+			xAccArdBank,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			#{xtype, jdbcType=VARCHAR},
+			#{xcode, jdbcType=VARCHAR},
+			#{xdescdet, jdbcType=VARCHAR},
+			#{xprops, jdbcType=VARCHAR},
+			#{xacc, jdbcType=VARCHAR},
+			#{xAccDisc, jdbcType=VARCHAR},
+			#{xAccVat, jdbcType=VARCHAR},
+			#{xAccAit, jdbcType=VARCHAR},
+			#{xAccPur, jdbcType=VARCHAR},
+			#{xAccAdj, jdbcType=VARCHAR},
+			#{xAccCash, jdbcType=VARCHAR},
+			#{xAccBank, jdbcType=VARCHAR},
+			#{xAccArdBank, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=DATE},
+			#{updateDate, jdbcType=DATE}
+		) 
+	</insert>
+
+	<update id="updateXcodes" 
+			parameterType="Xcodes">
+
+		UPDATE
+			Xcodes
+		SET
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xdescdet=#{xdescdet, jdbcType=VARCHAR},
+			xprops=#{xprops, jdbcType=VARCHAR},
+			xacc=#{xacc, jdbcType=VARCHAR},
+			xAccDisc=#{xAccDisc, jdbcType=VARCHAR},
+			xAccVat=#{xAccVat, jdbcType=VARCHAR},
+			xAccAit=#{xAccAit, jdbcType=VARCHAR},
+			xAccPur=#{xAccPur, jdbcType=VARCHAR},
+			xAccAdj=#{xAccAdj, jdbcType=VARCHAR},
+			xAccCash=#{xAccCash, jdbcType=VARCHAR},
+			xAccBank=#{xAccBank, jdbcType=VARCHAR},
+			xAccArdBank=#{xAccArdBank, jdbcType=VARCHAR},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=DATE},
+			updateDate=#{updateDate, jdbcType=DATE}
+		WHERE
+			xcode=#{xcode},
+	</update>
+
+	<select id="getAllXcodes" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="findByXtype" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="findByXcode" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xcode=#{xcode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="findByXtypesAndXcodes" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND xcode=#{xcode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+</mapper>

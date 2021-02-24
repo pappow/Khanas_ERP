@@ -247,7 +247,7 @@
 			listCode=#{listCode} 
 			AND businessId=#{businessId}
 			AND status='L'
-			<if test="params.listValue1 != null and paramslistValue1 != ''">
+			<if test="params.listValue1 != null and params.listValue1 != ''">
 				AND listValue1=#{params.listValue1}
 			</if>
 			<if test="params.listValue2 != null and params.listValue2 != ''">
