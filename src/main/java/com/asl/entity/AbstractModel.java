@@ -42,21 +42,21 @@ public abstract class AbstractModel<U> implements Serializable {
 
 	private static final long serialVersionUID = -3736149934368733226L;
 
-	@Column(name = "bsid")
+	@Column(name = "businessId", nullable = false)
 	private String businessId;
 
 	@CreatedBy
-	@Column(name = "ctby")
+	@Column(name = "createdBy")
 	private U createdBy;
 
 	@LastModifiedBy
-	@Column(name = "lmod")
+	@Column(name = "lastModifiedBy")
 	private U lastModifiedBy;
 
-	@Column(name = "crip")
+	@Column(name = "createdByIP")
 	private String createdByIP;
 
-	@Column(name = "mdip")
+	@Column(name = "lastModifiedByIP")
 	private String lastModifiedByIP;
 
 	@Column(name = "status", length = 1)

@@ -18,9 +18,9 @@ import com.asl.service.ASLSessionManager;
 public abstract class AbstractGenericService {
 
 	protected static final String ERROR = "Error is {}, {}";
-	//@PersistenceContext protected EntityManager em;
-	//@Autowired protected JdbcTemplate jdbcTemplate;
-	//@Autowired protected ASLSessionManager sessionManager;
+//	@PersistenceContext protected EntityManager em;
+//	@Autowired protected JdbcTemplate jdbcTemplate;
+	@Autowired protected ASLSessionManager sessionManager;
 
 	/**
 	 * Generate slug name

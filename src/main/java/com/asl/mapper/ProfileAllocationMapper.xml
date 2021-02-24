@@ -1,0 +1,78 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileAllocationMapper">
+
+	<insert id="save" 
+			parameterType="ProfileAllocation">
+		INSERT INTO ProfileAllocation
+		(
+			paid,
+			username,
+			reportProfileId,
+			menuProfileId,
+			userProfileId,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			PROFILE_ALLOCATION_SEQ.nextval,
+			#{username, jdbcType=VARCHAR},
+			#{reportProfileId, jdbcType=BIGINT},
+			#{menuProfileId, jdbcType=BIGINT},
+			#{userProfileId, jdbcType=BIGINT},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="ProfileAllocation">
+		UPDATE
+			ProfileAllocation
+		SET
+			username=#{username, jdbcType=VARCHAR},
+			reportProfileId=#{reportProfileId, jdbcType=BIGINT},
+			menuProfileId=#{menuProfileId, jdbcType=BIGINT},
+			userProfileId=#{userProfileId, jdbcType=BIGINT},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+		WHERE
+			paid=#{paid}
+	</update>
+
+	<select id="findById" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE profileAllocationId=#{profileAllocationId}
+	</select>
+
+	<select id="getAllProfileAllocation" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE businessId=#{businessId}
+	</select>
+
+	<select id="findByUsername" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE username=#{username} AND businessId=#{businessId}
+	</select>
+
+	<select id="findByUsernameAndPassword" resultType="Users">
+		SELECT * FROM Users WHERE username=#{username} AND pswd=#{password}
+	</select>
+
+</mapper>

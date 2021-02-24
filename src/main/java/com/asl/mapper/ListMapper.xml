@@ -2,8 +2,303 @@
 
 <mapper namespace="com.asl.mapper.ListMapper">
 
+	<insert id="saveListHead" 
+			parameterType="ListHead">
+
+		INSERT INTO ListHead
+		(
+			listHeadId,
+			listCode,
+			description,
+			prompt1,
+			prompt2,
+			prompt3,
+			prompt4,
+			prompt5,
+			prompt6,
+			prompt7,
+			prompt8,
+			prompt9,
+			prompt10,
+			prompt11,
+			prompt12,
+			prompt13,
+			prompt14,
+			prompt15,
+			prompt16,
+			notes,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			LIST_HEAD_SEQ.nextval,
+			#{listCode, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{prompt1, jdbcType=VARCHAR},
+			#{prompt2, jdbcType=VARCHAR},
+			#{prompt3, jdbcType=VARCHAR},
+			#{prompt4, jdbcType=VARCHAR},
+			#{prompt5, jdbcType=VARCHAR},
+			#{prompt6, jdbcType=VARCHAR},
+			#{prompt7, jdbcType=VARCHAR},
+			#{prompt8, jdbcType=VARCHAR},
+			#{prompt9, jdbcType=VARCHAR},
+			#{prompt10, jdbcType=VARCHAR},
+			#{prompt11, jdbcType=VARCHAR},
+			#{prompt12, jdbcType=VARCHAR},
+			#{prompt13, jdbcType=VARCHAR},
+			#{prompt14, jdbcType=VARCHAR},
+			#{prompt15, jdbcType=VARCHAR},
+			#{prompt16, jdbcType=VARCHAR},
+			#{notes, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updateListHead" 
+			parameterType="ListHead">
+
+		UPDATE
+			ListHead
+		SET
+			listCode=#{listCode, jdbcType=VARCHAR},
+			description=#{description, jdbcType=VARCHAR},
+			prompt1=#{prompt1, jdbcType=VARCHAR},
+			prompt2=#{prompt2, jdbcType=VARCHAR},
+			prompt3=#{prompt3, jdbcType=VARCHAR},
+			prompt4=#{prompt4, jdbcType=VARCHAR},
+			prompt5=#{prompt5, jdbcType=VARCHAR},
+			prompt6=#{prompt6, jdbcType=VARCHAR},
+			prompt7=#{prompt7, jdbcType=VARCHAR},
+			prompt8=#{prompt8, jdbcType=VARCHAR},
+			prompt9=#{prompt9, jdbcType=VARCHAR},
+			prompt10=#{prompt10, jdbcType=VARCHAR},
+			prompt11=#{prompt11, jdbcType=VARCHAR},
+			prompt12=#{prompt12, jdbcType=VARCHAR},
+			prompt13=#{prompt13, jdbcType=VARCHAR},
+			prompt14=#{prompt14, jdbcType=VARCHAR},
+			prompt15=#{prompt15, jdbcType=VARCHAR},
+			prompt16=#{prompt16, jdbcType=VARCHAR},
+			notes=#{notes, jdbcType=VARCHAR},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+		WHERE
+			listHeadId=#{listHeadId}
+	</update>
+
+	<insert id="saveDataList" 
+			parameterType="DataList">
+
+		INSERT INTO DataList
+		(
+			listId,
+			listCode,
+			description,
+			listValue1,
+			listValue2,
+			listValue3,
+			listValue4,
+			listValue5,
+			listValue6,
+			listValue7,
+			listValue8,
+			listValue9,
+			listValue10,
+			listValue11,
+			listValue12,
+			listValue13,
+			listValue14,
+			listValue15,
+			listValue16,
+			extraValue1,
+			extraValue2,
+			extraValue3,
+			extraValue4,
+			extraValue5,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			DATA_LIST_SEQ.nextval,
+			#{listCode, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{listValue1, jdbcType=VARCHAR},
+			#{listValue2, jdbcType=VARCHAR},
+			#{listValue3, jdbcType=VARCHAR},
+			#{listValue4, jdbcType=VARCHAR},
+			#{listValue5, jdbcType=VARCHAR},
+			#{listValue6, jdbcType=VARCHAR},
+			#{listValue7, jdbcType=VARCHAR},
+			#{listValue8, jdbcType=VARCHAR},
+			#{listValue9, jdbcType=VARCHAR},
+			#{listValue10, jdbcType=VARCHAR},
+			#{listValue11, jdbcType=VARCHAR},
+			#{listValue12, jdbcType=VARCHAR},
+			#{listValue13, jdbcType=VARCHAR},
+			#{listValue14, jdbcType=VARCHAR},
+			#{listValue15, jdbcType=VARCHAR},
+			#{listValue16, jdbcType=VARCHAR},
+			#{extraValue1, jdbcType=VARCHAR},
+			#{extraValue2, jdbcType=VARCHAR},
+			#{extraValue3, jdbcType=VARCHAR},
+			#{extraValue4, jdbcType=VARCHAR},
+			#{extraValue5, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateDataList" 
+			parameterType="DataList">
+
+		UPDATE 
+			DataList
+		SET
+			listCode=#{listCode, jdbcType=VARCHAR},
+			description=#{description, jdbcType=VARCHAR},
+			listValue1=#{listValue1, jdbcType=VARCHAR},
+			listValue2=#{listValue2, jdbcType=VARCHAR},
+			listValue3=#{listValue3, jdbcType=VARCHAR},
+			listValue4=#{listValue4, jdbcType=VARCHAR},
+			listValue5=#{listValue5, jdbcType=VARCHAR},
+			listValue6=#{listValue6, jdbcType=VARCHAR},
+			listValue7=#{listValue7, jdbcType=VARCHAR},
+			listValue8=#{listValue8, jdbcType=VARCHAR},
+			listValue9=#{listValue9, jdbcType=VARCHAR},
+			listValue10=#{listValue10, jdbcType=VARCHAR},
+			listValue11=#{listValue11, jdbcType=VARCHAR},
+			listValue12=#{listValue12, jdbcType=VARCHAR},
+			listValue13=#{listValue13, jdbcType=VARCHAR},
+			listValue14=#{listValue14, jdbcType=VARCHAR},
+			listValue15=#{listValue15, jdbcType=VARCHAR},
+			listValue16=#{listValue16, jdbcType=VARCHAR},
+			extraValue1=#{extraValue1, jdbcType=VARCHAR},
+			extraValue2=#{extraValue2, jdbcType=VARCHAR},
+			extraValue3=#{extraValue3, jdbcType=VARCHAR},
+			extraValue4=#{extraValue4, jdbcType=VARCHAR},
+			extraValue5=#{extraValue5, jdbcType=VARCHAR},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+		WHERE
+			listId=#{listId}
+	</update>
+
+	<select id="findListHeadById" resultType="ListHead">
+		SELECT * FROM ListHead WHERE listHeadId=#{listHeadId}
+	</select>
+
+	<select id="findDataListById" resultType="DataList">
+		SELECT * FROM DataList WHERE listId=#{listId}
+	</select>
+
+	<select id="findListHeadByListCode" resultType="ListHead">
+		SELECT * FROM ListHead WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="findDataListByListCode" resultType="DataList">
+		SELECT * FROM DataList WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="getList" resultType="DataList">
+		SELECT 
+			* 
+		FROM 
+			DataList 
+		WHERE 
+			listCode=#{listCode} 
+			AND businessId=#{businessId}
+			AND status='L'
+			<if test="params.listValue1 != null and params.listValue1 != ''">
+				AND listValue1=#{params.listValue1}
+			</if>
+			<if test="params.listValue2 != null and params.listValue2 != ''">
+				AND listValue2=#{params.listValue2}
+			</if>
+			<if test="params.listValue3 != null and params.listValue3 != ''">
+				AND listValue3=#{params.listValue3}
+			</if>
+			<if test="params.listValue4 != null and params.listValue4 != ''">
+				AND listValue4=#{params.listValue4}
+			</if>
+			<if test="params.listValue5 != null and params.listValue5 != ''">
+				AND listValue5=#{params.listValue5}
+			</if>
+			<if test="params.listValue6 != null and params.listValue6 != ''">
+				AND listValue6=#{params.listValue6}
+			</if>
+			<if test="params.listValue7 != null and params.listValue7 != ''">
+				AND listValue7=#{params.listValue7}
+			</if>
+			<if test="params.listValue8 != null and params.listValue8 != ''">
+				AND listValue8=#{params.listValue8}
+			</if>
+			<if test="params.listValue9 != null and params.listValue9 != ''">
+				AND listValue9=#{params.listValue9}
+			</if>
+			<if test="params.listValue10 != null and params.listValue10 != ''">
+				AND listValue10=#{params.listValue10}
+			</if>
+			<if test="params.listValue11 != null and params.listValue11 != ''">
+				AND listValue11=#{params.listValue11}
+			</if>
+			<if test="params.listValue12 != null and params.listValue12 != ''">
+				AND listValue12=#{params.listValue12}
+			</if>
+			<if test="params.listValue13 != null and params.listValue13 != ''">
+				AND listValue13=#{params.listValue13}
+			</if>
+			<if test="params.listValue14 != null and params.listValue14 != ''">
+				AND listValue14=#{params.listValue14}
+			</if>
+			<if test="params.listValue15 != null and params.listValue15 != ''">
+				AND listValue15=#{params.listValue15}
+			</if>
+			<if test="params.listValue16 != null and params.listValue16 != ''">
+				AND listValue16=#{params.listValue16}
+			</if>
+	</select>
+
 	<select id="getAllListHead" resultType="ListHead">
-		select * from lh
+		SELECT * FROM ListHead WHERE businessId=#{businessId} ORDER BY listHeadid ASC
 	</select>
 
 </mapper>

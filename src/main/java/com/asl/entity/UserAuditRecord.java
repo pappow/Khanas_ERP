@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,12 +18,11 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "UAR")
+@Table(name = "userAuditRecord")
 public class UserAuditRecord implements Serializable {
 	private static final long serialVersionUID = -7491245343434996061L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "recordId", unique = true, nullable = false)
 	private Long recordId;
 
@@ -35,7 +32,7 @@ public class UserAuditRecord implements Serializable {
 	@Column(name = "businessId")
 	private String businessId;
 
-	@Column(name = "uaam")
+	@Column(name = "unAuthorizedAccessMessage")
 	private String unAuthorizedAccessMessage;
 
 	@Column(name = "ipAddress")

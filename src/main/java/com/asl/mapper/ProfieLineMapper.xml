@@ -1,0 +1,81 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileLineMapper">
+
+	<insert id="save" 
+			parameterType="ProfileLine">
+		INSERT INTO ProfileLine
+		(	
+			profileLineId,
+			profileId,
+			profileCode,
+			profileType,
+			enabled,
+			display,
+			required,
+			screenPrompt,
+			seqn,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			PROFILE_LINE_SEQ.nextval,
+			#{profileId, jdbcType=BIGINT},
+			#{profileCode, jdbcType=VARCHAR},
+			#{profileType, jdbcType=VARCHAR},
+			#{enabled, jdbcType=BIGINT},
+			#{display, jdbcType=BIGINT},
+			#{required, jdbcType=BIGINT},
+			#{screenPrompt, jdbcType=VARCHAR},
+			#{seqn, jdbcType=BIGINT},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="ProfileLine">
+		UPDATE ProfileLine
+		SET
+			profileId=#{profileId, jdbcType=BIGINT}
+			profileCode=#{profileCode, jdbcType=VARCHAR},
+			profileType=#{profileType, jdbcType=VARCHAR},
+			enabled=#{enabled, jdbcType=BIGINT},
+			display=#{display, jdbcType=BIGINT},
+			required=#{required, jdbcType=BIGINT},
+			screenPrompt=#{screenPrompt, jdbcType=VARCHAR},
+			seqn=#{seqn, jdbcType=BIGINT},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+		WHERE
+			profileLineId=#{profileLineId}
+	</update>
+
+	<select id="findById" resultType="ProfileLine">
+		SELECT * FROM ProfileLine WHERE profileLineId=#{profileLineId}
+	</select>
+
+	<select id="getAllByProfileIdAndProfileType" resultType="ProfileLine">
+		SELECT * FROM ProfileLine WHERE profileId=#{profileId} AND profileType=#{profileType} AND businessId=#{businessId}
+	</select>
+
+</mapper>

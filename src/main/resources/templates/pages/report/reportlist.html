@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Report</title>
+		<meta th:remove="tag" th:include="commons :: common-meta"/>
+		<meta th:remove="tag" th:include="commons :: common-css"/>
+		<meta th:remove="tag" th:include="commons :: common-js"/>
+	</head>
+	<body>
+
+		<!-- Header section -->
+		<div class="header-section" th:include="commons :: header-section"></div>
+
+		<!-- Menu section -->
+		<div class="navbar-inverse menu-section">
+			<div class="container">
+				<div class="row">
+					<nav class="navbar navbar-inverse">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+										<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+									</button>
+								</div>
+								<div class="collapse navbar-collapse" id="myNavbar">
+									<div class="nav navbar-nav">
+										<li><a th:href="@{/}">Dashboard</a></li>
+										<li class="active"><a th:href="@{/report}">Report</a></li>
+									</div>
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
+								</div>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<!-- Content section -->
+		<div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 content-area">
+						<!-- Section data maintenance -->
+						<section id="data-maintenance" style="margin-top: 10px;">
+							<div class="section-header sectionbartoggle">
+								<h1><i class="fas fa-chevron-down"></i> Sales & Invoicing Reports</h1>
+							</div>
+							<div class="section-body togglebox">
+								<table class="table dashboard-menu-table">
+									<tr th:if="${reportProfile.salesReportSummary ne null and reportProfile.salesReportSummary.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.salesReportSummary.profileCode}" th:text="${reportProfile.salesReportSummary.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesReportSummary.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.salesReportDetail ne null and reportProfile.salesReportDetail.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.salesReportDetail.profileCode}" th:text="${reportProfile.salesReportDetail.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesReportDetail.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.cancelBillReport ne null and reportProfile.cancelBillReport.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.cancelBillReport.profileCode}" th:text="${reportProfile.cancelBillReport.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.cancelBillReport.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.categorySalesReport ne null and reportProfile.categorySalesReport.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.categorySalesReport.profileCode}" th:text="${reportProfile.categorySalesReport.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.categorySalesReport.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemWiseSalesSummary ne null and reportProfile.itemWiseSalesSummary.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummary.profileCode}" th:text="${reportProfile.itemWiseSalesSummary.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummary.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.setMenuWiseSalesSummary ne null and reportProfile.setMenuWiseSalesSummary.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.setMenuWiseSalesSummary.profileCode}" th:text="${reportProfile.setMenuWiseSalesSummary.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.setMenuWiseSalesSummary.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemWiseSalesSummaryTP ne null and reportProfile.itemWiseSalesSummaryTP.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummaryTP.profileCode}" th:text="${reportProfile.itemWiseSalesSummaryTP.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummaryTP.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemList ne null and reportProfile.itemList.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.itemList.profileCode}" th:text="${reportProfile.itemList.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemList.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemPriceHistory ne null and reportProfile.itemPriceHistory.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.itemPriceHistory.profileCode}" th:text="${reportProfile.itemPriceHistory.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemPriceHistory.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.collectionReportSummary ne null and reportProfile.collectionReportSummary.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.collectionReportSummary.profileCode}" th:text="${reportProfile.collectionReportSummary.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.collectionReportSummary.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.collectionReportDetail ne null and reportProfile.collectionReportDetail.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.collectionReportDetail.profileCode}" th:text="${reportProfile.collectionReportDetail.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.collectionReportDetail.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.creditCardCollectionDetail ne null and reportProfile.creditCardCollectionDetail.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.creditCardCollectionDetail.profileCode}" th:text="${reportProfile.creditCardCollectionDetail.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.creditCardCollectionDetail.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.salesEatInOrTakeAway ne null and reportProfile.salesEatInOrTakeAway.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.salesEatInOrTakeAway.profileCode}" th:text="${reportProfile.salesEatInOrTakeAway.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesEatInOrTakeAway.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.vatReport ne null and reportProfile.vatReport.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.vatReport.profileCode}" th:text="${reportProfile.vatReport.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.vatReport.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.syncStatus ne null and reportProfile.syncStatus.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.syncStatus.profileCode}" th:text="${reportProfile.syncStatus.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.syncStatus.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.discountReport ne null and reportProfile.discountReport.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.discountReport.profileCode}" th:text="${reportProfile.discountReport.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.discountReport.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.deliveryServiceReport ne null and reportProfile.deliveryServiceReport.display}">
+										<td><a th:href="@{/report/} + ${reportProfile.deliveryServiceReport.profileCode}" th:text="${reportProfile.deliveryServiceReport.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.deliveryServiceReport.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.salesReportSummaryV ne null and reportProfile.salesReportSummaryV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.salesReportSummaryV.profileCode}" th:text="${reportProfile.salesReportSummaryV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesReportSummaryV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.salesReportDetailV ne null and reportProfile.salesReportDetailV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.salesReportDetailV.profileCode}" th:text="${reportProfile.salesReportDetailV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesReportDetailV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemWiseSalesSummaryV ne null and reportProfile.itemWiseSalesSummaryV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummaryV.profileCode}" th:text="${reportProfile.itemWiseSalesSummaryV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemWiseSalesSummaryV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemPriceHistoryV ne null and reportProfile.itemPriceHistoryV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.itemPriceHistoryV.profileCode}" th:text="${reportProfile.itemPriceHistoryV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemPriceHistoryV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.collectionReportSummaryV ne null and reportProfile.collectionReportSummaryV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.collectionReportSummaryV.profileCode}" th:text="${reportProfile.collectionReportSummaryV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.collectionReportSummaryV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.collectionReportDetailV ne null and reportProfile.collectionReportDetailV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.collectionReportDetailV.profileCode}" th:text="${reportProfile.collectionReportDetailV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.collectionReportDetailV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.creditCardCollectionDetailV ne null and reportProfile.creditCardCollectionDetailV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.creditCardCollectionDetailV.profileCode}" th:text="${reportProfile.creditCardCollectionDetailV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.creditCardCollectionDetailV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.salesEatInOrTakeAwayV ne null and reportProfile.salesEatInOrTakeAwayV.display}" style="background: #cff9dc;">
+										<td><a th:href="@{/report/} + ${reportProfile.salesEatInOrTakeAwayV.profileCode}" th:text="${reportProfile.salesEatInOrTakeAwayV.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.salesEatInOrTakeAwayV.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
+									<!-- OUTLET SERVER REPORTS -->
+									<tr th:if="${reportProfile.outletSalesStatement ne null and reportProfile.outletSalesStatement.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.outletSalesStatement.profileCode}" th:text="${reportProfile.outletSalesStatement.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.outletSalesStatement.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.hourlyCCAndSales ne null and reportProfile.hourlyCCAndSales.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.hourlyCCAndSales.profileCode}" th:text="${reportProfile.hourlyCCAndSales.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.hourlyCCAndSales.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.itemSalesStatement ne null and reportProfile.itemSalesStatement.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.itemSalesStatement.profileCode}" th:text="${reportProfile.itemSalesStatement.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.itemSalesStatement.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.outletSalesBreakdown ne null and reportProfile.outletSalesBreakdown.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.outletSalesBreakdown.profileCode}" th:text="${reportProfile.outletSalesBreakdown.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.outletSalesBreakdown.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.billOrDayWiseAccountStatement ne null and reportProfile.billOrDayWiseAccountStatement.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.billOrDayWiseAccountStatement.profileCode}" th:text="${reportProfile.billOrDayWiseAccountStatement.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.billOrDayWiseAccountStatement.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.dayWiseSalesSummary ne null and reportProfile.dayWiseSalesSummary.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.dayWiseSalesSummary.profileCode}" th:text="${reportProfile.dayWiseSalesSummary.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.dayWiseSalesSummary.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${reportProfile.outletSyncStatus ne null and reportProfile.outletSyncStatus.display}" style="background: #caeeff;">
+										<td><a th:href="@{/report/} + ${reportProfile.outletSyncStatus.profileCode}" th:text="${reportProfile.outletSyncStatus.screenPrompt}">Report Name</a></td>
+										<td>
+											<a th:href="@{/report/} + ${reportProfile.outletSyncStatus.profileCode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer section -->
+		<div class="footer-section" th:include="commons :: footer-section"></div>
+
+	</body>
+</html>

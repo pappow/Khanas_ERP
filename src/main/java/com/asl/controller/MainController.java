@@ -1,30 +1,60 @@
 package com.asl.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.asl.service.ListService;
+import com.asl.entity.UserAuditRecord;
+import com.asl.model.LoggedInUserDetails;
+import com.asl.service.UserAuditRecordService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zubayer Ahamed
- * @since Feb 16, 2021
+ * @since 27-12-2020
  */
+@Slf4j
 @Controller
 @RequestMapping("/")
-public class MainController {
+public class MainController extends ASLAbstractController {
 
-	@Autowired private ListService listService;
+	private static final String LOGAIN_PAGE_PATH = "pages/login/fakelogin";
+	private static final String OUTSIDE_USERS_NAME = "anonymousUser";
+
+	@Autowired private UserAuditRecordService auditService;
 
 	@GetMapping
 	public String loadHomePage(Model model) {
-		
-		listService.findAllListHead().stream().forEach(r -> {
-			System.out.println(r.toString());
-		});
-		
-		return "index";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		if (OUTSIDE_USERS_NAME.equalsIgnoreCase(username)) {
+			if(sessionManager.getFromMap("FAKE_LOGIN_USER") != null) {
+				return "redirect:/business";
+			}
+
+			model.addAttribute("pageTitle", "Login");
+			log.debug("Login page called at {}", new Date());
+			return LOGAIN_PAGE_PATH;
+		}
+
+		if(sessionManager.getFromMap("LOGGED_DONE") == null || !sessionManager.getFromMap("LOGGED_DONE").equals("Y")) {
+			UserAuditRecord uar = new LoggedInUserDetails().getAuditRecord(sessionManager.getLoggedInUserDetails());
+			Date date = new Date();
+			uar.setLoginDate(date);
+			uar.setLogoutDate(null);
+			uar.setRecordDate(date);
+			auditService.save(uar);
+			sessionManager.addToMap("LOGGED_DONE", "Y");
+		}
+
+		return "redirect:/dashboard";
 	}
+
 }

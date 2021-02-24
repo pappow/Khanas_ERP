@@ -25,10 +25,10 @@ spring:
   thymeleaf:
     cache: false
   datasource: 
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost;databaseName=JUNKDB
-    username: sa
-    password: sql@s3rv3r
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@103.231.135.60:1521:orcl
+    username: res_erp
+    password: res_erp
     tomcat:
       max-wait: 20000
       max-active: 50
@@ -42,7 +42,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate: 
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        dialect: org.hibernate.dialect.Oracle10gDialect
         id:
           new_generator_mappings: false
   jackson:
@@ -52,4 +52,16 @@ spring:
     location: banner.txt
 
 mybatis: 
+#  mapper-locations: classpath*:**/mapper/*.xml
   typeAliasesPackage: com.asl.entity
+
+JNDIName: jdbcTemplate
+default: 
+  allow-system-admin: N
+  site-title: ASL <span class="title-divider">ERP</span>
+  logo-name: asl.png
+  copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
+  im-ex-path: D:/ASL/importexport
+  logging-path: D:/ASL/logs 
+  report: 
+    template-path: D:/ASL/cr-reports

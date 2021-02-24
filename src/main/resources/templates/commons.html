@@ -1,0 +1,153 @@
+<!-- COMMON MEAT INFO -->
+<head th:fragment="common-meta" xmlns:th="http://www.thymeleaf.org">
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link th:href="@{/assets/img/favicon.ico}" rel="icon" type="image/x-icon" />
+</head>
+
+<!-- COMMON-CSS -->
+<head th:fragment="common-css" xmlns:th="http://www.thymeleaf.org">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap.min.css"/>
+
+	<link rel="stylesheet" th:href="@{/assets/css/fontawesome/fontawesome.css}"/>
+	<link rel="stylesheet" th:href="@{/assets/css/fontawesome/brands.css}"/>
+	<link rel="stylesheet" th:href="@{/assets/css/fontawesome/solid.css}"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/lobibox/lobibox.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/smoke/smoke.css}"/>
+
+	<link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/ck-ui.css}"/>
+</head>
+
+<!-- COMMON-JS -->
+<head th:fragment="common-js" xmlns:th="http://www.thymeleaf.org">
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!-- Data table -->
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap.min.js"></script>
+
+	<!-- Alert message -->
+	<script type="text/javascript" th:src="@{/assets/js/lobibox/lobibox.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/lobibox/messageboxes.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/lobibox/notifications.min.js}"></script>
+
+	<!-- Form validator -->
+	<script type="text/javascript" th:src="@{/assets/js/smoke/smoke.js}"></script>
+
+	<!-- Date picker -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- ck ui -->
+	<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-functions.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-ui.js}"></script>
+
+	<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
+</head>
+
+<!-- Main Menu -->
+<nav class="navbar navbar-inverse" th:fragment="main-menu" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle"
+				data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" th:href="@{/}">ASL-CR</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li class="active"><a th:href="@{/}">Home</a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Report <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li th:each="menu: ${T(com.asl.enums.ReportMenu).values()}">
+							<a th:href="@{/report/} + ${menu.code}"><span th:text="${menu.description}"></span></a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<!-- HEADER -->
+<div class="header-section" th:fragment="header-section" xmlns:th="http://www.thymeleaf.org">
+	<a th:href="@{/}" class="basePath"></a>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1 class="brand-name"><a th:href="@{/}" th:utext="${brandName}" style="color: #29af70; font-weight: bold; text-decoration: none;">BOOK-POINT</a></h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-section" th:fragment="footer-section" xmlns:th="http://www.thymeleaf.org">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center" th:with="df=${'yyyy'}">
+				<span th:utext="${copyrightText}"></span> <span th:text="${#dates.format(#dates.createNow(), df)}"></span>
+			</div>
+		</div>
+	</div>
+	<span th:remove="tag" th:include="commons :: alert-section"></span>
+	<span th:remove="tag" th:include="commons :: loading-mask"></span>
+	<div th:remove="tag" th:replace="commons :: progressmask"></div>
+</div>
+
+<!-- Utility -->
+<!-- ALERT -->
+<div th:fragment="alert-section" xmlns:th="http://www.thymeleaf.org">
+	<div class="ck-alert nodisplay alert alert-dismissible fade in">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> 
+		<strong class="ck-alert-identifier">Success!</strong> <span class="ck-alert-message">This alert box could indicate a successful or positive action.</span>
+	</div>
+</div>
+
+<!-- Loading mask -->
+<div th:fragment="loading-mask" xmlns:th="http://www.thymeleaf.org">
+	<div class="loading-mask nodisplay"></div>
+	<div id="loadingmask2" class="nodisplay">
+		<div id="loadingdots" class="nodisplay">
+			<div id="loadingdots_1" class="loadingdots nodisplay">L</div>
+			<div id="loadingdots_2" class="loadingdots nodisplay">O</div>
+			<div id="loadingdots_3" class="loadingdots nodisplay">A</div>
+			<div id="loadingdots_4" class="loadingdots nodisplay">D</div>
+			<div id="loadingdots_5" class="loadingdots nodisplay">I</div>
+			<div id="loadingdots_6" class="loadingdots nodisplay">N</div>
+			<div id="loadingdots_7" class="loadingdots nodisplay">G</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="progressmask" th:fragment="progressmask" xmlns:th="http://www.thymeleaf.org">
+	<div class="progress-box">
+		<div class="progress">
+			<link rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/progressmask.css}" />
+			<div 	class="progress-bar progress-bar-success progress-bar-striped" 
+					role="progressbar"
+					aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+					0% complete
+			</div>
+		</div>
+	</div>
+</div>
+

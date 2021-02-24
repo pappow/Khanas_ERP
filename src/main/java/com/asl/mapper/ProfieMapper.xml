@@ -1,0 +1,81 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileMapper">
+
+	<insert id="save" 
+			parameterType="Profile">
+		INSERT INTO Profile
+		(
+			profileId,
+			profileCode,
+			description,
+			profileType,
+			businessId,
+			createdBy,
+			lastModifiedBy,
+			createdByIP,
+			lastModifiedByIP,
+			status,
+			createDate,
+			updateDate
+		)
+		VALUES
+		(
+			PROFILE_SEQ.nextval,
+			#{profileCode,jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{profileType, jdbcType=VARCHAR},
+			#{businessId, jdbcType=VARCHAR},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastModifiedBy, jdbcType=VARCHAR},
+			#{createdByIP, jdbcType=VARCHAR},
+			#{lastModifiedByIP, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="Profile" 
+			useGeneratedKeys="true"
+			keyColumn="profileId"
+			keyProperty="profileId">
+		UPDATE Profile
+		SET
+			profileCode=#{profileCode, jdbcType=VARCHAR},
+			description=#{description, jdbcType=VARCHAR},
+			profileType=#{profileType, jdbcType=VARCHAR},
+			businessId=#{businessId, jdbcType=VARCHAR},
+			createdBy=#{createdBy, jdbcType=VARCHAR},
+			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
+			createdByIP=#{createdByIP, jdbcType=VARCHAR},
+			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
+			status=#{status, jdbcType=VARCHAR},
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+		WHERE
+			profileId=#{profileId}
+	</update>
+
+	<select id="findByProfileId" resultType="Profile">
+		SELECT * FROM Profile WHERE profileId=#{profileId}
+	</select>
+
+	<select id="findByProfileCodeAndProfileType" resultType="Profile">
+		SELECT * FROM Profile WHERE profileCode=#{profileCode} AND profileType=#{profileType} AND businessId=#{businessId}
+	</select>
+
+	<select id="getAllProfiles" resultType="Profile">
+		SELECT 
+			* 
+		FROM 
+			Profile 
+		WHERE 
+			businessId=#{businessId}
+			<if test="profileType != null and profileType != ''">
+				AND profileType=#{profileType}
+			</if>
+	</select>
+
+</mapper>

@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Entity
-@Table(name = "LH")
+@Table(name = "listHead")
 @EqualsAndHashCode(of = { "listHeadId" }, callSuper = false)
 public class ListHead extends AbstractModel<String> {
 

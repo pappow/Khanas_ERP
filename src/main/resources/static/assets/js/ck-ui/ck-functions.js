@@ -96,11 +96,35 @@ function triggerUpdateButton(){
 	console.log('%cTrigger update button...', 'color: green');
 
 	$('li.editmode').addClass('nodisplay');
+	$('a.btn.editmode').addClass('nodisplay');
 	$('li.viewmode').removeClass('nodisplay');
+	$('a.btn.viewmode').removeClass('nodisplay');
 	$('#mainform .form-control, #mainform .form-control-input2').removeAttr('disabled');
 
 	if($('table.datatable').length > 0){
-		var table = $('table.datatable');
+		$('table.datatable').each(function (tindex, table) {
+			$(table).find('th button.editmode').removeAttr('disabled');
+			var datatable = $(table).DataTable();
+			datatable.rows().every(function(index, element) {
+				var row = $(this.node());
+				$(row).find('button.editmode').removeAttr('disabled');
+			});
+		});
+	}
+
+	$('input.form-control-input2[disabled!="disabled"]').parent().css("margin-left", "0px");
+}
+function triggerUpdateButtonSpecific(tableId){
+	console.log('%cTrigger update button...', 'color: green');
+
+	$('li.editmode').addClass('nodisplay');
+	$('a.btn.editmode').addClass('nodisplay');
+	$('li.viewmode').removeClass('nodisplay');
+	$('a.btn.viewmode').removeClass('nodisplay');
+	$('#mainform .form-control, #mainform .form-control-input2').removeAttr('disabled');
+
+	if($('table#' + tableId).length > 0){
+		var table = $('table#' + tableId);
 		$(table).find('th button.editmode').removeAttr('disabled');
 		var datatable = $(table).DataTable();
 		datatable.rows().every(function(index, element) {
@@ -257,11 +281,34 @@ function dataTableInit(){
 				"targets": noSortColumns,
 				"orderable": false
 			}],
+			"responsive": true
+		});
+
+		new $.fn.dataTable.FixedHeader(datatable);
+
+		bindDataTableButtonsEvent(datatable);
+	});
+}
+
+function dataTableInitSpecific(tableId){
+	console.log('%cDataTable init.. ', 'color: green');
+	$('table#' + tableId).each(function (tindex, table) {
+		var noSortColumns = [];
+		$(table).find('th[data-nosort="Y"]').each(function(i, col){
+			noSortColumns.push($(col).index());
+		});
+
+		var datatable = $(table).DataTable({
+			"columnDefs": [{
+				"targets": noSortColumns,
+				"orderable": false
+			}],
 		});
 
 		bindDataTableButtonsEvent(datatable);
 	});
 }
+
 
 
 
@@ -489,13 +536,16 @@ function doSectionReloadWithNewData(rdata){
 		type : 'GET',
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
+			console.log({data});
 			var wrapperelement = $('#' + rdata.reloadelementid + "_wrapper");
 			if($(wrapperelement).length > 0){
 				wrapperelement.html("");
 				wrapperelement.append(data);
 
-				dataTableInit();
-				triggerUpdateButton();
+				//dataTableInit();
+				dataTableInitSpecific(rdata.reloadelementid);
+				triggerUpdateButtonSpecific(rdata.reloadelementid);
+				//triggerUpdateButton();
 			} else {
 				console.log("Normal table");
 				var target = $('#' + rdata.reloadelementid);
