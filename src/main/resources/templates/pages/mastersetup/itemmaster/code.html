@@ -56,13 +56,13 @@
 										<a th:if="${#strings.isEmpty(xcodes.xcode)}" th:href="@{/mastersetup/itemmaster/code}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.status.description == 'Live'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.status.description == 'Live'}" th:href="@{/mastersetup/itemmaster/code/archive/} + ${xcodes.xcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(xcodes.xcode) and scodes.status.description == 'Deleted'}" th:href="@{/mastersetup/itemmaster/code/restore/} + ${xcodes.xcode}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.status.description == 'Deleted'}" th:href="@{/mastersetup/itemmaster/code/restore/} + ${xcodes.xcode}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<a th:if="${not #strings.isEmpty(xcodes.xcode) and #strings.isEmpty(xcodes.copyId) and xcodes.status.description == 'Live'}" th:href="@{/mastersetup/itemmaster/code/}  + ${xcodes.xcode} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
 										<!-- Form Pagination -->
-										<a th:href="@{/formpaging/jump/top?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
+										<a th:href="@{/mastersetup/itemmaster/code/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
 										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
 										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/formpaging/jump/bottom?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a>
+										<a th:href="@{/mastersetup/itemmaster/code/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/itemmaster/code/save}" th:object="${xcodes}" method="post">

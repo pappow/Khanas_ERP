@@ -70,12 +70,12 @@ public abstract class AbstractModel<U> implements Serializable {
 
 	@CreationTimestamp
 	@Column(name = "createDate")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate = new Date();
 
 	@UpdateTimestamp
 	@Column(name = "updateDate")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate = new Date();
 
 	@Transient

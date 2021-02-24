@@ -50,8 +50,8 @@
 			#{createdByIP, jdbcType=VARCHAR},
 			#{lastModifiedByIP, jdbcType=VARCHAR},
 			#{status, jdbcType=VARCHAR},
-			#{createDate, jdbcType=DATE},
-			#{updateDate, jdbcType=DATE}
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
@@ -79,10 +79,10 @@
 			createdByIP=#{createdByIP, jdbcType=VARCHAR},
 			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
 			status=#{status, jdbcType=VARCHAR},
-			createDate=#{createDate, jdbcType=DATE},
-			updateDate=#{updateDate, jdbcType=DATE}
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
 		WHERE
-			xcode=#{xcode},
+			xcode=#{xcode}
 	</update>
 
 	<select id="getAllXcodes" resultType="Xcodes">
@@ -99,6 +99,18 @@
 
 	<select id="findByXtypesAndXcodes" resultType="Xcodes">
 		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND xcode=#{xcode} AND businessId=#{businessId} AND status='L'
+	</select>
+
+	<select id="getSeilingRecord" resultType="Xcodes">
+		SELECT 
+			* 
+		FROM 
+			XCODES 
+		WHERE 
+			businessId=#{businessId}
+			AND ROWNUM = 1 
+		ORDER BY 
+			XCODE ${direction}
 	</select>
 
 </mapper>

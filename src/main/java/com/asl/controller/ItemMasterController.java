@@ -91,4 +91,16 @@ public class ItemMasterController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/mastersetup/itemmaster/code/" + xcodes.getXtype() + "/" + xcodes.getXcode());
 		return responseHelper.getResponse();
 	}
+
+	@GetMapping("/code/paging/jump/{direction}")
+	public String itemCodePaging(@PathVariable("direction") String direction, Model model) {
+		String sort = "ASC";
+		if("bottom".equalsIgnoreCase(direction)) sort = "DESC";
+		Xcodes xcodes = xcodesService.getSeilingRecord(sort);
+		if(xcodes == null) xcodes = new Xcodes();
+		model.addAttribute("codeTypes", listService.getList("CODE_TYPE", "ITEM_CODE"));
+		model.addAttribute("xcodes", xcodes);
+		model.addAttribute("xcodesList", xcodesService.getAllXcodes());
+		return "pages/mastersetup/itemmaster/code";
+	}
 }

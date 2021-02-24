@@ -19,4 +19,6 @@ public interface XcodesService {
 	public List<Xcodes> findByXtype(String xType);
 	public List<Xcodes> findByXcode(String xCode);
 	public Xcodes findByXtypesAndXcodes(String xType, String xCodes);
+
+	public Xcodes getSeilingRecord(String direction);
 }

@@ -33,8 +33,8 @@
 			#{createdByIP, jdbcType=VARCHAR},
 			#{lastModifiedByIP, jdbcType=VARCHAR},
 			#{status, jdbcType=VARCHAR},
-			#{createDate, jdbcType=DATE},
-			#{updateDate, jdbcType=DATE}
+			#{createDate, jdbcType=TIMESTAMP},
+			#{updateDate, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
@@ -53,8 +53,8 @@
 			createdByIP=#{createdByIP, jdbcType=VARCHAR},
 			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
 			status=#{status, jdbcType=VARCHAR},
-			createDate=#{createDate, jdbcType=DATE},
-			updateDate=#{updateDate, jdbcType=DATE}
+			createDate=#{createDate, jdbcType=TIMESTAMP},
+			updateDate=#{updateDate, jdbcType=TIMESTAMP}
 		WHERE
 			paid=#{paid}
 	</update>

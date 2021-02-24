@@ -59,4 +59,10 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 		return xcodesMapper.findByXtypesAndXcodes(xType, xCodes, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public Xcodes getSeilingRecord(String direction) {
+		return xcodesMapper.getSeilingRecord(direction, sessionManager.getBusinessId());
+	}
+
+	
 }

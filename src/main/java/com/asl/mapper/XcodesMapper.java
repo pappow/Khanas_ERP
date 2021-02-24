@@ -20,4 +20,6 @@ public interface XcodesMapper {
 	public List<Xcodes> findByXtype(String xtype, String businessId);
 	public List<Xcodes> findByXcode(String xcode, String businessId);
 	public Xcodes findByXtypesAndXcodes(String xtype, String xcode, String businessId);
+
+	public Xcodes getSeilingRecord(String direction, String businessId);
 }
