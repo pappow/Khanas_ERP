@@ -19,7 +19,7 @@ public class BusinessServiceImpl extends AbstractGenericService implements Busin
 	@Override
 	public ASLBusiness findBById(String businessId) {
 		if(businessId == null) return null;
-		return businessMapper.findByBusinessId(businessId);
+		return businessMapper.findByZid(businessId);
 	}
 
 }

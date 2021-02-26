@@ -1,9 +1,7 @@
 package com.asl.controller;
 
-import java.util.Arrays;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Xcodes;
 import com.asl.enums.ResponseStatus;
-import com.asl.mapper.XcodesMapper;
 import com.asl.service.ListService;
 import com.asl.service.XcodesService;
 

@@ -15,8 +15,8 @@ public interface UserMapper {
 
 	public long save(Users users);
 	public long update(Users users);
-	public List<Users> getAllUser(String businessId);
+	public List<Users> getAllUser(String zid);
 	public List<Users> findByUsername(String username);
 	public List<Users> findByUsernameAndPassword(String username, String password);
-	public Users findByUsernameAndBusinessId(String username, String businessId);
+	public Users findByUsernameAndBusinessId(String username, String zid);
 }

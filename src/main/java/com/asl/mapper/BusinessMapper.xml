@@ -2,8 +2,8 @@
 
 <mapper namespace="com.asl.mapper.BusinessMapper">
 
-	<select id="findByBusinessId" resultType="ASLBusiness">
-		SELECT * FROM ASLBusiness WHERE businessId=#{businessId}
+	<select id="findByZid" resultType="ASLBusiness">
+		SELECT * FROM ASLBusiness WHERE zid=#{zid}
 	</select>
 
 </mapper>

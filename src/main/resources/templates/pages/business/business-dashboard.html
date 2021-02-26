@@ -91,10 +91,10 @@
 								<div th:if="${param.error}" style="color: red; margin-top: 20px !important; font-size: 20px; text-align: center; margin-top: -10px;">Please don't tamper with data. This incident will be reported to the System Admin</div>
 
 								<div th:each="business : ${businesses}" class="business-box">
-									<form id="${business.businessid}" class="sign-in-form" role="form" th:action="@{/login}" method="post" autocomplete="off">
+									<form id="${business.zid}" class="sign-in-form" role="form" th:action="@{/login}" method="post" autocomplete="off">
 										<input type="hidden" name="username" th:value="${business.username}"/>
 										<input type="hidden" name="password" th:value="${business.password}"/>
-										<input type="hidden" name="businessid" th:value="${business.businessid}"/>
+										<input type="hidden" name="zid" th:value="${business.zid}"/>
 										<button type="submit" class="business-submit-button"><i class="fas fa-hotel"></i><h4 th:text="${business.businessName}"></h4></button>
 									</form>
 								</div>

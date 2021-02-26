@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.asl.entity.UserAuditRecord;
 import com.asl.entity.Users;
-import com.asl.enums.RecordStatus;
 import com.asl.service.UserAuditRecordService;
 import com.asl.service.UserService;
 
@@ -33,8 +32,8 @@ class AslErpApplicationTests {
 	void saveUser() {
 		Users user = new Users();
 		user.setUsername("admin");
-		user.setStatus(RecordStatus.L);
-		user.setBusinessId("900010");
+		user.setZactive(Boolean.TRUE);
+		user.setZid("900010");
 		user.setPswd("1234");
 		user.setSystemAdmin(true);
 		long count = userService.save(user);

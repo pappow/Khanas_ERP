@@ -25,14 +25,14 @@
 			role8,
 			role9,
 			role10,
-			businessid,
-			createdby,
-			lastmodifiedby,
-			createdbyip,
-			lastmodifiedbyip,
-			status,
-			createdate,
-			updatedate
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
 		)
 		VALUES
 		(
@@ -55,14 +55,14 @@
 			#{role8},
 			#{role9},
 			#{role10},
-			#{businessId},
-			#{createdBy},
-			#{lastModifiedBy},
-			#{createdByIP},
-			#{lastModifiedByIP},
-			#{status},
-			#{createDate},
-			#{updateDate}
+			#{zid},
+			#{zauserid},
+			#{zuuserid},
+			#{zaip},
+			#{zuip},
+			#{zactive},
+			#{ztime},
+			#{zutime}
 		)
 	</insert>
 
@@ -89,20 +89,20 @@
 			role8=#{role8},
 			role9=#{role9},
 			role10=#{role10},
-			businessId=#{businessId},
-			createdBy=#{createdBy},
-			lastModifiedBy=#{lastModifiedBy},
-			createdByIP=#{createdByIP},
-			lastModifiedByIP=#{lastModifiedByIP},
-			status=#{status},
-			createDate=#{createDate},
-			updateDate=#{updateDate}
+			zid=#{zid},
+			zauserid=#{zauserid},
+			zuuserid=#{zuuserid},
+			zaip=#{zaip},
+			zuip=#{zuip},
+			zactive=#{zactive},
+			ztime=#{ztime},
+			zutime=#{zutime}
 		WHERE
 			username=#{username}
 	</update>
 
 	<select id="getAllUser" resultType="Users">
-		SELECT * FROM Users WHERE businessId=#{businessId}
+		SELECT * FROM Users WHERE zid=#{zid}
 	</select>
 
 	<select id="findByUsername" resultType="Users">
@@ -110,7 +110,7 @@
 	</select>
 
 	<select id="findByUsernameAndBusinessId" resultType="Users">
-		SELECT * FROM Users WHERE username=#{username} AND businessId=#{businessId}
+		SELECT * FROM Users WHERE username=#{username} AND zid=#{zid}
 	</select>
 
 	<select id="findByUsernameAndPassword" resultType="Users">

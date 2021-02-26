@@ -9,7 +9,7 @@
 			</foreach> 
 		FROM 
 			ListHead 
-		WHERE businessId=#{businessId} ORDER BY listHeadid ASC
+		WHERE zid=#{zid} ORDER BY listHeadid ASC
 	</select>
 
 </mapper>

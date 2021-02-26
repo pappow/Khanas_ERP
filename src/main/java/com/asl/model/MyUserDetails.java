@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.asl.entity.Users;
-import com.asl.enums.RecordStatus;
 import com.asl.enums.UserRole;
 
 import lombok.ToString;
@@ -40,11 +39,11 @@ public class MyUserDetails implements UserDetails {
 	public MyUserDetails(Users user) {
 		this.username = user.getUsername();
 		this.password = user.getPswd();
-		this.businessId = user.getBusinessId();
+		this.businessId = user.getZid();
 		this.accountExpired = false;
 		this.credentialExpired = false;
-		this.accountLocked = !RecordStatus.L.equals(user.getStatus());
-		this.enabled = RecordStatus.L.equals(user.getStatus());
+		this.accountLocked = !Boolean.TRUE.equals(user.getZactive());
+		this.enabled = Boolean.TRUE.equals(user.getZactive());
 		this.roles = StringUtils.isBlank(user.getRoles()) ? UserRole.SUBSCRIBER.getCode() : user.getRoles();
 		this.authorities = Arrays.stream(roles.split(","))
 									.map(SimpleGrantedAuthority::new)

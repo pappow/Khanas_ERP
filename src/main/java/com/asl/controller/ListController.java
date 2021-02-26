@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.DataList;
 import com.asl.entity.ListHead;
-import com.asl.enums.RecordStatus;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.ListService;
 
@@ -254,7 +253,7 @@ public class ListController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 
-			dl.setStatus(RecordStatus.D);
+			dl.setZactive(Boolean.FALSE);
 			long count = listService.update(dl);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
@@ -285,7 +284,7 @@ public class ListController extends ASLAbstractController {
 		if(!doArchive && listService.findListHeadByListCode(lh.getListCode()) != null) {
 			lh.setListCode("XXX_" + lh.getListCode());
 		}
-		lh.setStatus(doArchive ? RecordStatus.D : RecordStatus.L);
+		lh.setZactive(doArchive ? Boolean.FALSE : Boolean.FALSE);
 		long count = listService.update(lh);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't update listhead");

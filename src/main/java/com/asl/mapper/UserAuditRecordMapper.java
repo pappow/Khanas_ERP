@@ -14,6 +14,6 @@ import com.asl.entity.UserAuditRecord;
 public interface UserAuditRecordMapper {
 
 	long save(UserAuditRecord userAuditRecord);
-	List<UserAuditRecord> findByUserId(String userId, String businessId);
-	public List<UserAuditRecord> getAll(String businessId);
+	List<UserAuditRecord> findByUserId(String userId, String zid);
+	public List<UserAuditRecord> getAll(String zid);
 }

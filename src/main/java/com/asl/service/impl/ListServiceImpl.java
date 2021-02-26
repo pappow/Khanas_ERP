@@ -40,7 +40,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	public long save(ListHead listHead, String businessId) {
 		if(listHead == null) return 0;
 		listHead.setListCode(modifiedListCode(listHead.getListCode()));
-		listHead.setBusinessId(businessId);
+		listHead.setZid(businessId);
 		return listMapper.saveListHead(listHead);
 	}
 
@@ -53,7 +53,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	public long update(ListHead listHead, String businessId) {
 		if(listHead == null) return 0;
 		listHead.setListCode(modifiedListCode(listHead.getListCode()));
-		listHead.setBusinessId(businessId);
+		listHead.setZid(businessId);
 		return listMapper.updateListHead(listHead);
 	}
 
@@ -65,7 +65,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	@Override
 	public long save(DataList dataList, String businessId) {
 		if(dataList == null) return 0;
-		dataList.setBusinessId(businessId);
+		dataList.setZid(businessId);
 		return listMapper.saveDataList(dataList);
 	}
 
@@ -77,7 +77,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	@Override
 	public long update(DataList dataList, String businessId) {
 		if(dataList == null) return 0;
-		dataList.setBusinessId(businessId);
+		dataList.setZid(businessId);
 		return listMapper.updateDataList(dataList);
 	}
 

@@ -47,9 +47,9 @@ public class BusinessDashboardController extends ASLAbstractController {
 
 		List<Business> businesses = new ArrayList<>();
 		for(Users xus : list) {
-			ASLBusiness zb = businessService.findBById(xus.getBusinessId());
+			ASLBusiness zb = businessService.findBById(xus.getZid());
 			if(zb == null) continue;
-			businesses.add(new Business(xus.getUsername(), xus.getPswd(), zb.getBusinessId(), zb.getBusinessName()));
+			businesses.add(new Business(xus.getUsername(), xus.getPswd(), zb.getZid(), zb.getBusinessName()));
 		} 
 
 		model.addAttribute("businesses", businesses);

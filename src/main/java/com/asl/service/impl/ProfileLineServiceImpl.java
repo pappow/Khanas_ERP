@@ -24,7 +24,7 @@ public class ProfileLineServiceImpl extends AbstractGenericService implements Pr
 	public long save(ProfileLine profileLine) {
 		if(profileLine == null) return 0;
 
-		profileLine.setBusinessId(sessionManager.getBusinessId());
+		profileLine.setZid(sessionManager.getBusinessId());
 		return profileLineMapper.save(profileLine);
 	}
 
@@ -32,7 +32,7 @@ public class ProfileLineServiceImpl extends AbstractGenericService implements Pr
 	public long update(ProfileLine profileLine) {
 		if(profileLine == null) return 0;
 
-		profileLine.setBusinessId(sessionManager.getBusinessId());
+		profileLine.setZid(sessionManager.getBusinessId());
 		return profileLineMapper.save(profileLine);
 	}
 

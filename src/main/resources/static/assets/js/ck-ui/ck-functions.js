@@ -303,7 +303,10 @@ function dataTableInitSpecific(tableId){
 				"targets": noSortColumns,
 				"orderable": false
 			}],
+			"responsive": true
 		});
+
+		new $.fn.dataTable.FixedHeader(datatable);
 
 		bindDataTableButtonsEvent(datatable);
 	});
@@ -346,7 +349,9 @@ function submitMainForm(customurl){
 			console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.redirecturl){
+				if(data.reloadurl){
+					doSectionReloadWithNewData(data);
+				} else if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
 					}, 1500);
