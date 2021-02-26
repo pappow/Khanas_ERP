@@ -7,8 +7,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -22,17 +20,10 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.asl.enums.RecordStatus;
-
 import lombok.Data;
 
 /**
  * @author Zubayer Ahamed
- *
- */
-/**
- * @author Zubayer Ahamed
- *
  * @since Nov 28, 2020
  */
 @Data
@@ -42,41 +33,40 @@ public abstract class AbstractModel<U> implements Serializable {
 
 	private static final long serialVersionUID = -3736149934368733226L;
 
-	@Column(name = "businessId", nullable = false)
-	private String businessId;
+	@Column(name = "zid")
+	private String zid;
 
 	@CreatedBy
-	@Column(name = "createdBy")
-	private U createdBy;
+	@Column(name = "zauserid")
+	private U zauserid;
 
 	@LastModifiedBy
-	@Column(name = "lastModifiedBy")
-	private U lastModifiedBy;
+	@Column(name = "zuuserid")
+	private U zuuserid;
 
-	@Column(name = "createdByIP")
-	private String createdByIP;
+	@Column(name = "zaip")
+	private String zaip;
 
-	@Column(name = "lastModifiedByIP")
-	private String lastModifiedByIP;
+	@Column(name = "zuip")
+	private String zuip;
 
-	@Column(name = "status", length = 1)
-	@Enumerated(EnumType.STRING)
-	private RecordStatus status = RecordStatus.L;
+	@Column(name = "zactive", length = 1)
+	private Boolean zactive = Boolean.TRUE;
 
-	public RecordStatus getStatus() {
-		if(this.status == null) return RecordStatus.L;
-		return status;
+	public Boolean getZactive() {
+		if(this.zactive == null) return Boolean.FALSE;
+		return zactive;
 	}
 
 	@CreationTimestamp
-	@Column(name = "createDate")
+	@Column(name = "ztime")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate = new Date();
+	private Date ztime = new Date();
 
 	@UpdateTimestamp
-	@Column(name = "updateDate")
+	@Column(name = "zutime")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateDate = new Date();
+	private Date zutime = new Date();
 
 	@Transient
 	private String copyId;
@@ -84,7 +74,7 @@ public abstract class AbstractModel<U> implements Serializable {
 	@PreUpdate
 	public void onUpdate() {
 		try {
-			setLastModifiedByIP(InetAddress.getLocalHost().toString());
+			setZuip(InetAddress.getLocalHost().toString());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -93,7 +83,7 @@ public abstract class AbstractModel<U> implements Serializable {
 	@PrePersist
 	public void onPersist() {
 		try {
-			setCreatedByIP(InetAddress.getLocalHost().toString());
+			setZaip(InetAddress.getLocalHost().toString());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

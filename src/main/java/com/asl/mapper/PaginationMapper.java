@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaginationMapper {
 
-	public List<Map<String, Object>> getResultMap(List<String> columns, String businessId);
+	public List<Map<String, Object>> getResultMap(List<String> columns, String zid);
 }

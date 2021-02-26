@@ -17,5 +17,5 @@ public interface ProfileLineMapper {
 	long save(ProfileLine profileLine);
 	long update(ProfileLine profileLine);
 	ProfileLine findById(Long profileLineId);
-	List<ProfileLine> getAllByProfileIdAndProfileType(Long profileId, ProfileType profileType, String businessId);
+	List<ProfileLine> getAllByProfileIdAndProfileType(Long profileId, ProfileType profileType, String zid);
 }

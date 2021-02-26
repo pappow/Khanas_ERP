@@ -42,7 +42,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		if(profile == null || StringUtils.isBlank(profile.getProfileCode())) return 0;
 
 		profile.setProfileCode(modifiedProfileCode(profile.getProfileCode()));
-		profile.setBusinessId(sessionManager.getBusinessId());
+		profile.setZid(sessionManager.getBusinessId());
 		return profileMapper.save(profile);
 	}
 
@@ -51,7 +51,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		if(profile == null || StringUtils.isBlank(profile.getProfileCode())) return 0;
 
 		profile.setProfileCode(modifiedProfileCode(profile.getProfileCode()));
-		profile.setBusinessId(sessionManager.getBusinessId());
+		profile.setZid(sessionManager.getBusinessId());
 		return profileMapper.update(profile);
 	}
 

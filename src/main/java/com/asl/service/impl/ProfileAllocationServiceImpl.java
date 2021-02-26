@@ -24,7 +24,7 @@ public class ProfileAllocationServiceImpl extends AbstractGenericService impleme
 	public long save(ProfileAllocation profileAllocation) {
 		if(profileAllocation == null || StringUtils.isBlank(profileAllocation.getUsername())) return 0;
 
-		profileAllocation.setBusinessId(sessionManager.getBusinessId());
+		profileAllocation.setZid(sessionManager.getBusinessId());
 		return profileAllocationMapper.save(profileAllocation);
 	}
 
@@ -32,7 +32,7 @@ public class ProfileAllocationServiceImpl extends AbstractGenericService impleme
 	public long update(ProfileAllocation profileAllocation) {
 		if(profileAllocation == null || StringUtils.isBlank(profileAllocation.getUsername())) return 0;
 
-		profileAllocation.setBusinessId(sessionManager.getBusinessId());
+		profileAllocation.setZid(sessionManager.getBusinessId());
 		return profileAllocationMapper.update(profileAllocation);
 	}
 

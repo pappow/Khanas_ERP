@@ -24,10 +24,10 @@ public interface ListMapper {
 	public ListHead findListHeadById(Long listHeadId);
 	public DataList findDataListById(Long listId);
 
-	public ListHead findListHeadByListCode(String listCode, String businessId);
-	public List<DataList> findDataListByListCode(String listCode, String businessId);
+	public ListHead findListHeadByListCode(String listCode, String zid);
+	public List<DataList> findDataListByListCode(String listCode, String zid);
 
-	public List<DataList> getList(String listCode, String businessId, Map<String, String> params);
+	public List<DataList> getList(String listCode, String zid, Map<String, String> params);
 
-	public List<ListHead> getAllListHead(String businessId);
+	public List<ListHead> getAllListHead(String zid);
 }

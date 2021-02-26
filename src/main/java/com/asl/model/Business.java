@@ -13,6 +13,6 @@ public class Business {
 
 	private String username;
 	private String password;
-	private String businessid;
+	private String zid;
 	private String businessName;
 }

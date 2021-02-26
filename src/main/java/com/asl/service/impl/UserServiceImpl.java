@@ -25,14 +25,14 @@ public class UserServiceImpl extends AbstractGenericService implements UserServi
 	public long save(Users user) {
 		if (user == null) return 0;
 		user.setUsername(modifyUsername(user.getUsername()));
-		user.setBusinessId(sessionManager.getBusinessId());
+		user.setZid(sessionManager.getBusinessId());
 		return userMapper.save(user);
 	}
 
 	@Override
 	public long update(Users user) {
 		if (user == null) return 0;
-		user.setBusinessId(sessionManager.getBusinessId());
+		user.setZid(sessionManager.getBusinessId());
 		return userMapper.update(user);
 	}
 

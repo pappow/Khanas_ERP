@@ -34,8 +34,8 @@ public class ASLBusiness implements Serializable {
 
 	@Id
 	@Basic(optional = false)
-	@Column(name = "businessId")
-	private String businessId;
+	@Column(name = "zid")
+	private String zid;
 
 	@Column(name = "businessName")
 	private String businessName;

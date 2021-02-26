@@ -27,14 +27,14 @@
 			prompt15,
 			prompt16,
 			notes,
-			businessId,
-			createdBy,
-			lastModifiedBy,
-			createdByIP,
-			lastModifiedByIP,
-			status,
-			createDate,
-			updateDate
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
 		)
 		VALUES
 		(
@@ -58,14 +58,14 @@
 			#{prompt15, jdbcType=VARCHAR},
 			#{prompt16, jdbcType=VARCHAR},
 			#{notes, jdbcType=VARCHAR},
-			#{businessId, jdbcType=VARCHAR},
-			#{createdBy, jdbcType=VARCHAR},
-			#{lastModifiedBy, jdbcType=VARCHAR},
-			#{createdByIP, jdbcType=VARCHAR},
-			#{lastModifiedByIP, jdbcType=VARCHAR},
-			#{status, jdbcType=VARCHAR},
-			#{createDate, jdbcType=TIMESTAMP},
-			#{updateDate, jdbcType=TIMESTAMP}
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
@@ -94,14 +94,14 @@
 			prompt15=#{prompt15, jdbcType=VARCHAR},
 			prompt16=#{prompt16, jdbcType=VARCHAR},
 			notes=#{notes, jdbcType=VARCHAR},
-			businessId=#{businessId, jdbcType=VARCHAR},
-			createdBy=#{createdBy, jdbcType=VARCHAR},
-			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
-			createdByIP=#{createdByIP, jdbcType=VARCHAR},
-			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
-			status=#{status, jdbcType=VARCHAR},
-			createDate=#{createDate, jdbcType=TIMESTAMP},
-			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+			zid=#{zid, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			listHeadId=#{listHeadId}
 	</update>
@@ -135,14 +135,14 @@
 			extraValue3,
 			extraValue4,
 			extraValue5,
-			businessId,
-			createdBy,
-			lastModifiedBy,
-			createdByIP,
-			lastModifiedByIP,
-			status,
-			createDate,
-			updateDate
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
 		)
 		VALUES
 		(
@@ -170,14 +170,14 @@
 			#{extraValue3, jdbcType=VARCHAR},
 			#{extraValue4, jdbcType=VARCHAR},
 			#{extraValue5, jdbcType=VARCHAR},
-			#{businessId, jdbcType=VARCHAR},
-			#{createdBy, jdbcType=VARCHAR},
-			#{lastModifiedBy, jdbcType=VARCHAR},
-			#{createdByIP, jdbcType=VARCHAR},
-			#{lastModifiedByIP, jdbcType=VARCHAR},
-			#{status, jdbcType=VARCHAR},
-			#{createDate, jdbcType=TIMESTAMP},
-			#{updateDate, jdbcType=TIMESTAMP}
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
@@ -210,14 +210,14 @@
 			extraValue3=#{extraValue3, jdbcType=VARCHAR},
 			extraValue4=#{extraValue4, jdbcType=VARCHAR},
 			extraValue5=#{extraValue5, jdbcType=VARCHAR},
-			businessId=#{businessId, jdbcType=VARCHAR},
-			createdBy=#{createdBy, jdbcType=VARCHAR},
-			lastModifiedBy=#{lastModifiedBy, jdbcType=VARCHAR},
-			createdByIP=#{createdByIP, jdbcType=VARCHAR},
-			lastModifiedByIP=#{lastModifiedByIP, jdbcType=VARCHAR},
-			status=#{status, jdbcType=VARCHAR},
-			createDate=#{createDate, jdbcType=TIMESTAMP},
-			updateDate=#{updateDate, jdbcType=TIMESTAMP}
+			zid=#{zid, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			listId=#{listId}
 	</update>
@@ -231,11 +231,11 @@
 	</select>
 
 	<select id="findListHeadByListCode" resultType="ListHead">
-		SELECT * FROM ListHead WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+		SELECT * FROM ListHead WHERE listCode=#{listCode} AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="findDataListByListCode" resultType="DataList">
-		SELECT * FROM DataList WHERE listCode=#{listCode} AND businessId=#{businessId} AND status='L'
+		SELECT * FROM DataList WHERE listCode=#{listCode} AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="getList" resultType="DataList">
@@ -245,8 +245,8 @@
 			DataList 
 		WHERE 
 			listCode=#{listCode} 
-			AND businessId=#{businessId}
-			AND status='L'
+			AND zid=#{zid}
+			AND zactive='1'
 			<if test="params.listValue1 != null and params.listValue1 != ''">
 				AND listValue1=#{params.listValue1}
 			</if>
@@ -298,7 +298,7 @@
 	</select>
 
 	<select id="getAllListHead" resultType="ListHead">
-		SELECT * FROM ListHead WHERE businessId=#{businessId} ORDER BY listHeadid ASC
+		SELECT * FROM ListHead WHERE zid=#{zid} ORDER BY listHeadid ASC
 	</select>
 
 </mapper>

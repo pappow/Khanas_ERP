@@ -11,5 +11,5 @@ import com.asl.entity.ASLBusiness;
 @Mapper
 public interface BusinessMapper {
 
-	ASLBusiness findByBusinessId(String businessId);
+	ASLBusiness findByZid(String zid);
 }

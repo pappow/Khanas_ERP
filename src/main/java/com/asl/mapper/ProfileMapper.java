@@ -18,9 +18,9 @@ public interface ProfileMapper {
 	long save(Profile profile);
 	long update(Profile profile);
 	Profile findByProfileId(Long profileId);
-	Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType, String businessId);
-	List<Profile> getAllProfiles(String businessId);
-	List<Profile> getAllProfiles(ProfileType profileType, String businessId);
-	MenuProfile getMenuProfileById(Long profileId, String businessId);
+	Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType, String zid);
+	List<Profile> getAllProfiles(String zid);
+	List<Profile> getAllProfiles(ProfileType profileType, String zid);
+	MenuProfile getMenuProfileById(Long profileId, String zid);
 	String modifiedProfileCode(String pc);
 }
