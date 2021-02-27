@@ -100,7 +100,7 @@ public class XtrnController extends ASLAbstractController {
 		return doArchiveOrRestore(xtypetrn, xtrn, true);
 	}
 
-	@PostMapping("/archive/{xtypetrn}/{xtrn}")
+	@PostMapping("/restore/{xtypetrn}/{xtrn}")
 	public @ResponseBody Map<String, Object> restore(@PathVariable String xtypetrn, @PathVariable String xtrn){
 		return doArchiveOrRestore(xtypetrn, xtrn, false);
 	}
