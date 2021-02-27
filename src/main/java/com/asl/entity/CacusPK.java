@@ -14,5 +14,5 @@ public class CacusPK implements Serializable {
 	private static final long serialVersionUID = 6458664254386681580L;
 
 	private String zid;
-	private String zemail;
+	private String xcus;
 }
