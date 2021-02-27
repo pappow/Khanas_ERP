@@ -113,8 +113,14 @@ public class XtrnController extends ASLAbstractController {
 		}
 
 		xt.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		
-		
-		return null;
+		long count = xtrnService.update(xt);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Transaction code updated successfully");
+		responseHelper.setRedirectUrl("/mastersetup/xtrn/" + xtypetrn + "/" + xtrn);
+		return responseHelper.getResponse();
 	}
 }

@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.asl.entity.Users;
+import com.asl.entity.Xusers;
 import com.asl.model.MyUserDetails;
-import com.asl.service.UserService;
+import com.asl.service.XusersService;
 
 /**
  * @author Zubayer Ahamed
@@ -18,7 +18,7 @@ import com.asl.service.UserService;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired private UserService userService;
+	@Autowired private XusersService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		String xusername = token[0];
 		String businessId = token[1];
 
-		Users xuser = userService.findBByUsernameAndBusinessId(xusername, businessId);
+		Xusers xuser = userService.findByZemailAndZid(xusername, businessId);
 		if(xuser == null) throw  new UsernameNotFoundException("User not found in the system");
 		return new MyUserDetails(xuser);
 	}

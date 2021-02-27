@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.asl.entity.UserAuditRecord;
-import com.asl.entity.Users;
+import com.asl.entity.Xusers;
 import com.asl.service.UserAuditRecordService;
-import com.asl.service.UserService;
+import com.asl.service.XusersService;
 
 @SpringBootTest
 class AslErpApplicationTests {
 
-	@Autowired private UserService userService;
+	@Autowired private XusersService userService;
 	@Autowired private UserAuditRecordService userAuditRecordService;
 
 	@Test
@@ -30,30 +30,30 @@ class AslErpApplicationTests {
 
 	@Test
 	void saveUser() {
-		Users user = new Users();
-		user.setUsername("admin");
+		Xusers user = new Xusers();
+		user.setZemail("admin");
 		user.setZactive(Boolean.TRUE);
 		user.setZid("900010");
-		user.setPswd("1234");
-		user.setSystemAdmin(true);
+		user.setXpassword("1234");
+		user.setSystemadmin(true);
 		long count = userService.save(user);
 		System.out.println(count);
 	}
 
 	@Test
 	void findByUsername() {
-		List<Users> list = userService.findByUsernameOnly("admin");
+		List<Xusers> list = userService.findByZemail("admin");
 		list.stream().forEach(l -> {
 			System.out.println(l.toString());
-			System.out.println(l.getSystemAdmin());
+			System.out.println(l.getSystemadmin());
 		});
 	}
 
 	@Test
 	void update() {
-		List<Users> list = userService.findByUsernameOnly("admin");
-		Users user = list.get(0);
-		user.setPswd("admin");
+		List<Xusers> list = userService.findByZemail("admin");
+		Xusers user = list.get(0);
+		user.setXpassword("admin");
 		long count = userService.update(user);
 		System.out.println(count);
 	}
