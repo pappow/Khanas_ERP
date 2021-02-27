@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +63,7 @@ public class Cacus extends AbstractModel<String> {
 	private String xstatuscus;
 
 	@Column(name = "xcrlimit")
-	private String xcrlimit;
+	private BigDecimal xcrlimit;
 
 	@Column(name = "xtype")
 	private String xtype;
