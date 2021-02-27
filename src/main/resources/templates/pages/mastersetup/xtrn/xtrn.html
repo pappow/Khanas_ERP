@@ -49,7 +49,7 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Item Code</h1>
+										<h1>Transaction Code</h1>
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
@@ -57,7 +57,6 @@
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" th:href="@{/mastersetup/xtrn/archive/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == false}" th:href="@{/mastersetup/xtrn/restore/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and #strings.isEmpty(xtrn.copyId) and xtrn.zactive == true}" th:href="@{/mastersetup/xtrn/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
 										<!-- Form Pagination -->
 										<!-- <a th:href="@{/mastersetup/itemmaster/code/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
 										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xtrn.xcode) ? 'start' : xtrn.xcode} + '?table=xtrn&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
@@ -67,6 +66,8 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/xtrn/save}" th:object="${xtrn}" method="post">
 											<input type="hidden" th:if="${not #strings.isEmpty(xtrn.copyId)}" id="copyId" name= "copyId"/>
+											<input type="hidden" th:if="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}" th:field="*{xtypetrn}"/>
+											<input type="hidden" th:if="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}" th:field="*{xtrn}"/>
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">

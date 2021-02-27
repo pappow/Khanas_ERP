@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.asl.controller;
 
 import java.util.Date;
@@ -19,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.Users;
+import com.asl.entity.Xusers;
 import com.asl.model.FakeLoginUser;
-import com.asl.service.UserService;
+import com.asl.service.XusersService;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zubayer Ahamed
- *
+ * @since 
  */
 @Slf4j
 @Controller
@@ -37,7 +34,7 @@ public class LoginController extends ASLAbstractController {
 	private static final String LOGAIN_PAGE_PATH = "pages/login/fakelogin";
 	private static final String OUTSIDE_USERS_NAME = "anonymousUser";
 
-	@Autowired private UserService userService;
+	@Autowired private XusersService userService;
 
 	@GetMapping
 	public String loadLoginPage(Model model, @RequestParam(required = false) String device) {
@@ -64,7 +61,7 @@ public class LoginController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		List<Users> users = userService.findBByUsernameAndPassword(fakeLoginUser.getUsername(), fakeLoginUser.getPassword());
+		List<Xusers> users = userService.findByZemailAndXpassword(fakeLoginUser.getUsername(), fakeLoginUser.getPassword());
 		if(users == null || users.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("User not found in the system, please try again with appropriate username and password");
 			return responseHelper.getResponse();

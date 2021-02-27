@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.asl.entity.Users;
 import com.asl.entity.ASLBusiness;
+import com.asl.entity.Xusers;
 import com.asl.model.Business;
 import com.asl.service.BusinessService;
 
@@ -37,19 +37,19 @@ public class BusinessDashboardController extends ASLAbstractController {
 			return "redirect:/";
 		}
 
-		List<Users> list = null;
+		List<Xusers> list = null;
 		if(sessionManager.getFromMap("FAKE_LOGIN_USER") != null) {
-			list = (List<Users>) sessionManager.getFromMap("FAKE_LOGIN_USER");
+			list = (List<Xusers>) sessionManager.getFromMap("FAKE_LOGIN_USER");
 		}
 		if(list == null || list.isEmpty()) {
 			return "redirect:/";
 		}
 
 		List<Business> businesses = new ArrayList<>();
-		for(Users xus : list) {
+		for(Xusers xus : list) {
 			ASLBusiness zb = businessService.findBById(xus.getZid());
 			if(zb == null) continue;
-			businesses.add(new Business(xus.getUsername(), xus.getPswd(), zb.getZid(), zb.getBusinessName()));
+			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getBusinessName()));
 		} 
 
 		model.addAttribute("businesses", businesses);

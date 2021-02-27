@@ -71,8 +71,4 @@
 		SELECT * FROM ProfileAllocation WHERE username=#{username} AND zid=#{zid}
 	</select>
 
-	<select id="findByUsernameAndPassword" resultType="Users">
-		SELECT * FROM Users WHERE username=#{username} AND pswd=#{password}
-	</select>
-
 </mapper>

@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.asl.entity.Users;
+import com.asl.entity.Xusers;
 import com.asl.enums.UserRole;
 
 import lombok.ToString;
@@ -36,9 +36,9 @@ public class MyUserDetails implements UserDetails {
 	private String roles;
 	private List<GrantedAuthority> authorities;
 
-	public MyUserDetails(Users user) {
-		this.username = user.getUsername();
-		this.password = user.getPswd();
+	public MyUserDetails(Xusers user) {
+		this.username = user.getZemail();
+		this.password = user.getXpassword();
 		this.businessId = user.getZid();
 		this.accountExpired = false;
 		this.credentialExpired = false;

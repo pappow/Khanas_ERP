@@ -2,10 +2,17 @@ package com.asl.entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.asl.enums.UserRole;
+import com.asl.util.BooleanToYesNo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +42,9 @@ public class Xusers extends AbstractModel<String> {
 
 	@Column(name = "xpassword")
 	private String xpassword;
+
+	@Column(name = "xcus")
+	private String xcus;
 
 	@Column(name = "xrole")
 	private String xrole;
@@ -68,4 +78,53 @@ public class Xusers extends AbstractModel<String> {
 
 	@Column(name = "xpriority")
 	private String xpriority;
+
+	@Column(name = "xcontact")
+	private String xcontact;
+
+	@Column(name = "xcrlimit")
+	private String xcrlimit;
+
+	@Column(name = "xgcus")
+	private String xgcus;
+
+	@Column(name = "xgsup")
+	private String xgsup;
+
+	@Column(name = "xmadd")
+	private String xmadd;
+
+	@Column(name = "xorg")
+	private String xorg;
+
+	@Column(name = "xphone")
+	private String xphone;
+
+	@Column(name = "xstatuscus")
+	private String xstatuscus;
+
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Column(name = "xvatregno")
+	private String xvatregno;
+
+	@Column(name = "systemadmin")
+	@Convert(converter = BooleanToYesNo.class)
+	private Boolean systemadmin;
+
+	@Transient
+	private String roles;
+
+	public String getRoles() {
+		this.roles = "";
+		if(Boolean.TRUE.equals(systemadmin)) roles += UserRole.SYSTEM_ADMIN.getCode() + ',';
+
+		if(StringUtils.isBlank(roles)) return roles;
+
+		int lastComma = roles.lastIndexOf(',');
+		String finalString = roles.substring(0, lastComma);
+		roles = finalString;
+		return roles;
+	}
 }

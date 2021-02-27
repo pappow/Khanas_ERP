@@ -27,7 +27,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/mastersetup/itemmaster}">Item Master</a></li>
-										<li class="active"><a th:href="@{/mastersetup/itemmaster/code}">Item Code</a></li>
+										<li class="active"><a th:href="@{/mastersetup/xcodes}">Item Code</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -52,35 +52,36 @@
 										<h1>Item Code</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/itemmaster/code}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(xcodes.xcode)}" th:href="@{/mastersetup/itemmaster/code}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:if="${#strings.isEmpty(xcodes.xcode)}" th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.zactive == true}" th:href="@{/mastersetup/itemmaster/code/archive/} + ${xcodes.xcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.zactive == false}" th:href="@{/mastersetup/itemmaster/code/restore/} + ${xcodes.xcode}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<a th:if="${not #strings.isEmpty(xcodes.xcode) and #strings.isEmpty(xcodes.copyId) and xcodes.zactive == true}" th:href="@{/mastersetup/itemmaster/code/}  + ${xcodes.xcode} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
+										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.zactive == true}" th:href="@{/mastersetup/xcodes/archive/} + ${xcodes.xtype} + '/' + ${xcodes.xcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(xcodes.xcode) and xcodes.zactive == false}" th:href="@{/mastersetup/xcodes/restore/} + ${xcodes.xtype} + '/' + ${xcodes.xcode}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/itemmaster/code/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/itemmaster/code/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
+										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
+										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
+										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
+										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/itemmaster/code/save}" th:object="${xcodes}" method="post">
+										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/xcodes/save}" th:object="${xcodes}" method="post">
 											<input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>
+											<input type="hidden" th:if="${not #strings.isEmpty(xcodes.xtype) and not #strings.isEmpty(xcodes.xcode)}" th:field="*{xtype}"/>
+											<input type="hidden" th:if="${not #strings.isEmpty(xcodes.xtype) and not #strings.isEmpty(xcodes.xcode)}" th:field="*{xcode}"/>
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xtype">Code Type : </label>
 														<div class="col-sm-8">
-															<select class="form-control" th:field="*{xtype}">
-																<option th:each="type : ${codeTypes}" th:value="${type.listValue2}" th:text="${type.listValue2}"></option>
+															<select class="form-control" th:field="*{xtype}" th:disabled="${not #strings.isEmpty(xcodes.xtype) and not #strings.isEmpty(xcodes.xcode)}">
+																<option th:each="type : ${xcodesTypes}" th:value="${type.listValue2}" th:text="${type.listValue2}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xcode">Code : </label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xcode}" required="required" maxlength="100">
+															<input type="text" class="form-control" th:field="*{xcode}" required="required" maxlength="100"  th:disabled="${not #strings.isEmpty(xcodes.xtype) and not #strings.isEmpty(xcodes.xcode)}">
 														</div>
 													</div>
 													<div class="form-group">
@@ -118,7 +119,7 @@
 											<tbody>
 												<tr th:each="xcd : ${xcodesList}">
 													<td th:text="${xcd.xtype}"></td>
-													<td><a th:href="@{/mastersetup/itemmaster/code/} + ${xcd.xtype} + '/' +${xcd.xcode}" th:text="${xcd.xcode}"></a></td>
+													<td><a th:href="@{/mastersetup/xcodes/} + ${xcd.xtype} + '/' +${xcd.xcode}" th:text="${xcd.xcode}"></a></td>
 													<td th:text="${xcd.xdescdet}"></td>
 												</tr>
 											</tbody>
