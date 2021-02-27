@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,6 +91,7 @@ public class ListController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		setNewListHeadDataToOldListHead(listHead, lh);
 		long count = listService.update(lh);
 		if(count == 0) {
@@ -284,7 +286,7 @@ public class ListController extends ASLAbstractController {
 		if(!doArchive && listService.findListHeadByListCode(lh.getListCode()) != null) {
 			lh.setListCode("XXX_" + lh.getListCode());
 		}
-		lh.setZactive(doArchive ? Boolean.FALSE : Boolean.FALSE);
+		lh.setZactive(doArchive ? Boolean.FALSE : Boolean.TRUE);
 		long count = listService.update(lh);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't update listhead");

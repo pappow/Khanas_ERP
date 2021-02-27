@@ -9,10 +9,10 @@ import lombok.Data;
  * @since Feb 24, 2021
  */
 @Data
-public class CacusPK implements Serializable {
+public class XtrnPK implements Serializable {
 
-	private static final long serialVersionUID = 6458664254386681580L;
-
+	private static final long serialVersionUID = 7078439678926327781L;
 	private String zid;
-	private String xcus;
+	private String xtrn;
+	private String xtypetrn;
 }
