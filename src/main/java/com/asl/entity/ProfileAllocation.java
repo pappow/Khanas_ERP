@@ -25,6 +25,9 @@ public class ProfileAllocation extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -8668618359438471462L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "paid", unique = true, nullable = false)

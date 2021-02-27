@@ -9,11 +9,10 @@ import lombok.Data;
  * @since Feb 24, 2021
  */
 @Data
-public class XcodesPK implements Serializable {
+public class XusersPK implements Serializable {
 
-	private static final long serialVersionUID = 3915133288641449550L;
+	private static final long serialVersionUID = 6458664254386681580L;
 
 	private String zid;
-	private String xcode;
-	private String xtype;
+	private String zemail;
 }

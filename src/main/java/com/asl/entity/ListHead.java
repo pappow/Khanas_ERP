@@ -23,6 +23,9 @@ public class ListHead extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 3380300077484005051L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "listHeadId", unique = true, nullable = false)

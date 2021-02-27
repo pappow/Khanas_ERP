@@ -33,9 +33,6 @@ public abstract class AbstractModel<U> implements Serializable {
 
 	private static final long serialVersionUID = -3736149934368733226L;
 
-	@Column(name = "zid")
-	private String zid;
-
 	@CreatedBy
 	@Column(name = "zauserid")
 	private U zauserid;
