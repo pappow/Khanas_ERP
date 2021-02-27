@@ -27,6 +27,9 @@ public class Profile extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 2616243655037864169L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "profileId", unique = true, nullable = false)

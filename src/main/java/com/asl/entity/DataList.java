@@ -22,6 +22,9 @@ public class DataList extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 2402818361445233745L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "listId", unique = true, nullable = false)

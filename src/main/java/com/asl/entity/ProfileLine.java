@@ -35,6 +35,9 @@ public class ProfileLine extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -9011140154721641297L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "profileLineId", unique = true, nullable = false)

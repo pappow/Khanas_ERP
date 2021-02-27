@@ -61,7 +61,8 @@ public class ItemMasterController extends ASLAbstractController {
 		}
 
 		// modify xcodes
-		
+		xcodes.setXcode(xcodes.getXcode().trim());
+
 		// validate xcodes
 
 		// If existing xcodes

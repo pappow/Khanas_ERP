@@ -28,6 +28,9 @@ public class Users extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -2612771101344210891L;
 
+	@Column(name = "zid", nullable = false)
+	private String zid;
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "username")
