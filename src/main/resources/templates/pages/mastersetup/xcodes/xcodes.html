@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Item Codes</title>
+		<title>Codes</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -26,8 +26,8 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/mastersetup/itemmaster}">Item Master</a></li>
-										<li class="active"><a th:href="@{/mastersetup/xcodes}">Item Code</a></li>
+										<li><a th:href="@{/mastersetup/cap}">Codes and parameters</a></li>
+										<li class="active"><a th:href="@{/mastersetup/xcodes}">Codes</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -49,7 +49,7 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Item Code</h1>
+										<h1>Codes</h1>
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
@@ -74,7 +74,7 @@
 														<label class="control-label col-sm-4" for="xtype">Code Type : </label>
 														<div class="col-sm-8">
 															<select class="form-control" th:field="*{xtype}" th:disabled="${not #strings.isEmpty(xcodes.xtype) and not #strings.isEmpty(xcodes.xcode)}">
-																<option th:each="type : ${T(com.asl.enums.ItemCodeType).values()}" th:value="${type.code}" th:text="${type.code}"></option>
+																<option th:each="type : ${T(com.asl.enums.CodeType).values()}" th:value="${type.code}" th:text="${type.code}"></option>
 															</select>
 														</div>
 													</div>
@@ -105,7 +105,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Lists</h1>
+										<h1>All Codes</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap" id="xcodestable" th:fragment="xcodestable">

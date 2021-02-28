@@ -15,11 +15,16 @@ public class MasterSetupController extends ASLAbstractController {
 
 	@GetMapping("/itemmaster")
 	public String loadItemMasterMenuPage(Model model) {
-		return "pages/mastersetup/itemmaster/itemmaster";
+		return "pages/mastersetup/itemmaster";
 	}
 
 	@GetMapping("/partymaster")
 	public String loadPartyMasterMenuPage(Model model) {
 		return "pages/mastersetup/partymaster";
+	}
+
+	@GetMapping("/cap")
+	public String loadCodeAndParametersPage(Model model) {
+		return "pages/mastersetup/cap";
 	}
 }
