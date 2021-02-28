@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since Feb 24, 2021
  */
 @Controller
-@RequestMapping("/mastersetup/itemmaster")
-public class ItemMasterController extends ASLAbstractController {
+@RequestMapping("/mastersetup")
+public class MasterSetupController extends ASLAbstractController {
 
-	@GetMapping
-	public String loadItemMasterpage(Model model) {
+	@GetMapping("/itemmaster")
+	public String loadItemMasterMenuPage(Model model) {
 		return "pages/mastersetup/itemmaster/itemmaster";
 	}
 
+	@GetMapping("/partymaster")
+	public String loadPartyMasterMenuPage(Model model) {
+		return "pages/mastersetup/partymaster";
+	}
 }
