@@ -4,7 +4,7 @@ package com.asl.enums;
  * @author Zubayer Ahamed
  * @since Feb 28, 2021
  */
-public enum ItemCodeType {
+public enum CodeType {
 
 	ITEM_GROUP("Item Group"),
 	ITEM_CATEGORY("Item Category"),
@@ -19,7 +19,7 @@ public enum ItemCodeType {
 
 	private String code;
 
-	private ItemCodeType(String code) {
+	private CodeType(String code) {
 		this.code = code;
 	}
 

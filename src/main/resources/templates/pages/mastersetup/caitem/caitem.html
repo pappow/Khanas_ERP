@@ -7,10 +7,10 @@
 		<meta th:remove="tag" th:include="commons :: common-js" />
 	</head>
 	<body>
-	
+
 		<!-- Header section -->
 		<div class="header-section" th:include="commons :: header-section"></div>
-	
+
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
 			<div class="container">
@@ -26,8 +26,8 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/mastersetup/caitem}">Item Master</a></li>
-										<!-- <li class="active"><a th:href="@{/mastersetup/xcodes}">Item Code</a></li> -->
+										<li><a th:href="@{/mastersetup/itemmaster}">Item master</a></li>
+										<li class="active"><a th:href="@{/mastersetup/caitem}">Item Entry</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -37,8 +37,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container">
@@ -68,18 +67,17 @@
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/caitem/save}" th:object="${caitem}" method="post">
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
 											<input type="hidden" th:if="${not #strings.isEmpty(caitem.xitem)}" th:field="*{xitem}"/>
-											
+
 											<div class="row">
 												<div class="col-md-6">
-												
-													
+
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xitem">Item Code : </label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xitem}" required="required" maxlength="100"  th:disabled="${not #strings.isEmpty(caitem.xitem)}">
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xcatitem">Item Category : </label>
 														<div class="col-sm-8">
@@ -232,8 +230,7 @@
 				</div>
 			</div>
 		</div>
-		
-	
+
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
