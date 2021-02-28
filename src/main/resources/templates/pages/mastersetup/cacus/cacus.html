@@ -70,17 +70,17 @@
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group" th:if="${cacusType eq 'SUP'}">
-														<label class="control-label col-sm-4" for="xcustype">Supplier Code: </label>
+														<label class="control-label col-sm-4" for="xtype">Supplier Code: </label>
 														<div class="col-sm-8">
-															<select class="form-control" th:field="*{xcustype}">
+															<select class="form-control" th:field="*{xtype}">
 																<option th:each="type : ${supplierTypes}" th:value="${type.xtrn}" th:text="${type.xtrn}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group" th:if="${cacusType eq 'CUS'}">
-														<label class="control-label col-sm-4" for="xcustype">Customer Code: </label>
+														<label class="control-label col-sm-4" for="xtype">Customer Code: </label>
 														<div class="col-sm-8">
-															<select class="form-control" th:field="*{xcustype}">
+															<select class="form-control" th:field="*{xtype}">
 																<option th:each="type : ${customerTypes}" th:value="${type.xtrn}" th:text="${type.xtrn}"></option>
 															</select>
 														</div>
@@ -89,18 +89,6 @@
 														<label class="control-label col-sm-4" for="xorg">Company: </label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xorg}"/>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcountry">Country: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xcountry}"/>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-sm-4" for="xzip">Zip/Postal Code: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xzip}"/>
 														</div>
 													</div>
 												</div>
