@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Xtrn;
 import com.asl.enums.ResponseStatus;
-import com.asl.service.ListService;
 import com.asl.service.XtrnService;
 
 /**
@@ -27,12 +26,10 @@ import com.asl.service.XtrnService;
 @RequestMapping("/mastersetup/xtrn")
 public class XtrnController extends ASLAbstractController {
 
-	@Autowired private ListService listService;
 	@Autowired private XtrnService xtrnService;
 
 	@GetMapping
 	public String loadXtrnPage(Model model) {
-		model.addAttribute("xtrnTypes", listService.getList("CODE_TYPE", "XTRN_CODE"));
 		model.addAttribute("xtrn", getDefaultXtrn());
 		model.addAttribute("xtrnList", xtrnService.getAllXtrn());
 		return "pages/mastersetup/xtrn/xtrn";
@@ -45,7 +42,6 @@ public class XtrnController extends ASLAbstractController {
 			return "redirect:/mastersetup/xtrn";
 		}
 
-		model.addAttribute("xtrnTypes", listService.getList("CODE_TYPE", "XTRN_CODE"));
 		model.addAttribute("xtrn", x);
 		model.addAttribute("xtrnList", xtrnService.getAllXtrn());
 		return "pages/mastersetup/xtrn/xtrn";
