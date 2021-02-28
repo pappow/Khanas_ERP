@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Xcodes;
 import com.asl.enums.ResponseStatus;
-import com.asl.service.ListService;
 import com.asl.service.XcodesService;
 
 /**
@@ -27,12 +26,10 @@ import com.asl.service.XcodesService;
 @RequestMapping("/mastersetup/xcodes")
 public class XcodesController extends ASLAbstractController {
 
-	@Autowired private ListService listService;
 	@Autowired private XcodesService xcodesService;
 
 	@GetMapping
 	public String loadXtrnPage(Model model) {
-		model.addAttribute("xcodesTypes", listService.getList("CODE_TYPE", "ITEM_CODE"));
 		model.addAttribute("xcodes", new Xcodes());
 		model.addAttribute("xcodesList", xcodesService.getAllXcodes());
 		return "pages/mastersetup/xcodes/xcodes";
@@ -43,7 +40,6 @@ public class XcodesController extends ASLAbstractController {
 		Xcodes x = xcodesService.findByXtypesAndXcodes(xtype, xcode);
 		if(x == null) return "redirect:/mastersetup/xcodes";
 
-		model.addAttribute("xcodesTypes", listService.getList("CODE_TYPE", "ITEM_CODE"));
 		model.addAttribute("xcodes", x);
 		model.addAttribute("xcodesList", xcodesService.getAllXcodes());
 		return "pages/mastersetup/xcodes/xcodes";
