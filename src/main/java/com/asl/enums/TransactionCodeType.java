@@ -7,7 +7,8 @@ package com.asl.enums;
 public enum TransactionCodeType {
 
 	SUPPLIER_NUMBER("Supplier Number"),
-	CUSTOMER_NUMBER("Customer Number");
+	CUSTOMER_NUMBER("Customer Number"),
+	PURCHASE_ORDER("Purchase Order");
 
 	private String code;
 

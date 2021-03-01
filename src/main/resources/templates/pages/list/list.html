@@ -13,7 +13,7 @@
 
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row">
 					<nav class="navbar navbar-inverse">
 						<div class="container-fluid">
@@ -39,12 +39,12 @@
 
 		<!-- Content section -->
 		<div>
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
 
 						<div class="row">
-							<div class="col-md-7">
+							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
@@ -195,7 +195,7 @@
 									</div>
 								</section>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
 										<h1>All Lists</h1>
@@ -206,14 +206,14 @@
 												<tr>
 													<th>Code</th>
 													<th>Description</th>
-													<th>zactive</th>
+													<th>Status</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr th:each="lh : ${listHeads}">
 													<td><a th:href="@{/system/list/} + ${lh.listHeadId}" th:text="${lh.listCode}"></a></td>
 													<td th:text="${lh.description}"></td>
-													<td th:text="${lh.zactive}"></td>
+													<td th:text="${lh.zactive == true ? 'Y' : 'N'}"></td>
 												</tr>
 											</tbody>
 										</table>

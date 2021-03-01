@@ -13,7 +13,7 @@
 
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row">
 					<nav class="navbar navbar-inverse">
 						<div class="container-fluid">
@@ -40,7 +40,7 @@
 
 		<!-- Content section -->
 		<div>
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
 
@@ -93,13 +93,13 @@
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xnum">Starting : </label>
 														<div class="col-sm-8">
-															<input type="number" class="form-control" th:field="*{xnum}" min="1">
+															<input type="number" class="form-control" th:field="*{xnum}" min="0" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}">
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xinc">Increment : </label>
 														<div class="col-sm-8">
-															<input type="number" class="form-control" th:field="*{xinc}" min="1">
+															<input type="number" class="form-control" th:field="*{xinc}" min="1" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}">
 														</div>
 													</div>
 													<div class="form-group">
@@ -112,12 +112,6 @@
 														<label class="control-label col-sm-4" for="xrsufix">Suffix : </label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xrsufix}">
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-sm-4" for="xformat">Format : </label>
-														<div class="col-sm-8">
-															<textarea class="form-control" th:field="*{xformat}"></textarea>
 														</div>
 													</div>
 												</div>
@@ -140,7 +134,6 @@
 													<th>Description</th>
 													<th>Starting</th>
 													<th>Increment</th>
-													<th>Format</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -150,7 +143,6 @@
 													<td th:text="${x.xdesc}"></td>
 													<td th:text="${x.xnum}"></td>
 													<td th:text="${x.xinc}"></td>
-													<td th:text="${x.xformat}"></td>
 												</tr>
 											</tbody>
 										</table>

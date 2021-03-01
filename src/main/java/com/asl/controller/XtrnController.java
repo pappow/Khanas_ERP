@@ -49,7 +49,7 @@ public class XtrnController extends ASLAbstractController {
 
 	private Xtrn getDefaultXtrn() {
 		Xtrn xtrn = new Xtrn();
-		xtrn.setXnum(1);
+		xtrn.setXnum(0);
 		xtrn.setXinc(1);
 		return xtrn;
 	}
@@ -69,7 +69,7 @@ public class XtrnController extends ASLAbstractController {
 		// if existing record
 		Xtrn existXtrn = xtrnService.findByXtypetrnAndXtrn(xtrn.getXtypetrn(), xtrn.getXtrn());
 		if(existXtrn != null) {
-			BeanUtils.copyProperties(xtrn, existXtrn, "xtypetrn", "xtrn");
+			BeanUtils.copyProperties(xtrn, existXtrn, "xtypetrn", "xtrn", "xnum", "xinc");
 			long count = xtrnService.update(existXtrn);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
