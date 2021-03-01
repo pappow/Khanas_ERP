@@ -15,7 +15,11 @@ public enum CodeType {
 	CURRENCY_OF_PRICE("Currency of Price"),
 	STOCK_TYPE("Stock Type"),
 	TAX_CATEGORY("Tax Category"),
-	STOCKING_UNIT("Stocking Unit");
+	STOCKING_UNIT("Stocking Unit"),
+	SUPPLIER_GROUP("Supplier Group"),
+	SUPPLIER_STATUS("Supplier Status"),
+	CUSTOMER_GROUP("Customer Group"),
+	CUSTOMER_STATUS("Customer Status");
 
 	private String code;
 

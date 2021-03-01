@@ -1,5 +1,6 @@
 package com.asl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -7,8 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.UserAuditRecord;
 import com.asl.entity.Xusers;
+import com.asl.enums.TransactionCodeType;
+import com.asl.service.CacusService;
 import com.asl.service.UserAuditRecordService;
 import com.asl.service.XusersService;
 
@@ -17,6 +21,7 @@ class AslErpApplicationTests {
 
 	@Autowired private XusersService userService;
 	@Autowired private UserAuditRecordService userAuditRecordService;
+	@Autowired private CacusService cacusService;
 
 	@Test
 	void saveUserAuditRecord() {
@@ -55,6 +60,16 @@ class AslErpApplicationTests {
 		Xusers user = list.get(0);
 		user.setXpassword("admin");
 		long count = userService.update(user);
+		System.out.println(count);
+	}
+
+	@Test
+	void saveCacus() {
+		Cacus cacus = new Cacus();
+		cacus.setXcustype("SUP-");
+		cacus.setXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode());
+		cacus.setXcrlimit(BigDecimal.ZERO);
+		long count = cacusService.save(cacus);
 		System.out.println(count);
 	}
 

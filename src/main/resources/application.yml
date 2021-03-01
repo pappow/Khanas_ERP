@@ -1,5 +1,8 @@
 logging:
   level:
+    com: 
+      asl: 
+        mapper: TRACE
     root: INFO
     org:
       springframework:

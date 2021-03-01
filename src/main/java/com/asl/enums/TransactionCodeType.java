@@ -6,12 +6,8 @@ package com.asl.enums;
  */
 public enum TransactionCodeType {
 
-	SUPPLIER_GROUP("Supplier Group"),
-	SUPPLIER_STATUS("Supplier Status"),
 	SUPPLIER_NUMBER("Supplier Number"),
-	CUSTOMER_NUMBER("Customer Number"),
-	CUSTOMER_GROUP("Customer Group"),
-	CUSTOMER_STATUS("Customer Status");
+	CUSTOMER_NUMBER("Customer Number");
 
 	private String code;
 
