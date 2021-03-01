@@ -33,8 +33,8 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
-	<!-- <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script> -->
-	<!-- <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap.min.js"></script> -->
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap.min.js"></script>
 
 	<!-- Alert message -->
 	<script type="text/javascript" th:src="@{/assets/js/lobibox/lobibox.min.js}"></script>
@@ -89,7 +89,7 @@
 <!-- HEADER -->
 <div class="header-section" th:fragment="header-section" xmlns:th="http://www.thymeleaf.org">
 	<a th:href="@{/}" class="basePath"></a>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
 				<h1 class="brand-name"><a th:href="@{/}" th:utext="${brandName}" style="color: #29af70; font-weight: bold; text-decoration: none;">BOOK-POINT</a></h1>

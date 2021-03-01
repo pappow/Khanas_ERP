@@ -15,49 +15,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.PoordHeader;
-import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 
-//Purchase Order Controller
-
 @Controller
 @RequestMapping("/purchasing/poord")
 public class PoordController extends ASLAbstractController {
-	
+
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
-	
+
 	@GetMapping
 	public String loadPoordPage(Model model) {
-		
+
 		model.addAttribute("poordheader", new PoordHeader());
 		//model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getAllPoordHeaders());
 		//model.addAttribute("warehouses", xcodeService.findByXtype(CodeType..getCode()));
-		
+
 		return "pages/purchasing/poord/poord";
 	}
-	
-	
+
 	@GetMapping("/{xpornum}")
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
-				
 		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum); 
-		if(data == null)
-			return "redirect:/purchasing/poord";
-		 
+		if(data == null) return "redirect:/purchasing/poord";
+
 		model.addAttribute("poordheader", data);
 		model.addAttribute("allPoordHeader", poordService.getAllPoordHeaders());
 		//model.addAttribute("", poordService.getPoordDetailsByXpornum(xpornum));
 		return "pages/purchasing/poord/poord";
 	}
-	
-	
+
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
-		
 		if(poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -67,7 +59,6 @@ public class PoordController extends ASLAbstractController {
 
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
-		
 		if(existPoordHeader != null) {
 			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum");
 			long count = poordService.update(existPoordHeader);
@@ -90,7 +81,6 @@ public class PoordController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
-	
 
 	@PostMapping("/archive/{xpornum}")
 	public @ResponseBody Map<String, Object> archive(@PathVariable String xpornum){
@@ -101,7 +91,7 @@ public class PoordController extends ASLAbstractController {
 	public @ResponseBody Map<String, Object> restore(@PathVariable String xpornum){
 		return doArchiveOrRestore(xpornum, false);
 	}
-	
+
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
 		if(poordHeader == null) {
@@ -120,5 +110,5 @@ public class PoordController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
-	
+
 }

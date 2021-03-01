@@ -11,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.asl.entity.ASLBusiness;
 import com.asl.entity.Xusers;
+import com.asl.entity.Zbusiness;
 import com.asl.model.Business;
-import com.asl.service.BusinessService;
+import com.asl.service.ZbusinessService;
 
 /**
  * @author Zubayer Ahamed
@@ -26,7 +26,7 @@ public class BusinessDashboardController extends ASLAbstractController {
 
 	private static final String OUTSIDE_USERS_NAME = "anonymousUser";
 
-	@Autowired private BusinessService businessService;
+	@Autowired private ZbusinessService zbusinessService;
 
 	@SuppressWarnings("unchecked")
 	@GetMapping
@@ -47,10 +47,10 @@ public class BusinessDashboardController extends ASLAbstractController {
 
 		List<Business> businesses = new ArrayList<>();
 		for(Xusers xus : list) {
-			ASLBusiness zb = businessService.findBById(xus.getZid());
+			Zbusiness zb = zbusinessService.findBById(xus.getZid());
 			if(zb == null) continue;
-			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getBusinessName()));
-		} 
+			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getZorg()));
+		}
 
 		model.addAttribute("businesses", businesses);
 

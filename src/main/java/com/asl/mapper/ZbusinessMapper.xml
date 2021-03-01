@@ -1,0 +1,9 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ZbusinessMapper">
+
+	<select id="findByZid" resultType="Zbusiness">
+		SELECT * FROM Zbusiness WHERE zid=#{zid} AND zactive='1'
+	</select>
+
+</mapper>

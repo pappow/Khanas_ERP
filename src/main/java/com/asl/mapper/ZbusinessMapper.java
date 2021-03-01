@@ -2,14 +2,14 @@ package com.asl.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.asl.entity.ASLBusiness;
+import com.asl.entity.Zbusiness;
 
 /**
  * @author Zubayer Ahamed
  * @since Feb 17, 2021
  */
 @Mapper
-public interface BusinessMapper {
+public interface ZbusinessMapper {
 
-	ASLBusiness findByZid(String zid);
+	Zbusiness findByZid(String zid);
 }

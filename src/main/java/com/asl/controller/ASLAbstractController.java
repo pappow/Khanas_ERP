@@ -15,13 +15,10 @@ import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
 import com.asl.service.ProfileService;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Slf4j
 @Component
 public class ASLAbstractController {
 

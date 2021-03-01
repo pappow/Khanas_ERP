@@ -2,14 +2,14 @@ package com.asl.service;
 
 import org.springframework.stereotype.Component;
 
-import com.asl.entity.ASLBusiness;
+import com.asl.entity.Zbusiness;
 
 /**
  * @author Zubayer Ahamed
  * @since Dec 30, 2020
  */
 @Component
-public interface BusinessService {
+public interface ZbusinessService {
 
-	public ASLBusiness findBById(String businessId);
+	public Zbusiness findBById(String zid);
 }
