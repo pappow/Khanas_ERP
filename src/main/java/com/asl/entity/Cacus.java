@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Entity
-@Table(name = "xusers")
+@Table(name = "cacus")
 @IdClass(CacusPK.class)
 @EqualsAndHashCode(of = { "zid","xcus" }, callSuper = false)
 public class Cacus extends AbstractModel<String> {
@@ -53,9 +53,6 @@ public class Cacus extends AbstractModel<String> {
 	@Column(name = "xgcus")
 	private String xgcus;
 
-	@Column(name = "xgsup")
-	private String xgsup;
-
 	@Column(name = "xvatregno")
 	private String xvatregno;
 
@@ -65,18 +62,9 @@ public class Cacus extends AbstractModel<String> {
 	@Column(name = "xcrlimit")
 	private BigDecimal xcrlimit;
 
-	@Column(name = "xtype")
-	private String xtype;
-
 	@Column(name = "xcustype")
 	private String xcustype;
 
-	@Column(name = "xcountry")
-	private String xcountry;
-
-	@Column(name = "xzip")
-	private String xzip;
-
-	@Column(name = "xcur")
-	private String xcur;
+	@Column(name = "xtype")
+	private String xtype;
 }
