@@ -164,6 +164,9 @@ input.file-input-control{
 =========================================
 */
 
+.table.datatable tr td:first-child{
+	padding-left: 30px !important;
+}
 .table th, .table td{
 	padding: 5px 10px !important;
 	vertical-align: middle !important;
@@ -835,6 +838,15 @@ image using the content attribute.
 	h1.brand-name {
 		font-size: 45px;
 		text-align: center;
+	}
+	
+	.org-logo{
+		display: none;
+	}
+	.brand-name{
+		display: block !important;
+		text-align: center !important;
+		float: none;
 	}
 }
 

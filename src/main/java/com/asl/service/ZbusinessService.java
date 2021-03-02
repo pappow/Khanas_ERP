@@ -11,5 +11,7 @@ import com.asl.entity.Zbusiness;
 @Component
 public interface ZbusinessService {
 
+	public long save(Zbusiness zbusiness);
+	public long update(Zbusiness zbusiness);
 	public Zbusiness findBById(String zid);
 }

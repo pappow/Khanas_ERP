@@ -20,4 +20,6 @@ public interface CacusMapper {
 	public List<Cacus> findByXtype(String xtype, String zid);
 
 	public List<Cacus> getAllCacus(String zid);
+
+	public List<Cacus> searchCacus(String xtype, String xcus, String zid);
 }

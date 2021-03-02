@@ -11,5 +11,8 @@ import com.asl.entity.Zbusiness;
 @Mapper
 public interface ZbusinessMapper {
 
+	public long save(Zbusiness zbusiness);
+	public long update(Zbusiness zbusiness);
+
 	Zbusiness findByZid(String zid);
 }

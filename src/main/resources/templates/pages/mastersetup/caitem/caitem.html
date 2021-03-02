@@ -67,70 +67,79 @@
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/caitem/save}" th:object="${caitem}" method="post">
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
 											<input type="hidden" th:if="${not #strings.isEmpty(caitem.xitem)}" th:field="*{xitem}"/>
-
+											<input type="hidden" th:field="*{xtype}"/>
 											<div class="row">
 												<div class="col-md-6">
 
-													<div class="form-group">
-														<label class="control-label col-sm-4" for="xitem">Item Code : </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xitem}" required="required" maxlength="100"  th:disabled="${not #strings.isEmpty(caitem.xitem)}">
+													<div class="form-group" th:if="${#strings.isEmpty(caitem.xitem)}">
+														<label class="control-label col-md-4" for="xitem">Item Code Prefix : </label>
+														<div class="col-md-4">
+															<select class="form-control" th:field="*{codeType}">
+																<option th:each="prefix : ${itemxtrnnumbers}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+															</select>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(caitem.xitem)}">
+														<label class="control-label col-md-4" for="xitem">Item Code : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xitem}" disabled="disabled">
 														</div>
 													</div>
 
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcatitem">Item Category : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xcatitem">Item Category : </label>
+														<div class="col-md-8">
 															<select class="form-control" th:field="*{xcatitem}">
 																<option th:each="category : ${xitemCategories}" th:value="${category.xcode}" th:text="${category.xcode}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xgitem">Item group : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xgitem">Item group : </label>
+														<div class="col-md-8">
 															<select class="form-control" th:field="*{xgitem}">
 																<option th:each="group : ${xitemGroups}" th:value="${group.xcode}" th:text="${group.xcode}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xunitpur">Purchase Unit : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xunitpur">Purchase Unit : </label>
+														<div class="col-md-8">
 															<select class="form-control" th:field="*{xunitpur}">
 																<option th:each="unit : ${xunitPurs}" th:value="${unit.xcode}" th:text="${unit.xcode}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xunitsel">Selling Unit : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xunitsel">Selling Unit : </label>
+														<div class="col-md-8">
 															<select class="form-control" th:field="*{xunitsel}">
 																<option th:each="unit : ${xunitSels}" th:value="${unit.xcode}" th:text="${unit.xcode}"></option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcodeold">Old Code: </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xcodeold">Old Code: </label>
+														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcodeold}">
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xrate">Sales Rate: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xrate}">
+														<label class="control-label col-md-4" for="xrate">Sales Rate: </label>
+														<div class="col-md-8">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}">
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xminqty">Minimum Quantity: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xminqty}">
+													<label class="control-label col-md-4" for="xminqty">Minimum Qty: </label>
+														<div class="col-md-8">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xminqty}">
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcus">Party: </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xcus">Party: </label>
+														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcus}">
 														</div>
 													</div>
@@ -138,56 +147,56 @@
 												</div>
 												<div class="col-md-6">
 													<!-- <div class="form-group">
-														<label class="control-label col-sm-4" for="xitem">Item Description : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xitem">Item Description : </label>
+														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xdesc}" maxlength="100">
 														</div>
 													</div> -->
 													
 													<!-- <div class="form-group">
-														<label class="control-label col-sm-4" for="xmodel">Model : </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xmodel">Model : </label>
+														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xmodel}" maxlength="100">
 														</div>
 													</div> -->
 													
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcfpur">Conv. Factor-Purchase: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xcfpur}">
+														<label class="control-label col-md-4" for="xcfpur">Conv. Factor-Purchase: </label>
+														<div class="col-md-8">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xcfpur}">
 														</div>
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcfsel">Conv. Factor-Purchase: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xcfsel}">
+														<label class="control-label col-md-4" for="xcfsel">Conv. Factor-Sales: </label>
+														<div class="col-md-8">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xcfsel}">
 														</div>
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xcost">Cost: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xcost}">
+														<label class="control-label col-md-4" for="xcost">Cost: </label>
+														<div class="col-md-8">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xcost}">
 														</div>
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xdealerp">Dealer Price: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xdealerp}">
+														<label class="control-label col-md-4" for="xdealerp">Dealer Price: </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" data-smk-type="decimal" th:field="*{xdealerp}">
 														</div>
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xmrp">MRP: </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xmrp}">
+														<label class="control-label col-md-4" for="xmrp">MRP: </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" data-smk-type="decimal" th:field="*{xmrp}">
 														</div>
 													</div>
 													<!-- <div class="form-group">
-														<label class="control-label col-sm-4" for="xlong">Long Description: </label>
-														<div class="col-sm-8">
+														<label class="control-label col-md-4" for="xlong">Long Description: </label>
+														<div class="col-md-8">
 															<textarea class="form-control" th:field="*{xlong}"></textarea>
 														</div>
 													</div> -->

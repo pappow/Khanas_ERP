@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -76,6 +77,12 @@ public class Caitem extends AbstractModel<String> {
 
 	@Column(name = "xlong")
 	private String xlong;
+
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Transient
+	private String codeType;
 
 	/*
 	@Column(name = "xdesc")
