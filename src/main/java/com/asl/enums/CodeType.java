@@ -19,7 +19,9 @@ public enum CodeType {
 	SUPPLIER_GROUP("Supplier Group"),
 	SUPPLIER_STATUS("Supplier Status"),
 	CUSTOMER_GROUP("Customer Group"),
-	CUSTOMER_STATUS("Customer Status");
+	CUSTOMER_STATUS("Customer Status"),
+	WAREHOUSE("Warehouse"),
+	PURCHASE_ORDER_STATUS("Purchase Order Status");
 
 	private String code;
 

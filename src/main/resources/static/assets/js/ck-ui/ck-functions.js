@@ -515,7 +515,11 @@ function submitModalForm(customurl){
 			if(data.status == 'SUCCESS'){
 				$('div.modal').modal('hide');
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.reloadurl){
+				if(data.redirecturl){
+					setTimeout(() => {
+						window.location.replace(getBasepath() + data.redirecturl);
+					}, 1500);
+				} else if(data.reloadurl){
 					doSectionReloadWithNewData(data);
 				}
 			} else {

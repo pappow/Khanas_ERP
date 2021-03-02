@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.PoordHeader;
 import com.asl.entity.UserAuditRecord;
 import com.asl.entity.Xusers;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CacusService;
+import com.asl.service.PoordService;
 import com.asl.service.UserAuditRecordService;
 import com.asl.service.XusersService;
 
@@ -22,6 +24,7 @@ class AslErpApplicationTests {
 	@Autowired private XusersService userService;
 	@Autowired private UserAuditRecordService userAuditRecordService;
 	@Autowired private CacusService cacusService;
+	@Autowired private PoordService poordService;
 
 	@Test
 	void saveUserAuditRecord() {
@@ -70,6 +73,16 @@ class AslErpApplicationTests {
 		cacus.setXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode());
 		cacus.setXcrlimit(BigDecimal.ZERO);
 		long count = cacusService.save(cacus);
+		System.out.println(count);
+	}
+
+	@Test
+	void savePoordHeader() {
+		PoordHeader ph = new PoordHeader();
+		ph.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
+		ph.setXtrnpor("PO-");
+		
+		long count = poordService.save(ph);
 		System.out.println(count);
 	}
 

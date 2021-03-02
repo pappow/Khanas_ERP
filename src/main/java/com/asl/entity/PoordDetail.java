@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +15,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "poorddetail")
-@IdClass(PoordDetailPK.class) // ?
-@EqualsAndHashCode(of = { "zid","xpornum" }, callSuper = false)
+@IdClass(PoordDetailPK.class)
+@EqualsAndHashCode(of = { "zid", "xpornum", "xrow" }, callSuper = false)
 public class PoordDetail extends AbstractModel<String> {
-	
+
 	private static final long serialVersionUID = 4124498529281042988L;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
@@ -28,35 +30,36 @@ public class PoordDetail extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xpornum")
 	private String xpornum;
-	
+
+	@Id
 	@Column(name = "xrow")
-	private String xrow;
-	
+	private int xrow;
+
 	@Column(name = "xitem")
 	private String xitem;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Column(name = "xqtyord")
-	private String xqtyord;
-	
+	private BigDecimal xqtyord;
+
 	@Column(name = "xrate")
-	private String xrate;
-	
+	private BigDecimal xrate;
+
 	@Column(name = "xunitpur")
 	private String xunitpur;
-	
+
 	@Column(name = "xlineamt")
-	private String xlineamt;
-	
+	private BigDecimal xlineamt;
+
 	@Column(name = "xqtygrn")
-	private String xqtygrn;
-	
+	private BigDecimal xqtygrn;
+
 	@Column(name = "xcfpur")
-	private String xcfpur;
-	
+	private BigDecimal xcfpur;
+
 	@Column(name = "xqtypur")
-	private String xqtypur;
+	private BigDecimal xqtypur;
 
 }

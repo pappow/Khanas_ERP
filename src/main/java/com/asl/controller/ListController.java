@@ -147,7 +147,7 @@ public class ListController extends ASLAbstractController {
 		try {
 			lh = listService.findListHeadById(Long.valueOf(listHeadId));
 		} catch (Exception e) {
-			log.error("Error is : {}, {}", e.getMessage(), e);
+			log.error(ERROR, e.getMessage(), e);
 		}
 
 		if(lh == null) return "redirect:/system/list";

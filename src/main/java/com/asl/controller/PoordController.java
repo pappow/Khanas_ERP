@@ -1,5 +1,8 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,10 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.DataList;
+import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
+import com.asl.enums.TransactionCodeType;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
+import com.asl.service.XtrnService;
 
 @Controller
 @RequestMapping("/purchasing/poord")
@@ -25,42 +33,51 @@ public class PoordController extends ASLAbstractController {
 
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
+	@Autowired private XtrnService xtrnService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
-
-		model.addAttribute("poordheader", new PoordHeader());
-		//model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode()));
+		model.addAttribute("poordheader", getDefaultPoordHeader());
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getAllPoordHeaders());
-		//model.addAttribute("warehouses", xcodeService.findByXtype(CodeType..getCode()));
-
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
 		return "pages/purchasing/poord/poord";
 	}
 
 	@GetMapping("/{xpornum}")
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
 		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum); 
-		if(data == null) return "redirect:/purchasing/poord";
+		if(data == null) data = getDefaultPoordHeader();
 
 		model.addAttribute("poordheader", data);
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getAllPoordHeaders());
-		//model.addAttribute("", poordService.getPoordDetailsByXpornum(xpornum));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
+		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		return "pages/purchasing/poord/poord";
+	}
+
+	private PoordHeader getDefaultPoordHeader() {
+		PoordHeader poord = new PoordHeader();
+		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
+		poord.setXtotamt(BigDecimal.ZERO);
+		return poord;
 	}
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
-		if(poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) {
+		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrnpor()) && StringUtils.isBlank(poordHeader.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-
 		// Validate
 
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
 		if(existPoordHeader != null) {
-			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum");
+			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate");
 			long count = poordService.update(existPoordHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
@@ -109,6 +126,80 @@ public class PoordController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Purchase order updated successfully");
 		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("{xpornum}/poorddetail/{xrow}/show")
+	public String openPoordDetailModal(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
+
+		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
+
+		if("new".equalsIgnoreCase(xrow)) {
+			PoordDetail poorddetail = new PoordDetail();
+			poorddetail.setXpornum(xpornum);
+			poorddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			poorddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			poorddetail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
+			model.addAttribute("poorddetail", poorddetail);
+		} else {
+			PoordDetail poorddetail = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+			if(poorddetail == null) {
+				poorddetail = new PoordDetail();
+				poorddetail.setXpornum(xpornum);
+				poorddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+				poorddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+				poorddetail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
+			}
+			model.addAttribute("poorddetail", poorddetail);
+		}
+
+		return "pages/purchasing/poord/poorddetailmodal::poorddetailmodal";
+	}
+
+	@PostMapping("/poorddetail/save")
+	public @ResponseBody Map<String, Object> savePoorddetail(PoordDetail poordDetail){
+		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// modify line amount
+		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+
+		// if existing
+		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
+		if(existDetail != null) {
+			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
+			long count = poordService.updateDetail(existDetail);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			//responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
+			responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
+			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		// if new detail
+		long count = poordService.saveDetail(poordDetail);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		//responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
+		responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/poorddetail/{xpornum}")
+	public String reloadPoordDetailTabble(@PathVariable String xpornum, Model model) {
+		List<PoordDetail> detailList = poordService.findPoorddetailByXpornum(xpornum);
+		model.addAttribute("poorddetailsList", detailList);
+		PoordHeader header = new PoordHeader();
+		header.setXpornum(xpornum);
+		model.addAttribute("poordheader", header);
+		return "pages/purchasing/poord/poord::poorddetailtable";
 	}
 
 }
