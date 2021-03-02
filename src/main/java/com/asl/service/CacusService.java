@@ -20,4 +20,6 @@ public interface CacusService {
 	public List<Cacus> findByXtype(String xtype);
 
 	public List<Cacus> getAllCacus();
+
+	public List<Cacus> searchCacus(String xtype, String xcus);
 }

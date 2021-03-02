@@ -1,8 +1,10 @@
 package com.asl.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,8 @@ public class SearchSuggestController extends ASLAbstractController {
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
-		List<Cacus> cacusList = cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode());
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cacus> cacusList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus())));
 		return list;
@@ -38,9 +41,9 @@ public class SearchSuggestController extends ASLAbstractController {
 
 	@GetMapping("/caitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCaitems(@PathVariable String hint){
-		List<Caitem> cacusList = caitemService.getAllCaitems();
+		List<Caitem> caitemList = caitemService.searchCaitem(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
-		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem())));
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem())));
 		return list;
 	}
 }

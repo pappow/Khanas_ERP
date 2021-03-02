@@ -77,6 +77,16 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	public long deleteDetail(PoordDetail poordDetail) {
+		if(poordDetail == null) return 0;
+		long count = poordMapper.deletePoordDetail(poordDetail);
+		if(count != 0) {
+			count = updatePoordHeaderTotalAmt(poordDetail);
+		}
+		return count;
+	}
+
+	@Override
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow) {
 		if(StringUtils.isBlank(xpornum) || xrow == 0) return null;
 		return poordMapper.findPoorddetailByXportNumAndXrow(xpornum, xrow, sessionManager.getBusinessId());

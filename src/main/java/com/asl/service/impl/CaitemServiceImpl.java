@@ -13,13 +13,12 @@ import com.asl.service.CaitemService;
 
 @Service
 public class CaitemServiceImpl extends AbstractGenericService implements CaitemService {
-	
-	@Autowired
-	private CaitemMapper caitemMapper;
+
+	@Autowired private CaitemMapper caitemMapper;
 
 	@Override
 	public long save(Caitem caitem) {
-		if (caitem == null || StringUtils.isBlank(caitem.getXitem())) return 0;
+		if (caitem == null || StringUtils.isBlank(caitem.getXtype())) return 0;
 		caitem.setZid(sessionManager.getBusinessId());
 		return caitemMapper.saveCaitem(caitem);
 	}
@@ -45,8 +44,14 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	@Override
 	public Caitem findByXitem(String xitem) {
 		if (StringUtils.isBlank(xitem)) return null;
-
 		return caitemMapper.findByXitem(xitem, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Caitem> searchCaitem(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return caitemMapper.searchCaitem(hint, sessionManager.getBusinessId());
+	}
+
+	
 }

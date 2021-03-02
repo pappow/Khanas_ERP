@@ -18,6 +18,18 @@ public class ZbusinessServiceImpl extends AbstractGenericService implements Zbus
 	@Autowired private ZbusinessMapper businessMapper;
 
 	@Override
+	public long save(Zbusiness zbusiness) {
+		if(zbusiness == null || StringUtils.isBlank(zbusiness.getZid())) return 0;
+		return businessMapper.save(zbusiness);
+	}
+
+	@Override
+	public long update(Zbusiness zbusiness) {
+		if(zbusiness == null || StringUtils.isBlank(zbusiness.getZid())) return 0;
+		return businessMapper.update(zbusiness);
+	}
+
+	@Override
 	public Zbusiness findBById(String zid) {
 		if(StringUtils.isBlank(zid)) return null;
 		return businessMapper.findByZid(zid);

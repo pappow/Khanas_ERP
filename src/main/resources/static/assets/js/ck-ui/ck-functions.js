@@ -250,6 +250,10 @@ function doItemDelete(url){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.reloadurl){
 					doSectionReloadWithNewData(data);
+				} else if(data.redirecturl){
+					setTimeout(() => {
+						window.location.replace(getBasepath() + data.redirecturl);
+					}, 1500);
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);

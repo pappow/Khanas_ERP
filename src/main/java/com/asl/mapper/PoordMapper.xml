@@ -72,6 +72,10 @@
 			xpornum=#{xpornum}
 	</update>
 
+	<delete id="deletePoordDetail" parameterType="PoordHeader">
+		DELETE FROM PoordDetail WHERE xrow=#{xrow} AND xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
+	</delete>
+
 	<insert id="savePoordDetail" parameterType="PoordDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COUNT(*) + 1 FROM PoordDetail WHERE xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}

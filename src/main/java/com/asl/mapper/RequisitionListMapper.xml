@@ -1,0 +1,19 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.RequisitionListMapper">
+
+	<select id="getAllBranchesRequisitionList" resultType="RequisitionList">
+		SELECT
+			XPORNUM,
+			ZORG,
+			XTOTAMT,
+			XSTATUSPOR
+		FROM 
+			POORDHEADER
+			JOIN ZBUSINESS ON ZBUSINESS.ZID=POORDHEADER.ZID
+		WHERE 
+			POORDHEADER.ZACTIVE='1'
+			AND ZBUSINESS.CENTRAL!='1'
+	</select>
+
+</mapper>

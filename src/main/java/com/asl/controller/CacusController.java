@@ -135,6 +135,7 @@ public class CacusController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// If new
 		long count = cacusService.save(cacus);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);

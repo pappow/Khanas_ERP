@@ -16,5 +16,5 @@ public interface CaitemMapper {
 	public List<Caitem> findByXcatitem(String xcatitem, String zid);
 	public Caitem findByXitem(String xitem, String zid);
 
-	
+	public List<Caitem> searchCaitem(String xitem, String zid);
 }

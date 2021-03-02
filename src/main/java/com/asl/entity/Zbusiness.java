@@ -91,6 +91,9 @@ public class Zbusiness extends AbstractModel<String> {
 	private String xtimage;
 
 	@Column(name = "xbimage")
-	private String xbimage; 
+	private String xbimage;
+
+	@Column(name = "central")
+	private Boolean central;
 
 }

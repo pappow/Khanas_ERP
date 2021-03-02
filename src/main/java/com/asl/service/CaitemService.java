@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Caitem;
-import com.asl.entity.Xcodes;
 
 @Component
 public interface CaitemService {
@@ -18,5 +17,6 @@ public interface CaitemService {
 	public List<Caitem> findByXcatitem(String xcatitem);
 	public Caitem findByXitem(String xitem);
 	//public Xcodes findByXtypesAndXcodes(String xType, String xCodes);
+	public List<Caitem> searchCaitem(String hint);
 
 }

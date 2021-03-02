@@ -16,6 +16,7 @@ public interface PoordMapper {
 
 	public long savePoordDetail(PoordDetail poordDetail);
 	public long updatePoordDetail(PoordDetail poordDetail);
+	public long deletePoordDetail(PoordDetail poordDetail);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum, String zid);
 

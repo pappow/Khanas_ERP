@@ -2,8 +2,10 @@
 
 <mapper namespace="com.asl.mapper.CaitemMapper">
 
-		<insert id="saveCaitem" parameterType="Caitem">
-		
+	<insert id="saveCaitem" parameterType="Caitem">
+		<selectKey keyProperty="xitem" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${codeType}', 6) FROM DUAL
+		</selectKey>
 		INSERT INTO Caitem
 		(
 			xitem,
@@ -22,7 +24,8 @@
 			xcus,
 			xlong,
 			<!-- xdesc,
-			xmodel,	 -->		
+			xmodel,	 -->
+			xtype,
 			zid,
 			zauserid,
 			zuuserid,
@@ -34,7 +37,7 @@
 		)
 		VALUES
 		(
-			#{xitem, jdbcType = VARCHAR},
+			#{xitem},
 			#{xcatitem, jdbcType=VARCHAR},
 			#{xgitem, jdbcType=VARCHAR},
 			#{xunitpur, jdbcType=VARCHAR},
@@ -47,10 +50,11 @@
 			#{xdealerp, jdbcType=DECIMAL},
 			#{xminqty, jdbcType=DECIMAL},
 			#{xmrp, jdbcType=DECIMAL},
-			#{xcus, jdbcType=VARCHAR},			
+			#{xcus, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
 			<!-- #{xdesc, jdbcType=VARCHAR},
-			#{xmodel, jdbcType=VARCHAR}, -->			
+			#{xmodel, jdbcType=VARCHAR}, -->
+			#{xtype, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -60,11 +64,9 @@
 			#{ztime, jdbcType=TIMESTAMP},
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
-			
-		</insert>
-		
-		<update id="updateCaitem" parameterType="Caitem">
+	</insert>
 
+	<update id="updateCaitem" parameterType="Caitem">
 		UPDATE
 			Caitem
 		SET
@@ -80,10 +82,11 @@
 			xdealerp=#{xdealerp, jdbcType=DECIMAL},
 			xminqty=#{xminqty, jdbcType=DECIMAL},
 			xmrp=#{xmrp, jdbcType=DECIMAL},
-			xcus=#{xcus, jdbcType=VARCHAR},			
+			xcus=#{xcus, jdbcType=VARCHAR},
 			xlong=#{xlong, jdbcType=VARCHAR},
 			<!-- xdesc=#{xdesc, jdbcType=VARCHAR},
-			xmodel=#{xmodel, jdbcType=VARCHAR}, -->			
+			xmodel=#{xmodel, jdbcType=VARCHAR}, -->	
+			xtype=#{xtype, jdbcType=VARCHAR},
 			zid=#{zid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -95,17 +98,20 @@
 		WHERE
 			xitem=#{xitem}
 	</update>
-	
-	
+
 	<select id="getAllCaitems" resultType="Caitem">
 		SELECT * FROM Caitem WHERE zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="findByXcatitem" resultType="Caitem">
 		SELECT * FROM Caitem WHERE xcatitem=#{xcatitem} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="findByXitem" resultType="Caitem">
 		SELECT * FROM Caitem WHERE xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="searchCaitem" resultType="Caitem">
+		SELECT * FROM Caitem WHERE xitem LIKE '%' || #{xitem} || '%' AND zid=#{zid} AND zactive='1'
 	</select>
 </mapper>
