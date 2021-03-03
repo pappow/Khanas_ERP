@@ -35,7 +35,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<Cacus> cacusList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
-		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus())));
+		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXcontact())));
 		return list;
 	}
 
@@ -43,7 +43,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	public @ResponseBody List<SearchSuggestResult> getCaitems(@PathVariable String hint){
 		List<Caitem> caitemList = caitemService.searchCaitem(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
-		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem())));
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
 }

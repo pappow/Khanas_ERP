@@ -97,6 +97,6 @@
 	</select>
 
 	<select id="searchCacus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE xtype=#{xtype} AND xcus LIKE '%' || #{xcus} || '%' AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE xtype=#{xtype} AND (xcus LIKE '%' || #{xcus} || '%' OR xcontact LIKE '%' || #{xcus} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 </mapper>

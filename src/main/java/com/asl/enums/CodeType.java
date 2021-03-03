@@ -22,7 +22,8 @@ public enum CodeType {
 	CUSTOMER_STATUS("Customer Status"),
 	WAREHOUSE("Warehouse"),
 	PURCHASE_ORDER_STATUS("Purchase Order Status"),
-	GRN_STATUS("GRN Status");
+	GRN_STATUS("GRN Status"),
+	REQUISITION_ORDER_STATUS("Requisition Order Status");
 
 	private String code;
 

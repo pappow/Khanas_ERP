@@ -72,7 +72,7 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(caitem.xitem)}">
-														<label class="control-label col-md-4" for="xitem">Item Code Prefix : </label>
+														<label class="control-label col-md-4" for="xitem">Prefix : </label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{codeType}">
 																<option th:each="prefix : ${itemxtrnnumbers}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -146,19 +146,19 @@
 
 												</div>
 												<div class="col-md-6">
-													<!-- <div class="form-group">
+													<div class="form-group">
 														<label class="control-label col-md-4" for="xitem">Item Description : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xdesc}" maxlength="100">
 														</div>
-													</div> -->
+													</div>
 													
-													<!-- <div class="form-group">
+													<div class="form-group">
 														<label class="control-label col-md-4" for="xmodel">Model : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xmodel}" maxlength="100">
 														</div>
-													</div> -->
+													</div>
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xcfpur">Conv. Factor-Purchase: </label>
@@ -216,6 +216,7 @@
 											<thead>
 												<tr>
 													<th>Item Code</th>
+													<th>Item Name</th>
 													<th>Item Category</th>
 													<th>Item Group</th>
 												</tr>
@@ -225,6 +226,7 @@
 													<td>
 														<a th:href="@{/mastersetup/caitem/} + ${caitem.xitem}" th:text="${caitem.xitem}"></a>
 													</td>
+													<td th:text="${caitem.xdesc}"></td>
 													<td th:text="${caitem.xcatitem}"></td>
 													<td th:text="${caitem.xgitem}"></td>
 												</tr>

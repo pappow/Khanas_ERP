@@ -38,7 +38,7 @@ public class ZbusinessTest {
 	private Zbusiness getBranch1() {
 		Zbusiness z = new Zbusiness();
 		z.setZid("900010");
-		z.setZorg("Khana's B1");
+		z.setZorg("Dhanmondi Branch");
 		z.setZactive(true);
 		z.setCentral(false);
 		return z;
@@ -47,7 +47,7 @@ public class ZbusinessTest {
 	private Zbusiness getBranch2() {
 		Zbusiness z = new Zbusiness();
 		z.setZid("900020");
-		z.setZorg("Khana's B2");
+		z.setZorg("Mohammodpur Brnach");
 		z.setZactive(true);
 		z.setCentral(false);
 		return z;

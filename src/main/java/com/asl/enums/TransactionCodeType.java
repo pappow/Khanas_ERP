@@ -9,6 +9,7 @@ public enum TransactionCodeType {
 	SUPPLIER_NUMBER("Supplier Number"),
 	CUSTOMER_NUMBER("Customer Number"),
 	PURCHASE_ORDER("Purchase Order"),
+	REQUISITION_ORDER("Requisition Order"),
 	ITEM_NUMBER("Item Number"),
 	GRN_NUMBER("GRN Number");
 
