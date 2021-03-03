@@ -1,0 +1,86 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.PogrnMapper">
+	<insert id="savePogrnHeader" parameterType="PogrnHeader">
+		<!-- <selectKey keyProperty="xpornum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnpor}', 6) FROM DUAL
+		</selectKey> -->
+		INSERT INTO PogrnHeader
+		(
+			xgrnnum,
+			xdate,
+			xcus,
+			xtype,
+			xwh,
+			xstatusgrn,
+			xinvnum,
+			xpcnum,
+			xstatusap,
+			xref,
+			xtotamt,
+			xpornum,
+			xstatusjv,
+			xstatuscrn,
+			xvoucher,
+			xnote,			
+			
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xgrnnum, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xcus, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xstatusgrn, jdbcType=VARCHAR},
+			#{xinvnum, jdbcType=VARCHAR},
+			#{xpcnum, jdbcType=VARCHAR},
+			#{xstatusap, jdbcType=VARCHAR},
+			#{xref, jdbcType=VARCHAR},
+			#{xtotamt, jdbcType=DECIMAL},
+			#{xpornum, jdbcType=VARCHAR},
+			#{xstatusjv, jdbcType=VARCHAR},
+			#{xstatuscrn, jdbcType=VARCHAR},
+			#{xvoucher, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},			
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>	
+	
+	
+	
+	
+	
+	<select id="findPogrnHeaderByXgrnnum" resultType="PogrnHeader">
+		SELECT * FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPogrnDetailByXgrnnumAndXrow" resultType="PogrnDetail">
+		SELECT * FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	
+	<select id="findPogrnDetailByXgrnnum" resultType="PogrnDetail">
+		SELECT * FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllPogrnHeader" resultType="PogrnHeader">
+		SELECT * FROM PogrnHeader WHERE zid=#{zid} AND zactive='1'
+	</select>
+</mapper>
