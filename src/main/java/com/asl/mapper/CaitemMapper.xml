@@ -23,8 +23,8 @@
 			xmrp,
 			xcus,
 			xlong,
-			<!-- xdesc,
-			xmodel,	 -->
+			xdesc,
+			xmodel,
 			xtype,
 			zid,
 			zauserid,
@@ -52,8 +52,8 @@
 			#{xmrp, jdbcType=DECIMAL},
 			#{xcus, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
-			<!-- #{xdesc, jdbcType=VARCHAR},
-			#{xmodel, jdbcType=VARCHAR}, -->
+			#{xdesc, jdbcType=VARCHAR},
+			#{xmodel, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -84,8 +84,8 @@
 			xmrp=#{xmrp, jdbcType=DECIMAL},
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xlong=#{xlong, jdbcType=VARCHAR},
-			<!-- xdesc=#{xdesc, jdbcType=VARCHAR},
-			xmodel=#{xmodel, jdbcType=VARCHAR}, -->	
+			xdesc=#{xdesc, jdbcType=VARCHAR},
+			xmodel=#{xmodel, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			zid=#{zid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
@@ -112,6 +112,6 @@
 	</select>
 
 	<select id="searchCaitem" resultType="Caitem">
-		SELECT * FROM Caitem WHERE xitem LIKE '%' || #{xitem} || '%' AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Caitem WHERE (xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 </mapper>

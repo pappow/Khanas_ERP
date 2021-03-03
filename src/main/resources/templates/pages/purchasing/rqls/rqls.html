@@ -55,17 +55,17 @@
 										<tr>
 											<th>REQ Number</th>
 											<th>Branch Name</th>
-											<th>Total Amount</th>
+											<th>Date</th>
 											<th>Status</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="r : ${rqlsList}">
 											<td>
 												<a th:href="@{/purchasing/poord/} + ${r.xpornum}" th:text="${r.xpornum}"></a>
 											</td>
 											<td th:text="${r.zorg}"></td>
-											<td th:text="${r.xtotamt}"></td>
+											<td th:text="${#dates.format(r.xdate, df)}"></td>
 											<td th:text="${r.xstatuspor}"></td>
 										</tr>
 									</tbody>
