@@ -21,7 +21,8 @@ public enum CodeType {
 	CUSTOMER_GROUP("Customer Group"),
 	CUSTOMER_STATUS("Customer Status"),
 	WAREHOUSE("Warehouse"),
-	PURCHASE_ORDER_STATUS("Purchase Order Status");
+	PURCHASE_ORDER_STATUS("Purchase Order Status"),
+	GRN_STATUS("GRN Status");
 
 	private String code;
 
