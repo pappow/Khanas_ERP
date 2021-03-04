@@ -37,8 +37,8 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 
 	@Override
 	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(pogrnDetail == null) return 0;
+		return pogrnMapper.updatePogrnHeaderTotalAmt(pogrnDetail);
 	}
 
 	@Override
@@ -71,11 +71,12 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	public long deleteDetail(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null) return 0;
 		long count = pogrnMapper.deletePogrnDetail(pogrnDetail);
-		/*
+		
 		if(count != 0) {
-			count = updatePogrnHeaderTotalAmt(pogrnDetail);
+			// Commmented due to the reason of xlineamt column not present in PogrnDetail. We need this to calculate xtotamt.
+			//count = updatePogrnHeaderTotalAmt(pogrnDetail);
 		}
-		*/
+		
 		return count;
 	}
 
@@ -85,6 +86,14 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 			return null;
 
 		return pogrnMapper.findPogrnHeaderByXgrnnum(xgrnnum, sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public PogrnHeader findPogrnHeaderByXpornum(String xpornum) {
+		if (StringUtils.isBlank(xpornum))
+			return null;
+
+		return pogrnMapper.findPogrnHeaderByXpornum(xpornum, sessionManager.getBusinessId());
 	}
 
 	@Override

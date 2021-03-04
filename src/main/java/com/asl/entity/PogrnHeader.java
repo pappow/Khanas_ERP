@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -79,5 +80,8 @@ public class PogrnHeader extends AbstractModel<String>{
 	
 	@Column(name = "xnote")
 	private String xnote;
+	
+	@Transient
+	private String xtrngrn;
 	
 }

@@ -37,7 +37,7 @@ public class PogrnDetail extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
-	private String xrow;
+	private int xrow;
 
 	@Column(name = "xdocrow")
 	private String xdocrow;
@@ -49,16 +49,16 @@ public class PogrnDetail extends AbstractModel<String> {
 	private String xitem;	
 	
 	@Column(name = "xqtygrn")
-	private int xqtygrn;
+	private BigDecimal xqtygrn;
 	
 	@Column(name = "xrate")
 	private BigDecimal xrate;
 	
 	@Column(name = "xqtyprn")
-	private String xqtyprn;
+	private BigDecimal xqtyprn;
 	
 	@Column(name = "xunitpur")
-	private int xunitpur;
+	private String xunitpur;
 	
 	@Column(name = "xnote")
 	private String xnote;

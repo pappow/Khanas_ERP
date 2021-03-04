@@ -2,7 +2,6 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,13 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
+import com.asl.service.XtrnService;
 
 @Controller
 @RequestMapping("/purchasing/pogrn")
@@ -36,12 +34,13 @@ public class PogrnController extends ASLAbstractController {
 	private PogrnService pogrnService;
 	@Autowired
 	private XcodesService xcodeService;
-	
+	@Autowired
+	private XtrnService xtrnService;
 	@GetMapping
 	public String loadGRNPage(Model model) {
 		
 		model.addAttribute("pogrnheader", getDefaultPogrnHeader());
-		//model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
@@ -58,7 +57,7 @@ public class PogrnController extends ASLAbstractController {
 		if(data == null) data = getDefaultPogrnHeader();
 
 		model.addAttribute("pogrnheader", data);
-		//model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
@@ -71,7 +70,7 @@ public class PogrnController extends ASLAbstractController {
 	
 	private PogrnHeader getDefaultPogrnHeader() {
 		PogrnHeader pogrn = new PogrnHeader();
-		pogrn.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
+		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		pogrn.setXtotamt(BigDecimal.ZERO);
 		return pogrn;
 	}
@@ -97,7 +96,7 @@ public class PogrnController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("GRN updated successfully");
-			responseHelper.setRedirectUrl("/purchasing/grn/" + pogrnHeader.getXgrnnum());
+			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 			return responseHelper.getResponse();
 		}
 		
@@ -109,7 +108,7 @@ public class PogrnController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + pogrnHeader.getXgrnnum());
+		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 		return responseHelper.getResponse();
 		
 	}
@@ -125,43 +124,88 @@ public class PogrnController extends ASLAbstractController {
 		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
 	}
 	
+	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
+	public String openPogrnDetailModal(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
+
+		model.addAttribute("purUnitList", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
+
+		if("new".equalsIgnoreCase(xrow)) {
+			PogrnDetail pogrndetail = new PogrnDetail();
+			pogrndetail.setXgrnnum(xgrnnum);
+			pogrndetail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			pogrndetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			pogrndetail.setXqtyprn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			model.addAttribute("pogrndetail", pogrndetail);
+		} else {
+			PogrnDetail pogrndetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
+			if(pogrndetail == null) {
+				pogrndetail = new PogrnDetail();
+				pogrndetail.setXgrnnum(xgrnnum);
+				pogrndetail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+				pogrndetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+				pogrndetail.setXqtyprn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			}
+			model.addAttribute("pogrndetail", pogrndetail);
+		}
+
+		return "pages/purchasing/pogrn/pogrndetailmodal::pogrndetailmodal";
+	}
+	
 	@PostMapping("/pogrndetail/save")
-	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail poordDetail){
-		/*
-		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) {
+	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail pogrnDetail){
+		
+		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		// modify line amount
-		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		//pogrnDetail.setXlineamt(pogrnDetail.getXqtyord().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
+		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
 		if(existDetail != null) {
-			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
-			long count = poordService.updateDetail(existDetail);
+			BeanUtils.copyProperties(pogrnDetail, existDetail, "xgrnnum", "xrow");
+			long count = pogrnService.updateDetail(existDetail);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
-			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
+			responseHelper.setRedirectUrl("/purchasing/pogrn/" +  pogrnDetail.getXgrnnum());
+			responseHelper.setSuccessStatusAndMessage("GRN Item updated successfully");
 			return responseHelper.getResponse();
 		}
 
 		// if new detail
-		long count = poordService.saveDetail(poordDetail);
+		long count = pogrnService.saveDetail(pogrnDetail);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
-		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
+		responseHelper.setRedirectUrl("/purchasing/pogrn/" +  pogrnDetail.getXgrnnum());
+		responseHelper.setSuccessStatusAndMessage("GRN Item saved successfully");
 		
 		return responseHelper.getResponse();
-		*/
-		return null;
+	}
+	
+	
+	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deletePogrnDetail(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
+		PogrnDetail pd = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
+		if(pd == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = pogrnService.deleteDetail(pd);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/purchasing/pogrn/" +  xgrnnum);
+		return responseHelper.getResponse();
 	}
 
 }
