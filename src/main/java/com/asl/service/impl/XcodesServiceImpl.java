@@ -31,32 +31,51 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public long update(Xcodes xcodes) {
 		if (xcodes == null || StringUtils.isBlank(xcodes.getXtype()) || StringUtils.isBlank(xcodes.getXcode())) return 0;
-		xcodes.setZid(sessionManager.getBusinessId());
 		return xcodesMapper.updateXcodes(xcodes);
 	}
 
 	@Override
 	public List<Xcodes> getAllXcodes() {
-		return xcodesMapper.getAllXcodes(sessionManager.getBusinessId());
+		return getAllXcodes(null);
+	}
+
+	@Override
+	public List<Xcodes> getAllXcodes(Boolean zactive) {
+		return xcodesMapper.getAllXcodes(sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
 	public List<Xcodes> findByXtype(String xType) {
-		if (StringUtils.isBlank(xType)) return Collections.emptyList();
-		return xcodesMapper.findByXtype(xType, sessionManager.getBusinessId());
+		return findByXtype(xType, null);
 	}
 
 	@Override
+	public List<Xcodes> findByXtype(String xType, Boolean zactive) {
+		if (StringUtils.isBlank(xType)) return Collections.emptyList();
+		return xcodesMapper.findByXtype(xType, sessionManager.getBusinessId(), zactive);
+	}
+
+
+	@Override
 	public List<Xcodes> findByXcode(String xCode) {
+		return findByXcode(xCode, null);
+	}
+
+	@Override
+	public List<Xcodes> findByXcode(String xCode, Boolean zactive) {
 		if (StringUtils.isBlank(xCode)) return Collections.emptyList();
-		return xcodesMapper.findByXcode(xCode, sessionManager.getBusinessId());
+		return xcodesMapper.findByXcode(xCode, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
 	public Xcodes findByXtypesAndXcodes(String xType, String xCodes) {
-		if (StringUtils.isBlank(xType) || StringUtils.isBlank(xCodes)) return null;
+		return findByXtypesAndXcodes(xType, xCodes, null);
+	}
 
-		return xcodesMapper.findByXtypesAndXcodes(xType, xCodes, sessionManager.getBusinessId());
+	@Override
+	public Xcodes findByXtypesAndXcodes(String xType, String xCodes, Boolean zactive) {
+		if (StringUtils.isBlank(xType) || StringUtils.isBlank(xCodes)) return null;
+		return xcodesMapper.findByXtypesAndXcodes(xType, xCodes, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override

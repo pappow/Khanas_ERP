@@ -28,6 +28,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.service.CacusService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
+import com.asl.service.ZbusinessService;
 
 /**
  * @author Zubayer Ahamed
@@ -40,6 +41,7 @@ public class CacusController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private XcodesService xcodesService;
 	@Autowired private CacusService cacusService;
+	@Autowired private ZbusinessService zbusinessService;
 
 	@GetMapping
 	public String loadCacusPage(Model model, @RequestParam(required = false) String cacusType) {
@@ -84,22 +86,22 @@ public class CacusController extends ASLAbstractController {
 		List<Cacus> customersList = new ArrayList<>();
 
 		if(CacusType.SUP.name().equalsIgnoreCase(cacusType)) {
-			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode()));
-			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode()));
-			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
+			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode(), Boolean.TRUE));
+			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE));
+			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode(), Boolean.TRUE));
 			suppliersList.addAll(cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
 		} else if (CacusType.CUS.name().equalsIgnoreCase(cacusType)) {
-			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode()));
-			customerGroups.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode()));
-			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
+			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			customerGroups.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE));
+			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode(), Boolean.TRUE));
 			customersList.addAll(cacusService.findByXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
 		} else {
-			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode()));
-			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode()));
-			customerGroups.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode()));
-			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode()));
-			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
-			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
+			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode(), Boolean.TRUE));
+			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			customerGroups.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE));
+			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE));
+			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode(), Boolean.TRUE));
+			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode(), Boolean.TRUE));
 			suppliersList.addAll(cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
 			customersList.addAll(cacusService.findByXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
 		}
@@ -111,6 +113,7 @@ public class CacusController extends ASLAbstractController {
 		model.addAttribute("customerTypes", customerTypes);
 		model.addAttribute("suppliersList", suppliersList);
 		model.addAttribute("customersList", customersList);
+		if(Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) model.addAttribute("branchesList", zbusinessService.getAllBranchBusiness());
 	}
 
 	@PostMapping("/save")

@@ -2,9 +2,7 @@
 
 <mapper namespace="com.asl.mapper.XcodesMapper">
 
-	<insert id="saveXcodes" 
-			parameterType="Xcodes">
-
+	<insert id="saveXcodes" parameterType="Xcodes">
 		INSERT INTO Xcodes
 		(
 			xtype,
@@ -55,13 +53,10 @@
 		) 
 	</insert>
 
-	<update id="updateXcodes" 
-			parameterType="Xcodes">
-
+	<update id="updateXcodes" parameterType="Xcodes">
 		UPDATE
 			Xcodes
 		SET
-			xtype=#{xtype, jdbcType=VARCHAR},
 			xdescdet=#{xdescdet, jdbcType=VARCHAR},
 			xprops=#{xprops, jdbcType=VARCHAR},
 			xacc=#{xacc, jdbcType=VARCHAR},
@@ -73,7 +68,6 @@
 			xAccCash=#{xAccCash, jdbcType=VARCHAR},
 			xAccBank=#{xAccBank, jdbcType=VARCHAR},
 			xAccArdBank=#{xAccArdBank, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -83,34 +77,36 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xcode=#{xcode}
+			AND xtype=#{xtype, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<select id="getAllXcodes" resultType="Xcodes">
-		SELECT * FROM Xcodes WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Xcodes WHERE zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
 	</select>
 
 	<select id="findByXtype" resultType="Xcodes">
-		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
 	</select>
 
 	<select id="findByXcode" resultType="Xcodes">
-		SELECT * FROM Xcodes WHERE xcode=#{xcode} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Xcodes WHERE xcode=#{xcode} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
 	</select>
 
 	<select id="findByXtypesAndXcodes" resultType="Xcodes">
-		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND xcode=#{xcode} AND zid=#{zid} AND zactive='1'
-	</select>
-
-	<select id="getSeilingRecord" resultType="Xcodes">
-		SELECT 
-			* 
-		FROM 
-			XCODES 
-		WHERE 
-			zid=#{zid}
-			AND ROWNUM = 1 
-		ORDER BY 
-			XCODE ${direction}
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND xcode=#{xcode} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
 	</select>
 
 </mapper>

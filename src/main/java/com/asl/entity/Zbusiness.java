@@ -96,4 +96,10 @@ public class Zbusiness extends AbstractModel<String> {
 	@Column(name = "central")
 	private Boolean central;
 
+	@Column(name = "branch")
+	private Boolean branch;
+
+	@Column(name = "centralzid")
+	private String centralzid;
+
 }

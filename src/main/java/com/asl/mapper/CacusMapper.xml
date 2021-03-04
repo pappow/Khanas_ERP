@@ -2,8 +2,7 @@
 
 <mapper namespace="com.asl.mapper.CacusMapper">
 
-	<insert id="save" 
-			parameterType="Cacus">
+	<insert id="save" parameterType="Cacus">
 		<selectKey keyProperty="xcus" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtype}', '${xcustype}', 6) FROM DUAL
 		</selectKey>
@@ -21,6 +20,10 @@
 			xcrlimit,
 			xcustype,
 			xtype,
+			zemail,
+			xcuszid,
+			xcountry,
+			xcur,
 			zid,
 			zauserid,
 			zuuserid,
@@ -44,6 +47,10 @@
 			#{xcrlimit, jdbcType=DECIMAL},
 			#{xcustype, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
+			#{zemail, jdbcType=VARCHAR},
+			#{xcuszid, jdbcType=VARCHAR},
+			#{xcountry, jdbcType=VARCHAR},
+			#{xcur, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -55,9 +62,7 @@
 		) 
 	</insert>
 
-	<update id="update" 
-			parameterType="Cacus">
-
+	<update id="update" parameterType="Cacus">
 		UPDATE
 			Cacus
 		SET
@@ -72,7 +77,10 @@
 			xcrlimit=#{xcrlimit, jdbcType=DECIMAL},
 			xcustype=#{xcustype, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
+			zemail=#{zemail, jdbcType=VARCHAR},
+			xcuszid=#{xcuszid, jdbcType=VARCHAR},
+			xcountry=#{xcountry, jdbcType=VARCHAR},
+			xcur=#{xcur, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -82,6 +90,7 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xcus=#{xcus, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<select id="findByXcus" resultType="Cacus">
@@ -97,6 +106,6 @@
 	</select>
 
 	<select id="searchCacus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE xtype=#{xtype} AND (xcus LIKE '%' || #{xcus} || '%' OR xcontact LIKE '%' || #{xcus} || '%') AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE (xcus LIKE '%' || #{xcus} || '%' OR xorg LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
 	</select>
 </mapper>

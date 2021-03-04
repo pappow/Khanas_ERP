@@ -1,5 +1,6 @@
 package com.asl.service;
 
+import com.asl.entity.Zbusiness;
 import com.asl.model.LoggedInUserDetails;
 
 /**
@@ -17,4 +18,6 @@ public interface ASLSessionManager {
 	public LoggedInUserDetails getLoggedInUserDetails();
 
 	public String getBusinessId();
+
+	public Zbusiness getZbusiness();
 }

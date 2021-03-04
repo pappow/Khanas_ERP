@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Xtrn;
 import com.asl.enums.ResponseStatus;
+import com.asl.model.ServiceException;
 import com.asl.service.XtrnService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zubayer Ahamed
  * @since Feb 27, 2021
  */
+@Slf4j
 @Controller
 @RequestMapping("/mastersetup/xtrn")
 public class XtrnController extends ASLAbstractController {
@@ -70,8 +74,14 @@ public class XtrnController extends ASLAbstractController {
 		Xtrn existXtrn = xtrnService.findByXtypetrnAndXtrn(xtrn.getXtypetrn(), xtrn.getXtrn());
 		if(existXtrn != null) {
 			BeanUtils.copyProperties(xtrn, existXtrn, "xtypetrn", "xtrn", "xnum", "xinc");
-			long count = xtrnService.update(existXtrn);
-			if(count == 0) {
+			try {
+				long count = xtrnService.update(existXtrn);
+				if(count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+			} catch (ServiceException e) {
+				log.error(ERROR, e.getMessage(), e);
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
@@ -81,8 +91,14 @@ public class XtrnController extends ASLAbstractController {
 		}
 
 		// If new xtrn
-		long count = xtrnService.save(xtrn);
-		if(count == 0) {
+		try {
+			long count = xtrnService.save(xtrn);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -109,8 +125,14 @@ public class XtrnController extends ASLAbstractController {
 		}
 
 		xt.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = xtrnService.update(xt);
-		if(count == 0) {
+		try {
+			long count = xtrnService.update(xt);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}

@@ -2,9 +2,7 @@
 
 <mapper namespace="com.asl.mapper.ListMapper">
 
-	<insert id="saveListHead" 
-			parameterType="ListHead">
-
+	<insert id="saveListHead" parameterType="ListHead">
 		INSERT INTO ListHead
 		(
 			listHeadId,
@@ -69,9 +67,7 @@
 		) 
 	</insert>
 
-	<update id="updateListHead" 
-			parameterType="ListHead">
-
+	<update id="updateListHead" parameterType="ListHead">
 		UPDATE
 			ListHead
 		SET
@@ -94,7 +90,6 @@
 			prompt15=#{prompt15, jdbcType=VARCHAR},
 			prompt16=#{prompt16, jdbcType=VARCHAR},
 			notes=#{notes, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -104,11 +99,10 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			listHeadId=#{listHeadId}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<insert id="saveDataList" 
-			parameterType="DataList">
-
+	<insert id="saveDataList" parameterType="DataList">
 		INSERT INTO DataList
 		(
 			listId,
@@ -181,9 +175,7 @@
 		)
 	</insert>
 
-	<update id="updateDataList" 
-			parameterType="DataList">
-
+	<update id="updateDataList" parameterType="DataList">
 		UPDATE 
 			DataList
 		SET
@@ -210,7 +202,6 @@
 			extraValue3=#{extraValue3, jdbcType=VARCHAR},
 			extraValue4=#{extraValue4, jdbcType=VARCHAR},
 			extraValue5=#{extraValue5, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -220,6 +211,7 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			listId=#{listId}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<select id="findListHeadById" resultType="ListHead">

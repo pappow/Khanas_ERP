@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.asl.entity.Xusers;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.UserRole;
 
 import lombok.ToString;
@@ -29,6 +30,7 @@ public class MyUserDetails implements UserDetails {
 	private String password;
 	private String emailAddress;
 	private String businessId;
+	private Zbusiness zbusiness;
 	private boolean accountExpired;
 	private boolean credentialExpired;
 	private boolean accountLocked;
@@ -36,10 +38,11 @@ public class MyUserDetails implements UserDetails {
 	private String roles;
 	private List<GrantedAuthority> authorities;
 
-	public MyUserDetails(Xusers user) {
+	public MyUserDetails(Xusers user, Zbusiness zbusiness) {
 		this.username = user.getZemail();
 		this.password = user.getXpassword();
 		this.businessId = user.getZid();
+		this.zbusiness = zbusiness;
 		this.accountExpired = false;
 		this.credentialExpired = false;
 		this.accountLocked = !Boolean.TRUE.equals(user.getZactive());
@@ -49,6 +52,8 @@ public class MyUserDetails implements UserDetails {
 									.map(SimpleGrantedAuthority::new)
 									.collect(Collectors.toList());
 	}
+
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,4 +101,9 @@ public class MyUserDetails implements UserDetails {
 	public String getRoles() {
 		return roles;
 	}
+
+	public Zbusiness getZbusiness() {
+		return this.zbusiness;
+	}
+
 }

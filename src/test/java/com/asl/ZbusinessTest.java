@@ -31,6 +31,7 @@ public class ZbusinessTest {
 		z.setZid("900000");
 		z.setZorg("Khana's Central");
 		z.setCentral(true);
+		z.setBranch(false);
 		z.setZactive(true);
 		return z;
 	}
@@ -41,6 +42,8 @@ public class ZbusinessTest {
 		z.setZorg("Dhanmondi Branch");
 		z.setZactive(true);
 		z.setCentral(false);
+		z.setBranch(true);
+		z.setCentralzid("900000");
 		return z;
 	}
 
@@ -50,6 +53,8 @@ public class ZbusinessTest {
 		z.setZorg("Mohammodpur Brnach");
 		z.setZactive(true);
 		z.setCentral(false);
+		z.setBranch(true);
+		z.setCentralzid("900000");
 		return z;
 	}
 }

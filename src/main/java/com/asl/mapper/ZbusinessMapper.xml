@@ -29,6 +29,8 @@
 			xtimage,
 			xbimage,
 			central,
+			branch,
+			centralzid,
 			zauserid,
 			zuuserid,
 			zaip,
@@ -63,6 +65,8 @@
 			#{xtimage, jdbcType=VARCHAR},
 			#{xbimage, jdbcType=VARCHAR},
 			#{central, jdbcType=BOOLEAN},
+			#{branch, jdbcType=BOOLEAN},
+			#{centralzid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
@@ -99,6 +103,8 @@
 			xtimage=#{xtimage, jdbcType=VARCHAR},
 			xbimage=#{xbimage, jdbcType=VARCHAR},
 			central=#{central, jdbcType=BOOLEAN},
+			branch=#{branch, jdbcType=BOOLEAN},
+			centralzid=#{centralzid, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -112,6 +118,14 @@
 
 	<select id="findByZid" resultType="Zbusiness">
 		SELECT * FROM Zbusiness WHERE zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="getAllBranchBusiness" resultType="Zbusiness">
+		SELECT * FROM Zbusiness WHERE centralzid=#{zid} AND branch='1' AND zactive='1'
+	</select>
+
+	<select id="getCentralBusiness" resultType="Zbusiness">
+		SELECT * FROM Zbusiness WHERE zid=#{centralzid} AND central='1' AND zactive='1'
 	</select>
 
 </mapper>

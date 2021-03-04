@@ -281,7 +281,9 @@ select.form-control[disabled] {
 .checkbox-inline label, .radio-inline label{
 	font-weight: normal;
 }
-
+input[type=checkbox], input[type=radio] {
+    margin-top: 1px !important;
+}
 /*
 =========================================
 ============ Search suggest =========
