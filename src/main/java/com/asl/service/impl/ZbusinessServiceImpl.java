@@ -1,5 +1,7 @@
 package com.asl.service.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,16 @@ public class ZbusinessServiceImpl extends AbstractGenericService implements Zbus
 	public Zbusiness findBById(String zid) {
 		if(StringUtils.isBlank(zid)) return null;
 		return businessMapper.findByZid(zid);
+	}
+
+	@Override
+	public List<Zbusiness> getAllBranchBusiness() {
+		return businessMapper.getAllBranchBusiness(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Zbusiness getCentralBusiness() {
+		return businessMapper.getCentralBusiness(sessionManager.getZbusiness().getCentralzid());
 	}
 
 }

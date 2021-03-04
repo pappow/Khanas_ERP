@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.asl.config.AppConfig;
+import com.asl.entity.Zbusiness;
 import com.asl.model.MenuProfile;
 import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
@@ -40,6 +41,11 @@ public class ASLAbstractController {
 	@ModelAttribute("brandName")
 	protected String brandName() {
 		return appConfig.getDefaultSystemName();
+	}
+
+	@ModelAttribute("zbusiness")
+	protected Zbusiness getZbusiness() {
+		return sessionManager.getZbusiness();
 	}
 
 	@ModelAttribute("logoName")

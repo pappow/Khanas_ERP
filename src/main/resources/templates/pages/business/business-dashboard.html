@@ -9,6 +9,14 @@
 			.section-body{
 				text-align:center;
 			}
+			.central-box{
+				display:inline-block;
+				width:24%;
+				margin: 0 auto;
+				box-sizing: border-box;
+				margin-top: 10px;
+				padding: 10px;
+			}
 			.business-box{
 				display:inline-block;
 				width:24%;
@@ -17,7 +25,7 @@
 				margin-top: 10px;
 				padding: 10px;
 			}
-			.business-submit-button{
+			.business-submit-button, .central-submit-button{
 				width: 100%;
 				padding: 25px 0px;
 				text-align: center;
@@ -30,7 +38,10 @@
 				border-radius: 5px;
 				transition: 0.5s;
 			}
-			.business-submit-button i{
+			.central-submit-button{
+				background: red;
+			}
+			.business-submit-button i, .central-submit-button i{
 				font-size: 45px;
 			}
 			.business-submit-button:hover{
@@ -40,6 +51,9 @@
 
 			@media only screen and (max-width: 600px) {
 				.business-box{
+					width:49%;
+				}
+				.central-box{
 					width:49%;
 				}
 			}
@@ -85,17 +99,36 @@
 						<!-- Section data maintenance -->
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Choose Your Organization</h1>
+								<h1>Central</h1>
 							</div>
 							<div class="section-body">
 								<div th:if="${param.error}" style="color: red; margin-top: 20px !important; font-size: 20px; text-align: center; margin-top: -10px;">Please don't tamper with data. This incident will be reported to the System Admin</div>
 
-								<div th:each="business : ${businesses}" class="business-box">
+								<div th:if="${business.central}" th:each="business : ${businesses}" class="business-box">
 									<form id="${business.zid}" class="sign-in-form" role="form" th:action="@{/login}" method="post" autocomplete="off">
 										<input type="hidden" name="username" th:value="${business.username}"/>
 										<input type="hidden" name="password" th:value="${business.password}"/>
 										<input type="hidden" name="zid" th:value="${business.zid}"/>
-										<button type="submit" class="business-submit-button"><i class="fas fa-hotel"></i><h4 th:text="${business.businessName}"></h4></button>
+										<button type="submit" class="central-submit-button"><i class="fas fa-hotel"></i><h4 th:text="${business.businessName}"></h4></button>
+									</form>
+								</div>
+							</div>
+						</section>
+					
+						<!-- Section data maintenance -->
+						<section id="data-maintenance" style="margin-top: 30px;">
+							<div class="section-header sectionbartoggle">
+								<h1>Choose Your Branch</h1>
+							</div>
+							<div class="section-body">
+								<div th:if="${param.error}" style="color: red; margin-top: 20px !important; font-size: 20px; text-align: center; margin-top: -10px;">Please don't tamper with data. This incident will be reported to the System Admin</div>
+
+								<div th:if="${business.branch}" th:each="business : ${businesses}" class="business-box">
+									<form id="${business.zid}" class="sign-in-form" role="form" th:action="@{/login}" method="post" autocomplete="off">
+										<input type="hidden" name="username" th:value="${business.username}"/>
+										<input type="hidden" name="password" th:value="${business.password}"/>
+										<input type="hidden" name="zid" th:value="${business.zid}"/>
+										<button type="submit" class="business-submit-button"><i class="fas fa-store"></i><h4 th:text="${business.businessName}"></h4></button>
 									</form>
 								</div>
 							</div>

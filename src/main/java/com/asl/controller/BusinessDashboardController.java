@@ -49,7 +49,7 @@ public class BusinessDashboardController extends ASLAbstractController {
 		for(Xusers xus : list) {
 			Zbusiness zb = zbusinessService.findBById(xus.getZid());
 			if(zb == null) continue;
-			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getZorg()));
+			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getZorg(), zb.getCentral(), zb.getBranch()));
 		}
 
 		model.addAttribute("businesses", businesses);

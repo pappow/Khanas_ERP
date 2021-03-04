@@ -15,4 +15,6 @@ public class Business {
 	private String password;
 	private String zid;
 	private String businessName;
+	private boolean central;
+	private boolean branch;
 }

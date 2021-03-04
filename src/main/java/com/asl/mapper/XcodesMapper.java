@@ -16,10 +16,11 @@ public interface XcodesMapper {
 	public long saveXcodes(Xcodes xcodes);
 	public long updateXcodes(Xcodes xcodes);
 
-	public List<Xcodes> getAllXcodes(String zid);
-	public List<Xcodes> findByXtype(String xtype, String zid);
-	public List<Xcodes> findByXcode(String xcode, String zid);
-	public Xcodes findByXtypesAndXcodes(String xtype, String xcode, String zid);
+	public List<Xcodes> getAllXcodes(String zid, Boolean zactive);
+	public List<Xcodes> findByXtype(String xtype, String zid, Boolean zactive);
+	public List<Xcodes> findByXcode(String xcode, String zid, Boolean zactive);
+	public Xcodes findByXtypesAndXcodes(String xtype, String xcode, String zid, Boolean zactive);
 
 	public Xcodes getSeilingRecord(String direction, String zid);
 }
+

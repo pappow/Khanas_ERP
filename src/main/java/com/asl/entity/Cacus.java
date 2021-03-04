@@ -67,4 +67,16 @@ public class Cacus extends AbstractModel<String> {
 
 	@Column(name = "xtype")
 	private String xtype;
+
+	@Column(name = "zemail")
+	private String zemail;
+
+	@Column(name = "xcuszid")
+	private String xcuszid;
+
+	@Column(name = "xcountry")
+	private String xcountry;
+
+	@Column(name = "xcur")
+	private String xcur;
 }

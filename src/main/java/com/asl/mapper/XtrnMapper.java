@@ -16,9 +16,9 @@ public interface XtrnMapper {
 	public long save(Xtrn xtrn);
 	public long update(Xtrn xtrn);
 
-	public List<Xtrn> getAllXtrn(String zid);
-	public List<Xtrn> findByXtypetrn(String xtypetrn, String zid);
-	public List<Xtrn> findByXtrn(String xtrn, String zid);
-	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid);
+	public List<Xtrn> getAllXtrn(String zid, Boolean zactive);
+	public List<Xtrn> findByXtypetrn(String xtypetrn, String zid, Boolean zactive);
+	public List<Xtrn> findByXtrn(String xtrn, String zid, Boolean zactive);
+	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid, Boolean zactive);
 
 }

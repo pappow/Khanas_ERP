@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import com.asl.entity.Zbusiness;
 import com.asl.model.LoggedInUserDetails;
 import com.asl.model.MyUserDetails;
 import com.asl.service.ASLSessionManager;
@@ -64,4 +65,19 @@ public abstract class AbstractSessionManager implements ASLSessionManager {
 
 		return businessId;
 	}
+
+	@Override
+	public Zbusiness getZbusiness() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth == null || !auth.isAuthenticated()) return null;
+
+		Object principal = auth.getPrincipal();
+		if(principal instanceof MyUserDetails) {
+			MyUserDetails mud = (MyUserDetails) principal;
+			return mud.getZbusiness();
+		}
+
+		return null;
+	}
+
 }
