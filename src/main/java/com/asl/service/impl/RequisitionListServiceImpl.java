@@ -1,22 +1,27 @@
 package com.asl.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asl.entity.RequisitionList;
-import com.asl.mapper.RequisitionListMapper;
+import com.asl.mapper.OrderRequisitionMapper;
+import com.asl.model.BranchesRequisitions;
 import com.asl.service.RequisitionListService;
 
 @Service
 public class RequisitionListServiceImpl extends AbstractGenericService implements RequisitionListService{
 
-	@Autowired private RequisitionListMapper requisitionListMapper;
+	@Autowired private OrderRequisitionMapper requisitionListMapper;
 
 	@Override
-	public List<RequisitionList> getAllBranchesRequisitionList() {
-		return requisitionListMapper.getAllBranchesRequisitionList();
+	public List<BranchesRequisitions> getAllBranchesRequisitions(Date xdate) {
+		if(!Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) return Collections.emptyList();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return requisitionListMapper.getAllBranchesRequisitions(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
 }

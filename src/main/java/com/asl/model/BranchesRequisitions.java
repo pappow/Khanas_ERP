@@ -1,4 +1,4 @@
-package com.asl.entity;
+package com.asl.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class RequisitionList {
+public class BranchesRequisitions {
 
 	private String xpornum;
 	private String zorg;

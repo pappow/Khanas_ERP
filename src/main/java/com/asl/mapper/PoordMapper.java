@@ -26,4 +26,6 @@ public interface PoordMapper {
 	public List<PoordHeader> getAllPoordHeader(String zid);
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype, String zid);
 
+	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem, String zid);
+
 }

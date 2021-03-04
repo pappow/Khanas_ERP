@@ -13,9 +13,9 @@ public class RequisitionListTest {
 
 	@Test
 	void testZbusinessSave() {
-		requisitionListService.getAllBranchesRequisitionList().stream().forEach(i -> {
-			System.out.println(i.toString());
-		});
+//		requisitionListService.getAllBranchesRequisitions().stream().forEach(i -> {
+//			System.out.println(i.toString());
+//		});
 	}
 
 	

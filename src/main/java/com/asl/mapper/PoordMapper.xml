@@ -181,4 +181,8 @@
 		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1'
 	</select>
 
+	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">
+		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+	</select>
+
 </mapper>

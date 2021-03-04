@@ -1,0 +1,23 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.OrderRequisitionMapper">
+
+	<select id="getAllBranchesRequisitions" resultType="com.asl.model.BranchesRequisitions">
+		SELECT
+			XPORNUM,
+			ZORG,
+			XSTATUSPOR,
+			XDATE
+		FROM 
+			POORDHEADER
+			JOIN ZBUSINESS ON ZBUSINESS.ZID=POORDHEADER.ZID
+		WHERE 
+			ZBUSINESS.CENTRALZID=#{zid}
+			AND TO_CHAR(XDATE,'yyyy-MM-dd')=#{xdate}
+			AND XTYPE='Requisition Order'
+			AND ZBUSINESS.BRANCH='1'
+			AND POORDHEADER.ZACTIVE='1'
+			AND POORDHEADER.XSTATUSPOR='Open'
+	</select>
+
+</mapper>

@@ -1,10 +1,11 @@
 package com.asl.service;
 
+import java.util.Date;
 import java.util.List;
 
-import com.asl.entity.RequisitionList;
+import com.asl.model.BranchesRequisitions;
 
 public interface RequisitionListService {
 
-	public List<RequisitionList> getAllBranchesRequisitionList();
+	public List<BranchesRequisitions> getAllBranchesRequisitions(Date xdate);
 }
