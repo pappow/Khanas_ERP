@@ -25,4 +25,6 @@ public interface PoordService {
 
 	public List<PoordHeader> getAllPoordHeaders();
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype);
+
+	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem);
 }

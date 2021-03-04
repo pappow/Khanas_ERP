@@ -2,7 +2,6 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,35 +17,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
-@RequestMapping("/purchasing/poord")
-public class PoordController extends ASLAbstractController {
+@RequestMapping("/purchasing/requisition")
+public class OrderRequisitionController extends ASLAbstractController {
 
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
-	@Autowired private PogrnService pogrnService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
-		return "pages/purchasing/poord/poord";
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
+		return "pages/purchasing/requisition/poord";
 	}
 
 	@GetMapping("/{xpornum}")
@@ -55,22 +50,20 @@ public class PoordController extends ASLAbstractController {
 		if(data == null) data = getDefaultPoordHeader();
 
 		model.addAttribute("poordheader", data);
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
-		return "pages/purchasing/poord/poord";
+		return "pages/purchasing/requisition/poord";
 	}
 
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
-		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
+		poord.setXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
 	}
-	
-	
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
@@ -89,8 +82,8 @@ public class PoordController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Purchase Order updated successfully");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+			responseHelper.setSuccessStatusAndMessage("Requisition Order updated successfully");
+			responseHelper.setRedirectUrl("/purchasing/requisition/" + poordHeader.getXpornum());
 			return responseHelper.getResponse();
 		}
 
@@ -100,8 +93,8 @@ public class PoordController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Purchase Order created successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Requisition Order created successfully");
+		responseHelper.setRedirectUrl("/purchasing/requisition/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
 
@@ -129,8 +122,8 @@ public class PoordController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Purchase order updated successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Requisition order updated successfully");
+		responseHelper.setRedirectUrl("/purchasing/requisition/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
 
@@ -158,7 +151,7 @@ public class PoordController extends ASLAbstractController {
 			model.addAttribute("poorddetail", poorddetail);
 		}
 
-		return "pages/purchasing/poord/poorddetailmodal::poorddetailmodal";
+		return "pages/purchasing/requisition/poorddetailmodal::poorddetailmodal";
 	}
 
 	@PostMapping("/poorddetail/save")
@@ -168,8 +161,11 @@ public class PoordController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// modify line amount
-		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		// Check item already exist in detail list
+		if(poordDetail.getXrow() == 0 && poordService.findPoorddetailByXpornumAndXitem(poordDetail.getXpornum(), poordDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
+			return responseHelper.getResponse();
+		}
 
 		// if existing
 		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
@@ -180,7 +176,7 @@ public class PoordController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
+			responseHelper.setRedirectUrl("/purchasing/requisition/" +  poordDetail.getXpornum());
 			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -191,7 +187,7 @@ public class PoordController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
+		responseHelper.setRedirectUrl("/purchasing/requisition/" +  poordDetail.getXpornum());
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -203,7 +199,7 @@ public class PoordController extends ASLAbstractController {
 		PoordHeader header = new PoordHeader();
 		header.setXpornum(xpornum);
 		model.addAttribute("poordheader", header);
-		return "pages/purchasing/poord/poord::poorddetailtable";
+		return "pages/purchasing/requisition/poord::poorddetailtable";
 	}
 
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
@@ -221,63 +217,7 @@ public class PoordController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  xpornum);
-		return responseHelper.getResponse();
-	}
-	
-	
-	@GetMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrnnn(@PathVariable String xpornum){
-		if(StringUtils.isBlank(xpornum)) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		// Validate
-
-		// Get PoordHeader record by Xpornum
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader != null) {
-			PogrnHeader pogrnHeader = new PogrnHeader();
-			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-			pogrnHeader.setXdate(new Date());
-			pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-			pogrnHeader.setXtrngrn(xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()).get(0).getXtrn());
-			
-			long count = pogrnService.save(pogrnHeader);
-			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-			
-			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
-			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
-			PogrnDetail pogrnDetail;
-			for(int i=0; i< poordDetailList.size(); i++) {
-				pogrnDetail = new PogrnDetail();
-				
-				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
-				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
-				
-				long nCount = pogrnService.saveDetail(pogrnDetail);
-				if(nCount == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					return responseHelper.getResponse();
-				}				
-			}
-			
-			//Update PoordHeader
-			poordHeader.setXstatuspor("GRN Created");
-			long pCount = poordService.update(poordHeader);
-			if(pCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}			
-			 
-			responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
-			return responseHelper.getResponse();
-		}	
-		responseHelper.setStatus(ResponseStatus.ERROR);
+		responseHelper.setRedirectUrl("/purchasing/requisition/" +  xpornum);
 		return responseHelper.getResponse();
 	}
 }

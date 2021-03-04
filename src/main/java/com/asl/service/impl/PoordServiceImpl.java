@@ -104,5 +104,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		return poordMapper.getPoordHeadersByXtype(xtype, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem) {
+		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(xitem)) return null;
+		return poordMapper.findPoorddetailByXpornumAndXitem(xpornum, xitem, sessionManager.getBusinessId());
+	}
 }
