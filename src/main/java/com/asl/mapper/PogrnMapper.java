@@ -18,6 +18,7 @@ public interface PogrnMapper {
 	public long deletePogrnDetail(PogrnDetail pogrnDetail);
 
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum, String zid);
+	public PogrnHeader findPogrnHeaderByXpornum(String xpornum, String zid);
 
 	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow, String zid);
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum, String zid);

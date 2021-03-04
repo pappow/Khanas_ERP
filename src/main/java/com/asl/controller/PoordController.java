@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.PogrnDetail;
+import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
@@ -33,6 +37,7 @@ public class PoordController extends ASLAbstractController {
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
+	@Autowired private PogrnService pogrnService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
@@ -64,6 +69,8 @@ public class PoordController extends ASLAbstractController {
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
 	}
+	
+	
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
@@ -215,6 +222,62 @@ public class PoordController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setRedirectUrl("/purchasing/poord/" +  xpornum);
+		return responseHelper.getResponse();
+	}
+	
+	
+	@GetMapping("/creategrn/{xpornum}")
+	public @ResponseBody Map<String, Object> creategrnnn(@PathVariable String xpornum){
+		if(StringUtils.isBlank(xpornum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		// Validate
+
+		// Get PoordHeader record by Xpornum
+		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
+		if(poordHeader != null) {
+			PogrnHeader pogrnHeader = new PogrnHeader();
+			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
+			pogrnHeader.setXdate(new Date());
+			pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
+			pogrnHeader.setXtrngrn(xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()).get(0).getXtrn());
+			
+			long count = pogrnService.save(pogrnHeader);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			
+			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
+			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
+			PogrnDetail pogrnDetail;
+			for(int i=0; i< poordDetailList.size(); i++) {
+				pogrnDetail = new PogrnDetail();
+				
+				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
+				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
+				
+				long nCount = pogrnService.saveDetail(pogrnDetail);
+				if(nCount == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}				
+			}
+			
+			//Update PoordHeader
+			poordHeader.setXstatuspor("GRN Created");
+			long pCount = poordService.update(poordHeader);
+			if(pCount == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}			
+			 
+			responseHelper.setSuccessStatusAndMessage("GRN created successfully");
+			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+			return responseHelper.getResponse();
+		}	
+		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
 	}
 }

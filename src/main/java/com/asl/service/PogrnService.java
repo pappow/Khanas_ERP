@@ -21,6 +21,7 @@ public interface PogrnService {
 	public long deleteDetail(PogrnDetail pogrnDetail);
 
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum);
+	public PogrnHeader findPogrnHeaderByXpornum(String xpornum);
 
 	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow);
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum);
