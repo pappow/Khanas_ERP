@@ -1,11 +1,7 @@
 package com.asl.service.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.asl.service.ASLSessionManager;
@@ -18,8 +14,6 @@ import com.asl.service.ASLSessionManager;
 public abstract class AbstractGenericService {
 
 	protected static final String ERROR = "Error is {}, {}";
-//	@PersistenceContext protected EntityManager em;
-//	@Autowired protected JdbcTemplate jdbcTemplate;
 	@Autowired protected ASLSessionManager sessionManager;
 
 	/**

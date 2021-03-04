@@ -10,4 +10,5 @@ import com.asl.model.BranchesRequisitions;
 public interface OrderRequisitionMapper {
 
 	public List<BranchesRequisitions> getAllBranchesRequisitions(String xdate, String zid);
+	public List<BranchesRequisitions> getAllBranchesRequisitionDetails(String xdate, String zid);
 }

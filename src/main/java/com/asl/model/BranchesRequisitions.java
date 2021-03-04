@@ -13,4 +13,7 @@ public class BranchesRequisitions {
 	private BigDecimal xtotamt;
 	private String xstatuspor;
 	private Date xdate;
+	private String xitem;
+	private String xdesc;
+	private String xqtyord;
 }

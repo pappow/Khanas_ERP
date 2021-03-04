@@ -11,15 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.asl.service.RequisitionListService;
 
 @Controller
-@RequestMapping("/purchasing/rqls")
+@RequestMapping("/purchasing/bqls")
 public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@Autowired private RequisitionListService requisitionListService;
 
 	@GetMapping
-	public String loadRqlsPage(Model model) {
-		model.addAttribute("rqlsList", requisitionListService.getAllBranchesRequisitions(new Date()));
+	public String loadBqls(Model model) {
+		model.addAttribute("bqlsList", requisitionListService.getAllBranchesRequisitions(new Date()));
 		return "pages/purchasing/branchesrequisitions/bqls";
+	}
+
+	@GetMapping("/details")
+	public String loadRqlsDetails(Model model) {
+		model.addAttribute("bqlsDetailsList", requisitionListService.getAllBranchesRequisitionDetails(new Date()));
+		return "pages/purchasing/branchesrequisitions/bqlsdetail";
 	}
 
 }

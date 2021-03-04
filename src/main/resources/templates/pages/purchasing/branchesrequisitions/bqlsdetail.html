@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Branches Requisitions</title>
+		<title>Branches Requisitions Details</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -60,7 +60,7 @@
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-										<tr th:each="r : ${bqlsList}">
+										<tr th:each="r : ${bqlsDetailsList}">
 											<td>
 												<a th:href="@{/purchasing/poord/} + ${r.xpornum}" th:text="${r.xpornum}"></a>
 											</td>

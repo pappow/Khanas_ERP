@@ -24,4 +24,12 @@ public class RequisitionListServiceImpl extends AbstractGenericService implement
 		return requisitionListMapper.getAllBranchesRequisitions(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<BranchesRequisitions> getAllBranchesRequisitionDetails(Date xdate) {
+		if(!Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) return Collections.emptyList();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return requisitionListMapper.getAllBranchesRequisitionDetails(sdf.format(xdate), sessionManager.getBusinessId());
+	}
+
+	
 }
