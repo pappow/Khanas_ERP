@@ -170,15 +170,22 @@
 	</select>
 
 	<select id="findPoorddetailByXpornum" resultType="PoordDetail">
-		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			PoordDetail 
+		WHERE 
+			xpornum=#{xpornum} 
+			AND zid=#{zid} 
+			AND zactive='1'
 	</select> 
 
 	<select id="getAllPoordHeader" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM PoordHeader WHERE zid=#{zid} AND zactive='1' ORDER BY xdate DESC
 	</select>
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xdate DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">

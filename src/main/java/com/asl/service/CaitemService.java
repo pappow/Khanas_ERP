@@ -19,4 +19,6 @@ public interface CaitemService {
 	//public Xcodes findByXtypesAndXcodes(String xType, String xCodes);
 	public List<Caitem> searchCaitem(String hint);
 
+	public List<Caitem> searchCentralCaitem(String hint);
+	public Caitem findCentralItemByXitem(String xitem);
 }
