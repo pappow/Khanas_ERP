@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Imtrn;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
@@ -25,6 +26,7 @@ import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
@@ -38,6 +40,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private PogrnService pogrnService;
+	@Autowired private ImtrnService imtrnService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
@@ -230,8 +233,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 	}
 	
 	
-	@GetMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrnnn(@PathVariable String xpornum){
+	@GetMapping("/creategrn/{status}/{xpornum}")
+	public @ResponseBody Map<String, Object> creategrnnn( @PathVariable String status, @PathVariable String xpornum){
 		if(StringUtils.isBlank(xpornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -240,7 +243,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		// Get PoordHeader record by Xpornum
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader != null) {
+		if(poordHeader != null && StringUtils.isBlank(status)) {
 			PogrnHeader pogrnHeader = new PogrnHeader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pogrnHeader.setXdate(new Date());
@@ -254,22 +257,34 @@ public class PurchaseOrderController extends ASLAbstractController {
 			}
 			
 			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
+			//Get PO items to copy them in GRN.
 			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
 			PogrnDetail pogrnDetail;
+			Imtrn imtrn;
 			for(int i=0; i< poordDetailList.size(); i++) {
 				pogrnDetail = new PogrnDetail();
-				
+				//Copying PO items to GRN items.
 				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
 				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
-				
 				long nCount = pogrnService.saveDetail(pogrnDetail);
+				// Update Inventory
+				/*
+				if("finalize".equalsIgnoreCase(status)){				
+					imtrn = new Imtrn();
+					BeanUtils.copyProperties(pogrnDetail, imtrn, "");
+					imtrn.setXdate(pogrnHeader.getXdate());
+					//imtrn.set
+					
+					imtrnService.update(imtrn);
+				}
+				*/
 				if(nCount == 0) {
 					responseHelper.setStatus(ResponseStatus.ERROR);
 					return responseHelper.getResponse();
 				}				
 			}
 			
-			//Update PoordHeader
+			//Update PoordHeader Status
 			poordHeader.setXstatuspor("GRN Created");
 			long pCount = poordService.update(poordHeader);
 			if(pCount == 0) {
