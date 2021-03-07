@@ -11,7 +11,8 @@ public enum TransactionCodeType {
 	PURCHASE_ORDER("Purchase Order"),
 	REQUISITION_ORDER("Requisition Order"),
 	ITEM_NUMBER("Item Number"),
-	GRN_NUMBER("GRN Number");
+	GRN_NUMBER("GRN Number"),
+	INVENTORY_NUMBER("Inventory Number");
 
 	private String code;
 

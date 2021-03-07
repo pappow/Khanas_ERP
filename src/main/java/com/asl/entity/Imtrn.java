@@ -89,6 +89,6 @@ private String xnote;
 private String xunit;
 
 @Transient
-private String xtrnpor;
+private String xtrnimtrn;
 
 }

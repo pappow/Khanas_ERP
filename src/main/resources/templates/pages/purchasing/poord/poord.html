@@ -54,10 +54,10 @@
 									<div class="form-action-button">
 										<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/draft/} + ${poordheader.xpornum} + " class="btn btn-sm btn-success grn-btn-link draft"><i class="fas fa-tags"></i> Draft GRN</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/finalize/} + ${poordheader.xpornum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Create GRN</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/purchasing/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'GRN Created' and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'GRN Created' and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/draft/} + ${poordheader.xpornum}" class="btn btn-sm btn-success grn-btn-link draft"><i class="fas fa-tags"></i> Draft GRN</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'GRN Created' and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/finalize/} + ${poordheader.xpornum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Create and Finalize GRN</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'GRN Created' and poordheader.zactive == true}" th:href="@{/purchasing/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == false}" th:href="@{/purchasing/poord/restore/} + ${poordheader.xpornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
 										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
@@ -262,16 +262,17 @@
 			$('a.grn-btn-link').off('click').on('click', function(e){
 				e.preventDefault();
 				var porNum = $("#xpornum").val();
-				var cUrl;
+				var status;
 				if($(this).hasClass("draft")){
-					cUrl = "/asl-erp/purchasing/poord/creategrn/draft/" + porNum;
+					status = "draft";
 				}else{
-					cUrl = "/asl-erp/purchasing/poord/creategrn/finalize/" + porNum;
+					status = "finalize";
 				}
 				$.ajax({
-					url: cUrl,
+					url: "/asl-erp/purchasing/poord/creategrn/" + status + "/" +porNum,
 					success: function(result){
-						location.reload(true);
+						console.log(result.status)
+						//location.reload(true);
 					}
 				});
 			});

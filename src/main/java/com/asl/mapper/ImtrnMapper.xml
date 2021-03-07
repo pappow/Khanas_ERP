@@ -3,9 +3,9 @@
 <mapper namespace="com.asl.mapper.ImtrnMapper">
 	
 	
-	<insert id="savePoordHeader" parameterType="Imtrn">
+	<insert id="saveImtrn" parameterType="Imtrn">
 		<selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnpor}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Imtrn
 		(
@@ -105,6 +105,10 @@
 	
 	<select id="findImtrnByXimtrnnum" resultType="Imtrn">
 		SELECT * FROM Imtrn WHERE ximtrnnum=#{ximtrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllImtrn" resultType="Imtrn">
+		SELECT * FROM Imtrn WHERE zid=#{zid} AND zactive='1'
 	</select>
 	
 </mapper>

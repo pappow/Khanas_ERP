@@ -1,5 +1,7 @@
 package com.asl.service.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	@Override
 	public long save(Imtrn imtrn) {
 		if (imtrn == null || StringUtils.isBlank(imtrn.getXtype())
-				|| StringUtils.isBlank(imtrn.getXtrnpor()))
+				|| StringUtils.isBlank(imtrn.getXtrnimtrn()))
 			return 0;
 		imtrn.setZid(sessionManager.getBusinessId());
 		return imtrnMapper.saveImtrn(imtrn);
@@ -32,11 +34,17 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	}
 
 	@Override
-	public Imtrn findImtrnByImtrnnum(String ximtrnnum) {
+	public Imtrn findImtrnByXimtrnnum(String ximtrnnum) {
 		if (StringUtils.isBlank(ximtrnnum))
 			return null;
 
-		return imtrnMapper.findImtrnByImtrnnum(ximtrnnum, sessionManager.getBusinessId());
+		return imtrnMapper.findImtrnByXimtrnnum(ximtrnnum, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Imtrn> getAllImtrn() {
+		
+		return imtrnMapper.getAllImtrn(sessionManager.getBusinessId());
 	}
 	
 	

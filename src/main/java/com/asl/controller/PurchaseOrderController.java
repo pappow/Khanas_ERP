@@ -118,7 +118,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader == null) {
+		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -234,7 +234,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	
 	
 	@GetMapping("/creategrn/{status}/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrnnn( @PathVariable String status, @PathVariable String xpornum){
+	public @ResponseBody Map<String, Object> creategrn( @PathVariable String status, @PathVariable String xpornum){
 		if(StringUtils.isBlank(xpornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -268,16 +268,26 @@ public class PurchaseOrderController extends ASLAbstractController {
 				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
 				long nCount = pogrnService.saveDetail(pogrnDetail);
 				// Update Inventory
-				/*
+				
 				if("finalize".equalsIgnoreCase(status)){				
 					imtrn = new Imtrn();
-					BeanUtils.copyProperties(pogrnDetail, imtrn, "");
+					BeanUtils.copyProperties(pogrnDetail, imtrn);
 					imtrn.setXdate(pogrnHeader.getXdate());
+					imtrn.setXwh(pogrnHeader.getXwh());
+					imtrn.setXqty(pogrnDetail.getXqtygrn());
+					imtrn.setXsign(+1);
+					imtrn.setXtype(TransactionCodeType.INVENTORY_NUMBER.getCode());
+					imtrn.setXtrnimtrn(xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode()).get(0).getXtrn());
 					//imtrn.set
 					
-					imtrnService.update(imtrn);
+					long imtrnCount = imtrnService.save(imtrn);
+					if(imtrnCount == 0) {
+						responseHelper.setStatus(ResponseStatus.ERROR);
+						return responseHelper.getResponse();
+					}
+					
 				}
-				*/
+				
 				if(nCount == 0) {
 					responseHelper.setStatus(ResponseStatus.ERROR);
 					return responseHelper.getResponse();
