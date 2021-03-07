@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Zbusiness;
 import com.asl.mapper.CaitemMapper;
 import com.asl.service.CaitemService;
 
@@ -53,5 +54,16 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		return caitemMapper.searchCaitem(hint, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<Caitem> searchCentralCaitem(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		Zbusiness zb = sessionManager.getZbusiness();
+		return caitemMapper.searchCentralCaitem(hint, zb.getCentralzid());
+	}
+
+	@Override
+	public Caitem findCentralItemByXitem(String xitem) {
+		if(StringUtils.isBlank(xitem)) return null;
+		return caitemMapper.findCentralItemByXitem(xitem, sessionManager.getZbusiness().getCentralzid());
+	}
 }

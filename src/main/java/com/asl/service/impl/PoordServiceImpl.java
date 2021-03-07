@@ -87,6 +87,18 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	public long archiveAllPoordDetailByXpornum(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return 0;
+		return poordMapper.archiveAllPoordDetailByXpornum(xpornum, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long countOfRequisitionDetailsByXpornum(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return 0;
+		return poordMapper.countOfRequisitionDetailsByXpornum(xpornum, sessionManager.getBusinessId());
+	}
+
+	@Override
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow) {
 		if(StringUtils.isBlank(xpornum) || xrow == 0) return null;
 		return poordMapper.findPoorddetailByXportNumAndXrow(xpornum, xrow, sessionManager.getBusinessId());
@@ -95,7 +107,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	@Override
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum) {
 		if(StringUtils.isBlank(xpornum)) return Collections.emptyList();
-		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId());
+		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId(), sessionManager.getZbusiness().getCentralzid());
 	}
 
 	@Override

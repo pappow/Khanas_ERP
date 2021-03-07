@@ -17,11 +17,13 @@ public interface PoordMapper {
 	public long savePoordDetail(PoordDetail poordDetail);
 	public long updatePoordDetail(PoordDetail poordDetail);
 	public long deletePoordDetail(PoordDetail poordDetail);
+	public long archiveAllPoordDetailByXpornum(String xpornum, String zid);
+	public long countOfRequisitionDetailsByXpornum(String xpornum, String zid);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum, String zid);
 
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow, String zid);
-	public List<PoordDetail> findPoorddetailByXpornum(String xpornum, String zid);
+	public List<PoordDetail> findPoorddetailByXpornum(String xpornum, String zid, String centralzid);
 
 	public List<PoordHeader> getAllPoordHeader(String zid);
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype, String zid);

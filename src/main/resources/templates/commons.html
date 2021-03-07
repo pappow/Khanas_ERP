@@ -94,6 +94,7 @@
 			<div class="col-md-12">
 				<h1 class="brand-name" style="display: inline-block; float: left;">
 					<a th:href="@{/}" th:utext="${brandName}" style="color: #29af70; font-weight: bold; text-decoration: none;">BOOK-POINT</a>
+					<span th:if="${zbusiness != null}" style="display: block; font-size: 12px; font-weight: bold; color: #961b39;" th:text="${zbusiness.zorg}"></span>
 				</h1>
 				<img class="org-logo" th:src="@{/assets/img/khanas_logo.png}" style="max-width: 100px; float: right; padding: 10px;"/>
 			</div>

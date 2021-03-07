@@ -114,4 +114,26 @@
 	<select id="searchCaitem" resultType="Caitem">
 		SELECT * FROM Caitem WHERE (xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
+
+	<select id="searchCentralCaitem" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE 
+			(xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') 
+			AND zid=#{centralzid} 
+			AND zactive='1'
+	</select>
+
+	<select id="findCentralItemByXitem" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			Caitem 
+		WHERE 
+			xitem=#{xitem} 
+			AND zid=#{centralzid} 
+			AND zactive='1'
+	</select>
 </mapper>

@@ -17,6 +17,8 @@ public interface PoordService {
 	public long updateDetail(PoordDetail poordDetail);
 
 	public long deleteDetail(PoordDetail poordDetail);
+	public long archiveAllPoordDetailByXpornum(String xpornum);
+	public long countOfRequisitionDetailsByXpornum(String xpornum);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum);
 

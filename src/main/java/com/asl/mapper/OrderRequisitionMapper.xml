@@ -7,7 +7,8 @@
 			XPORNUM,
 			ZORG,
 			XSTATUSPOR,
-			XDATE
+			XDATE,
+			POORDHEADER.ZID AS "BRANCHZID"
 		FROM 
 			POORDHEADER
 			JOIN ZBUSINESS ON ZBUSINESS.ZID=POORDHEADER.ZID
@@ -18,6 +19,53 @@
 			AND ZBUSINESS.BRANCH='1'
 			AND POORDHEADER.ZACTIVE='1'
 			AND POORDHEADER.XSTATUSPOR='Open'
+		ORDER BY
+			ZBUSINESS.ZORG
 	</select>
+
+	<select id="getAllBranchesRequisitionDetails" resultType="com.asl.model.BranchesRequisitions">
+		SELECT
+			POORDHEADER.XPORNUM,
+			ZBUSINESS.ZORG,
+			POORDDETAIL.XITEM,
+			CAITEM.XDESC,
+			POORDDETAIL.XQTYORD,
+			POORDHEADER.XSTATUSPOR,
+			XDATE
+		FROM 
+			POORDHEADER
+			JOIN POORDDETAIL ON POORDDETAIL.XPORNUM=POORDHEADER.XPORNUM AND POORDDETAIL.ZID=POORDHEADER.ZID
+			JOIN CAITEM ON CAITEM.XITEM=POORDDETAIL.XITEM AND CAITEM.ZID=#{zid}
+			JOIN ZBUSINESS ON ZBUSINESS.ZID=POORDHEADER.ZID
+		WHERE 
+			ZBUSINESS.CENTRALZID=#{zid}
+			AND TO_CHAR(POORDHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
+			AND POORDHEADER.XTYPE='Requisition Order'
+			AND ZBUSINESS.BRANCH='1'
+			AND POORDHEADER.ZACTIVE='1'
+			AND POORDHEADER.XSTATUSPOR='Open'
+		ORDER BY
+			POORDHEADER.XPORNUM, ZBUSINESS.ZORG, POORDDETAIL.XITEM ASC
+	</select>
+
+	<select id="getDetailListByXpornumAndBranchZid" resultType="PoordDetail">
+		SELECT 
+			poorddetail.xpornum,
+			poorddetail.xrow,
+			poorddetail.xitem,
+			caitem.xdesc as "xitemdesc",
+			poorddetail.xnote,
+			poorddetail.xunitpur,
+			poorddetail.xqtyord,
+			poorddetail.xrate,
+			poorddetail.zactive
+		FROM 
+			poorddetail 
+			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid='900000'
+		WHERE 
+			poorddetail.xpornum=#{xpornum}
+			AND poorddetail.zid=#{branchzid}
+			AND poorddetail.zactive='1'
+	</select> 
 
 </mapper>

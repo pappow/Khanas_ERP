@@ -134,4 +134,11 @@ public class CaitemControlller extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/mastersetup/caitem/" + xitem);
 		return responseHelper.getResponse();
 	}
+
+	@GetMapping("/centralitem/purunit/{xitem}")
+	public @ResponseBody String getCentralItemPurchaseUnit(@PathVariable String xitem) {
+		Caitem centralCaitem = caitemService.findCentralItemByXitem(xitem);
+		if(centralCaitem == null) return "";
+		return centralCaitem.getXunitpur();
+	}
 }

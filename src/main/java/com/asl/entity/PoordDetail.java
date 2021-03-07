@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,5 +62,8 @@ public class PoordDetail extends AbstractModel<String> {
 
 	@Column(name = "xqtypur")
 	private BigDecimal xqtypur;
+
+	@Transient
+	private String xitemdesc;
 
 }
