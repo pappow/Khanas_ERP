@@ -204,6 +204,14 @@ function bindDataTableButtonsEvent(datatable){
 					doItemDelete(url);
 				}
 			});
+			
+			// Confirm Btn
+			$(row).find('button.btn-confirm').off('click').on('click', function(e){
+				var url = $(this).data('url');
+				if(confirm("Are you sure you want to make it confirm?")){
+					doItemConfirm(url);
+				}
+			});
 		});
 	}
 }
@@ -269,12 +277,70 @@ function doItemDelete(url){
 
 
 /**
+ * Data table item confirm
+ * @param url
+ * @returns
+ */
+function doItemConfirm(url){
+	console.log('%cTrigger confirm item ... ', 'color: green');
+
+	$.ajax({
+		url : url,
+		type : 'POST',
+		beforeSend : loadingMask2.show(),
+		success : function(data) {
+			console.log({data});
+			if(data.status == 'SUCCESS'){
+				showMessage(data.status.toLowerCase(), data.message);
+				if(data.reloadurl){
+					doSectionReloadWithNewData(data);
+				} else if(data.redirecturl){
+					setTimeout(() => {
+						window.location.replace(getBasepath() + data.redirecturl);
+					}, 1500);
+				}
+			} else {
+				showMessage(data.status.toLowerCase(), data.message);
+			}
+		}, 
+		error : function(jqXHR, status, errorThrown){
+			showMessage(status, "Something went wrong .... ");
+		},
+		complete: loadingMask2.hide()
+	});
+	
+}
+
+
+/**
  * Data table init
  * @returns
  */
 function dataTableInit(){
 	console.log('%cDataTable init.. ', 'color: green');
 	$('table.datatable').each(function (tindex, table) {
+		var noSortColumns = [];
+		$(table).find('th[data-nosort="Y"]').each(function(i, col){
+			noSortColumns.push($(col).index());
+		});
+
+		var datatable = $(table).DataTable({
+			"columnDefs": [{
+				"targets": noSortColumns,
+				"orderable": false
+			}],
+			"responsive": true
+		});
+
+		new $.fn.dataTable.FixedHeader(datatable);
+
+		bindDataTableButtonsEvent(datatable);
+	});
+}
+
+function modalDataTableInit(){
+	console.log('%cDataTable init.. ', 'color: green');
+	$('table.modal-datatable').each(function (tindex, table) {
 		var noSortColumns = [];
 		$(table).find('th[data-nosort="Y"]').each(function(i, col){
 			noSortColumns.push($(col).index());

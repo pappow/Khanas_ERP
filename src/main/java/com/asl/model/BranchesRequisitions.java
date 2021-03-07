@@ -15,5 +15,6 @@ public class BranchesRequisitions {
 	private Date xdate;
 	private String xitem;
 	private String xdesc;
-	private String xqtyord;
+	private BigDecimal xqtyord;
+	private String branchzid;
 }

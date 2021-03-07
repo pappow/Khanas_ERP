@@ -119,7 +119,7 @@
 		SELECT 
 			* 
 		FROM 
-			Caitem 
+			caitem 
 		WHERE 
 			(xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') 
 			AND zid=#{centralzid} 

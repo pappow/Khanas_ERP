@@ -182,7 +182,7 @@
 										<tr th:each="d : ${poorddetailsList}">
 											<td th:text="${d.xrow}"></td>
 											<td>
-												<a href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
 											</td>
 											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>

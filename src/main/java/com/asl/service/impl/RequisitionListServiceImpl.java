@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asl.entity.PoordDetail;
 import com.asl.mapper.OrderRequisitionMapper;
 import com.asl.model.BranchesRequisitions;
 import com.asl.service.RequisitionListService;
@@ -31,5 +33,10 @@ public class RequisitionListServiceImpl extends AbstractGenericService implement
 		return requisitionListMapper.getAllBranchesRequisitionDetails(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<PoordDetail> getDetailListByXpornumAndBranchZid(String xpornum, String branchzid) {
+		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(branchzid)) return Collections.emptyList();
+		return requisitionListMapper.getDetailListByXpornumAndBranchZid(xpornum, branchzid);
+	}
+
 }

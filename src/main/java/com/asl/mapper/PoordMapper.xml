@@ -76,6 +76,19 @@
 		DELETE FROM PoordDetail WHERE xrow=#{xrow} AND xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
 	</delete>
 
+	<update id="archiveAllPoordDetailByXpornum">
+		UPDATE 
+			poorddetail
+		SET
+			zactive='0'
+		WHERE
+			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+	</update>
+
+	<select id="countOfRequisitionDetailsByXpornum" resultType="Long">
+		SELECT COUNT(*) FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+	</select>
+
 	<insert id="savePoordDetail" parameterType="PoordDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COUNT(*) + 1 FROM PoordDetail WHERE xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
@@ -171,13 +184,22 @@
 
 	<select id="findPoorddetailByXpornum" resultType="PoordDetail">
 		SELECT 
-			* 
+			poorddetail.xpornum,
+			poorddetail.xrow,
+			poorddetail.xitem,
+			caitem.xdesc as "xitemdesc",
+			poorddetail.xnote,
+			poorddetail.xunitpur,
+			poorddetail.xqtyord,
+			poorddetail.xrate,
+			poorddetail.zactive
 		FROM 
-			PoordDetail 
+			poorddetail 
+			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid='900000'
 		WHERE 
-			xpornum=#{xpornum} 
-			AND zid=#{zid} 
-			AND zactive='1'
+			poorddetail.xpornum=#{xpornum}
+			AND poorddetail.zid=#{zid}
+			AND poorddetail.zactive='1'
 	</select> 
 
 	<select id="getAllPoordHeader" resultType="PoordHeader">

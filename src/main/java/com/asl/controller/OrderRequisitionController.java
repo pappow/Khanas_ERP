@@ -122,6 +122,15 @@ public class OrderRequisitionController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// archive all details
+		if(poordService.countOfRequisitionDetailsByXpornum(xpornum) > 0) {
+			long count2 = poordService.archiveAllPoordDetailByXpornum(xpornum);
+			if(count2 == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't archive details");
+				return responseHelper.getResponse();
+			}
+		}
+
 		responseHelper.setSuccessStatusAndMessage("Requisition order updated successfully");
 		responseHelper.setRedirectUrl("/purchasing/requisition/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
