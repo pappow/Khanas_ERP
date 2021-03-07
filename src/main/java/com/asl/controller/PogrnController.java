@@ -99,7 +99,6 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 			return responseHelper.getResponse();
 		}
-		
 
 		// If new
 		long count = pogrnService.save(pogrnHeader);
