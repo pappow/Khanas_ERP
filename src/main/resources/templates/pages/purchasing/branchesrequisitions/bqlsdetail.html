@@ -42,6 +42,39 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
+					<div class="col-md-12">
+						<section id="data-maintenance" style="margin-top: 30px;">
+							<div class="section-header sectionbartoggle">
+								<h1>Date Wise Query</h1>
+							</div>
+							<div class="section-body section-border">
+								<div class="row">
+									<div class="col-md-6">
+										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/bqls/query/matrix}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<div class="form-group datepicker">
+												<label class="control-label col-md-4" for="xdate">Requisitions Date : </label>
+												<div class="input-group date col-md-8 datepicker">
+													<input 	type="datepicker" 
+															class="form-control" 
+															id="xdate"
+															name="xdate"
+															th:value="${#dates.format(#dates.createNow(), df)}"/>
+													<div class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="col-md-6">
+										<div class="">
+											<button class="btn btn-sm btn-success query-submit-btn" type="submit"><i class="fas fa-search"></i></button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
 
 					<div class="col-md-12">
 						<!-- rqls list section -->
@@ -51,19 +84,21 @@
 							</div>
 
 							<div class="section-body" style="overflow-x:scroll;">
-								<table class="table table-striped table-bordered nowrap">
+								<table class="table table-striped table-bordered nowrap" id="branchesorderreqmatrixtable" th:fragment="branchesorderreqmatrixtable">
 									<thead>
 										<tr>
-											<th rowspan="2">
+											<th rowspan="3">
 												Item <i class="fas fa-arrow-right"></i>
 												<br/>
 												Branch <i class="fas fa-arrow-down"></i>
 											</th>
 											<th th:each="col : ${distinctItems}" th:text="${col.xitem}" style="text-align: right;"></th>
-											<th rowspan="2" style="text-align: right;">Total Ordered Item <i class="fas fa-arrow-down" ></i></th>
 										</tr>
 										<tr>
 											<th th:each="col : ${distinctItems}" th:text="${col.xdesc}" style="text-align: right;"></th>
+										</tr>
+										<tr style="background: #eee;">
+											<th th:each="col : ${distinctItems}" th:text="${col.xunitpur}" style="text-align: right;"></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -75,14 +110,12 @@
 														th:text="${britem.xqtyord}">
 												</span>
 											</td>
-											<td th:text="${br.totalItemOrdered}" style="text-align: right;"></td>
 										</tr>
 									</tbody>
 									<tfoot>
 										<tr>
 											<th>Total <i class="fas fa-arrow-right"></i></th>
 											<th th:each="col : ${distinctItems}" th:text="${col.totalQty}" style="text-align: right;"></th>
-											<th th:text="${grandTotal}" style="text-align: right;"></th>
 										</tr>
 									</tfoot>
 								</table>
@@ -98,5 +131,16 @@
 
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				$('.query-submit-btn').on('click', function(e){
+					e.preventDefault();
+					submitMainForm();
+				})
+				
+			})
+		</script>
 	</body>
 </html>

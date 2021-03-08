@@ -17,4 +17,5 @@ public class BranchesRequisitions {
 	private String xdesc;
 	private BigDecimal xqtyord;
 	private String branchzid;
+	private String xunitpur;
 }

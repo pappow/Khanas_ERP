@@ -42,7 +42,39 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
-
+					<div class="col-md-12">
+						<section id="data-maintenance" style="margin-top: 30px;">
+							<div class="section-header sectionbartoggle">
+								<h1>Date Wise Query</h1>
+							</div>
+							<div class="section-body section-border">
+								<div class="row">
+									<div class="col-md-6">
+										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/bqls/query}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<div class="form-group datepicker">
+												<label class="control-label col-md-4" for="xdate">Requisitions Date : </label>
+												<div class="input-group date col-md-8 datepicker">
+													<input 	type="datepicker" 
+															class="form-control" 
+															id="xdate"
+															name="xdate"
+															th:value="${#dates.format(#dates.createNow(), df)}"/>
+													<div class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="col-md-6">
+										<div class="">
+											<button class="btn btn-sm btn-success query-submit-btn" type="submit"><i class="fas fa-search"></i></button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
 					<div class="col-md-12">
 						<!-- rqls list section -->
 						<section id="data-maintenance" style="margin-top: 30px;">
@@ -50,7 +82,7 @@
 								<h1>All Branches Requisitions</h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="poorddetailtable" th:fragment="poorddetailtable">
+								<table class="table table-striped table-bordered datatable nowrap" id="branchesorderrequisitiontable" th:fragment="branchesorderrequisitiontable">
 									<thead>
 										<tr>
 											<th>REQ Number</th>
@@ -85,5 +117,16 @@
 
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				$('.query-submit-btn').on('click', function(e){
+					e.preventDefault();
+					submitMainForm();
+				})
+				
+			})
+		</script>
 	</body>
 </html>
