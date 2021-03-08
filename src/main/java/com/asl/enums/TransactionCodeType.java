@@ -13,7 +13,7 @@ public enum TransactionCodeType {
 	ITEM_NUMBER("Item Number", "IC-"),
 	GRN_NUMBER("GRN Number", "GRN-"),
 	PO_GRN_NUMBER("PO GRN Number", "POGRN-"),
-	INVENTORY_NUMBER("Inventory Number", "INV-"),
+	INVENTORY_NUMBER("Inventory Number", "IMT-"),
 	SALES_ORDER("Sales Order", "SO-"),
 	CHALAN_NUMBER("Chalan Number", "CH-");
 

@@ -13,18 +13,13 @@
 						<!-- <input type="hidden" id="listHeadId" name="listHeadId" th:value="${listHead.listHeadId}"/>
 						<input type="hidden" th:field="*{listId}"/> -->
 						<input type="hidden" th:field="*{xgrnnum}"/>
+						<input type="hidden" th:field="*{xitem}"/>						
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xitem">Item Code : </label>
 								<div class="col-sm-8">
-									<input 	type="text" 
-											class="form-control searchsuggest" 
-											placeholder="Search..." 
-											th:value="${pogrndetail.xitem}" 
-											th:attr="search-url='search/caitem'"/>
-									<input type="hidden" id="search-val" th:field="*{xitem}" value=""/>
-									<input type="hidden" id="search-des" value=""/>
+									<input type="text" th:value="${pogrndetail.xitem}" class="form-control" disabled="disabled"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -52,7 +47,9 @@
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xrate">Rate : </label>
 								<div class="col-sm-8">
-									<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}" min="0"/>
+									<!-- <input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}" min="0"/> -->
+									<input type="hidden" data-smk-type="decimal" th:field="*{xrate}" min="0"/>
+									<input type="text" th:value="${pogrndetail.xrate}" class="form-control xrate-display" disabled="disabled"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -65,9 +62,11 @@
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xunitpur">Purchase Unit : </label>
 								<div class="col-sm-8">
-									<select class="form-control" th:field="*{xunitpur}">
+									<input type="hidden" th:field="*{xunitpur}"/>
+									<input type="text" th:value="${pogrndetail.xunitpur}" class="form-control xunitpur-display" disabled="disabled"/>
+									<!-- <select class="form-control" th:field="*{xunitpur}">
 										<option th:each="unit : ${purUnitList}" th:value="${unit.xcode}" th:text="${unit.xcode}"></option>
-									</select>
+									</select> -->
 								</div>
 							</div>
 						</div>
@@ -93,7 +92,43 @@
 				// Init ui for modal
 				ck.ui.config.buttonevent();
 				
+				$('#xqtygrn').on('blur', function(e){
+					e.preventDefault();
+					calculateRateAmount();
+				})
+	
+				$('#xrate').on('blur', function(e){
+					e.preventDefault();
+					calculateRateAmount();
+				})
+			
+				function calculateRateAmount(){
+					var qty = $('#xqtygrn').val();
+					var rate = $('#xrate').val();
+					$('#xlineamt').val(qty * rate);
+				}
+				
+				// Get item purchase unit
+				setTimeout(() => {
+					$.ajax({
+						url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+						type : 'GET',
+						beforeSend : loadingMask2.show(),
+						success : function(data) {
+							loadingMask2.hide();
+														
+							$('input[name="xunitpur"]').val(data.xunitpur);
+							$('input.xunitpur-display').val(data.xunitpur);
 
+							$('input[name="xrate"]').val(data.xrate);
+							$('input.xrate-display').val(data.xrate);},
+						error : function(jqXHR, status, errorThrown){
+							showMessage(status, "Something went wrong .... ");
+							loadingMask2.hide()
+						}
+					})
+				}, 1000);
+	
 			});
 		</script>
 	</div>

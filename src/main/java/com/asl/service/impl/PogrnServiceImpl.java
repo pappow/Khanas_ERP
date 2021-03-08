@@ -46,11 +46,11 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		long count = pogrnMapper.savePogrnDetail(pogrnDetail);
-		/*
+		
 		if(count != 0) {
 			count = updatePogrnHeaderTotalAmt(pogrnDetail);
 		}
-		*/
+		
 		return count;
 	}
 

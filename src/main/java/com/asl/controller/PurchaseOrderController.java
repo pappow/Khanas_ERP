@@ -235,7 +235,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	
 	
 	@GetMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrn( @PathVariable String status, @PathVariable String xpornum){
+	public @ResponseBody Map<String, Object> creategrn(@PathVariable String xpornum){
 		if(StringUtils.isBlank(xpornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -244,12 +244,12 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		// Get PoordHeader record by Xpornum
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader != null && StringUtils.isNotBlank((status))) {
+		if(poordHeader != null) {
 			PogrnHeader pogrnHeader = new PogrnHeader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pogrnHeader.setXdate(new Date());
 			pogrnHeader.setXtype(TransactionCodeType.PO_GRN_NUMBER.getCode());
-			pogrnHeader.setXtrngrn(xtrnService.findByXtypetrn(TransactionCodeType.PO_GRN_NUMBER.getCode()).get(0).getXtrn());
+			pogrnHeader.setXtrngrn(TransactionCodeType.PO_GRN_NUMBER.getdefaultCode());
 			
 			long count = pogrnService.save(pogrnHeader);
 			if(count == 0) {

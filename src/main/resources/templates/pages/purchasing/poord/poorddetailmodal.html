@@ -19,7 +19,7 @@
 								<label class="control-label col-sm-4" for="xitem">Item Code : </label>
 								<div class="col-sm-8">
 									<input 	type="text" 
-											class="form-control searchsuggest" 
+											class="form-control searchsuggest xitemsearch" 
 											placeholder="Search..." 
 											th:value="${poorddetail.xitem}" 
 											th:attr="search-url='search/caitem'"/>
@@ -30,9 +30,12 @@
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xunitpur">Purchase Unit : </label>
 								<div class="col-sm-8">
-									<select class="form-control" th:field="*{xunitpur}">
+									<input type="hidden" th:field="*{xunitpur}"/>
+									<input type="text" th:value="${poorddetail.xunitpur}" class="form-control xunitpur-display" disabled="disabled"/>
+									
+									<!-- <select class="form-control" th:field="*{xunitpur}">
 										<option th:each="p : ${purchaseUnit}" th:value="${p.xcode}" th:text="${p.xcode}">Select</option>
-									</select>
+									</select> -->
 								</div>
 							</div>
 							<div class="form-group">
@@ -91,8 +94,31 @@
 					var rate = $('#xrate').val();
 					$('#xlineamt').val(qty * rate);
 				}
+				
+				// Get item purchase unit
+				$('.xitemsearch').on('blur', function(){
+				setTimeout(() => {
+					$.ajax({
+						url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+						type : 'GET',
+						beforeSend : loadingMask2.show(),
+						success : function(data) {
+							loadingMask2.hide();
+							console.log(data.getXunitpur());
+														
+							$('input[name="xunitpur"]').val(data.xunitpur);
+							$('input.xunitpur-display').val(data.xunitpur);
 
-			})
+							$('input[name="xrate"]').val(data.xrate);},
+						error : function(jqXHR, status, errorThrown){
+							showMessage(status, "Something went wrong .... ");
+							loadingMask2.hide();
+						}
+					})
+				}, 1000);
+				});
+
+			});
 		</script>
 	</div>
 </div>

@@ -235,13 +235,13 @@ public class PogrnController extends ASLAbstractController {
 			for(int i=0; i< pogrnDetailList.size(); i++) {
 				
 				imtrn = new Imtrn();
-				BeanUtils.copyProperties(pogrnDetailList.get(0), imtrn);
+				BeanUtils.copyProperties(pogrnDetailList.get(i), imtrn);
 				imtrn.setXdate(pogrnHeader.getXdate());
 				imtrn.setXwh(pogrnHeader.getXwh());
-				imtrn.setXqty(pogrnDetailList.get(0).getXqtygrn());
+				imtrn.setXqty(pogrnDetailList.get(i).getXqtygrn());
 				imtrn.setXsign(+1);
 				imtrn.setXtype(TransactionCodeType.INVENTORY_NUMBER.getCode());
-				imtrn.setXtrnimtrn(xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode()).get(0).getXtrn());
+				imtrn.setXtrnimtrn(TransactionCodeType.INVENTORY_NUMBER.getdefaultCode());
 				//imtrn.set
 				
 				long imtrnCount = imtrnService.save(imtrn);
@@ -269,8 +269,13 @@ public class PogrnController extends ASLAbstractController {
 			}*/		
 			
 			//Update grn status
-			pogrnHeader.setXstatusgrn("");
-			long count = pogrnService.update(pogrnHeader);
+			pogrnHeader.setXstatusgrn("GRN Confirmed");
+			long grnCount = pogrnService.update(pogrnHeader);
+			if(grnCount == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			
 			
 			responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
 			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());

@@ -141,4 +141,12 @@ public class CaitemControlller extends ASLAbstractController {
 		if(centralCaitem == null) return "";
 		return centralCaitem.getXunitpur();
 	}
+	
+	@GetMapping("/itemdetail/{xitem}")
+	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
+		
+		Caitem centralCaitem = caitemService.findCentralItemByXitem(xitem);
+			
+		return centralCaitem;
+	}
 }
