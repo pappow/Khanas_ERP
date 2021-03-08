@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.PoordHeader;
 import com.asl.enums.ResponseStatus;
 import com.asl.model.BranchesRequisitions;
+import com.asl.service.PoordService;
 import com.asl.service.RequisitionListService;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +33,7 @@ import lombok.Data;
 public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@Autowired private RequisitionListService requisitionListService;
+	@Autowired private PoordService poordService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -83,6 +86,28 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 	public String loadRqlsDetails(Model model) {
 		generateMatrixData(new Date(), model);
 		return "pages/purchasing/branchesrequisitions/bqlsdetail";
+	}
+
+	@PostMapping("/ordreqconfirm/{branchzid}/{xpornum}")
+	public @ResponseBody Map<String, Object> confirmReqOrderAndCreateSOAndChalan(@PathVariable String branchzid, @PathVariable String xpornum, Model model){
+		// Change requisition order status
+		PoordHeader ph = poordService.findBranchPoordHeaderByXpornumForCentral(xpornum);
+		
+		
+		// Create sales order header if not exist today
+		
+		// saave sales order header
+		
+		
+		// create all sales details from requisition details
+		
+		// save requisition details to sell order detail
+		
+		
+		// reload page
+		
+		
+		return responseHelper.getResponse();
 	}
 
 	private void generateMatrixData(Date date, Model model) {

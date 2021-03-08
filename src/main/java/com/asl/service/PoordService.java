@@ -21,6 +21,7 @@ public interface PoordService {
 	public long countOfRequisitionDetailsByXpornum(String xpornum);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum);
+	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum);
 
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow);
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum);

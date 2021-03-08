@@ -49,6 +49,12 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum) {
+		if (StringUtils.isBlank(xpornum)) return null;
+		return poordMapper.findBranchPoordHeaderByXpornumForCentral(xpornum, sessionManager.getZbusiness().getCentralzid());
+	}
+
+	@Override
 	public long saveDetail(PoordDetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());

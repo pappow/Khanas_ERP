@@ -21,6 +21,7 @@ public interface PoordMapper {
 	public long countOfRequisitionDetailsByXpornum(String xpornum, String zid);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum, String zid);
+	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum, String branchzid);
 
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow, String zid);
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum, String zid, String centralzid);

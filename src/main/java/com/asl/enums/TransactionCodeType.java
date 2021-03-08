@@ -14,7 +14,8 @@ public enum TransactionCodeType {
 	GRN_NUMBER("GRN Number", "GRN-"),
 	PO_GRN_NUMBER("PO GRN Number", "POGRN-"),
 	INVENTORY_NUMBER("Inventory Number", "INV-"),
-	SALES_ORDER("Sales Order", "OP-");
+	SALES_ORDER("Sales Order", "SO-"),
+	CHALAN_NUMBER("Chalan Number", "CH-");
 
 	private String code;
 	private String defaultCode;
