@@ -1,6 +1,8 @@
 package com.asl.controller;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.enums.ResponseStatus;
@@ -29,10 +32,38 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@Autowired private RequisitionListService requisitionListService;
 
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 	@GetMapping
 	public String loadBqls(Model model) {
 		model.addAttribute("bqlsList", requisitionListService.getAllBranchesRequisitions(new Date()));
 		return "pages/purchasing/branchesrequisitions/bqls";
+	}
+
+	@GetMapping("/query")
+	public String reloadTableWithData(@RequestParam String date, Model model) throws ParseException {
+		model.addAttribute("bqlsList", requisitionListService.getAllBranchesRequisitions(sdf.parse(date)));
+		return "pages/purchasing/branchesrequisitions/bqls::branchesorderrequisitiontable";
+	}
+
+	@PostMapping("/query")
+	public @ResponseBody Map<String, Object> queryForrequistionDetails(Date xdate, Model model){
+		responseHelper.setReloadSectionIdWithUrl("branchesorderrequisitiontable", "/purchasing/bqls/query?date=" + sdf.format(xdate));
+		responseHelper.setStatus(ResponseStatus.SUCCESS);
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/query/matrix")
+	public String reloadTableWithDataMatrix(@RequestParam String date, Model model) throws ParseException {
+		generateMatrixData(sdf.parse(date), model);
+		return "pages/purchasing/branchesrequisitions/bqlsdetail::branchesorderreqmatrixtable";
+	}
+
+	@PostMapping("/query/matrix")
+	public @ResponseBody Map<String, Object> queryForrequistionDetailsMatrix(Date xdate, Model model){
+		responseHelper.setReloadSectionIdWithUrl("branchesorderreqmatrixtable", "/purchasing/bqls/query/matrix?date=" + sdf.format(xdate));
+		responseHelper.setStatus(ResponseStatus.SUCCESS);
+		return responseHelper.getResponse();
 	}
 
 	@GetMapping("/ordreqdetails/{branchzid}/{xpornum}/show")
@@ -50,10 +81,15 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@GetMapping("/details")
 	public String loadRqlsDetails(Model model) {
-		List<TableColumn> distinctItems = new ArrayList<TableColumn>();
-		List<BranchRow> distinctBranch = new ArrayList<BranchRow>();
+		generateMatrixData(new Date(), model);
+		return "pages/purchasing/branchesrequisitions/bqlsdetail";
+	}
 
-		List<BranchesRequisitions> bqList = requisitionListService.getAllBranchesRequisitionDetails(new Date());
+	private void generateMatrixData(Date date, Model model) {
+		List<TableColumn> distinctItems = new ArrayList<>();
+		List<BranchRow> distinctBranch = new ArrayList<>();
+
+		List<BranchesRequisitions> bqList = requisitionListService.getAllBranchesRequisitionDetails(date);
 
 		Map<String, TableColumn> columnRowMap = new HashMap<>();
 		Map<String, BranchRow> branchRowMap = new HashMap<>();
@@ -68,6 +104,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 				c.setXitem(item);
 				c.setXdesc(bq.getXdesc());
 				c.setTotalQty(bq.getXqtyord());
+				c.setXunitpur(bq.getXunitpur());
 				columnRowMap.put(item, c);
 			}
 
@@ -95,16 +132,9 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
 		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));
 
-		BigDecimal grandTotal = BigDecimal.ZERO;
-		for(TableColumn c : distinctItems) {
-			grandTotal = grandTotal.add(c.getTotalQty());
-		}
-
-		model.addAttribute("grandTotal", grandTotal);
 		model.addAttribute("distinctBranch", distinctBranch);
 		model.addAttribute("distinctItems", distinctItems);
 		model.addAttribute("bqlsDetailsList", bqList);
-		return "pages/purchasing/branchesrequisitions/bqlsdetail";
 	}
 }
 
@@ -113,6 +143,7 @@ class TableColumn{
 	private String xitem;
 	private String xdesc;
 	private BigDecimal totalQty;
+	private String xunitpur;
 }
 
 @Data

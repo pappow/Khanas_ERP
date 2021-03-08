@@ -6,21 +6,29 @@ package com.asl.enums;
  */
 public enum TransactionCodeType {
 
-	SUPPLIER_NUMBER("Supplier Number"),
-	CUSTOMER_NUMBER("Customer Number"),
-	PURCHASE_ORDER("Purchase Order"),
-	REQUISITION_ORDER("Requisition Order"),
-	ITEM_NUMBER("Item Number"),
-	GRN_NUMBER("GRN Number"),
-	INVENTORY_NUMBER("Inventory Number");
+	SUPPLIER_NUMBER("Supplier Number", "SU-"),
+	CUSTOMER_NUMBER("Customer Number", "CUS-"),
+	PURCHASE_ORDER("Purchase Order", "PO-"),
+	REQUISITION_ORDER("Requisition Order", "REQ-"),
+	ITEM_NUMBER("Item Number", "IC-"),
+	GRN_NUMBER("GRN Number", "GRN-"),
+	PO_GRN_NUMBER("PO GRN Number", "POGRN-"),
+	INVENTORY_NUMBER("Inventory Number", "INV-"),
+	SALES_ORDER("Sales Order", "OP-");
 
 	private String code;
+	private String defaultCode;
 
-	private TransactionCodeType(String code) {
+	private TransactionCodeType(String code, String defaultCode) {
 		this.code = code;
+		this.defaultCode = defaultCode;
 	}
 
 	public String getCode() {
 		return this.code;
+	}
+	
+	public String getdefaultCode() {
+		return this.defaultCode;
 	}
 }
