@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +18,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Imtrn;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
+import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -36,6 +41,11 @@ public class PogrnController extends ASLAbstractController {
 	private XcodesService xcodeService;
 	@Autowired
 	private XtrnService xtrnService;
+	@Autowired
+	private PoordService poordService;
+	@Autowired
+	private ImtrnService imtrnService;
+	
 	@GetMapping
 	public String loadGRNPage(Model model) {
 		
@@ -204,6 +214,70 @@ public class PogrnController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setRedirectUrl("/purchasing/pogrn/" +  xgrnnum);
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/confirmgrn/{xgrnnum}")
+	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xgrnnum){
+		if(StringUtils.isBlank(xgrnnum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		// Validate
+		
+		//Get PogrnHeader record by Xgrnnum
+		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		
+		if(pogrnHeader != null) {
+			
+			List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+			Imtrn imtrn;
+			for(int i=0; i< pogrnDetailList.size(); i++) {
+				
+				imtrn = new Imtrn();
+				BeanUtils.copyProperties(pogrnDetailList.get(0), imtrn);
+				imtrn.setXdate(pogrnHeader.getXdate());
+				imtrn.setXwh(pogrnHeader.getXwh());
+				imtrn.setXqty(pogrnDetailList.get(0).getXqtygrn());
+				imtrn.setXsign(+1);
+				imtrn.setXtype(TransactionCodeType.INVENTORY_NUMBER.getCode());
+				imtrn.setXtrnimtrn(xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode()).get(0).getXtrn());
+				//imtrn.set
+				
+				long imtrnCount = imtrnService.save(imtrn);
+				if(imtrnCount == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}	
+			}
+			
+			//Create Arhed (Account Payable)
+			/*
+			 Arhed arhed = new Arhed(); BeanUtils.copyProperties(poordHeader, arhed,
+			   "xdate");
+			 */
+		
+			
+			//Update PoordHeader Status
+			/*
+			PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(pornum);
+			poordHeader.setXstatuspor("GRN Confirmed");
+			long pCount = poordService.update(poordHeader);
+			if(pCount == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}*/		
+			
+			//Update grn status
+			pogrnHeader.setXstatusgrn("");
+			long count = pogrnService.update(pogrnHeader);
+			
+			responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
+			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
+			return responseHelper.getResponse();
+			
+		}
+		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
 	}
 

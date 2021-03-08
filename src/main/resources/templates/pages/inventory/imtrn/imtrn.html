@@ -182,6 +182,7 @@
 													<th>Inv. Number</th>
 													<th>Date</th>
 													<th>Qty</th>
+													<th>Rate</th>
 													<th>Status</th>
 												</tr>
 											</thead>
@@ -192,6 +193,7 @@
 													</td>
 													<td  th:text="${#dates.format(imtrn.xdate, df)}"></td>
 													<td th:text="${imtrn.xqty}"></td>
+													<td th:text="${imtrn.xrate}"></td>
 													<td th:text="${imtrn.xstatus}"></td>
 												</tr>
 											</tbody>

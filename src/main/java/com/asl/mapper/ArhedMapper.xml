@@ -1,5 +1,127 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.ArhedMapper">
+	<insert id="saveArhed" parameterType="Arhed">
+		<selectKey keyProperty="xvoucher" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnarhed}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO Arhed
+		(
+		xvoucher,
+		xdate,
+		xcus,
+		xbank,
+		xwh,
+		xprime,
+		xbalprime,
+		xpaymenttype,
+		xref,
+		xdateref,
+		xvatamt,
+		xaitamt,
+		xstatuschq,
+		xdiscprime,
+		xstatusbnk,
+		xstatusjv,
+		xnote,
+		xdocnum,
+		xtypetrn,
+		xbase,
+		xsign,
+		xtype,
+		xcusledbal,
+
+		zid,
+		zauserid,
+		zuuserid,
+		zaip,
+		zuip,
+		zactive,
+		ztime,
+		zutime
+		)
+		VALUES
+		(
+		#{xvoucher},
+		#{xdate, jdbcType=DATE},
+		#{xcus, jdbcType=VARCHAR},
+		#{xbank, jdbcType=VARCHAR},
+		#{xwh, jdbcType=VARCHAR},
+		#{xprime, jdbcType=INTEGER},
+		#{xbalprime, jdbcType=INTEGER},
+		#{xpaymenttype, jdbcType=VARCHAR},
+		#{xref, jdbcType=VARCHAR},
+		#{xdateref, jdbcType=DATE},
+		#{xvatamt, jdbcType=DECIMAL},
+		#{xaitamt, jdbcType=DECIMAL},
+		#{xstatuschq, jdbcType=VARCHAR},
+		#{xdiscprime, jdbcType=INTEGER},
+		#{xstatusbnk, jdbcType=VARCHAR},
+		#{xstatusjv, jdbcType=VARCHAR},
+		#{xnote, jdbcType=VARCHAR},
+		#{xdocnum, jdbcType=VARCHAR},
+		#{xtypetrn, jdbcType=VARCHAR},
+		#{xbase, jdbcType=DECIMAL},
+		#{xsign, jdbcType=INTEGER},
+		#{xtype, jdbcType=VARCHAR},
+		#{xcusledbal, jdbcType=DECIMAL},
+
+		#{zid, jdbcType=VARCHAR},
+		#{zauserid, jdbcType=VARCHAR},
+		#{zuuserid, jdbcType=VARCHAR},
+		#{zaip, jdbcType=VARCHAR},
+		#{zuip, jdbcType=VARCHAR},
+		#{zactive, jdbcType=VARCHAR},
+		#{ztime, jdbcType=TIMESTAMP},
+		#{zutime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateArhed" parameterType="Arhed">
+		UPDATE Arhed 
+		SET
+		xcus=#{xcus, jdbcType=VARCHAR},
+		xdate=#{xdate, jdbcType=DATE},
+		xcus=#{xcus, jdbcType=VARCHAR},
+		xbank=#{xbank, jdbcType=VARCHAR},
+		xwh=#{xwh, jdbcType=VARCHAR},
+		xprime#{xprime, jdbcType=INTEGER},
+		xbalprime=#{xbalprime, jdbcType=INTEGER},
+		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+		xref=#{xref, jdbcType=VARCHAR},
+		xdateref=#{xdateref, jdbcType=DATE},
+		xvatamt=#{xvatamt, jdbcType=DECIMAL},
+		xaitamt=#{xaitamt, jdbcType=DECIMAL},
+		xstatuschq=#{xstatuschq, jdbcType=VARCHAR},
+		xdiscprime=#{xdiscprime, jdbcType=INTEGER},
+		xstatusbnk=#{xstatusbnk, jdbcType=VARCHAR},
+		xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+		xnote=#{xnote, jdbcType=VARCHAR},
+		xdocnum=#{xdocnum, jdbcType=VARCHAR},
+		xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+		xbase=#{xbase, jdbcType=DECIMAL},
+		xsign=#{xsign, jdbcType=INTEGER},
+		xtype=#{xtype, jdbcType=VARCHAR},
+		xcusledbal=#{xcusledbal, jdbcType=DECIMAL},		
+
+		zauserid=#{zauserid, jdbcType=VARCHAR},
+		zuuserid=#{zuuserid, jdbcType=VARCHAR},
+		zaip=#{zaip, jdbcType=VARCHAR},
+		zuip=#{zuip, jdbcType=VARCHAR},
+		zactive=#{zactive, jdbcType=VARCHAR},
+		ztime=#{ztime, jdbcType=TIMESTAMP},
+		zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+		xvoucher=#{xvoucher}
+		AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="findArhedByXvoucher" resultType="Arhed">
+		SELECT * FROM Arhed WHERE xvoucher=#{xvoucher} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="getAllArhed" resultType="Arhed">
+		SELECT * FROM xvoucher WHERE zid=#{zid} AND zactive='1'
+	</select>
 
 </mapper>

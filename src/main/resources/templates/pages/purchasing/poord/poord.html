@@ -217,7 +217,7 @@
 											<th>Rate</th>
 											<th>Purchase Unit</th>
 											<th>Net Amount</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${poordheader.xstatuspor != 'GRN Created'}">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/new/show', data-target-modal='poorddetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -225,15 +225,13 @@
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
 											<td th:text="${d.xrow}"></td>
-											<td>
-												<a href="" th:text="${d.xitem}"></a>
-											</td>
+											<td th:text=${d.xitem}></td>
 											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:text="${d.xunitpur}"></td>
 											<td th:text="${d.xlineamt}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${poordheader.xstatuspor != 'GRN Created'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/show', data-target-modal='poorddetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
@@ -271,8 +269,16 @@
 				$.ajax({
 					url: "/asl-erp/purchasing/poord/creategrn/" + status + "/" +porNum,
 					success: function(result){
-						console.log(result.status)
+						var status = result.status.toLowerCase()
+						console.log(status);
+						if(status == "success")
+							showMessage("success", "GRN Finalized and Inventory Updated ");
+						else if(status == "error")
+							showMessage("error", "Somthing went wrong.....");
 						//location.reload(true);
+						setTimeout(() => {
+							location.reload(true);
+						}, 1000);
 					}
 				});
 			});
