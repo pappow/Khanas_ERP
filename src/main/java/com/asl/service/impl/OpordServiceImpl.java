@@ -1,5 +1,7 @@
 package com.asl.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -69,5 +71,35 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.getAllOpordheader(sessionManager.getBusinessId());
 	}
 
+	@Override
+	public Opordheader findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(String xtypetrn, String xpornum, String xcus, Date xdate) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xpornum) || StringUtils.isBlank(xcus) || xdate == null) return null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return opordMapper.findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(xtypetrn, xpornum, xcus, sdf.format(xdate), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Opordheader findOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || xdate == null) return null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return opordMapper.findOpordHeaderByXtypetrnAndXtrnAndXdate(xtypetrn, xtrn, sdf.format(xdate), sessionManager.getBusinessId());
+	}
+
 	
+
+	@Override
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || xdate == null) return null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return opordMapper.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(xtypetrn, xtrn, sdf.format(xdate), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem) {
+		if(StringUtils.isBlank(xordernum) || StringUtils.isBlank(xitem)) return null;
+		return opordMapper.findOporddetailByXordernumAndXitem(xordernum, xitem, sessionManager.getBusinessId());
+	}
+
+	
+
 }

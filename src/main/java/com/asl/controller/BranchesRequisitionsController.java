@@ -19,9 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
+import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.ResponseStatus;
+import com.asl.enums.TransactionCodeType;
 import com.asl.model.BranchesRequisitions;
+import com.asl.service.OpordService;
 import com.asl.service.PoordService;
 import com.asl.service.RequisitionListService;
 
@@ -34,6 +39,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@Autowired private RequisitionListService requisitionListService;
 	@Autowired private PoordService poordService;
+	@Autowired private OpordService opordService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -75,12 +81,12 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		return "pages/purchasing/branchesrequisitions/branchorderreqdetailmodal::branchorderreqdetailmodal";
 	}
 
-	@PostMapping("/ordreqconfirm/{branchzid}/{xpornum}")
-	public @ResponseBody Map<String, Object> confirmOrderRequisition(@PathVariable String branchzid, @PathVariable String xpornum, Model model) {
-		
-		responseHelper.setStatus(ResponseStatus.ERROR);
-		return responseHelper.getResponse();
-	}
+//	@PostMapping("/ordreqconfirm/{branchzid}/{xpornum}")
+//	public @ResponseBody Map<String, Object> confirmOrderRequisition(@PathVariable String branchzid, @PathVariable String xpornum, Model model) {
+//		
+//		responseHelper.setStatus(ResponseStatus.ERROR);
+//		return responseHelper.getResponse();
+//	}
 
 	@GetMapping("/details")
 	public String loadRqlsDetails(Model model) {
@@ -91,22 +97,115 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 	@PostMapping("/ordreqconfirm/{branchzid}/{xpornum}")
 	public @ResponseBody Map<String, Object> confirmReqOrderAndCreateSOAndChalan(@PathVariable String branchzid, @PathVariable String xpornum, Model model){
 		// Change requisition order status
-		PoordHeader ph = poordService.findBranchPoordHeaderByXpornumForCentral(xpornum);
-		
-		
+		PoordHeader ph = poordService.findBranchPoordHeaderByXpornumForCentral(xpornum, branchzid);
+		if(ph == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find any requisition in the system");
+			return responseHelper.getResponse();
+		}
+		ph.setXstatuspor("Confirmed");
+		long count = poordService.update(ph);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
 		// Create sales order header if not exist today
-		
-		// saave sales order header
-		
-		
-		// create all sales details from requisition details
-		
-		// save requisition details to sell order detail
-		
-		
+		Opordheader oh = new Opordheader();
+		oh.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
+		oh.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
+		oh.setXpornum(ph.getXpornum());
+		oh.setXdate(new Date());
+		oh.setXcus(ph.getZid());
+		oh.setXstatus("Open");
+		long ohCount = opordService.saveOpordHeader(oh);
+		if(ohCount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't crete sales order");
+			return responseHelper.getResponse();
+		}
+
+		// find chalan, create chalan if not exist
+		Opordheader existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
+		if(existChalan == null) {
+			// Create new chalan for today
+			Opordheader chalan = new Opordheader();
+			chalan.setXtypetrn(TransactionCodeType.CHALAN_NUMBER.getCode());
+			chalan.setXtrn(TransactionCodeType.CHALAN_NUMBER.getdefaultCode());
+			chalan.setXdate(new Date());
+			chalan.setXstatus("Open");
+			long chalanCount = opordService.saveOpordHeader(chalan);
+			if(chalanCount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't crete chalan");
+				return responseHelper.getResponse();
+			}
+			existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(chalan.getXtypetrn(), chalan.getXtrn(), chalan.getXdate());
+			if(existChalan == null) {
+				responseHelper.setErrorStatusAndMessage("Chalan not found");
+				return responseHelper.getResponse();
+			}
+		}
+
+
+		// if header saved successfully, then find it again from db to get xordernum
+		// find oh by  xpornum, xdate, xtypetrn and xcus 
+		Opordheader savedoh = opordService.findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(oh.getXtypetrn(), oh.getXpornum(), oh.getXcus(), oh.getXdate());
+		if(savedoh == null) {
+			responseHelper.setErrorStatusAndMessage("Can't found any sales order");
+			return responseHelper.getResponse();
+		}
+
+		// find all order requisition details first
+		List<PoordDetail> poordDetailsList = poordService.findPoordDetailsByXpornumAndBranchZid(xpornum, branchzid);
+		if(poordDetailsList == null || poordDetailsList.isEmpty()) {  // if no detail exist
+			responseHelper.setReloadSectionIdWithUrl("branchesorderrequisitiontable", "/purchasing/bqls/query?date=" + sdf.format(ph.getXdate()));
+			responseHelper.setSuccessStatusAndMessage("Sales order head created successfully");
+			return responseHelper.getResponse();
+		}
+
+		// if detail data exist
+		for(PoordDetail pd : poordDetailsList) {
+			// create all sales details from requisition details
+			Oporddetail od = new Oporddetail();
+			od.setXordernum(savedoh.getXordernum());
+			od.setXitem(pd.getXitem());
+			od.setXunit(pd.getXunitpur());
+			od.setXqtyord(pd.getXqtyord());
+			od.setXrate(pd.getXrate());
+			long countOD = opordService.saveOpordDetail(od);
+			if(countOD == 0) {
+				//TODO: need to revoke all previous transaction from database
+				responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
+				return responseHelper.getResponse();
+			}
+
+			// TODO: Update or add chalan details
+			// search existing chalan detail by item and chalan header
+			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(existChalan.getXordernum(), pd.getXitem());
+			if(existChalanDetail != null) {
+				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
+				long countChalanDetail = opordService.updateOpordDetail(existChalanDetail);
+				if(countChalanDetail == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
+					return responseHelper.getResponse();
+				}
+			} else {
+				Oporddetail chalanDetail = new Oporddetail();
+				chalanDetail.setXordernum(existChalan.getXordernum());
+				chalanDetail.setXitem(pd.getXitem());
+				chalanDetail.setXunit(pd.getXunitpur());
+				chalanDetail.setXqtyord(pd.getXqtyord());
+				chalanDetail.setXrate(pd.getXrate());
+				long countChalanDetail = opordService.saveOpordDetail(chalanDetail);
+				if(countChalanDetail == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");
+					return responseHelper.getResponse();
+				}
+			}
+		}
+
+
 		// reload page
-		
-		
+		responseHelper.setSuccessStatusAndMessage("Requisition confirmed successfully");
+		responseHelper.setReloadSectionIdWithUrl("branchesorderrequisitiontable", "/purchasing/bqls/query?date=" + sdf.format(ph.getXdate()));
 		return responseHelper.getResponse();
 	}
 

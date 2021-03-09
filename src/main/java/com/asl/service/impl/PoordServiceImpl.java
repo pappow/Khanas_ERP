@@ -29,9 +29,8 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 
 	@Override
 	public long update(PoordHeader poordHeader) {
-		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum()))
-			return 0;
-		poordHeader.setZid(sessionManager.getBusinessId());
+		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) return 0;
+		if(StringUtils.isBlank(poordHeader.getZid())) poordHeader.setZid(sessionManager.getBusinessId());
 		return poordMapper.updatePoordHeader(poordHeader);
 	}
 
@@ -49,9 +48,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum) {
+	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum, String branchzid) {
 		if (StringUtils.isBlank(xpornum)) return null;
-		return poordMapper.findBranchPoordHeaderByXpornumForCentral(xpornum, sessionManager.getZbusiness().getCentralzid());
+		return poordMapper.findBranchPoordHeaderByXpornumForCentral(xpornum, branchzid);
 	}
 
 	@Override
@@ -114,6 +113,12 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum) {
 		if(StringUtils.isBlank(xpornum)) return Collections.emptyList();
 		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId(), sessionManager.getZbusiness().getCentralzid());
+	}
+
+	@Override
+	public List<PoordDetail> findPoordDetailsByXpornumAndBranchZid(String xpornum, String branchzid) {
+		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(branchzid)) return Collections.emptyList();
+		return poordMapper.findPoordDetailsByXpornumAndBranchZid(xpornum, branchzid);
 	}
 
 	@Override
