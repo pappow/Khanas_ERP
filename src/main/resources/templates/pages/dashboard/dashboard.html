@@ -64,26 +64,26 @@
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/mastersetup/cap}">Code And Parameters</a></td>
+										<td><a th:href="@{/mastersetup/cap}">Code & Parameters</a></td>
 										<td>
 											<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
 									<tr>
-										<td colspan="2">Purchasing</td>
+										<td colspan="2">Procurements</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/purchasing}">Purchasing</a></td>
+										<td><a th:href="@{/purchasing}">Procurements</a></td>
 										<td>
 											<a th:href="@{/purchasing}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td colspan="2">Sales & Invoicing</td>
 									</tr>
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/salesninvoice}">Sales & Invoicing</a></td>
 										<td>
 											<a th:href="@{/salesninvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>

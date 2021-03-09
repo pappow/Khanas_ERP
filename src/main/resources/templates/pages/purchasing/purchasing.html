@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Purchasing</title>
+		<title>Procurements</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -45,43 +45,49 @@
 						<!-- Section data maintenance -->
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Purchasing</h1>
+								<h1>Procurements</h1>
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
 									<tr>
+										<td colspan="2">Requisition</td>
+									</tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/purchasing/bqls}">Branches Requisition</a></td>
 										<td>
 											<a th:href="@{/purchasing/bqls}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/purchasing/bqls/details}">Branches Requisition Details</a></td>
 										<td>
 											<a th:href="@{/purchasing/bqls/details}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.branch}">
 										<td><a th:href="@{/purchasing/requisition}">Order Requisition</a></td>
 										<td>
 											<a th:href="@{/purchasing/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
+										<td colspan="2">Purchasing</td>
+									</tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/purchasing/poord}">Purchase Order</a></td>
 										<td>
 											<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/purchasing/grn}">Direct GRN</a></td>
 										<td>
 											<a th:href="@{/purchasing/grn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									
-									<tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
 										<td><a th:href="@{/purchasing/pogrn}">Purchase Order GRN</a></td>
 										<td>
 											<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>

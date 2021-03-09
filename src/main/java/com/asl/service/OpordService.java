@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.model.BranchesRequisitions;
 
 /**
  * @author Zubayer Ahamed
@@ -31,4 +32,6 @@ public interface OpordService {
 	public Opordheader findOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem);
+
+	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate);
 }

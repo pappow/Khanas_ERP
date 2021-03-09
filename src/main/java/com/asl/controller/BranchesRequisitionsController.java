@@ -81,13 +81,6 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		return "pages/purchasing/branchesrequisitions/branchorderreqdetailmodal::branchorderreqdetailmodal";
 	}
 
-//	@PostMapping("/ordreqconfirm/{branchzid}/{xpornum}")
-//	public @ResponseBody Map<String, Object> confirmOrderRequisition(@PathVariable String branchzid, @PathVariable String xpornum, Model model) {
-//		
-//		responseHelper.setStatus(ResponseStatus.ERROR);
-//		return responseHelper.getResponse();
-//	}
-
 	@GetMapping("/details")
 	public String loadRqlsDetails(Model model) {
 		generateMatrixData(new Date(), model);

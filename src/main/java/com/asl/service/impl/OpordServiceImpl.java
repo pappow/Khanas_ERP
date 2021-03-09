@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.mapper.OpordMapper;
+import com.asl.model.BranchesRequisitions;
 import com.asl.service.OpordService;
 
 /**
@@ -100,6 +101,10 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.findOporddetailByXordernumAndXitem(xordernum, xitem, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return opordMapper.getSalesOrderMatrxi(sdf.format(xdate), sessionManager.getBusinessId());
+	}
 
 }
