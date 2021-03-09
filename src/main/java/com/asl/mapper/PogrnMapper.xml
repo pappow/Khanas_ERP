@@ -121,7 +121,7 @@
 		xitem,
 		xqtygrn,
 		xrate,
-		xlineamt
+		xlineamt,
 		xqtyprn,
 		xunitpur,
 		xnote,
@@ -152,14 +152,11 @@
 		#{zid, jdbcType=VARCHAR},
 		#{zauserid, jdbcType=VARCHAR},
 		#{zuuserid, jdbcType=VARCHAR},
-		#{zaip,
-		jdbcType=VARCHAR},
+		#{zaip, jdbcType=VARCHAR},
 		#{zuip, jdbcType=VARCHAR},
-		#{zactive,
-		jdbcType=VARCHAR},
+		#{zactive, jdbcType=VARCHAR},
 		#{ztime, jdbcType=TIMESTAMP},
-		#{zutime,
-		jdbcType=TIMESTAMP}
+		#{zutime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 

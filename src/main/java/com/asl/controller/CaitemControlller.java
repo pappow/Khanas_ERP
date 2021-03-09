@@ -145,7 +145,7 @@ public class CaitemControlller extends ASLAbstractController {
 	@GetMapping("/itemdetail/{xitem}")
 	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
 		
-		Caitem centralCaitem = caitemService.findCentralItemByXitem(xitem);
+		Caitem centralCaitem = caitemService.findByXitem(xitem);
 			
 		return centralCaitem;
 	}

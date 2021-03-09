@@ -157,6 +157,15 @@
 															<input type="number" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
 														</div>
 													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatait">Vat & Tax ID : </label>
+														<div class="col-md-8">
+															<select class="form-control" th:field="*{xvatait}">
+																<option th:each="s : ${xvataitList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
+															</select>
+														</div>
+													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>

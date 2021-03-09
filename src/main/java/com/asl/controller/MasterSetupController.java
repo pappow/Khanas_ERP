@@ -27,4 +27,9 @@ public class MasterSetupController extends ASLAbstractController {
 	public String loadCodeAndParametersPage(Model model) {
 		return "pages/mastersetup/cap";
 	}
+	
+	@GetMapping("/vataitmaster")
+	public String loadVatAndTaxPage(Model model) {		
+		return "pages/mastersetup/vataitmaster";
+	}
 }
