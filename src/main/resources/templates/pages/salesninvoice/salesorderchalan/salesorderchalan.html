@@ -123,7 +123,9 @@
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="cd : ${chalanDetails}">
-											<td th:text="${cd.xitem}"></td>
+											<td>
+												<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem}"></a>
+											</td>
 											<td th:text="${cd.xqtyord}"></td>
 											<td th:text="${cd.xunit}"></td>
 										</tr>
