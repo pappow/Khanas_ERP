@@ -178,6 +178,10 @@
 		SELECT * FROM PoordHeader WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
 	</select>
 
+	<select id="findBranchPoordHeaderByXpornumForCentral" resultType="PoordHeader">
+		SELECT * FROM PoordHeader WHERE xpornum=#{xpornum} AND zid=#{branchzid} AND zactive='1'
+	</select>
+
 	<select id="findPoorddetailByXportNumAndXrow" resultType="PoordDetail">
 		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
