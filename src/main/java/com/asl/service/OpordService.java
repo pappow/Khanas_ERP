@@ -1,5 +1,6 @@
 package com.asl.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -25,4 +26,9 @@ public interface OpordService {
 
 	public List<Oporddetail> findOporddetailByXordernum(String xordernum);
 	public List<Opordheader> getAllOpordheader();
+
+	public Opordheader findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(String xtypetrn, String xpornum, String xcus, Date xdate);
+	public Opordheader findOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
+	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem);
 }

@@ -138,4 +138,56 @@
 		SELECT * FROM Opordheader WHERE zid=#{zid} AND zactive='1'
 	</select>
 
+	<select id="findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus" resultType="Opordheader">
+		SELECT 
+			* 
+		FROM 
+			Opordheader 
+		WHERE 
+			xtypetrn=#{xtypetrn}
+			AND xpornum=#{xpornum}
+			AND xcus=#{xcus}
+			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+
+	<select id="findOpordHeaderByXtypetrnAndXtrnAndXdate" resultType="Opordheader">
+		SELECT 
+			* 
+		FROM 
+			Opordheader 
+		WHERE 
+			xtypetrn=#{xtypetrn}
+			AND xtrn=#{xtrn}
+			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+
+	<select id="findAllOpordHeaderByXtypetrnAndXtrnAndXdate" resultType="Opordheader">
+		SELECT 
+			* 
+		FROM 
+			Opordheader 
+		WHERE 
+			xtypetrn=#{xtypetrn}
+			AND xtrn=#{xtrn}
+			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+
+	<select id="findOporddetailByXordernumAndXitem" resultType="Oporddetail">
+		SELECT 
+			* 
+		FROM 
+			oporddetail 
+		WHERE 
+			xordernum=#{xordernum}
+			AND xitem=#{xitem}
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+
 </mapper>

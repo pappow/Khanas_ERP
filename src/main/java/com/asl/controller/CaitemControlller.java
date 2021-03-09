@@ -35,11 +35,11 @@ public class CaitemControlller extends ASLAbstractController {
 	@GetMapping
 	public String loadCaitemPage(Model model) {
 		model.addAttribute("caitem", getDefaultCaitem());
-		model.addAttribute("itemxtrnnumbers", xtrnService.findByXtypetrn(TransactionCodeType.ITEM_NUMBER.getCode()));
-		model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode()));
-		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode()));
-		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
-		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode()));
+		model.addAttribute("itemxtrnnumbers", xtrnService.findByXtypetrn(TransactionCodeType.ITEM_NUMBER.getCode(), Boolean.TRUE));
+		model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode(), Boolean.TRUE));
+		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE));
+		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
+		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		return "pages/mastersetup/caitem/caitem";
 	}
@@ -50,11 +50,11 @@ public class CaitemControlller extends ASLAbstractController {
 		if(data == null) data = getDefaultCaitem();
 
 		model.addAttribute("caitem", data);
-		model.addAttribute("itemxtrnnumbers", xtrnService.findByXtypetrn(TransactionCodeType.ITEM_NUMBER.getCode()));
-		model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode()));
-		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode()));
-		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
-		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode()));
+		model.addAttribute("itemxtrnnumbers", xtrnService.findByXtypetrn(TransactionCodeType.ITEM_NUMBER.getCode(), Boolean.TRUE));
+		model.addAttribute("xitemCategories", xcodeService.findByXtype(CodeType.ITEM_CATEGORY.getCode(), Boolean.TRUE));
+		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE));
+		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
+		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		return "pages/mastersetup/caitem/caitem";
 	}

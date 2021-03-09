@@ -21,10 +21,11 @@ public interface PoordService {
 	public long countOfRequisitionDetailsByXpornum(String xpornum);
 
 	public PoordHeader findPoordHeaderByXpornum(String xpornum);
-	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum);
+	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum, String branchzid);
 
 	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow);
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum);
+	public List<PoordDetail> findPoordDetailsByXpornumAndBranchZid(String xpornum, String branchzid);
 
 	public List<PoordHeader> getAllPoordHeaders();
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype);
