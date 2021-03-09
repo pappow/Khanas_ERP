@@ -1,0 +1,75 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ImTagMapper">
+	<insert id="save" parameterType="ImTag">
+		<!-- <selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
+		</selectKey> -->
+		INSERT INTO ImTag
+		(
+			xtagnum,
+			xdate,
+			xdatecom,
+			xref,
+			xwh,
+			xstatustag,
+				
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xtagnum, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xdatecom, jdbcType=DATE},
+			#{xref, jdbcType=VARCHAR},
+			#{xwh, jdbcType=INTEGER},
+			#{xstatustag, jdbcType=VARCHAR},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+	
+	<update id="update" parameterType="ImTag">
+		UPDATE
+			ImTag
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xdatecom=#{xdatecom, jdbcType=DATE},
+			xref=#{xref, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=INTEGER},
+			xstatustag=#{xstatustag, jdbcType=VARCHAR},
+			
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			ztime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xtagnum=#{xtagnum, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="findImTagByXtagnum" resultType="ImTag">
+		SELECT * FROM ImTag WHERE xtagnum=#{xtagnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllImTag" resultType="ImTag">
+		SELECT * FROM ImTag WHERE zid=#{zid} AND zactive='1'
+	</select>
+</mapper>

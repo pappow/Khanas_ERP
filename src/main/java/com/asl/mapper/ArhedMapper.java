@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Arhed;
-import com.asl.entity.PoordHeader;
 
 @Mapper
 public interface ArhedMapper {

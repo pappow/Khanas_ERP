@@ -1,0 +1,78 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ImmofgDetailMapper">
+	<insert id="save" parameterType="ImmofgDetail">
+		<!-- <selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
+		</selectKey> -->
+		INSERT INTO ImmofgDetail
+		(
+			ztornum,
+			xrow,
+			xunit,
+			xitem,
+			xqtyord,
+			xnote,
+			xrate,
+				
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{ztornum, jdbcType=VARCHAR},
+			#{xrow, jdbcType=INTEGER},
+			#{xunit, jdbcType=VARCHAR},
+			#{xitem, jdbcType=VARCHAR},
+			#{xqtyord, jdbcType=INTEGER},
+			#{xnote, jdbcType=VARCHAR},
+			#{xrate, jdbcType=INTEGER},	
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+	
+	<update id="update" parameterType="ImmofgDetail">
+		UPDATE
+			ImmofgDetail
+		SET
+			xunit=#{xunit, jdbcType=VARCHAR},
+			xitem=#{xitem, jdbcType=VARCHAR},
+			xqtyord=#{xqtyord, jdbcType=INTEGER},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xrate=#{xrate, jdbcType=INTEGER},	
+			
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			ztornum=#{ztornum, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="findCaBankByXbank" resultType="ImmofgDetail">
+		SELECT * FROM ImmofgDetail WHERE xtornum=#{xtornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllImmofgDetail" resultType="ImmofgDetail">
+		SELECT * FROM ImmofgDetail WHERE zid=#{zid} AND zactive='1'
+	</select>
+</mapper>
