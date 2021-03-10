@@ -197,6 +197,7 @@
 			poorddetail.xunitpur,
 			poorddetail.xqtyord,
 			poorddetail.xrate,
+			poorddetail.xlineamt,
 			poorddetail.zactive
 		FROM 
 			poorddetail 
