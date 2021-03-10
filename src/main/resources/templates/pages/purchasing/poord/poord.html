@@ -261,10 +261,9 @@
 				var porNum = $("#xpornum").val();
 				
 				$.ajax({
-					url: "/asl-erp/purchasing/poord/creategrn/" + porNum,
+					url: getBasePath() + "/purchasing/poord/creategrn/" + porNum,
 					success: function(result){
-						var status = result.status.toLowerCase()
-						console.log(status);
+						var status = result.status.toLowerCase();
 						if(status == "success")
 							showMessage("success", "GRN Created Successfully");
 						else if(status == "error")

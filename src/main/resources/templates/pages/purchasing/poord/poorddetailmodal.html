@@ -93,35 +93,30 @@
 					var qty = $('#xqtyord').val();
 					var rate = $('#xrate').val();
 					$('#xlineamt').val(qty * rate);
-				}
-				
-				
+				}				
 				
 				// Get item purchase unit
-				$('.xitemsearch').on('blur', function(){
-										
-				setTimeout(() => {
-					$.ajax({
-						url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
-						type : 'GET',
-						beforeSend : loadingMask2.show(),
-						success : function(data) {
-							loadingMask2.hide();
-							console.log(data.xunitpur);
-														
-							$('input[name="xunitpur"]').val(data.xunitpur);
-							$('input.xunitpur-display').val(data.xunitpur);
-
-							$('input[name="xrate"]').val(data.xrate);},
-							
-							//$('input[name="xtotamt"]').val(parseFloat($('input[name="xrate"]').val()) * parseFloat($('input[name="xqtyord"]').val()));
-							
-						error : function(jqXHR, status, errorThrown){
-							showMessage(status, "Something went wrong .... ");
-							loadingMask2.hide();
-						}
-					})
-				}, 1000);
+				$('.xitemsearch').on('blur', function(){										
+					setTimeout(() => {
+						$.ajax({
+							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+							type : 'GET',
+							beforeSend : loadingMask2.show(),
+							success : function(data) {
+								loadingMask2.hide();
+															
+								$('input[name="xunitpur"]').val(data.xunitpur);
+								$('input.xunitpur-display').val(data.xunitpur);	
+								$('input[name="xrate"]').val(data.xrate);},
+								
+								//$('input[name="xtotamt"]').val(parseFloat($('input[name="xrate"]').val()) * parseFloat($('input[name="xqtyord"]').val()));
+								
+							error : function(jqXHR, status, errorThrown){
+								showMessage(status, "Something went wrong .... ");
+								loadingMask2.hide();
+							}
+						})
+					}, 1000);
 				});
 
 			});

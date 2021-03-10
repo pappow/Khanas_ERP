@@ -296,7 +296,7 @@
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: "/asl-erp/purchasing/pogrn/confirmgrn/" + grnNum,
+					url: getBasePath() + "/purchasing/pogrn/confirmgrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						
