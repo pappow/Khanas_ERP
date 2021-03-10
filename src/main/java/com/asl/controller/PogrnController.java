@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
+import com.asl.entity.Pogrndetail;
+import com.asl.entity.Pogrnheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -53,7 +53,7 @@ public class PogrnController extends ASLAbstractController {
 	@GetMapping("/{xgrnnum}")
 	public String loadGRNPage(@PathVariable String xgrnnum, Model model) {
 		
-		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 
+		Pogrnheader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 
 		if(data == null) data = getDefaultPogrnHeader();
 
 		model.addAttribute("pogrnheader", data);
@@ -68,15 +68,15 @@ public class PogrnController extends ASLAbstractController {
 		return "pages/purchasing/pogrn/pogrn";
 	}
 	
-	private PogrnHeader getDefaultPogrnHeader() {
-		PogrnHeader pogrn = new PogrnHeader();
+	private Pogrnheader getDefaultPogrnHeader() {
+		Pogrnheader pogrn = new Pogrnheader();
 		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		pogrn.setXtotamt(BigDecimal.ZERO);
 		return pogrn;
 	}
 	
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(PogrnHeader pogrnHeader, BindingResult bindingResult){
+	public @ResponseBody Map<String, Object> save(Pogrnheader pogrnHeader, BindingResult bindingResult){
 		
 		
 		if((pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()))) {
@@ -87,7 +87,7 @@ public class PogrnController extends ASLAbstractController {
 
 		// if existing record
 		
-		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
+		Pogrnheader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if(existPogrnHeader != null) {
 			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate", "xtotamt");
 			long count = pogrnService.update(existPogrnHeader);
@@ -115,9 +115,9 @@ public class PogrnController extends ASLAbstractController {
 	
 	@GetMapping("/pogrndetail/{xgrnnum}")
 	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
-		List<PogrnDetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+		List<Pogrndetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
 		model.addAttribute("pogrnDetailsList", detailList);
-		PogrnHeader header = new PogrnHeader();
+		Pogrnheader header = new Pogrnheader();
 		header.setXgrnnum(xgrnnum);
 		model.addAttribute("pogrnheader", header);
 		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
@@ -129,16 +129,16 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("purUnitList", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 
 		if("new".equalsIgnoreCase(xrow)) {
-			PogrnDetail pogrndetail = new PogrnDetail();
+			Pogrndetail pogrndetail = new Pogrndetail();
 			pogrndetail.setXgrnnum(xgrnnum);
 			pogrndetail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 			pogrndetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			pogrndetail.setXqtyprn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			model.addAttribute("pogrndetail", pogrndetail);
 		} else {
-			PogrnDetail pogrndetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
+			Pogrndetail pogrndetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
 			if(pogrndetail == null) {
-				pogrndetail = new PogrnDetail();
+				pogrndetail = new Pogrndetail();
 				pogrndetail.setXgrnnum(xgrnnum);
 				pogrndetail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 				pogrndetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
@@ -151,7 +151,7 @@ public class PogrnController extends ASLAbstractController {
 	}
 	
 	@PostMapping("/pogrndetail/save")
-	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail pogrnDetail){
+	public @ResponseBody Map<String, Object> savePogrndetail(Pogrndetail pogrnDetail){
 		
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
@@ -162,7 +162,7 @@ public class PogrnController extends ASLAbstractController {
 		//pogrnDetail.setXlineamt(pogrnDetail.getXqtyord().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
+		Pogrndetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
 		if(existDetail != null) {
 			BeanUtils.copyProperties(pogrnDetail, existDetail, "xgrnnum", "xrow");
 			long count = pogrnService.updateDetail(existDetail);
@@ -190,7 +190,7 @@ public class PogrnController extends ASLAbstractController {
 	
 	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePogrnDetail(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
-		PogrnDetail pd = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
+		Pogrndetail pd = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
 		if(pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();

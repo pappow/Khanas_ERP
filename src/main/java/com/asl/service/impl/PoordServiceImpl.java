@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
+import com.asl.entity.Poorddetail;
+import com.asl.entity.Poordheader;
 import com.asl.mapper.PoordMapper;
 import com.asl.service.PoordService;
 
@@ -19,7 +19,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	private PoordMapper poordMapper;
 
 	@Override
-	public long save(PoordHeader poordHeader) {
+	public long save(Poordheader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())
 				|| StringUtils.isBlank(poordHeader.getXtrnpor()))
 			return 0;
@@ -28,7 +28,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public long update(PoordHeader poordHeader) {
+	public long update(Poordheader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum()))
 			return 0;
 		poordHeader.setZid(sessionManager.getBusinessId());
@@ -36,12 +36,12 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public List<PoordHeader> getAllPoordHeaders() {
+	public List<Poordheader> getAllPoordHeaders() {
 		return poordMapper.getAllPoordHeader(sessionManager.getBusinessId());
 	}
 
 	@Override
-	public PoordHeader findPoordHeaderByXpornum(String xpornum) {
+	public Poordheader findPoordHeaderByXpornum(String xpornum) {
 		if (StringUtils.isBlank(xpornum))
 			return null;
 
@@ -49,13 +49,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum) {
+	public Poordheader findBranchPoordHeaderByXpornumForCentral(String xpornum) {
 		if (StringUtils.isBlank(xpornum)) return null;
 		return poordMapper.findBranchPoordHeaderByXpornumForCentral(xpornum, sessionManager.getZbusiness().getCentralzid());
 	}
 
 	@Override
-	public long saveDetail(PoordDetail poordDetail) {
+	public long saveDetail(Poorddetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
 		long count = poordMapper.savePoordDetail(poordDetail);
@@ -66,13 +66,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public long updatePoordHeaderTotalAmt(PoordDetail poordDetail) {
+	public long updatePoordHeaderTotalAmt(Poorddetail poordDetail) {
 		if(poordDetail == null) return 0;
 		return poordMapper.updatePoordHeaderTotalAmt(poordDetail);
 	}
 
 	@Override
-	public long updateDetail(PoordDetail poordDetail) {
+	public long updateDetail(Poorddetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
 		long count = poordMapper.updatePoordDetail(poordDetail);
@@ -83,7 +83,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public long deleteDetail(PoordDetail poordDetail) {
+	public long deleteDetail(Poorddetail poordDetail) {
 		if(poordDetail == null) return 0;
 		long count = poordMapper.deletePoordDetail(poordDetail);
 		if(count != 0) {
@@ -105,25 +105,25 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow) {
+	public Poorddetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow) {
 		if(StringUtils.isBlank(xpornum) || xrow == 0) return null;
 		return poordMapper.findPoorddetailByXportNumAndXrow(xpornum, xrow, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<PoordDetail> findPoorddetailByXpornum(String xpornum) {
+	public List<Poorddetail> findPoorddetailByXpornum(String xpornum) {
 		if(StringUtils.isBlank(xpornum)) return Collections.emptyList();
 		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId(), sessionManager.getZbusiness().getCentralzid());
 	}
 
 	@Override
-	public List<PoordHeader> getPoordHeadersByXtype(String xtype) {
+	public List<Poordheader> getPoordHeadersByXtype(String xtype) {
 		if(StringUtils.isBlank(xtype)) return Collections.emptyList();
 		return poordMapper.getPoordHeadersByXtype(xtype, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem) {
+	public Poorddetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem) {
 		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(xitem)) return null;
 		return poordMapper.findPoorddetailByXpornumAndXitem(xpornum, xitem, sessionManager.getBusinessId());
 	}

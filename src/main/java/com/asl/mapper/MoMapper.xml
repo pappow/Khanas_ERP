@@ -2,11 +2,11 @@
 
 <mapper namespace="com.asl.mapper.MoMapper">
 
-	<insert id="saveMoHeader" parameterType="MoHeader">
+	<insert id="saveMoHeader" parameterType="Moheader">
 <!-- 		<selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xbomkey}', 6) FROM DUAL
 		</selectKey> -->
-		INSERT INTO MoHeader
+		INSERT INTO Moheader
 		(   
 			xbatch,
 			zemail,
@@ -58,11 +58,11 @@
 		) 
 	</insert>
 
-	<insert id="saveMoDetail" parameterType="MoDetail">
+	<insert id="saveMoDetail" parameterType="Modetail">
 		<!-- <selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
 			SELECT COUNT(*) + 1 FROM BmBomDetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
 		</selectKey> -->
-		INSERT INTO MoDetail
+		INSERT INTO Modetail
 		(
 			xrow,
 			xbatch,
@@ -108,9 +108,9 @@
 		) 
 	</insert>
 
-	<update id="updateMoDetail" parameterType="MoDetail">
+	<update id="updateMoDetail" parameterType="Modetail">
 		UPDATE 
-			MoDetail
+			Modetail
 		SET
 			zemail=#{zemail, jdbcType=VARCHAR},
 			xstype=#{xstype, jdbcType=VARCHAR},
@@ -134,20 +134,20 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<select id="findMoHeaderByXbatch" resultType="MoHeader">
-		SELECT * FROM MoHeader WHERE xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+	<select id="findMoHeaderByXbatch" resultType="Moheader">
+		SELECT * FROM Moheader WHERE xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="findModetailByXrowAndXbatch" resultType="MoDetail">
-		SELECT * FROM MoDetail WHERE xrow=#{xrow} AND xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+	<select id="findModetailByXrowAndXbatch" resultType="Modetail">
+		SELECT * FROM Modetail WHERE xrow=#{xrow} AND xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="findModetailByXrow" resultType="MoDetail">
-		SELECT * FROM MoDetail WHERE xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	<select id="findModetailByXrow" resultType="Modetail">
+		SELECT * FROM Modetail WHERE xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="getAllMoheader" resultType="MoHeader">
-		SELECT * FROM MoHeader WHERE zid=#{zid} AND zactive='1'
+	<select id="getAllMoheader" resultType="Moheader">
+		SELECT * FROM Moheader WHERE zid=#{zid} AND zactive='1'
 	</select>
 
 </mapper>

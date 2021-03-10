@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.DataList;
-import com.asl.entity.ListHead;
+import com.asl.entity.Listhead;
 
 /**
  * @author Zubayer Ahamed
@@ -15,19 +15,19 @@ import com.asl.entity.ListHead;
 @Mapper
 public interface ListMapper {
 
-	public long saveListHead(ListHead listHead);
+	public long saveListHead(Listhead listHead);
 	public long saveDataList(DataList dataList);
 
-	public long updateListHead(ListHead listHead);
+	public long updateListHead(Listhead listHead);
 	public long updateDataList(DataList dataList);
 
-	public ListHead findListHeadById(Long listHeadId);
+	public Listhead findListHeadById(Long listHeadId);
 	public DataList findDataListById(Long listId);
 
-	public ListHead findListHeadByListCode(String listCode, String zid);
+	public Listhead findListHeadByListCode(String listCode, String zid);
 	public List<DataList> findDataListByListCode(String listCode, String zid);
 
 	public List<DataList> getList(String listCode, String zid, Map<String, String> params);
 
-	public List<ListHead> getAllListHead(String zid);
+	public List<Listhead> getAllListHead(String zid);
 }

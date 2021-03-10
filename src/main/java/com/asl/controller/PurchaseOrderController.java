@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Imtrn;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
+import com.asl.entity.Pogrndetail;
+import com.asl.entity.Pogrnheader;
+import com.asl.entity.Poorddetail;
+import com.asl.entity.Poordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -54,7 +54,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@GetMapping("/{xpornum}")
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
-		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum); 
+		Poordheader data = poordService.findPoordHeaderByXpornum(xpornum); 
 		if(data == null) data = getDefaultPoordHeader();
 
 		model.addAttribute("poordheader", data);
@@ -66,15 +66,15 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return "pages/purchasing/poord/poord";
 	}
 
-	private PoordHeader getDefaultPoordHeader() {
-		PoordHeader poord = new PoordHeader();
+	private Poordheader getDefaultPoordHeader() {
+		Poordheader poord = new Poordheader();
 		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
 	}
 
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
+	public @ResponseBody Map<String, Object> save(Poordheader poordHeader, BindingResult bindingResult){
 		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrnpor()) && StringUtils.isBlank(poordHeader.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -82,7 +82,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		// Validate
 
 		// if existing record
-		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
+		Poordheader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
 		if(existPoordHeader != null) {
 			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate", "xtotamt");
 			long count = poordService.update(existPoordHeader);
@@ -117,7 +117,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	}
 
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
+		Poordheader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
 		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -141,16 +141,16 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 
 		if("new".equalsIgnoreCase(xrow)) {
-			PoordDetail poorddetail = new PoordDetail();
+			Poorddetail poorddetail = new Poorddetail();
 			poorddetail.setXpornum(xpornum);
 			poorddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 			poorddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			poorddetail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
 			model.addAttribute("poorddetail", poorddetail);
 		} else {
-			PoordDetail poorddetail = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+			Poorddetail poorddetail = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
 			if(poorddetail == null) {
-				poorddetail = new PoordDetail();
+				poorddetail = new Poorddetail();
 				poorddetail.setXpornum(xpornum);
 				poorddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 				poorddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
@@ -163,7 +163,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	}
 
 	@PostMapping("/poorddetail/save")
-	public @ResponseBody Map<String, Object> savePoorddetail(PoordDetail poordDetail){
+	public @ResponseBody Map<String, Object> savePoorddetail(Poorddetail poordDetail){
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -179,7 +179,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
+		Poorddetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
 		if(existDetail != null) {
 			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
 			long count = poordService.updateDetail(existDetail);
@@ -205,9 +205,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@GetMapping("/poorddetail/{xpornum}")
 	public String reloadPoordDetailTabble(@PathVariable String xpornum, Model model) {
-		List<PoordDetail> detailList = poordService.findPoorddetailByXpornum(xpornum);
+		List<Poorddetail> detailList = poordService.findPoorddetailByXpornum(xpornum);
 		model.addAttribute("poorddetailsList", detailList);
-		PoordHeader header = new PoordHeader();
+		Poordheader header = new Poordheader();
 		header.setXpornum(xpornum);
 		model.addAttribute("poordheader", header);
 		return "pages/purchasing/poord/poord::poorddetailtable";
@@ -215,7 +215,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
-		PoordDetail pd = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+		Poorddetail pd = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
 		if(pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -242,9 +242,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		// Validate
 
 		// Get PoordHeader record by Xpornum
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
+		Poordheader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
 		if(poordHeader != null && StringUtils.isBlank(status)) {
-			PogrnHeader pogrnHeader = new PogrnHeader();
+			Pogrnheader pogrnHeader = new Pogrnheader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pogrnHeader.setXdate(new Date());
 			pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
@@ -258,11 +258,11 @@ public class PurchaseOrderController extends ASLAbstractController {
 			
 			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
 			//Get PO items to copy them in GRN.
-			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
-			PogrnDetail pogrnDetail;
+			List<Poorddetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
+			Pogrndetail pogrnDetail;
 			Imtrn imtrn;
 			for(int i=0; i< poordDetailList.size(); i++) {
-				pogrnDetail = new PogrnDetail();
+				pogrnDetail = new Pogrndetail();
 				//Copying PO items to GRN items.
 				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
 				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());

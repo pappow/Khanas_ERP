@@ -23,9 +23,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = { "zid","xvoucher" }, callSuper = false)
 public class Arhed extends AbstractModel<String> {
 		
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2473303101908084113L;
 
 	@Id

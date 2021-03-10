@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.DataList;
-import com.asl.entity.ListHead;
+import com.asl.entity.Listhead;
 import com.asl.mapper.ListMapper;
 import com.asl.service.ListService;
 
@@ -32,12 +32,12 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	}
 
 	@Override
-	public long save(ListHead listHead) {
+	public long save(Listhead listHead) {
 		return save(listHead, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public long save(ListHead listHead, String businessId) {
+	public long save(Listhead listHead, String businessId) {
 		if(listHead == null) return 0;
 		listHead.setListCode(modifiedListCode(listHead.getListCode()));
 		listHead.setZid(businessId);
@@ -45,12 +45,12 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	}
 
 	@Override
-	public long update(ListHead listHead) {
+	public long update(Listhead listHead) {
 		return update(listHead, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public long update(ListHead listHead, String businessId) {
+	public long update(Listhead listHead, String businessId) {
 		if(listHead == null) return 0;
 		listHead.setListCode(modifiedListCode(listHead.getListCode()));
 		listHead.setZid(businessId);
@@ -82,7 +82,7 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	}
 
 	@Override
-	public ListHead findListHeadById(Long listHeadId) {
+	public Listhead findListHeadById(Long listHeadId) {
 		if(listHeadId == null) return null;
 		return listMapper.findListHeadById(listHeadId);
 	}
@@ -94,12 +94,12 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	}
 
 	@Override
-	public ListHead findListHeadByListCode(String listCode) {
+	public Listhead findListHeadByListCode(String listCode) {
 		return findListHeadByListCode(listCode, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public ListHead findListHeadByListCode(String listCode, String businessId) {
+	public Listhead findListHeadByListCode(String listCode, String businessId) {
 		if(StringUtils.isBlank(listCode) || StringUtils.isBlank(businessId)) return null;
 		return listMapper.findListHeadByListCode(listCode, businessId);
 	}
@@ -136,8 +136,8 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	}
 
 	@Override
-	public List<ListHead> getAllListHead() {
-		List<ListHead> list = listMapper.getAllListHead(sessionManager.getBusinessId());
+	public List<Listhead> getAllListHead() {
+		List<Listhead> list = listMapper.getAllListHead(sessionManager.getBusinessId());
 		if(list == null) return Collections.emptyList();
 		return list;
 	}

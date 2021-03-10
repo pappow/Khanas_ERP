@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.asl.entity.Cacus;
-import com.asl.entity.PoordHeader;
+import com.asl.entity.Poordheader;
 import com.asl.entity.UserAuditRecord;
 import com.asl.entity.Xusers;
 import com.asl.enums.TransactionCodeType;
@@ -78,7 +78,7 @@ class AslErpApplicationTests {
 
 	@Test
 	void savePoordHeader() {
-		PoordHeader ph = new PoordHeader();
+		Poordheader ph = new Poordheader();
 		ph.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		ph.setXtrnpor("PO-");
 		

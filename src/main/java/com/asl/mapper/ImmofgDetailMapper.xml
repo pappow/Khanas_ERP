@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.ImmofgDetailMapper">
-	<insert id="save" parameterType="ImmofgDetail">
+	<insert id="save" parameterType="Immofgdetail">
 		<!-- <selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
 		</selectKey> -->
@@ -45,7 +45,7 @@
 		) 
 	</insert>
 	
-	<update id="update" parameterType="ImmofgDetail">
+	<update id="update" parameterType="Immofgdetail">
 		UPDATE
 			ImmofgDetail
 		SET
@@ -68,11 +68,11 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 	
-	<select id="findCaBankByXbank" resultType="ImmofgDetail">
+	<select id="findCaBankByXbank" resultType="Immofgdetail">
 		SELECT * FROM ImmofgDetail WHERE xtornum=#{xtornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
-	<select id="getAllImmofgDetail" resultType="ImmofgDetail">
+	<select id="getAllImmofgDetail" resultType="Immofgdetail">
 		SELECT * FROM ImmofgDetail WHERE zid=#{zid} AND zactive='1'
 	</select>
 </mapper>

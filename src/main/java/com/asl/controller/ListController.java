@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.DataList;
-import com.asl.entity.ListHead;
+import com.asl.entity.Listhead;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.ListService;
 
@@ -34,14 +34,14 @@ public class ListController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadListPage(Model model) {
-		model.addAttribute("listHead", new ListHead());
+		model.addAttribute("listHead", new Listhead());
 		model.addAttribute("listHeads", listService.getAllListHead());
 		return "pages/list/list";
 	}
 
 	@GetMapping("/{listHeadId}")
 	public String loadListPage(@PathVariable String listHeadId, Model model) {
-		ListHead lh = null;
+		Listhead lh = null;
 		try {
 			lh = listService.findListHeadById(Long.valueOf(listHeadId));
 			if(lh == null) {
@@ -59,7 +59,7 @@ public class ListController extends ASLAbstractController {
 	}
 
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> saveListHead(ListHead listHead, BindingResult bindingResult){
+	public @ResponseBody Map<String, Object> saveListHead(Listhead listHead, BindingResult bindingResult){
 		if(listHead == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -85,7 +85,7 @@ public class ListController extends ASLAbstractController {
 		}
 
 		// If previous listhead
-		ListHead lh = listService.findListHeadById(listHead.getListHeadId());
+		Listhead lh = listService.findListHeadById(listHead.getListHeadId());
 		if(lh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -111,25 +111,25 @@ public class ListController extends ASLAbstractController {
 	}
 
 	@PostMapping("/archive/{listHeadId}")
-	public @ResponseBody Map<String, Object> archive(@PathVariable Long listHeadId, ListHead listHead){
+	public @ResponseBody Map<String, Object> archive(@PathVariable Long listHeadId, Listhead listHead){
 		return doArchiveOrRestore(listHeadId, listHead, true);
 	}
 
 	@PostMapping("/restore/{listHeadId}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable Long listHeadId, ListHead listHead){
+	public @ResponseBody Map<String, Object> restore(@PathVariable Long listHeadId, Listhead listHead){
 		return doArchiveOrRestore(listHeadId, listHead, false);
 	}
 
 	@GetMapping("/{listHeadId}/copy")
 	public String copy(@PathVariable Long listHeadId, Model model) {
 		if(listHeadId == null) {
-			model.addAttribute("listHead", new ListHead());
+			model.addAttribute("listHead", new Listhead());
 			return "redirect:/system/list";
 		}
 
-		ListHead lh = listService.findListHeadById(Long.valueOf(listHeadId));
+		Listhead lh = listService.findListHeadById(Long.valueOf(listHeadId));
 		if(lh == null) {
-			model.addAttribute("listHead", new ListHead());
+			model.addAttribute("listHead", new Listhead());
 			return "redirect:/system/list";
 		}
 
@@ -143,7 +143,7 @@ public class ListController extends ASLAbstractController {
 
 	@GetMapping("{listHeadId}/listline/{listLineId}/show")
 	public String openModalToAddOrUpdateList(@PathVariable String listHeadId, @PathVariable String listLineId, Model model) {
-		ListHead lh = null;
+		Listhead lh = null;
 		try {
 			lh = listService.findListHeadById(Long.valueOf(listHeadId));
 		} catch (Exception e) {
@@ -179,7 +179,7 @@ public class ListController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		ListHead lh = null;
+		Listhead lh = null;
 		try {
 			lh = listService.findListHeadById(Long.valueOf(listHeadId));
 		} catch (Exception e) {
@@ -235,7 +235,7 @@ public class ListController extends ASLAbstractController {
 
 	@PostMapping("{listHeadId}/listline/{listLineId}/archive")
 	public @ResponseBody Map<String, Object> archiveListLine(@PathVariable String listHeadId, @PathVariable String listLineId, Model model) {
-		ListHead lh = null;
+		Listhead lh = null;
 		try {
 			lh = listService.findListHeadById(Long.valueOf(listHeadId));
 		} catch (Exception e) {
@@ -270,13 +270,13 @@ public class ListController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	private Map<String, Object> doArchiveOrRestore(Long listHeadId, ListHead listHead, boolean doArchive) {
+	private Map<String, Object> doArchiveOrRestore(Long listHeadId, Listhead listHead, boolean doArchive) {
 		if(listHeadId == null) {
 			responseHelper.setErrorStatusAndMessage("Can't update listhead");
 			return responseHelper.getResponse();
 		}
 
-		ListHead lh = listService.findListHeadById(listHeadId);
+		Listhead lh = listService.findListHeadById(listHeadId);
 		if(lh == null) {
 			responseHelper.setErrorStatusAndMessage("Can't find data");
 			return responseHelper.getResponse();
@@ -316,7 +316,7 @@ public class ListController extends ASLAbstractController {
 		ol.setListValue16(nl.getListValue16());
 	}
 
-	private void setNewListHeadDataToOldListHead(ListHead nl, ListHead ol) {
+	private void setNewListHeadDataToOldListHead(Listhead nl, Listhead ol) {
 		ol.setListCode(nl.getListCode());
 		ol.setDescription(nl.getDescription());
 		ol.setPrompt1(nl.getPrompt1());

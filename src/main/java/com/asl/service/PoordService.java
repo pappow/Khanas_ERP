@@ -4,30 +4,30 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
+import com.asl.entity.Poorddetail;
+import com.asl.entity.Poordheader;
 
 @Component
 public interface PoordService {
-	public long save(PoordHeader poordHeader);
-	public long update(PoordHeader poordHeader);
-	public long updatePoordHeaderTotalAmt(PoordDetail poordDetail);
+	public long save(Poordheader poordHeader);
+	public long update(Poordheader poordHeader);
+	public long updatePoordHeaderTotalAmt(Poorddetail poordDetail);
 
-	public long saveDetail(PoordDetail poordDetail);
-	public long updateDetail(PoordDetail poordDetail);
+	public long saveDetail(Poorddetail poordDetail);
+	public long updateDetail(Poorddetail poordDetail);
 
-	public long deleteDetail(PoordDetail poordDetail);
+	public long deleteDetail(Poorddetail poordDetail);
 	public long archiveAllPoordDetailByXpornum(String xpornum);
 	public long countOfRequisitionDetailsByXpornum(String xpornum);
 
-	public PoordHeader findPoordHeaderByXpornum(String xpornum);
-	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum);
+	public Poordheader findPoordHeaderByXpornum(String xpornum);
+	public Poordheader findBranchPoordHeaderByXpornumForCentral(String xpornum);
 
-	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow);
-	public List<PoordDetail> findPoorddetailByXpornum(String xpornum);
+	public Poorddetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow);
+	public List<Poorddetail> findPoorddetailByXpornum(String xpornum);
 
-	public List<PoordHeader> getAllPoordHeaders();
-	public List<PoordHeader> getPoordHeadersByXtype(String xtype);
+	public List<Poordheader> getAllPoordHeaders();
+	public List<Poordheader> getPoordHeadersByXtype(String xtype);
 
-	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem);
+	public Poorddetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem);
 }

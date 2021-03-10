@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import com.asl.entity.ListHead;
+import com.asl.entity.Listhead;
 import com.asl.entity.Profile;
 import com.asl.service.ListService;
 import com.asl.service.ProfileService;
@@ -48,14 +48,14 @@ public class ModelValidator extends ConstraintValidator {
 //		return errors;
 //	}
 
-	public void validateListHead(ListHead listHead, Errors errors, Validator validator) {
+	public void validateListHead(Listhead listHead, Errors errors, Validator validator) {
 		if(listHead == null || errors == null || validator == null) return;
 
 		super.validate(listHead, errors, validator);
 		if (errors.hasErrors()) return;
 
 		// Check for duplicate listcode if this listhead has id
-		ListHead lh = listService.findListHeadByListCode(listHead.getListCode());
+		Listhead lh = listService.findListHeadByListCode(listHead.getListCode());
 		if(lh == null) return;
 
 		if(listHead.getListHeadId() == null || (!listHead.getListHeadId().equals(lh.getListHeadId()))) {

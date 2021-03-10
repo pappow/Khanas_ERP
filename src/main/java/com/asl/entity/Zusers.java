@@ -7,17 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
 @Table(name = "zusers")
-@EqualsAndHashCode(of = { "userid" }, callSuper = false)
-public class Zusers extends AbstractModel<String>{/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7594669428937034865L;
-
+public class Zusers{
+	
 	@Id
 	@Basic(optional = false)
 	@Column(name = "userid")

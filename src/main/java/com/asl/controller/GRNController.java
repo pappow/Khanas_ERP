@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.PogrnHeader;
+import com.asl.entity.Pogrnheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -39,7 +39,7 @@ public class GRNController extends ASLAbstractController {
 		model.addAttribute("pogrnheader", getDefaultPogrnHeader());
 		//model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		//model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
-		model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
+		model.addAttribute("allPogrnHeader", new ArrayList<Pogrnheader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		//model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
@@ -50,13 +50,13 @@ public class GRNController extends ASLAbstractController {
 	@GetMapping("/{xgrnnum}")
 	public String loadGRNPage(@PathVariable String xgrnnum, Model model) {
 		
-		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 
+		Pogrnheader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 
 		if(data == null) data = getDefaultPogrnHeader();
 
 		model.addAttribute("pogrnheader", data);
 		//model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		//model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
-		model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
+		model.addAttribute("allPogrnHeader", new ArrayList<Pogrnheader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
@@ -65,15 +65,15 @@ public class GRNController extends ASLAbstractController {
 		return "pages/purchasing/grn/grn";
 	}
 	
-	private PogrnHeader getDefaultPogrnHeader() {
-		PogrnHeader pogrn = new PogrnHeader();
+	private Pogrnheader getDefaultPogrnHeader() {
+		Pogrnheader pogrn = new Pogrnheader();
 		pogrn.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		pogrn.setXtotamt(BigDecimal.ZERO);
 		return pogrn;
 	}
 	
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(PogrnHeader pogrnHeader, BindingResult bindingResult){
+	public @ResponseBody Map<String, Object> save(Pogrnheader pogrnHeader, BindingResult bindingResult){
 		if((pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()))) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -81,7 +81,7 @@ public class GRNController extends ASLAbstractController {
 		// Validate
 
 		// if existing record
-		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
+		Pogrnheader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if(existPogrnHeader != null) {
 			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum");
 			long count = pogrnService.update(existPogrnHeader);

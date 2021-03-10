@@ -6,16 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
 @Table(name = "zlogs")
-@EqualsAndHashCode(of = { "zerrorid" }, callSuper = false)
-public class Zlogs extends AbstractModel<String> {/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7290232268629620939L;
+
+public class Zlogs {
 
 	@Id
 	@Basic(optional = false)

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.asl.entity.MoHeader;
-import com.asl.entity.MoDetail;
+import com.asl.entity.Moheader;
+import com.asl.entity.Modetail;
 
 /**
  * @author Zubayer Ahamed
@@ -14,16 +14,16 @@ import com.asl.entity.MoDetail;
 @Mapper
 public interface MoMapper {
 	
-	public long saveMoHeader(MoHeader moheader);
-	public long updateMoHeader(MoHeader moheader);
+	public long saveMoHeader(Moheader moheader);
+	public long updateMoHeader(Moheader moheader);
 
-	public long saveMoDetail(MoDetail modetail);
-	public long updateMoDetail(MoDetail modetail);
+	public long saveMoDetail(Modetail modetail);
+	public long updateMoDetail(Modetail modetail);
 
-	public MoHeader findMoHeaderByXbatch(String xbatch, String zid);
-	public MoDetail findModetailByXrowAndXbatch(int xrow, String xbatch, String zid);
+	public Moheader findMoHeaderByXbatch(String xbatch, String zid);
+	public Modetail findModetailByXrowAndXbatch(int xrow, String xbatch, String zid);
 
-	public List<MoDetail> findModetailByXrow(int xrow, String zid);
-	public List<MoHeader> getAllMoheader(String zid);
+	public List<Modetail> findModetailByXrow(int xrow, String zid);
+	public List<Moheader> getAllMoheader(String zid);
 
 }

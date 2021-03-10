@@ -4,24 +4,24 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
+import com.asl.entity.Pogrndetail;
+import com.asl.entity.Pogrnheader;
 
 @Mapper
 public interface PogrnMapper {
-	public long savePogrnHeader(PogrnHeader pogrnHeader);
-	public long updatePogrnHeader(PogrnHeader pogrnHeader);
-	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail);
+	public long savePogrnHeader(Pogrnheader pogrnHeader);
+	public long updatePogrnHeader(Pogrnheader pogrnHeader);
+	public long updatePogrnHeaderTotalAmt(Pogrndetail pogrnDetail);
 
-	public long savePogrnDetail(PogrnDetail pogrnDetail);
-	public long updatePogrnDetail(PogrnDetail pogrnDetail);
-	public long deletePogrnDetail(PogrnDetail pogrnDetail);
+	public long savePogrnDetail(Pogrndetail pogrnDetail);
+	public long updatePogrnDetail(Pogrndetail pogrnDetail);
+	public long deletePogrnDetail(Pogrndetail pogrnDetail);
 
-	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum, String zid);
-	public PogrnHeader findPogrnHeaderByXpornum(String xpornum, String zid);
+	public Pogrnheader findPogrnHeaderByXgrnnum(String xgrnnum, String zid);
+	public Pogrnheader findPogrnHeaderByXpornum(String xpornum, String zid);
 
-	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow, String zid);
-	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum, String zid);
+	public Pogrndetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow, String zid);
+	public List<Pogrndetail> findPogrnDetailByXgrnnum(String xgrnnum, String zid);
 
-	public List<PogrnHeader> getAllPogrnHeader(String zid);
+	public List<Pogrnheader> getAllPogrnHeader(String zid);
 }

@@ -15,9 +15,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "xtrnp")
 @IdClass(XtrnpPK.class)
 @EqualsAndHashCode(of = { "zid","xtypetrn","xtrn","xtyperel" }, callSuper = false)
-public class Xtrnp extends AbstractModel<String>{/**
-	 * 
-	 */
+public class Xtrnp extends AbstractModel<String>{
+	
 	private static final long serialVersionUID = 8598532177594698314L;
 
 	@Id

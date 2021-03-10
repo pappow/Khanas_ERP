@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
+import com.asl.entity.Pogrndetail;
+import com.asl.entity.Pogrnheader;
 import com.asl.mapper.PogrnMapper;
 import com.asl.service.PogrnService;
 
@@ -19,7 +19,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	private PogrnMapper pogrnMapper;
 
 	@Override
-	public long save(PogrnHeader pogrnHeader) {
+	public long save(Pogrnheader pogrnHeader) {
 		//if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()) || StringUtils.isBlank(pogrnHeader.getXtrnpor()))
 		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()))
 			return 0;
@@ -28,7 +28,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public long update(PogrnHeader pogrnHeader) {
+	public long update(Pogrnheader pogrnHeader) {
 		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXgrnnum()))
 			return 0;
 		pogrnHeader.setZid(sessionManager.getBusinessId());
@@ -36,13 +36,13 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail) {
+	public long updatePogrnHeaderTotalAmt(Pogrndetail pogrnDetail) {
 		if(pogrnDetail == null) return 0;
 		return pogrnMapper.updatePogrnHeaderTotalAmt(pogrnDetail);
 	}
 
 	@Override
-	public long saveDetail(PogrnDetail pogrnDetail) {
+	public long saveDetail(Pogrndetail pogrnDetail) {
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		long count = pogrnMapper.savePogrnDetail(pogrnDetail);
@@ -55,7 +55,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public long updateDetail(PogrnDetail pogrnDetail) {
+	public long updateDetail(Pogrndetail pogrnDetail) {
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		long count = pogrnMapper.updatePogrnDetail(pogrnDetail);
@@ -68,7 +68,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public long deleteDetail(PogrnDetail pogrnDetail) {
+	public long deleteDetail(Pogrndetail pogrnDetail) {
 		if(pogrnDetail == null) return 0;
 		long count = pogrnMapper.deletePogrnDetail(pogrnDetail);
 		
@@ -81,7 +81,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum) {
+	public Pogrnheader findPogrnHeaderByXgrnnum(String xgrnnum) {
 		if (StringUtils.isBlank(xgrnnum))
 			return null;
 
@@ -89,7 +89,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 	
 	@Override
-	public PogrnHeader findPogrnHeaderByXpornum(String xpornum) {
+	public Pogrnheader findPogrnHeaderByXpornum(String xpornum) {
 		if (StringUtils.isBlank(xpornum))
 			return null;
 
@@ -97,19 +97,19 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow) {
+	public Pogrndetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow) {
 		if(StringUtils.isBlank(xgrnnum) || xrow == 0) return null;
 		return pogrnMapper.findPogrnDetailByXgrnnumAndXrow(xgrnnum, xrow, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum) {
+	public List<Pogrndetail> findPogrnDetailByXgrnnum(String xgrnnum) {
 		if(StringUtils.isBlank(xgrnnum)) return Collections.emptyList();
 		return pogrnMapper.findPogrnDetailByXgrnnum(xgrnnum, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<PogrnHeader> getAllPogrnHeaders() {
+	public List<Pogrnheader> getAllPogrnHeaders() {
 		return pogrnMapper.getAllPogrnHeader(sessionManager.getBusinessId());
 	}
 	
