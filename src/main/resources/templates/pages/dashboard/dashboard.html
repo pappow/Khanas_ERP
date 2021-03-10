@@ -97,6 +97,16 @@
 										</td>
 									</tr>
 
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
+										<td colspan="2">Production</td>
+									</tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
+										<td><a th:href="@{/production}">Production</a></td>
+										<td>
+											<a th:href="@{/production}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 									<tr>
 										<td colspan="2">Inventory</td>
 									</tr>

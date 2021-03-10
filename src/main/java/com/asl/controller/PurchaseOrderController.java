@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.Arhed;
-import com.asl.entity.Imtrn;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;

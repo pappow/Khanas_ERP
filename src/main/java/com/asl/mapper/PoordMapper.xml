@@ -197,6 +197,7 @@
 			poorddetail.xunitpur,
 			poorddetail.xqtyord,
 			poorddetail.xrate,
+			poorddetail.xlineamt,
 			poorddetail.zactive
 		FROM 
 			poorddetail 
@@ -223,7 +224,7 @@
 	</select>
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xdate DESC
+		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xdate
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">

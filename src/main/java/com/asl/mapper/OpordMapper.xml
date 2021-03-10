@@ -131,7 +131,18 @@
 	</select>
 
 	<select id="findOporddetailByXordernum" resultType="Oporddetail">
-		SELECT * FROM Oporddetail WHERE xordernum=#{xordernum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			oporddetail.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem
+		FROM
+			oporddetail 
+			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{zid}
+		WHERE 
+			oporddetail.xordernum=#{xordernum}
+			AND oporddetail.zid=#{zid}
+			AND oporddetail.zactive='1'
 	</select>
 
 	<select id="getAllOpordheader" resultType="Opordheader">
@@ -200,7 +211,7 @@
 		FROM
 			OPORDHEADER
 			JOIN OPORDDETAIL ON OPORDDETAIL.XORDERNUM = OPORDHEADER.XORDERNUM
-			JOIN CAITEM ON CAITEM.XITEM = OPORDDETAIL.XITEM
+			JOIN CAITEM ON CAITEM.XITEM = OPORDDETAIL.XITEM AND CAITEM.ZID='900000'
 			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
 		WHERE
 			OPORDHEADER.ZID='900000'
