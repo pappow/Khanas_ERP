@@ -2,7 +2,6 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,13 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Arhed;
 import com.asl.entity.Imtrn;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.ArhedService;
 import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
@@ -48,6 +48,8 @@ public class PogrnController extends ASLAbstractController {
 	private ImtrnService imtrnService;
 	@Autowired
 	private VataitService vataitService;
+	@Autowired
+	private ArhedService arhedService;
 	
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -257,11 +259,17 @@ public class PogrnController extends ASLAbstractController {
 			}
 			
 			//Create Arhed (Account Payable)
-			/*
-			 Arhed arhed = new Arhed(); BeanUtils.copyProperties(poordHeader, arhed,
-			   "xdate");
-			 */
-		
+			
+			 Arhed arhed = new Arhed(); 
+			 BeanUtils.copyProperties(pogrnHeader, arhed, "xdate");
+			 arhed.setXsign(+1);
+			 long arCount = arhedService.save(arhed);
+			 
+			 if(arCount == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}	
+			 
 			
 			//Update PoordHeader Status
 			/*

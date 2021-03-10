@@ -121,7 +121,7 @@
 	</select>
 
 	<select id="getAllArhed" resultType="Arhed">
-		SELECT * FROM xvoucher WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Arhed WHERE zid=#{zid} AND zactive='1'
 	</select>
 
 </mapper>
