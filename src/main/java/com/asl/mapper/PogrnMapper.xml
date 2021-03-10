@@ -100,12 +100,12 @@
 	</update>
 	
 	<update id="updatePogrnHeaderTotalAmt" parameterType="PogrnDetail">
-		<!-- UPDATE 
+		UPDATE 
 			PogrnHeader
 		SET
 			xtotamt=(SELECT SUM(xlineamt) FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1')
 		WHERE
-			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1' -->
+			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
 	</update>
 
 	<insert id="savePogrnDetail" parameterType="PogrnDetail">
@@ -121,6 +121,7 @@
 		xitem,
 		xqtygrn,
 		xrate,
+		xlineamt,
 		xqtyprn,
 		xunitpur,
 		xnote,
@@ -143,6 +144,7 @@
 		#{xitem, jdbcType=VARCHAR},
 		#{xqtygrn, jdbcType=DECIMAL},
 		#{xrate, jdbcType=DECIMAL},
+		#{xlineamt, jdbcType=DECIMAL},
 		#{xqtyprn, jdbcType=DECIMAL},
 		#{xunitpur, jdbcType=VARCHAR},
 		#{xnote, jdbcType=VARCHAR},
@@ -150,14 +152,11 @@
 		#{zid, jdbcType=VARCHAR},
 		#{zauserid, jdbcType=VARCHAR},
 		#{zuuserid, jdbcType=VARCHAR},
-		#{zaip,
-		jdbcType=VARCHAR},
+		#{zaip, jdbcType=VARCHAR},
 		#{zuip, jdbcType=VARCHAR},
-		#{zactive,
-		jdbcType=VARCHAR},
+		#{zactive, jdbcType=VARCHAR},
 		#{ztime, jdbcType=TIMESTAMP},
-		#{zutime,
-		jdbcType=TIMESTAMP}
+		#{zutime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
@@ -170,6 +169,7 @@
 		xitem=#{xitem, jdbcType=VARCHAR},
 		xqtygrn=#{xqtygrn, jdbcType=DECIMAL},
 		xrate=#{xrate, jdbcType=DECIMAL},
+		xlineamt=#{xlineamt, jdbcType=DECIMAL},
 		xqtyprn=#{xqtyprn, jdbcType=DECIMAL},
 		xunitpur=#{xunitpur, jdbcType=VARCHAR},
 		xnote=#{xnote, jdbcType=VARCHAR},
