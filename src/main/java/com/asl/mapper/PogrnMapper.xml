@@ -86,6 +86,11 @@
 		xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
 		xvoucher=#{xvoucher, jdbcType=VARCHAR},
 		xnote=#{xnote, jdbcType=VARCHAR},
+		xvatait=#{xvatait, jdbcType=VARCHAR},
+		xvatamt=#{xvatamt, jdbcType=DECIMAL},
+		xaitamt=#{xaitamt, jdbcType=DECIMAL},
+		xdiscprime=#{xdiscprime, jdbcType=DECIMAL},
+		xdocnum=#{xdocnum, jdbcType=INTEGER},
 
 		zid=#{zid, jdbcType=VARCHAR},
 		zauserid=#{zauserid, jdbcType=VARCHAR},

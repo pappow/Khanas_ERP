@@ -112,7 +112,7 @@
 	</select>
 
 	<select id="searchCaitem" resultType="Caitem">
-		SELECT * FROM Caitem WHERE (xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Caitem WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="searchCentralCaitem" resultType="Caitem">
@@ -121,7 +121,7 @@
 		FROM 
 			caitem 
 		WHERE 
-			(xitem LIKE '%' || #{xitem} || '%'  OR xdesc LIKE '%' || #{xitem} || '%') 
+			(UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') 
 			AND zid=#{centralzid} 
 			AND zactive='1'
 	</select>

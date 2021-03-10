@@ -148,25 +148,7 @@
 															</select>
 														</div>
 													</div>
-
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
-														<div class="col-md-6">
-															<input type="number" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
-														</div>
-													</div>
 													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xvatait">Vat & Tax ID : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xvatait}">
-																<option th:each="s : ${xvataitList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div>
-
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>
 														<div class="col-md-8">
@@ -182,6 +164,49 @@
 															<input type="text" class="form-control" th:field="*{xvoucher}">
 														</div>
 													</div>
+
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
+														<div class="col-md-6">
+															<input type="number" class="form-control xtotamt" th:field="*{xtotamt}" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
+														<div class="col-md-8">
+															<select class="form-control vatait-select" th:field="*{xvatait}">
+																<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
+															</select>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
+														<div class="col-md-6">
+															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
+															<input type="number" class="form-control xvatamt-show" min="0" th:value="${pogrnheader.xvatamt}" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
+														<div class="col-md-6">
+															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xaitamt}" min="0">
+															<input type="number" class="form-control xaitamt-show" min="0" th:value="${pogrnheader.xaitamt}" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xdiscprime">Prime Discount: </label>
+														<div class="col-md-6">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscprime}" min="0">
+														</div>
+													</div>
+
+													
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnote">Note : </label>
@@ -296,7 +321,7 @@
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: getBasePath() + "/purchasing/pogrn/confirmgrn/" + grnNum,
+					url: getBasepath() + "/purchasing/pogrn/confirmgrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						
@@ -311,6 +336,34 @@
 					}
 				});
 			});
+			
+			$(".vatait-select").on("change", function(){
+				var vataitId = $(".vatait-select").val()
+				$.ajax({
+					url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
+					type : 'GET',
+					beforeSend : loadingMask2.show(),
+					success: function(data){
+						loadingMask2.hide();
+						console.log(data.xvat);
+						var vatPercent = parseFloat(data.xvat);
+						var aitPercent = parseFloat(data.xait);
+						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
+						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;						
+						
+						$('input[name="xvatamt"]').val(vatAmount);
+						$('input.xvatamt-show').val(vatAmount);
+						$('input[name="xaitamt"]').val(aitAmount);
+						$('input.xaitamt-show').val(aitAmount);
+					},
+					error : function(jqXHR, status, errorThrown){
+						showMessage(status, "Something went wrong .... ");
+						loadingMask2.hide();
+					}
+				});
+			});
+			
+			
 		});
 	</script>
 </html>
