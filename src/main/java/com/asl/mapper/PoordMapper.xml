@@ -193,6 +193,7 @@
 			poorddetail.xitem,
 			caitem.xdesc as "xitemdesc",
 			poorddetail.xnote,
+			poorddetail.xlineamt,
 			poorddetail.xunitpur,
 			poorddetail.xqtyord,
 			poorddetail.xrate,

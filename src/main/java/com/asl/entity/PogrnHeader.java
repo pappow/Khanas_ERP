@@ -84,4 +84,21 @@ public class PogrnHeader extends AbstractModel<String>{
 	@Transient
 	private String xtrngrn;
 	
+	//Following additional fields have been proposed for Arhed Purpose
+	
+	@Column(name = "xvatait")
+	private String xvatait;
+	
+	@Column(name = "xvatamt")
+	private BigDecimal xvatamt;
+	
+	@Column(name = "xaitamt")
+	private BigDecimal xaitamt;
+	
+	@Column(name = "xdiscprime")
+	private BigDecimal xdiscprime;
+	
+	@Column(name = "xdocnum")
+	private Integer xdocnum;
+	
 }

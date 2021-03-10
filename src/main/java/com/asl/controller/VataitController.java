@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.PoordHeader;
 import com.asl.entity.Vatait;
 import com.asl.enums.ResponseStatus;
@@ -118,6 +119,14 @@ public class VataitController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Vat & Tax Indentifier updated successfully");
 		responseHelper.setRedirectUrl("/mastersetup/vatait/" + vatait.getXvatait());
 		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/vataitdetail/{xvatait}")
+	public @ResponseBody Vatait getVatait(@PathVariable String xvatait){
+		
+		Vatait vatait = vataitService.findVataitByXvatait(xvatait);
+			
+		return vatait;
 	}
 
 }

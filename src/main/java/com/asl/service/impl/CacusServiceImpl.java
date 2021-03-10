@@ -52,7 +52,7 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 
 	@Override
 	public List<Cacus> searchCacus(String xtype, String xcus){
-		return cacusMapper.searchCacus(xtype, xcus, sessionManager.getBusinessId());
+		return cacusMapper.searchCacus(xtype, xcus.toUpperCase(), sessionManager.getBusinessId());
 	}
 
 }

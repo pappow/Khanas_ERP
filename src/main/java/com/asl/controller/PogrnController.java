@@ -28,6 +28,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
+import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -45,6 +46,8 @@ public class PogrnController extends ASLAbstractController {
 	private PoordService poordService;
 	@Autowired
 	private ImtrnService imtrnService;
+	@Autowired
+	private VataitService vataitService;
 	
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -56,6 +59,7 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
 		return "pages/purchasing/pogrn/pogrn";
 	}
@@ -73,6 +77,7 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
 		
 		return "pages/purchasing/pogrn/pogrn";
@@ -169,7 +174,7 @@ public class PogrnController extends ASLAbstractController {
 		}
 
 		// modify line amount
-		//pogrnDetail.setXlineamt(pogrnDetail.getXqtyord().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
 		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());

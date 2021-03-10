@@ -92,7 +92,7 @@
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xcus">Supplier No : </label>
-														<div class="col-sm-6">
+														<div class="col-sm-8">
 															<input 	type="text" 
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
@@ -261,8 +261,10 @@
 				var porNum = $("#xpornum").val();
 				
 				$.ajax({
-					url: getBasePath() + "/purchasing/poord/creategrn/" + porNum,
+					url: getBasepath() + "/purchasing/poord/creategrn/" + porNum,
+					beforeSend : loadingMask2.show(),
 					success: function(result){
+						loadingMask2.hide();
 						var status = result.status.toLowerCase();
 						if(status == "success")
 							showMessage("success", "GRN Created Successfully");

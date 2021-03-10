@@ -35,7 +35,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<Cacus> cacusList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
-		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXcontact())));
+		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;
 	}
 
