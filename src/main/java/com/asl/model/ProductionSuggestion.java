@@ -15,4 +15,5 @@ public class ProductionSuggestion {
 	private String xrawitem;
 	private String xrawqty;
 	private String xrawunit;
+	private String xrawdes;
 }

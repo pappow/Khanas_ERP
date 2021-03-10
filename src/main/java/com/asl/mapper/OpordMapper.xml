@@ -138,7 +138,7 @@
 			caitem.xcatitem
 		FROM
 			oporddetail 
-			JOIN caitem ON caitem.xitem = oporddetail.xitem
+			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{zid}
 		WHERE 
 			oporddetail.xordernum=#{xordernum}
 			AND oporddetail.zid=#{zid}
@@ -211,7 +211,7 @@
 		FROM
 			OPORDHEADER
 			JOIN OPORDDETAIL ON OPORDDETAIL.XORDERNUM = OPORDHEADER.XORDERNUM
-			JOIN CAITEM ON CAITEM.XITEM = OPORDDETAIL.XITEM
+			JOIN CAITEM ON CAITEM.XITEM = OPORDDETAIL.XITEM AND CAITEM.ZID='900000'
 			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
 		WHERE
 			OPORDHEADER.ZID='900000'
