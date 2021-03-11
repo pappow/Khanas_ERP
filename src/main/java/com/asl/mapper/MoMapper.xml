@@ -1,0 +1,153 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.MoMapper">
+
+	<insert id="saveMoHeader" parameterType="Moheader">
+<!-- 		<selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xbomkey}', 6) FROM DUAL
+		</selectKey> -->
+		INSERT INTO Moheader
+		(   
+			xbatch,
+			zemail,
+			xdate,
+			xitem,
+			xbomkey,
+			xwh,
+			xqtyprd,
+			xqtycom,
+			xlong,
+			xsup,
+			xstatusmor,
+			xcus,
+			xordernum,
+			
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xbatch, jdbcType=VARCHAR},
+			#{zemail, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xitem, jdbcType=VARCHAR},
+			#{xbomkey, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xqtyprd, jdbcType=INTEGER},
+			#{xqtycom, jdbcType=INTEGER},
+			#{xlong, jdbcType=VARCHAR},
+			#{xsup, jdbcType=VARCHAR},
+			#{xstatusmor, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
+			#{xordernum, jdbcType=VARCHAR},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<insert id="saveMoDetail" parameterType="Modetail">
+		<!-- <selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
+			SELECT COUNT(*) + 1 FROM BmBomDetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
+		</selectKey> -->
+		INSERT INTO Modetail
+		(
+			xrow,
+			xbatch,
+			zemail,
+			xstype,
+			xitem,
+			xqtyreq,
+			xunit,
+			xwh,
+			xlong,
+			xtype,
+
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xrow, jdbcType=INTEGER},
+			#{xbatch, jdbcType=VARCHAR},
+			#{zemail, jdbcType=VARCHAR},
+			#{xstype, jdbcType=VARCHAR},
+			#{xitem, jdbcType=VARCHAR},
+			#{xqtyreq, jdbcType=INTEGER},
+			#{xunit, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xlong, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updateMoDetail" parameterType="Modetail">
+		UPDATE 
+			Modetail
+		SET
+			zemail=#{zemail, jdbcType=VARCHAR},
+			xstype=#{xstype, jdbcType=VARCHAR},
+			xitem=#{xitem, jdbcType=VARCHAR},
+			xqtyreq=#{xqtyreq, jdbcType=INTEGER},
+			xunit=#{xunit, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xlong=#{xlong, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xrow=#{xrow, jdbcType=INTEGER}
+			AND xbatch=#{xbatch, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="findMoHeaderByXbatch" resultType="Moheader">
+		SELECT * FROM Moheader WHERE xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findModetailByXrowAndXbatch" resultType="Modetail">
+		SELECT * FROM Modetail WHERE xrow=#{xrow} AND xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findModetailByXrow" resultType="Modetail">
+		SELECT * FROM Modetail WHERE xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="getAllMoheader" resultType="Moheader">
+		SELECT * FROM Moheader WHERE zid=#{zid} AND zactive='1'
+	</select>
+
+</mapper>
