@@ -48,15 +48,15 @@ public class ASLAbstractController {
 		return sessionManager.getZbusiness();
 	}
 
-//	@ModelAttribute("isCentral")
-//	public boolean isCentral() {
-//		return Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral());
-//	}
-//
-//	@ModelAttribute("isBranch")
-//	public boolean isBranch() {
-//		return Boolean.TRUE.equals(sessionManager.getZbusiness().getBranch());
-//	}
+	@ModelAttribute("isCentral")
+	public boolean isCentral() {
+		return sessionManager.isCentral();
+	}
+
+	@ModelAttribute("isBranch")
+	public boolean isBranch() {
+		return sessionManager.isBranch();
+	}
 
 	@ModelAttribute("logoName")
 	protected String defaultLogoName() {

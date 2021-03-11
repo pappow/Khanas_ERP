@@ -15,6 +15,8 @@
 								<tr>
 									<th>Row</th>
 									<th>Item Code</th>
+									<th>Category</th>
+									<th>Group</th>
 									<th>Qty</th>
 									<th>Unit</th>
 								</tr>
@@ -23,8 +25,10 @@
 								<tr th:each="d : ${oporddetailsList}">
 									<td th:text="${d.xrow}"></td>
 									<td>
-										<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem}"></a>
+										<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
 									</td>
+									<td th:text="${d.xcatitem}"></td>
+									<td th:text="${d.xgitem}"></td>
 									<td th:text="${d.xqtyord}"></td>
 									<td th:text="${d.xunit}"></td>
 								</tr>

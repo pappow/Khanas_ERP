@@ -7,10 +7,23 @@
 			*
 		FROM
 			PRO_SUGG
+		WHERE
+			chalan=#{chalan}
+			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
+			AND zid=#{zid}
 	</select>
 
 	<select id = "createSuggestion" statementType = "CALLABLE">
 		{call proc_suggesstion(#{xordernum, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
+	<delete id="deleteSuggestion">
+		DELETE 
+		FROM 
+			PRO_SUGG 
+		WHERE 
+			chalan=#{chalan}
+			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
+			AND zid=#{zid}
+	</delete>
 </mapper>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Purchase Order</title>
+		<title>Order Requisition</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -36,8 +36,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
@@ -54,8 +53,8 @@
 									<div class="form-action-button">
 										<a th:href="@{/purchasing/requisition}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/requisition}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/purchasing/requisition/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true and poordheader.xstatuspor == 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true and poordheader.xstatuspor == 'Open'}" th:href="@{/purchasing/requisition/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == false}" th:href="@{/purchasing/requisition/restore/} + ${poordheader.xpornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
 										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
@@ -96,26 +95,25 @@
 																	class="form-control" 
 																	id="xdate"
 																	name="xdate"
-																	th:value="${poordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(poordheader.xdate, df)}"/>
+																	th:value="${poordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(poordheader.xdate, df)}"/
+																	th:attr="disabled=${poordheader.xstatuspor != 'Open'}">
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatuspor">Requistion Status : </label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatuspor}">
-																<option th:each="s : ${postatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
+															<input type="text" th:field="*{xstatuspor}" class="form-control" disabled="disabled"/>
 														</div>
 													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnote">Note : </label>
 														<div class="col-md-8">
-															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+															<textarea class="form-control" th:field="*{xnote}" rows="3" th:attr="disabled=${poordheader.xstatuspor != 'Open'}"></textarea>
 														</div>
 													</div>
 
@@ -154,7 +152,7 @@
 
 							</div>
 						</div>
-						
+
 					</div>
 
 					<div class="col-md-12">
@@ -173,7 +171,7 @@
 											<th>Note</th>
 											<th>Qty</th>
 											<th>Unit</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${poordheader.xstatuspor == 'Open'}">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/requisition/} + ${poordheader.xpornum} + '/poorddetail/new/show', data-target-modal='poorddetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -187,7 +185,7 @@
 											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xunitpur}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${poordheader.xstatuspor == 'Open'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/requisition/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/show', data-target-modal='poorddetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/requisition/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
