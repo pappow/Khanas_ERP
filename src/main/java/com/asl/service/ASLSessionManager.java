@@ -20,4 +20,8 @@ public interface ASLSessionManager {
 	public String getBusinessId();
 
 	public Zbusiness getZbusiness();
+
+	public boolean isCentral();
+
+	public boolean isBranch();
 }

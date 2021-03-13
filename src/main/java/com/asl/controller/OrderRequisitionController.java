@@ -2,12 +2,14 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,6 +70,8 @@ public class OrderRequisitionController extends ASLAbstractController {
 		PoordHeader poord = new PoordHeader();
 		poord.setXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
 		poord.setXtotamt(BigDecimal.ZERO);
+		poord.setXstatuspor("Open");
+		poord.setXdate(new Date());
 		return poord;
 	}
 
@@ -77,12 +81,25 @@ public class OrderRequisitionController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		// Validate
+		Calendar cal2 = Calendar.getInstance();
+		cal2.set(Calendar.HOUR_OF_DAY, 0);
+		cal2.set(Calendar.MINUTE, 0);
+		cal2.set(Calendar.SECOND, 0);
+		
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(poordHeader.getXdate());
+		if(!DateUtils.isSameDay(cal1, cal2) && poordHeader.getXdate().before(cal2.getTime())) {
+			responseHelper.setErrorStatusAndMessage("Past date not allowed. Please select current date or future date");
+			return responseHelper.getResponse();
+		}
+
 
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
 		if(existPoordHeader != null) {
-			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate", "xtotamt");
+			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate", "xtotamt","xstatuspor");
 			long count = poordService.update(existPoordHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
@@ -94,6 +111,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		}
 
 		// If new
+		poordHeader.setXstatuspor("Open");
 		long count = poordService.save(poordHeader);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);

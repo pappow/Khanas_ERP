@@ -178,15 +178,17 @@
 
 	<select id="findAllOpordHeaderByXtypetrnAndXtrnAndXdate" resultType="Opordheader">
 		SELECT 
-			* 
+			opordheader.*,
+			zbusiness.zorg AS "branchname"
 		FROM 
-			Opordheader 
+			opordheader
+			JOIN zbusiness ON zbusiness.zid = opordheader.xcus
 		WHERE 
-			xtypetrn=#{xtypetrn}
-			AND xtrn=#{xtrn}
-			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
-			AND zid=#{zid} 
-			AND zactive='1'
+			opordheader.xtypetrn=#{xtypetrn}
+			AND opordheader.xtrn=#{xtrn}
+			AND TO_CHAR(opordheader.xdate,'yyyy-MM-dd')=#{xdate}
+			AND opordheader.zid=#{zid} 
+			AND opordheader.zactive='1'
 	</select>
 
 	<select id="findOporddetailByXordernumAndXitem" resultType="Oporddetail">

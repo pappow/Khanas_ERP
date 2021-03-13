@@ -18,7 +18,6 @@
 			AND XTYPE='Requisition Order'
 			AND ZBUSINESS.BRANCH='1'
 			AND POORDHEADER.ZACTIVE='1'
-			AND POORDHEADER.XSTATUSPOR='Open'
 		ORDER BY
 			ZBUSINESS.ZORG
 	</select>
@@ -58,7 +57,9 @@
 			poorddetail.xunitpur,
 			poorddetail.xqtyord,
 			poorddetail.xrate,
-			poorddetail.zactive
+			poorddetail.zactive,
+			caitem.xcatitem,
+			caitem.xgitem
 		FROM 
 			poorddetail 
 			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid='900000'

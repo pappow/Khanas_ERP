@@ -87,20 +87,20 @@
 										</td>
 									</tr>
 
-									<tr th:if="${zbusiness ne null and zbusiness.central}">
+									<tr th:if="${isCentral}">
 										<td colspan="2">Sales & Invoicing</td>
 									</tr>
-									<tr th:if="${zbusiness ne null and zbusiness.central}">
+									<tr th:if="${isCentral}">
 										<td><a th:href="@{/salesninvoice}">Sales & Invoicing</a></td>
 										<td>
 											<a th:href="@{/salesninvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
-									<tr th:if="${zbusiness ne null and zbusiness.central}">
+									<tr th:if="${isCentral}">
 										<td colspan="2">Production</td>
 									</tr>
-									<tr th:if="${zbusiness ne null and zbusiness.central}">
+									<tr th:if="${isCentral}">
 										<td><a th:href="@{/production}">Production</a></td>
 										<td>
 											<a th:href="@{/production}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>

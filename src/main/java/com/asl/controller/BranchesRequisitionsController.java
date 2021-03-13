@@ -102,7 +102,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// Create sales order header if not exist today
+		// Create sales order header
 		Opordheader oh = new Opordheader();
 		oh.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
 		oh.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
@@ -116,7 +116,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// find chalan, create chalan if not exist
+		// find todays chalan, create chalan if not exist
 		Opordheader existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
 		if(existChalan == null) {
 			// Create new chalan for today

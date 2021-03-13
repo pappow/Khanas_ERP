@@ -87,7 +87,6 @@
 										<tr>
 											<th>Sales Order Number</th>
 											<th>Requisition Number</th>
-											<!-- <th>Branch Name</th> -->
 											<th>Date</th>
 											<th>Status</th>
 											<th data-nosort="Y" style="text-align: right">Action</th>
@@ -96,13 +95,11 @@
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="s : ${salesOrders}">
 											<td th:text="${s.xordernum}"></td>
-											<td th:text="${s.xpornum}"></td>
-											<!-- <td th:text="${s.zorg}"></td> -->
+											<td th:text="${s.xpornum} + ' - ' + ${s.branchname}"></td>
 											<td th:text="${#dates.format(s.xdate, df)}"></td>
 											<td th:text="${s.xstatus}"></td>
 											<td style="text-align: right;">
 												<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesorder/ordreqdetails/} + ${s.xordernum} + '/show', data-target-modal='salesorderdetailmodal'"><i class="fas fa-eye"></i></button>
-												<!-- <button type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/salesorder/ordreqconfirm/}  + ${s.xordernum}"><i class="fas fa-check-square"></i></button> -->
 											</td>
 										</tr>
 									</tbody>

@@ -65,5 +65,9 @@ public class PoordDetail extends AbstractModel<String> {
 
 	@Transient
 	private String xitemdesc;
+	@Transient
+	private String xcatitem;
+	@Transient
+	private String xgitem;
 
 }

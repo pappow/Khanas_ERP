@@ -80,4 +80,16 @@ public abstract class AbstractSessionManager implements ASLSessionManager {
 		return null;
 	}
 
+	@Override
+	public boolean isCentral() {
+		return getZbusiness() != null && Boolean.TRUE.equals(getZbusiness().getCentral());
+	}
+
+	@Override
+	public boolean isBranch() {
+		return getZbusiness() != null && Boolean.TRUE.equals(getZbusiness().getBranch());
+	}
+
+	
+
 }
