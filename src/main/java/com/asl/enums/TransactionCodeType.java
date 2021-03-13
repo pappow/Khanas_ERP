@@ -18,7 +18,12 @@ public enum TransactionCodeType {
 	PO_GRN_NUMBER("PO GRN Number", "POGRN-", TransactionCodes.PO_GRN_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	SALES_ORDER("Sales Order", "SO-", TransactionCodes.SALES_ORDER),
-	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER);
+	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER),
+
+	VOUCHER_NUMBER("Voucher Number", "VCH-",null),
+	ACCOUNT_PAYABLE("Account Payable", "AP-",null),
+	ACCOUNT_PAYMENT("Account Payment", "PM-",null),
+	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-",null);
 
 	private String code;
 	private String defaultCode;

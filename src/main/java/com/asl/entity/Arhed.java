@@ -52,10 +52,10 @@ public class Arhed extends AbstractModel<String> {
 	private String xwh;
 	
 	@Column(name = "xprime")
-	private Integer xprime;
+	private BigDecimal xprime;
 	
 	@Column(name = "xbalprime")
-	private Integer xbalprime;
+	private BigDecimal xbalprime;
 	
 	@Column(name = "xpaymenttype")
 	private String xpaymenttype;
@@ -77,7 +77,7 @@ public class Arhed extends AbstractModel<String> {
 	private String xstatuschq;
 	
 	@Column(name = "xdiscprime")
-	private Integer xdiscprime;
+	private BigDecimal xdiscprime;
 	
 	@Column(name = "xstatusbnk")
 	private String xstatusbnk;

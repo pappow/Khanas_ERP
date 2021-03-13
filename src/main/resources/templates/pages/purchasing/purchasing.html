@@ -100,6 +100,13 @@
 											<a th:href="@{/purchasing/supplierpayment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
+										<td><a th:href="@{/purchasing/supplierasjustment}">Supplier Adjustment</a></td>
+										<td>
+											<a th:href="@{/purchasing/supplieradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 								</table>
 							</div>
 						</section>

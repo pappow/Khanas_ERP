@@ -23,7 +23,14 @@ public enum CodeType {
 	WAREHOUSE("Warehouse"),
 	PURCHASE_ORDER_STATUS("Purchase Order Status"),
 	GRN_STATUS("GRN Status"),
-	REQUISITION_ORDER_STATUS("Requisition Order Status");
+	REQUISITION_ORDER_STATUS("Requisition Order Status"),
+	PAYMENT_TYPE("Payment Type"),
+	CHEQUE_STATUS("Cheque Status"),
+	BANK_STATUS("Bank Status"),
+	JOURNAL_VOUCHER_STATUS("Journal Voucher Status"),
+	PAYMENT_MODE("Payment Mode");
+	
+	
 
 	private String code;
 
