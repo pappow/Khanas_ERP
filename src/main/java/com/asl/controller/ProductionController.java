@@ -17,4 +17,5 @@ public class ProductionController extends ASLAbstractController {
 	public String loadProductionMenuPage(Model model) {
 		return "pages/production/production";
 	}
+
 }

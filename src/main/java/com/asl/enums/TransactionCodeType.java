@@ -22,7 +22,9 @@ public enum TransactionCodeType {
 	VOUCHER_NUMBER("Voucher Number", "VCH-",null),
 	ACCOUNT_PAYABLE("Account Payable", "AP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_PAYMENT("Account Payment", "PM-", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION);
+	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
+	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER);
+
 
 	private String code;
 	private String defaultCode;

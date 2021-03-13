@@ -21,9 +21,12 @@ public interface BmbomMapper {
 	public long updateBmBomDetail(Bmbomdetail bmbomdetail);
 
 	public Bmbomheader findBmBomHeaderByXbomkey(String xbomkey, String zid);
-	public Bmbomdetail findBmBomdetailByXbomkeyAndXbomrow(String xbomrow, int xbomkey, String zid);
+	public Bmbomheader findBmBomHeaderByXitem(String xitem, String zid);
+	public Bmbomdetail findBmBomdetailByXbomkeyAndXbomrow(String xbomkey, int xbomrow, String zid);
 
 	public List<Bmbomdetail> findBmBomdetailByXbomkey(String xbomkey, String zid);
 	public List<Bmbomheader> getAllBmBomheader(String zid);
+
+	public long archiveBmbomdetailByXbomkey(String xbomkey, String zid);
 
 }

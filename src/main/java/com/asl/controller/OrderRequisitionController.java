@@ -147,7 +147,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		}
 
 		// archive all details
-		if(poordService.countOfRequisitionDetailsByXpornum(xpornum) > 0) {
+		if(archive && poordService.countOfRequisitionDetailsByXpornum(xpornum) > 0) {
 			long count2 = poordService.archiveAllPoordDetailByXpornum(xpornum);
 			if(count2 == 0) {
 				responseHelper.setErrorStatusAndMessage("Can't archive details");
