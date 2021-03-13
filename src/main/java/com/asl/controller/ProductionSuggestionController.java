@@ -1,6 +1,8 @@
 package com.asl.controller;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ProductionSuggestion;
 import com.asl.service.OpordService;
 import com.asl.service.ProductionSuggestionService;
 
@@ -35,7 +38,8 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		} else {
 			chalan = opordService.findOpordHeaderByXordernum(xordernum);
 		}
-		model.addAttribute("suggestions", productionSuggestionService.getProductionSuggestion(xordernum, chalan.getXdate()));
+		List<ProductionSuggestion> list = productionSuggestionService.getProductionSuggestion(chalan.getXordernum(), chalan == null ? new Date() : chalan.getXdate());
+		model.addAttribute("suggestions", list == null ? Collections.emptyList() : list);
 		return "pages/production/suggestion/suggestion";
 	}
 
@@ -45,8 +49,7 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		if(opordHeader == null) return "redirect:/production/suggestion";
 
 		// delete suggestion table where xordernum
-		long count = productionSuggestionService.deleteSuggestion(xordernum, opordHeader.getXdate());
-		//if(count == 0) return "redirect:/production/suggestion";
+		productionSuggestionService.deleteSuggestion(xordernum, opordHeader.getXdate());
 
 		productionSuggestionService.createSuggestion(xordernum);
 		return "redirect:/production/suggestion?xordernum=" + xordernum;

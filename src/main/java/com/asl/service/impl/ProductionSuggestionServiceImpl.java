@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ProductionSuggestionServiceImpl extends AbstractGenericService impl
 
 	@Override
 	public List<ProductionSuggestion> getProductionSuggestion(String chalan, Date xdate) {
+		if(StringUtils.isBlank(chalan) || xdate == null) return Collections.emptyList();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return productionSuggestionMapper.getProductionSuggestion(chalan, sdf.format(xdate), sessionManager.getBusinessId());
 	}
