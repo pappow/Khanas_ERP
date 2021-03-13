@@ -267,6 +267,8 @@ public class PogrnController extends ASLAbstractController {
 			 arhed.setXbase(pogrnHeader.getXtotamt());
 			 arhed.setXdiscprime(pogrnHeader.getXdiscprime());
 			 arhed.setXsign(-1);
+			 arhed.setXtyperec("Due");
+			 arhed.setXstatusjv("Confirmed");
 			 arhed.setXtype(TransactionCodeType.ACCOUNT_PAYABLE.getCode());
 			 arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYABLE.getdefaultCode());
 			 long arCount = arhedService.save(arhed);

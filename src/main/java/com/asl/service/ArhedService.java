@@ -15,6 +15,6 @@ public interface ArhedService {
 	public List<Arhed> getAllArheds();
 	
 	//Supplier Opening Entry
-	public Arhed findObapByXCus(String xcus);
+	public Arhed findObapByXcus(String xcus);
 	public List<Arhed> getAllObaps();
 }

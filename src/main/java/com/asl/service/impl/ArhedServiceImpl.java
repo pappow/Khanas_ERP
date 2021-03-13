@@ -48,17 +48,17 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	}
 
 	@Override
-	public Arhed findObapByXCus(String xcus) {
+	public Arhed findObapByXcus(String xcus) {
 		if(StringUtils.isBlank(xcus))
 			return null;
 		
-		return arhedMapper.findObapByXCus(xcus, TransactionCodeType.ACCOUNT_OBAP.getCode(), sessionManager.getBusinessId());
+		return arhedMapper.findObapByXcus(xcus, TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
 	@Override
 	public List<Arhed> getAllObaps() {
 		// TODO Auto-generated method stub
-		return null;
+		return arhedMapper.getAllObaps(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
 }

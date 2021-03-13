@@ -19,11 +19,14 @@ public class TransactionCodes {
 	public static final Map<String, String> INVENTORY_NUMBER = new HashMap<>();
 	public static final Map<String, String> SALES_ORDER = new HashMap<>();
 	public static final Map<String, String> CHALAN_NUMBER = new HashMap<>();
+	public static final Map<String, String> AP_TRANSACTION = new HashMap<>();
 
 	static {
 		
 		
-		
+		AP_TRANSACTION.put("ACCOUNT_PAYABLE", "AP-");
+		AP_TRANSACTION.put("ACCOUNT_PAYMENT", "PM-");
+		AP_TRANSACTION.put("OPENING_ENTRY", "OBAP-");
 		
 	}
 }

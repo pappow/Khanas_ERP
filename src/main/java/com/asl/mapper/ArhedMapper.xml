@@ -30,6 +30,8 @@
 		xsign,
 		xtype,
 		xcusledbal,
+		xtyperec,
+		xinvnum,
 
 		zid,
 		zauserid,
@@ -65,7 +67,9 @@
 		#{xsign, jdbcType=INTEGER},
 		#{xtype, jdbcType=VARCHAR},
 		#{xcusledbal, jdbcType=DECIMAL},
-
+		#{xtyperec, jdbcType=VARCHAR},
+		#{xinvnum, jdbcType=VARCHAR},
+		
 		#{zid, jdbcType=VARCHAR},
 		#{zauserid, jdbcType=VARCHAR},
 		#{zuuserid, jdbcType=VARCHAR},
@@ -102,7 +106,9 @@
 		xbase=#{xbase, jdbcType=DECIMAL},
 		xsign=#{xsign, jdbcType=INTEGER},
 		xtype=#{xtype, jdbcType=VARCHAR},
-		xcusledbal=#{xcusledbal, jdbcType=DECIMAL},		
+		xcusledbal=#{xcusledbal, jdbcType=DECIMAL},
+		xtyperec=#{xtyperec, jdbcType=VARCHAR},
+		xinvnum=#{xtyperec, jdbcType=VARCHAR},
 
 		zauserid=#{zauserid, jdbcType=VARCHAR},
 		zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -121,7 +127,16 @@
 	</select>
 
 	<select id="getAllArhed" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE '%AP%'  OR UPPER(xvoucher) LIKE '%PM%') 
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE 'AP%'  OR UPPER(xvoucher) LIKE 'PM%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findObapByXcus" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllObaps" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	

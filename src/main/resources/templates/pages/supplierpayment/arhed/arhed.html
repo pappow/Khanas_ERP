@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
-										<!-- <li><a th:href="@{/inventory}">Account</a></li> -->
+										<li><a th:href="@{/purchasing}">Purchasing</a></li>
 										<li class="active"><a th:href="@{/purchasing/supplierpayment}">Supplier Payment</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -195,11 +195,12 @@
 														</div>
 													</div>	
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatusjv">Journal Voucher Status : </label>
+														<label class="control-label col-md-4" for="xstatusjv">JV Status : </label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatusjv}">
+															<input type="text" class="form-control" th:field="*{xstatusjv}" disabled="disabled">
+															<!-- <select class="form-control" th:field="*{xstatusjv}">
 																<option th:each="jv : ${jvstatusList}" th:value="${jv.xcode}" th:text="${jv.xcode}"></option>
-															</select>
+															</select> -->
 														</div>
 													</div>
 													<div class="form-group">
@@ -214,16 +215,14 @@
 															<input type="text" class="form-control" th:field="*{xdocnum}">
 														</div>
 													</div>
+													
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xtypetrn">Transaction Type : </label>
+														<label class="control-label col-md-4" for="xinvnum">Invoice No. : </label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xtypetrn}">
-																<option value="1" >Demo Data 1</option>
-																<option value="2" >Demo Data 2</option>
-																<!-- <option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option> -->
-															</select>
+															<input type="text" class="form-control" th:field="*{xinvnum}">
 														</div>
-													</div>	
+													</div>
+													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xbase">Base Amount : </label>
 														<div class="col-md-6">
@@ -237,12 +236,12 @@
 														</div>
 													</div>
 													
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcusledbal">Customer Ledger Amount : </label>
 														<div class="col-md-6">
 															<input type="number" class="form-control" th:field="*{xcusledbal}" min="0">
 														</div>
-													</div>									
+													</div>	 -->								
 												</div>
 											</div>
 										</form>
@@ -264,6 +263,7 @@
 													<th>Date</th>
 													<th>Prime Amount</th>
 													<th>Balance Amount</th>
+													<th>Status</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -271,9 +271,10 @@
 													<td>
 														<a th:href="@{/purchasing/supplierpayment/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
 													</td>
-													<td  th:text="${#dates.format(arhed.xdate, df)}"></td>
+													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
 													<td th:text="${arhed.xprime}"></td>
 													<td th:text="${arhed.xbalprime}"></td>
+													<td th:text="${arhed.xtyperec}" class="text-danger"></td>
 												</tr>
 											</tbody>
 										</table>
