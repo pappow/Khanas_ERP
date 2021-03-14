@@ -224,6 +224,7 @@ public class PogrnController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 	
+	/*
 	@GetMapping("/confirmgrn/{xgrnnum}")
 	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xgrnnum){
 		if(StringUtils.isBlank(xgrnnum)) {
@@ -280,14 +281,14 @@ public class PogrnController extends ASLAbstractController {
 			 
 			
 			//Update PoordHeader Status
-			/*
+			
 			PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(pornum);
 			poordHeader.setXstatuspor("GRN Confirmed");
 			long pCount = poordService.update(poordHeader);
 			if(pCount == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
-			}*/		
+			}	
 			
 			//Update grn status
 			pogrnHeader.setXstatusgrn("GRN Confirmed");
@@ -304,6 +305,22 @@ public class PogrnController extends ASLAbstractController {
 			
 		}
 		responseHelper.setStatus(ResponseStatus.ERROR);
+		return responseHelper.getResponse();
+	}*/
+	
+	@GetMapping("/confirmgrn/{xgrnnum}")
+	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xgrnnum){
+		if(StringUtils.isBlank(xgrnnum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		// Validate
+		
+		pogrnService.procInventory(xgrnnum);
+		
+			
+		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
+		responseHelper.setRedirectUrl("/purchasing/pogrn/" + xgrnnum);
 		return responseHelper.getResponse();
 	}
 

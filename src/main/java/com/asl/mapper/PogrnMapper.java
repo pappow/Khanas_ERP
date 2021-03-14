@@ -24,4 +24,6 @@ public interface PogrnMapper {
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum, String zid);
 
 	public List<PogrnHeader> getAllPogrnHeader(String zid);
+	
+	public void procInventory(String zid, String user, String xgrnnum);
 }

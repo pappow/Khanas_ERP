@@ -220,4 +220,8 @@
 		SELECT * FROM
 		PogrnHeader WHERE zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id = "procInventory" statementType = "CALLABLE">
+		{call PO_confirmGRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xgrnnum, jdbcType = VARCHAR, mode = IN})}
+	</select>
 </mapper>
