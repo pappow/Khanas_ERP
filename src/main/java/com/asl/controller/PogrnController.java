@@ -261,8 +261,16 @@ public class PogrnController extends ASLAbstractController {
 			//Create Arhed (Account Payable)
 			
 			 Arhed arhed = new Arhed(); 
-			 BeanUtils.copyProperties(pogrnHeader, arhed, "xdate");
-			 arhed.setXsign(+1);
+			 BeanUtils.copyProperties(pogrnHeader, arhed);
+			 arhed.setXprime(pogrnHeader.getXtotamt());
+			 //arhed.setXbalprime(pogrnHeader.getXtotamt());
+			 arhed.setXbase(pogrnHeader.getXtotamt());
+			 arhed.setXdiscprime(pogrnHeader.getXdiscprime());
+			 arhed.setXsign(-1);
+			 arhed.setXtyperec("Due");
+			 arhed.setXstatusjv("Confirmed");
+			 arhed.setXtype(TransactionCodeType.ACCOUNT_PAYABLE.getCode());
+			 arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYABLE.getdefaultCode());
 			 long arCount = arhedService.save(arhed);
 			 
 			 if(arCount == 0) {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Arhed;
+import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.ArhedMapper;
 import com.asl.service.ArhedService;
 
@@ -44,6 +45,20 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	public List<Arhed> getAllArheds() {
 		
 		return arhedMapper.getAllArhed(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Arhed findObapByXcus(String xcus) {
+		if(StringUtils.isBlank(xcus))
+			return null;
+		
+		return arhedMapper.findObapByXcus(xcus, TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Arhed> getAllObaps() {
+		// TODO Auto-generated method stub
+		return arhedMapper.getAllObaps(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
 }

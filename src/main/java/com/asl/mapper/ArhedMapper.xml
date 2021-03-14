@@ -30,6 +30,8 @@
 		xsign,
 		xtype,
 		xcusledbal,
+		xtyperec,
+		xinvnum,
 
 		zid,
 		zauserid,
@@ -47,15 +49,15 @@
 		#{xcus, jdbcType=VARCHAR},
 		#{xbank, jdbcType=VARCHAR},
 		#{xwh, jdbcType=VARCHAR},
-		#{xprime, jdbcType=INTEGER},
-		#{xbalprime, jdbcType=INTEGER},
+		#{xprime, jdbcType=DECIMAL},
+		#{xbalprime, jdbcType=DECIMAL},
 		#{xpaymenttype, jdbcType=VARCHAR},
 		#{xref, jdbcType=VARCHAR},
 		#{xdateref, jdbcType=DATE},
 		#{xvatamt, jdbcType=DECIMAL},
 		#{xaitamt, jdbcType=DECIMAL},
 		#{xstatuschq, jdbcType=VARCHAR},
-		#{xdiscprime, jdbcType=INTEGER},
+		#{xdiscprime, jdbcType=DECIMAL},
 		#{xstatusbnk, jdbcType=VARCHAR},
 		#{xstatusjv, jdbcType=VARCHAR},
 		#{xnote, jdbcType=VARCHAR},
@@ -65,7 +67,9 @@
 		#{xsign, jdbcType=INTEGER},
 		#{xtype, jdbcType=VARCHAR},
 		#{xcusledbal, jdbcType=DECIMAL},
-
+		#{xtyperec, jdbcType=VARCHAR},
+		#{xinvnum, jdbcType=VARCHAR},
+		
 		#{zid, jdbcType=VARCHAR},
 		#{zauserid, jdbcType=VARCHAR},
 		#{zuuserid, jdbcType=VARCHAR},
@@ -85,15 +89,15 @@
 		xcus=#{xcus, jdbcType=VARCHAR},
 		xbank=#{xbank, jdbcType=VARCHAR},
 		xwh=#{xwh, jdbcType=VARCHAR},
-		xprime#{xprime, jdbcType=INTEGER},
-		xbalprime=#{xbalprime, jdbcType=INTEGER},
+		xprime#{xprime, jdbcType=DECIMAL},
+		xbalprime=#{xbalprime, jdbcType=DECIMAL},
 		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
 		xref=#{xref, jdbcType=VARCHAR},
 		xdateref=#{xdateref, jdbcType=DATE},
 		xvatamt=#{xvatamt, jdbcType=DECIMAL},
 		xaitamt=#{xaitamt, jdbcType=DECIMAL},
 		xstatuschq=#{xstatuschq, jdbcType=VARCHAR},
-		xdiscprime=#{xdiscprime, jdbcType=INTEGER},
+		xdiscprime=#{xdiscprime, jdbcType=DECIMAL},
 		xstatusbnk=#{xstatusbnk, jdbcType=VARCHAR},
 		xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
 		xnote=#{xnote, jdbcType=VARCHAR},
@@ -102,7 +106,9 @@
 		xbase=#{xbase, jdbcType=DECIMAL},
 		xsign=#{xsign, jdbcType=INTEGER},
 		xtype=#{xtype, jdbcType=VARCHAR},
-		xcusledbal=#{xcusledbal, jdbcType=DECIMAL},		
+		xcusledbal=#{xcusledbal, jdbcType=DECIMAL},
+		xtyperec=#{xtyperec, jdbcType=VARCHAR},
+		xinvnum=#{xtyperec, jdbcType=VARCHAR},
 
 		zauserid=#{zauserid, jdbcType=VARCHAR},
 		zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -121,7 +127,18 @@
 	</select>
 
 	<select id="getAllArhed" resultType="Arhed">
-		SELECT * FROM Arhed WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE 'AP%'  OR UPPER(xvoucher) LIKE 'PM%') 
+		AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id="findObapByXcus" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllObaps" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
 
 </mapper>

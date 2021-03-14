@@ -13,4 +13,8 @@ public interface ArhedService {
 	
 	public Arhed findArhedByXvoucher(String xvoucher);
 	public List<Arhed> getAllArheds();
+	
+	//Supplier Opening Entry
+	public Arhed findObapByXcus(String xcus);
+	public List<Arhed> getAllObaps();
 }

@@ -1,6 +1,5 @@
 package com.asl.controller;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Arhed;
-import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -25,9 +23,9 @@ import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
-@RequestMapping("/purchasing/supplierpayment")
-public class SupplierPaymentController extends ASLAbstractController {
-	
+@RequestMapping("/purchasing/supplieradjustment")
+public class SupplierAdjustmentController extends ASLAbstractController{
+
 	@Autowired
 	private ArhedService arhedService;
 	@Autowired
@@ -35,9 +33,9 @@ public class SupplierPaymentController extends ASLAbstractController {
 	@Autowired
 	private XcodesService xcodeService;
 	
-	
+
 	@GetMapping
-	public String loadSupplierPaymentPage(Model model) {
+	public String loadSupplierAdjustmentPage(Model model) {
 		
 		model.addAttribute("arhed", getDefaultArhed());		
 		model.addAttribute("allArhed", arhedService.getAllArheds());
@@ -83,11 +81,6 @@ public class SupplierPaymentController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
-		
-		//Modify transaction codes for arhed
-		arhed.setXsign(+1);
-		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
@@ -98,7 +91,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Payment updated successfully");
+			responseHelper.setSuccessStatusAndMessage("Voucher updated successfully");
 			responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
 		}
@@ -130,4 +123,5 @@ public class SupplierPaymentController extends ASLAbstractController {
 	}
 
 
+	
 }
