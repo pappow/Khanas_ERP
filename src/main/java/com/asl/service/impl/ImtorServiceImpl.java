@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.ImtorDetail;
-import com.asl.entity.Imtorheader;
+import com.asl.entity.ImtorHeader;
 import com.asl.entity.Imtrn;
 import com.asl.mapper.ImtorMapper;
 import com.asl.service.ImtorService;
@@ -19,7 +19,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	private ImtorMapper imtorMapper;
 
 	@Override
-	public long save(Imtorheader imtorHeader) {
+	public long save(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrntor()))
 			return 0;
 		imtorHeader.setZid(sessionManager.getBusinessId());
@@ -27,7 +27,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	}
 
 	@Override
-	public long update(Imtorheader imtorHeader) {
+	public long update(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtornum())) return 0;
 		if(StringUtils.isBlank(imtorHeader.getZid())) imtorHeader.setZid(sessionManager.getBusinessId());
 		return imtorMapper.updateImtorHeader(imtorHeader);
@@ -52,7 +52,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	}
 
 	@Override
-	public Imtorheader findImtorHeaderByXtornum(String xtornum) {
+	public ImtorHeader findImtorHeaderByXtornum(String xtornum) {
 		if (StringUtils.isBlank(xtornum))
 			return null;
 
@@ -60,7 +60,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	}
 
 	@Override
-	public List<Imtorheader> getAllImtorHeader() {
+	public List<ImtorHeader> getAllImtorHeader() {
 		return imtorMapper.getAllImtorHeader(sessionManager.getBusinessId());
 	}
 

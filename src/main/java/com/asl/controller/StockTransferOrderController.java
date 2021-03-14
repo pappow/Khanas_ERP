@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.ImtorDetail;
-import com.asl.entity.Imtorheader;
+import com.asl.entity.ImtorHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
@@ -50,7 +50,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	@GetMapping("/{xtornum}")
 	public String loadPoordPage(@PathVariable String xtornum, Model model) {
-		Imtorheader data = imtorService.findImtorHeaderByXtornum(xtornum); 
+		ImtorHeader data = imtorService.findImtorHeaderByXtornum(xtornum); 
 		if(data == null) data = getDefaultImtorHeader();
 
 		model.addAttribute("imtorheader", data);
@@ -61,14 +61,14 @@ public class StockTransferOrderController extends ASLAbstractController {
 		return "pages/inventory/transferorder/imtor";
 	}
 
-	private Imtorheader getDefaultImtorHeader() {
-		Imtorheader imtorHeader = new Imtorheader();
+	private ImtorHeader getDefaultImtorHeader() {
+		ImtorHeader imtorHeader = new ImtorHeader();
 		//imtorHeader.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		//imtorHeader.setXtotamt(BigDecimal.ZERO);
 		return imtorHeader;
 	}
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(Imtorheader imtorHeader, BindingResult bindingResult){
+	public @ResponseBody Map<String, Object> save(ImtorHeader imtorHeader, BindingResult bindingResult){
 		if((imtorHeader == null) || StringUtils.isBlank(imtorHeader.getXtrntor()) && StringUtils.isBlank(imtorHeader.getXtornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -79,7 +79,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		imtorHeader.setXtrntor(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
 
 		// if existing record
-		Imtorheader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
+		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
 		if(existImtorHeader != null) {
 			BeanUtils.copyProperties(imtorHeader, existImtorHeader, "xtornum", "xdate");
 			long count = imtorService.update(existImtorHeader);
@@ -202,7 +202,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 	public String reloadImtorDetailTabble(@PathVariable String xtornum, Model model) {
 		List<ImtorDetail> detailList = imtorService.findImtorDetailByXtornum(xtornum);
 		model.addAttribute("imtordetailsList", detailList);
-		Imtorheader header = new Imtorheader();
+		ImtorHeader header = new ImtorHeader();
 		header.setXtornum(xtornum);
 		model.addAttribute("imtorheader", header);
 		return "pages/inventory/transferorder/imtor::imtordetailtable";

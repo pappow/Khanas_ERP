@@ -18,9 +18,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "imtorheader")
-@IdClass(ImtorheaderPK.class)
+@IdClass(ImtorHeaderPK.class)
 @EqualsAndHashCode(of = { "zid", "xtornum" }, callSuper = false)
-public class Imtorheader extends AbstractModel<String> {
+public class ImtorHeader extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -1246892187349642823L;
 
