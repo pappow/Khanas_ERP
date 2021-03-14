@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 import lombok.Data;
 @Data
-public class ImtorHeaderPK implements Serializable{
+public class ImtorheaderPK implements Serializable{
 	
 	private static final long serialVersionUID = 2792307943782731079L;
 	

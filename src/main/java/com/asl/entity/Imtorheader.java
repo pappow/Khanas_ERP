@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "imtorheader")
-@IdClass(ImtorHeaderPK.class)
+@IdClass(ImtorheaderPK.class)
 @EqualsAndHashCode(of = { "zid", "xtornum" }, callSuper = false)
 public class Imtorheader extends AbstractModel<String> {
 
