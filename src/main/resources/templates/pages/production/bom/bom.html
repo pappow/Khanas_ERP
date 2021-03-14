@@ -155,7 +155,7 @@
 											<th>Assembly</th>
 											<th>Fixed Qty</th>
 											<th data-nosort="Y" style="text-align: right;">
-												<button th:if="${#lists.isEmpty(bomdetails)}" type="button" class="btn btn-success btn-add" th:attr="data-url=@{/production/bom/} + ${bom.xbomkey} + '/bomdetail/new/show', data-target-modal='bomdetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/production/bom/} + ${bom.xbomkey} + '/bomdetail/new/show', data-target-modal='bomdetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -190,33 +190,4 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	
-	<script>
-		$(document).ready(function(){
-			/* $(".grn-btn-link").on("click", function(){
-				
-			});
-			$('a.grn-btn-link').off('click').on('click', function(e){
-				e.preventDefault();
-				var porNum = $("#xbomkey").val();
-				
-				$.ajax({
-					url: getBasepath() + "/purchasing/poord/creategrn/" + porNum,
-					beforeSend : loadingMask2.show(),
-					success: function(result){
-						loadingMask2.hide();
-						var status = result.status.toLowerCase();
-						if(status == "success")
-							showMessage("success", "GRN Created Successfully");
-						else if(status == "error")
-							showMessage("error", "Somthing went wrong.....");
-						//location.reload(true);
-						setTimeout(() => {
-							location.reload(true);
-						}, 1200);
-					}
-				});
-			}); */
-		});
-	</script>
 </html>

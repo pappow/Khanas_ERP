@@ -45,7 +45,8 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	@Override
 	public long updateBmbomdetail(Bmbomdetail bmbomdetail) {
 		if(bmbomdetail == null || StringUtils.isBlank(bmbomdetail.getXbomkey())) return 0;
-		return bmbomMapper.saveBmBomDetail(bmbomdetail);
+		bmbomdetail.setZid(sessionManager.getBusinessId());
+		return bmbomMapper.updateBmBomDetail(bmbomdetail);
 	}
 
 	@Override
@@ -81,6 +82,12 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	public long archiveBmbomdetailByXbomkey(String xbomkey) {
 		if(StringUtils.isBlank(xbomkey)) return 0;
 		return bmbomMapper.archiveBmbomdetailByXbomkey(xbomkey, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail) {
+		if(bmbomdetail == null || StringUtils.isBlank(bmbomdetail.getXbomkey()) || bmbomdetail.getXbomrow() == 0) return 0;
+		return bmbomMapper.deleteBmbomdetailByXbomkeyAndXbomrow(bmbomdetail);
 	}
 
 	

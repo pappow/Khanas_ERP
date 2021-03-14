@@ -28,5 +28,5 @@ public interface BmbomMapper {
 	public List<Bmbomheader> getAllBmBomheader(String zid);
 
 	public long archiveBmbomdetailByXbomkey(String xbomkey, String zid);
-
+	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
 }

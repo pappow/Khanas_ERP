@@ -28,4 +28,5 @@ public interface BmbomService {
 	public List<Bmbomheader> getAllBmbomheader();
 
 	public long archiveBmbomdetailByXbomkey(String xbomkey);
+	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
 }

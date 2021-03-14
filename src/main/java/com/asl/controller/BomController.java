@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Bmbomdetail;
 import com.asl.entity.Bmbomheader;
 import com.asl.entity.Caitem;
-import com.asl.entity.PoordDetail;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.BmbomService;
@@ -208,26 +207,60 @@ public class BomController extends ASLAbstractController {
 		if(existDetail != null) {
 			BeanUtils.copyProperties(bmbomdetail, existDetail);
 			existDetail.setXdesc(caitem.getXdesc());
+			existDetail.setXstype(caitem.getXgitem());
 			long count = bmbomService.updateBmbomdetail(existDetail);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/production/bom/" +  bmbomdetail.getXbomkey());
+			responseHelper.setReloadSectionIdWithUrl("bomdetailtable", "/production/bom/bomdetail/" + bmbomdetail.getXbomkey());
 			responseHelper.setSuccessStatusAndMessage("BOM detail update successfully");
 			return responseHelper.getResponse();
 		}
 
 		// if new
 		bmbomdetail.setXdesc(caitem.getXdesc());
+		bmbomdetail.setXstype(caitem.getXgitem());
 		long count = bmbomService.saveBmbomdetail(bmbomdetail);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/production/bom/" +  bmbomdetail.getXbomkey());
+		responseHelper.setReloadSectionIdWithUrl("bomdetailtable", "/production/bom/bomdetail/" + bmbomdetail.getXbomkey());
 		responseHelper.setSuccessStatusAndMessage("BOM detail saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/bomdetail/{xbomkey}")
+	public String reloadDetailSection(@PathVariable String xbomkey, Model model) {
+		model.addAttribute("bom", bmbomService.findBmbomheaderByXbomkey(xbomkey));
+		model.addAttribute("bomdetails", bmbomService.findBmbomdetailByXbomkey(xbomkey));
+		return "pages/production/bom/bom::bomdetailtable";
+	}
+
+	@PostMapping("/{xbomkey}/bomdetail/{xbomrow}/delete")
+	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xbomkey, @PathVariable String xbomrow, Model model) {
+		Bmbomheader bh = bmbomService.findBmbomheaderByXbomkey(xbomkey);
+		if(bh == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		Bmbomdetail bd = bmbomService.findBmbomdetailByXbomkeyAndXbomrow(xbomkey, Integer.parseInt(xbomrow));
+		if(bd == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = bmbomService.deleteBmbomdetailByXbomkeyAndXbomrow(bd);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("can't delete detail");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("bomdetailtable", "/production/bom/bomdetail/" + bh.getXbomkey());
+		responseHelper.setSuccessStatusAndMessage("BOM detail deleted successfully");
 		return responseHelper.getResponse();
 	}
 }
