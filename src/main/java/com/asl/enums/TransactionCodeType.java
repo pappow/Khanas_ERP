@@ -25,7 +25,6 @@ public enum TransactionCodeType {
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER);
 
-
 	private String code;
 	private String defaultCode;
 	private Map<String, String> xtrnCodes;
