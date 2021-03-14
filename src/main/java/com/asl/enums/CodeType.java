@@ -28,7 +28,8 @@ public enum CodeType {
 	CHEQUE_STATUS("Cheque Status"),
 	BANK_STATUS("Bank Status"),
 	JOURNAL_VOUCHER_STATUS("Journal Voucher Status"),
-	PAYMENT_MODE("Payment Mode");
+	PAYMENT_MODE("Payment Mode"),
+	TRANSFER_ORDER_STATUS("Transfer Order Status");
 	
 	
 

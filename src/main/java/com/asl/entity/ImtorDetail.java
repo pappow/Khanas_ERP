@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,9 +15,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "imtordetail")
-@IdClass(ImtordetailPK.class)
+@IdClass(ImtorDetailPK.class)
 @EqualsAndHashCode(of = { "zid", "xtornum", "xrow" }, callSuper = false)
-public class Imtordetail extends AbstractModel<String> {
+public class ImtorDetail extends AbstractModel<String> {
 	
 	private static final long serialVersionUID = 7944093590743606577L;
 	
@@ -32,20 +34,21 @@ public class Imtordetail extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
-	private String xrow;
-	
-	@Column(name = "xunit")
-	private String xunit;
+	private int xrow;
 	
 	@Column(name = "xitem")
 	private String xitem;
-	
+
+	@Column(name = "xunit")
+	private String xunit;
+		
 	@Column(name = "xqtyord")
-	private int xqtyord;
+	private BigDecimal xqtyord;
 	
+	@Column(name = "xrate")
+	private BigDecimal xrate;
+
 	@Column(name = "xnote")
 	private String xnote;
 	
-	@Column(name = "xrate")
-	private int xrate;
 }
