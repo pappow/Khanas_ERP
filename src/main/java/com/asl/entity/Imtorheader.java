@@ -23,7 +23,6 @@ public class Imtorheader extends AbstractModel<String>{
 
 	private static final long serialVersionUID = -1246892187349642823L;
 
-	
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")

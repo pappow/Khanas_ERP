@@ -17,7 +17,11 @@ public interface CaitemMapper {
 	public Caitem findByXitem(String xitem, String zid);
 
 	public List<Caitem> searchCaitem(String xitem, String zid);
+	public List<Caitem> searchFinishedProductionCaitem(String xitem, String zid);
+	public List<Caitem> searchRawMaterialsCaitem(String xitem, String zid);
 
 	public List<Caitem> searchCentralCaitem(String xitem, String centralzid);
 	public Caitem findCentralItemByXitem(String xitem, String centralzid);
+	
+	
 }

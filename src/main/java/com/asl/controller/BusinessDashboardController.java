@@ -37,6 +37,7 @@ public class BusinessDashboardController extends ASLAbstractController {
 			return "redirect:/";
 		}
 
+
 		List<Xusers> list = null;
 		if(sessionManager.getFromMap("FAKE_LOGIN_USER") != null) {
 			list = (List<Xusers>) sessionManager.getFromMap("FAKE_LOGIN_USER");
