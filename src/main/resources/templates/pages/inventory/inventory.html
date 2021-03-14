@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Purchasing</title>
+		<title>Inventory Management</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -45,7 +45,7 @@
 						<!-- Section data maintenance -->
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Inventory</h1>
+								<h1>Inventory Management</h1>
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
@@ -57,14 +57,65 @@
 									</tr>
 									<tr>
 										<td><a th:href="@{/inventory/imtrn}">Inventory Imtrn</a></td>
+										<td colspan="2">Inventory Management</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/inventory/imtrn}">Inventory</a></td>
 										<td>
 											<a th:href="@{/inventory/imtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+
 									<tr>
 										<td><a th:href="@{/inventory/transferorder}">Transfer Order</a></td>
 										<td>
 											<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										<td>
+									</td>
+
+									<tr>
+										<td colspan="2">Reports</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Current Stock</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Date Wise Stock Status</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Stock Low Status</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Inventory Consumption Report</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Item Transaction Detail</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Item Transaction Summary</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Item List</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 								</table>

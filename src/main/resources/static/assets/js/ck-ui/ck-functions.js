@@ -12,6 +12,13 @@ function getBasepath(){
 }
 
 /**
+ * Birt URL
+ */
+function getBirtUrl(){
+	return $('a.birtUrl').attr('href');
+}
+
+/**
  * Show success message
  * @param message
  * @returns success message bar

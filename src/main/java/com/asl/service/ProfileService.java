@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.asl.entity.Profile;
 import com.asl.enums.ProfileType;
 import com.asl.model.MenuProfile;
+import com.asl.model.ReportProfile;
 
 /**
  * @author Zubayer Ahamed
@@ -25,6 +26,10 @@ public interface ProfileService {
 	MenuProfile getLoggedInUserMenuProfile();
 	MenuProfile getMenuProfileById(Long profileId);
 	MenuProfile getDefaultMenuProfile();
+
+	ReportProfile getLoggedInUserReportProfile();
+	ReportProfile getReportProfileById(Long profileId);
+	ReportProfile getDefaultReportProfile();
 
 	String modifiedProfileCode(String pc);
 }

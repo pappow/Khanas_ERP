@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
 
 @Component
 public interface PogrnService {

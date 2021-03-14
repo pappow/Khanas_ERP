@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.asl.enums.MenuProfile;
 import com.asl.enums.ProfileType;
+import com.asl.enums.ReportMenu;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -86,6 +87,16 @@ public class ProfileLine extends AbstractModel<String> {
 		this.screenPrompt = dl.getListValue5();
 		this.display = "Y".equalsIgnoreCase(dl.getListValue6());
 		this.required = "Y".equalsIgnoreCase(dl.getListValue7());
+	}
+
+	public ProfileLine(ReportMenu rm) {
+		this.seqn = rm.getGroup();
+		this.profileType = ProfileType.R;
+		this.profileCode = rm.getCode();
+		this.managerPrompt = rm.getDescription();
+		this.screenPrompt = rm.getDescription();
+		this.display = "Y".equalsIgnoreCase(rm.getDefaultAccess());
+		this.required = false;
 	}
 
 	public ProfileLine(MenuProfile rm) {

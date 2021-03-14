@@ -30,4 +30,7 @@ public class AppConfig {
 
 	@Value("${default.allow-system-admin:N}")
 	private String allowSystemAdmin;
+
+	@Value("${default.birtUrl:http://localhost:8080/birt/frameset}")
+	private String birtUrl;
 }
