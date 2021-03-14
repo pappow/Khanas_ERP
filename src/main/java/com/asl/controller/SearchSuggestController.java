@@ -54,4 +54,20 @@ public class SearchSuggestController extends ASLAbstractController {
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
+
+	@GetMapping("/caitem/finishednprod/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getFinsihedNProductionCaitems(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchFinishedProductionCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/rawmaterialprod/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getRawMaterialCaitems(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchRawMaterialsCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
 }

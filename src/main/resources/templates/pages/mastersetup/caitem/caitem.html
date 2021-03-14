@@ -110,6 +110,16 @@
 															</select>
 														</div>
 													</div>
+
+													<div class="form-group input2">
+														<label class="control-label col-sm-4" for="xproditem">Prod Item? :</label>
+														<div class="col-sm-8">
+															<div class="checkbox">
+																<label><input type="checkbox" class="form-control-input2" th:field="*{xproditem}" value="Y"/></label>
+															</div>
+														</div>
+													</div>
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xunitpur">Purchase Unit : </label>
 														<div class="col-md-8">
@@ -220,6 +230,7 @@
 													<th>Item Name</th>
 													<th>Item Category</th>
 													<th>Item Group</th>
+													<th>For Production?</th>
 													<th>Purchase Unit</th>
 													<th>Selling Unit</th>
 													<th>Sales Rate</th>
@@ -236,6 +247,7 @@
 													<td th:text="${caitem.xdesc}"></td>
 													<td th:text="${caitem.xcatitem}"></td>
 													<td th:text="${caitem.xgitem}"></td>
+													<td th:text="${caitem.xproditem ? 'Y' : 'N'}"></td>
 													<td th:text="${caitem.xunitpur}"></td>
 													<td th:text="${caitem.xunitsel}"></td>
 													<td th:text="${caitem.xrate}"></td>

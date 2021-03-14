@@ -84,11 +84,12 @@ public class Caitem extends AbstractModel<String> {
 	@Transient
 	private String codeType;
 
-
 	@Column(name = "xdesc")
 	private String xdesc;
 
 	@Column(name = "xmodel")
 	private String xmodel;
 
+	@Column(name = "xproditem")
+	private boolean xproditem;
 }
