@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +18,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "imtorheader")
-@IdClass(ImtorheaderPK.class)
+@IdClass(ImtorHeaderPK.class)
 @EqualsAndHashCode(of = { "zid","xtornum" }, callSuper = false)
-public class Imtorheader extends AbstractModel<String>{
+public class ImtorHeader extends AbstractModel<String>{
 
 	private static final long serialVersionUID = -1246892187349642823L;
 
@@ -58,5 +59,11 @@ public class Imtorheader extends AbstractModel<String>{
 	
 	@Column(name = "xlong")
 	private String xlong;
+
+	@Transient
+	private String xtype;
+
+	@Transient
+	private String xtrntor;
 }
 
