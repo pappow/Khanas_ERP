@@ -50,6 +50,9 @@
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
 									<tr>
+										<td colspan="2">Production</td>
+									</tr>
+									<tr>
 										<td><a th:href="@{/production/bom}">BOM Entry/Receipe Setting</a></td>
 										<td>
 											<a th:href="@{/production/bom}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
@@ -59,6 +62,34 @@
 										<td><a th:href="@{/production/suggestion}">Production Planning against sales order (Requisition)</a></td>
 										<td>
 											<a th:href="@{/production/suggestion}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
+									<tr>
+										<td colspan="2">Reports</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">BOM Listing</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Batch wise production</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Batch wise material consumptions</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/report}">Production Analysis (Expected vs Actual)</a></td>
+										<td>
+											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 								</table>

@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,10 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		} else {
 			chalan = opordService.findOpordHeaderByXordernum(xordernum);
 		}
-		List<ProductionSuggestion> list = productionSuggestionService.getProductionSuggestion(chalan.getXordernum(), chalan == null ? new Date() : chalan.getXdate());
+		List<ProductionSuggestion> list = new ArrayList<>();
+		if(chalan != null) {
+			list = productionSuggestionService.getProductionSuggestion(chalan.getXordernum(), chalan.getXdate());
+		}
 		model.addAttribute("suggestions", list == null ? Collections.emptyList() : list);
 		return "pages/production/suggestion/suggestion";
 	}

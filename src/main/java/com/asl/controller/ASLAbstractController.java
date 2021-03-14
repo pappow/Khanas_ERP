@@ -9,17 +9,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.asl.config.AppConfig;
 import com.asl.entity.Zbusiness;
+import com.asl.enums.ReportMenu;
 import com.asl.model.MenuProfile;
+import com.asl.model.ReportProfile;
 import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
 import com.asl.service.ProfileService;
+import com.asl.service.report.ReportFieldService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
+@Slf4j
 @Component
 public class ASLAbstractController {
 
@@ -68,25 +74,30 @@ public class ASLAbstractController {
 		return appConfig.getCopyRightText();
 	}
 
-//	@ModelAttribute("reportProfile")
-//	public ReportProfile getLoggedInUserReportProfile() {
-//		return profileService.getLoggedInUserReportProfile();
-//	}
+	@ModelAttribute("birtUrl")
+	public String birtUrl() {
+		return appConfig.getBirtUrl();
+	}
+
+	@ModelAttribute("reportProfile")
+	public ReportProfile getLoggedInUserReportProfile() {
+		return profileService.getLoggedInUserReportProfile();
+	}
 
 	@ModelAttribute("menuProfile")
 	public MenuProfile getLoggedInUserMenuProfile() {
 		return profileService.getLoggedInUserMenuProfile();
 	}
 
-//	protected ReportFieldService getReportFieldService(ReportMenu reportMenu) {
-//		if(reportMenu == null) return null;
-//		try {
-//			return (ReportFieldService) appContext.getBean(reportMenu.getCode().toLowerCase() + "Service");
-//		} catch (Exception e) {
-//			log.error(ERROR, e.getMessage(), e);
-//			return null;
-//		}
-//	}
+	protected ReportFieldService getReportFieldService(ReportMenu reportMenu) {
+		if(reportMenu == null) return null;
+		try {
+			return (ReportFieldService) appContext.getBean(reportMenu.getCode().toLowerCase() + "Service");
+		} catch (Exception e) {
+			log.error(ERROR, e.getMessage(), e);
+			return null;
+		}
+	}
 
 //	protected ImportExportService getImportExportService(String module) {
 //		if(StringUtils.isBlank(module)) return null;

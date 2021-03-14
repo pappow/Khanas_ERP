@@ -15,8 +15,10 @@ import com.asl.entity.Profile;
 import com.asl.entity.ProfileAllocation;
 import com.asl.entity.ProfileLine;
 import com.asl.enums.ProfileType;
+import com.asl.enums.ReportMenu;
 import com.asl.mapper.ProfileMapper;
 import com.asl.model.MenuProfile;
+import com.asl.model.ReportProfile;
 import com.asl.service.ListService;
 import com.asl.service.ProfileAllocationService;
 import com.asl.service.ProfileLineService;
@@ -169,4 +171,83 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		return mp;
 	}
 
+	@Override
+	public ReportProfile getLoggedInUserReportProfile() {
+		ProfileAllocation pa = paService.findByUsername(sessionManager.getLoggedInUserDetails().getUsername());
+		if(pa == null || pa.getReportProfileId() == null) {
+			log.debug("===> User \"{}\", don't have any specifc report profile", sessionManager.getLoggedInUserDetails().getUsername());
+			return getDefaultReportProfile();
+		}
+
+		return getReportProfileById(pa.getReportProfileId());
+	}
+
+	@Override
+	public ReportProfile getReportProfileById(Long profileId) {
+		if(profileId == null) return getDefaultReportProfile();
+
+		Profile profile = findById(profileId);
+
+		List<ProfileLine> profileLines = new ArrayList<>();
+
+		// All datalist profile lines
+		List<DataList> proxyProfileLines = listService.getList("PROFILE", null, null, ProfileType.R.getCode());
+		if(proxyProfileLines != null && !proxyProfileLines.isEmpty()) {
+			for(DataList dl : proxyProfileLines) {
+				ProfileLine pl = new ProfileLine(dl);
+				pl.setProfileId(profile.getProfileId());
+				profileLines.add(pl);
+			}
+		}
+
+		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfileIdAndProfileType(profile.getProfileId(), profile.getProfileType());
+		profileLines.stream().forEach(proxy -> {
+			originalProfileLines.stream().forEach(original -> {
+				if(proxy.getProfileCode().equalsIgnoreCase(original.getProfileCode())) {
+					proxy.setProfileLineId(original.getProfileLineId());
+					proxy.setProfileId(original.getProfileId());
+					proxy.setProfileCode(original.getProfileCode());
+					proxy.setProfileType(original.getProfileType());
+					proxy.setEnabled(original.isEnabled());
+					proxy.setDisplay(original.isDisplay());
+					proxy.setRequired(original.isRequired());
+					proxy.setSeqn(original.getSeqn());
+					if(StringUtils.isNotBlank(original.getScreenPrompt())) proxy.setScreenPrompt(original.getScreenPrompt());
+				}
+			});
+		});
+		ReportProfile rp = new ReportProfile();
+		profileLines.stream().forEach(rp::setProfileLine);
+
+		return rp;
+	}
+
+	@Override
+	public ReportProfile getDefaultReportProfile() {
+		List<ProfileLine> profileLines = new ArrayList<>();
+		List<DataList> proxyProfileLines = listService.getList("PROFILE", null, null, ProfileType.R.getCode());
+		if(proxyProfileLines != null && !proxyProfileLines.isEmpty()) {
+			for(DataList dl : proxyProfileLines) {
+				ProfileLine pl = new ProfileLine(dl);
+				profileLines.add(pl);
+			}
+		}
+
+		// override enums with list if list exist
+		List<ProfileLine> finalprofileLines = new ArrayList<>();
+		EnumSet.allOf(ReportMenu.class).forEach(rm -> {
+			ProfileLine enumpl = new ProfileLine(rm);
+			profileLines.stream().forEach(pl -> {
+				if(pl.getProfileCode().equalsIgnoreCase(enumpl.getProfileCode())) {
+					BeanUtils.copyProperties(pl, enumpl);
+				}
+			});
+			finalprofileLines.add(enumpl);
+		});
+
+		ReportProfile rp = new ReportProfile();
+		finalprofileLines.stream().forEach(rp::setProfileLine);
+		log.debug("Default report profile : {}", rp);
+		return rp;
+	}
 }
