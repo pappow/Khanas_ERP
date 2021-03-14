@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "imtorheader")
 @IdClass(ImtorHeaderPK.class)
 @EqualsAndHashCode(of = { "zid", "xtornum" }, callSuper = false)
-public class ImtorHeader extends AbstractModel<String> {
+public class Imtorheader extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -1246892187349642823L;
 
