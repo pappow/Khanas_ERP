@@ -23,6 +23,7 @@ public enum TransactionCodeType {
 	ACCOUNT_PAYABLE("Account Payable", "AP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_PAYMENT("Account Payment", "PM-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
+	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER);
 
 	private String code;
