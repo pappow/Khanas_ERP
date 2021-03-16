@@ -624,6 +624,7 @@ function doSectionReloadWithNewData(rdata){
 		success : function(data) {
 			console.log({data});
 			var wrapperelement = $('#' + rdata.reloadelementid + "_wrapper");
+			// first section reload
 			if($(wrapperelement).length > 0){
 				wrapperelement.html("");
 				wrapperelement.append(data);
@@ -640,6 +641,7 @@ function doSectionReloadWithNewData(rdata){
 				parentElement.append(data);
 				bindTableButtonsEvent($('#' + rdata.reloadelementid));
 			}
+
 			loadingMask2.hide()
 		}, 
 		error : function(jqXHR, status, errorThrown){
@@ -647,5 +649,41 @@ function doSectionReloadWithNewData(rdata){
 			loadingMask2.hide()
 		}
 	});
+
+	// 2nd reload url
+	if(rdata.secondreloadurl == undefined) return;
+	$.ajax({
+		url : getBasepath() + rdata.secondreloadurl,
+		type : 'GET',
+		beforeSend : loadingMask2.show(),
+		success : function(data) {
+			console.log({data});
+			var wrapperelement = $('#' + rdata.secondreloadelementid + "_wrapper");
+			// first section reload
+			if($(wrapperelement).length > 0){
+				wrapperelement.html("");
+				wrapperelement.append(data);
+
+				//dataTableInit();
+				dataTableInitSpecific(rdata.secondreloadelementid);
+				//triggerUpdateButtonSpecific(rdata.reloadelementid);
+				//triggerUpdateButton();
+			} else {
+				console.log("Normal table");
+				var target = $('#' + rdata.secondreloadelementid);
+				var parentElement = target.parent();
+				parentElement.html("");
+				parentElement.append(data);
+				bindTableButtonsEvent($('#' + rdata.secondreloadelementid));
+			}
+
+			loadingMask2.hide()
+		}, 
+		error : function(jqXHR, status, errorThrown){
+			showMessage(status, "Something went wrong .... ");
+			loadingMask2.hide()
+		}
+	});
+
 };
 

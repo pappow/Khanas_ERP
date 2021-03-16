@@ -150,12 +150,30 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
+	<delete id="deleteOpordDetail" parameterType="Oporddetail">
+		DELETE
+		FROM
+			OPORDDETAIL
+		WHERE
+			xordernum=#{xordernum, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</delete>
+
 	<select id="findOpordHeaderByXordernum" resultType="Opordheader">
 		SELECT * FROM Opordheader WHERE xordernum=#{xordernum} AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="findOporddetailByXordernumAndXrow" resultType="Oporddetail">
-		SELECT * FROM Oporddetail WHERE xordernum=#{xordernum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			oporddetail 
+		WHERE 
+			xordernum=#{xordernum} 
+			AND xrow=#{xrow} 
+			AND zid=#{zid} 
+			AND zactive='1'
 	</select>
 
 	<select id="findOporddetailByXordernum" resultType="Oporddetail">
@@ -281,4 +299,21 @@
 			AND OPORDHEADER.XSTATUS=#{xstatus}
 			AND TO_CHAR(OPORDHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
 	</select>
+
+	<select id="findAllSalesOrderByChalan" resultType="Opordheader">
+		SELECT 
+			OPORDHEADER.*,
+			ZBUSINESS.ZORG AS "branchname"
+		FROM 
+			OPORDHEADER
+			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
+		WHERE
+			OPORDHEADER.ZID=#{zid}
+			AND OPORDHEADER.ZACTIVE='1'
+			AND OPORDHEADER.XTYPETRN=#{xtypetrn}
+			AND OPORDHEADER.XTRN=#{xtrn}
+			AND OPORDHEADER.XCHALANREF=#{xchalanref}
+	</select>
+
+	
 </mapper>

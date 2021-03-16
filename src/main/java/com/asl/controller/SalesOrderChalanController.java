@@ -1,7 +1,9 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +57,12 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		model.addAttribute("salesorderchalan", oh);
 		model.addAttribute("salesorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("salesorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
-		model.addAttribute("opensalesorders", opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", new Date()));
+		
+		List<Opordheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
+		if("Open".equalsIgnoreCase(oh.getXstatus())) allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", new Date()));
+		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum));
+		model.addAttribute("opensalesorders", allOpenAndConfirmesSalesOrders);
+		model.addAttribute("chalandetails", opordService.findOporddetailByXordernum(xordernum));
 		return "pages/salesninvoice/salesorderchalan/salesorderchalan";
 	}
 
@@ -77,7 +84,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		// if existing
 		Opordheader existOh = opordService.findOpordHeaderByXordernum(opordheader.getXordernum());
 		if(existOh != null) {
-			BeanUtils.copyProperties(opordheader, existOh, "xdate");
+			BeanUtils.copyProperties(opordheader, existOh, "xdate", "xstatus");
 			long count = opordService.updateOpordHeader(existOh);
 			if(count == 0) {
 				responseHelper.setErrorStatusAndMessage("Chalan not updated");
@@ -105,7 +112,10 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	@GetMapping("/opensalesorder/query")
 	public String reloadTableWithData(@RequestParam String xordernum, @RequestParam String date, Model model) throws ParseException {
 		model.addAttribute("salesorderchalan", opordService.findOpordHeaderByXordernum(xordernum));
-		model.addAttribute("opensalesorders", opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", sdf.parse(date)));
+		List<Opordheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
+		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", sdf.parse(date)));
+		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum));
+		model.addAttribute("opensalesorders", allOpenAndConfirmesSalesOrders);
 		return "pages/salesninvoice/salesorderchalan/salesorderchalan::opensalesorderstable";
 	}
 
@@ -127,6 +137,10 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
 		if(oh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isNotBlank(oh.getXchalanref())) {
+			responseHelper.setErrorStatusAndMessage("Sales order already added to chalan : " + oh.getXchalanref() + " . Please reload this page again");
 			return responseHelper.getResponse();
 		}
 
@@ -172,9 +186,86 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		}
 
 		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
 		return responseHelper.getResponse();
 	}
+
+	@PostMapping("/salesorderrevoke/{chalan}/{xordernum}")
+	public @ResponseBody Map<String, Object> revokeSalesOrder(@PathVariable String chalan, @PathVariable String xordernum, Model model){
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("This " + xordernum + " Sales Order has no item to remove from chalan");
+			return responseHelper.getResponse();
+		}
+
+		// create or update chalan detail first
+		for(Oporddetail pd : details) {
+			// check chalan detail already exist using item
+			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(chalan, pd.getXitem());
+			if(existChalanDetail == null) continue;
+
+			// update existing with qty
+			existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().subtract(pd.getXqtyord()));
+			long countChalanDetail = 0;
+			if(BigDecimal.ZERO.equals(existChalanDetail.getXqtyord())) {
+				countChalanDetail = opordService.deleteOpordDetail(existChalanDetail);
+			} else {
+				countChalanDetail = opordService.updateOpordDetail(existChalanDetail);
+			}
+			if(countChalanDetail == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
+				return responseHelper.getResponse();
+			}
+		}
+
+		// now update sales order with chalan reference
+		oh.setXchalanref(null);
+		oh.setXstatus("Open");
+		long count = opordService.updateOpordHeader(oh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
+		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/chalandetail/{xordernum}")
+	public String reloadChalanDetailSection(@PathVariable String xordernum, Model model) {
+		model.addAttribute("chalandetails", opordService.findOporddetailByXordernum(xordernum));
+		return "pages/salesninvoice/salesorderchalan/salesorderchalan::salesorderchalandetailtable";
+	}
+
+	@PostMapping("/lockchalan/{xordernum}")
+	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xordernum, Model model){
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		oh.setXstatus("Confirmed");
+		long count = opordService.updateOpordHeader(oh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't lock Chalan");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Chalan locked successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + xordernum);
+		return responseHelper.getResponse();
+	}
+
 
 //	@GetMapping
 //	public String loadSalesOrderPage(Model model) {

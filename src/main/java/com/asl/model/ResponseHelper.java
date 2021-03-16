@@ -46,6 +46,11 @@ public class ResponseHelper {
 		this.response.put("reloadurl", url);
 	}
 
+	public void setSecondReloadSectionIdWithUrl(String elementId, String url) {
+		this.response.put("secondreloadelementid", elementId);
+		this.response.put("secondreloadurl", url);
+	}
+
 	public void setSuccessStatusAndMessage(String message) {
 		this.status = ResponseStatus.SUCCESS;
 		if(StringUtils.isBlank(message)) message = DEFAULT_SUCCESS_MESSAGE;

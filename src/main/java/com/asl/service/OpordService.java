@@ -22,6 +22,8 @@ public interface OpordService {
 	public long saveOpordDetail(Oporddetail oporddetail);
 	public long updateOpordDetail(Oporddetail oporddetail);
 
+	public long deleteOpordDetail(Oporddetail oporddetail);
+
 	public Opordheader findOpordHeaderByXordernum(String xordernum);
 	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow);
 
@@ -37,4 +39,5 @@ public interface OpordService {
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
 
 	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, Date xdate);
+	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
 }
