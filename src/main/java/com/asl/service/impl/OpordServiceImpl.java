@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public long updateOpordHeader(Opordheader opordheader) {
 		if(opordheader == null) return 0;
+		opordheader.setZid(sessionManager.getBusinessId());
 		return opordMapper.updateOpordHeader(opordheader);
 	}
 
@@ -75,14 +77,12 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public Opordheader findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(String xtypetrn, String xpornum, String xcus, Date xdate) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xpornum) || StringUtils.isBlank(xcus) || xdate == null) return null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return opordMapper.findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(xtypetrn, xpornum, xcus, sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
 	@Override
 	public Opordheader findOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || xdate == null) return null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return opordMapper.findOpordHeaderByXtypetrnAndXtrnAndXdate(xtypetrn, xtrn, sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
@@ -91,7 +91,6 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || xdate == null) return null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return opordMapper.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(xtypetrn, xtrn, sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
@@ -103,8 +102,21 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 
 	@Override
 	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return opordMapper.getSalesOrderMatrxi(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return Collections.emptyList();
+		return opordMapper.findAllOpordHeaderByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, Date date) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xstatus)) return Collections.emptyList();
+		if(date == null) date = new Date();
+		return opordMapper.findAllSalesOrder(xtypetrn, xtrn, xstatus, sdf.format(date), sessionManager.getBusinessId());
+	}
+
+	
 }

@@ -397,11 +397,11 @@ function dataTableInitSpecific(tableId){
  * @param customurl
  * @returns
  */
-function submitMainForm(customurl){
-	if($('form#mainform').length < 1) return;
+function submitMainForm(customurl, customform){
+	if(customform == undefined && $('form#mainform').length < 1) return;
 	console.log('%cForm submit triggered', 'color: green');
 
-	var targettedForm = $('form#mainform');
+	var targettedForm = customform == undefined ? $('form#mainform') : customform;
 	console.log('%cValidting form','color: green');
 	if(!targettedForm.smkValidate()) return;
 
@@ -630,7 +630,7 @@ function doSectionReloadWithNewData(rdata){
 
 				//dataTableInit();
 				dataTableInitSpecific(rdata.reloadelementid);
-				triggerUpdateButtonSpecific(rdata.reloadelementid);
+				//triggerUpdateButtonSpecific(rdata.reloadelementid);
 				//triggerUpdateButton();
 			} else {
 				console.log("Normal table");

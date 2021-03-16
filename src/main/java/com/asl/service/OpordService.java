@@ -34,4 +34,7 @@ public interface OpordService {
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem);
 
 	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate);
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
+
+	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, Date xdate);
 }

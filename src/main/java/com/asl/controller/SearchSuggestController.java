@@ -47,6 +47,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 
+
 	@GetMapping("/caitem/central/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCentralCaitems(@PathVariable String hint){
 		List<Caitem> caitemList = caitemService.searchCentralCaitem(hint);
@@ -54,6 +55,15 @@ public class SearchSuggestController extends ASLAbstractController {
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
+
+	@GetMapping("/caitem/requisition/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getCentralCaitemsForRequisitions(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchCentralCaitemForRequisition(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
 
 	@GetMapping("/caitem/finishednprod/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getFinsihedNProductionCaitems(@PathVariable String hint){

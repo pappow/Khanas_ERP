@@ -42,11 +42,11 @@ public class OrderRequisitionController extends ASLAbstractController {
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
-		
+
 		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
 		poordheadersList.sort(Comparator.comparing(PoordHeader::getXdate).reversed());
 		model.addAttribute("allPoordHeader", poordheadersList);
-		
+
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
 		return "pages/purchasing/requisition/poord";

@@ -117,25 +117,25 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		}
 
 		// find todays chalan, create chalan if not exist
-		Opordheader existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
-		if(existChalan == null) {
-			// Create new chalan for today
-			Opordheader chalan = new Opordheader();
-			chalan.setXtypetrn(TransactionCodeType.CHALAN_NUMBER.getCode());
-			chalan.setXtrn(TransactionCodeType.CHALAN_NUMBER.getdefaultCode());
-			chalan.setXdate(new Date());
-			chalan.setXstatus("Open");
-			long chalanCount = opordService.saveOpordHeader(chalan);
-			if(chalanCount == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't crete chalan");
-				return responseHelper.getResponse();
-			}
-			existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(chalan.getXtypetrn(), chalan.getXtrn(), chalan.getXdate());
-			if(existChalan == null) {
-				responseHelper.setErrorStatusAndMessage("Chalan not found");
-				return responseHelper.getResponse();
-			}
-		}
+//		Opordheader existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
+//		if(existChalan == null) {
+//			// Create new chalan for today
+//			Opordheader chalan = new Opordheader();
+//			chalan.setXtypetrn(TransactionCodeType.CHALAN_NUMBER.getCode());
+//			chalan.setXtrn(TransactionCodeType.CHALAN_NUMBER.getdefaultCode());
+//			chalan.setXdate(new Date());
+//			chalan.setXstatus("Open");
+//			long chalanCount = opordService.saveOpordHeader(chalan);
+//			if(chalanCount == 0) {
+//				responseHelper.setErrorStatusAndMessage("Can't crete chalan");
+//				return responseHelper.getResponse();
+//			}
+//			existChalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(chalan.getXtypetrn(), chalan.getXtrn(), chalan.getXdate());
+//			if(existChalan == null) {
+//				responseHelper.setErrorStatusAndMessage("Chalan not found");
+//				return responseHelper.getResponse();
+//			}
+//		}
 
 
 		// if header saved successfully, then find it again from db to get xordernum
@@ -172,27 +172,27 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 			// TODO: Update or add chalan details
 			// search existing chalan detail by item and chalan header
-			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(existChalan.getXordernum(), pd.getXitem());
-			if(existChalanDetail != null) {
-				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
-				long countChalanDetail = opordService.updateOpordDetail(existChalanDetail);
-				if(countChalanDetail == 0) {
-					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
-					return responseHelper.getResponse();
-				}
-			} else {
-				Oporddetail chalanDetail = new Oporddetail();
-				chalanDetail.setXordernum(existChalan.getXordernum());
-				chalanDetail.setXitem(pd.getXitem());
-				chalanDetail.setXunit(pd.getXunitpur());
-				chalanDetail.setXqtyord(pd.getXqtyord());
-				chalanDetail.setXrate(pd.getXrate());
-				long countChalanDetail = opordService.saveOpordDetail(chalanDetail);
-				if(countChalanDetail == 0) {
-					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");
-					return responseHelper.getResponse();
-				}
-			}
+//			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(existChalan.getXordernum(), pd.getXitem());
+//			if(existChalanDetail != null) {
+//				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
+//				long countChalanDetail = opordService.updateOpordDetail(existChalanDetail);
+//				if(countChalanDetail == 0) {
+//					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
+//					return responseHelper.getResponse();
+//				}
+//			} else {
+//				Oporddetail chalanDetail = new Oporddetail();
+//				chalanDetail.setXordernum(existChalan.getXordernum());
+//				chalanDetail.setXitem(pd.getXitem());
+//				chalanDetail.setXunit(pd.getXunitpur());
+//				chalanDetail.setXqtyord(pd.getXqtyord());
+//				chalanDetail.setXrate(pd.getXrate());
+//				long countChalanDetail = opordService.saveOpordDetail(chalanDetail);
+//				if(countChalanDetail == 0) {
+//					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");
+//					return responseHelper.getResponse();
+//				}
+//			}
 		}
 
 
