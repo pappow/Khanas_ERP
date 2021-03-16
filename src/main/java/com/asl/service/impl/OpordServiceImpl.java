@@ -1,6 +1,5 @@
 package com.asl.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +47,15 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public long updateOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
+		oporddetail.setZid(sessionManager.getBusinessId());
 		return opordMapper.updateOpordDetail(oporddetail);
+	}
+
+	@Override
+	public long deleteOpordDetail(Oporddetail oporddetail) {
+		if(oporddetail == null) return 0;
+		oporddetail.setZid(sessionManager.getBusinessId());
+		return opordMapper.deleteOpordDetail(oporddetail);
 	}
 
 	@Override
@@ -116,6 +123,12 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xstatus)) return Collections.emptyList();
 		if(date == null) date = new Date();
 		return opordMapper.findAllSalesOrder(xtypetrn, xtrn, xstatus, sdf.format(date), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xchalanref)) return Collections.emptyList();
+		return opordMapper.findAllSalesOrderByChalan(xtypetrn, xtrn, xchalanref, sessionManager.getBusinessId());
 	}
 
 	

@@ -21,6 +21,8 @@ public interface OpordMapper {
 	public long saveOpordDetail(Oporddetail oporddetail);
 	public long updateOpordDetail(Oporddetail oporddetail);
 
+	public long deleteOpordDetail(Oporddetail oporddetail);
+
 	public Opordheader findOpordHeaderByXordernum(String xordernum, String zid);
 	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow, String zid);
 
@@ -36,4 +38,5 @@ public interface OpordMapper {
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid);
 
 	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, String xdate, String zid);
+	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);
 }
