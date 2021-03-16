@@ -23,7 +23,7 @@ import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
-@RequestMapping("/purchasing/supplieradjustment")
+@RequestMapping("/procurement/supplieradjustment")
 public class SupplierAdjustmentController extends ASLAbstractController{
 
 	@Autowired
@@ -38,37 +38,40 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 	public String loadSupplierAdjustmentPage(Model model) {
 		
 		model.addAttribute("arhed", getDefaultArhed());		
-		model.addAttribute("allArhed", arhedService.getAllArheds());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.VOUCHER_NUMBER.getCode()));
+		model.addAttribute("allArhed", arhedService.getAllAdaps());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAP.getCode()));
+		model.addAttribute("objtypeList", xcodeService.findByXtype(CodeType.OBJECT_TYPE.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		
-		return "pages/supplierpayment/arhed/arhed";
+		return "pages/procurement/supplieradjustment/arhed";
 	}
 	
 	@GetMapping("/{xvoucher}")
-	public String loadSupplierPaymentPage(@PathVariable String xvoucher, Model model) {
+	public String loadSupplierAdjustmentPage(@PathVariable String xvoucher, Model model) {
 		
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
 		model.addAttribute("arhed", data);
-		model.addAttribute("allArhed", arhedService.getAllArheds());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.VOUCHER_NUMBER.getCode()));
+		model.addAttribute("allArhed", arhedService.getAllAdaps());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAP.getCode()));
+		model.addAttribute("objtypeList", xcodeService.findByXcode(CodeType.OBJECT_TYPE.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeLiist", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		
-		return "pages/supplierpayment/arhed/arhed";
+		return "pages/procurement/supplieradjustment/arhed";
 	}
 	
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
+		arhed.setXtypeobj("Debit");
 		//arhed.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		//arhed.setXtotamt(BigDecimal.ZERO);
 		return arhed;
@@ -81,6 +84,13 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		// Validate
+		
+		if("debit".equalsIgnoreCase(arhed.getXtypeobj())) {
+			arhed.setXsign(+1);
+		}else {
+			arhed.setXsign(-1);
+		}
+		arhed.setXtype("ADAP-");
 
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
@@ -92,7 +102,7 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Voucher updated successfully");
-			responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + arhed.getXvoucher());
+			responseHelper.setRedirectUrl("/procurement/supplieradjustment/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
 		}
 
@@ -103,7 +113,7 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Voucher created successfully");
-		responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + arhed.getXvoucher());
+		responseHelper.setRedirectUrl("/procurement/supplieradjustment/" + arhed.getXvoucher());
 		return responseHelper.getResponse();
 	}
 	
@@ -118,8 +128,22 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 	}
 
 	public Map<String, Object> doArchiveOrRestore(String xvoucher, boolean archive){
-		
-		return null;
+		Arhed arhed = arhedService.findArhedByXvoucher(xvoucher);
+		if(arhed == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		arhed.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
+		long count = arhedService.update(arhed);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Entry updated successfully");
+		responseHelper.setRedirectUrl("/procurement/supplieradjustment/" + arhed.getXvoucher());
+		return responseHelper.getResponse();
 	}
 
 

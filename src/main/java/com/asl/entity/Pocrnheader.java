@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "pocrnheader")
 @IdClass(PocrnheaderPK.class)
-@EqualsAndHashCode(of = { "zid","xcrmnum" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid","xcrnnum" }, callSuper = false)
 public class Pocrnheader extends AbstractModel<String>{
 	
 	private static final long serialVersionUID = -5765658972092206991L;
@@ -30,11 +31,8 @@ public class Pocrnheader extends AbstractModel<String>{
 
 	@Id
 	@Basic(optional = false)
-	@Column(name = "xcrmnum")
-	private String xcrmnum;
-	
-	@Column(name = "zemail")
-	private String zemail;
+	@Column(name = "xcrnnum")
+	private String xcrnnum;
 	
 	@Column(name = "xgrnnum")
 	private String xgrnnum;
@@ -46,8 +44,8 @@ public class Pocrnheader extends AbstractModel<String>{
 	@Column(name = "xvoucher")
 	private String xvoucher;
 	
-	@Column(name = "xsup")
-	private String xsup;
+	@Column(name = "xcus")
+	private String xcus;
 	
 	@Column(name = "xstatusgrn")
 	private String xstatusgrn;
@@ -77,5 +75,9 @@ public class Pocrnheader extends AbstractModel<String>{
 	@Temporal(TemporalType.DATE)
 	private Date xdategl;
 	
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
 	
+	@Transient
+	private String xtrncrn;
 }

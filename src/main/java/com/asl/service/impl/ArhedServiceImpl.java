@@ -57,8 +57,20 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 
 	@Override
 	public List<Arhed> getAllObaps() {
-		// TODO Auto-generated method stub
 		return arhedMapper.getAllObaps(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Arhed findAdapByXcus(String xcus) {
+		if(StringUtils.isBlank(xcus))
+			return null;
+		
+		return arhedMapper.findAdapByXcus(xcus, TransactionCodeType.ACCOUNT_ADAP.getdefaultCode(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Arhed> getAllAdaps() {
+		return arhedMapper.getAllAdaps(TransactionCodeType.ACCOUNT_ADAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
 }

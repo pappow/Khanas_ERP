@@ -3,17 +3,16 @@
 <mapper namespace="com.asl.mapper.PocrnMapper">
 
 	<insert id="savePocrnHeader" parameterType="Pocrnheader">
-<!-- 		<selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xbomkey}', 6) FROM DUAL
+		<selectKey keyProperty="xcrnnum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrncrn}', 6) FROM DUAL
 		</selectKey> -->
 		INSERT INTO Pocrnheader
 		(   
-			xcrmnum,
-			zemail,
+			xcrnnum,
 			xgrnnum,
 			xdate,
 			xvoucher,
-			xsup,
+			xcus,
 			xstatusgrn,
 			xwh,
 			xref,
@@ -35,12 +34,11 @@
 		)
 		VALUES
 		(
-			#{xcrmnum, jdbcType=VARCHAR},
-			#{zemail, jdbcType=VARCHAR},
+			#{xcrnnum},
 			#{xgrnnum, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xvoucher, jdbcType=VARCHAR},
-			#{xsup, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
 			#{xstatusgrn, jdbcType=VARCHAR},
 			#{xwh, jdbcType=VARCHAR},
 			#{xref, jdbcType=VARCHAR},
@@ -61,16 +59,44 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
+	
+		<update id="updatePocrnHeader" parameterType="Pocrnheader">
+		UPDATE
+		PocrnHeader
+		SET		
+		xdate=#{xdate, jdbcType=DATE},
+		xvoucer=#{xvoucher, jdbcType=VARCHAR},
+		xsup=#{xsup, jdbcType=VARCHAR},
+		xstatusgrn=#{xstatusgrn, jdbcType=VARCHAR},
+		xwh=#{xwh, jdbcType=VARCHAR},
+		xref=#{xref, jdbcType=VARCHAR},
+		xstatusap=#{xstatusap, jdbcType=VARCHAR},
+		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+		xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+		xnote=#{xnote, jdbcType=VARCHAR},
+		xtype=#{xtype, jdbcType=VARCHAR},
+		xdategl=#{xdategl, jdbcType=DATE},
+
+		zid=#{zid, jdbcType=VARCHAR},
+		zauserid=#{zauserid, jdbcType=VARCHAR},
+		zuuserid=#{zuuserid, jdbcType=VARCHAR},
+		zaip=#{zaip, jdbcType=VARCHAR},
+		zuip=#{zuip, jdbcType=VARCHAR},
+		zactive=#{zactive, jdbcType=VARCHAR},
+		ztime=#{ztime, jdbcType=TIMESTAMP},
+		zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+		xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' 
+	</update>
 
 	<insert id="savePocrnDetail" parameterType="Pocrndetail">
-		<!-- <selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM BmBomDetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
-		</selectKey> -->
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COUNT(*) + 1 FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zactive='1' AND zid=#{zid}
+		</selectKey>
 		INSERT INTO Pocrndetail
 		(
 			xrow,
 			xcrnnum,
-			zemail,
 			xunit,
 			xitem,
 			xqtyord,
@@ -90,14 +116,13 @@
 		)
 		VALUES
 		(
-			#{xrow, jdbcType=INTEGER},
+			#{xrow},
 			#{xcrnnum, jdbcType=VARCHAR},
-			#{zemail, jdbcType=VARCHAR},
 			#{xunit, jdbcType=VARCHAR},
 			#{xitem, jdbcType=VARCHAR},
-			#{xqtyord, jdbcType=INTEGER},
-			#{xqtygrn, jdbcType=INTEGER},
-			#{xrate, jdbcType=INTEGER},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xqtygrn, jdbcType=DECIMAL},
+			#{xrate, jdbcType=DECIMAL},
 			#{xdocrow, jdbcType=INTEGER},
 			#{xlong, jdbcType=VARCHAR},
 			
@@ -116,12 +141,11 @@
 		UPDATE 
 			Pocrndetail
 		SET
-			zemail=#{zemail, jdbcType=VARCHAR},
 			xunit=#{xunit, jdbcType=VARCHAR},
 			xitem=#{xitem, jdbcType=VARCHAR},
-			xqtyord=#{xqtyord, jdbcType=INTEGER},
-			xqtygrn=#{xqtygrn, jdbcType=INTEGER},
-			xrate=#{xrate, jdbcType=INTEGER},
+			xqtyord=#{xqtyord, jdbcType=DECIMAL},
+			xqtygrn=#{xqtygrn, jdbcType=DECIMAL},
+			xrate=#{xrate, jdbcType=DECIMAL},
 			xdocrow=#{xdocrow, jdbcType=INTEGER},
 			xlong=#{xlong, jdbcType=VARCHAR},
 			
@@ -133,25 +157,30 @@
 			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			xrow=#{xrow, jdbcType=INTEGER}
-			AND xcrnnum=#{xcrnnum, jdbcType=VARCHAR}
+			xcrnnum=#{xcrnnum, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<select id="findPocrnHeaderByXcrnnum" resultType="Pocrnheader">
-		SELECT * FROM Pocrnheader WHERE xbatch=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Pocrnheader WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findPocrnHeaderByXgrnnum" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="findPocrndetailByXrowAndXcrnnum" resultType="Pocrndetail">
-		SELECT * FROM Pocrndetail WHERE xrow=#{xrow} AND xbatch=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+	<select id="findPocrndetailByXcrnnumAndXrow" resultType="Pocrndetail">
+		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="findPocrndetailByXrow" resultType="Pocrndetail">
-		SELECT * FROM Pocrndetail WHERE xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	<select id="getAllPocrnheader" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
+		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
 	</select>
 
-	<select id="getAllMoheader" resultType="Pocrnheader">
-		SELECT * FROM getAllPocrnheader WHERE zid=#{zid} AND zactive='1'
-	</select>
 
 </mapper>

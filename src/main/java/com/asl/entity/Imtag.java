@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,4 +50,13 @@ public class Imtag extends AbstractModel<String> {
 	
 	@Column(name = "xstatustag")
 	private String xstatustag;
+	
+	@Column(name = "xtype")
+	private String xtype;
+	
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
+	
+	@Transient
+	private String xtrnimtag;
 }

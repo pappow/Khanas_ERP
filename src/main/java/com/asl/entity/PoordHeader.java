@@ -60,6 +60,9 @@ public class PoordHeader extends AbstractModel<String> {
 	@Column(name = "xnote")
 	private String xnote;
 
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
+
 	@Transient
 	private String xtrnpor;
 }

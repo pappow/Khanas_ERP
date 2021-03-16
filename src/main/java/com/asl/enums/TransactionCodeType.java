@@ -16,13 +16,17 @@ public enum TransactionCodeType {
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
 	PO_GRN_NUMBER("PO GRN Number", "POGRN-", TransactionCodes.PO_GRN_NUMBER),
+	PRN_NUMBER("PRN Number", "PR--", null),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
+	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
+	STOCK_TAKE("Stock Take", "TAG-", null),
 	SALES_ORDER("Sales Order", "SO-", TransactionCodes.SALES_ORDER),
 	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER),
 	VOUCHER_NUMBER("Voucher Number", "VCH-",null),
 	ACCOUNT_PAYABLE("Account Payable", "AP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_PAYMENT("Account Payment", "PM-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
+	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER);
 

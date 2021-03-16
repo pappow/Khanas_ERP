@@ -140,5 +140,14 @@
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="findAdapByXcus" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllAdaps" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
 
 </mapper>
