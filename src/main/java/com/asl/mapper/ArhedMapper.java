@@ -18,5 +18,10 @@ public interface ArhedMapper {
 	//Supplier Opening Entry
 	public Arhed findObapByXcus(String xcus, String xtrn, String zid);
 	public List<Arhed> getAllObaps(String xtrn, String zid);
+	
+	//Supplier Adjustment
+	public Arhed findAdapByXcus(String xcus, String xtrn, String zid);
+	public List<Arhed> getAllAdaps(String xtrn, String zid);
+	
 
 }

@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,9 +40,13 @@ public class Imtdet extends AbstractModel<String>{
 	private String xitem;
 	
 	@Column(name = "xqty")
-	private String xqty;
+	private BigDecimal xqty;
 	
 	@Column(name = "xstatustag")
 	private String xstatustag;
+	
+	//Additionaly added
+	@Column(name = "xunit")
+	private String xunit;
 	
 }

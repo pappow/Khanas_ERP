@@ -68,6 +68,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
 		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
+		//poord.setXtype("Purchase");
+		//poord.setXtypetrn("PO Number");
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
 	}
@@ -245,6 +247,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		if(poordHeader != null) {
 			PogrnHeader pogrnHeader = new PogrnHeader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
+			pogrnHeader.setXpornum(xpornum);
 			pogrnHeader.setXdate(new Date());
 			pogrnHeader.setXtype(TransactionCodeType.PO_GRN_NUMBER.getCode());
 			pogrnHeader.setXtrngrn(TransactionCodeType.PO_GRN_NUMBER.getdefaultCode());

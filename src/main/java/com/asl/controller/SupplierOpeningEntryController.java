@@ -71,7 +71,7 @@ public class SupplierOpeningEntryController extends ASLAbstractController{
 	
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
-		//arhed.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
+		arhed.setXtype("OBAP");
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXbalprime(BigDecimal.ZERO);
 		arhed.setXbase(BigDecimal.ZERO);

@@ -29,10 +29,10 @@ public enum CodeType {
 	BANK_STATUS("Bank Status"),
 	JOURNAL_VOUCHER_STATUS("Journal Voucher Status"),
 	PAYMENT_MODE("Payment Mode"),
-	TRANSFER_ORDER_STATUS("Transfer Order Status");
+	TRANSFER_ORDER_STATUS("Transfer Order Status"),
+	TAG_STATUS("TAG Status"),
+	OBJECT_TYPE("Object Type");
 	
-	
-
 	private String code;
 
 	private CodeType(String code) {

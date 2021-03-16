@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
-import com.asl.entity.Imtrn;
 import com.asl.mapper.ImtorMapper;
 import com.asl.service.ImtorService;
 

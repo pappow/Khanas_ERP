@@ -28,6 +28,7 @@ public interface PogrnService {
 	public List<PogrnHeader> getAllPogrnHeaders();
 	
 	//Procedure Call
-	public void procInventory(String xgrnnum);
+	public void procInventory(String xgrnnum, String xpornum);
+	public void procArhed(String xgrnnum);
 
 }

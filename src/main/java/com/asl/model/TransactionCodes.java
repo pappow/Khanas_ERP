@@ -17,6 +17,7 @@ public class TransactionCodes {
 	public static final Map<String, String> GRN_NUMBER = new HashMap<>();
 	public static final Map<String, String> PO_GRN_NUMBER = new HashMap<>();
 	public static final Map<String, String> INVENTORY_NUMBER = new HashMap<>();
+	public static final Map<String, String> INVENTORY_TRANSACTION = new HashMap<>();
 	public static final Map<String, String> SALES_ORDER = new HashMap<>();
 	public static final Map<String, String> CHALAN_NUMBER = new HashMap<>();
 	public static final Map<String, String> AP_TRANSACTION = new HashMap<>();

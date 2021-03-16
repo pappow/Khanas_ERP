@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,16 +28,13 @@ public class Pocrndetail extends AbstractModel<String>{
 
 	@Id
 	@Basic(optional = false)
-	@Column(name = "xrow")
-	private int xrow;
-	
-	@Id
-	@Basic(optional = false)
 	@Column(name = "xcrnnum")
 	private String xcrnnum;
-	
-	@Column(name = "zemail")
-	private String zemail;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "xrow")
+	private int xrow;
 	
 	@Column(name = "xunit")
 	private String xunit;
@@ -44,13 +43,13 @@ public class Pocrndetail extends AbstractModel<String>{
 	private String xitem;
 	
 	@Column(name = "xqtyord")
-	private int xqtyord;
+	private BigDecimal xqtyord;
 	
 	@Column(name = "xqtygrn")
-	private int xqtygrn;
+	private BigDecimal xqtygrn;
 	
 	@Column(name = "xrate")
-	private int xrate;
+	private BigDecimal xrate;
 	
 	@Column(name = "xdocrow")
 	private int xdocrow;

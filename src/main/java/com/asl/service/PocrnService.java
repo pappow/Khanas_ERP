@@ -1,0 +1,28 @@
+package com.asl.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.asl.entity.Pocrndetail;
+import com.asl.entity.Pocrnheader;
+import com.asl.entity.PogrnHeader;
+
+@Component
+public interface PocrnService {
+	
+	public long save(Pocrnheader pocrnheader);
+	public long update(Pocrnheader pocrnheader);
+	
+	public long saveDetail(Pocrndetail pocrndetail);
+	public long updateDetail(Pocrndetail pocrndetail);
+	public long deleteDetail(Pocrndetail pocrndetail);
+
+	public List<Pocrnheader> getAllPocrnheader();
+	public List<Pocrndetail> findPocrnDetailByXcrnnum(String xcrnnum);
+	
+	public Pocrnheader findPocrnHeaderByXcrnnum(String xcrnnum);
+	public Pocrnheader findPocrnHeaderByXgrnnum(String xgrnnum);
+	public Pocrndetail findPocrnDetailByXcrnnumAndXrow(String xcrnnum, int xrow);
+
+}

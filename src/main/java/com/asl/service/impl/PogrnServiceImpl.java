@@ -114,8 +114,13 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public void procInventory(String xgrnnum) {
-		pogrnMapper.procInventory(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum);
+	public void procInventory(String xgrnnum, String xpornum) {
+		pogrnMapper.procInventory(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum, xpornum);
+	}
+	
+	@Override
+	public void procArhed(String xgrnnum) {
+		pogrnMapper.procArhed(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum);
 	}
 	
 	
