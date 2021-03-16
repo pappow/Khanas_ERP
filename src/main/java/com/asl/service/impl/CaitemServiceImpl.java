@@ -61,6 +61,12 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		return caitemMapper.searchCentralCaitem(hint.toUpperCase(), zb.getCentralzid());
 	}
 
+	public List<Caitem> searchCentralCaitemForRequisition(String hint)  {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		Zbusiness zb = sessionManager.getZbusiness();
+		return caitemMapper.searchCentralCaitemForRequisition(hint.toUpperCase(), zb.getCentralzid());
+	}
+
 	@Override
 	public Caitem findCentralItemByXitem(String xitem) {
 		if(StringUtils.isBlank(xitem)) return null;

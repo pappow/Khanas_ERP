@@ -64,7 +64,7 @@
 							<div class="section-header">
 								<h1><span th:text="${reportName}"></span></h1>
 							</div>
-							<div class="section-body togglebox">
+							<div class="section-body togglebox" style="height: 800px">
 								<iframe id="reportIframe" 
 										name="reportIframe"
 										scrolling="no" 
@@ -98,11 +98,11 @@
 				$('.confirm-rpt-birt-btn').off('click').on('click', function(e){
 					e.preventDefault();
 					console.log("hi");
+					document.getElementById('reportIframe').src = "";
+					document.getElementById('reportIframe').src = getBirtUrl() + '?__report=khanas/supplierList.rptdesign&__toolbar=false&__showtitle=false&ZID=900000';
 					
-					document.getElementById('reportIframe').src = 
-					
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 </html>

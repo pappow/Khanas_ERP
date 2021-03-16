@@ -69,6 +69,9 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "xtrn")
 	private String xtrn;
 
+	@Column(name = "xchalanref")
+	private String xchalanref;
+
 	@Transient
 	private String branchname;
 }

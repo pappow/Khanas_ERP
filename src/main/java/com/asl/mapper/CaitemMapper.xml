@@ -129,6 +129,18 @@
 			AND zactive='1'
 	</select>
 
+	<select id="searchCentralCaitemForRequisition" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE 
+			(UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') 
+			AND xgitem != 'Raw Materials'
+			AND zid=#{centralzid} 
+			AND zactive='1'
+	</select>
+
 	<select id="findCentralItemByXitem" resultType="Caitem">
 		SELECT 
 			* 

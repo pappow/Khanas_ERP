@@ -33,5 +33,7 @@ public interface OpordMapper {
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem, String zid);
 
 	public List<BranchesRequisitions> getSalesOrderMatrxi(String xdate, String zid);
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid);
 
+	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, String xdate, String zid);
 }
