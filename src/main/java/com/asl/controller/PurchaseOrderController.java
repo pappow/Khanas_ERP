@@ -286,7 +286,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			}			
 			 
 			responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 			return responseHelper.getResponse();
 		}	
 		responseHelper.setStatus(ResponseStatus.ERROR);

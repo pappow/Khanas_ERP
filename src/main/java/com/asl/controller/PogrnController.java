@@ -348,6 +348,7 @@ public class PogrnController extends ASLAbstractController {
 			BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pocrnHeader.setXgrnnum(xgrnnum);
 			pocrnHeader.setXdate(new Date());
+			pocrnHeader.setXsup(pogrnHeader.getXcus());
 			pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
 			pocrnHeader.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
 			

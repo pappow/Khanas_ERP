@@ -22,5 +22,10 @@ public interface PocrnMapper {
 	public Pocrnheader findPocrnHeaderByXcrnnum(String xcrnnum, String zid);
 	public Pocrnheader findPocrnHeaderByXgrnnum(String xgrnnum, String zid);
 	public Pocrndetail findPocrnDetailByXcrnnumAndXrow(String xcrnnum, int xrow, String zid);
-
+	
+	//Procedures
+	public void procConfirmCRN(String zid, String user, String xcrnnum);	
+	public void procIssuePricing(String zid, String user, String xtrnnum, String xwh);
+	public void procTransferPRtoAP(String zid, String user, String xcrnnum);
+	
 }

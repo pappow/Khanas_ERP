@@ -14,6 +14,7 @@ public interface OpdoMapper {
 
 	public long saveOpDoDetail(Opdodetail opdodetail);
 	public long updateOpDoDetail(Opdodetail opdodetail);
+	public long deleteOpdoDetail(Opdodetail opdodetail);
 
 	public Opdoheader findOpdoHeaderByXdornum(String xdornum, String zid);
 	public Opdodetail findOpDoDetailByXrowAndXdornum(int xrow, String xdornum, String zid);

@@ -13,7 +13,9 @@
 			xdate,
 			xvoucher,
 			xcus,
+			xsup,
 			xstatusgrn,
+			xstatuscrn,
 			xwh,
 			xref,
 			xstatusap,
@@ -39,7 +41,9 @@
 			#{xdate, jdbcType=DATE},
 			#{xvoucher, jdbcType=VARCHAR},
 			#{xcus, jdbcType=VARCHAR},
+			#{xsup, jdbcType=VARCHAR},
 			#{xstatusgrn, jdbcType=VARCHAR},
+			#{xstatuscrn, jdbcType=VARCHAR},
 			#{xwh, jdbcType=VARCHAR},
 			#{xref, jdbcType=VARCHAR},
 			#{xstatusap, jdbcType=VARCHAR},
@@ -65,9 +69,11 @@
 		PocrnHeader
 		SET		
 		xdate=#{xdate, jdbcType=DATE},
-		xvoucer=#{xvoucher, jdbcType=VARCHAR},
+		xvoucher=#{xvoucher, jdbcType=VARCHAR},
+		xcus=#{xcus, jdbcType=VARCHAR},
 		xsup=#{xsup, jdbcType=VARCHAR},
 		xstatusgrn=#{xstatusgrn, jdbcType=VARCHAR},
+		xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
 		xwh=#{xwh, jdbcType=VARCHAR},
 		xref=#{xref, jdbcType=VARCHAR},
 		xstatusap=#{xstatusap, jdbcType=VARCHAR},
@@ -102,6 +108,7 @@
 			xqtyord,
 			xqtygrn,
 			xrate,
+			xlineamt,
 			xdocrow,
 			xlong,
 
@@ -123,6 +130,7 @@
 			#{xqtyord, jdbcType=DECIMAL},
 			#{xqtygrn, jdbcType=DECIMAL},
 			#{xrate, jdbcType=DECIMAL},
+			#{xlineamt, jdbcType=DECIMAL},
 			#{xdocrow, jdbcType=INTEGER},
 			#{xlong, jdbcType=VARCHAR},
 			
@@ -146,6 +154,7 @@
 			xqtyord=#{xqtyord, jdbcType=DECIMAL},
 			xqtygrn=#{xqtygrn, jdbcType=DECIMAL},
 			xrate=#{xrate, jdbcType=DECIMAL},
+			xlineamt=#{xrate, jdbcType=DECIMAL},
 			xdocrow=#{xdocrow, jdbcType=INTEGER},
 			xlong=#{xlong, jdbcType=VARCHAR},
 			
@@ -180,6 +189,20 @@
 	
 	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
 		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id = "procConfirmCRN" statementType = "CALLABLE">
+		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xcrnnum, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procIssuePricing" statementType = "CALLABLE">
+		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
+			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procTransferPRtoAP" statementType = "CALLABLE">
+		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
+			#{xcrnnum, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
 
