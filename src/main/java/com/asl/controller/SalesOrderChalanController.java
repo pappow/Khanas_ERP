@@ -242,6 +242,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 	@GetMapping("/chalandetail/{xordernum}")
 	public String reloadChalanDetailSection(@PathVariable String xordernum, Model model) {
+		model.addAttribute("salesorderchalan", opordService.findOpordHeaderByXordernum(xordernum));
 		model.addAttribute("chalandetails", opordService.findOporddetailByXordernum(xordernum));
 		return "pages/salesninvoice/salesorderchalan/salesorderchalan::salesorderchalandetailtable";
 	}

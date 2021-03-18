@@ -206,17 +206,21 @@
 											<th>Unit</th>
 											<th>Category</th>
 											<th>Group</th>
+											<th th:if="${salesorderchalan.xstatus eq 'Confirmed'}">Action</th>
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="cd : ${chalandetails}">
 											<td>
-												<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem}"></a>
+												<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem} + ' - ' + ${cd.xdesc}"></a>
 											</td>
 											<td th:text="${cd.xqtyord}"></td>
 											<td th:text="${cd.xunit}"></td>
 											<td th:text="${cd.xcatitem}"></td>
 											<td th:text="${cd.xgitem}"></td>
+											<td th:if="${salesorderchalan.xstatus eq 'Confirmed'}">
+												<a th:href="@{/production/batch/chalantobatch/} + ${salesorderchalan.xordernum} + '/' + ${cd.xitem}" target="_blank">Create Batch</a>
+											</td>
 										</tr>
 									</tbody>
 								</table>

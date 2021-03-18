@@ -23,7 +23,9 @@ public interface MoMapper {
 	public Moheader findMoHeaderByXbatch(String xbatch, String zid);
 	public Modetail findModetailByXrowAndXbatch(int xrow, String xbatch, String zid);
 
-	public List<Modetail> findModetailByXrow(int xrow, String zid);
+	public List<Modetail> findModetailByXbatch(String xbatch, String zid);
 	public List<Moheader> getAllMoheader(String zid);
+
+	public Moheader findMoheaderByXchalanAndXitem(String xchalan, String xitem, String zid);
 
 }
