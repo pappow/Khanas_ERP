@@ -75,14 +75,13 @@ public class FormFieldBuilder {
 	}
 
 	/**
-	 * Generate Date field
+	 * 
 	 * @param sequence
-	 * @param validateDateRange
 	 * @param startDate
 	 * @param prompt
 	 * @param defaultValue
 	 * @param required
-	 * @return {@link FormFieldBuilder}
+	 * @return
 	 */
 	public static FormFieldBuilder generateDateField(int sequence, boolean startDate, String prompt, Date defaultValue, boolean required) {
 		FormFieldBuilder ffb = new FormFieldBuilder();

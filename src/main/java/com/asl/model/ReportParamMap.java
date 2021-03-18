@@ -12,6 +12,7 @@ import com.asl.enums.ReportParamDataType;
 public class ReportParamMap {
 
 	public static final Map<String, String> SUPPLIER_LIST = new HashMap<>();
+	public static final Map<String, String> CUSTOMER_LIST = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -49,6 +50,10 @@ public class ReportParamMap {
 
 	static {
 		SUPPLIER_LIST.put("param1", "zid|" + ReportParamDataType.STRING.name());
+
+		CUSTOMER_LIST.put("param1", "zid|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param2", "fdate|" + ReportParamDataType.DATE.name());
+		CUSTOMER_LIST.put("param3", "tdate|" + ReportParamDataType.DATE.name());
 
 		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());

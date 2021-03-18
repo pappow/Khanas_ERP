@@ -11,7 +11,8 @@ import com.asl.model.ReportParamMap;
 public enum ReportMenu {
 
 	// Procurements report
-	SUPPLIERLIST(1, "SUPPLIERLIST", "Supplier List", ReportParamMap.SUPPLIER_LIST, "supplierList.rpt", "supplierList", "Y", "/report/SUPPLIERLIST");
+	SUPPLIERLIST(1, "SUPPLIERLIST", "Supplier List", ReportParamMap.SUPPLIER_LIST, "supplierList.rpt", "supplierList", "Y", "/report/SUPPLIERLIST"),
+	CUSTOMERLIST(1, "CUSTOMERLIST", "Customer List", ReportParamMap.CUSTOMER_LIST, "supplierList.rpt", "customerList", "Y", "/report/CUSTOMERLIST");
 
 	private int group;
 	private String code;
