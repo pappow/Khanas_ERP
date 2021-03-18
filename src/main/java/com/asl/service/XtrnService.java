@@ -25,4 +25,6 @@ public interface XtrnService {
 	public List<Xtrn> findByXtrn(String xtrn, Boolean zactive);
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn);
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, Boolean zactive);
+
+	public String generateAndGetXtrnNumber(String xtypetrn, String xtrn, int leftpad, String zid);
 }

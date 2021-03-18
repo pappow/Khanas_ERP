@@ -20,5 +20,6 @@ public interface XtrnMapper {
 	public List<Xtrn> findByXtypetrn(String xtypetrn, String zid, Boolean zactive);
 	public List<Xtrn> findByXtrn(String xtrn, String zid, Boolean zactive);
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid, Boolean zactive);
+	public String generateXtrn(String xtypetrn, String xtrn, int leftpad, String zid);
 
 }

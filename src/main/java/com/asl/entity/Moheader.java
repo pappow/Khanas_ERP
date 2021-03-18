@@ -1,5 +1,6 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,10 +52,10 @@ public class Moheader extends AbstractModel<String> {
 	private String xwh;
 
 	@Column(name = "xqtyprd")
-	private int xqtyprd;
+	private BigDecimal xqtyprd;
 
 	@Column(name = "xqtycom")
-	private int xqtycom;
+	private BigDecimal xqtycom;
 
 	@Column(name = "xlong")
 	private String xlong;
@@ -75,4 +77,10 @@ public class Moheader extends AbstractModel<String> {
 
 	@Column(name = "xtrn")
 	private String xtrn;
+
+	@Column(name = "xchalan")
+	private String xchalan;
+
+	@Transient
+	private String Xqtyprdunit;
 }

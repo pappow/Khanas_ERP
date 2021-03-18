@@ -104,4 +104,8 @@
 		</if>
 	</select>
 
+	<select id="generateXtrn" resultType="String">
+		SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtype}', 6) FROM DUAL
+	</select>
+
 </mapper>

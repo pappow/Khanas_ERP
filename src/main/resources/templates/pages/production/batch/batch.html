@@ -51,18 +51,24 @@
 										<h1>Batch Entry</h1>
 									</div>
 									<div class="form-action-button">
-										<!-- <a th:href="@{/production/bom}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:href="@{/production/bom}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(batch.xbatch)}" th:href="@{/production/bom}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true}" th:href="@{/production/bom/explodebom/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-bomb"></i> Explode BOM</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true}" th:href="@{/production/bom/archive/} + ${batch.xbatch}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == false}" th:href="@{/production/bom/restore/} + ${batch.xbatch}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a> -->
+										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == false}" th:href="@{/production/bom/restore/} + ${batch.xbatch}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/production/batch/save}" th:object="${batch}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
 											<input th:if="${not #strings.isEmpty(batch.xbatch)}" type="hidden" class="form-control" th:field="*{xbatch}"/>
+											<input type="hidden" class="form-control" th:field="*{xchalan}"/>
+											<input type="hidden" class="form-control" th:field="*{xitem}"/>
+											<input type="hidden" class="form-control" th:field="*{xbomkey}"/>
+											<input type="hidden" class="form-control" th:field="*{xqtyprd}"/>
+											<input type="hidden" class="form-control" th:field="*{xstatusmor}"/>
 											<div class="row">
-												<div class="col-md-8">
+												<div class="col-md-12">
 
 													<div class="form-group" th:if="${#strings.isEmpty(batch.xbatch)}">
 														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
@@ -75,26 +81,57 @@
 
 													<div class="form-group" th:if="${not #strings.isEmpty(batch.xbatch)}">
 														<label class="control-label col-md-4" for="xtrn">Batch Code : </label>
-														<div class="col-md-4">
+														<div class="col-md-8">
 															<input type="text" class="form-control" th:value="${batch.xbatch}" disabled="disabled"/>
 														</div>
 													</div>
 
-													<!-- <div class="form-group">
-														<label class="control-label col-sm-4" for="xitem">Prod Item : </label>
-														<div class="col-sm-8 search-suggest">
-															<input 	type="text" 
-																	class="form-control searchsuggest xitemsearch" 
-																	placeholder="Search..." 
-																	th:value="${not #strings.isEmpty(batch.xitem) ?  batch.xitem + ' - ' + batch.xdesc : ''}" 
-																	th:attr="search-url='search/caitem/finishednprod'"/>
-															<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
-															<input type="hidden" id="search-des" value=""/>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xchalan">Chalan : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${batch.xchalan}" disabled="disabled"/>
 														</div>
-													</div> -->
+														<a th:href="@{/salesninvoice/salesorderchalan/} + ${batch.xchalan}" class="btn btn-sm btn-default" target="_blank"><i class="fas fa-eye"></i></a>
+													</div>
 
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xitem">Item : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${batch.xitem}" disabled="disabled"/>
+														</div>
+														<a th:href="@{/mastersetup/caitem/} + ${batch.xitem}" class="btn btn-sm btn-default" target="_blank"><i class="fas fa-eye"></i></a>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xbomkey">BOM : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${batch.xbomkey}" disabled="disabled"/>
+														</div>
+														<a th:href="@{/production/bom/} + ${batch.xbomkey}" class="btn btn-sm btn-default" target="_blank"><i class="fas fa-eye"></i></a>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xqtyprd">Production Quantity : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${batch.xqtyprd} + ' ' + ${batch.xqtyprdunit}" disabled="disabled"/>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xqtycom">Quantity Completed : </label>
+														<div class="col-md-4">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xqtycom}"/>
+														</div>
+														<span th:text="${batch.xqtyprdunit}" style="line-height: 30px;">Unit</span>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatusmor">Status : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${batch.xstatusmor}" disabled="disabled"/>
+														</div>
+													</div>
 												</div>
-												<div class="col-md-4"></div>
 											</div>
 										</form>
 									</div>
@@ -110,22 +147,32 @@
 											<thead>
 												<tr>
 													<th>BOM</th>
+													<th>Chalan</th>
 													<th>Item</th>
-													<th>Date</th>
-													<th>Batch Qty</th>
+													<th>BOM</th>
+													<th>Production Quantity</th>
+													<th>Quantity Completed</th>
+													<th>Status</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<!-- <tr th:each="bh : ${bomheaders}">
+												<tr th:each="bh : ${batchList}">
 													<td>
-														<a th:href="@{/production/bom/} + ${bh.xbatch}" th:text="${bh.xbatch}"></a>
+														<a th:href="@{/production/batch/} + ${bh.xbatch}" th:text="${bh.xbatch}"></a>
 													</td>
 													<td>
-														<a th:href="@{/mastersetup/caitem/} + ${bh.xitem}" target="_blank" th:text="${bh.xitem} + ' - ' + ${bh.xdesc}"></a>
+														<a th:href="@{/salesninvoice/salesorderchalan/} + ${bh.xchalan}" target="_blank" th:text="${bh.xchalan}"></a>
 													</td>
-													<td  th:text="${#dates.format(bh.xdate, df)}"></td>
-													<td th:text="${bh.xpreferbatchqty}"></td>
-												</tr> -->
+													<td>
+														<a th:href="@{/mastersetup/caitem/} + ${bh.xitem}" target="_blank" th:text="${bh.xitem}"></a>
+													</td>
+													<td>
+														<a th:href="@{/production/bom/} + ${bh.xbomkey}" target="_blank" th:text="${bh.xbomkey}"></a>
+													</td>
+													<td th:text="${bh.xqtyprd}"></td>
+													<td th:text="${bh.xqtycom}"></td>
+													<td th:text="${bh.xstatusmor}"></td>
+												</tr>
 											</tbody>
 										</table>
 									</div>
