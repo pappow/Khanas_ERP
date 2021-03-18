@@ -228,7 +228,7 @@
 			zbusiness.zorg AS "branchname"
 		FROM 
 			opordheader
-			JOIN zbusiness ON zbusiness.zid = opordheader.xcus
+			LEFT JOIN zbusiness ON zbusiness.zid = opordheader.xcus
 		WHERE 
 			opordheader.xtypetrn=#{xtypetrn}
 			AND opordheader.xtrn=#{xtrn}

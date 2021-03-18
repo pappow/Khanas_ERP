@@ -1,9 +1,10 @@
 package com.asl.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,25 @@ public class ProductionSuggestionController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadSuggestion(@RequestParam(required = false) String xordernum, Model model) {
+		List<Opordheader> allChalans = new ArrayList<>();
 		Opordheader chalan = null;
 		if(StringUtils.isBlank(xordernum)) {
-			chalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
+			allChalans.addAll(opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date()));
 		} else {
 			chalan = opordService.findOpordHeaderByXordernum(xordernum);
+			allChalans.add(chalan);
 		}
-		List<ProductionSuggestion> list = new ArrayList<>();
-		if(chalan != null) {
-			list = productionSuggestionService.getProductionSuggestion(chalan.getXordernum(), chalan.getXdate());
+
+		Map<String, List<ProductionSuggestion>> allSuggestions = new HashMap<>();
+		for(Opordheader c : allChalans) {
+			List<ProductionSuggestion> list = new ArrayList<>();
+			if(c != null) {
+				list = productionSuggestionService.getProductionSuggestion(c.getXordernum(), c.getXdate());
+			}
+			allSuggestions.put(c.getXordernum(), list);
 		}
-		model.addAttribute("suggestions", list == null ? Collections.emptyList() : list);
+
+		model.addAttribute("allSuggestions", allSuggestions);
 		return "pages/production/suggestion/suggestion";
 	}
 
@@ -55,7 +64,9 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		// delete suggestion table where xordernum
 		productionSuggestionService.deleteSuggestion(xordernum, opordHeader.getXdate());
 
+		// create suggestion
 		productionSuggestionService.createSuggestion(xordernum);
+
 		return "redirect:/production/suggestion?xordernum=" + xordernum;
 	}
 }
