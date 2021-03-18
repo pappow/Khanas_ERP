@@ -54,7 +54,7 @@
 										<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(pocrnheader.xcrnnum)}" th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" th:href="@{/procurement/grnreturn/confirmgrn/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-success confirmgrn-btn-link"><i class="fas fa-tick-alt"></i> Confirm/Finalize</a>
+										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" th:href="@{/procurement/grnreturn/confirmprn/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-success confirmprn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" th:href="@{/procurement/grnreturn/archive/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == false}" th:href="@{/procurement/grnreturn/restore/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -277,7 +277,6 @@
 											<th>Note</th>
 											<th>Qty</th>
 											<th>Rate</th>
-											<th>Purchase Unit</th>
 											<th data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
@@ -289,8 +288,8 @@
 											<td>
 												<a href="" th:text="${d.xitem}"></a>
 											</td>
-											<td th:text="${d.xnote}"></td>
-											<td th:text="${d.xqtyord}"></td>
+											<td th:text="${d.xlong}"></td>
+											<td th:text="${d.xqtygrn}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-edit"></i></button>
@@ -316,17 +315,17 @@
 <script>
 		$(document).ready(function(){
 			
-			$('a.confirmgrn-btn-link').off('click').on('click', function(e){
+			$('a.confirmprn-btn-link').off('click').on('click', function(e){
 				e.preventDefault();
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: getBasepath() + "/procurement/grnreturn/confirmgrn/" + grnNum,
+					url: getBasepath() + "/procurement/grnreturn/confirmprn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						
 						if(status == "success")
-							showMessage("success", "GRN Confirmed");
+							showMessage("success", "PRN Confirmed");
 						else if(status == "error")
 							showMessage("error", "Somthing went wrong.....");
 						//location.reload(true);

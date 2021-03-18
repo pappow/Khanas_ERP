@@ -47,8 +47,14 @@ public class Pocrnheader extends AbstractModel<String>{
 	@Column(name = "xcus")
 	private String xcus;
 	
+	@Column(name = "xsup")
+	private String xsup;
+	
 	@Column(name = "xstatusgrn")
 	private String xstatusgrn;
+	
+	@Column(name = "xstatuscrn")
+	private String xstatuscrn;
 	
 	@Column(name = "xwh")
 	private String xwh;

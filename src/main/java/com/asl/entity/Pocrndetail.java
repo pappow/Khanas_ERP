@@ -51,6 +51,9 @@ public class Pocrndetail extends AbstractModel<String>{
 	@Column(name = "xrate")
 	private BigDecimal xrate;
 	
+	@Column(name = "xlineamt")
+	private BigDecimal xlineamt;
+	
 	@Column(name = "xdocrow")
 	private int xdocrow;
 	

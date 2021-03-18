@@ -91,6 +91,20 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 		if(StringUtils.isBlank(xcrnnum) || xrow == 0) return null;
 		return pocrnMapper.findPocrnDetailByXcrnnumAndXrow(xcrnnum, xrow, sessionManager.getBusinessId());
 	}
-	
+
+	@Override
+	public void procConfirmCRN(String xcrnnum) {
+		pocrnMapper.procConfirmCRN(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum);
+	}
+
+	@Override
+	public void procIssuePricing(String xtrnnum, String xwh) {
+		pocrnMapper.procIssuePricing(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtrnnum, xwh);
+	}
+
+	@Override
+	public void procTransferPRtoAP(String xcrnnum) {
+		pocrnMapper.procTransferPRtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum);
+	}	
 
 }
