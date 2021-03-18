@@ -85,4 +85,10 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 		return xtrnMapper.findByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId(), zactive);
 	}
 
+	@Override
+	public String generateAndGetXtrnNumber(String xtypetrn, String xtrn, int leftpad, String zid) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return "";
+		if(leftpad < 6) leftpad = 6;
+		return xtrnMapper.generateXtrn(xtypetrn, xtrn, leftpad, sessionManager.getBusinessId());
+	}
 }
