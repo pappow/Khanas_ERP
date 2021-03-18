@@ -254,6 +254,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// now lock chalan
 		oh.setXstatus("Confirmed");
 		long count = opordService.updateOpordHeader(oh);
 		if(count == 0) {

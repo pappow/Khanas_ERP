@@ -17,6 +17,8 @@ import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
 import com.asl.service.ProfileService;
+import com.asl.service.XcodesService;
+import com.asl.service.XtrnService;
 import com.asl.service.report.ReportFieldService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,8 @@ public class ASLAbstractController {
 	@Autowired protected ModelValidator modelValidator;
 	@Autowired protected ProfileService profileService;
 	@Autowired protected FormPagingService formPagingService;
+	@Autowired protected XtrnService xtrnService;
+	@Autowired protected XcodesService xcodesService;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {

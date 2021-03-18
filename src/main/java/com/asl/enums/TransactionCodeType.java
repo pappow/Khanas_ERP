@@ -28,7 +28,9 @@ public enum TransactionCodeType {
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
-	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER);
+	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
+	BATCH_NUMBER("Batch Number", "BN--", null),
+	PROC_ERROR("PROC Error", "ERROR", null);
 
 	private String code;
 	private String defaultCode;
