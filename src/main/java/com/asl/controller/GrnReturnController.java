@@ -227,7 +227,7 @@ public class GrnReturnController extends ASLAbstractController {
 		
 		pocrnService.procConfirmCRN(xcrnnum);
 		pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh());
-		//pocrnService.procTransferPRtoAP(xcrnnum);
+		pocrnService.procTransferPRtoAP(xcrnnum);
 		
 		responseHelper.setSuccessStatusAndMessage("PRN Confirmed successfully");
 		responseHelper.setRedirectUrl("/procurement/grnreturn/" + xcrnnum);

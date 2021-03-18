@@ -30,7 +30,8 @@ public enum TransactionCodeType {
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
-	PROC_ERROR("PROC Error", "ERROR", null);
+	PROC_ERROR("PROC Error", "ERROR", null),
+	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null);
 
 	private String code;
 	private String defaultCode;

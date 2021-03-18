@@ -248,6 +248,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			PogrnHeader pogrnHeader = new PogrnHeader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pogrnHeader.setXpornum(xpornum);
+			pogrnHeader.setXstatusgrn("Open");
 			pogrnHeader.setXdate(new Date());
 			pogrnHeader.setXtype(TransactionCodeType.PO_GRN_NUMBER.getCode());
 			pogrnHeader.setXtrngrn(TransactionCodeType.PO_GRN_NUMBER.getdefaultCode());
@@ -278,7 +279,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			}
 			
 			//Update PoordHeader Status
-			poordHeader.setXstatuspor("GRN Created");
+			poordHeader.setXstatuspor("Confirmed");
 			long pCount = poordService.update(poordHeader);
 			if(pCount == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);

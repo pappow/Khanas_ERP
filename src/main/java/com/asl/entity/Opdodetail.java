@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "opdodetail")
 @IdClass(OpdodetailPK.class)
-@EqualsAndHashCode(of = { "zid","xrow","xdornum" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid","xdornum","xrow" }, callSuper = false)
 public class Opdodetail  extends AbstractModel<String>{
 	
 	private static final long serialVersionUID = -2050527945264418934L;
@@ -23,19 +25,16 @@ public class Opdodetail  extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "zid")
 	private String zid;
-
-	@Id
-	@Basic(optional = false)
-	@Column(name = "xrow")
-	private int xrow;
 	
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xdornum")
 	private String xdornum;
-	
-	@Column(name = "zemail")
-	private String zemail;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "xrow")
+	private int xrow;
 	
 	@Column(name = "xunitsel")
 	private String xunitsel;
@@ -44,10 +43,13 @@ public class Opdodetail  extends AbstractModel<String>{
 	private String xitem;
 	
 	@Column(name = "xqtyord")
-	private int xqtyord;
+	private BigDecimal xqtyord;
 	
 	@Column(name = "xrate")
-	private int xrate;
+	private BigDecimal xrate;
+	
+	@Column(name = "xlineamt")
+	private BigDecimal xlineamt;
 	
 	@Column(name = "xcomtype")
 	private String xcomtype;
@@ -59,8 +61,8 @@ public class Opdodetail  extends AbstractModel<String>{
 	private String xlong;
 	
 	@Column(name = "xrategrn")
-	private int xrategrn;
+	private BigDecimal xrategrn;
 	
 	@Column(name = "xqtycrn")
-	private int xqtycrn;
+	private BigDecimal xqtycrn;
 }
