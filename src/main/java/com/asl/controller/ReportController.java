@@ -1,32 +1,25 @@
 package com.asl.controller;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.enums.ReportMenu;
 import com.asl.enums.ReportParamDataType;
-import com.asl.enums.ReportType;
 import com.asl.model.RequestParameters;
-import com.asl.service.PrintingService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/report")
 public class ReportController extends ASLAbstractController {
-
-	@Autowired private PrintingService printingService;
 
 	@GetMapping
 	public String loadReportPage(Model model) {
@@ -65,20 +56,13 @@ public class ReportController extends ASLAbstractController {
 	}
 
 	@PostMapping("/print")
-	public ResponseEntity<Object> print(RequestParameters params) throws IOException {
+	public @ResponseBody String print(RequestParameters params) throws IOException {
 		ReportMenu rm = ReportMenu.valueOf(params.getReportCode().toUpperCase());
 
-		String message = "";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
 		headers.add("X-Content-Type-Options", "nosniff");
 
-		// Parameters to send
-		String reportName = appConfig.getReportTemplatepath() + "/" + rm.getReportFile();
-		String reportTitle = "Test Report";
-		boolean attachment = true;
-
-		ReportType reportType = ReportType.PDF;
 		Map<String, Object> reportParams = new HashMap<>();
 		for(Map.Entry<String, String> m : rm.getParamMap().entrySet()) {
 			String reportParamFieldName = m.getKey();
@@ -86,40 +70,15 @@ public class ReportController extends ASLAbstractController {
 			String cristalReportParamName = arr[0];
 			ReportParamDataType paramType = ReportParamDataType.valueOf(arr[1]);
 			Object method = RequestParameters.invokeGetter(params, reportParamFieldName);
-			if("reportViewType".equalsIgnoreCase(cristalReportParamName)) {
-				reportType = (ReportType) method;
-				continue;
-			}
 			convertObjectAndPutIntoMap(cristalReportParamName, paramType, method, reportParams);
 		}
 
-		byte[] byt = null;
-		BufferedInputStream in = printingService.getDataBytes(reportName, reportTitle, attachment, reportParams, reportType);
-		if (in == null) {
-			message = "Can't generate PDF to print";
-			byt = message.getBytes();
-		} else {
-			final byte[] data = new byte[1024];
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			while (in.read(data) > -1) {
-				os.write(data);
-			}
+		StringBuilder url = new StringBuilder(rm.getReportFile());
+		reportParams.entrySet().parallelStream().forEach(m -> {
+			url.append("&" + m.getKey() + "=" + m.getValue());
+		});
 
-			byt = os.toByteArray();
-
-			if(ReportType.EXCEL.equals(reportType) || ReportType.EXCEL_DATA.equals(reportType)) {
-				headers.add("Content-Disposition", "attachment; filename=report.xls");
-				headers.setContentType(new MediaType("application", "excel"));
-			} else {
-				headers.add("URL Filter", ".*");
-				headers.add("Original Type", "application/.*pdf");
-				headers.add("Replacement Type", "application/pdf");
-				headers.add("Disposition", "inline");
-			}
-		}
-
-		String encodedString = Base64.getEncoder().encodeToString(byt);
-		return new ResponseEntity<>(encodedString, headers, HttpStatus.OK);
+		return url.toString();
 	}
 
 	private void convertObjectAndPutIntoMap(String paramName, ReportParamDataType paramType, Object method, Map<String, Object> reportParams) {

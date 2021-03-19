@@ -60,7 +60,7 @@ mybatis:
 
 JNDIName: jdbcTemplate
 default: 
-  birtUrl: http://localhost:8080/birt/frameset
+  birtUrl: http://localhost:8080/birt/frameset?__report=khanas/
   allow-system-admin: Y
   site-title: Khana's <span class="title-divider">ERP</span>
   logo-name: asl.png
