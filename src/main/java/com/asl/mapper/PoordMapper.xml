@@ -75,7 +75,7 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<delete id="deletePoordDetail" parameterType="PoordHeader">
+	<delete id="deletePoordDetail" parameterType="PoordDetail">
 		DELETE FROM PoordDetail WHERE xrow=#{xrow} AND xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
 	</delete>
 

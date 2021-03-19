@@ -2,14 +2,13 @@
 
 <mapper namespace="com.asl.mapper.OpdoMapper">
 
-	<insert id="saveOpDoHeader" parameterType="Opdoheader">
-<!-- 		<selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xbomkey}', 6) FROM DUAL
-		</selectKey> -->
+	<insert id="saveOpdoHeader" parameterType="Opdoheader">
+ 		<selectKey keyProperty="xdornum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnopdo}', 6) FROM DUAL
+		</selectKey>
 		INSERT INTO Opdoheader
 		(   
 			xdornum,
-			xemail,
 			xdate,
 			xcus,
 			xtotamt,
@@ -34,6 +33,7 @@
 			xcur,
 			xexch,
 			xvoucher,
+			xtypetrn,
 			
 			zid,
 			zauserid,
@@ -47,21 +47,20 @@
 		VALUES
 		(
 			#{xdornum, jdbcType=VARCHAR},
-			#{zemail, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xcus, jdbcType=VARCHAR},
-			#{xtotamt, jdbcType=INTEGER},
-			#{xvatamt, jdbcType=INTEGER},
+			#{xtotamt, jdbcType=DECIMAL},
+			#{xvatamt, jdbcType=DECIMAL},
 			#{xperson, jdbcType=VARCHAR},
 			#{xpaymenttype, jdbcType=VARCHAR},
-			#{xdiscamt, jdbcType=INTEGER},
+			#{xdiscamt, jdbcType=DECIMAL},
 			#{xordernum, jdbcType=VARCHAR},
 			#{xstatusord, jdbcType=VARCHAR},
 			#{xstatusjv, jdbcType=VARCHAR},
-			#{xpaid, jdbcType=INTEGER},
+			#{xpaid, jdbcType=DECIMAL},
 			#{xref, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
-			#{xchange, jdbcType=INTEGER},
+			#{xchange, jdbcType=DECIMAL},
 			#{xpaystatus, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
 			#{xstatusar, jdbcType=VARCHAR},
@@ -70,8 +69,9 @@
 			#{xdatecom, jdbcType=DATE},
 			#{xdatedue, jdbcType=DATE},
 			#{xcur, jdbcType=VARCHAR},
-			#{xexch, jdbcType=INTEGER},
+			#{xexch, jdbcType=DECIMAL},
 			#{xvoucher, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
 			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -83,20 +83,62 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
+	
+	
+	<update id="updateOpdoHeader" parameterType="Opdoheader">
+		UPDATE
+			Opdoheader
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xcus=#{xcus, jdbcType=VARCHAR},
+			xtotamt=#{xtotamt, jdbcType=DECIMAL},
+			xvatamt=#{xvatamt, jdbcType=DECIMAL},
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+			xdiscamt=#{xdiscamt, jdbcType=DECIMAL},
+			xordernum=#{xordernum, jdbcType=VARCHAR},
+			xstatusord=#{xstatusord, jdbcType=VARCHAR},
+			xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+			xpaid=#{xpaid, jdbcType=DECIMAL},
+			xref=#{xref, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xchange=#{xchange, jdbcType=DECIMAL},
+			xpaystatus=#{xpaystatus, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xstatusar=#{xstatusar, jdbcType=VARCHAR},
+			xstaff=#{xstaff, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xdatecom=#{xdatecom, jdbcType=DATE},
+			xdatedu=#{xdatedue, jdbcType=DATE},
+			xcur=#{xcur, jdbcType=VARCHAR},
+			xexch=#{xexch, jdbcType=DECIMAL},
+			xvoucher=#{xvoucher, jdbcType=VARCHAR},
+			
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xdornum=#{xdornum, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
 
-	<insert id="saveOpDoDetail" parameterType="Opdodetail">
-		<!-- <selectKey keyProperty="xbomkey" resultType="String" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM BmBomDetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
-		</selectKey> -->
+	<insert id="saveOpdoDetail" parameterType="Opdodetail">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COUNT(*) + 1 FROM Opdodetail WHERE xdornum=#{xdornum} AND zactive='1' AND zid=#{zid}
+		</selectKey>
 		INSERT INTO Opdodetail
 		(
 			xrow,
 			xdornum,
-			zemail,
 			xunitsel,
 			xitem,
 			xqtyord,
 			xrate,
+			xlineamt,
 			xcomtype,
 			xdorrow,
 			xlong,
@@ -114,18 +156,18 @@
 		)
 		VALUES
 		(
-			#{xrow, jdbcType=INTEGER},
+			#{xrow},
 			#{xdornum, jdbcType=VARCHAR},
-			#{zemail, jdbcType=VARCHAR},
 			#{xunitsel, jdbcType=VARCHAR},
 			#{xitem, jdbcType=VARCHAR},
-			#{xqtyord, jdbcType=INTEGER},
-			#{xrate, jdbcType=INTEGER},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xrate, jdbcType=DECIMAL},
+			#{xlineamt, jdbcType=DECIMAL},
 			#{xcomtype, jdbcType=VARCHAR},
 			#{xdorrow, jdbcType=INTEGER},
 			#{xlong, jdbcType=VARCHAR},
-			#{xrategrn, jdbcType=INTEGER},
-			#{xqtycrn, jdbcType=INTEGER},
+			#{xrategrn, jdbcType=DECIMAL},
+			#{xqtycrn, jdbcType=DECIMAL},
 			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -138,20 +180,20 @@
 		) 
 	</insert>
 
-	<update id="updateOpDoDetail" parameterType="Opdodetail">
+	<update id="updateOpdoDetail" parameterType="Opdodetail">
 		UPDATE 
 			Opdodetail
 		SET
-			zemail=#{zemail, jdbcType=VARCHAR},
 			xunitsel=#{xunitsel, jdbcType=VARCHAR},
 			xitem=#{xitem, jdbcType=VARCHAR},
-			xqtyord=#{xqtyord, jdbcType=INTEGER},
-			xrate=#{xrate, jdbcType=INTEGER},
+			xqtyord=#{xqtyord, jdbcType=DECIMAL},
+			xrate=#{xrate, jdbcType=DECIMAL},
+			xlineamt=#{xlineamt, jdbcType=DECIMAL},
 			xcomtype=#{xcomtype, jdbcType=VARCHAR},
 			xdorrow=#{xdorrow, jdbcType=INTEGER},
 			xlong=#{xlong, jdbcType=VARCHAR},
-			xrategrn=#{xrategrn, jdbcType=INTEGER},
-			xqtycrn=#{xqtycrn, jdbcType=INTEGER},
+			xrategrn=#{xrategrn, jdbcType=DECIMAL},
+			xqtycrn=#{xqtycrn, jdbcType=DECIMAL},
 			
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -165,20 +207,34 @@
 			AND xdornum=#{xdornum, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="deleteOpdoDetail" parameterType="Opdodetail">
+		DELETE FROM Opdodetail WHERE xpornum=#{xpornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</delete>
+	
+	<update id="updateOpdoHeaderTotalAmt" parameterType="OpdoDetail">
+		UPDATE 
+			Opdoheader
+		SET
+			xtotamt=(SELECT SUM(xlineamt) FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1')
+		WHERE
+			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+	</update>
 
-	<select id="findOpDoHeaderByXdornum" resultType="Opdoheader">
+	<select id="findOpdoHeaderByXdornum" resultType="Opdoheader">
 		SELECT * FROM Opdoheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
-	</select>
-
-	<select id="findOpDoDetailByXrowAndXdornum" resultType="Opdodetail">
-		SELECT * FROM Opdodetail WHERE xrow=#{xrow} AND xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
-	</select>
-
-	<select id="findOpDoDetailByXrow" resultType="Opdodetail">
-		SELECT * FROM Opdodetail WHERE xrow=#{xrow} AND zid=#{zid} AND zactive='1'
-	</select>
-
-	<select id="getAllOpDoHeader" resultType="Opdoheader">
+	</select>	
+	
+	<select id="getAllOpdoHeader" resultType="Opdoheader">
 		SELECT * FROM Opdoheader WHERE zid=#{zid} AND zactive='1'
 	</select>
+
+	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
+		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findOpdoDetailByXdornum" resultType="Opdodetail">
+		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+	</select>
+
 </mapper>

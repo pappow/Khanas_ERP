@@ -1,5 +1,6 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,9 +35,6 @@ public class Opdoheader extends AbstractModel<String> {
 	@Column(name = "xdornum")
 	private String xdornum;
 	
-	@Column(name = "xemail")
-	private String xemail;
-	
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
@@ -44,10 +43,10 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xcus;
 	
 	@Column(name = "xtotamt")
-	private int xtotamt;
+	private BigDecimal xtotamt;
 	
 	@Column(name = "xvatamt")
-	private int xvatamt;
+	private BigDecimal xvatamt;
 	
 	@Column(name = "xperson")
 	private String xperson;
@@ -56,7 +55,7 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xpaymenttype;
 	
 	@Column(name = "xdiscamt")
-	private int xdiscamt;
+	private BigDecimal xdiscamt;
 	
 	@Column(name = "xordernum")
 	private String xordernum;
@@ -68,7 +67,7 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xstatusjv;
 	
 	@Column(name = "xpaid")
-	private int xpaid;
+	private BigDecimal xpaid;
 	
 	@Column(name = "xref")
 	private String xref;
@@ -77,7 +76,7 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xnote;
 	
 	@Column(name = "xchange")
-	private int xchange;
+	private BigDecimal xchange;
 	
 	@Column(name = "xpaystatus")
 	private String xpaystatus;
@@ -106,9 +105,15 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xcur;
 	
 	@Column(name = "xexch")
-	private int xexch;
+	private BigDecimal xexch;
 	
 	@Column(name = "xvoucher")
 	private String xvoucher;
+	
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
+	
+	@Transient
+	private String xtrnopdo;
 	
 }

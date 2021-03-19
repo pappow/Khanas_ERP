@@ -323,9 +323,9 @@ public class PogrnController extends ASLAbstractController {
 		// Validate
 		
 		//Get PogrnHeader record by Xgrnnum
-		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-		pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum());
 		
+		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum());		
 			
 		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
 		responseHelper.setRedirectUrl("/purchasing/pogrn/" + xgrnnum);
@@ -347,6 +347,7 @@ public class PogrnController extends ASLAbstractController {
 			Pocrnheader pocrnHeader = new Pocrnheader();
 			BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
 			pocrnHeader.setXgrnnum(xgrnnum);
+			pocrnHeader.setXstatuscrn("Open");
 			pocrnHeader.setXdate(new Date());
 			pocrnHeader.setXsup(pogrnHeader.getXcus());
 			pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
