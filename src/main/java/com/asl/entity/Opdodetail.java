@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "opdodetail")
 @IdClass(OpdodetailPK.class)
-@EqualsAndHashCode(of = { "zid","xdornum","xrow" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid","xrow","xdornum" }, callSuper = false)
 public class Opdodetail  extends AbstractModel<String>{
 	
 	private static final long serialVersionUID = -2050527945264418934L;
@@ -28,13 +28,13 @@ public class Opdodetail  extends AbstractModel<String>{
 	
 	@Id
 	@Basic(optional = false)
-	@Column(name = "xdornum")
-	private String xdornum;
-
-	@Id
-	@Basic(optional = false)
 	@Column(name = "xrow")
 	private int xrow;
+	
+	@Id
+	@Basic(optional = false)
+	@Column(name = "xdornum")
+	private String xdornum;
 	
 	@Column(name = "xunitsel")
 	private String xunitsel;

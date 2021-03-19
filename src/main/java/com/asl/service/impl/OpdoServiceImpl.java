@@ -93,5 +93,26 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		if(opdoDetail == null) return 0;
 		return opdoMapper.updateOpdoHeaderTotalAmt(opdoDetail);
 	}
+	
+	@Override
+	public long updateOpdoHeaderGrandTotalAmt(Opdoheader opdoHeader) {
+		if(opdoHeader == null) return 0;
+		return opdoMapper.updateOpdoHeaderGrandTotalAmt(opdoHeader);
+	}
+
+	@Override
+	public void procConfirmDO(String xdornum, String p_seq) {
+		opdoMapper.procConfirmDO(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdornum, p_seq);
+	}
+
+	@Override
+	public void procIssuePricing(String xdocnum, String xwh, String p_seq) {
+		opdoMapper.procIssuePricing(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, xwh, p_seq);
+	}
+
+	@Override
+	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq) {
+		opdoMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, p_screen, p_seq);
+	}
 
 }

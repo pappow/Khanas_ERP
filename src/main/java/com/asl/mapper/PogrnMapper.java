@@ -25,6 +25,6 @@ public interface PogrnMapper {
 
 	public List<PogrnHeader> getAllPogrnHeader(String zid);
 	
-	public void procInventory(String zid, String user, String xgrnnum, String xpornum);
-	public void procArhed(String zid, String user, String xgrnnum);
+	public void procInventory(String zid, String user, String xgrnnum, String xpornum, String p_seq);
+	public void procTransferPOtoAP(String zid, String user, String xgrnnum, String p_seq);
 }

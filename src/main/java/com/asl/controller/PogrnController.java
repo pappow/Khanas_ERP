@@ -22,15 +22,12 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordHeader;
+import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.service.ArhedService;
-import com.asl.service.ImtrnService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
-import com.asl.service.PoordService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
@@ -48,13 +45,7 @@ public class PogrnController extends ASLAbstractController {
 	@Autowired
 	private XtrnService xtrnService;
 	@Autowired
-	private PoordService poordService;
-	@Autowired
-	private ImtrnService imtrnService;
-	@Autowired
 	private VataitService vataitService;
-	@Autowired
-	private ArhedService arhedService;
 	
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -93,8 +84,12 @@ public class PogrnController extends ASLAbstractController {
 	private PogrnHeader getDefaultPogrnHeader() {
 		PogrnHeader pogrn = new PogrnHeader();
 		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-		//pogrn.setXtypetrn("Purchase");
+		pogrn.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
+		pogrn.setXtypetrn("Purchase");
 		pogrn.setXtotamt(BigDecimal.ZERO);
+		pogrn.setXvatamt(BigDecimal.ZERO);
+		pogrn.setXdiscprime(BigDecimal.ZERO);
+		pogrn.setXdate(new Date());
 		return pogrn;
 	}
 	
@@ -320,13 +315,34 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+		
+		//Get PogrnHeader record by Xgrnnum		
+		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
 		// Validate
 		
-		//Get PogrnHeader record by Xgrnnum
+		if("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
+			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
+			return responseHelper.getResponse();
+		}		
+		Xcodes xcode = xcodeService.findByXtypesAndXcodes(CodeType.WAREHOUSE.getCode(), pogrnHeader.getXwh());
+		if(xcode == null) {
+			responseHelper.setErrorStatusAndMessage("A valid warehouse must be selected.");
+			return responseHelper.getResponse();
+		}
+		List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+		if(pogrnDetailList.size() == 0) {
+			responseHelper.setErrorStatusAndMessage("Please add detail!");
+			return responseHelper.getResponse();
+		}
+		if(!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
+			pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum(), "Seq");
+		}
+				
 		
-		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-		pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum());		
-			
+		if(!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusap())) {
+			pogrnService.procTransferPOtoAP(xgrnnum, "Seq");
+		}
+		
 		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
 		responseHelper.setRedirectUrl("/purchasing/pogrn/" + xgrnnum);
 		return responseHelper.getResponse();
@@ -352,6 +368,7 @@ public class PogrnController extends ASLAbstractController {
 			pocrnHeader.setXsup(pogrnHeader.getXcus());
 			pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
 			pocrnHeader.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
+			//pocrnHeader.setXtypetrn("??");
 			
 			long count = pocrnService.save(pocrnHeader);
 			if(count == 0) {
@@ -380,7 +397,7 @@ public class PogrnController extends ASLAbstractController {
 			}
 			
 			//Update PoordHeader Status
-			pogrnHeader.setXstatusgrn("GRN Returned");
+			pogrnHeader.setXstatusgrn("GRN Returned"); // Is it final?
 			long pCount = pogrnService.update(pogrnHeader);
 			if(pCount == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);

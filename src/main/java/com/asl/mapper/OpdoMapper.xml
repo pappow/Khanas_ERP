@@ -13,6 +13,7 @@
 			xcus,
 			xtotamt,
 			xvatamt,
+			xgrandtot,
 			xperson,
 			xpaymenttype,
 			xdiscamt,
@@ -51,6 +52,7 @@
 			#{xcus, jdbcType=VARCHAR},
 			#{xtotamt, jdbcType=DECIMAL},
 			#{xvatamt, jdbcType=DECIMAL},
+			#{xgrandtot, jdbcType=DECIMAL},
 			#{xperson, jdbcType=VARCHAR},
 			#{xpaymenttype, jdbcType=VARCHAR},
 			#{xdiscamt, jdbcType=DECIMAL},
@@ -93,6 +95,7 @@
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xtotamt=#{xtotamt, jdbcType=DECIMAL},
 			xvatamt=#{xvatamt, jdbcType=DECIMAL},
+			xgrandtot=#{xgrandtot, jdbcType=DECIMAL},
 			xperson=#{xperson, jdbcType=VARCHAR},
 			xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
 			xdiscamt=#{xdiscamt, jdbcType=DECIMAL},
@@ -134,8 +137,8 @@
 		(
 			xrow,
 			xdornum,
-			xunitsel,
 			xitem,
+			xunitsel,
 			xqtyord,
 			xrate,
 			xlineamt,
@@ -158,8 +161,8 @@
 		(
 			#{xrow},
 			#{xdornum, jdbcType=VARCHAR},
-			#{xunitsel, jdbcType=VARCHAR},
 			#{xitem, jdbcType=VARCHAR},
+			#{xunitsel, jdbcType=VARCHAR},
 			#{xqtyord, jdbcType=DECIMAL},
 			#{xrate, jdbcType=DECIMAL},
 			#{xlineamt, jdbcType=DECIMAL},
@@ -212,11 +215,20 @@
 		DELETE FROM Opdodetail WHERE xpornum=#{xpornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</delete>
 	
-	<update id="updateOpdoHeaderTotalAmt" parameterType="OpdoDetail">
+	<update id="updateOpdoHeaderTotalAmt" parameterType="Opdodetail">
 		UPDATE 
 			Opdoheader
 		SET
 			xtotamt=(SELECT SUM(xlineamt) FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1')
+		WHERE
+			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+	</update>
+	
+	<update id="updateOpdoHeaderGrandTotalAmt" parameterType="Opdoheader">
+		UPDATE 
+			Opdoheader
+		SET
+			xgrandtot=(SELECT SUM(xtotamt + xvatamt) FROM Opdoheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1')
 		WHERE
 			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
 	</update>
@@ -236,5 +248,16 @@
 	<select id="findOpdoDetailByXdornum" resultType="Opdodetail">
 		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
 	</select>
-
+	
+	<select id = "procConfirmDO" statementType = "CALLABLE">
+		{call OP_confirmDO(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procIssuePricing" statementType = "CALLABLE">
+		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdocnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procTransferOPtoAR" statementType = "CALLABLE">
+		{call OP_transferOPtoAR(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_screen, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
 </mapper>

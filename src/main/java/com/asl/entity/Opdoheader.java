@@ -113,6 +113,11 @@ public class Opdoheader extends AbstractModel<String> {
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 	
+	//Added as for confirm Opdo procedure pre event
+	
+	@Column(name = "xgrandtot")
+	private BigDecimal xgrandtot;
+	
 	@Transient
 	private String xtrnopdo;
 	

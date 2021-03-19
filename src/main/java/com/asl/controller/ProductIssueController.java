@@ -29,7 +29,7 @@ public class ProductIssueController extends ASLAbstractController {
 	private ImtrnService imtrnService;
 	
 	@GetMapping
-	public String loadImtrnPage(Model model) {
+	public String loadProductIssuePage(Model model) {
 		/*
 		model.addAttribute("pogrnheader", getDefaultPogrnHeader());
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
@@ -44,7 +44,7 @@ public class ProductIssueController extends ASLAbstractController {
 	}
 	
 	@GetMapping("/{xgrnnum}")
-	public String loadImtrnPage(@PathVariable String xgrnnum, Model model) {
+	public String loadProductIssuePage(@PathVariable String xgrnnum, Model model) {
 		
 		/*
 		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 

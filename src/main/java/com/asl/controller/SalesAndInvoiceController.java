@@ -218,6 +218,47 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  xdornum);
 		return responseHelper.getResponse();
 	}
+	
+	@GetMapping("/confirmopdo/{xdornum}")
+	public @ResponseBody Map<String, Object> confirmOpdo(@PathVariable String xdornum){
+		if(StringUtils.isBlank(xdornum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
+		
+		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
+		
+		if(opdoDetailList.size()==0){
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		if(!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
+			opdoHeader.setXpaid(BigDecimal.valueOf(paid));
+		}
+		Integer xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99)).intValue();
+		
+		if(grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+			responseHelper.setErrorStatusAndMessage("Paid amount not to be less than Receivable!");
+			return responseHelper.getResponse();
+		}
+		
+		//Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		//PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
+			opdoService.procConfirmDO(xdornum, "Seq");
+			opdoService.procIssuePricing(xdornum, opdoHeader.getXwh(), "Seq");
+		}
+		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())){
+			opdoService.procTransferOPtoAR(xdornum, "opdoheader", "Seq");
+		}
+			
+		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
+		return responseHelper.getResponse();
+	}
 
 
 }

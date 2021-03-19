@@ -15,6 +15,7 @@ public interface OpdoService {
 	public long save(Opdoheader opdoHeader);
 	public long update(Opdoheader opdoHeader);
 	public long updateOpdoHeaderTotalAmt(Opdodetail opdoDetail);
+	public long updateOpdoHeaderGrandTotalAmt(Opdoheader opdoheader);
 	
 	public long saveDetail(Opdodetail opdoDetail);
 	public long updateDetail(Opdodetail opdoDetail);
@@ -25,4 +26,9 @@ public interface OpdoService {
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum);
+	
+	//Procedure Calls
+	public void procConfirmDO(String xdornum, String p_seq);
+	public void procIssuePricing(String xdocnum, String xwh, String p_seq);
+	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq);
 }

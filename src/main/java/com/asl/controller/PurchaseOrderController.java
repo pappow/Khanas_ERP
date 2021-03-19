@@ -250,8 +250,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 			pogrnHeader.setXpornum(xpornum);
 			pogrnHeader.setXstatusgrn("Open");
 			pogrnHeader.setXdate(new Date());
-			pogrnHeader.setXtype(TransactionCodeType.PO_GRN_NUMBER.getCode());
-			pogrnHeader.setXtrngrn(TransactionCodeType.PO_GRN_NUMBER.getdefaultCode());
+			pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
+			pogrnHeader.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 			
 			long count = pogrnService.save(pogrnHeader);
 			if(count == 0) {
