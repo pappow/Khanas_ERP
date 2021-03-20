@@ -32,7 +32,7 @@ public class SUPPLIERLISTReportFieldServiceImpl extends AbstractReportService {
 				fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
 				
 				//xphone
-				fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", true));
+				fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", false));
 				
 				//xgcus
 				fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Corporate", true));

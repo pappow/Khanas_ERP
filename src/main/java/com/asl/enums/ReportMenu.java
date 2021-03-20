@@ -11,12 +11,13 @@ import com.asl.model.ReportParamMap;
 public enum ReportMenu {
 
 	// Procurements report
-	SUPPLIERLIST(1, "SUPPLIERLIST", "Supplier List", ReportParamMap.SUPPLIER_LIST, "SupplierReport.rptdesign", "supplierList", "Y", "/report/SUPPLIERLIST"),
-	CUSTOMERLIST(2, "CUSTOMERLIST", "Customer List", ReportParamMap.CUSTOMER_LIST, "CustomerReport.rptdesign", "customerList", "Y", "/report/CUSTOMERLIST"),
+	SUPPLIERLIST(1, "SUPPLIERLIST", "Supplier List", ReportParamMap.SUPPLIER_LIST, "SupplierList.rptdesign", "supplierList", "Y", "/report/SUPPLIERLIST"),
+	CUSTOMERLIST(2, "CUSTOMERLIST", "Customer List", ReportParamMap.CUSTOMER_LIST, "CustomerList.rptdesign", "customerList", "Y", "/report/CUSTOMERLIST"),
 	STOCKLIST(3, "STOCKLIST", "Stock List", ReportParamMap.STOCK_LIST, "Imstock.rptdesign", "stockList", "Y", "/report/STOCKLIST"),
 	ITEMLIST(4, "ITEMLIST", "Item List", ReportParamMap.ITEM_LIST, "ItemList.rptdesign", "itemList", "Y", "/report/ITEMLIST"),
-	PURCHASEORDERLIST(5, "PURCHASEORDERLIST", "Purches Order List", ReportParamMap.PURCHASEORDER_LIST, "PurchaseOrderListing.rptdesign", "purchaseorderList", "Y", "/report/PURCHASEORDERLIST"),
-	GRNLIST(6, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnListing.rptdesign", "grnList", "Y", "/report/GRNLIST");
+	PURCHASEORDERLIST(5, "PURCHASEORDERLIST", "Purchase Order List", ReportParamMap.PURCHASEORDER_LIST, "PurchaseOrderListing.rptdesign", "purchaseorderList", "Y", "/report/PURCHASEORDERLIST"),
+	GRNLIST(6, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnList.rptdesign", "grnList", "Y", "/report/GRNLIST"),
+	PURCHASEDEVIATION(7, "PURCHASEDEVIATION", "Purchase Deviation List", ReportParamMap.PURCHASED_DEVIATION, "PurchaseDeviation.rptdesign", "purchaseDivisionList", "Y", "/report/PURCHASEDEVIATION");
 	
 	private int group;
 	private String code;

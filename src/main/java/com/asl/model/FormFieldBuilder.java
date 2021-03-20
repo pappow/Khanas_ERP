@@ -25,6 +25,7 @@ public class FormFieldBuilder {
 	private int seqn;
 
 	private String defaultInputValue;
+	private int defaultIntValue;
 	private Date defaultDateValue;
 	private boolean startDate;
 	private String defaultTime;
@@ -65,7 +66,16 @@ public class FormFieldBuilder {
 		ffb.setRequired(required);
 		return ffb;
 	}
-
+	
+	public static FormFieldBuilder generateNumberField(int sequence, String prompt, int defaultValue, boolean required) {
+		FormFieldBuilder ffb = new FormFieldBuilder();
+		ffb.setPrompt(prompt);
+		ffb.setSeqn(sequence);
+		ffb.setFieldType(FormFieldType.NUMBER);
+		ffb.setDefaultInputValue(String.valueOf(defaultValue));
+		ffb.setRequired(required);
+		return ffb;
+	}
 
 	/**
 	 * Generate Date field
