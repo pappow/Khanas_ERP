@@ -1,5 +1,7 @@
 package com.asl.controller;
 
+import java.util.List;
+
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.asl.config.AppConfig;
+import com.asl.entity.ProcErrorLog;
 import com.asl.entity.Zbusiness;
 import com.asl.enums.ReportMenu;
 import com.asl.model.MenuProfile;
@@ -16,6 +19,7 @@ import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
+import com.asl.service.ProcErrorLogService;
 import com.asl.service.ProfileService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
@@ -47,6 +51,7 @@ public class ASLAbstractController {
 	@Autowired protected FormPagingService formPagingService;
 	@Autowired protected XtrnService xtrnService;
 	@Autowired protected XcodesService xcodesService;
+	@Autowired protected ProcErrorLogService errorService;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {
@@ -101,6 +106,18 @@ public class ASLAbstractController {
 			log.error(ERROR, e.getMessage(), e);
 			return null;
 		}
+	}
+
+	protected String getProcedureErrorMessages(String errorCode) {
+		List<ProcErrorLog> errors = errorService.findByAction(errorCode);
+
+		if(errors != null && !errors.isEmpty()) return null;
+
+		StringBuilder message = new StringBuilder();
+		errors.parallelStream().forEach(e -> {
+			message.append(e.getOsqlCode() + " - " + e.getErrorMessage());
+		});
+		return message.toString();
 	}
 
 //	protected ImportExportService getImportExportService(String module) {

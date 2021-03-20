@@ -29,4 +29,6 @@ public interface BmbomMapper {
 
 	public long archiveBmbomdetailByXbomkey(String xbomkey, String zid);
 	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
+
+	public void explodeBom(String zid, String user, String batch, String action, String errseq);
 }
