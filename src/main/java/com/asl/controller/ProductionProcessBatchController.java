@@ -114,8 +114,16 @@ public class ProductionProcessBatchController extends ASLAbstractController {
 
 	@PostMapping("/explodebom/{xbatch}")
 	public @ResponseBody Map<String, Object> expload(@PathVariable String xbatch, Model model){
-		
-		
+		String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+
+		// call bom expload proc
+		bmbomService.explodeBom(xbatch, "Explode", errorCode);
+		String em = getProcedureErrorMessages(errorCode);
+		if(StringUtils.isNotBlank(em)) {
+			responseHelper.setErrorStatusAndMessage(em);
+			return responseHelper.getResponse();
+		}
+
 		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
 	} 

@@ -21,23 +21,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Immofgdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpordService;
 import com.asl.service.XtrnService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zubayer Ahamed
  * @since Mar 9, 2021
  */
+@Slf4j
 @Controller
 @RequestMapping("/salesninvoice/salesorderchalan")
 public class SalesOrderChalanController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
 	@Autowired private XtrnService xtrnService;
+	@Autowired private ImmofgdetailService immofgdetailService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -253,6 +259,22 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		if(oh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
+		}
+
+		// transfer all chalan deails to immofgdetail
+		List<Oporddetail> chalandetails = opordService.findOporddetailByXordernum(oh.getXordernum());
+		for(Oporddetail c : chalandetails) {
+			Immofgdetail id = new Immofgdetail();
+			id.setXtornum(c.getXordernum());
+			id.setXrow(c.getXrow());
+			id.setXunit(c.getXunit());
+			id.setXitem(c.getXitem());
+			id.setXqtyord(c.getXqtyord());
+			id.setXnote(c.getXlong());
+			long count = immofgdetailService.save(id);
+			if(count == 0) {
+				log.error("ERROR is : {}", "Can't insert chaland details to Immofgdetail table for chalan " + c.getXordernum());
+			}
 		}
 
 		// now lock chalan

@@ -90,5 +90,8 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 		return bmbomMapper.deleteBmbomdetailByXbomkeyAndXbomrow(bmbomdetail);
 	}
 
-	
+	@Override
+	public void explodeBom(String batch, String action, String errseq) {
+		bmbomMapper.explodeBom(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), batch, action, errseq);
+	}
 }

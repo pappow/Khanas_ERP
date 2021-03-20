@@ -29,4 +29,6 @@ public interface BmbomService {
 
 	public long archiveBmbomdetailByXbomkey(String xbomkey);
 	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
+
+	public void explodeBom(String batch, String action, String errseq);
 }

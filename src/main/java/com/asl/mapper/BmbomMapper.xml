@@ -194,4 +194,12 @@
 			AND zid=#{zid}
 	</delete>
 
+	<select id = "explodeBom" statementType = "CALLABLE">
+		{call MO_ExplodeBOM(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	
+	
+	
+	
 </mapper>
