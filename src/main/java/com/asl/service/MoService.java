@@ -27,4 +27,7 @@ public interface MoService {
 	public List<Moheader> getAllMoheader();
 
 	public Moheader findMoheaderByXchalanAndXitem(String xchalan, String xitem);
+	public Modetail findModetailByXbatchAndXitem(String xbatch, String xitem);
+
+	public void processProduction(String batch, String action, String errseq);
 }

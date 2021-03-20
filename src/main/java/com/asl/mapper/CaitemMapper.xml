@@ -176,4 +176,16 @@
 			AND xgitem='Raw Materials'
 			AND zactive='1'
 	</select>
+
+	<select id="getWithoutProductionCaitems" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE 
+			(UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') 
+			AND zid=#{zid} 
+			AND xproditem!='1'
+			AND zactive='1'
+	</select>
 </mapper>

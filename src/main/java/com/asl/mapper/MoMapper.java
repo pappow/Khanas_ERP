@@ -27,5 +27,7 @@ public interface MoMapper {
 	public List<Moheader> getAllMoheader(String zid);
 
 	public Moheader findMoheaderByXchalanAndXitem(String xchalan, String xitem, String zid);
+	public Modetail findModetailByXbatchAndXitem(String xbatch, String xitem, String zid);
 
+	public void processProduction(String batch, String action, String errseq, String zid, String user);
 }

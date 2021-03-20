@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +63,7 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 
 	@Override
 	public List<Modetail> findModetailByXbatch(String xbatch) {
-		if(StringUtils.isBlank(xbatch)) return null;
+		if(StringUtils.isBlank(xbatch)) return Collections.emptyList();
 		return moMapper.findModetailByXbatch(xbatch, sessionManager.getBusinessId());
 	}
 
@@ -75,6 +76,17 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public Moheader findMoheaderByXchalanAndXitem(String xchalan, String xitem) {
 		if(StringUtils.isBlank(xchalan) || StringUtils.isBlank(xitem)) return null;
 		return moMapper.findMoheaderByXchalanAndXitem(xchalan, xitem, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Modetail findModetailByXbatchAndXitem(String xbatch, String xitem) {
+		if(StringUtils.isBlank(xbatch) || StringUtils.isBlank(xitem)) return null;
+		return moMapper.findModetailByXbatchAndXitem(xbatch, xitem, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public void processProduction(String batch, String action, String errseq) {
+		moMapper.processProduction(batch, action, errseq, sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername());
 	}
 
 	
