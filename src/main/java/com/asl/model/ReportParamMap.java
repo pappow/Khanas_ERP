@@ -13,6 +13,10 @@ public class ReportParamMap {
 
 	public static final Map<String, String> SUPPLIER_LIST = new HashMap<>();
 	public static final Map<String, String> CUSTOMER_LIST = new HashMap<>();
+	public static final Map<String, String> STOCK_LIST = new HashMap<>();
+	public static final Map<String, String> ITEM_LIST = new HashMap<>();
+	public static final Map<String, String> PURCHASEORDER_LIST = new HashMap<>();
+	public static final Map<String, String> GRN_LIST = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -49,12 +53,36 @@ public class ReportParamMap {
 	public static final Map<String, String> OSS = new HashMap<>();
 
 	static {
-		SUPPLIER_LIST.put("param1", "zid|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param3", "XORG|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param5", "ZGCUS|" + ReportParamDataType.STRING.name());
+		SUPPLIER_LIST.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
 
-		CUSTOMER_LIST.put("param1", "zid|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param2", "fdate|" + ReportParamDataType.DATE.name());
-		CUSTOMER_LIST.put("param3", "tdate|" + ReportParamDataType.DATE.name());
-
+		CUSTOMER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param3", "XORG|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param5", "ZGCUS|" + ReportParamDataType.STRING.name());
+		CUSTOMER_LIST.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
+		
+		STOCK_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		STOCK_LIST.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
+		STOCK_LIST.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
+		
+		ITEM_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		ITEM_LIST.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
+		ITEM_LIST.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
+		ITEM_LIST.put("param4", "XCATITEM|" + ReportParamDataType.STRING.name());
+		ITEM_LIST.put("param5", "XGITEAM|" + ReportParamDataType.STRING.name());
+		ITEM_LIST.put("param6", "XPRODITEM|" + ReportParamDataType.STRING.name());
+		
+		PURCHASEORDER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		PURCHASEORDER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		PURCHASEORDER_LIST.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
+		PURCHASEORDER_LIST.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
+		
 		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
 		SRS.put("param3", "tdate|" + ReportParamDataType.DATE.name());

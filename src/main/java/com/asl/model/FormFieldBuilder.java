@@ -55,6 +55,17 @@ public class FormFieldBuilder {
 		ffb.setDefaultInputValue(defaultValue);
 		return ffb;
 	}
+	
+	public static FormFieldBuilder generateInputField(int sequence, String prompt, String defaultValue, boolean required) {
+		FormFieldBuilder ffb = new FormFieldBuilder();
+		ffb.setPrompt(prompt);
+		ffb.setSeqn(sequence);
+		ffb.setFieldType(FormFieldType.INPUT);
+		ffb.setDefaultInputValue(defaultValue);
+		ffb.setRequired(required);
+		return ffb;
+	}
+
 
 	/**
 	 * Generate Date field
