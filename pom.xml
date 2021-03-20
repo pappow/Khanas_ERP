@@ -131,7 +131,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<finalName>ASL-ERP</finalName>
+					<finalName>KHANAS-ERP</finalName>
 				</configuration>
 			</plugin>
 			<plugin>

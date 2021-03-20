@@ -52,7 +52,7 @@
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/production/bom}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(batch.xbatch)}" th:href="@{/production/bom}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${#strings.isEmpty(batch.xbatch)}" th:href="@{/production/batch}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" th:href="@{/production/batch/explodebom/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-bomb"></i> Explode BOM</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail ne null and batch.xstatusmor eq 'Open'}" th:href="@{/production/batch/processproduction/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-mortar-pestle"></i> Process Production</a>
@@ -229,7 +229,7 @@
 											<th>Req. Qty.</th>
 											<th>Unit</th>
 											<th>Type</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${batch.xstatusmor eq 'Open'}">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/production/batch/} + ${batch.xbatch} + '/batchdetail/new/show', data-target-modal='batchdetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -243,7 +243,7 @@
 											<td th:text="${bd.xqtyreq}"></td>
 											<td th:text="${bd.xunit}"></td>
 											<td th:text="${bd.xtype}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${batch.xstatusmor eq 'Open'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/} + ${batch.xbatch} + '/batchdetail/' + ${bd.xrow} + '/show', data-target-modal='batchdetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/production/batch/} + ${batch.xbatch} + '/batchdetail/' + ${bd.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
