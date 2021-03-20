@@ -34,20 +34,28 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 
 	@Override
 	public long saveDetail(ImtorDetail imtorDetail) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
+		imtorDetail.setZid(sessionManager.getBusinessId());
+		long count = imtorMapper.saveImtorDetail(imtorDetail);
+		//if(count != 0) {count = updatePoordHeaderTotalAmt(imtorDetail);}
+		return count;
 	}
 
 	@Override
 	public long updateDetail(ImtorDetail imtorDetail) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
+		imtorDetail.setZid(sessionManager.getBusinessId());
+		long count = imtorMapper.updateImtorDetail(imtorDetail);
+		//if(count != 0) {count = updatePoordHeaderTotalAmt(imtorDetail);}
+		return count;
 	}
 
 	@Override
 	public long deleteDetail(ImtorDetail imtorDetail) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(imtorDetail == null) return 0;
+		long count = imtorMapper.deleteImtorDetail(imtorDetail);
+		//if(count != 0) {count = updatePoordHeaderTotalAmt(imtorDetail);}
+		return count;
 	}
 
 	@Override
@@ -72,8 +80,9 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 
 	@Override
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow) {
-		// TODO Auto-generated method stub
-		return null;
+		if (StringUtils.isBlank(xtornum) || xrow == 0)
+			return null;
+		return imtorMapper.findImtorDetailByXtornumAndXrow(xtornum, xrow, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -81,6 +90,17 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		if (StringUtils.isBlank(xtornum) || StringUtils.isBlank(xitem))
 			return null;
 		return imtorMapper.findImtorDetailByXtornumAndXitem(xtornum, xitem, sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail) {
+		if(imtorDetail == null) return 0;
+		return imtorMapper.updateImtorHeaderTotalAmt(imtorDetail);
+	}
+
+	@Override
+	public void procConfirmTO(String xtornum, String p_action, String p_seq) {
+		imtorMapper.procConfirmTO(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtornum, p_action, p_seq);
 	}
 
 }

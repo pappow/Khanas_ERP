@@ -24,8 +24,8 @@ public interface PocrnMapper {
 	public Pocrndetail findPocrnDetailByXcrnnumAndXrow(String xcrnnum, int xrow, String zid);
 	
 	//Procedures
-	public void procConfirmCRN(String zid, String user, String xcrnnum);	
-	public void procIssuePricing(String zid, String user, String xtrnnum, String xwh);
-	public void procTransferPRtoAP(String zid, String user, String xcrnnum);
+	public void procConfirmCRN(String zid, String user, String xcrnnum, String p_seq);	
+	public void procIssuePricing(String zid, String user, String xtrnnum, String xwh, String p_seq);
+	public void procTransferPRtoAP(String zid, String user, String xcrnnum, String p_seq);
 	
 }

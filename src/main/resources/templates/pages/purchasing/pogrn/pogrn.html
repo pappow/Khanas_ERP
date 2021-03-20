@@ -53,10 +53,10 @@
 									<div class="form-action-button">
 										<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/confirmgrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-success confirmgrn-btn-link"><i class="fas fa-tick-alt"></i> Confirm/Finalize</a>
 										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == false}" th:href="@{/purchasing/pogrn/restore/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
 										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>

@@ -1,5 +1,6 @@
 package com.asl.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -26,6 +27,10 @@ public interface OpdoService {
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum);
+	
+	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatus, Date date);
+	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
+	public List<Opdoheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
 	
 	//Procedure Calls
 	public void procConfirmDO(String xdornum, String p_seq);

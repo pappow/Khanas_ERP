@@ -26,8 +26,8 @@ public interface PocrnService {
 	public Pocrndetail findPocrnDetailByXcrnnumAndXrow(String xcrnnum, int xrow);
 	
 	//Procedure Calls
-	public void procConfirmCRN(String xcrnnum);	
-	public void procIssuePricing(String xtrnnum, String xwh);
-	public void procTransferPRtoAP(String xcrnnum);
+	public void procConfirmCRN(String xcrnnum, String p_seq);	
+	public void procIssuePricing(String xtrnnum, String xwh, String p_seq);
+	public void procTransferPRtoAP(String xcrnnum, String p_seq);
 
 }

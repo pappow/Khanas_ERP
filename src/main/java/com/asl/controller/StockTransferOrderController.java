@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
+import com.asl.entity.PogrnDetail;
+import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -161,7 +164,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	@PostMapping("/imtordetail/save")
 	public @ResponseBody Map<String, Object> savePoorddetail(ImtorDetail imtorDetail){
-		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) {
+		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum()) || StringUtils.isBlank(imtorDetail.getXitem())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -208,83 +211,54 @@ public class StockTransferOrderController extends ASLAbstractController {
 		return "pages/inventory/transferorder/imtor::imtordetailtable";
 	}
 	
-	/*
-	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
-		PoordDetail pd = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
-		if(pd == null) {
+	
+	@PostMapping("{xtornum}/imtordetail/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteImtorDetail(@PathVariable String xtornum, @PathVariable String xrow, Model model) {
+		ImtorDetail detail = imtorService.findImtorDetailByXtornumAndXrow(xtornum, Integer.parseInt(xrow));
+		if(detail == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
-		long count = poordService.deleteDetail(pd);
+		long count = imtorService.deleteDetail(detail);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  xpornum);
+		responseHelper.setRedirectUrl("/inventory/transferorder/" +  xtornum);
 		return responseHelper.getResponse();
 	}
-	
-	
-	@GetMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrn(@PathVariable String xpornum){
-		if(StringUtils.isBlank(xpornum)) {
+
+	@GetMapping("/confirmimtor/{xtornum}")
+	public @ResponseBody Map<String, Object> confirmimtor(@PathVariable String xtornum){
+		if(StringUtils.isBlank(xtornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+		
+		//Get PogrnHeader record by Xgrnnum		
+		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
 		// Validate
-
-		// Get PoordHeader record by Xpornum
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader != null) {
-			PogrnHeader pogrnHeader = new PogrnHeader();
-			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-			pogrnHeader.setXdate(new Date());
-			pogrnHeader.setXtype(TransactionCodeType.PO_GRN_NUMBER.getCode());
-			pogrnHeader.setXtrngrn(TransactionCodeType.PO_GRN_NUMBER.getdefaultCode());
-			
-			long count = pogrnService.save(pogrnHeader);
-			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-			
-			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
-			//Get PO items to copy them in GRN.
-			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
-			PogrnDetail pogrnDetail;
-			for(int i=0; i< poordDetailList.size(); i++) {
-				pogrnDetail = new PogrnDetail();
-				//Copying PO items to GRN items.
-				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
-				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
-				pogrnDetail.setXqtygrn(poordDetailList.get(i).getXqtyord());
-				long nCount = pogrnService.saveDetail(pogrnDetail);
-				
-				// Update Inventory				
-				if(nCount == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					return responseHelper.getResponse();
-				}				
-			}
-			
-			//Update PoordHeader Status
-			poordHeader.setXstatuspor("GRN Created");
-			long pCount = poordService.update(poordHeader);
-			if(pCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}			
-			 
-			responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		
+		if("Confirmed".equalsIgnoreCase(imtorHeader.getXstatustor())) {
+			responseHelper.setErrorStatusAndMessage("Transfer Order already confirmed");
 			return responseHelper.getResponse();
-		}	
-		responseHelper.setStatus(ResponseStatus.ERROR);
+		}
+		List<ImtorDetail> imtorDetailList = imtorService.findImtorDetailByXtornum(xtornum);
+		if(imtorDetailList.size() == 0) {
+			responseHelper.setErrorStatusAndMessage("Please add detail!");
+			return responseHelper.getResponse();
+		}
+		String p_seq;
+		if(!"Confirmed".equalsIgnoreCase(imtorHeader.getXstatustor())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			imtorService.procConfirmTO(xtornum, "Issue and Receive", p_seq);
+		}
+		
+		responseHelper.setSuccessStatusAndMessage("Transfer Order Confirmed successfully");
+		responseHelper.setRedirectUrl("/inventory/transferorder/" + xtornum);
 		return responseHelper.getResponse();
 	}
-*/
 }

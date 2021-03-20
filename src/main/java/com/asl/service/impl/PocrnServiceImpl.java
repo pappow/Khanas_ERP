@@ -93,18 +93,18 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 	}
 
 	@Override
-	public void procConfirmCRN(String xcrnnum) {
-		pocrnMapper.procConfirmCRN(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum);
+	public void procConfirmCRN(String xcrnnum, String p_seq) {
+		pocrnMapper.procConfirmCRN(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum, p_seq);
 	}
 
 	@Override
-	public void procIssuePricing(String xtrnnum, String xwh) {
-		pocrnMapper.procIssuePricing(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtrnnum, xwh);
+	public void procIssuePricing(String xtrnnum, String xwh, String p_seq) {
+		pocrnMapper.procIssuePricing(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtrnnum, xwh, p_seq);
 	}
 
 	@Override
-	public void procTransferPRtoAP(String xcrnnum) {
-		pocrnMapper.procTransferPRtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum);
+	public void procTransferPRtoAP(String xcrnnum, String p_seq) {
+		pocrnMapper.procTransferPRtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum, p_seq);
 	}	
 
 }

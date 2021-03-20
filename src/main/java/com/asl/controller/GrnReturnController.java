@@ -227,18 +227,32 @@ public class GrnReturnController extends ASLAbstractController {
 		Pocrnheader pocrnHeader = pocrnService.findPocrnHeaderByXcrnnum(xcrnnum);
 		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pocrnHeader.getXgrnnum());
 		List<Pocrndetail> pocrnHeaderList = pocrnService.findPocrnDetailByXcrnnum(xcrnnum);
+		
+		
 		if(!"Open".equalsIgnoreCase(pocrnHeader.getXstatusgrn())) {
-			responseHelper.setErrorStatusAndMessage("Data already exists. Please add another one or update existing");
+			responseHelper.setErrorStatusAndMessage("PRN already confirmed");
 			return responseHelper.getResponse();
 		}
 		if(pocrnHeaderList.size() == 0) {
-			responseHelper.setErrorStatusAndMessage("Item add another one or update existing");
+			responseHelper.setErrorStatusAndMessage("Please add details!");
 			return responseHelper.getResponse();
 		}
-		
-		pocrnService.procConfirmCRN(xcrnnum);
-		pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh());
-		pocrnService.procTransferPRtoAP(xcrnnum);
+		String p_seq;
+		if(!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pocrnService.procConfirmCRN(xcrnnum, p_seq);
+			//Error check for procConfirmCRN
+			
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh(), p_seq);		
+			//Error check for procIssuePricing
+			
+		}
+		if(!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pocrnService.procTransferPRtoAP(xcrnnum, p_seq);
+			//Error check for procTransferPRtoAP
+		}
 		
 		responseHelper.setSuccessStatusAndMessage("PRN Confirmed successfully");
 		responseHelper.setRedirectUrl("/procurement/grnreturn/" + xcrnnum);

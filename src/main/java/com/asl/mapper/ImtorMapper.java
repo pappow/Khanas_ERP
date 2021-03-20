@@ -24,4 +24,9 @@ public interface ImtorMapper {
 	public ImtorDetail findImtorDetailByXtornumAndXitem(String xtornum, String xitem, String zid);
 	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum, String zid);
 	
+	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail);
+	
+	//Procedure Calls
+	public void procConfirmTO(String zid, String user, String xtornum, String p_action, String p_seq);
+	
 }

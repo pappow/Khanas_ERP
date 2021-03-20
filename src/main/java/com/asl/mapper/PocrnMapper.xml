@@ -192,17 +192,18 @@
 	</select>
 	
 	<select id = "procConfirmCRN" statementType = "CALLABLE">
-		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xcrnnum, jdbcType = VARCHAR, mode = IN})}
+		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, 
+			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 	
 	<select id = "procIssuePricing" statementType = "CALLABLE">
 		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
-			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN})}
+			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 	
 	<select id = "procTransferPRtoAP" statementType = "CALLABLE">
 		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
-			#{xcrnnum, jdbcType = VARCHAR, mode = IN})}
+			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
 
