@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -113,6 +114,24 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	@Override
 	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq) {
 		opdoMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, p_screen, p_seq);
+	}
+
+	@Override
+	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatus, Date date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Opdoheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

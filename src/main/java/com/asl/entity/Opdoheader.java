@@ -35,6 +35,10 @@ public class Opdoheader extends AbstractModel<String> {
 	@Column(name = "xdornum")
 	private String xdornum;
 	
+	//This column acts as chalan reference
+	@Column(name = "xdocnum")
+	private String xdocnum;
+	
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;

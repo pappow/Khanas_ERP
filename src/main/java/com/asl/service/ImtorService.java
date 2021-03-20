@@ -25,5 +25,10 @@ public interface ImtorService {
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow);
 	public ImtorDetail findImtorDetailByXtornumAndXitem(String xtornum, String xitem);
 	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum);
+	
+	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail);
+	
+	//Procedure calls
+	public void procConfirmTO(String xtornum, String p_action, String p_seq);
 
 }

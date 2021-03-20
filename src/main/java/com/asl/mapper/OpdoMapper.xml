@@ -9,6 +9,7 @@
 		INSERT INTO Opdoheader
 		(   
 			xdornum,
+			xdocnum,
 			xdate,
 			xcus,
 			xtotamt,
@@ -48,6 +49,7 @@
 		VALUES
 		(
 			#{xdornum, jdbcType=VARCHAR},
+			#{xdocnum, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xcus, jdbcType=VARCHAR},
 			#{xtotamt, jdbcType=DECIMAL},
@@ -91,6 +93,7 @@
 		UPDATE
 			Opdoheader
 		SET
+			xdocnum=#{xdocnum, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xtotamt=#{xtotamt, jdbcType=DECIMAL},

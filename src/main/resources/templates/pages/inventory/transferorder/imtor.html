@@ -55,6 +55,7 @@
 										<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(imtorheader.xtornum)}" th:href="@{/inventory/transferorder}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Create Order</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success confirmimtor-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/archive/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == false}" th:href="@{/inventory/transferorder/restore/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -215,7 +216,7 @@
 											<td th:text="${d.xrow}"></td>
 											<td th:text="${d.xitem}"></td>
 											<td th:text="${d.xqtyord}"></td>
-											<td th:text="${d.xunit"></td>
+											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/inventory/transferorder/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/show', data-target-modal='imtordetailmodal'"><i class="fas fa-edit"></i></button>
@@ -239,6 +240,28 @@
 	</body>
 	
 	<script>
-		$(document).ready(function(){});
+		$(document).ready(function(){
+			$('a.confirmimtor-btn-link').off('click').on('click', function(e){
+				e.preventDefault();
+				var tornum = $("#xtornum").val();
+				
+				$.ajax({
+					url: getBasepath() + "/inventory/transferorder/confirmimtor/" + tornum,
+					success: function(result){
+						var status = result.status.toLowerCase();
+						
+						if(status == "success")
+							showMessage("success", "Transfer Order Confirmed");
+						else if(status == "error")
+							showMessage("error", result.message);
+						//location.reload(true);
+						setTimeout(() => {
+							location.reload(true);
+						}, 1200);
+					}
+				});
+			});
+		});
+		
 	</script>
 </html>

@@ -147,6 +147,10 @@
 		SELECT * FROM ImtorHeader WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
+		SELECT * FROM ImtorHeader WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	<select id="getAllImtorHeader" resultType="ImtorHeader">
 		SELECT * FROM ImtorHeader WHERE zid=#{zid} AND zactive='1'
 	</select>
@@ -157,5 +161,9 @@
 
 	<select id="findImtorDetailByXtornumAndXitem" resultType="ImtorDetail">
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id = "procConfirmTO" statementType = "CALLABLE">
+		{call IM_confirmTO(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xtornum, jdbcType = VARCHAR, mode = IN}, #{p_action, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 </mapper>

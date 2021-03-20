@@ -334,13 +334,16 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please add detail!");
 			return responseHelper.getResponse();
 		}
+		String p_seq;
 		if(!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
-			pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum(), "Seq");
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum(), p_seq);
 		}
 				
 		
 		if(!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusap())) {
-			pogrnService.procTransferPOtoAP(xgrnnum, "Seq");
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pogrnService.procTransferPOtoAP(xgrnnum, p_seq);
 		}
 		
 		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
