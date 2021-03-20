@@ -228,6 +228,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
 		
+		
 		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
 		
 		if(opdoDetailList.size()==0){
@@ -247,15 +248,26 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		
 		//Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		//PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		
+		String p_seq;
 		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
-			opdoService.procConfirmDO(xdornum, "Seq");
-			opdoService.procIssuePricing(xdornum, opdoHeader.getXwh(), "Seq");
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procConfirmDO(xdornum, p_seq);
+			//Error check here for procConfrimDo
+			
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procIssuePricing(xdornum, opdoHeader.getXwh(), p_seq);
+			//Error check here for procIssuePricing
+			
 		}
 		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())){
-			opdoService.procTransferOPtoAR(xdornum, "opdoheader", "Seq");
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procTransferOPtoAR(xdornum, "opdoheader", p_seq);
+			//Error check here for procTransferOPtoAR
+			
 		}
 			
-		responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
+		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
 		return responseHelper.getResponse();
 	}
