@@ -83,4 +83,6 @@ public class Moheader extends AbstractModel<String> {
 
 	@Transient
 	private String Xqtyprdunit;
+	@Transient
+	private String xdesc;
 }

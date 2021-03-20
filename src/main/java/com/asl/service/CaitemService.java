@@ -23,4 +23,5 @@ public interface CaitemService {
 	public List<Caitem> searchCentralCaitem(String hint);
 	public List<Caitem> searchCentralCaitemForRequisition(String hint);
 	public Caitem findCentralItemByXitem(String xitem);
+	public List<Caitem> getWithoutProductionCaitems(String hint);
 }

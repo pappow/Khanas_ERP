@@ -26,6 +26,16 @@ a.btn.nodisplay{
 	padding: 0px 0px 10px 0px; text-align: center;
 }
 
+.default-mo-box{
+	
+	border: 1px solid #ddd; 
+	box-shadow: 0px 0px 5px #eee; 
+	padding: 20px 20px 0px 20px; 
+	border-radius: 5px
+	
+}
+
+
 /*
 === Nav bar
 */

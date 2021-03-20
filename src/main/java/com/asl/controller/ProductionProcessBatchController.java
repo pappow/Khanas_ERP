@@ -1,6 +1,10 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Bmbomheader;
+import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Oporddetail;
 import com.asl.enums.ResponseStatus;
@@ -77,6 +82,11 @@ public class ProductionProcessBatchController extends ASLAbstractController {
 		model.addAttribute("batch", mh);
 		model.addAttribute("batchPrefix", xtrnService.findByXtypetrn(TransactionCodeType.BATCH_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("batchList", moService.getAllMoheader());
+
+		List<Modetail> batchDetails = moService.findModetailByXbatch(mh.getXbatch());
+		Modetail defaultModetail = batchDetails.stream().filter(bd -> "Default".equals(bd.getXtype())).collect(Collectors.toList()).stream().findFirst().orElse(null);
+		model.addAttribute("batchDetails", batchDetails);
+		model.addAttribute("defaultBatchDetail", defaultModetail);
 		return "pages/production/batch/batch";
 	}
 
@@ -124,7 +134,89 @@ public class ProductionProcessBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setStatus(ResponseStatus.ERROR);
+		responseHelper.setSuccessStatusAndMessage("BOM Expload successfully");
+		responseHelper.setRedirectUrl("/production/batch/" + xbatch);
 		return responseHelper.getResponse();
-	} 
+	}
+
+	@GetMapping("{xbatch}/batchdetail/{xrow}/show")
+	public String openBatchDetailModal(@PathVariable String xbatch, @PathVariable String xrow, Model model) {
+
+		Modetail mod = null;
+
+		if("new".equalsIgnoreCase(xrow)) {
+			mod = new Modetail();
+			mod.setXbatch(xbatch);
+			mod.setXqtyreq(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+		} else {
+			mod = moService.findModetailByXrowAndXbatch(Integer.parseInt(xrow), xbatch);
+			if(mod == null) {
+				mod = new Modetail();
+				mod.setXbatch(xbatch);
+				mod.setXqtyreq(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			}
+		}
+
+		model.addAttribute("batchdetail", mod);
+		return "pages/production/batch/batchdetailmodal::batchdetailmodal";
+	}
+
+	@PostMapping("/batchdetail/save")
+	public @ResponseBody Map<String, Object> saveBatchDetail(Modetail modetail, Model model){
+		if(modetail == null || StringUtils.isBlank(modetail.getXbatch())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// check item already exist in detail list
+		if(modetail.getXrow() == 0) {
+			Modetail dupe = moService.findModetailByXbatchAndXitem(modetail.getXbatch(), modetail.getXitem());
+			if(dupe != null && !"Default".equalsIgnoreCase(dupe.getXtype())) {
+				responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
+				return responseHelper.getResponse();
+			}
+		}
+
+		// if existing
+		Modetail md = moService.findModetailByXrowAndXbatch(modetail.getXrow(), modetail.getXbatch());
+		if(md != null) {
+			BeanUtils.copyProperties(modetail, md);
+			long count = moService.updateMoDetail(modetail);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Cant update item");
+				return responseHelper.getResponse();
+			}
+			responseHelper.setRedirectUrl("/production/batch/" + modetail.getXbatch());
+			responseHelper.setSuccessStatusAndMessage("Saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		long count = moService.saveMoDetail(modetail);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Cant save item");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/production/batch/" + modetail.getXbatch());
+		responseHelper.setSuccessStatusAndMessage("Saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/processproduction/{xbatch}")
+	public @ResponseBody Map<String, Object> processProduction(@PathVariable String xbatch, Model model){
+
+		String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+
+		// call bom expload proc
+		moService.processProduction(xbatch, "Process", errorCode);
+		String em = getProcedureErrorMessages(errorCode);
+		if(StringUtils.isNotBlank(em)) {
+			responseHelper.setErrorStatusAndMessage(em);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Production Processed successfully");
+		responseHelper.setRedirectUrl("/production/batch/" + xbatch);
+		return responseHelper.getResponse();
+	}
 }

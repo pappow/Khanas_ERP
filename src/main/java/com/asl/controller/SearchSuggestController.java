@@ -38,7 +38,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;
 	}
-	
+
 	@GetMapping("/customer/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCustomers(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
@@ -85,6 +85,14 @@ public class SearchSuggestController extends ASLAbstractController {
 	@GetMapping("/caitem/rawmaterialprod/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getRawMaterialCaitems(@PathVariable String hint){
 		List<Caitem> caitemList = caitemService.searchRawMaterialsCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/withoutproduction/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getWithoutProductionCaitems(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.getWithoutProductionCaitems(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;

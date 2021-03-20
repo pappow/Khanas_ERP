@@ -1,11 +1,14 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,7 +47,7 @@ public class Modetail extends AbstractModel<String> {
 	private String xitem;
 
 	@Column(name = "xqtyreq")
-	private int xqtyreq;
+	private BigDecimal xqtyreq;
 
 	@Column(name = "xunit")
 	private String xunit;
@@ -57,4 +60,7 @@ public class Modetail extends AbstractModel<String> {
 
 	@Column(name = "xtype")
 	private String xtype;
+
+	@Transient
+	private String xdesc;
 }

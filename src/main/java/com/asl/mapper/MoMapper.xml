@@ -166,23 +166,87 @@
 	</update>
 
 	<select id="findMoHeaderByXbatch" resultType="Moheader">
-		SELECT * FROM Moheader WHERE xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			moheader.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			moheader 
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+		WHERE 
+			moheader.xbatch=#{xbatch} 
+			AND moheader.zid=#{zid} 
+			AND moheader.zactive='1'
 	</select>
 
 	<select id="findModetailByXrowAndXbatch" resultType="Modetail">
-		SELECT * FROM Modetail WHERE xrow=#{xrow} AND xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			modetail.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			modetail 
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+		WHERE 
+			modetail.xrow=#{xrow} 
+			AND modetail.xbatch=#{xbatch} 
+			AND modetail.zid=#{zid} 
+			AND modetail.zactive='1'
 	</select>
 
 	<select id="findModetailByXbatch" resultType="Modetail">
-		SELECT * FROM modetail WHERE xbatch=#{xbatch} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			modetail.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			modetail 
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+		WHERE 
+			modetail.xbatch=#{xbatch} 
+			AND modetail.zid=#{zid} 
+			AND modetail.zactive='1'
 	</select>
 
 	<select id="getAllMoheader" resultType="Moheader">
-		SELECT * FROM Moheader WHERE zid=#{zid} AND zactive='1'
+		SELECT 
+			moheader.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			moheader 
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+		WHERE 
+			moheader.zid=#{zid} 
+			AND moheader.zactive='1'
 	</select>
 
 	<select id="findMoheaderByXchalanAndXitem" resultType="Moheader">
-		SELECT * FROM Moheader WHERE xchalan=#{xchalan} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			moheader.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			moheader 
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+		WHERE 
+			moheader.xchalan=#{xchalan} 
+			AND moheader.xitem=#{xitem} 
+			AND moheader.zid=#{zid} 
+			AND moheader.zactive='1'
+	</select>
+
+	<select id="findModetailByXbatchAndXitem" resultType="Modetail">
+		SELECT 
+			modetail.*,
+			caitem.xdesc AS "xdesc" 
+		FROM 
+			modetail 
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+		WHERE
+			modetail.xbatch=#{xbatch} 
+			AND modetail.xitem=#{xitem} 
+			AND modetail.zid=#{zid} 
+			AND modetail.zactive='1'
+	</select>
+
+	<select id = "processProduction" statementType = "CALLABLE">
+		{call MO_processProduction(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
 </mapper>
