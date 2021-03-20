@@ -35,6 +35,22 @@
 			</div>
 		</div>
 
+		<!-- NUMBER -->
+		<div th:case="'NUMBER'">
+			<div class="form-group">
+				<label class="control-label col-sm-4" th:for="${field.fieldId}" th:text="${field.prompt}">List code: </label>
+				<div class="col-sm-8">
+					<input 	type="number" 
+							class="form-control" 
+							th:id="${field.fieldId}" 
+							th:name="${field.fieldName}" 
+							th:value="${field.defaultInputValue}" 
+							th:required="${field.required}"
+							th:disabled="${field.disabled}"/>
+				</div>
+			</div>
+		</div>
+
 		<!-- DATE FIELD -->
 		<div th:case="'DATE'">
 			<div class="form-group datepicker">

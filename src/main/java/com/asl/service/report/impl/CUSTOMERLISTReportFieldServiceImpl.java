@@ -26,19 +26,19 @@ public class CUSTOMERLISTReportFieldServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		//xcus
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "XCUS", "CUS-000002", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(2, "XCUS", "CUS-000021", true));
 		
 		//xorg
-		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "ASL", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "Dhanmondi", true));
 		
 		//xphone
-		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "", false));
 		
 		//xgcus
-		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Branch", true));
 		
 		//xstatuscus
-		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
 
 		
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));

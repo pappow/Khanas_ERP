@@ -83,10 +83,11 @@ public class ReportController extends ASLAbstractController {
 
 	private void convertObjectAndPutIntoMap(String paramName, ReportParamDataType paramType, Object method, Map<String, Object> reportParams) {
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+		SimpleDateFormat sdf3 = new SimpleDateFormat("dd-MMM-yyyy");
 		switch (paramType) {
 			case DATE:
 				try {
-					reportParams.put(paramName, sdf.parseObject((String) method));
+					reportParams.put(paramName, sdf3.format(sdf.parseObject((String) method)).toUpperCase());
 				} catch (ParseException e) {
 					log.error(ERROR, e.getMessage(), e);
 				}

@@ -29,14 +29,14 @@ public class GRNLISTReportFieldServiceImpl3 extends AbstractReportService {
 		//xstatusgrn
 		fieldsList.add(FormFieldBuilder.generateInputField(2, "GRN Status", "Confirmed", true));
 		
-		//Warehouse
-		fieldsList.add(FormFieldBuilder.generateInputField(3, "Warehouse", "Central Store", true));
+//		//Warehouse
+//		fieldsList.add(FormFieldBuilder.generateInputField(3, "Warehouse", "Central Store", true));
 				
 		//From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(4, "From Date", new Date(), true));
+		fieldsList.add(FormFieldBuilder.generateDateField(3, "From Date", new Date(), true));
 		
 		//To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(5, "To Date", new Date(), true));
+		fieldsList.add(FormFieldBuilder.generateDateField(4, "To Date", new Date(), true));
 		
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
