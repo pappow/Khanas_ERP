@@ -54,8 +54,8 @@
 										<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(opdoheader.xdornum)}" th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/confirmgrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success confirmgrn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/returngrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/confirmopdo/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success confirmopdo-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord == 'Returned' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/returngrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/archive/} + ${opdoheader.xdornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == false}" th:href="@{/salesninvoice/salesandinvoice/restore/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -135,7 +135,7 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
 														<div class="col-md-6">
-															<input type="number" class="form-control xtotamt" th:field="*{xtotamt}" disabled="disabled">
+															<input type="text" class="form-control xtotamt" th:field="*{xtotamt}" disabled="disabled">
 														</div>
 													</div>
 													
@@ -151,8 +151,7 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
 														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
-															<input type="number" class="form-control xvatamt-show" min="0" th:value="${opdoheader.xvatamt}" disabled="disabled">
+															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xvatamt}" min="0">
 														</div>
 													</div>
 													
@@ -397,7 +396,6 @@
 												<a href="" th:text="${d.xitem}"></a>
 											</td>
 											<td th:text="${d.xunitsel}"></td>
-											<td th:text="${d.xqty}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
@@ -424,7 +422,7 @@
 <script>
 		$(document).ready(function(){
 			
-			$('a.confirmgrn-btn-link').off('click').on('click', function(e){
+			$('a.confirmopdo-btn-link').off('click').on('click', function(e){
 				e.preventDefault();
 				var dornum = $("#xdornum").val();
 				
@@ -436,7 +434,7 @@
 						if(status == "success")
 							showMessage("success", "Invoice Confirmed");
 						else if(status == "error")
-							showMessage("error", "Somthing went wrong.....");
+							showMessage("error", result.message);
 						//location.reload(true);
 						setTimeout(() => {
 							location.reload(true);

@@ -77,7 +77,9 @@ public class GrnReturnController extends ASLAbstractController {
 	
 	private Pocrnheader getDefaultPocrnHeader() {
 		Pocrnheader pocrn = new Pocrnheader();
-		//pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
+		
+		pocrn.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
+		pocrn.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
 		//pogrn.setXtypetrn("Purchase");
 		//pogrn.setXtotamt(BigDecimal.ZERO);
 		return pocrn;
@@ -214,7 +216,7 @@ public class GrnReturnController extends ASLAbstractController {
 	}
 	
 	@GetMapping("/confirmprn/{xcrnnum}")
-	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xcrnnum){
+		public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xcrnnum){
 		if(StringUtils.isBlank(xcrnnum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -224,6 +226,15 @@ public class GrnReturnController extends ASLAbstractController {
 		//Get PocrnHeader record by Xcrnnum
 		Pocrnheader pocrnHeader = pocrnService.findPocrnHeaderByXcrnnum(xcrnnum);
 		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pocrnHeader.getXgrnnum());
+		List<Pocrndetail> pocrnHeaderList = pocrnService.findPocrnDetailByXcrnnum(xcrnnum);
+		if(!"Open".equalsIgnoreCase(pocrnHeader.getXstatusgrn())) {
+			responseHelper.setErrorStatusAndMessage("Data already exists. Please add another one or update existing");
+			return responseHelper.getResponse();
+		}
+		if(pocrnHeaderList.size() == 0) {
+			responseHelper.setErrorStatusAndMessage("Item add another one or update existing");
+			return responseHelper.getResponse();
+		}
 		
 		pocrnService.procConfirmCRN(xcrnnum);
 		pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh());

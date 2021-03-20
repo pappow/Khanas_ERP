@@ -12,8 +12,7 @@
 					<form id="mainform-modal" th:action="@{/salesninvoice/salesandinvoice/opdodetail/save}" method="post" class="form-horizontal" th:object="${opdodetail}">
 						<!-- <input type="hidden" id="listHeadId" name="listHeadId" th:value="${listHead.listHeadId}"/>
 						<input type="hidden" th:field="*{listId}"/> -->
-						<input type="hidden" th:field="*{xdornum}"/>
-						<input type="hidden" th:field="*{xitem}"/>						
+						<input type="hidden" th:field="*{xdornum}"/>					
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
 						<div class="col-md-6">							
 							<div class="form-group">

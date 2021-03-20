@@ -11,11 +11,10 @@ public enum TransactionCodeType {
 
 	SUPPLIER_NUMBER("Supplier Number", "SU-", TransactionCodes.SUPPLIER_NUMBER),
 	CUSTOMER_NUMBER("Customer Number", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
-	PURCHASE_ORDER("Purchase Order", "PO-", TransactionCodes.PURCHASE_ORDER),
+	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
-	PO_GRN_NUMBER("PO GRN Number", "POGRN-", TransactionCodes.PO_GRN_NUMBER),
 	PRN_NUMBER("PRN Number", "PR--", null),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
