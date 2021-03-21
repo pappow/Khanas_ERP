@@ -14,7 +14,7 @@ import com.asl.model.FormFieldBuilder;
  * @since Dec 27, 2020
  */
 @Service("purchaseorderlistService")
-public class PURCHASEORDERReportFieldServiceImpl2 extends AbstractReportService {
+public class PURCHASEORDERReportFieldServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();

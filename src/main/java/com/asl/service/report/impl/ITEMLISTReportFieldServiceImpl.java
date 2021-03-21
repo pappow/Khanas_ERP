@@ -32,7 +32,7 @@ public class ITEMLISTReportFieldServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateInputField(3, "XDESC", "Chicken", true));
 		
 		//xphone
-		fieldsList.add(FormFieldBuilder.generateInputField(4, "XCATITEM", "Chicken", true));
+		fieldsList.add(FormFieldBuilder.generateInputField(4, "XCAITEM", "Chicken", true));
 		
 		//xgcus
 		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGITEM", "Good", true));
