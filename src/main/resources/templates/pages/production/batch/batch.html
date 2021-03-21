@@ -51,15 +51,15 @@
 										<h1>Batch Entry</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/production/bom}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(batch.xbatch)}" th:href="@{/production/batch}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/salesninvoice/salesorderchalan}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> Create new from Chalan</a>
+										<a th:if="${#strings.isEmpty(batch.xbatch) and not #strings.isEmpty(batch.xchalan) and batch.xchalan ne 'new'}" th:href="@{/production/batch}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" th:href="@{/production/batch/explodebom/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-bomb"></i> Explode BOM</a>
 										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail ne null and batch.xstatusmor eq 'Open'}" th:href="@{/production/batch/processproduction/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-mortar-pestle"></i> Process Production</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and batch.xstatusmor eq 'Open'}" th:href="@{/production/batch/archive/} + ${batch.xbatch}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and batch.xstatusmor eq 'Open' and defaultBatchDetail eq null}" th:href="@{/production/batch/archive/} + ${batch.xbatch}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/production/batch/save}" th:object="${batch}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+										<form th:if="${not #strings.isEmpty(batch.xchalan) and batch.xchalan ne 'new'}" id="mainform" class="form-horizontal" th:action="@{/production/batch/save}" th:object="${batch}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
 											<input th:if="${not #strings.isEmpty(batch.xbatch)}" type="hidden" class="form-control" th:field="*{xbatch}"/>
 											<input type="hidden" class="form-control" th:field="*{xchalan}"/>
