@@ -70,26 +70,21 @@
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(opdoheader.xdornum)}" class="form-control" th:field="*{xgrnnum}"> -->
+											<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
+											<input th:if="${not #strings.isEmpty(opdoheader.xdornum)}" type="hidden" class="form-control" th:field="*{xtrn}"/>
 											<input type="hidden" th:if="${not #strings.isEmpty(opdoheader.xdornum)}" class="form-control" th:field="*{xdornum}">
 											<input type="hidden" class="form-control" th:field="*{xtotamt}">
 											<div class="row">
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xtrnopdo">GRN Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">GRN Prefix : </label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrnopdo}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${opdoprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
 													</div>
-
-													<!-- <div class="form-group" th:if="${not #strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xgrnnum">GRN Number : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xgrnnum}" disabled="disabled">
-														</div>
-													</div> -->
 													
 													<div class="form-group" th:if="${not #strings.isEmpty(opdoheader.xdornum)}">
 														<label class="control-label col-md-4" for="xdornum">Invoice Number : </label>

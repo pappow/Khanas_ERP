@@ -63,12 +63,12 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/deliveryorderchalan/save}" th:object="${deliveryorderchalan}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
-											<input th:if="${not #strings.isEmpty(deliveryorderchalan.xordernum)}" type="hidden" class="form-control" th:field="*{xtrn}"/>
-											<input th:if="${not #strings.isEmpty(deliveryorderchalan.xordernum)}" type="hidden" class="form-control" th:field="*{xordernum}"/>
+											<input th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)}" type="hidden" class="form-control" th:field="*{xtrn}"/>
+											<input th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)}" type="hidden" class="form-control" th:field="*{xdornum}"/>
 											<div class="row">
 												<div class="col-md-8">
 
-													<div class="form-group" th:if="${#strings.isEmpty(deliveryorderchalan.xordernum)}">
+													<div class="form-group" th:if="${#strings.isEmpty(deliveryorderchalan.xdornum)}">
 														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{xtrn}">
@@ -77,17 +77,17 @@
 														</div>
 													</div>
 
-													<div class="form-group" th:if="${not #strings.isEmpty(deliveryorderchalan.xordernum)}">
+													<div class="form-group" th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)}">
 														<label class="control-label col-md-4" for="xtrn">Chalan Code : </label>
 														<div class="col-md-4">
-															<input type="text" class="form-control" th:value="${deliveryorderchalan.xordernum}" disabled="disabled"/>
+															<input type="text" class="form-control" th:value="${deliveryorderchalan.xdornum}" disabled="disabled"/>
 														</div>
 													</div>
 
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatus">Status : </label>
+														<label class="control-label col-md-4" for="xstatusord">Status : </label>
 														<div class="col-md-4">
-															<input type="text" class="form-control" th:field="*{xstatus}" disabled="disabled"/>
+															<input type="text" class="form-control" th:field="*{xstatusord}" disabled="disabled"/>
 														</div>
 													</div>
 
@@ -115,10 +115,10 @@
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 												<tr th:each="bh : ${deliveryorderchalanList}">
 													<td>
-														<a th:href="@{/salesninvoice/deliveryorderchalan/} + ${bh.xordernum}" th:text="${bh.xordernum}"></a>
+														<a th:href="@{/salesninvoice/deliveryorderchalan/} + ${bh.xdornum}" th:text="${bh.xdornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(bh.xdate, df)}"></td>
-													<td th:text="${bh.xstatus}"></td>
+													<td th:text="${bh.xstatusord}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -131,18 +131,18 @@
 					</div>
 
 
-					<div class="col-md-6" th:if="${not #strings.isEmpty(deliveryorderchalan.xordernum)}">
+					<div class="col-md-6" th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)}">
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1 th:text="${deliveryorderchalan.xstatus eq 'Open' ? 'All assigned & open Sales Orders' : 'All assigned Sales Orders'}">All Open Sales Orders</h1>
+								<h1 th:text="${deliveryorderchalan.xstatusord eq 'Open' ? 'All assigned & open Sales Orders' : 'All assigned Sales Orders'}">All Open Sales Orders (Invoice)</h1>
 							</div>
 							<div class="section-body">
-								<div class="row" th:if="${deliveryorderchalan.xstatus eq 'Open'}">
+								<div class="row" th:if="${deliveryorderchalan.xstatusord eq 'Open'}">
 									<div class="col-md-6">
 										<form id="mainform2" class="form-horizontal" th:action="@{/salesninvoice/deliveryorderchalan/opendeliveryorder/query}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<input type="hidden" name="xordernum" th:value="${deliveryorderchalan.xordernum}"/>
+											<input type="hidden" name="xdornum" th:value="${deliveryorderchalan.xdornum}"/>
 											<div class="form-group datepicker">
-												<label class="control-label col-md-4" for="xdate">Sales Order Date : </label>
+												<label class="control-label col-md-4" for="xdate">Order Date : </label>
 												<div class="input-group date col-md-8 datepicker">
 													<input 	type="datepicker" 
 															class="form-control" 
@@ -174,15 +174,16 @@
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-										<tr th:each="os : ${opendeliveryorders}">
+										<tr th:each="os : ${openinvoiceorders}">
+											<td th:text="${os.xdornum}"></td>
+											<!-- <td th:text="${os.xpornum} + ' - ' + ${os.branchname}"></td> -->
 											<td th:text="${os.xordernum}"></td>
-											<td th:text="${os.xpornum} + ' - ' + ${os.branchname}"></td>
 											<td th:text="${#dates.format(os.xdate, df)}"></td>
-											<td th:text="${os.xstatus}"></td>
+											<td th:text="${os.xstatusord}"></td>
 											<td style="text-align: right">
-												<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/ordreqdetails/} + ${os.xordernum} + '/show', data-target-modal='deliveryorderdetailmodal'"><i class="fas fa-eye"></i></button>
-												<button th:if="${os.xstatus eq 'Open' and deliveryorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderconfirm/} + ${deliveryorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-check-square"></i></button>
-												<button th:if="${os.xstatus ne 'Open' and deliveryorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderrevoke/} + ${deliveryorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/ordreqdetails/} + ${os.xdornum} + '/show', data-target-modal='deliveryorderdetailmodal'"><i class="fas fa-eye"></i></button>
+												<button th:if="${os.xstatusord eq 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderconfirm/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-check-square"></i></button>
+												<button th:if="${os.xstatusord ne 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderrevoke/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
@@ -191,7 +192,7 @@
 						</section>
 					</div>
 
-					<div class="col-md-6" th:if="${not #strings.isEmpty(deliveryorderchalan.xordernum)}">
+					<div class="col-md-6" th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)}">
 						<!-- poorddetail section -->
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
@@ -206,7 +207,7 @@
 											<th>Unit</th>
 											<th>Category</th>
 											<th>Group</th>
-											<th th:if="${deliveryorderchalan.xstatus eq 'Confirmed'}">Action</th>
+											<th th:if="${deliveryorderchalan.xstatusord eq 'Confirmed'}">Action</th>
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">

@@ -21,7 +21,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 	@Override
 	public long save(Opdoheader opdoHeader) {
-		if (opdoHeader == null || StringUtils.isBlank(opdoHeader.getXtype()))
+		if (opdoHeader == null)
 			return 0;
 		opdoHeader.setZid(sessionManager.getBusinessId());
 		return opdoMapper.saveOpdoHeader(opdoHeader);
@@ -118,20 +118,20 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 	@Override
 	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatus, Date date) {
-		// TODO Auto-generated method stub
-		return null;
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xstatus)) return Collections.emptyList();
+		if(date == null) date = new Date();
+		return opdoMapper.findAllInvoiceOrder(xtypetrn, xtrn, xstatus, sdf.format(date), sessionManager.getBusinessId());
 	}
 
 	@Override
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref) {
-		// TODO Auto-generated method stub
-		return null;
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xchalanref)) return Collections.emptyList();
+		return opdoMapper.findAllInvoiceOrderByChalan(xtypetrn, xtrn, xchalanref, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<Opdoheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return Collections.emptyList();
+		return opdoMapper.findAllOpdoHeaderByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId());
 	}
-
 }
