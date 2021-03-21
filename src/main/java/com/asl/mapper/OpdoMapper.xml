@@ -4,7 +4,7 @@
 
 	<insert id="saveOpdoHeader" parameterType="Opdoheader">
  		<selectKey keyProperty="xdornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnopdo}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Opdoheader
 		(   
@@ -36,6 +36,7 @@
 			xexch,
 			xvoucher,
 			xtypetrn,
+			xtrn,
 			
 			zid,
 			zauserid,
@@ -76,6 +77,7 @@
 			#{xexch, jdbcType=DECIMAL},
 			#{xvoucher, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
 			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -262,5 +264,49 @@
 	
 	<select id = "procTransferOPtoAR" statementType = "CALLABLE">
 		{call OP_transferOPtoAR(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_screen, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id="findAllOpdoHeaderByXtypetrnAndXtrn" resultType="Opdoheader">
+		SELECT
+			*
+		FROM 
+			OPDOHEADER
+		WHERE
+			ZID=#{zid}
+			AND ZACTIVE='1'
+			AND XTYPETRN=#{xtypetrn}
+			AND XTRN=#{xtrn}
+	</select>
+
+	<select id="findAllInvoiceOrder" resultType="Opdoheader">
+		SELECT 
+			OPDOHEADER.*
+			<!-- ZBUSINESS.ZORG AS "branchname" -->
+		FROM 
+			OPDOHEADER
+			<!-- JOIN ZBUSINESS ON ZBUSINESS.ZID = OPDOHEADER.XCUS -->
+		WHERE
+			OPDOHEADER.ZID=#{zid}
+			AND OPDOHEADER.ZACTIVE='1'
+			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
+			AND OPDOHEADER.XTRN=#{xtrn}
+			AND OPDOHEADER.XSTATUSORD=#{xstatusord}
+			AND TO_CHAR(OPDOHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
+	</select>
+
+	<select id="findAllInvoiceOrderByChalan" resultType="Opdoheader">
+		SELECT 
+			OPDOHEADER.*
+			<!-- ZBUSINESS.ZORG AS "branchname" -->
+		FROM 
+			OPDOHEADER
+			<!-- JOIN ZBUSINESS ON ZBUSINESS.ZID = OPDOHEADER.XCUS -->
+		WHERE
+			OPDOHEADER.ZID=#{zid}
+			AND OPDOHEADER.ZACTIVE='1'
+			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
+			AND OPDOHEADER.XTRN=#{xtrn}
+			AND OPDOHEADER.XDOCNUM = #{xchalanref}
+			<!-- AND (OPDOHEADER.XCHALANREF=#{xchalanref} OR OPDOHEADER.XDOCNUM = #{xchalanref}) -->
 	</select>
 </mapper>

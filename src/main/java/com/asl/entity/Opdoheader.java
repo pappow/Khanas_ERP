@@ -114,6 +114,9 @@ public class Opdoheader extends AbstractModel<String> {
 	@Column(name = "xvoucher")
 	private String xvoucher;
 	
+	@Column(name = "xtrn")
+	private String xtrn;
+	
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 	

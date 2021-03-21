@@ -90,7 +90,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		opdoheader.setXstatusord("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
 		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
-		//opdoheader.setXtypetrn(xtypetrn);
+		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		return opdoheader;
 	}
 	
@@ -227,8 +228,6 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		
-		
 		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
 		
 		if(opdoDetailList.size()==0){
@@ -268,6 +267,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 			
 		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
+
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
 		return responseHelper.getResponse();
 	}

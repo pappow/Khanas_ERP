@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/salesninvoice/deliveryorderchalan")
-public class DeliveryOrderChalan extends ASLAbstractController {
+public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
 	@Autowired private OpdoService opdoService;
@@ -50,7 +50,7 @@ public class DeliveryOrderChalan extends ASLAbstractController {
 	public String loadDeliveryOrderChalanPage(Model model) {
 		model.addAttribute("deliveryorderchalan", getDefaultOpdoheader());
 		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		model.addAttribute("deliveryorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
@@ -61,9 +61,7 @@ public class DeliveryOrderChalan extends ASLAbstractController {
 
 		model.addAttribute("deliveryorderchalan", oh);
 		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		//model.addAttribute("deliveryorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
-		//model.addAttribute("deliveryorderchalanList", opdoService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
-		model.addAttribute("deliveryorderchalanList", new ArrayList<>());
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
 		
 		List<Opdoheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
 		if("Open".equalsIgnoreCase(oh.getXstatusord()))
@@ -76,11 +74,13 @@ public class DeliveryOrderChalan extends ASLAbstractController {
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
-	private Opordheader getDefaultOpdoheader() {
-		Opordheader oh = new Opordheader();
+	private Opdoheader getDefaultOpdoheader() {
+		Opdoheader oh = new Opdoheader();
+		oh.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		oh.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		oh.setXtypetrn(TransactionCodeType.CHALAN_NUMBER.getCode());
 		oh.setXdate(new Date());
-		oh.setXstatus("Open");
+		oh.setXstatusord("Open");
 		return oh;
 	}
 

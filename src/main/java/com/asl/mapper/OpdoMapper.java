@@ -1,5 +1,6 @@
 package com.asl.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -24,6 +25,11 @@ public interface OpdoMapper {
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid);
+	
+	//For Delivery Chalan
+	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatusord, String xdate, String zid);
+	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);
+	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn,  String zid);
 	
 	//Procedure Calls
 	public void procConfirmDO(String zid, String user, String xdornum, String p_seq);
