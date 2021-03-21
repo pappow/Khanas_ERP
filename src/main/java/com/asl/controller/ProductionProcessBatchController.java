@@ -219,4 +219,24 @@ public class ProductionProcessBatchController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/production/batch/" + xbatch);
 		return responseHelper.getResponse();
 	}
+
+	@PostMapping("/archive/{xbatch}")
+	public @ResponseBody Map<String, Object> archive(@PathVariable String xbatch, Model model){
+		Moheader mh = moService.findMoHeaderByXbatch(xbatch);
+		if(mh == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found to do archive");
+			return responseHelper.getResponse();
+		}
+
+		mh.setZactive(false);
+		long count = moService.updateMoHeader(mh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Batch not deleted");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/production/batch");
+		responseHelper.setSuccessStatusAndMessage("Batch archived successfully");
+		return responseHelper.getResponse();
+	}
 }

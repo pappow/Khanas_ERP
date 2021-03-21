@@ -6,7 +6,7 @@
 	<!-- DEV PROFILE -->
 	<springProfile name="dev">
 		<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-			<file>${LOGS}/asl-cr.log</file>
+			<file>${LOGS}/khanas-erp.log</file>
 			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 				<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
 			</encoder>
@@ -45,7 +45,7 @@
 	<!-- PROD PROFILE -->
 	<springProfile name="prod">
 		<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-			<file>${LOGS}/asl-cr.log</file>
+			<file>${LOGS}/khanas-erp.log</file>
 			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 				<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
 			</encoder>
