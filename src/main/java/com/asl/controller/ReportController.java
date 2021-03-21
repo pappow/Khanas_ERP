@@ -73,7 +73,7 @@ public class ReportController extends ASLAbstractController {
 			convertObjectAndPutIntoMap(cristalReportParamName, paramType, method, reportParams);
 		}
 
-		StringBuilder url = new StringBuilder(rm.getReportFile());
+		StringBuilder url = new StringBuilder(rm.getReportFile()).append("&__toolbar=false&__showtitle=false&__title=report");
 		reportParams.entrySet().parallelStream().forEach(m -> {
 			url.append("&" + m.getKey() + "=" + m.getValue());
 		});
