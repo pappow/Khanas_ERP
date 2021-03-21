@@ -13,7 +13,7 @@ import com.asl.model.FormFieldBuilder;
  * @since Dec 27, 2020
  */
 @Service("purchasedeviationService")
-public class PURCHASEDEVIATIONReportFieldServiceImpl2 extends AbstractReportService {
+public class PURCHASEDEVIATIONReportFieldServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
