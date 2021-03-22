@@ -18,6 +18,7 @@ public class ReportParamMap {
 	public static final Map<String, String> PURCHASEORDER_LIST = new HashMap<>();
 	public static final Map<String, String> PURCHASED_DEVIATION = new HashMap<>();
 	public static final Map<String, String> GRN_LIST = new HashMap<>();
+	public static final Map<String, String> CHALAN_LIST = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -92,6 +93,8 @@ public class ReportParamMap {
 		GRN_LIST.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
 		GRN_LIST.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
 		
+		CHALAN_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		CHALAN_LIST.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
