@@ -217,7 +217,7 @@
 	</update>
 	
 	<delete id="deleteOpdoDetail" parameterType="Opdodetail">
-		DELETE FROM Opdodetail WHERE xpornum=#{xpornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		DELETE FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</delete>
 	
 	<update id="updateOpdoHeaderTotalAmt" parameterType="Opdodetail">

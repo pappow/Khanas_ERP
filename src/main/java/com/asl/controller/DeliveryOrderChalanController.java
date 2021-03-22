@@ -128,13 +128,13 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
 		
 		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
-		model.addAttribute("opendeliveryorders", allOpenAndConfirmesSalesOrders);
+		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan::opendeliveryorderstable";
 	}
 
 	@PostMapping("/opendeliveryorder/query")
 	public @ResponseBody Map<String, Object> queryForrequistionDetails(String xdornum, Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xordernum="+ xdornum +"&date=" + sdf.format(xdate));
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ xdornum +"&date=" + sdf.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
@@ -200,7 +200,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
 		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
 		return responseHelper.getResponse();
@@ -249,8 +249,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("deliverorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
 		return responseHelper.getResponse();
 	}

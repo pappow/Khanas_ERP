@@ -52,7 +52,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
-		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.SALES_AND_INVOICE_STATUS.getCode()));
+		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("payStatusList", new ArrayList<>());
 		model.addAttribute("arStatusList", new ArrayList<>());		
 		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode()));
@@ -72,8 +72,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
-		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.SALES_AND_INVOICE_STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("payStatusList", new ArrayList<>());
 		model.addAttribute("arStatusList", new ArrayList<>());		
 		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode()));
@@ -174,7 +174,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 
 		// modify line amount
-		//opdoDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
 		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
