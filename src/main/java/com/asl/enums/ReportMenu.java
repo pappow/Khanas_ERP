@@ -17,7 +17,8 @@ public enum ReportMenu {
 	ITEMLIST(4, "ITEMLIST", "Item List", ReportParamMap.ITEM_LIST, "ItemList.rptdesign", "itemList", "Y", "/report/ITEMLIST"),
 	PURCHASEORDERLIST(5, "PURCHASEORDERLIST", "Purchase Order List", ReportParamMap.PURCHASEORDER_LIST, "PurchaseOrderListing.rptdesign", "purchaseorderList", "Y", "/report/PURCHASEORDERLIST"),
 	PURCHASEDEVIATION(6, "PURCHASEDEVIATION", "Purchase Deviation List", ReportParamMap.PURCHASED_DEVIATION, "PurchaseDeviation.rptdesign", "purchaseDivisionList", "Y", "/report/PURCHASEDEVIATION"),
-	GRNLIST(7, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnList.rptdesign", "grnList", "Y", "/report/GRNLIST");
+	GRNLIST(7, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnList.rptdesign", "grnList", "Y", "/report/GRNLIST"),
+	CHALANLIST(8, "CHALANLIST", "Suggestion List", ReportParamMap.CHALAN_LIST, "SuggReport.rptdesign", "chalanList", "Y", "/report/CHALANLIST");
 	
 	private int group;
 	private String code;

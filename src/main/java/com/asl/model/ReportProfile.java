@@ -37,6 +37,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine purchaseorderList;
 	private ProfileLine purchaseDivisionList;
 	private ProfileLine grnList;
+	private ProfileLine chalanList;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
