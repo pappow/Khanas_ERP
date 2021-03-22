@@ -29,15 +29,16 @@ import lombok.extern.slf4j.Slf4j;
 public class ReportProfile implements Serializable {
 
 	private static final long serialVersionUID = 5690006573031426825L;
+	private static final String ERROR = "Error is : {}, {}";
 
-	private ProfileLine supplierList;
-	private ProfileLine customerList;
-	private ProfileLine stockList;   
-	private ProfileLine itemList;
-	private ProfileLine pol;
-	private ProfileLine purchaseDivisionList;
-	private ProfileLine grnList;
-	private ProfileLine chalanList;
+	private ProfileLine SUPL;
+	private ProfileLine CUSL;
+	private ProfileLine STOCKL;
+	private ProfileLine ITEML;
+	private ProfileLine POL;
+	private ProfileLine PDL;
+	private ProfileLine GRNL;
+	private ProfileLine SUGL;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
@@ -59,7 +60,7 @@ public class ReportProfile implements Serializable {
 			Method method = ReportProfile.class.getMethod(methodName, ProfileLine.class);
 			profileSetterMethods.put(code.toUpperCase(), method);
 		} catch (NoSuchMethodException | SecurityException  e) {
-			log.error("Error is : {}, {}", e.getMessage(),e);
+			log.error(ERROR, e.getMessage(),e);
 		}
 	}
 
@@ -99,9 +100,43 @@ public class ReportProfile implements Serializable {
 	}
 
 	// Setter methods
-	public void setSupplierList(ProfileLine profileLine) {
-		this.supplierList = profileLine;
+	public void setSUPL(ProfileLine profileLine) {
+		this.SUPL = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
+	public void setCUSL(ProfileLine profileLine) {
+		this.CUSL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setSTOCKL(ProfileLine profileLine) {
+		this.STOCKL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setITEML(ProfileLine profileLine) {
+		this.ITEML = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setPOL(ProfileLine profileLine) {
+		this.POL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setPDL(ProfileLine profileLine) {
+		this.PDL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setGRNL(ProfileLine profileLine) {
+		this.GRNL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+	public void setSUGL(ProfileLine profileLine) {
+		this.SUGL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
 }

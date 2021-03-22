@@ -18,6 +18,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
+import com.asl.service.ProductionSuggestionService;
 
 /**
  * @author Zubayer Ahamed
@@ -29,6 +30,7 @@ public class SearchSuggestController extends ASLAbstractController {
 
 	@Autowired private CacusService cacusService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private ProductionSuggestionService productionSuggestionService;
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -47,6 +49,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;
 	}
+
 
 	@GetMapping("/caitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCaitems(@PathVariable String hint){
@@ -95,6 +98,33 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<Caitem> caitemList = caitemService.getWithoutProductionCaitems(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	
+	// REPORT
+	@GetMapping("/report/party/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllCustomerAndSupplier(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+
+		List<Cacus> supList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
+		supList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+
+		List<Cacus> cusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
+		cusList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+
+		return list;
+	}
+	
+	@GetMapping("/report/chalan/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getChalan(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		productionSuggestionService.searchClananNumbers(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c, c)));
+
 		return list;
 	}
 }

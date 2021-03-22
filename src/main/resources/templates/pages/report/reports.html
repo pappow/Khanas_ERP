@@ -23,7 +23,7 @@
 		<div th:case="'INPUT'">
 			<div class="form-group">
 				<label class="control-label col-sm-4" th:for="${field.fieldId}" th:text="${field.prompt}">List code: </label>
-				<div class="col-sm-8">
+				<div class="col-sm-6">
 					<input 	type="text" 
 							class="form-control" 
 							th:id="${field.fieldId}" 
@@ -39,7 +39,7 @@
 		<div th:case="'NUMBER'">
 			<div class="form-group">
 				<label class="control-label col-sm-4" th:for="${field.fieldId}" th:text="${field.prompt}">List code: </label>
-				<div class="col-sm-8">
+				<div class="col-sm-6">
 					<input 	type="number" 
 							class="form-control" 
 							th:id="${field.fieldId}" 
@@ -75,7 +75,7 @@
 		<div th:case="'DROPDOWN'">
 			<div class="form-group">
 				<label class="control-label col-sm-4" th:for="${field.fieldId}" th:text="${field.prompt}">Dropdown : </label>
-				<div class="col-sm-8">
+				<div class="col-sm-6">
 					<select class="form-control selectpicker"
 							th:id="${field.fieldId}" 
 							th:name="${field.fieldName}" 
@@ -110,7 +110,7 @@
 		<div th:case="'TIME'">
 			<div class="form-group timerange">
 				<label class="control-label col-sm-4" th:for="${field.fieldId}" th:text="${field.prompt}">Time: </label>
-				<div class="input-group time col-sm-8 date-time-wrapper timepicker">
+				<div class="input-group time col-sm-6 date-time-wrapper timepicker">
 					<input 	class="form-control" 
 							data-type="timepicker" 
 							th:id="${field.fieldId}"

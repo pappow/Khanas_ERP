@@ -11,15 +11,15 @@ import com.asl.model.ReportParamMap;
 public enum ReportMenu {
 
 	// Procurements report
-	SUPPLIERLIST(1, "SUPPLIERLIST", "Supplier List", ReportParamMap.SUPPLIER_LIST, "SupplierList.rptdesign", "supplierList", "Y", "/report/SUPPLIERLIST"),
-	CUSTOMERLIST(2, "CUSTOMERLIST", "Customer List", ReportParamMap.CUSTOMER_LIST, "CustomerList.rptdesign", "customerList", "Y", "/report/CUSTOMERLIST"),
-	STOCKLIST(3, "STOCKLIST", "Stock List", ReportParamMap.STOCK_LIST, "Imstock.rptdesign", "stockList", "Y", "/report/STOCKLIST"),
-	ITEMLIST(4, "ITEMLIST", "Item List", ReportParamMap.ITEM_LIST, "ItemList.rptdesign", "itemList", "Y", "/report/ITEMLIST"),
-	POL(5, "POL", "Purchase Order List", ReportParamMap.POL, "pol.rptdesign", "pol", "Y", "/report/POL"),
-	PURCHASEDEVIATION(6, "PURCHASEDEVIATION", "Purchase Deviation List", ReportParamMap.PURCHASED_DEVIATION, "PurchaseDeviation.rptdesign", "purchaseDivisionList", "Y", "/report/PURCHASEDEVIATION"),
-	GRNLIST(7, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnList.rptdesign", "grnList", "Y", "/report/GRNLIST"),
-	CHALANLIST(8, "CHALANLIST", "Suggestion List", ReportParamMap.CHALAN_LIST, "SuggReport.rptdesign", "chalanList", "Y", "/report/CHALANLIST");
-	
+	SUPL(1, "SUPL", "Supplier List", ReportParamMap.SUPL, "SUPL.rptdesign", "SUPL", "Y", "/report/SUPL"),
+	CUSL(2, "CUSL", "Customer List", ReportParamMap.CUSL, "CUSL.rptdesign", "CUSL", "Y", "/report/CUSL"),
+	STOCKL(3, "STOCKL", "Stock List", ReportParamMap.STOCKL, "STOCKL.rptdesign", "STOCKL", "Y", "/report/STOCKL"),
+	ITEML(4, "ITEML", "Item List", ReportParamMap.ITEML, "ITEML.rptdesign", "ITEML", "Y", "/report/ITEML"),
+	POL(5, "POL", "Purchase Order List", ReportParamMap.POL, "POL.rptdesign", "POL", "Y", "/report/POL"),
+	PDL(6, "PDL", "Purchase Deviation List", ReportParamMap.PDL, "PDL.rptdesign", "PDL", "Y", "/report/PDL"),
+	GRNL(7, "GRNL", "GRN List", ReportParamMap.GRNL, "GRNL.rptdesign", "GRNL", "Y", "/report/GRNL"),
+	SUGL(8, "SUGL", "Suggestion List", ReportParamMap.SUGL, "SUGL.rptdesign", "SUGL", "Y", "/report/SUGL");
+
 	private int group;
 	private String code;
 	private String description;

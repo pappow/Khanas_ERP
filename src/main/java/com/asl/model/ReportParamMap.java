@@ -11,14 +11,14 @@ import com.asl.enums.ReportParamDataType;
  */
 public class ReportParamMap {
 
-	public static final Map<String, String> SUPPLIER_LIST = new HashMap<>();
-	public static final Map<String, String> CUSTOMER_LIST = new HashMap<>();
-	public static final Map<String, String> STOCK_LIST = new HashMap<>();
-	public static final Map<String, String> ITEM_LIST = new HashMap<>();
+	public static final Map<String, String> SUPL = new HashMap<>();
+	public static final Map<String, String> CUSL = new HashMap<>();
+	public static final Map<String, String> STOCKL = new HashMap<>();
+	public static final Map<String, String> ITEML = new HashMap<>();
 	public static final Map<String, String> POL = new HashMap<>();
-	public static final Map<String, String> PURCHASED_DEVIATION = new HashMap<>();
-	public static final Map<String, String> GRN_LIST = new HashMap<>();
-	public static final Map<String, String> CHALAN_LIST = new HashMap<>();
+	public static final Map<String, String> PDL = new HashMap<>();
+	public static final Map<String, String> GRNL = new HashMap<>();
+	public static final Map<String, String> SUGL = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -55,46 +55,46 @@ public class ReportParamMap {
 	public static final Map<String, String> OSS = new HashMap<>();
 
 	static {
-		SUPPLIER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		SUPPLIER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
-		SUPPLIER_LIST.put("param3", "XORG|" + ReportParamDataType.STRING.name());
-		SUPPLIER_LIST.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
-		SUPPLIER_LIST.put("param5", "XGCUS|" + ReportParamDataType.STRING.name());
-		SUPPLIER_LIST.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
+		SUPL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		SUPL.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		SUPL.put("param3", "XORG|" + ReportParamDataType.STRING.name());
+		SUPL.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
+		SUPL.put("param5", "XGCUS|" + ReportParamDataType.STRING.name());
+		SUPL.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
 
-		CUSTOMER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param3", "XORG|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param5", "XGCUS|" + ReportParamDataType.STRING.name());
-		CUSTOMER_LIST.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
+		CUSL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		CUSL.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		CUSL.put("param3", "XORG|" + ReportParamDataType.STRING.name());
+		CUSL.put("param4", "XPHONE|" + ReportParamDataType.STRING.name());
+		CUSL.put("param5", "XGCUS|" + ReportParamDataType.STRING.name());
+		CUSL.put("param6", "XSTATUSCUS|" + ReportParamDataType.STRING.name());
 		
-		STOCK_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		STOCK_LIST.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
-		STOCK_LIST.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
+		STOCKL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		STOCKL.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
+		STOCKL.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
 		
-		ITEM_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		ITEM_LIST.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
-		ITEM_LIST.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
-		ITEM_LIST.put("param4", "XCAITEM|" + ReportParamDataType.STRING.name());
-		ITEM_LIST.put("param5", "XGITEM|" + ReportParamDataType.STRING.name());
-		ITEM_LIST.put("param6", "XPRODITEM|" + ReportParamDataType.STRING.name());
+		ITEML.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		ITEML.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
+		ITEML.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
+		ITEML.put("param4", "XCAITEM|" + ReportParamDataType.STRING.name());
+		ITEML.put("param5", "XGITEM|" + ReportParamDataType.STRING.name());
+		ITEML.put("param6", "XPRODITEM|" + ReportParamDataType.STRING.name());
 		
 		POL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		POL.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
 		POL.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
 		POL.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
 		
-		PURCHASED_DEVIATION.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		PURCHASED_DEVIATION.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
+		PDL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		PDL.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
 		
-		GRN_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		GRN_LIST.put("param2", "XGRNSTATUS|" + ReportParamDataType.STRING.name());
-		GRN_LIST.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
-		GRN_LIST.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
+		GRNL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		GRNL.put("param2", "XGRNSTATUS|" + ReportParamDataType.STRING.name());
+		GRNL.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
+		GRNL.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
 		
-		CHALAN_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		CHALAN_LIST.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());
+		SUGL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		SUGL.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
