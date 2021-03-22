@@ -117,7 +117,7 @@
 			xstaff=#{xstaff, jdbcType=VARCHAR},
 			xwh=#{xwh, jdbcType=VARCHAR},
 			xdatecom=#{xdatecom, jdbcType=DATE},
-			xdatedu=#{xdatedue, jdbcType=DATE},
+			xdatedue=#{xdatedue, jdbcType=DATE},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xexch=#{xexch, jdbcType=DECIMAL},
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
@@ -249,9 +249,20 @@
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
 		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id="findOpdoDetailByXdornumAndXitem" resultType="Opdodetail">
+		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+	</select>
 
 	<select id="findOpdoDetailByXdornum" resultType="Opdodetail">
-		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			opdodetail.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem
+		FROM Opdodetail
+			JOIN caitem ON caitem.xitem = opdodetail.xitem AND caitem.zid=#{zid}
+		WHERE Opdodetail.xdornum=#{xdornum} AND Opdodetail.zid=#{zid} AND Opdodetail.zactive='1'
 	</select>
 	
 	<select id = "procConfirmDO" statementType = "CALLABLE">

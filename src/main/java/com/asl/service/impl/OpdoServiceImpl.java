@@ -83,6 +83,12 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	}
 
 	@Override
+	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem) {
+		if(StringUtils.isBlank(xdornum) || StringUtils.isBlank(xitem)) return null;
+		return opdoMapper.findOpdoDetailByXdornumAndXitem(xdornum, xitem, sessionManager.getBusinessId());
+	}
+	
+	@Override
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum) {
 		if(StringUtils.isBlank(xdornum))
 			return Collections.emptyList();
