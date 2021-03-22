@@ -12,8 +12,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("chalanlistService")
-public class CHALANLISTReportFieldServiceImpl2 extends AbstractReportService {
+@Service("pdlService")
+public class PDLServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -24,11 +24,10 @@ public class CHALANLISTReportFieldServiceImpl2 extends AbstractReportService {
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
-		
+
 		// xpornum
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "Chalan", "CH-000016", true));
-		
-		
+		fieldsList.add(FormFieldBuilder.generateInputField(2, "XPORNUM", "PO-000035", true));
+
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}

@@ -41,5 +41,11 @@ public class ProductionSuggestionServiceImpl extends AbstractGenericService impl
 		return productionSuggestionMapper.deleteSuggestion(chalan, sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<String> searchClananNumbers(String chalan) {
+		if(StringUtils.isBlank(chalan)) return Collections.emptyList();
+		return productionSuggestionMapper.searchClananNumbers(chalan.toUpperCase(), sessionManager.getBusinessId());
+	}
+
 	
 }

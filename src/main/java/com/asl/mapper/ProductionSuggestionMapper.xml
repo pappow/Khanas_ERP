@@ -26,4 +26,8 @@
 			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
 			AND zid=#{zid}
 	</delete>
+
+	<select id="searchClananNumbers" resultType="String">
+		SELECT distinct chalan FROM pro_sugg WHERE UPPER(chalan) LIKE '%' || #{chalan} || '%' AND zid=#{zid}
+	</select>
 </mapper>
