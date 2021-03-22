@@ -26,6 +26,7 @@ public interface OpdoService {
 	public List<Opdoheader> getAllOpdoHeader();
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow);
+	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum);
 	
 

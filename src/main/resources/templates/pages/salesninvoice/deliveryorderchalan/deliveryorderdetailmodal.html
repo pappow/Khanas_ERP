@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div id="salesorderdetailmodal" th:fragment="salesorderdetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+<div id="deliveryorderdetailmodal" th:fragment="deliveryorderdetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
 	<div class="modal-dialog modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -22,7 +22,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="d : ${oporddetailsList}">
+								<tr th:each="d : ${opdodetailsList}">
 									<td th:text="${d.xrow}"></td>
 									<td>
 										<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
@@ -30,7 +30,7 @@
 									<td th:text="${d.xcatitem}"></td>
 									<td th:text="${d.xgitem}"></td>
 									<td th:text="${d.xqtyord}"></td>
-									<td th:text="${d.xunit}"></td>
+									<td th:text="${d.xunitsel}"></td>
 								</tr>
 							</tbody>
 						</table>

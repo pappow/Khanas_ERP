@@ -33,6 +33,7 @@ public enum CodeType {
 	TRANSFER_ORDER_STATUS("Transfer Order Status"),
 	TAG_STATUS("TAG Status"),
 	OBJECT_TYPE("Object Type"),
+	STATUS("Status"),
 	SALES_AND_INVOICE_STATUS("Sales & Invoice Status");
 	
 	private String code;

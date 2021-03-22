@@ -24,6 +24,7 @@ public interface OpdoMapper {
 	public List<Opdoheader> getAllOpdoHeader(String zid);
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
+	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid);
 	
 	//For Delivery Chalan

@@ -45,6 +45,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		model.addAttribute("imtorheader", getDefaultImtorHeader());
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeader());
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode()));
+		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		//model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		
@@ -60,6 +61,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeader());
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode()));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		return "pages/inventory/transferorder/imtor";
 	}
@@ -68,6 +70,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		ImtorHeader imtorHeader = new ImtorHeader();
 		//imtorHeader.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		//imtorHeader.setXtotamt(BigDecimal.ZERO);
+		imtorHeader.setXstatustor("Open");
 		return imtorHeader;
 	}
 	@PostMapping("/save")

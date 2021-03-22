@@ -216,11 +216,11 @@
 												<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem} + ' - ' + ${cd.xdesc}"></a>
 											</td>
 											<td th:text="${cd.xqtyord}"></td>
-											<td th:text="${cd.xunit}"></td>
+											<td th:text="${cd.xunitsel}"></td>
 											<td th:text="${cd.xcatitem}"></td>
 											<td th:text="${cd.xgitem}"></td>
-											<td th:if="${deliveryorderchalan.xstatus eq 'Confirmed'}">
-												<a th:href="@{/production/batch/chalantobatch/} + ${deliveryorderchalan.xordernum} + '/' + ${cd.xitem}" target="_blank">Create Batch</a>
+											<td th:if="${deliveryorderchalan.xstatusord eq 'Confirmed'}">
+												<a th:href="@{/production/batch/chalantobatch/} + ${deliveryorderchalan.xdornum} + '/' + ${cd.xitem}" target="_blank">Create Batch</a>
 											</td>
 										</tr>
 									</tbody>
