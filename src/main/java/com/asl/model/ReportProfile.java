@@ -34,7 +34,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine customerList;
 	private ProfileLine stockList;   
 	private ProfileLine itemList;
-	private ProfileLine purchaseorderList;
+	private ProfileLine pol;
 	private ProfileLine purchaseDivisionList;
 	private ProfileLine grnList;
 	private ProfileLine chalanList;

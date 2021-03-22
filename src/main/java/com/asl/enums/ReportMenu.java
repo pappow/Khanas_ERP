@@ -15,7 +15,7 @@ public enum ReportMenu {
 	CUSTOMERLIST(2, "CUSTOMERLIST", "Customer List", ReportParamMap.CUSTOMER_LIST, "CustomerList.rptdesign", "customerList", "Y", "/report/CUSTOMERLIST"),
 	STOCKLIST(3, "STOCKLIST", "Stock List", ReportParamMap.STOCK_LIST, "Imstock.rptdesign", "stockList", "Y", "/report/STOCKLIST"),
 	ITEMLIST(4, "ITEMLIST", "Item List", ReportParamMap.ITEM_LIST, "ItemList.rptdesign", "itemList", "Y", "/report/ITEMLIST"),
-	PURCHASEORDERLIST(5, "PURCHASEORDERLIST", "Purchase Order List", ReportParamMap.PURCHASEORDER_LIST, "PurchaseOrderListing.rptdesign", "purchaseorderList", "Y", "/report/PURCHASEORDERLIST"),
+	POL(5, "POL", "Purchase Order List", ReportParamMap.POL, "pol.rptdesign", "pol", "Y", "/report/POL"),
 	PURCHASEDEVIATION(6, "PURCHASEDEVIATION", "Purchase Deviation List", ReportParamMap.PURCHASED_DEVIATION, "PurchaseDeviation.rptdesign", "purchaseDivisionList", "Y", "/report/PURCHASEDEVIATION"),
 	GRNLIST(7, "GRNLIST", "GRN List", ReportParamMap.GRN_LIST, "GrnList.rptdesign", "grnList", "Y", "/report/GRNLIST"),
 	CHALANLIST(8, "CHALANLIST", "Suggestion List", ReportParamMap.CHALAN_LIST, "SuggReport.rptdesign", "chalanList", "Y", "/report/CHALANLIST");

@@ -15,7 +15,7 @@ public class ReportParamMap {
 	public static final Map<String, String> CUSTOMER_LIST = new HashMap<>();
 	public static final Map<String, String> STOCK_LIST = new HashMap<>();
 	public static final Map<String, String> ITEM_LIST = new HashMap<>();
-	public static final Map<String, String> PURCHASEORDER_LIST = new HashMap<>();
+	public static final Map<String, String> POL = new HashMap<>();
 	public static final Map<String, String> PURCHASED_DEVIATION = new HashMap<>();
 	public static final Map<String, String> GRN_LIST = new HashMap<>();
 	public static final Map<String, String> CHALAN_LIST = new HashMap<>();
@@ -80,10 +80,10 @@ public class ReportParamMap {
 		ITEM_LIST.put("param5", "XGITEM|" + ReportParamDataType.STRING.name());
 		ITEM_LIST.put("param6", "XPRODITEM|" + ReportParamDataType.STRING.name());
 		
-		PURCHASEORDER_LIST.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		PURCHASEORDER_LIST.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
-		PURCHASEORDER_LIST.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
-		PURCHASEORDER_LIST.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
+		POL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		POL.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		POL.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
+		POL.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
 		
 		PURCHASED_DEVIATION.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		PURCHASED_DEVIATION.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
