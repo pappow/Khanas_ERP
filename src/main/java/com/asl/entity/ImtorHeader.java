@@ -59,6 +59,9 @@ public class ImtorHeader extends AbstractModel<String>{
 	
 	@Column(name = "xlong")
 	private String xlong;
+	
+	@Column(name = "xchalanref")
+	private String xchalanref;
 
 	@Transient
 	private String xtype;

@@ -11,6 +11,7 @@ import com.asl.entity.ImtorHeader;
 public interface ImtorMapper {
 	
 	public long saveImtorHeader(ImtorHeader imtorHeader);
+	public long saveImtorHeaderWithChalan(ImtorHeader imtorHeader);
 	public long updateImtorHeader(ImtorHeader imtorHeader);
 	
 	public long saveImtorDetail(ImtorDetail imtorDetail);
@@ -18,11 +19,13 @@ public interface ImtorMapper {
 	public long deleteImtorDetail(ImtorDetail imtorDetail);
 	
 	public ImtorHeader findImtorHeaderByXtornum(String xtornum, String zid);
+	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref, String zid);
 	public List<ImtorHeader> getAllImtorHeader(String zid);
 	
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow, String zid);
 	public ImtorDetail findImtorDetailByXtornumAndXitem(String xtornum, String xitem, String zid);
 	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum, String zid);
+	public List<ImtorDetail> findImtorDetailByXtornumAndXchalanref(String xtornum, String xchalanref, String zid);
 	
 	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail);
 	

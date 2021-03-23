@@ -9,6 +9,7 @@
 		INSERT INTO ImtorHeader
 		(
 			xtornum,
+			xchalanref,
 			xdate,
 			xref,
 			xdatecom,
@@ -30,6 +31,54 @@
 		VALUES
 		(
 			#{xtornum},
+			#{xchalanref, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xref, jdbcType=VARCHAR},
+			#{xdatecom, jdbcType=DATE},
+			#{xfwh, jdbcType=VARCHAR},
+			#{xtwh, jdbcType=VARCHAR},	
+			#{xstatustor, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{xlong, jdbcType=VARCHAR},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+	
+	<insert id="saveImtorHeaderWithChalan" parameterType="ImtorHeader">
+		INSERT INTO ImtorHeader
+		(
+			xtornum,
+			xchalanref,
+			xdate,
+			xref,
+			xdatecom,
+			xfwh,
+			xtwh,
+			xstatustor,
+			xtrn,
+			xlong,
+						
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xtornum, jdbcType=VARCHAR},
+			#{xchalanref, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xref, jdbcType=VARCHAR},
 			#{xdatecom, jdbcType=DATE},
@@ -54,6 +103,7 @@
 		UPDATE
 			ImtorHeader
 		SET
+			xchalanref=#{xchalanref, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xref=#{xref, jdbcType=VARCHAR},
 			xdatecom=#{xdatecom, jdbcType=DATE},
@@ -77,12 +127,13 @@
 	
 	<insert id="saveImtorDetail" parameterType="ImtorDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO ImtorDetail
 		(
 			xtornum,
 			xrow,
+			xchalanref,
 			xitem,
 			xunit,
 			xqtyord,
@@ -102,6 +153,7 @@
 		(
 			#{xtornum, jdbcType=VARCHAR},
 			#{xrow},
+			#{xchalanref, jdbcType=VARCHAR},
 			#{xitem, jdbcType=VARCHAR},
 			#{xunit, jdbcType=VARCHAR},
 			#{xqtyord, jdbcType=DECIMAL},
@@ -124,6 +176,7 @@
 		UPDATE 
 			ImtorDetail
 		SET
+			xchalanref=#{xchalanref, jdbcType=VARCHAR},
 			xitem=#{xitem, jdbcType=VARCHAR},
 			xunit=#{xunit, jdbcType=VARCHAR},
 			xqtyord=#{xqtyord, jdbcType=DECIMAL},
@@ -143,12 +196,24 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 	
+	<delete id="deleteImtorDetail" parameterType="ImtorDetail">
+		DELETE FROM ImtorDetail WHERE xrow=#{xrow} AND xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 	<select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
 		SELECT * FROM ImtorHeader WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="findImtorHeaderByXchalanref" resultType="ImtorHeader">
+		SELECT * FROM ImtorHeader WHERE xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">
+		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="getAllImtorHeader" resultType="ImtorHeader">

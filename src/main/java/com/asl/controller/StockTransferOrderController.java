@@ -20,15 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
-import com.asl.entity.Xcodes;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ImtorService;
+import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -39,6 +37,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 	@Autowired private ImtorService imtorService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private XtrnService xtrnService;
+	@Autowired private OpordService opordService;
 
 	@GetMapping
 	public String loadTransferOrderdPage(Model model) {
@@ -80,18 +79,77 @@ public class StockTransferOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(imtorHeader.getXfwh().equalsIgnoreCase(imtorHeader.getXtwh())) {
+			responseHelper.setErrorStatusAndMessage("Stock cannot be transferred to same warehouse !");;
+			return responseHelper.getResponse();
+		}
 		
 		imtorHeader.setXtype(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
 		imtorHeader.setXtrntor(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
-
+		String transactionCode = "";
 		// if existing record
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
+		
+		List<Oporddetail> opordDetailList = new ArrayList<Oporddetail>();
+		List<ImtorDetail> imtorDetailList;
+		//Validate and get records for chalan ref
+		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
+			Opordheader opordHeader = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());			
+			if(opordHeader == null) {
+				responseHelper.setErrorStatusAndMessage("Please provide a valid Chalan Ref");
+				return responseHelper.getResponse();
+			}
+			
+			if(!imtorHeader.getXchalanref().equalsIgnoreCase(existImtorHeader.getXchalanref()) && StringUtils.isNotBlank(existImtorHeader.getXchalanref())) {
+				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
+				for(int i=0; i<imtorDetailList.size(); i++) {
+					long delCount = imtorService.deleteDetail(imtorDetailList.get(i));
+					if(delCount == 0) {
+						responseHelper.setErrorStatusAndMessage("Failed to delete detail for Chalan : " + existImtorHeader.getXchalanref());
+						return responseHelper.getResponse();
+					}
+				}
+			}
+			
+			opordDetailList = opordService.findOporddetailByXordernum(opordHeader.getXordernum());	
+		}
+		
 		if(existImtorHeader != null) {
+			//Delete details if chalan ref is empty
+			if(StringUtils.isBlank(imtorHeader.getXchalanref()) && StringUtils.isNotBlank(existImtorHeader.getXchalanref())) {
+				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
+				for(int i=0; i<imtorDetailList.size(); i++) {
+					long delCount = imtorService.deleteDetail(imtorDetailList.get(i));
+					if(delCount == 0) {
+						responseHelper.setErrorStatusAndMessage("Failed to delete detail for Chalan : " + existImtorHeader.getXchalanref());
+						return responseHelper.getResponse();
+					}
+				}			
+			}
+			
+			String previousChalan = existImtorHeader.getXchalanref();
 			BeanUtils.copyProperties(imtorHeader, existImtorHeader, "xtornum", "xdate");
 			long count = imtorService.update(existImtorHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
+			}
+			
+			if(0<opordDetailList.size() && !imtorHeader.getXchalanref().equalsIgnoreCase(previousChalan)) {
+				ImtorDetail imtorDetail;
+				
+				for(int i=0; i<opordDetailList.size(); i++) {
+					imtorDetail = new ImtorDetail();
+					BeanUtils.copyProperties(opordDetailList.get(i), imtorDetail, "xrow");
+					imtorDetail.setXtornum(imtorHeader.getXtornum());
+					imtorDetail.setXchalanref(imtorHeader.getXchalanref());
+					
+					long dCount = imtorService.saveDetail(imtorDetail);
+					if(dCount == 0) {
+						responseHelper.setStatus(ResponseStatus.ERROR);
+						return responseHelper.getResponse();
+					}
+				}
 			}
 			responseHelper.setSuccessStatusAndMessage("Transfer Order updated successfully");
 			responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
@@ -99,12 +157,32 @@ public class StockTransferOrderController extends ASLAbstractController {
 		}
 
 		// If new
-		long count = imtorService.save(imtorHeader);
+		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
+			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtype(), imtorHeader.getXtrntor(), 6));
+		}
+		long count = imtorService.save(imtorHeader);		
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Purchase Order created successfully");
+		if(0<opordDetailList.size() && StringUtils.isNotBlank(imtorHeader.getXtornum())) {
+			ImtorDetail imtorDetail;
+			
+			for(int i=0; i<opordDetailList.size(); i++) {
+				imtorDetail = new ImtorDetail();
+				BeanUtils.copyProperties(opordDetailList.get(i), imtorDetail, "xrow");
+				imtorDetail.setXtornum(imtorHeader.getXtornum());
+				imtorDetail.setXchalanref(imtorHeader.getXchalanref());
+				
+				long dCount = imtorService.saveDetail(imtorDetail);
+				if(dCount == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+			}
+		}
+		
+		responseHelper.setSuccessStatusAndMessage("Transfer Order created successfully");
 		responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
 		return responseHelper.getResponse();
 	}
