@@ -10,6 +10,7 @@
 		(
 			xpornum,
 			xcus,
+			xsup,
 			xref,
 			xdate,
 			xwh,
@@ -31,6 +32,7 @@
 		(
 			#{xpornum},
 			#{xcus, jdbcType=VARCHAR},
+			#{xsup, jdbcType=VARCHAR},
 			#{xref, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xwh, jdbcType=VARCHAR},
@@ -55,6 +57,7 @@
 			PoordHeader
 		SET
 			xcus=#{xcus, jdbcType=VARCHAR},
+			xsup=#{xsup, jdbcType=VARCHAR},
 			xref=#{xref, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xwh=#{xwh, jdbcType=VARCHAR},

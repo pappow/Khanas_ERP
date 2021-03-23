@@ -16,6 +16,7 @@ public interface OpdoService {
 	public long save(Opdoheader opdoHeader);
 	public long update(Opdoheader opdoHeader);
 	public long updateOpdoHeaderTotalAmt(Opdodetail opdoDetail);
+	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(Opdodetail opdodetail);
 	public long updateOpdoHeaderGrandTotalAmt(Opdoheader opdoheader);
 	
 	public long saveDetail(Opdodetail opdoDetail);

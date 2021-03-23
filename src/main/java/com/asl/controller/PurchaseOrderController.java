@@ -47,7 +47,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		return "pages/purchasing/poord/poord";
 	}
 
@@ -60,7 +60,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		return "pages/purchasing/poord/poord";
 	}
@@ -70,6 +70,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		//poord.setXtype("Purchase");
 		//poord.setXtypetrn("PO Number");
+		poord.setXstatuspor("Open");
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
 	}

@@ -175,7 +175,9 @@
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="os : ${openinvoiceorders}">
-											<td th:text="${os.xdornum}"></td>
+											<td>
+												<a th:href="@{/salesninvoice/salesandinvoice/} + ${os.xdornum}" target="_blank" th:text="${os.xdornum}"></a>
+											</td>
 											<!-- <td th:text="${os.xpornum} + ' - ' + ${os.branchname}"></td> -->
 											<td th:text="${os.xordernum}"></td>
 											<td th:text="${#dates.format(os.xdate, df)}"></td>

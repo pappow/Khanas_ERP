@@ -34,6 +34,9 @@ public class PoordHeader extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xpornum")
 	private String xpornum;
+	
+	@Column(name = "xsup")
+	private String xsup;
 
 	@Column(name = "xcus")
 	private String xcus;
