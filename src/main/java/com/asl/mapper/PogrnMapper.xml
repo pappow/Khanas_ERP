@@ -231,4 +231,8 @@
 	<select id = "procTransferPOtoAP" statementType = "CALLABLE">
 		{call PO_transferPOtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xgrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
+	
+	<select id="searchPoord" resultType="PogrnHeader">
+		SELECT * FROM POGRNHEADER WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
 </mapper>

@@ -25,8 +25,8 @@ public class PDLServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// xpornum
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "XPORNUM", "PO-000035", true));
+		// xpornum - PO Number
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "PO-Number", "search/report/ponumber", "", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

@@ -19,6 +19,7 @@ import com.asl.model.SearchSuggestResult;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.ProductionSuggestionService;
+import com.asl.service.PogrnService;
 
 /**
  * @author Zubayer Ahamed
@@ -31,6 +32,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private CacusService cacusService;
 	@Autowired private CaitemService caitemService;
 	@Autowired private ProductionSuggestionService productionSuggestionService;
+	@Autowired private PogrnService pogrnService;
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -125,6 +127,15 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<SearchSuggestResult> list = new ArrayList<>();
 		productionSuggestionService.searchClananNumbers(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c, c)));
 
+		return list;
+	}
+	
+	@GetMapping("/report/ponumber/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getPonumber(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		pogrnService.searchPoord(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
 }

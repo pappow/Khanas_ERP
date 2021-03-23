@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 

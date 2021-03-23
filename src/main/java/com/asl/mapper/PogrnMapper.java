@@ -3,7 +3,6 @@ package com.asl.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 
@@ -27,4 +26,6 @@ public interface PogrnMapper {
 	
 	public void procInventory(String zid, String user, String xgrnnum, String xpornum, String p_seq);
 	public void procTransferPOtoAP(String zid, String user, String xgrnnum, String p_seq);
+	
+	public List<PogrnHeader> searchPoord(String xpornum, String zid);
 }

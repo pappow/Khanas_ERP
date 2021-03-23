@@ -123,6 +123,9 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		pogrnMapper.procTransferPOtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum, p_seq);
 	}
 	
-	
+	@Override
+	public List<PogrnHeader> searchPoord(String xpornum){
+		return pogrnMapper.searchPoord(xpornum.toUpperCase(), sessionManager.getBusinessId());
+	}
 
 }

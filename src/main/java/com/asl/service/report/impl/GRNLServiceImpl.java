@@ -28,10 +28,12 @@ public class GRNLServiceImpl extends AbstractReportService {
 	}
 
 	private List<FormFieldBuilder> generateFields() {
+		
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
+		
 
 		// xgrnstatus
 		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
