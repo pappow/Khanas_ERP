@@ -149,5 +149,17 @@
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="findAdarByXcus" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllAdars" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllArhedByXtrn" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND zid=#{zid} AND zactive='1'
+	</select>
 
 </mapper>

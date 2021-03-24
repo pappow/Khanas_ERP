@@ -26,7 +26,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/salesninvoice}">Sales & Invoicing</a></li>
-										<li class="active"><a th:href="@{/salesninvoice/salesandinvoice}">Invoicing</a></li>
+										<li class="active"><a th:href="@{/salesninvoice/directsales}">Invoicing (Direct)</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -51,13 +51,13 @@
 										<h1>Sales and Invoicing</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(opdoheader.xdornum)}" th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:if="${#strings.isEmpty(opdoheader.xdornum)}" th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/confirmopdo/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success confirmopdo-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord == 'Returned' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/returngrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/archive/} + ${opdoheader.xdornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == false}" th:href="@{/salesninvoice/salesandinvoice/restore/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/directsales/confirmopdo/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success confirmopdo-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord == 'Returned' and opdoheader.zactive == true}" th:href="@{/salesninvoice/directsales/returngrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/directsales/archive/} + ${opdoheader.xdornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == false}" th:href="@{/salesninvoice/directsales/restore/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
 										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
 										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
@@ -65,7 +65,7 @@
 										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/salesandinvoice/save}" th:object="${opdoheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/directsales/save}" th:object="${opdoheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
@@ -78,7 +78,7 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">GRN Prefix : </label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${opdoprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -87,7 +87,7 @@
 													</div>
 													
 													<div class="form-group" th:if="${not #strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xdornum">Invoice Number : </label>
+														<label class="control-label col-md-4" for="xdornum">Prefix Number : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xdornum}" disabled="disabled">
 														</div>
@@ -353,7 +353,7 @@
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 												<tr th:each="opdo : ${allOpdoHeader}">
 													<td>
-														<a th:href="@{/salesninvoice/salesandinvoice/} + ${opdo.xdornum}" th:text="${opdo.xdornum}"></a>
+														<a th:href="@{/salesninvoice/directsales/} + ${opdo.xdornum}" th:text="${opdo.xdornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(opdo.xdate, df)}"></td>
 													<td th:text="${opdo.xcus}"></td>
@@ -373,7 +373,7 @@
 
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(opdoheader.xdornum)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/salesninvoice/salesandinvoice/opdodetail/} + ${opdoheader.xdornum}"></a>
+							<a id="listlines-url" th:href="@{/salesninvoice/directsales/opdodetail/} + ${opdoheader.xdornum}"></a>
 							<div class="section-header sectionbartoggle">
 								<h1>Invoice Details</h1>
 							</div>
@@ -387,7 +387,7 @@
 											<th>Qty</th>
 											<th>Rate</th>
 											<th th:if="${opdoheader.xstatusord != 'Confirmed'}" data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/salesandinvoice/} + ${opdoheader.xdornum} + '/opdodetail/new/show', data-target-modal='opdodetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/new/show', data-target-modal='opdodetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -401,8 +401,8 @@
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:if="${opdoheader.xstatusord != 'Confirmed'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesandinvoice/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/show', data-target-modal='opdodetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/salesandinvoice/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/show', data-target-modal='opdodetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
@@ -429,7 +429,7 @@
 				var dornum = $("#xdornum").val();
 				
 				$.ajax({
-					url: getBasepath() + "/salesninvoice/salesandinvoice/confirmopdo/" + dornum,
+					url: getBasepath() + "/salesninvoice/directsales/confirmopdo/" + dornum,
 					success: function(result){
 						var status = result.status.toLowerCase();
 						
@@ -450,7 +450,7 @@
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: getBasepath() + "/salesninvoice/salesandinvoice/returngrn/" + grnNum,
+					url: getBasepath() + "/salesninvoice/directsales/returngrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						

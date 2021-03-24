@@ -102,6 +102,10 @@ public class PogrnController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+			responseHelper.setErrorStatusAndMessage("Please provide bill info");
+			return responseHelper.getResponse();
+		}
 
 		// if existing record
 		
@@ -144,6 +148,9 @@ public class PogrnController extends ASLAbstractController {
 	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
 	public String openPogrnDetailModal(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
 
+		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum); 
+		model.addAttribute("customer", data.getXcus());
+		model.addAttribute("pornum", data.getXpornum());
 		model.addAttribute("purUnitList", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 
 		if("new".equalsIgnoreCase(xrow)) {
