@@ -1,5 +1,6 @@
 package com.asl.model.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,7 +23,12 @@ public class SalesOrderChalan {
 	private String chalanName;
 	private String chalanDate;
 	private String status;
+
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")
-	private List<ItemDetails> items;
+	private List<ItemDetails> items = new ArrayList<>();
+
+	@XmlElementWrapper(name = "suggestions")
+	@XmlElement(name = "suggestion")
+	private List<Suggestion> suggestions = new ArrayList<>();
 }

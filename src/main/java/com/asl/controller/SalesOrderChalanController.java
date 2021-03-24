@@ -1,16 +1,27 @@
 package com.asl.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.fop.apps.FOPException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +31,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.asl.entity.Immofgdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.AllSalesOrderChalanReport;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.SalesOrderChalan;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpordService;
 import com.asl.service.XtrnService;
@@ -44,8 +61,6 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private ImmofgdetailService immofgdetailService;
-
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@GetMapping
 	public String loadSalesOrderChalanPage(Model model) {
@@ -290,6 +305,93 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@GetMapping("/print/{xordernum}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			message = "Chalan not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			message = "Chalan Details is empty";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		Zbusiness zb = sessionManager.getZbusiness();
+
+		AllSalesOrderChalanReport report = new AllSalesOrderChalanReport();
+		report.setBusinessName(zb.getZorg());
+		report.setBusinessAddress(zb.getXmadd());
+		report.setReportName("Sales Order Chalan Report");
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+
+		List<SalesOrderChalan> chalans = new ArrayList<>();
+		SalesOrderChalan chalan = new SalesOrderChalan();
+		chalan.setChalanName(oh.getXordernum());
+		chalan.setChalanDate(sdf.format(oh.getXdate()));
+		chalan.setStatus(oh.getXstatus());
+		chalans.add(chalan);
+
+		List<ItemDetails> items = new ArrayList<>();
+		details.stream().forEach(d -> {
+			ItemDetails id = new ItemDetails();
+			id.setItemCode(d.getXitem());
+			id.setItemCategory(d.getXdesc());
+			id.setItemQty(d.getXqtyord().toString());
+			id.setItemUnit(d.getXunit());
+			id.setItemCategory(d.getXcatitem());
+			id.setItemGroup(d.getXgitem());
+			items.add(id);
+		});
+		chalan.getItems().addAll(items);
+		report.getChalans().addAll(chalans);
+
+		String xml = null;
+		try {
+			xml = printingService.parseXMLString(report);
+		} catch (JAXBException e) {
+			log.error(ERROR, e.getMessage(), e);
+		}
+		if(StringUtils.isBlank(xml)) {
+			message = "Can't generate xml for chalan";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		Document doc = null;
+		try {
+			doc = printingService.getDomSourceForXML(xml);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			log.error(ERROR, e.getMessage(), e);
+		}
+		if(doc == null) {
+			message = "Can't generate document object from xml for chalan";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		ByteArrayOutputStream out = null;
+		try {
+			out = printingService.transfromToPDFBytes(doc, appConfig.getXslPath() + "/allsalesorderchalanreport.xsl");
+		} catch (FOPException | TransformerFactoryConfigurationError | TransformerException e) {
+			log.error(ERROR, e.getMessage(), e);
+		}
+		if(out == null) {
+			message = "Can't generate pdf for chalan";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		byte[] byt = out.toByteArray();
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
 
 //	@GetMapping
 //	public String loadSalesOrderPage(Model model) {

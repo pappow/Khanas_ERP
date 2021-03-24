@@ -33,4 +33,7 @@ public class AppConfig {
 
 	@Value("${default.birtUrl:http://localhost:8080/birt/frameset}")
 	private String birtUrl;
+
+	@Value("${default.report.xsl-path}")
+	private String xslPath;
 }

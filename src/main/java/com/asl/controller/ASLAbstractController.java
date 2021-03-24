@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.validation.Validator;
@@ -19,10 +20,12 @@ import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
+import com.asl.service.PrintingService;
 import com.asl.service.ProcErrorLogService;
 import com.asl.service.ProfileService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
+import com.asl.service.ZbusinessService;
 import com.asl.service.report.ReportFieldService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +43,7 @@ public class ASLAbstractController {
 	protected static final String DEFAULT_MENU = "DEFAULT_MENU";
 	protected static final String DEFAULT_REPORT = "DEFAULT_REPORT";
 	protected static final String ERROR = "Error is : {}, {}"; 
+	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired protected ApplicationContext appContext;
 	@Autowired protected AppConfig appConfig;
@@ -52,6 +56,7 @@ public class ASLAbstractController {
 	@Autowired protected XtrnService xtrnService;
 	@Autowired protected XcodesService xcodesService;
 	@Autowired protected ProcErrorLogService errorService;
+	@Autowired protected PrintingService printingService;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {

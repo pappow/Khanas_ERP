@@ -16,18 +16,16 @@ import lombok.Data;
  * @since Mar 24, 2021
  */
 @Data
-@XmlRootElement(name = "allsalesorderchalanreport")
+@XmlRootElement(name = "salesorder")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AllSalesOrderChalanReport {
+public class SalesOrder {
 
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	@XmlElementWrapper(name = "chalans")
-	@XmlElement(name = "chalan")
-	private List<SalesOrderChalan> chalans = new ArrayList<>();
-	private String printDate;
-	private String copyrightText;
+	private String orderNumber;
+	private String reqNumber;
+	private String reqBranch;
+	private String date;
+	private String status;
+	@XmlElementWrapper(name = "items")
+	@XmlElement(name = "item")
+	private List<ItemDetails> items = new ArrayList<>();
 }
