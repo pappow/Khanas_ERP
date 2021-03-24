@@ -18,7 +18,9 @@ public enum ReportMenu {
 	POL(5, "POL", "Purchase Order List", ReportParamMap.POL, "POL.rptdesign", "POL", "Y", "/report/POL"),
 	PDL(6, "PDL", "Purchase Deviation List", ReportParamMap.PDL, "PDL.rptdesign", "PDL", "Y", "/report/PDL"),
 	GRNL(7, "GRNL", "GRN List", ReportParamMap.GRNL, "GRNL.rptdesign", "GRNL", "Y", "/report/GRNL"),
-	SUGL(8, "SUGL", "Suggestion List", ReportParamMap.SUGL, "SUGL.rptdesign", "SUGL", "Y", "/report/SUGL");
+	SUGL(8, "SUGL", "Suggestion List", ReportParamMap.SUGL, "SUGL.rptdesign", "SUGL", "Y", "/report/SUGL"),
+	SL(9, "SL", "Supplier Ledger List", ReportParamMap.SL, "SL.rptdesign", "SL", "Y", "/report/SL"),
+	CL(10, "CL", "Customer Ledger List", ReportParamMap.CL, "CL.rptdesign", "CL", "Y", "/report/CL");
 
 	private int group;
 	private String code;
