@@ -36,6 +36,9 @@ public class ImtorDetail extends AbstractModel<String> {
 	@Column(name = "xrow")
 	private int xrow;
 	
+	@Column(name = "xchalanref")
+	private String xchalanref;
+	
 	@Column(name = "xitem")
 	private String xitem;
 

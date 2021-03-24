@@ -20,11 +20,13 @@ public interface ImtorService {
 	public long deleteDetail(ImtorDetail imtorDetail);
 	
 	public ImtorHeader findImtorHeaderByXtornum(String xtornum);
+	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref);
 	public List<ImtorHeader> getAllImtorHeader();
 	
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow);
 	public ImtorDetail findImtorDetailByXtornumAndXitem(String xtornum, String xitem);
 	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum);
+	public List<ImtorDetail> findImtorDetailByXtornumAndXchalanref(String xtornum, String xchalanref);
 	
 	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail);
 	

@@ -21,7 +21,10 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public long save(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrntor()))
 			return 0;
-		imtorHeader.setZid(sessionManager.getBusinessId());
+		imtorHeader.setZid(sessionManager.getBusinessId());					
+		if(StringUtils.isNotBlank(imtorHeader.getXtornum()) && StringUtils.isNotBlank(imtorHeader.getXchalanref()))
+			return imtorMapper.saveImtorHeaderWithChalan(imtorHeader);
+		
 		return imtorMapper.saveImtorHeader(imtorHeader);
 	}
 
@@ -65,6 +68,14 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 
 		return imtorMapper.findImtorHeaderByXtornum(xtornum, sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref) {
+		if (StringUtils.isBlank(xchalanref))
+			return null;
+
+		return imtorMapper.findImtorHeaderByXchalanref(xchalanref, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public List<ImtorHeader> getAllImtorHeader() {
@@ -77,6 +88,15 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 			return null;
 		return imtorMapper.findImtorDetailByXtornum(xtornum, sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public List<ImtorDetail> findImtorDetailByXtornumAndXchalanref(String xtornum, String xchalanref) {
+		if(StringUtils.isBlank(xchalanref))
+			return null;
+		return imtorMapper.findImtorDetailByXtornumAndXchalanref(xtornum, xchalanref, sessionManager.getBusinessId());
+	}
+	
+	
 
 	@Override
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow) {
