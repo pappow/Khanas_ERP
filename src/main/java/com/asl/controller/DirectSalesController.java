@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -30,11 +28,9 @@ import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
-import net.bytebuddy.matcher.ModifierMatcher.Mode;
-
 @Controller
-@RequestMapping("/salesninvoice/salesandinvoice")
-public class SalesAndInvoiceController extends ASLAbstractController {
+@RequestMapping("/salesninvoice/directsales")
+public class DirectSalesController extends ASLAbstractController {
 	
 	@Autowired
 	private OpdoService opdoService;
@@ -56,11 +52,11 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
 		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("payStatusList", new ArrayList<>());
-		model.addAttribute("arStatusList", new ArrayList<>());
+		model.addAttribute("arStatusList", new ArrayList<>());		
 		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode()));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
-		return "pages/salesninvoice/salesandinvoice/opdo";
+		return "pages/salesninvoice/directsales/opdo";
 	}
 	
 	@GetMapping("/{xdornum}")
@@ -82,7 +78,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
 		
-		return "pages/salesninvoice/salesandinvoice/opdo";
+		return "pages/salesninvoice/directsales/opdo";
 	}
 	
 	private Opdoheader getDefaultOpdoHeader() {
@@ -274,5 +270,5 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-
+	
 }

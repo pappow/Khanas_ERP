@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,5 +49,12 @@ public class Imtdet extends AbstractModel<String>{
 	//Additionaly added
 	@Column(name = "xunit")
 	private String xunit;
+	
+	@Transient
+	private String xdesc;
+	@Transient
+	private String xgitem;
+	@Transient
+	private String xcatitem;
 	
 }

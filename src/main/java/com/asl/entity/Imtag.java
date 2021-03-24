@@ -57,6 +57,9 @@ public class Imtag extends AbstractModel<String> {
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 	
+	@Column(name = "xtrn")
+	private String xtrn;
+	
 	@Transient
 	private String xtrnimtag;
 }

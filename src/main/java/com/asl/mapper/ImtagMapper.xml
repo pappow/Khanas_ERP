@@ -3,7 +3,7 @@
 <mapper namespace="com.asl.mapper.ImtagMapper">
 	<insert id="saveImtag" parameterType="Imtag">
 		<selectKey keyProperty="xtagnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtag}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Imtag
 		(
@@ -14,6 +14,8 @@
 			xwh,
 			xstatustag,
 			xtype,
+			xtypetrn,
+			xtrn,			
 				
 			zid,
 			zauserid,
@@ -33,6 +35,8 @@
 			#{xwh, jdbcType=INTEGER},
 			#{xstatustag, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},			
 			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -55,6 +59,8 @@
 			xwh=#{xwh, jdbcType=INTEGER},
 			xstatustag=#{xstatustag, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
 			
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -70,7 +76,7 @@
 	
 	<insert id="saveImtdet" parameterType="Imtdet">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM Imtdet WHERE xtagnum=#{xtagnum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM Imtdet WHERE xtagnum=#{xtagnum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO Imtdet
 		(
@@ -154,6 +160,13 @@
 	</select>
 	
 	<select id="findImtdetByXtagnum" resultType="Imtdet">
-		SELECT * FROM Imtdet WHERE xtagnum=#{xtagnum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			imt.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem 
+		FROM Imtdet imt 
+			JOIN caitem ON caitem.xitem = imt.xitem AND caitem.zid=#{zid}
+		WHERE imt.xtagnum=#{xtagnum} AND imt.zid=#{zid} AND imt.zactive='1'
 	</select>
 </mapper>

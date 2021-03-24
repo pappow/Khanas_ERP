@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Imtag;
 import com.asl.entity.Imtdet;
+import com.asl.entity.PogrnDetail;
+import com.asl.entity.PogrnHeader;
+import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -46,7 +49,7 @@ public class StockTakeController extends ASLAbstractController {
 		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode()));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.TAG_STATUS.getCode()));
+		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		
 		return "pages/inventory/stocktake/imtag";
 	}
@@ -61,7 +64,7 @@ public class StockTakeController extends ASLAbstractController {
 		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode()));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.TAG_STATUS.getCode()));
+		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("imtagDetailsList", imtagService.findImtdetByXtagnum(xtagnum));
 		
 		return "pages/inventory/stocktake/imtag";
@@ -69,8 +72,10 @@ public class StockTakeController extends ASLAbstractController {
 	
 	private Imtag getDefaultImtag() {
 		Imtag imtag= new Imtag();
-		imtag.setXtype(TransactionCodeType.STOCK_TAKE.getCode());	
-		imtag.setXtrnimtag(TransactionCodeType.STOCK_TAKE.getdefaultCode());		
+		imtag.setXtype(TransactionCodeType.STOCK_TAKE.getCode());
+		imtag.setXtypetrn(TransactionCodeType.STOCK_TAKE.getCode());
+		imtag.setXtrn(TransactionCodeType.STOCK_TAKE.getdefaultCode());
+		imtag.setXtrnimtag(TransactionCodeType.STOCK_TAKE.getdefaultCode()); // Removal queue
 		return imtag;
 	}
 	
@@ -194,6 +199,41 @@ public class StockTakeController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setRedirectUrl("/inventory/stocktake/" +  xtagnum);
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/confirmstocktake/{xtagnum}")
+	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xtagnum){
+		if(StringUtils.isBlank(xtagnum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		
+		//Get PogrnHeader record by Xgrnnum		
+		Imtag imtag = imtagService.findImtagByXtagnum(xtagnum);
+		// Validate		
+		if("Confirmed".equalsIgnoreCase(imtag.getXstatustag())) {
+			responseHelper.setErrorStatusAndMessage("TAG already confirmed");
+			return responseHelper.getResponse();
+		}		
+		Xcodes xcode = xcodeService.findByXtypesAndXcodes(CodeType.WAREHOUSE.getCode(), imtag.getXwh());
+		if(xcode == null) {
+			responseHelper.setErrorStatusAndMessage("A valid warehouse must be selected.");
+			return responseHelper.getResponse();
+		}
+		List<Imtdet> imtdetList = imtagService.findImtdetByXtagnum(xtagnum);
+		if(imtdetList.size() == 0) {
+			responseHelper.setErrorStatusAndMessage("Please add items to confirm stock-take!");
+			return responseHelper.getResponse();
+		}
+		String p_seq;
+		if(!"Confirmed".equalsIgnoreCase(imtag.getXstatustag())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			//pogrnService.procInventory(x, pogrnHeader.getXpornum(), p_seq);
+		}
+		
+		responseHelper.setSuccessStatusAndMessage("Imtag Confirmed successfully");
+		responseHelper.setRedirectUrl("/inventory/stocktake/" + imtag.getXtagnum());
 		return responseHelper.getResponse();
 	}
 	

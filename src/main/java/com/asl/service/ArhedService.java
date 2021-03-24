@@ -18,7 +18,13 @@ public interface ArhedService {
 	public Arhed findObapByXcus(String xcus);
 	public List<Arhed> getAllObaps();
 	
+	public List<Arhed> getAllArhedByXtrn(String xtrn);
+	
 	//Supplier Adjustment
 	public Arhed findAdapByXcus(String xcus);
 	public List<Arhed> getAllAdaps();
+	
+	//Customer Adjustment
+	public Arhed findAdarByXcus(String xcus);
+	public List<Arhed> getAllAdars();
 }
