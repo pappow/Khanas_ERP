@@ -61,6 +61,7 @@
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-file-invoice"></i> Create Invoice</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/production/suggestion/create/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-clipboard-list"></i> Create Suggestion</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/print/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-print"></i> Print</a>
+										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/production/batch/chalantobatch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Create Batch</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/salesorderchalan/save}" th:object="${salesorderchalan}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -136,7 +137,10 @@
 					<div class="col-md-6" th:if="${not #strings.isEmpty(salesorderchalan.xordernum)}">
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1 th:text="${salesorderchalan.xstatus eq 'Open' ? 'All assigned & open Sales Orders' : 'All assigned Sales Orders'}">All Open Sales Orders</h1>
+								<h1>
+									<span th:text="${salesorderchalan.xstatus eq 'Open' ? 'All assigned & open Sales Orders' : 'All assigned Sales Orders'}"></span>
+									<a th:if="${salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/printsalesorders/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-print"></i> Print</a>
+								</h1>
 							</div>
 							<div class="section-body">
 								<div class="row" th:if="${salesorderchalan.xstatus eq 'Open'}">

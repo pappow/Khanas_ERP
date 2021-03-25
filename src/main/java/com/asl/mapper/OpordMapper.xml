@@ -174,6 +174,8 @@
 			AND xrow=#{xrow} 
 			AND zid=#{zid} 
 			AND zactive='1'
+		ORDER BY
+			XROW DESC
 	</select>
 
 	<select id="findOporddetailByXordernum" resultType="Oporddetail">
@@ -189,10 +191,12 @@
 			oporddetail.xordernum=#{xordernum}
 			AND oporddetail.zid=#{zid}
 			AND oporddetail.zactive='1'
+		ORDER BY
+			OPORDDETAIL.XROW DESC
 	</select>
 
 	<select id="getAllOpordheader" resultType="Opordheader">
-		SELECT * FROM Opordheader WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Opordheader WHERE zid=#{zid} AND zactive='1' ORDER BY XORDERNUM DESC
 	</select>
 
 	<select id="findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus" resultType="Opordheader">
@@ -207,6 +211,8 @@
 			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
 			AND zid=#{zid} 
 			AND zactive='1'
+		ORDER BY
+			XORDERNUM DESC
 	</select>
 
 	<select id="findOpordHeaderByXtypetrnAndXtrnAndXdate" resultType="Opordheader">
@@ -220,6 +226,8 @@
 			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
 			AND zid=#{zid} 
 			AND zactive='1'
+		ORDER BY
+			XORDERNUM DESC
 	</select>
 
 	<select id="findAllOpordHeaderByXtypetrnAndXtrnAndXdate" resultType="Opordheader">
@@ -235,6 +243,8 @@
 			AND TO_CHAR(opordheader.xdate,'yyyy-MM-dd')=#{xdate}
 			AND opordheader.zid=#{zid} 
 			AND opordheader.zactive='1'
+		ORDER BY
+			OPORDHEADER.XORDERNUM DESC
 	</select>
 
 	<select id="findOporddetailByXordernumAndXitem" resultType="Oporddetail">
@@ -247,6 +257,8 @@
 			AND xitem=#{xitem}
 			AND zid=#{zid} 
 			AND zactive='1'
+		ORDER BY
+			XROW DESC
 	</select>
 
 	<select id="getSalesOrderMatrxi" resultType="com.asl.model.BranchesRequisitions">
@@ -282,6 +294,8 @@
 			AND ZACTIVE='1'
 			AND XTYPETRN=#{xtypetrn}
 			AND XTRN=#{xtrn}
+		ORDER BY
+			XORDERNUM DESC
 	</select>
 
 	<select id="findAllSalesOrder" resultType="Opordheader">
@@ -298,6 +312,8 @@
 			AND OPORDHEADER.XTRN=#{xtrn}
 			AND OPORDHEADER.XSTATUS=#{xstatus}
 			AND TO_CHAR(OPORDHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
+		ORDER BY
+			OPORDHEADER.XORDERNUM DESC
 	</select>
 
 	<select id="findAllSalesOrderByChalan" resultType="Opordheader">
@@ -313,6 +329,8 @@
 			AND OPORDHEADER.XTYPETRN=#{xtypetrn}
 			AND OPORDHEADER.XTRN=#{xtrn}
 			AND OPORDHEADER.XCHALANREF=#{xchalanref}
+		ORDER BY
+			OPORDHEADER.XORDERNUM DESC
 	</select>
 
 	
