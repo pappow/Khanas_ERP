@@ -13,8 +13,9 @@ import com.asl.entity.Opdodetail;
 public interface OpdoMapper {
 	public long saveOpdoHeader(Opdoheader opdoheader);
 	public long updateOpdoHeader(Opdoheader opdoheader);
-	public long updateOpdoHeaderTotalAmt(Opdodetail opdodetail);
-	public long updateOpdoHeaderGrandTotalAmt(Opdoheader opdoheader);	
+	public long updateOpdoHeaderTotalAmt(String xdornum, String zid);
+	public long updateOpdoHeaderGrandTotalAmt(String xdornum, String zid);
+	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum, String zid);	
 
 	public long saveOpdoDetail(Opdodetail opdodetail);
 	public long updateOpdoDetail(Opdodetail opdodetail);
@@ -22,6 +23,7 @@ public interface OpdoMapper {
 
 	public Opdoheader findOpdoHeaderByXdornum(String xdornum, String zid);
 	public List<Opdoheader> getAllOpdoHeader(String zid);
+	public List<Opdoheader> getAllRandomOpdoHeader(String zid);	
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);

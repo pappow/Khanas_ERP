@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.CacusService;
 import com.asl.service.OpdoService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
@@ -40,13 +43,16 @@ public class DirectSalesController extends ASLAbstractController {
 	private XtrnService xtrnService;
 	@Autowired
 	private VataitService vataitService;
+	@Autowired
+	private CacusService cacusService;
 	
 	@GetMapping
 	public String loadInvoicePage(Model model) {
 		
 		model.addAttribute("opdoheader", getDefaultOpdoHeader());
 		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode()));
-		model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
+		//model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
+		model.addAttribute("allOpdoHeader", opdoService.getAllRandomOpdoHeader());
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
@@ -67,7 +73,8 @@ public class DirectSalesController extends ASLAbstractController {
 
 		model.addAttribute("opdoheader", data);
 		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode()));
-		model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
+		//model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
+		model.addAttribute("allOpdoHeader", opdoService.getAllRandomOpdoHeader());
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
@@ -86,10 +93,13 @@ public class DirectSalesController extends ASLAbstractController {
 		opdoheader.setXtype(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
 		//pogrn.setXtypetrn("Purchase");
 		opdoheader.setXstatusord("Open");
+		opdoheader.setXgrandtot(BigDecimal.ZERO);
 		opdoheader.setXtotamt(BigDecimal.ZERO);
+		opdoheader.setXvatamt(BigDecimal.ZERO);
 		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
 		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		opdoheader.setXperson(sessionManager.getLoggedInUserDetails().getUsername());
 		return opdoheader;
 	}
 	
@@ -102,9 +112,28 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(StringUtils.isBlank(opdoHeader.getXorg()) || StringUtils.isBlank(opdoHeader.getXphone())) {
+			responseHelper.setErrorStatusAndMessage("Please provide customer info");;
+			return responseHelper.getResponse();
+		}
+		Cacus cacus = cacusService.findByXphone(opdoHeader.getXphone());
+		if(cacus == null) {
+			cacus = new Cacus();
+			cacus.setXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode());
+			cacus.setXcustype(TransactionCodeType.CUSTOMER_NUMBER.getdefaultCode());
+			cacus.setXorg(opdoHeader.getXorg());
+			cacus.setXphone(opdoHeader.getXphone());
+			cacus.setXcrlimit(BigDecimal.ZERO);
+			cacus.setXisrandom(true);
+			cacusService.save(cacus);
+			cacus = cacusService.findByXphone(opdoHeader.getXphone());
+		}
 
 		// if existing record
-		
+		Vatait vatait = vataitService.findVataitByXvatait(opdoHeader.getXvatait());		
+		opdoHeader.setXvatamt(opdoHeader.getXtotamt().multiply(vatait.getXvat()).divide(BigDecimal.valueOf(100)));
+		opdoHeader.setXgrandtot(opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt()).add(opdoHeader.getXvatamt()));		
+		opdoHeader.setXcus(cacus.getXcus());
 		Opdoheader existOpdoHeader = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
 		if(existOpdoHeader != null) {
 			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xdate");
@@ -119,13 +148,14 @@ public class DirectSalesController extends ASLAbstractController {
 		}
 
 		// If new
+		
 		long count = opdoService.save(opdoHeader);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoHeader.getXdornum());
+		responseHelper.setRedirectUrl("/salesninvoice/directsales/" + opdoHeader.getXdornum());
 		return responseHelper.getResponse();
 		
 	}
@@ -137,7 +167,7 @@ public class DirectSalesController extends ASLAbstractController {
 		Opdoheader header = new Opdoheader();
 		header.setXdornum(xdornum);
 		model.addAttribute("opdoheader", header);
-		return "pages/salesninvoice/salesandinvoice/opdo::opdodetailtable";
+		return "pages/salesninvoice/directsales/opdo::opdodetailtable";
 	}
 	
 	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
@@ -160,7 +190,7 @@ public class DirectSalesController extends ASLAbstractController {
 			}
 			model.addAttribute("opdodetail", opdodetail);
 		}
-		return "pages/salesninvoice/salesandinvoice/opdodetailmodal::opdodetailmodal";
+		return "pages/salesninvoice/directsales/opdodetailmodal::opdodetailmodal";
 	}
 	
 	@PostMapping("/opdodetail/save")
@@ -183,7 +213,7 @@ public class DirectSalesController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  opdoDetail.getXdornum());
+			responseHelper.setRedirectUrl("/salesninvoice/directsales/" +  opdoDetail.getXdornum());
 			responseHelper.setSuccessStatusAndMessage("Invoice item updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -194,7 +224,7 @@ public class DirectSalesController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  opdoDetail.getXdornum());
+		responseHelper.setRedirectUrl("/salesninvoice/directsales/" +  opdoDetail.getXdornum());
 		responseHelper.setSuccessStatusAndMessage("Invoice item saved successfully");		
 		return responseHelper.getResponse();
 	}
@@ -214,7 +244,7 @@ public class DirectSalesController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  xdornum);
+		responseHelper.setRedirectUrl("/salesninvoice/directsales/" +  xdornum);
 		return responseHelper.getResponse();
 	}
 	
@@ -226,19 +256,19 @@ public class DirectSalesController extends ASLAbstractController {
 		}
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
+		BigDecimal grandTot = (opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt());
 		
 		if(opdoDetailList.size()==0){
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Please add items to proceed!");
 			return responseHelper.getResponse();
 		}
 		if(!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
-			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
-			opdoHeader.setXpaid(BigDecimal.valueOf(paid));
+			BigDecimal paid = (opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt());
+			opdoHeader.setXpaid(paid);
 		}
-		Integer xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99)).intValue();
+		BigDecimal xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99));
 		
-		if(grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+		if(grandTot.compareTo(xpaid99) == 1 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
 			responseHelper.setErrorStatusAndMessage("Paid amount not to be less than Receivable!");
 			return responseHelper.getResponse();
 		}
@@ -266,7 +296,7 @@ public class DirectSalesController extends ASLAbstractController {
 			
 		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
 
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
+		responseHelper.setRedirectUrl("/salesninvoice/directsales/" + xdornum);
 		return responseHelper.getResponse();
 	}
 

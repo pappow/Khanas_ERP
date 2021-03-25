@@ -24,6 +24,7 @@
 			xcuszid,
 			xcountry,
 			xcur,
+			xisrandom,
 			zid,
 			zauserid,
 			zuuserid,
@@ -51,6 +52,7 @@
 			#{xcuszid, jdbcType=VARCHAR},
 			#{xcountry, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
+			#{xisrandom, jdbcType=BOOLEAN},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -81,6 +83,7 @@
 			xcuszid=#{xcuszid, jdbcType=VARCHAR},
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
+			xisrandom=#{xisrandom, jdbcType=BOOLEAN},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -96,6 +99,10 @@
 	<select id="findByXcus" resultType="Cacus">
 		SELECT * FROM Cacus WHERE zid=#{zid} AND xcus=#{xcus}
 	</select>
+	
+	<select id="findByXphone" resultType="Cacus">
+		SELECT * FROM Cacus WHERE zid=#{zid} AND xphone=#{xphone}
+	</select>
 
 	<select id="findByXtype" resultType="Cacus">
 		SELECT * FROM Cacus WHERE xtype=#{xtype} AND zid=#{zid}
@@ -106,7 +113,7 @@
 	</select>
 
 	<select id="searchCacus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="searchXorg" resultType="Cacus">

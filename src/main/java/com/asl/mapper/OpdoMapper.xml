@@ -185,7 +185,8 @@
 			#{zactive, jdbcType=VARCHAR},
 			#{ztime, jdbcType=TIMESTAMP},
 			#{zutime, jdbcType=TIMESTAMP}
-		) 
+		)
+		
 	</insert>
 
 	<update id="updateOpdoDetail" parameterType="Opdodetail">
@@ -220,7 +221,7 @@
 		DELETE FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</delete>
 	
-	<update id="updateOpdoHeaderTotalAmt" parameterType="Opdodetail">
+	<update id="updateOpdoHeaderTotalAmt">
 		UPDATE 
 			Opdoheader
 		SET
@@ -229,7 +230,7 @@
 			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
 	</update>
 	
-	<update id="updateOpdoHeaderGrandTotalAmt" parameterType="Opdoheader">
+	<update id="updateOpdoHeaderGrandTotalAmt">
 		UPDATE 
 			Opdoheader
 		SET
@@ -237,13 +238,39 @@
 		WHERE
 			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
 	</update>
+	
+	<update id="updateOpdoHeaderTotalAmtAndGrandTotalAmt">
+		UPDATE 
+			Opdoheader
+		SET
+			xtotamt=(SELECT SUM(xlineamt) FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'),
+			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscamt) FROM Opdoheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1')
+		WHERE
+			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+	</update>
 
 	<select id="findOpdoHeaderByXdornum" resultType="Opdoheader">
-		SELECT * FROM Opdoheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			oh.*, 
+			cacus.xorg, 
+			cacus.xphone 
+		FROM 
+			Opdoheader oh 
+			LEFT JOIN cacus on cacus.xcus = oh.xcus AND cacus.zid=#{zid} 
+		WHERE 
+			oh.xdornum=#{xdornum} AND oh.zid=#{zid} AND oh.zactive='1'
 	</select>	
 	
 	<select id="getAllOpdoHeader" resultType="Opdoheader">
-		SELECT * FROM Opdoheader WHERE zid=#{zid} AND zactive='1'
+		SELECT oh.*, cacus.xorg, cacus.xphone FROM Opdoheader oh
+		JOIN cacus on cacus.xcus = oh.xcus AND cacus.zid=#{zid}
+		WHERE oh.zid=#{zid} AND oh.zactive='1'
+	</select>
+	
+	<select id="getAllRandomOpdoHeader" resultType="Opdoheader">
+		SELECT oh.*, cacus.xorg, cacus.xphone FROM Opdoheader oh
+		JOIN cacus on cacus.xcus = oh.xcus AND cacus.zid=#{zid}
+		WHERE oh.zid=#{zid} AND oh.zactive='1' AND cacus.xisrandom = '1'
 	</select>
 
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
@@ -256,13 +283,13 @@
 
 	<select id="findOpdoDetailByXdornum" resultType="Opdodetail">
 		SELECT 
-			opdodetail.*,
+			od.*,
 			caitem.xdesc,
 			caitem.xgitem,
 			caitem.xcatitem
-		FROM Opdodetail
-			JOIN caitem ON caitem.xitem = opdodetail.xitem AND caitem.zid=#{zid}
-		WHERE Opdodetail.xdornum=#{xdornum} AND Opdodetail.zid=#{zid} AND Opdodetail.zactive='1'
+		FROM Opdodetail od
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+		WHERE od.xdornum=#{xdornum} AND od.zid=#{zid} AND od.zactive='1'
 	</select>
 	
 	<select id = "procConfirmDO" statementType = "CALLABLE">
@@ -308,16 +335,13 @@
 	<select id="findAllInvoiceOrderByChalan" resultType="Opdoheader">
 		SELECT 
 			OPDOHEADER.*
-			<!-- ZBUSINESS.ZORG AS "branchname" -->
 		FROM 
 			OPDOHEADER
-			<!-- JOIN ZBUSINESS ON ZBUSINESS.ZID = OPDOHEADER.XCUS -->
 		WHERE
 			OPDOHEADER.ZID=#{zid}
 			AND OPDOHEADER.ZACTIVE='1'
 			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
 			AND OPDOHEADER.XTRN=#{xtrn}
 			AND OPDOHEADER.XDOCNUM = #{xchalanref}
-			<!-- AND (OPDOHEADER.XCHALANREF=#{xchalanref} OR OPDOHEADER.XDOCNUM = #{xchalanref}) -->
 	</select>
 </mapper>

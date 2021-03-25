@@ -21,6 +21,7 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
+import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -34,6 +35,8 @@ public class MoneyReceiptController extends ASLAbstractController{
 	private XtrnService xtrnService;
 	@Autowired
 	private XcodesService xcodeService;	
+	@Autowired
+	private VataitService vataitService;
 	
 	@GetMapping
 	public String loadMoneyReceiptPage(Model model) {
@@ -46,6 +49,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
 		return "pages/salesninvoice/moneyreceipt/arhed";
 	}
@@ -64,6 +68,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
 		return "pages/salesninvoice/moneyreceipt/arhed";
 	}
@@ -77,17 +82,19 @@ public class MoneyReceiptController extends ASLAbstractController{
 		arhed.setXaitamt(BigDecimal.ZERO);
 		arhed.setXdiscprime(BigDecimal.ZERO);
 		arhed.setXbase(BigDecimal.ZERO);
+		arhed.setXvatait("No Vat");
 		arhed.setXpaymentterm("Credit");
 		arhed.setXtypetrn("Money Receipts");
 		arhed.setXstatus("Open");
 		arhed.setXtype(TransactionCodeType.ACCOUNT_MR.getCode());
+		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_MR.getCode());
 
 		return arhed;
 	}
 	
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
-		if((arhed == null || StringUtils.isBlank(arhed.getXtype())) || StringUtils.isBlank(arhed.getXtrnarhed()) && StringUtils.isBlank(arhed.getXvoucher())) {
+		if((arhed == null)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
