@@ -1,5 +1,6 @@
 package com.asl.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

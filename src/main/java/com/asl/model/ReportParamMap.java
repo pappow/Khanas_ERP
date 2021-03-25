@@ -19,6 +19,8 @@ public class ReportParamMap {
 	public static final Map<String, String> PDL = new HashMap<>();
 	public static final Map<String, String> GRNL = new HashMap<>();
 	public static final Map<String, String> SUGL = new HashMap<>();
+	public static final Map<String, String> SL = new HashMap<>();
+	public static final Map<String, String> CL = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -95,6 +97,14 @@ public class ReportParamMap {
 		
 		SUGL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		SUGL.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());
+		
+		SL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		SL.put("param2", "FromDate|" + ReportParamDataType.DATE.name());
+		SL.put("param3", "ToDate|" + ReportParamDataType.DATE.name());
+		
+		CL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		CL.put("param2", "FromDate|" + ReportParamDataType.DATE.name());
+		CL.put("param3", "ToDate|" + ReportParamDataType.DATE.name());
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());

@@ -30,5 +30,7 @@ public interface PogrnService {
 	//Procedure Call
 	public void procInventory(String xgrnnum, String xpornum, String p_seq);
 	public void procTransferPOtoAP(String xgrnnum, String p_seq);
-
+	
+	//Search
+	public List<PogrnHeader> searchPoord(String xpornum);
 }

@@ -26,10 +26,10 @@ public class CUSLServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// xcus
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "XCUS", "CUS-000021", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/report/cus", "", true));
 
 		// xorg
-		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "Dhanmondi", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/customer", "", true));
 
 		// xphone
 		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "", false));
