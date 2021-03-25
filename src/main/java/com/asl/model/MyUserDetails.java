@@ -26,6 +26,7 @@ public class MyUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 112410652033677128L;
 
+	private String fullName;
 	private String username;
 	private String password;
 	private String emailAddress;
@@ -39,6 +40,7 @@ public class MyUserDetails implements UserDetails {
 	private List<GrantedAuthority> authorities;
 
 	public MyUserDetails(Xusers user, Zbusiness zbusiness) {
+		this.fullName = user.getXname();
 		this.username = user.getZemail();
 		this.password = user.getXpassword();
 		this.businessId = user.getZid();
@@ -53,7 +55,9 @@ public class MyUserDetails implements UserDetails {
 									.collect(Collectors.toList());
 	}
 
-	
+	public String getFullName() {
+		return this.fullName;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

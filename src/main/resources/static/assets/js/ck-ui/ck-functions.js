@@ -46,7 +46,7 @@ function showScreenMessage(type, message, identifier){
 		$('.ck-alert-message').html("");
 		$('.ck-alert').removeClass(type);
 		$('.ck-alert').addClass('nodisplay');
-	}, 4000);
+	}, 1000);
 }
 
 
@@ -100,7 +100,7 @@ var loadingMask2 = {
  * @returns
  */
 function triggerUpdateButton(){
-	console.log('%cTrigger update button...', 'color: green');
+	//console.log('%cTrigger update button...', 'color: green');
 
 	$('li.editmode').addClass('nodisplay');
 	$('a.btn.editmode').addClass('nodisplay');
@@ -122,7 +122,7 @@ function triggerUpdateButton(){
 	$('input.form-control-input2[disabled!="disabled"]').parent().css("margin-left", "0px");
 }
 function triggerUpdateButtonSpecific(tableId){
-	console.log('%cTrigger update button...', 'color: green');
+	//console.log('%cTrigger update button...', 'color: green');
 
 	$('li.editmode').addClass('nodisplay');
 	$('a.btn.editmode').addClass('nodisplay');
@@ -147,11 +147,11 @@ function triggerUpdateButtonSpecific(tableId){
  * Trigger Cancel Button
  */
 function triggerCancelButton(){
-	console.log('%cTrigger cancel button...', 'color: green');
+	//console.log('%cTrigger cancel button...', 'color: green');
 	var href = location.href;
 	if(href.lastIndexOf('copy') != -1){
 		href = href.slice(0,-5)
-		console.log(href);
+		//console.log(href);
 		window.location.replace(href);
 		return;
 	}
@@ -227,7 +227,7 @@ function bindDataTableButtonsEvent(datatable){
  * Bind normal table button event
  */
 function bindTableButtonsEvent(targetTable){
-	console.log('%cBind normal table button event', 'color: green');
+	//console.log('%cBind normal table button event', 'color: green');
 	// New or edit button
 	$(targetTable).find('button.btn-edit, button.btn-add').off('click').on('click', function(e){
 		e.preventDefault();
@@ -253,14 +253,14 @@ function bindTableButtonsEvent(targetTable){
  * @returns
  */
 function doItemDelete(url){
-	console.log('%cTrigger delete item ... ', 'color: red');
+	//console.log('%cTrigger delete item ... ', 'color: red');
 
 	$.ajax({
 		url : url,
 		type : 'POST',
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			//console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.reloadurl){
@@ -268,7 +268,7 @@ function doItemDelete(url){
 				} else if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1500);
+					}, 1000);
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -289,14 +289,14 @@ function doItemDelete(url){
  * @returns
  */
 function doItemConfirm(url){
-	console.log('%cTrigger confirm item ... ', 'color: green');
+	//console.log('%cTrigger confirm item ... ', 'color: green');
 
 	$.ajax({
 		url : url,
 		type : 'POST',
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			//console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.reloadurl){
@@ -304,7 +304,7 @@ function doItemConfirm(url){
 				} else if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1500);
+					}, 1000);
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -324,7 +324,7 @@ function doItemConfirm(url){
  * @returns
  */
 function dataTableInit(){
-	console.log('%cDataTable init.. ', 'color: green');
+	//console.log('%cDataTable init.. ', 'color: green');
 	$('table.datatable').each(function (tindex, table) {
 		var noSortColumns = [];
 		$(table).find('th[data-nosort="Y"]').each(function(i, col){
@@ -336,17 +336,18 @@ function dataTableInit(){
 				"targets": noSortColumns,
 				"orderable": false
 			}],
-			"responsive": true
+			"responsive": true,
+			"aaSorting": []
 		});
 
-		new $.fn.dataTable.FixedHeader(datatable);
+		//new $.fn.dataTable.FixedHeader(datatable);
 
 		bindDataTableButtonsEvent(datatable);
 	});
 }
 
 function modalDataTableInit(){
-	console.log('%cDataTable init.. ', 'color: green');
+	//console.log('%cDataTable init.. ', 'color: green');
 	$('table.modal-datatable').each(function (tindex, table) {
 		var noSortColumns = [];
 		$(table).find('th[data-nosort="Y"]').each(function(i, col){
@@ -358,17 +359,18 @@ function modalDataTableInit(){
 				"targets": noSortColumns,
 				"orderable": false
 			}],
-			"responsive": true
+			"responsive": true,
+			"aaSorting": []
 		});
 
-		new $.fn.dataTable.FixedHeader(datatable);
+		//new $.fn.dataTable.FixedHeader(datatable);
 
 		bindDataTableButtonsEvent(datatable);
 	});
 }
 
 function dataTableInitSpecific(tableId){
-	console.log('%cDataTable init.. ', 'color: green');
+	//console.log('%cDataTable init.. ', 'color: green');
 	$('table#' + tableId).each(function (tindex, table) {
 		var noSortColumns = [];
 		$(table).find('th[data-nosort="Y"]').each(function(i, col){
@@ -380,10 +382,11 @@ function dataTableInitSpecific(tableId){
 				"targets": noSortColumns,
 				"orderable": false
 			}],
-			"responsive": true
+			"responsive": true,
+			"aaSorting": []
 		});
 
-		new $.fn.dataTable.FixedHeader(datatable);
+		//new $.fn.dataTable.FixedHeader(datatable);
 
 		bindDataTableButtonsEvent(datatable);
 	});
@@ -399,10 +402,10 @@ function dataTableInitSpecific(tableId){
  */
 function submitMainForm(customurl, customform){
 	if(customform == undefined && $('form#mainform').length < 1) return;
-	console.log('%cForm submit triggered', 'color: green');
+	//console.log('%cForm submit triggered', 'color: green');
 
 	var targettedForm = customform == undefined ? $('form#mainform') : customform;
-	console.log('%cValidting form','color: green');
+	//console.log('%cValidting form','color: green');
 	if(!targettedForm.smkValidate()) return;
 
 	var submitUrl = (customurl != undefined) ? customurl : targettedForm.attr('action');
@@ -414,8 +417,8 @@ function submitMainForm(customurl, customform){
 		return;
 	}
 
-	console.log('%cUrl : ' + submitUrl + ', Type : ' + submitType,'color: green');
-	console.log({formData});
+	//console.log('%cUrl : ' + submitUrl + ', Type : ' + submitType,'color: green');
+	//console.log({formData});
 
 	$.ajax({
 		url : submitUrl,
@@ -431,7 +434,7 @@ function submitMainForm(customurl, customform){
 				} else if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1500);
+					}, 1000);
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -479,7 +482,7 @@ function submitMultipartForm(submitUrl, submitType){
 				if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1500);
+					}, 1000);
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -588,14 +591,14 @@ function submitModalForm(customurl){
 		data : formData,
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			//console.log({data});
 			if(data.status == 'SUCCESS'){
 				$('div.modal').modal('hide');
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.redirecturl){
 					setTimeout(() => {
 						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1500);
+					}, 1000);
 				} else if(data.reloadurl){
 					doSectionReloadWithNewData(data);
 				}
@@ -622,7 +625,7 @@ function doSectionReloadWithNewData(rdata){
 		type : 'GET',
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			//console.log({data});
 			var wrapperelement = $('#' + rdata.reloadelementid + "_wrapper");
 			// first section reload
 			if($(wrapperelement).length > 0){
@@ -634,7 +637,7 @@ function doSectionReloadWithNewData(rdata){
 				//triggerUpdateButtonSpecific(rdata.reloadelementid);
 				//triggerUpdateButton();
 			} else {
-				console.log("Normal table");
+				//console.log("Normal table");
 				var target = $('#' + rdata.reloadelementid);
 				var parentElement = target.parent();
 				parentElement.html("");
@@ -657,7 +660,7 @@ function doSectionReloadWithNewData(rdata){
 		type : 'GET',
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			//console.log({data});
 			var wrapperelement = $('#' + rdata.secondreloadelementid + "_wrapper");
 			// first section reload
 			if($(wrapperelement).length > 0){
@@ -669,7 +672,7 @@ function doSectionReloadWithNewData(rdata){
 				//triggerUpdateButtonSpecific(rdata.reloadelementid);
 				//triggerUpdateButton();
 			} else {
-				console.log("Normal table");
+				//console.log("Normal table");
 				var target = $('#' + rdata.secondreloadelementid);
 				var parentElement = target.parent();
 				parentElement.html("");

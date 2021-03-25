@@ -212,6 +212,7 @@
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{zid}
 			AND poorddetail.zactive='1'
+		ORDER BY poorddetail.xrow DESC
 	</select> 
 
 	<select id="findPoordDetailsByXpornumAndBranchZid" resultType="PoordDetail">
@@ -223,18 +224,19 @@
 			xpornum=#{xpornum}
 			AND zid=#{branchzid}
 			AND zactive='1'
+		ORDER BY xrow DESC
 	</select>
 
 	<select id="getAllPoordHeader" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE zid=#{zid} AND zactive='1' ORDER BY xdate DESC
+		SELECT * FROM PoordHeader WHERE zid=#{zid} AND zactive='1' ORDER BY xpornum DESC
 	</select>
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xdate
+		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">
-		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1' ORDER BY xrow DESC
 	</select>
 
 </mapper>

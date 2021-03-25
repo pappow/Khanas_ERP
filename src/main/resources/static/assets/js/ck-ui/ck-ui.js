@@ -101,7 +101,7 @@ ck.ui.config.editmode = function(){
 		editmodetriggered = true;
 		$('#mainform .form-control, #mainform .form-control-input2').attr('disabled','true');
 	}
-	if(editmodetriggered) console.log("Edit mode triggered ...");
+	//if(editmodetriggered) console.log("Edit mode triggered ...");
 
 	// Bind update button event if available
 	if($('li.update-btn.editmode').length > 0){

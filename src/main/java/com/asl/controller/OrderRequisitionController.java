@@ -44,7 +44,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 
 		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
-		poordheadersList.sort(Comparator.comparing(PoordHeader::getXdate).reversed());
+		//poordheadersList.sort(Comparator.comparing(PoordHeader::getXpornum).reversed());
 		model.addAttribute("allPoordHeader", poordheadersList);
 
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
