@@ -11,6 +11,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,11 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.Immofgdetail;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.Oporddetail;
-import com.asl.entity.Opordheader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ImmofgdetailService;
@@ -302,39 +303,21 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@GetMapping("/print/{xdornum}")
+	public ResponseEntity<byte[]> printChalanWithSalesOrderDetails(@PathVariable String xdornum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
 
-//	@GetMapping
-//	public String loadSalesOrderPage(Model model) {
-//		Opordheader chalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
-//		List<Oporddetail> chalanDetails = new ArrayList<>();
-//		if(chalan != null) {
-//			chalanDetails = opordService.findOporddetailByXordernum(chalan.getXordernum());
-//			if(chalanDetails == null) chalanDetails = new ArrayList<>();
-//		}
-//		if(chalan == null) chalan = new Opordheader();
-//		model.addAttribute("chalan", chalan);
-//		model.addAttribute("chalanDetails", chalanDetails);
-//		return "pages/salesninvoice/salesorderchalan/salesorderchalan";
-//	}
-//
-//	@GetMapping("/query")
-//	public String reloadTableWithData(@RequestParam String date, Model model) throws ParseException {
-//		Opordheader chalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), sdf.parse(date));
-//		List<Oporddetail> chalanDetails = new ArrayList<>();
-//		if(chalan != null) {
-//			chalanDetails = opordService.findOporddetailByXordernum(chalan.getXordernum());
-//			if(chalanDetails == null) chalanDetails = new ArrayList<>();
-//		}
-//		if(chalan == null) chalan = new Opordheader();
-//		model.addAttribute("chalan", chalan);
-//		model.addAttribute("chalanDetails", chalanDetails);
-//		return "pages/salesninvoice/salesorderchalan/salesorderchalan::salesorderchalansection";
-//	}
-//
-//	@PostMapping("/query")
-//	public @ResponseBody Map<String, Object> queryForChalanDetails(Date xdate, Model model){
-//		responseHelper.setReloadSectionIdWithUrl("salesorderchalansection", "/salesninvoice/salesorderchalan/query?date=" + sdf.format(xdate));
-//		responseHelper.setStatus(ResponseStatus.SUCCESS);
-//		return responseHelper.getResponse();
-//	}
+		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if(oh == null) {
+			message = "Chalan not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		
+		
+		return null;
+	}
 }
