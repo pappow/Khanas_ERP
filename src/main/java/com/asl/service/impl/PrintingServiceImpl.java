@@ -1,13 +1,39 @@
 package com.asl.service.impl;
 
-import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.text.ParseException;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
 
-import com.asl.enums.ReportType;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fop.apps.FOPException;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import com.asl.service.PrintingService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,144 +44,91 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-public class PrintingServiceImpl extends AbstractGenericService implements PrintingService {
-
-	private static final String TRUSTED_CONNECTION = "false";
-	private static final String SERVER_TYPE = "JDBC (JNDI)";
-	private static final String USE_JDBC = "true";
-	private static final String DATABASE_DLL = "crdb_jdbc.dll";
-
-	@Autowired private Environment env;
+public class PrintingServiceImpl extends AbstractGenericService implements PrintingService{
 
 	@Override
-	public BufferedInputStream getDataBytes(String reportName, String reportTitle, boolean attachment, Map<String, Object> reportParams, ReportType reportType) {
-//		ReportClientDocument clientDoc = new ReportClientDocument();
-//		try {
-//			clientDoc.setReportAppServer(ReportClientDocument.inprocConnectionString);
-//			clientDoc.open(reportName, OpenReportOptions._openAsReadOnly);
-//
-//			// Database Config
-//			DBConfig dbConfig = new DBConfig();
-//			dbConfig.setConnectionURL(env.getProperty("spring.datasource.url"));
-//			dbConfig.setDriverName(env.getProperty("spring.datasource.driver-class-name"));
-//			dbConfig.setJndiName(env.getProperty("JNDIName"));
-//			dbConfig.setUsername(env.getProperty("spring.datasource.username"));
-//			dbConfig.setPassword(env.getProperty("spring.datasource.password"));
-//			changeDataSource(clientDoc, null, null, dbConfig);
-//			logonDataSource(clientDoc, dbConfig);
-//
-//			// Add report parameters
-//			for(Map.Entry<String, Object> param : reportParams.entrySet()) {
-//				addDiscreteParameterValue(clientDoc, "", param.getKey(), param.getValue());
-//			}
-//
-//			final ExportOptions exportOptions = new ExportOptions();
-//			if(ReportType.EXCEL.equals(reportType)) {
-//				final ExcelExportFormatOptions excelOptions = new ExcelExportFormatOptions();
-//				exportOptions.setExportFormatType(ReportExportFormat.MSExcel);
-//				exportOptions.setFormatOptions((IExportFormatOptions) excelOptions);
-//			} else if (ReportType.EXCEL_DATA.equals(reportType)) {
-//				final DataOnlyExcelExportFormatOptions excelOptions = new DataOnlyExcelExportFormatOptions();
-//				exportOptions.setExportFormatType(ReportExportFormat.recordToMSExcel);
-//				exportOptions.setFormatOptions((IExportFormatOptions)excelOptions);
-//			} else {
-//				PDFExportFormatOptions pdfOptions = new PDFExportFormatOptions();
-//				exportOptions.setExportFormatType(ReportExportFormat.PDF);
-//				exportOptions.setFormatOptions((IExportFormatOptions) pdfOptions);
-//			}
-//			return new BufferedInputStream(clientDoc.getPrintOutputController().export((IExportOptions) exportOptions));
-//		} catch (ReportSDKException e) {
-//			log.error(ERROR, e.getMessage(), e);
-//			return null;
-//		}
+	public String parseXMLString(Object ob) throws JAXBException {
+		log.info("Start parsing object to xml string");
+		JAXBContext jaxbContext = JAXBContext.newInstance(ob.getClass());
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		// output pretty printed
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		StringWriter result = new StringWriter();
+		jaxbMarshaller.marshal(ob, result);
+		return result.toString();
+	}
+
+	@Override
+	public Document getDomSourceForXML(String xml) throws ParserConfigurationException, SAXException, IOException {
+		log.info("Start creationg document object from xml");
+		InputSource is = new InputSource(new StringReader(xml));
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+	}
+
+	@Override
+	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template)
+			throws TransformerFactoryConfigurationError, TransformerException, FOPException {
+		log.info("Start creating pdf bytes using xml doc and template");
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		File file = new File(template);
+
+		Source xslSrc = new StreamSource(file);
+		Transformer transformer = TransformerFactory.newInstance().newTransformer(xslSrc);
+		if (transformer == null) {
+			throw new TransformerException("Template File not found: " + template);
+		}
+
+		//for image path setting
+		//String serverPath = request.getSession().getServletContext().getRealPath("/");
+
+		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
+		Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+		// Make sure the XSL transformation's result is piped through to FOP
+		Result res = new SAXResult(fop.getDefaultHandler());
+		// Start the transformation and rendering process
+		transformer.transform(new DOMSource(doc), res);
+		return out;
+	}
+
+	@Override
+	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
+			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+			TransformerFactoryConfigurationError, TransformerException, ParseException {
+		
 		return null;
 	}
 
-	
+	@Override
+	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException {
+		ByteArrayOutputStream out = getPDFReportByteAttayOutputStream(ob, template);
+		if(out == null) return null;
+		return out.toByteArray();
+	}
 
-//	@Override
-//	public void changeDataSource(ReportClientDocument clientDoc, String reportName, String tableName, DBConfig dbConfig) throws ReportSDKException {
-//		PropertyBag propertyBag = null;
-//		IConnectionInfo connectionInfo = null;
-//		ITable origTable = null;
-//		ITable newTable = null;
-//
-//		if (reportName == null || reportName.equals("")) {
-//			final Tables tables = clientDoc.getDatabaseController().getDatabase().getTables();
-//			for (int i = 0; i < tables.size(); ++i) {
-//				origTable = tables.getTable(i);
-//				if (tableName == null || origTable.getName().equals(tableName)) {
-//					newTable = (ITable) origTable.clone(true);
-//					newTable.setQualifiedName(origTable.getAlias());
-//					connectionInfo = newTable.getConnectionInfo();
-//					propertyBag = new PropertyBag();
-//					propertyBag.put((Object) "Trusted_Connection", (Object) TRUSTED_CONNECTION);
-//					propertyBag.put((Object) "Server Type", (Object) SERVER_TYPE);
-//					propertyBag.put((Object) "Use JDBC", (Object) USE_JDBC);
-//					propertyBag.put((Object) "Database DLL", (Object) DATABASE_DLL);
-//					propertyBag.put((Object) "JNDI Datasource Name", (Object) dbConfig.getJndiName());
-//					propertyBag.put((Object) "Connection URL", (Object) dbConfig.getConnectionURL());
-//					propertyBag.put((Object) "Database Class Name", (Object) dbConfig.getDriverName());
-//					connectionInfo.setAttributes(propertyBag);
-//					connectionInfo.setUserName(dbConfig.getUsername());
-//					connectionInfo.setPassword(dbConfig.getPassword());
-//					clientDoc.getDatabaseController().setTableLocation(origTable, newTable);
-//				}
-//			}
-//		}
-//		if (reportName == null || !reportName.equals("")) {
-//			final IStrings subNames = clientDoc.getSubreportController().getSubreportNames();
-//			for (int subNum = 0; subNum < subNames.size(); ++subNum) {
-//				final Tables tables2 = clientDoc.getSubreportController().getSubreport(subNames.getString(subNum))
-//						.getDatabaseController().getDatabase().getTables();
-//				for (int j = 0; j < tables2.size(); ++j) {
-//					origTable = tables2.getTable(j);
-//					if (tableName == null || origTable.getName().equals(tableName)) {
-//						newTable = (ITable) origTable.clone(true);
-//						newTable.setQualifiedName(origTable.getAlias());
-//						connectionInfo = newTable.getConnectionInfo();
-//						propertyBag = new PropertyBag();
-//						propertyBag.put((Object) "Trusted_Connection", (Object) TRUSTED_CONNECTION);
-//						propertyBag.put((Object) "Server Type", (Object) SERVER_TYPE);
-//						propertyBag.put((Object) "Use JDBC", (Object) USE_JDBC);
-//						propertyBag.put((Object) "Database DLL", (Object) DATABASE_DLL);
-//						propertyBag.put((Object) "JNDI Datasource Name", (Object) dbConfig.getJndiName());
-//						propertyBag.put((Object) "Connection URL", (Object) dbConfig.getConnectionURL());
-//						propertyBag.put((Object) "Database Class Name", (Object) dbConfig.getDriverName());
-//						connectionInfo.setAttributes(propertyBag);
-//						connectionInfo.setUserName(dbConfig.getUsername());
-//						connectionInfo.setPassword(dbConfig.getPassword());
-//						clientDoc.getSubreportController().getSubreport(subNames.getString(subNum))
-//								.getDatabaseController().setTableLocation(origTable, newTable);
-//					}
-//				}
-//			}
-//		}
-//
-//	}
-//
-//	@Override
-//	public void logonDataSource(ReportClientDocument clientDoc, DBConfig dbConfig) throws ReportSDKException {
-//		clientDoc.getDatabaseController().logon(dbConfig.getUsername(), dbConfig.getPassword());
-//	}
-//
-//	@Override
-//	public void addDiscreteParameterValue(ReportClientDocument clientDoc, String reportName, String parameterName, Object newValue) throws ReportSDKException {
-//		DataDefController dataDefController = clientDoc.getDataDefController();
-//		if (StringUtils.isNotBlank(reportName)) {
-//			dataDefController = clientDoc.getSubreportController().getSubreport(reportName).getDataDefController();
-//		}
-//
-//		final ParameterFieldDiscreteValue newDiscValue = new ParameterFieldDiscreteValue();
-//		newDiscValue.setValue(newValue);
-//		final ParameterField paramField = (ParameterField) dataDefController.getDataDefinition().getParameterFields().findField(parameterName, FieldDisplayNameType.fieldName, Locale.getDefault());
-//		final boolean multiValue = paramField.getAllowMultiValue();
-//		if (multiValue) {
-//			final Values newVals = (Values) paramField.getCurrentValues().clone(true);
-//			newVals.add((IValue) newDiscValue);
-//			clientDoc.getDataDefController().getParameterFieldController().setCurrentValue(reportName, parameterName, (Object) newVals);
-//		} else {
-//			clientDoc.getDataDefController().getParameterFieldController().setCurrentValue(reportName, parameterName, newValue);
-//		}
-//	}
+	@Override
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template)
+			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+			TransformerFactoryConfigurationError, TransformerException, ParseException {
+		if(ob == null || StringUtils.isBlank(template)) return null;
+
+		String xml = parseXMLString(ob);
+		if(StringUtils.isBlank(xml)) {
+			log.error(ERROR, "Cant't generate xml string from object");
+			return null;
+		}
+
+		Document doc = getDomSourceForXML(xml);
+		if(doc == null) {
+			log.error(ERROR, "Cant't generate document object from xml string");
+			return null;
+		}
+
+		ByteArrayOutputStream out = transfromToPDFBytes(doc, template);
+		if(out == null) return null;
+
+		return out;
+	}
+
+	
 }

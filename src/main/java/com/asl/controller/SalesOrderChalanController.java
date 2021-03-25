@@ -2,7 +2,6 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +10,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Immofgdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.AllSalesOrderChalanReport;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.SalesOrderChalan;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpordService;
 import com.asl.service.XtrnService;
@@ -44,8 +51,6 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private ImmofgdetailService immofgdetailService;
-
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@GetMapping
 	public String loadSalesOrderChalanPage(Model model) {
@@ -119,7 +124,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	public String reloadTableWithData(@RequestParam String xordernum, @RequestParam String date, Model model) throws ParseException {
 		model.addAttribute("salesorderchalan", opordService.findOpordHeaderByXordernum(xordernum));
 		List<Opordheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
-		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", sdf.parse(date)));
+		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", SDF.parse(date)));
 		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum));
 		model.addAttribute("opensalesorders", allOpenAndConfirmesSalesOrders);
 		return "pages/salesninvoice/salesorderchalan/salesorderchalan::opensalesorderstable";
@@ -127,7 +132,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 	@PostMapping("/opensalesorder/query")
 	public @ResponseBody Map<String, Object> queryForrequistionDetails(String xordernum, Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ xordernum +"&date=" + sdf.format(xdate));
+		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ xordernum +"&date=" + SDF.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
@@ -191,7 +196,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
 		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
 		return responseHelper.getResponse();
@@ -240,7 +245,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
 		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
 		return responseHelper.getResponse();
@@ -290,6 +295,65 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@GetMapping("/print/{xordernum}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			message = "Chalan not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			message = "Chalan Details is empty";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		Zbusiness zb = sessionManager.getZbusiness();
+
+		AllSalesOrderChalanReport report = new AllSalesOrderChalanReport();
+		report.setBusinessName(zb.getZorg());
+		report.setBusinessAddress(zb.getXmadd());
+		report.setReportName("Sales Order Chalan Report");
+		report.setFromDate(SDF.format(oh.getXdate()));
+		report.setToDate(SDF.format(oh.getXdate()));
+		report.setPrintDate(SDF.format(new Date()));
+
+		List<SalesOrderChalan> chalans = new ArrayList<>();
+		SalesOrderChalan chalan = new SalesOrderChalan();
+		chalan.setChalanName(oh.getXordernum());
+		chalan.setChalanDate(SDF.format(oh.getXdate()));
+		chalan.setStatus(oh.getXstatus());
+		chalans.add(chalan);
+
+		List<ItemDetails> items = new ArrayList<>();
+		details.stream().forEach(d -> {
+			ItemDetails id = new ItemDetails();
+			id.setItemCode(d.getXitem());
+			id.setItemCategory(d.getXdesc());
+			id.setItemQty(d.getXqtyord().toString());
+			id.setItemUnit(d.getXunit());
+			id.setItemCategory(d.getXcatitem());
+			id.setItemGroup(d.getXgitem());
+			items.add(id);
+		});
+		chalan.getItems().addAll(items);
+		report.getChalans().addAll(chalans);
+
+		byte[] byt = getPDFByte(report, "allsalesorderchalanreport.xsl");
+		if(byt == null) {
+			message = "Can't generate pdf for chalan : " + xordernum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
 
 //	@GetMapping
 //	public String loadSalesOrderPage(Model model) {

@@ -46,7 +46,10 @@
 						<!-- rqls list section -->
 						<section id="data-maintenance" style="margin-top: 30px;" th:if="${not #lists.isEmpty(suggestions.value)}" th:each="suggestions : ${allSuggestions}">
 							<div class="section-header sectionbartoggle">
-								<h1>Production Planning of Chalan - <a th:href="@{/salesninvoice/salesorderchalan/} + ${suggestions.key}" target="_blank" th:text="${suggestions.key}"></a></h1>
+								<h1>
+									Production Planning of Chalan - <a th:href="@{/salesninvoice/salesorderchalan/} + ${suggestions.key}" target="_blank" th:text="${suggestions.key}"></a>
+									<a target="_blank" th:href="@{/production/suggestion/print/} + ${suggestions.key}"><i class="fas fa-print"></i> Print</a>
+								</h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered datatable nowrap" id="salesordertable" th:fragment="salesordertable">

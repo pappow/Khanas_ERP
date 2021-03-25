@@ -231,8 +231,14 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 				BranchItem bi = new BranchItem(bq.getXitem(), bq.getXqtyord());
 				br.getItems().add(bi);
+				
+				
+				
+				
 
 				br.setTotalItemOrdered(br.getTotalItemOrdered().add(bi.getXqtyord()));
+
+				branchRowMap.put(zorg, br);
 			} else {
 				BranchRow br = new BranchRow();
 				br.setZorg(zorg);
@@ -267,6 +273,7 @@ class TableColumn{
 class BranchRow{
 	private String zorg;
 	private List<BranchItem> items = new ArrayList<>();
+	//TOdo:   VUL 
 	private BigDecimal totalItemOrdered;
 }
 

@@ -1,9 +1,18 @@
 package com.asl.service;
 
-import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
-import com.asl.enums.ReportType;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.apache.fop.apps.FOPException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * @author Zubayer Ahamed
@@ -11,8 +20,11 @@ import com.asl.enums.ReportType;
  */
 public interface PrintingService {
 
-	public BufferedInputStream getDataBytes(String reportName, String reportTitle, boolean attachment, Map<String, Object> reportParams, ReportType reportType);
-//	public void changeDataSource(ReportClientDocument clientDoc, String reportName, String tableName, DBConfig dbConfig) throws ReportSDKException;
-//	public void logonDataSource(ReportClientDocument clientDoc, DBConfig dbConfig) throws ReportSDKException;
-//	public void addDiscreteParameterValue(ReportClientDocument clientDoc, String reportName, String parameterName, Object newValue) throws ReportSDKException;
+	// FOP
+	public String parseXMLString(Object ob) throws JAXBException;
+	public Document getDomSourceForXML(String xml) throws ParserConfigurationException, SAXException, IOException;
+	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template) throws TransformerFactoryConfigurationError, TransformerException, FOPException;
+	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
+	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
 }

@@ -13,7 +13,7 @@ import com.asl.service.ASLSessionManager;
  * @since Dec 04, 2020
  */
 @Component
-public abstract class AbstractGenericService {
+public abstract class AbstractGenericService  {
 
 	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	protected static final String ERROR = "Error is {}, {}";
@@ -30,4 +30,5 @@ public abstract class AbstractGenericService {
 		name = name.replace(" ", "-");
 		return name;
 	}
+
 }

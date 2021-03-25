@@ -71,3 +71,4 @@ default:
   logging-path: D:/ASL/logs 
   report: 
     template-path: D:/ASL/cr-reports
+    xsl-path: D:/ASL/xsl
