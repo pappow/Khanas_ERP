@@ -15,9 +15,9 @@ public interface OpdoService {
 	
 	public long save(Opdoheader opdoHeader);
 	public long update(Opdoheader opdoHeader);
-	public long updateOpdoHeaderTotalAmt(Opdodetail opdoDetail);
-	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(Opdodetail opdodetail);
-	public long updateOpdoHeaderGrandTotalAmt(Opdoheader opdoheader);
+	public long updateOpdoHeaderTotalAmt(String xdornum);
+	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum);
+	public long updateOpdoHeaderGrandTotalAmt(String xdornum);
 	
 	public long saveDetail(Opdodetail opdoDetail);
 	public long updateDetail(Opdodetail opdoDetail);
@@ -25,6 +25,7 @@ public interface OpdoService {
 
 	public Opdoheader findOpdoHeaderByXdornum(String xdornum);
 	public List<Opdoheader> getAllOpdoHeader();
+	public List<Opdoheader> getAllRandomOpdoHeader();
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow);
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem);

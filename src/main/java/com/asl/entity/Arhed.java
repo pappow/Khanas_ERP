@@ -67,6 +67,9 @@ public class Arhed extends AbstractModel<String> {
 	@Temporal(TemporalType.DATE)
 	private Date xdateref;
 	
+	@Column(name = "xvatait")
+	private String xvatait;
+	
 	@Column(name = "xvatamt")
 	private BigDecimal xvatamt;
 	
@@ -133,7 +136,7 @@ public class Arhed extends AbstractModel<String> {
 	@Column(name = "xinvnum")
 	private String xinvnum;
 	
-	@Transient
+	@Column(name = "xtrnarhed")
 	private String xtrnarhed;
 
 

@@ -79,4 +79,7 @@ public class Cacus extends AbstractModel<String> {
 
 	@Column(name = "xcur")
 	private String xcur;
+	
+	@Column(name = "xisrandom")
+	private boolean xisrandom;
 }

@@ -26,7 +26,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/salesninvoice}">Sales & Invoicing</a></li>
-										<li class="active"><a th:href="@{/salesninvoice/directsales}">Invoicing (Direct)</a></li>
+										<li class="active"><a th:href="@{/salesninvoice/directsales}">Invoice (Direct)</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -48,7 +48,7 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Sales and Invoicing</h1>
+										<h1>Invoice</h1>
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
@@ -78,7 +78,7 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xtrn">GRN Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${opdoprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -87,13 +87,13 @@
 													</div>
 													
 													<div class="form-group" th:if="${not #strings.isEmpty(opdoheader.xdornum)}">
-														<label class="control-label col-md-4" for="xdornum">Prefix Number : </label>
+														<label class="control-label col-md-4" for="xdornum">Invoice Number : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xdornum}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcus">Customer No : </label>
 														<div class="col-sm-8">
 															<input 	type="text" 
@@ -103,6 +103,20 @@
 																	th:attr="search-url='search/customer'"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
 															<input type="hidden" id="search-des" value=""/>
+														</div>
+													</div> -->
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xorg">Name : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xorg}" placeholder="Customer Name" required="required">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xphone">Phone : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xphone}" placeholder="Customer Phone" required="required">
 														</div>
 													</div>
 													
@@ -115,7 +129,7 @@
 
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xdate"
@@ -128,7 +142,7 @@
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xgrandtot">Grand Amount : </label>
+														<label class="control-label col-md-4" for="xgrandtot">Grand Total : </label>
 														<div class="col-md-6">
 															<input type="text" class="form-control xgrandtot" th:field="*{xgrandtot}" disabled="disabled">
 														</div>
@@ -141,19 +155,20 @@
 														</div>
 													</div>
 													
-													<!-- <div class="form-group">
+													<div class="form-group">
 														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
 														<div class="col-md-8">
 															<select class="form-control vatait-select" th:field="*{xvatait}">
 																<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
 															</select>
 														</div>
-													</div> -->
+													</div>
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
 														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xvatamt}" min="0">
+															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
+															<input type="text" class="form-control xvatamt-show" min="0" th:value="${opdoheader.xvatamt}" disabled="disabled">
 														</div>
 													</div>
 													
@@ -172,37 +187,14 @@
 														</div>
 													</div>
 													
-													<div class="form-group">
+													<div class="form-group" th:if="${opdoheader.xstatusord == 'Confirmed'}">
 														<label class="control-label col-md-4" for="xperson">Sales Person : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xperson}">
+															<input type="text" class="form-control" th:field="*{xperson}" disabled="disabled">
 														</div>
 													</div>
 													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xpaymenttype">Payment Type : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xpaymenttype}">
-																<option th:each="x : ${paymentTypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
-															</select>
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xordernum">Order number : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xordernum}">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatusord">Order Status : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatusord}">
-																<option th:each="s : ${ordStatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div>
+
 													
 													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xstatusjv">JV Status : </label>
@@ -213,6 +205,16 @@
 															</select>
 														</div>
 													</div> -->
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xpaymenttype">Payment Type : </label>
+														<div class="col-md-8">
+															<select class="form-control" th:field="*{xpaymenttype}">
+																<option th:each="x : ${paymentTypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
+															</select>
+														</div>
+													</div>
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xpaid">Paid Amount : </label>
@@ -220,15 +222,7 @@
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xpaid}">
 														</div>
 													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xref">Ref: </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xref}">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
+												
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xchange">Change Amount: </label>
 														<div class="col-md-8">
@@ -254,13 +248,6 @@
 													</div>
 													
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xstaff">Employee: </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xstaff}">
-														</div>
-													</div>
-													
-													<div class="form-group">
 														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xwh}">
@@ -269,35 +256,7 @@
 														</div>
 													</div>
 													
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdatecom">Completion Date : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xdatecom"
-																	name="xdatecom"
-																	th:value="${opdoheader.xdatecom == null ? #dates.format(#dates.createNow(), df) : #dates.format(opdoheader.xdatecom, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-													
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdatedue">Date Due : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xdatecom"
-																	name="xdatecom"
-																	th:value="${opdoheader.xdatedue == null ? #dates.format(#dates.createNow(), df) : #dates.format(opdoheader.xdatedue, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-													
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcur">Currency: </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcur}">
@@ -309,7 +268,7 @@
 														<div class="col-md-8">
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xexch}">
 														</div>
-													</div>
+													</div> -->
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
@@ -476,14 +435,14 @@
 						loadingMask2.hide();
 						console.log(data.xvat);
 						var vatPercent = parseFloat(data.xvat);
-						var aitPercent = parseFloat(data.xait);
+						//var aitPercent = parseFloat(data.xait);
 						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;						
+						//var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;						
 						
 						$('input[name="xvatamt"]').val(vatAmount);
 						$('input.xvatamt-show').val(vatAmount);
-						$('input[name="xaitamt"]').val(aitAmount);
-						$('input.xaitamt-show').val(aitAmount);
+						//$('input[name="xaitamt"]').val(aitAmount);
+						//$('input.xaitamt-show').val(aitAmount);
 					},
 					error : function(jqXHR, status, errorThrown){
 						showMessage(status, "Something went wrong .... ");

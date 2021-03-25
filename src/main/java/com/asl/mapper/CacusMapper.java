@@ -17,6 +17,7 @@ public interface CacusMapper {
 	public long update(Cacus cacus);
 
 	public Cacus findByXcus(String xcus, String zid);
+	public Cacus findByXphone(String xphone, String zid);
 	public List<Cacus> findByXtype(String xtype, String zid);
 
 	public List<Cacus> getAllCacus(String zid);

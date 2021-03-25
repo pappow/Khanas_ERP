@@ -125,7 +125,16 @@ public class Opdoheader extends AbstractModel<String> {
 	@Column(name = "xgrandtot")
 	private BigDecimal xgrandtot;
 	
+	@Column(name = "xvatait")
+	private String xvatait;
+	
 	@Transient
 	private String xtrnopdo;
+	
+	@Transient
+	private String xorg;
+	
+	@Transient
+	private String xphone;
 	
 }
