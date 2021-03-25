@@ -26,7 +26,7 @@ public class PDLServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// xpornum - PO Number
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "PO-Number", "search/report/ponumber", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "PO-Number", "search/report/ponumber", "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

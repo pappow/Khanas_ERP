@@ -117,6 +117,10 @@
 	</select>
 	
 	<select id="searchXorg" resultType="Cacus">
-		SELECT * FROM Cacus WHERE (UPPER(xorg) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE (UPPER(xorg) LIKE '%' || #{xorg} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="searchXgcus" resultType="Cacus">
+		SELECT * FROM Cacus WHERE (UPPER(xgcus) LIKE '%' || #{xgcus} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 </mapper>

@@ -25,11 +25,11 @@ public class STOCKLServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// xcus
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "XITEM", "IC-000011", true));
+		// xitem
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "ITEM", "search/report/stock/xitem", "", true));
 
-		// xorg
-		fieldsList.add(FormFieldBuilder.generateInputField(3, "XDESC", "Chicken Wings", true));
+//		// xorg
+//		fieldsList.add(FormFieldBuilder.generateInputField(3, "XDESC", "Chicken Wings", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

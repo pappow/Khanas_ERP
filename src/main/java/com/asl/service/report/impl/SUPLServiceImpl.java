@@ -26,19 +26,19 @@ public class SUPLServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// xcus
-		fieldsList.add(FormFieldBuilder.generateInputField(2, "XCUS", "SUP-000101", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/report/sup", "", false));
 
-		// xorg
-		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
-
-		// xphone
-		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", false));
-
-		// xgcus
-		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Corporate", true));
-
-		// xstatuscus
-		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
+//		// xorg
+//		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
+//
+//		// xphone
+//		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", false));
+//
+//		// xgcus
+//		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Corporate", true));
+//
+//		// xstatuscus
+//		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

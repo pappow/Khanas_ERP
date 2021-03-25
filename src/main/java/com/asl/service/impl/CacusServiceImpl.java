@@ -60,4 +60,12 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 		return cacusMapper.findByXphone(xphone, sessionManager.getBusinessId());
 	}
 
+	public List<Cacus> searchXorg(String xorg){
+		return cacusMapper.searchXorg(xorg.toUpperCase(), sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Cacus> searchXgcus(String xgcus){
+		return cacusMapper.searchXorg(xgcus.toUpperCase(), sessionManager.getBusinessId());
+	}
 }

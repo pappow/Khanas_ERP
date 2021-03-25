@@ -18,6 +18,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
+import com.asl.service.ImstockService;
 import com.asl.service.ProductionSuggestionService;
 import com.asl.service.PogrnService;
 
@@ -33,6 +34,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private ProductionSuggestionService productionSuggestionService;
 	@Autowired private PogrnService pogrnService;
+	@Autowired private ImstockService imstockService;
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -148,6 +150,45 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<Cacus> cusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
 		cusList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 
+		return list;
+	}
+	
+	@GetMapping("/report/sup/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllSupplier(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+
+		List<Cacus> supList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
+		supList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+
+		return list;
+	}
+	
+	@GetMapping("/report/xorg/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllXorg(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		cacusService.searchXorg(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXorg(),c.getXorg())));
+		return list;
+	}
+	
+	@GetMapping("/report/xgcus/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllXgcus(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		cacusService.searchXgcus(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXgcus(),c.getXgcus())));
+		return list;
+	}
+	
+	@GetMapping("/report/stock/xitem/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllXitem(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		imstockService.searchXitem(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(),c.getXitem())));
 		return list;
 	}
 }
