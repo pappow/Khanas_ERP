@@ -23,6 +23,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -90,8 +91,6 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		return out;
 	}
 
-
-
 	@Override
 	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
 			throws JAXBException, ParserConfigurationException, SAXException, IOException,
@@ -99,4 +98,37 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		
 		return null;
 	}
+
+	@Override
+	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException {
+		ByteArrayOutputStream out = getPDFReportByteAttayOutputStream(ob, template);
+		if(out == null) return null;
+		return out.toByteArray();
+	}
+
+	@Override
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template)
+			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+			TransformerFactoryConfigurationError, TransformerException, ParseException {
+		if(ob == null || StringUtils.isBlank(template)) return null;
+
+		String xml = parseXMLString(ob);
+		if(StringUtils.isBlank(xml)) {
+			log.error(ERROR, "Cant't generate xml string from object");
+			return null;
+		}
+
+		Document doc = getDomSourceForXML(xml);
+		if(doc == null) {
+			log.error(ERROR, "Cant't generate document object from xml string");
+			return null;
+		}
+
+		ByteArrayOutputStream out = transfromToPDFBytes(doc, template);
+		if(out == null) return null;
+
+		return out;
+	}
+
+	
 }

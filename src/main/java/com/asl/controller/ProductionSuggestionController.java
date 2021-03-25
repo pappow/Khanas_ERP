@@ -115,14 +115,14 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		report.setBusinessName(zb.getZorg());
 		report.setBusinessAddress(zb.getXmadd());
 		report.setReportName("Sales Order Chalan Report");
-		report.setFromDate(sdf.format(oh.getXdate()));
-		report.setToDate(sdf.format(oh.getXdate()));
-		report.setPrintDate(sdf.format(new Date()));
+		report.setFromDate(SDF.format(oh.getXdate()));
+		report.setToDate(SDF.format(oh.getXdate()));
+		report.setPrintDate(SDF.format(new Date()));
 
 		List<SalesOrderChalan> chalans = new ArrayList<>();
 		SalesOrderChalan chalan = new SalesOrderChalan();
 		chalan.setChalanName(oh.getXordernum());
-		chalan.setChalanDate(sdf.format(oh.getXdate()));
+		chalan.setChalanDate(SDF.format(oh.getXdate()));
 		chalan.setStatus(oh.getXstatus());
 		chalans.add(chalan);
 

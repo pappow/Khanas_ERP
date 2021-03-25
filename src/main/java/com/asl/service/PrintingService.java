@@ -25,5 +25,6 @@ public interface PrintingService {
 	public Document getDomSourceForXML(String xml) throws ParserConfigurationException, SAXException, IOException;
 	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template) throws TransformerFactoryConfigurationError, TransformerException, FOPException;
 	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
-
+	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
 }
