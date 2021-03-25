@@ -138,4 +138,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		pogrnService.searchPoord(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
+	
+	@GetMapping("/report/cus/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllCustomer(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+
+		List<Cacus> cusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
+		cusList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+
+		return list;
+	}
 }
