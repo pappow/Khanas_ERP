@@ -175,9 +175,6 @@ input.file-input-control{
 ============ Table related overrided style =========
 =========================================
 */
-.section-body{
-	overflow-x: scroll;
-}
 
 .table th, .table td{
 	padding: 5px 10px !important;
