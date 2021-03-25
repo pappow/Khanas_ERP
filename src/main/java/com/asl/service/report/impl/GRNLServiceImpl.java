@@ -30,16 +30,15 @@ public class GRNLServiceImpl extends AbstractReportService {
 	private List<FormFieldBuilder> generateFields() {
 		
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
-
-		// zid
-		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 		
-
-		// xgrnstatus
 		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
+		// zid
+		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
+		
+		// xgrnstatus
 		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "GRN Status", options, "Confirmed", true));
 
 		// From Date

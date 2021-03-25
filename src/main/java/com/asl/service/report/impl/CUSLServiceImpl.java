@@ -28,17 +28,17 @@ public class CUSLServiceImpl extends AbstractReportService {
 		// xcus
 		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/report/cus", "", true));
 
-		// xorg
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/customer", "", true));
-
-		// xphone
-		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "", false));
-
-		// xgcus
-		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Branch", true));
-
-		// xstatuscus
-		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
+//		// xorg
+//		fieldsList.add(FormFieldBuilder.generateSearchField(3, "Organization", "search/report/xorg", "", false));
+//
+//		// xphone
+//		fieldsList.add(FormFieldBuilder.generateInputField(4, "Phone", "", false));
+//
+//		// xgcus
+//		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Customer Group", "search/report/xgcus","", false));
+//
+//		// xstatuscus
+//		fieldsList.add(FormFieldBuilder.generateInputField(6, "Status", "Active", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
