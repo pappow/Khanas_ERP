@@ -138,43 +138,10 @@
 											<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<!-- <tr>
-										<td><a th:href="@{/pagination}">Pagination</a></td>
-										<td>
-											<a th:href="@{/pagination}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr> -->
-
-
-									<!-- <tr>
-										<td colspan="2">Import / Export</td>
-									</tr>
-									<tr th:if="${menuProfile.listImportExport ne null and menuProfile.listImportExport.display}">
-										<td><a th:href="@{/importexport/listimportexport}" th:text="${menuProfile.listImportExport.screenPrompt}">List Im/Ex</a></td>
-										<td>
-											<a th:href="@{/importexport/listimportexport}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr> -->
-
-									<tr>
-										<td colspan="2">Maintenance Screen</td>
-									</tr>
-									<tr th:if="${menuProfile.shop ne null and menuProfile.shop.display}">
-										<td><a th:href="@{/shop}" th:text="${menuProfile.shop.screenPrompt}">List</a></td>
-										<td>
-											<a th:href="@{/shop}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
 									<tr th:if="${menuProfile.xuser ne null and menuProfile.xuser.display}">
-										<td><a th:href="@{/user}" th:text="${menuProfile.xuser.screenPrompt}">Manage User</a></td>
+										<td><a th:href="@{/user}" th:text="${menuProfile.xuser.screenPrompt}">User</a></td>
 										<td>
 											<a th:href="@{/user}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.contact ne null and menuProfile.contact.display}">
-										<td><a th:href="@{/contact}" th:text="${menuProfile.contact.screenPrompt}">Contact</a></td>
-										<td>
-											<a th:href="@{/contact}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>

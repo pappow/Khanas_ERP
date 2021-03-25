@@ -7,6 +7,8 @@ body{
 	font-size: 13px;
 }
 
+
+
 .title-divider{
 	color: #0987c5;
 }
@@ -173,10 +175,10 @@ input.file-input-control{
 ============ Table related overrided style =========
 =========================================
 */
-
-.table.datatable tr td:first-child{
-	padding-left: 30px !important;
+.section-body{
+	overflow-x: scroll;
 }
+
 .table th, .table td{
 	padding: 5px 10px !important;
 	vertical-align: middle !important;
@@ -829,10 +831,6 @@ image using the content attribute.
 .nodisplay, li.nodisplay {
 	display: none;
 }
-
-
-
-
 
 
 

@@ -14,6 +14,7 @@ import lombok.Data;
 @Data
 public class LoggedInUserDetails {
 
+	private String fullName;
 	private String username;
 	private String emailAddress;
 	private String businessId;

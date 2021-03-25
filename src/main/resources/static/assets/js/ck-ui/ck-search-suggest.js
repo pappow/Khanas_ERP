@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	console.log("%cSearch Sugget Init...", "color:green");
+	//console.log("%cSearch Sugget Init...", "color:green");
 
 	$(".searchsuggest").off('keyup').on('keyup', debounce(function() {
 
