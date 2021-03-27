@@ -25,6 +25,13 @@ public class SalesOrder {
 	private String reqBranch;
 	private String date;
 	private String status;
+	
+	//Added by sajjad
+	private String totalAmount;
+	private String vatAmount;
+	private String discountAmount;
+	private String grandTotalAmount;
+	
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")
 	private List<ItemDetails> items = new ArrayList<>();
