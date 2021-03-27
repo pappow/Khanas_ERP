@@ -113,6 +113,7 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		if(ob == null || StringUtils.isBlank(template)) return null;
 
 		String xml = parseXMLString(ob);
+		log.info(xml);
 		if(StringUtils.isBlank(xml)) {
 			log.error(ERROR, "Cant't generate xml string from object");
 			return null;
