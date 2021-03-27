@@ -29,6 +29,10 @@ import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.SalesOrder;
+import com.asl.model.report.SalesOrderChalan;
+import com.asl.model.report.SalesOrderChalanReport;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
@@ -316,8 +320,62 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		
-		
-		return null;
+		List<Opdoheader> salesOrders = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), oh.getXdornum());
+		if(salesOrders == null || salesOrders.isEmpty()) {
+			message = "Sales order not found in this chalan : " + xdornum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+
+		List<SalesOrderChalanReport> allReports = new ArrayList<>();
+
+		for(Opdoheader so : salesOrders) {
+
+			SalesOrderChalanReport report = new SalesOrderChalanReport();
+			report.setBusinessName(sessionManager.getZbusiness().getZorg());
+			report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+			report.setReportName("Invoice Chalan");
+			report.setFromDate(SDF.format(oh.getXdate()));
+			report.setToDate(SDF.format(oh.getXdate()));
+			report.setPrintDate(SDF.format(new Date()));
+			report.setCopyrightText("ASL");
+
+			report.setChalanNumber(oh.getXdornum());
+			report.setChalanDate(SDF.format(oh.getXdate()));
+			report.setChalanStatus(oh.getXstatusar());
+
+			SalesOrder salesOrder = new SalesOrder();
+			salesOrder.setOrderNumber(so.getXdornum());
+			salesOrder.setReqBranch(so.getXcus());
+			salesOrder.setDate(SDF.format(so.getXdate()));
+
+			List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(so.getXdornum());
+			if(items != null && !items.isEmpty()) {
+				items.parallelStream().forEach(it -> {
+					ItemDetails item = new ItemDetails();
+					item.setItemCode(it.getXitem());
+					item.setItemName(it.getXdesc());
+					item.setItemQty(it.getXqtyord().toString());
+					item.setItemUnit(it.getXunitsel());
+					item.setItemCategory(it.getXcatitem());
+					item.setItemGroup(it.getXgitem());
+					salesOrder.getItems().add(item);
+				});
+			}
+
+			report.getSalesorders().add(salesOrder);
+
+			allReports.add(report);
+
+		}
+
+		byte[] byt = getBatchPDFByte(allReports, "chalanreport.xsl");
+		if(byt == null) {
+			message = "Can't print report for chalan : " + xdornum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
 }

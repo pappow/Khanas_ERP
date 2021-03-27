@@ -150,7 +150,7 @@ public class ASLAbstractController {
 		return byt;
 	}
 
-	protected byte[] getBatchPDFByte(List<Object> report, String templateName) {
+	protected byte[] getBatchPDFByte(List<? extends Object> report, String templateName) {
 		try {
 			List<ByteArrayOutputStream> streams = new ArrayList<>();
 
