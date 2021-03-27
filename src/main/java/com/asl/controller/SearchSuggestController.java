@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
+import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
+import com.asl.service.OpordService;
 import com.asl.service.ProductionSuggestionService;
 import com.asl.service.PogrnService;
 
@@ -35,6 +37,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private ProductionSuggestionService productionSuggestionService;
 	@Autowired private PogrnService pogrnService;
 	@Autowired private ImstockService imstockService;
+	@Autowired private OpordService opordService;
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -102,6 +105,14 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<Caitem> caitemList = caitemService.getWithoutProductionCaitems(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/salesorderchalan/confirmed/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getOnlyConfirmedSalesOrderChalan(@PathVariable String hint){
+		List<Opordheader> chalans = opordService.searchOpordheaderByXtypetrnAndXtrnAndXordernum(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), hint, "Confirmed");
+		List<SearchSuggestResult> list = new ArrayList<>();
+		chalans.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXordernum(), c.getXordernum())));
 		return list;
 	}
 

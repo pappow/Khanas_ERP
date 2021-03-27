@@ -131,5 +131,9 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.findAllSalesOrderByChalan(xtypetrn, xtrn, xchalanref, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<Opordheader> searchOpordheaderByXtypetrnAndXtrnAndXordernum(String xtypetrn, String xtrn, String xordernum, String xstatus) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xordernum)) return Collections.emptyList();
+		return opordMapper.searchOpordheaderByXtypetrnAndXtrnAndXordernum(xtypetrn, xtrn, xordernum.toUpperCase(), xstatus, sessionManager.getBusinessId());
+	}
 }

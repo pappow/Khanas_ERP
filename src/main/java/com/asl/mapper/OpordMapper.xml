@@ -333,5 +333,18 @@
 			OPORDHEADER.XORDERNUM DESC
 	</select>
 
+	<select id="searchOpordheaderByXtypetrnAndXtrnAndXordernum" resultType="Opordheader">
+		SELECT 
+			* 
+		FROM 
+			OPORDHEADER 
+		WHERE 
+			(UPPER(XORDERNUM) LIKE '%' || #{xordernum} || '%') 
+			AND ZID=#{zid} 
+			AND XTYPETRN=#{xtypetrn}
+			AND XTRN=#{xtrn}
+			AND XSTATUS=#{xstatus}
+			AND ZACTIVE='1'
+	</select>
 	
 </mapper>

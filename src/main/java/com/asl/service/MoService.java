@@ -14,6 +14,7 @@ import com.asl.entity.Moheader;
 @Component
 public interface MoService {
 
+	public long saveBatchMoHeader(List<Moheader> moheaders);
 	public long saveMoHeader(Moheader moheader);
 	public long updateMoHeader(Moheader moheader);
 
