@@ -24,6 +24,8 @@
 			xtypetrn,
 			xtrn,
 			xchalan,
+			bomexploaded,
+			xdesc,
 			zid,
 			zauserid,
 			zuuserid,
@@ -51,6 +53,8 @@
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
 			#{xchalan, jdbcType=VARCHAR},
+			#{bomexploaded, jdbcType=BOOLEAN},
+			#{xdesc, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -80,6 +84,8 @@
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
 			xchalan=#{xchalan, jdbcType=VARCHAR},
+			bomexploaded=#{bomexploaded, jdbcType=BOOLEAN},
+			xdesc=#{xdesc, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -168,7 +174,8 @@
 	<select id="findMoHeaderByXbatch" resultType="Moheader">
 		SELECT 
 			moheader.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
 			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
@@ -181,7 +188,8 @@
 	<select id="findModetailByXrowAndXbatch" resultType="Modetail">
 		SELECT 
 			modetail.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
 			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
@@ -195,7 +203,8 @@
 	<select id="findModetailByXbatch" resultType="Modetail">
 		SELECT 
 			modetail.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
 			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
@@ -203,24 +212,30 @@
 			modetail.xbatch=#{xbatch} 
 			AND modetail.zid=#{zid} 
 			AND modetail.zactive='1'
+		ORDER BY
+			modetail.xrow DESC
 	</select>
 
 	<select id="getAllMoheader" resultType="Moheader">
 		SELECT 
 			moheader.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
 			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
 		WHERE 
 			moheader.zid=#{zid} 
 			AND moheader.zactive='1'
+		ORDER BY 
+			moheader.xbatch DESC
 	</select>
 
 	<select id="findMoheaderByXchalanAndXitem" resultType="Moheader">
 		SELECT 
 			moheader.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc", 
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
 			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
@@ -234,7 +249,8 @@
 	<select id="findModetailByXbatchAndXitem" resultType="Modetail">
 		SELECT 
 			modetail.*,
-			caitem.xdesc AS "xdesc" 
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
 			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
@@ -247,6 +263,21 @@
 
 	<select id = "processProduction" statementType = "CALLABLE">
 		{call MO_processProduction(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+
+	<select id="findModetailByXbatchAndXtype" resultType="Modetail">
+		SELECT 
+			modetail.*,
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
+		FROM 
+			modetail 
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+		WHERE
+			modetail.xbatch=#{xbatch} 
+			AND modetail.xtype=#{xtype}
+			AND modetail.zid=#{zid} 
+			AND modetail.zactive='1'
 	</select>
 
 </mapper>

@@ -30,4 +30,5 @@ public interface MoMapper {
 	public Modetail findModetailByXbatchAndXitem(String xbatch, String xitem, String zid);
 
 	public void processProduction(String batch, String action, String errseq, String zid, String user);
+	public Modetail findModetailByXbatchAndXtype(String xbatch, String xtype, String zid);
 }

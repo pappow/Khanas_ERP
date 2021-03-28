@@ -595,12 +595,16 @@ function submitModalForm(customurl){
 			if(data.status == 'SUCCESS'){
 				$('div.modal').modal('hide');
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.redirecturl){
-					setTimeout(() => {
-						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1000);
-				} else if(data.reloadurl){
-					doSectionReloadWithNewData(data);
+				if(data.triggermodalurl){
+					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+				} else {
+					if(data.redirecturl){
+						setTimeout(() => {
+							window.location.replace(getBasepath() + data.redirecturl);
+						}, 1000);
+					} else if(data.reloadurl){
+						doSectionReloadWithNewData(data);
+					}
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -620,6 +624,7 @@ function submitModalForm(customurl){
  * @returns
  */
 function doSectionReloadWithNewData(rdata){
+	console.log({rdata})
 	$.ajax({
 		url : getBasepath() + rdata.reloadurl,
 		type : 'GET',

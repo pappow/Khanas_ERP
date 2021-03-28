@@ -73,7 +73,7 @@ public class Opordheader extends AbstractModel<String> {
 	private String xchalanref;
 
 	@Column(name = "batchcreated")
-	private boolean batchCreated;
+	private boolean batchcreated;
 
 	@Transient
 	private String branchname;

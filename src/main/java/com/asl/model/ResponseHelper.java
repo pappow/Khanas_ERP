@@ -51,6 +51,11 @@ public class ResponseHelper {
 		this.response.put("secondreloadurl", url);
 	}
 
+	public void setTriggerModalUrl(String modalId, String url) {
+		this.response.put("modalid", modalId);
+		this.response.put("triggermodalurl", url);
+	}
+
 	public void setSuccessStatusAndMessage(String message) {
 		this.status = ResponseStatus.SUCCESS;
 		if(StringUtils.isBlank(message)) message = DEFAULT_SUCCESS_MESSAGE;
