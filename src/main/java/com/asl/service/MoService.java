@@ -37,4 +37,6 @@ public interface MoService {
 	public Modetail findModetailByXbatchAndXitem(String xbatch, String xitem);
 
 	public void processProduction(String batch, String action, String errseq);
+
+	public Modetail findDefaultModetailByXbatch(String xbatch);
 }

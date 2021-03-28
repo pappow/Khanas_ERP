@@ -1,7 +1,9 @@
 package com.asl.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -88,6 +90,8 @@ public class Moheader extends AbstractModel<String> {
 	private String xdesc;
 
 	@Transient
-	private String Xqtyprdunit;
-	
+	private String xqtyprdunit;
+
+	@Transient
+	private List<Modetail> modetails = new ArrayList<>();
 }

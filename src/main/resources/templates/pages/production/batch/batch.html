@@ -50,7 +50,7 @@
 										<h1>Search Chalan</h1>
 									</div>
 									<div class="section-body">
-										<form id="mainform" th:action="@{/production/batch/search/chalan}" method="post" class="form-horizontal" th:object="${poorddetail}">
+										<form id="mainform" th:action="@{/production/batch/search/chalan}" method="post" class="form-horizontal">
 											<div class="col-md-6">
 												<div class="form-group">
 													<label class="control-label col-sm-4" for="chalanNumber">Chalan Number : </label>
@@ -59,9 +59,9 @@
 																class="form-control searchsuggest" 
 																placeholder="Search..." 
 																required="required"
-																th:value="${chalanNumber}" 
+																th:value="${chalan.xordernum}" 
 																th:attr="search-url='search/salesorderchalan/confirmed'"/>
-														<input type="hidden" id="search-val" name="chalanNumber" value=""/>
+														<input type="hidden" id="search-val" name="chalanNumber" th:value="${chalan.xordernum}"/>
 														<input type="hidden" id="search-des" value=""/>
 													</div>
 												</div>
@@ -75,34 +75,62 @@
 									</div>
 								</section>
 							</div>
-						
-							<div class="col-md-12">
-								<!-- Section list head -->
-								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Batch Entry</h1>
-									</div>
-									<div class="form-action-button">
-									<!-- 	<a th:href="@{/salesninvoice/salesorderchalan}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> Create new from Chalan</a>
-										<a th:if="${#strings.isEmpty(batch.xbatch) and not #strings.isEmpty(batch.xchalan) and batch.xchalan ne 'new'}" th:href="@{/production/batch}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail eq null}" th:href="@{/production/batch/explodebom/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-bomb"></i> Explode BOM</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and defaultBatchDetail ne null and batch.xstatusmor eq 'Open'}" th:href="@{/production/batch/processproduction/} + ${batch.xbatch}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-mortar-pestle"></i> Process Production</a>
-										<a th:if="${not #strings.isEmpty(batch.xbatch) and batch.zactive == true and batch.xstatusmor eq 'Open' and defaultBatchDetail eq null}" th:href="@{/production/batch/archive/} + ${batch.xbatch}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a> -->
-									</div>
-									<div class="section-body">
-										
-									</div>
-								</section>
-							</div>
 
 							<div class="col-md-12">
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Chalan Item Details</h1>
 									</div>
 									<div class="section-body">
-										hi there
+										<table class="table table-striped table-bordered" id="batchdetailtable" th:fragment="batchdetailtable">
+											<h1 th:if="${not #lists.isEmpty(batchList)}" style="text-align: center; font-size: 25px;">Batch Details of Chalan : <a th:href="@{/salesninvoice/salesorderchalan/} + ${chalan.xordernum}" target="_blank" th:text="${chalan.xordernum}"></a></h1>
+											<thead th:if="${not #lists.isEmpty(batchList)}">
+												<tr>
+													<th>SN.</th>
+													<th>Batch</th>
+													<th>Item</th>
+													<th>BOM</th>
+													<th>Production Qty</th>
+													<th>Qty Completed</th>
+													<th style="text-align: right">View Default</th>
+													<th style="text-align: right">View Detail</th>
+												</tr>
+											</thead>
+											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+												<tr th:each="b, n : ${batchList}">
+													<td th:text="${n.count}"></td>
+													<td th:text="${b.xbatch}"></td>
+													<td>
+														<a th:href="@{/mastersetup/caitem/} + ${b.xitem}" target="_blank" th:text="${b.xitem} + ' - ' +  ${b.xdesc}"></a>
+													</td>
+													<td>
+														<a th:href="@{/production/bom/} + ${b.xbomkey}" th:text="${b.xbomkey}"></a>
+													</td>
+													<td th:text="${b.xqtyprd} + ' ' + ${b.xqtyprdunit}"></td>
+													<td>
+														<form class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
+															<input style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
+															<button th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
+															<span style="line-height: 27px;"  th:text="${b.xqtyprdunit}"></span>
+														</form>
+													</td>
+													<td style="text-align: right">
+														<button title="View Default" th:if="${b.bomexploaded}" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/default/show', data-target-modal='defaultbatchdetailmodal'"><i class="fas fa-eye"></i></button>
+													</td>
+													<td style="text-align: right">
+														<button title="Add/Edit items" th:if="${b.bomexploaded}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
+													</td>
+												</tr>
+											</tbody>
+											<script>
+												$(document).ready(function(){
+													$('.batch-submit').off('click').on('click', function(e){
+														e.preventDefault();
+														var form = $(this).parent('form');
+														submitMainForm($(form).attr('action'), $(form));
+													})
+												});
+											</script>
+										</table>
 									</div>
 								</section>
 							</div>
@@ -118,9 +146,30 @@
 		</div>
 
 		<!-- Modal -->
+		<div id="defaultbatchdetailmodal-section"></div>
+		<div id="othersbatchdetailmodal-section"></div>
+
+		<!-- Batch detail add modal -->
 		<div id="batchdetailmodal-section"></div>
 
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				$('.query-submit-btn').on('click', function(e){
+					e.preventDefault();
+					submitMainForm();
+				})
+
+				$('.batch-submit').off('click').on('click', function(e){
+					e.preventDefault();
+					var form = $(this).parent('form');
+					submitMainForm($(form).attr('action'), $(form));
+				})
+				
+			})
+		</script>
 	</body>
 </html>

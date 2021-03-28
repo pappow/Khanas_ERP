@@ -220,6 +220,12 @@ ck.ui.config.buttonevent = function(){
 		e.preventDefault();
 		submitModalForm();
 	});
+
+	$('button.close-btn-modal').off('click').on('click', function(e){
+		var url = $(this).data('url');
+		var modalid = $(this).data('target-modal');
+		modalLoader(url, modalid);
+	});
 };
 
 /**
