@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.asl.entity.Cacus;
 import com.asl.entity.Imstock;
 
 /**

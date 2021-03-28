@@ -1,6 +1,5 @@
 package com.asl.controller;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.Caitem;
-import com.asl.entity.PoordHeader;
 import com.asl.entity.Vatait;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.VataitService;

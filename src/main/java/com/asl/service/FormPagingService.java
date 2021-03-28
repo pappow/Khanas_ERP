@@ -10,5 +10,6 @@ import org.springframework.stereotype.Component;
 public interface FormPagingService {
 
 	public Long getExpectedRecord(String tableName, String columnName, String currentId, String direction);
+
 	public Long getSeilingRecord(String tableName, String columnName, String direction);
 }

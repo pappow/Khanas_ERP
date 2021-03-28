@@ -17,18 +17,27 @@ import com.asl.model.ReportProfile;
 public interface ProfileService {
 
 	long save(Profile profile);
+
 	long update(Profile profile);
+
 	Profile findById(Long profileId);
+
 	Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType);
+
 	List<Profile> getAllProfiles();
+
 	List<Profile> getAllProfiles(ProfileType profileType);
 
 	MenuProfile getLoggedInUserMenuProfile();
+
 	MenuProfile getMenuProfileById(Long profileId);
+
 	MenuProfile getDefaultMenuProfile();
 
 	ReportProfile getLoggedInUserReportProfile();
+
 	ReportProfile getReportProfileById(Long profileId);
+
 	ReportProfile getDefaultReportProfile();
 
 	String modifiedProfileCode(String pc);

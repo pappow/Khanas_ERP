@@ -1,4 +1,4 @@
-package com.asl.service;
+package com.asl.service.impl;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.asl.entity.ProcErrorLog;
 import com.asl.mapper.ProcErrorLogMapper;
-import com.asl.service.impl.AbstractGenericService;
+import com.asl.service.ProcErrorLogService;
 
 /**
  * @author Zubayer Ahamed

@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Imtag;
 import com.asl.entity.Imtdet;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;

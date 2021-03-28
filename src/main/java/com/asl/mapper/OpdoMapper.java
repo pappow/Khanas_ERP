@@ -1,13 +1,11 @@
 package com.asl.mapper;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.asl.entity.Opdoheader;
-import com.asl.entity.PoordDetail;
 import com.asl.entity.Opdodetail;
+import com.asl.entity.Opdoheader;
 
 @Mapper
 public interface OpdoMapper {

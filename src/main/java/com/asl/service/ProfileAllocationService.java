@@ -14,8 +14,12 @@ import com.asl.entity.ProfileAllocation;
 public interface ProfileAllocationService {
 
 	public long save(ProfileAllocation profileAllocation);
+
 	public long update(ProfileAllocation profileAllocation);
+
 	public ProfileAllocation findById(Long profileAllocationId);
+
 	public List<ProfileAllocation> getAllProfileAllocation();
+
 	public ProfileAllocation findByUsername(String username);
 }
