@@ -33,6 +33,7 @@ public interface OpordService {
 	public Opordheader findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(String xtypetrn, String xpornum, String xcus, Date xdate);
 	public Opordheader findOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate);
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(String xtypetrn, String xtrn, String xstatus);
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem);
 
 	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate);

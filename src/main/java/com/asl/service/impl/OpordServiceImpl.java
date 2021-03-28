@@ -93,7 +93,11 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.findOpordHeaderByXtypetrnAndXtrnAndXdate(xtypetrn, xtrn, sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(String xtypetrn, String xtrn, String xstatus) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xstatus)) return Collections.emptyList();
+		return opordMapper.findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(xtypetrn, xtrn, xstatus, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdate(String xtypetrn, String xtrn, Date xdate) {

@@ -20,6 +20,11 @@ public class RequisitionListServiceImpl extends AbstractGenericService implement
 	@Autowired private OrderRequisitionMapper requisitionListMapper;
 
 	@Override
+	public List<BranchesRequisitions> getAllOpenBranchesRequisitions() {
+		return requisitionListMapper.getAllOpenBranchesRequisitions(sessionManager.getBusinessId());
+	}
+
+	@Override
 	public List<BranchesRequisitions> getAllBranchesRequisitions(Date xdate) {
 		if(!Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) return Collections.emptyList();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

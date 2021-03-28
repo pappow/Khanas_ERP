@@ -1,7 +1,6 @@
 package com.asl.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,23 +32,27 @@ public class SalesOrderController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
 
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
-		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), "SO-", new Date()));
+		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), new Date()));
 		return "pages/salesninvoice/salesorders/salesorders";
+	}
+
+	@GetMapping("/allopensalesorder")
+	public String loadAllOpenSalesOrderPage(Model model) {
+		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open"));
+		return "pages/salesninvoice/salesorders/allopensalesorders";
 	}
 
 	@GetMapping("/query")
 	public String reloadTableWithData(@RequestParam String date, Model model) throws ParseException {
-		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), "SO-", sdf.parse(date)));
+		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), SDF.parse(date)));
 		return "pages/salesninvoice/salesorders/salesorders::salesordertable";
 	}
 
 	@PostMapping("/query")
 	public @ResponseBody Map<String, Object> queryForrequistionDetails(Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("salesordertable", "/salesninvoice/salesorder/query?date=" + sdf.format(xdate));
+		responseHelper.setReloadSectionIdWithUrl("salesordertable", "/salesninvoice/salesorder/query?date=" + SDF.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
@@ -62,13 +65,13 @@ public class SalesOrderController extends ASLAbstractController {
 
 	@GetMapping("/query/matrix")
 	public String reloadTableWithDataMatrix(@RequestParam String date, Model model) throws ParseException {
-		generateMatrixData(sdf.parse(date), model);
+		generateMatrixData(SDF.parse(date), model);
 		return "pages/salesninvoice/salesorders/salesordersmatrix::salesordersmatrixtable";
 	}
 
 	@PostMapping("/query/matrix")
 	public @ResponseBody Map<String, Object> queryForrequistionDetailsMatrix(Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("salesordersmatrixtable", "/salesninvoice/salesorder/query/matrix?date=" + sdf.format(xdate));
+		responseHelper.setReloadSectionIdWithUrl("salesordersmatrixtable", "/salesninvoice/salesorder/query/matrix?date=" + SDF.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
