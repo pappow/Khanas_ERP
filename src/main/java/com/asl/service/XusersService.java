@@ -14,10 +14,16 @@ import com.asl.entity.Xusers;
 public interface XusersService {
 
 	public long save(Xusers user);
+
 	public long update(Xusers user);
+
 	public List<Xusers> findByZemail(String zemail);
+
 	public List<Xusers> findByZemailAndXpassword(String zemail, String xpassword);
+
 	public Xusers findByZemailAndZid(String zemail, String zid);
+
 	public List<Xusers> getAllXusers();
+
 	public String modifyZemail(String zemail);
 }

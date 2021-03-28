@@ -12,7 +12,10 @@ import com.asl.enums.ProfileType;
 public interface ProfileLineService {
 
 	long save(ProfileLine profileLine);
+
 	long update(ProfileLine profileLine);
+
 	ProfileLine findById(Long profileLineId);
+
 	List<ProfileLine> getAllByProfileIdAndProfileType(Long profileId, ProfileType profileType);
 }

@@ -2,7 +2,6 @@ package com.asl.service.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +16,11 @@ import com.asl.service.ImstockService;
 @Service
 public class ImstockServiceImpl extends AbstractGenericService implements ImstockService {
 
-	@Autowired private ImstockMapper imstockMapper;
-
+	@Autowired
+	private ImstockMapper imstockMapper;
 
 	@Override
-	public List<Imstock> searchXitem(String xitem){
+	public List<Imstock> searchXitem(String xitem) {
 		return imstockMapper.searchXitem(xitem.toUpperCase(), sessionManager.getBusinessId());
 	}
 }

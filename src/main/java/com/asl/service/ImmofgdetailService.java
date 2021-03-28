@@ -14,8 +14,10 @@ import com.asl.entity.Immofgdetail;
 public interface ImmofgdetailService {
 
 	public long save(Immofgdetail immofgdetail);
+
 	public long update(Immofgdetail immofgdetail);
 
 	public Immofgdetail findImmofgDetailByXtornumAndXrow(String xtornum, int xrow);
+
 	public List<Immofgdetail> getAllImmofgDetail();
 }

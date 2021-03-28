@@ -9,28 +9,34 @@ import com.asl.entity.PogrnHeader;
 
 @Component
 public interface PogrnService {
-	
+
 	public long save(PogrnHeader pogrnHeader);
+
 	public long update(PogrnHeader pogrnHeader);
+
 	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail);
 
 	public long saveDetail(PogrnDetail pogrnDetail);
+
 	public long updateDetail(PogrnDetail pogrnDetail);
 
 	public long deleteDetail(PogrnDetail pogrnDetail);
 
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum);
+
 	public PogrnHeader findPogrnHeaderByXpornum(String xpornum);
 
 	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow);
+
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum);
 
 	public List<PogrnHeader> getAllPogrnHeaders();
-	
-	//Procedure Call
+
+	// Procedure Call
 	public void procInventory(String xgrnnum, String xpornum, String p_seq);
+
 	public void procTransferPOtoAP(String xgrnnum, String p_seq);
-	
-	//Search
+
+	// Search
 	public List<PogrnHeader> searchPoord(String xpornum);
 }

@@ -17,24 +17,31 @@ public interface ListService {
 	public String modifiedListCode(String listCode);
 
 	public long save(ListHead listHead);
+
 	public long save(ListHead listHead, String businessId);
 
 	public long update(ListHead listHead);
+
 	public long update(ListHead listHead, String businessId);
 
 	public long save(DataList dataList);
+
 	public long save(DataList dataList, String businessId);
 
 	public long update(DataList dataList);
+
 	public long update(DataList dataList, String businessId);
 
 	public ListHead findListHeadById(Long listHeadId);
+
 	public DataList findDataListById(Long dataListId);
 
 	public ListHead findListHeadByListCode(String listCode);
+
 	public ListHead findListHeadByListCode(String listCode, String businessId);
 
 	public List<DataList> findDataListByListCode(String listCode);
+
 	public List<DataList> findDataListByListCode(String listCode, String businessId);
 
 	public List<DataList> getList(String listCode, String... values);

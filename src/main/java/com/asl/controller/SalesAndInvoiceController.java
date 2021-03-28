@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -29,8 +27,6 @@ import com.asl.service.OpdoService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
-
-import net.bytebuddy.matcher.ModifierMatcher.Mode;
 
 @Controller
 @RequestMapping("/salesninvoice/salesandinvoice")

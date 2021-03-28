@@ -14,6 +14,8 @@ import com.asl.entity.UserAuditRecord;
 public interface UserAuditRecordService {
 
 	public long save(UserAuditRecord userAuditRecord);
+
 	public List<UserAuditRecord> findByUserId(String userId);
+
 	public List<UserAuditRecord> getAll();
 }

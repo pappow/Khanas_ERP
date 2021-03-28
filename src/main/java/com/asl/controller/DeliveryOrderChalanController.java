@@ -31,7 +31,6 @@ import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrder;
-import com.asl.model.report.SalesOrderChalan;
 import com.asl.model.report.SalesOrderChalanReport;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpdoService;

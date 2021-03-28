@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.asl.entity.Imtrn;
-import com.asl.entity.PogrnHeader;
-import com.asl.enums.CodeType;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ImtrnService;
 import com.asl.service.XcodesService;
