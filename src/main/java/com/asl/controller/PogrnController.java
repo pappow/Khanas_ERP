@@ -359,7 +359,7 @@ public class PogrnController extends ASLAbstractController {
 	}
 	
 	@GetMapping("/returngrn/{xgrnnum}")
-	public @ResponseBody Map<String, Object> creategrn(@PathVariable String xgrnnum){
+	public @ResponseBody Map<String, Object> returngrn(@PathVariable String xgrnnum){
 		if(StringUtils.isBlank(xgrnnum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();

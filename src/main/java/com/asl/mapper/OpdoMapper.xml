@@ -264,13 +264,15 @@
 	<select id="getAllOpdoHeader" resultType="Opdoheader">
 		SELECT oh.*, cacus.xorg, cacus.xphone FROM Opdoheader oh
 		JOIN cacus on cacus.xcus = oh.xcus AND cacus.zid=#{zid}
-		WHERE oh.zid=#{zid} AND oh.zactive='1'
+		WHERE oh.zid=#{zid} AND oh.zactive='1' 
+		ORDER BY oh.xdornum DESC
 	</select>
 	
 	<select id="getAllRandomOpdoHeader" resultType="Opdoheader">
 		SELECT oh.*, cacus.xorg, cacus.xphone FROM Opdoheader oh
 		JOIN cacus on cacus.xcus = oh.xcus AND cacus.zid=#{zid}
 		WHERE oh.zid=#{zid} AND oh.zactive='1' AND cacus.xisrandom = '1'
+		ORDER BY oh.xdornum DESC
 	</select>
 
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
@@ -290,6 +292,7 @@
 		FROM Opdodetail od
 			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
 		WHERE od.xdornum=#{xdornum} AND od.zid=#{zid} AND od.zactive='1'
+		ORDER BY XROW ASC
 	</select>
 	
 	<select id = "procConfirmDO" statementType = "CALLABLE">
@@ -314,6 +317,8 @@
 			AND ZACTIVE='1'
 			AND XTYPETRN=#{xtypetrn}
 			AND XTRN=#{xtrn}
+		ORDER BY
+			xdornum DESC
 	</select>
 
 	<select id="findAllInvoiceOrder" resultType="Opdoheader">
@@ -330,6 +335,8 @@
 			AND OPDOHEADER.XTRN=#{xtrn}
 			AND OPDOHEADER.XSTATUSORD=#{xstatusord}
 			AND TO_CHAR(OPDOHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
+		ORDER BY
+			XDORNUM DESC
 	</select>
 
 	<select id="findAllInvoiceOrderByChalan" resultType="Opdoheader">
@@ -343,5 +350,7 @@
 			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
 			AND OPDOHEADER.XTRN=#{xtrn}
 			AND OPDOHEADER.XDOCNUM = #{xchalanref}
+		ORDER BY
+			XDORNUM DESC
 	</select>
 </mapper>

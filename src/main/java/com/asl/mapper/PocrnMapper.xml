@@ -184,11 +184,11 @@
 	</select>
 
 	<select id="getAllPocrnheader" resultType="Pocrnheader">
-		SELECT * FROM Pocrnheader WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Pocrnheader WHERE zid=#{zid} AND zactive='1' ORDER BY xcrnnum DESC
 	</select>
 	
 	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
-		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
 	</select>
 	
 	<select id = "procConfirmCRN" statementType = "CALLABLE">
