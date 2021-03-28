@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
@@ -27,6 +29,19 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		moheader.setZid(sessionManager.getBusinessId());
 		return moMapper.saveMoHeader(moheader);
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public long saveBatchMoHeader(List<Moheader> moheaders) {
+		if(moheaders == null || moheaders.isEmpty()) return 0;
+		long count = 0;
+		for(Moheader moh : moheaders) {
+			count += saveMoHeader(moh);
+		}
+		return count;
+	}
+
+
 
 	@Override
 	public long updateMoHeader(Moheader moheader) {

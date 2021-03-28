@@ -247,6 +247,23 @@
 			OPORDHEADER.XORDERNUM DESC
 	</select>
 
+	<select id="findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus" resultType="Opordheader">
+		SELECT 
+			opordheader.*,
+			zbusiness.zorg AS "branchname"
+		FROM 
+			opordheader
+			LEFT JOIN zbusiness ON zbusiness.zid = opordheader.xcus
+		WHERE 
+			opordheader.xtypetrn=#{xtypetrn}
+			AND opordheader.xtrn=#{xtrn}
+			AND opordheader.xstatus=#{xstatus}
+			AND opordheader.zid=#{zid} 
+			AND opordheader.zactive='1'
+		ORDER BY
+			OPORDHEADER.XORDERNUM DESC
+	</select>
+
 	<select id="findOporddetailByXordernumAndXitem" resultType="Oporddetail">
 		SELECT 
 			* 
@@ -333,5 +350,18 @@
 			OPORDHEADER.XORDERNUM DESC
 	</select>
 
+	<select id="searchOpordheaderByXtypetrnAndXtrnAndXordernum" resultType="Opordheader">
+		SELECT 
+			* 
+		FROM 
+			OPORDHEADER 
+		WHERE 
+			(UPPER(XORDERNUM) LIKE '%' || #{xordernum} || '%') 
+			AND ZID=#{zid} 
+			AND XTYPETRN=#{xtypetrn}
+			AND XTRN=#{xtrn}
+			AND XSTATUS=#{xstatus}
+			AND ZACTIVE='1'
+	</select>
 	
 </mapper>

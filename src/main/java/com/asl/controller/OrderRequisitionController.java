@@ -3,7 +3,6 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -191,6 +190,12 @@ public class OrderRequisitionController extends ASLAbstractController {
 	public @ResponseBody Map<String, Object> savePoorddetail(PoordDetail poordDetail){
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// Validation
+		if(poordDetail.getXqtyord() == null || poordDetail.getXqtyord().equals(BigDecimal.ZERO)) {
+			responseHelper.setErrorStatusAndMessage("Invalid quantity entered");
 			return responseHelper.getResponse();
 		}
 

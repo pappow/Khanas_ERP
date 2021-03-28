@@ -2,6 +2,26 @@
 
 <mapper namespace="com.asl.mapper.OrderRequisitionMapper">
 
+	<select id="getAllOpenBranchesRequisitions" resultType="com.asl.model.BranchesRequisitions">
+		SELECT
+			XPORNUM,
+			ZORG,
+			XSTATUSPOR,
+			XDATE,
+			POORDHEADER.ZID AS "BRANCHZID"
+		FROM 
+			POORDHEADER
+			JOIN ZBUSINESS ON ZBUSINESS.ZID=POORDHEADER.ZID
+		WHERE 
+			ZBUSINESS.CENTRALZID=#{zid}
+			AND XTYPE='Requisition Order'
+			AND XSTATUSPOR='Open'
+			AND ZBUSINESS.BRANCH='1'
+			AND POORDHEADER.ZACTIVE='1'
+		ORDER BY
+			ZBUSINESS.ZORG
+	</select>
+
 	<select id="getAllBranchesRequisitions" resultType="com.asl.model.BranchesRequisitions">
 		SELECT
 			XPORNUM,

@@ -77,14 +77,6 @@
 
 			<li class="ckbigmenu-showall">Show all</li>
 
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/logout}">
-					<span class="ckbigmenu-icon" style="background: red;">
-						<i class="fas fa-sign-out-alt"></i>
-					</span>
-					<span class="ckbigmenu-text">Logout</span>
-				</a>
-			</li>
 			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${menuProfile.profileMaintenance ne null and menuProfile.profileMaintenance.display}">
 				<a th:href="@{/system/profile}">
 					<span class="ckbigmenu-icon" style="background: #000;">

@@ -81,8 +81,13 @@ public class Moheader extends AbstractModel<String> {
 	@Column(name = "xchalan")
 	private String xchalan;
 
+	@Column(name = "bomexploaded")
+	private boolean bomexploaded;
+
+	@Column(name = "xdesc")
+	private String xdesc;
+
 	@Transient
 	private String Xqtyprdunit;
-	@Transient
-	private String xdesc;
+	
 }

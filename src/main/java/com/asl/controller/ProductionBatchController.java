@@ -2,6 +2,8 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,35 +45,81 @@ public class ProductionBatchController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadChalanBatchPage(Model model) {
-		
+		model.addAttribute("chalanNumber", "");
 		return "pages/production/batch/batch";
 	}
-	
+
+	@PostMapping("/search/chalan")
+	public String searchAndLoadChalan(String chalanNumber, Model model) {
+		
+		return "";
+	}
+
 	@GetMapping("/chalantobatch/{xordernum}")
 	public String loadChalanBatch(@PathVariable String xordernum, Model model) {
-		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
-		if(oh == null) return "redirect:/production/batch";
+		// get chalan details
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xordernum);
+		if(chalan == null) return "redirect:/production/batch";
 
-		if(!oh.isBatchCreated()) {
-			// Create batch first if not created
-			// get all chalann details
-			List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
-			if(details == null || details.isEmpty()) return "redirect:/production/batch";
+		// if batch not created, then create batch first
+		List<Oporddetail> chalanItems = opordService.findOporddetailByXordernum(xordernum);
+		if(!chalan.isBatchCreated()) {
+			// get chalan details
+			if(chalanItems == null || chalanItems.isEmpty()) return "redirect:/production/batch";
 
-			// create batch for each  chalan item details;
-			for(Oporddetail item : details) {
-				Moheader mh = new Moheader();
-				mh.setXitem(item.getXitem());
-				mh.setXtypetrn(TransactionCodeType.BATCH_NUMBER.getCode());
-				mh.setXtrn(TransactionCodeType.BATCH_NUMBER.getdefaultCode());
-				// TODO: mh.setXqtyprd(item.);
-				
+			// create batch for each item details;
+			List<Moheader> batcList = new ArrayList<>();
+			for(Oporddetail item : chalanItems) {
+				Bmbomheader bom = bmbomService.findBmBomHeaderByXitem(item.getXitem());
+
+				Moheader batch = new Moheader();
+				batch.setXtypetrn(TransactionCodeType.BATCH_NUMBER.getCode());
+				batch.setXtrn(TransactionCodeType.BATCH_NUMBER.getdefaultCode());
+				batch.setXchalan(chalan.getXordernum());
+				batch.setXitem(item.getXitem());
+				batch.setXdesc(item.getXdesc());
+				batch.setXbomkey(bom != null ? bom.getXbomkey() : "");
+				batch.setXdate(new Date());
+				batch.setXqtyprd(item.getXqtyord());
+				batch.setXqtycom(BigDecimal.ZERO);
+				batch.setXstatusmor("Open");
+				batcList.add(batch);
 			}
-			
-			
+
+			long count = moService.saveBatchMoHeader(batcList);
+			if(count == 0) return "redirect:/production/batch";
+
+			// Update chalan now with batch created flag
+			chalan.setBatchCreated(true);
+			long chalanUpdatecount = opordService.updateOpordHeader(chalan);
+			if(chalanUpdatecount == 0) return "redirect:/production/batch";
 		}
 
-		
+		// if batch already created, then retreive all chalan details
+		// get all batch which is recently or previously created and make default item list using batch number and procedure
+		List<Moheader> allBatches = new ArrayList<>();
+		for(Oporddetail item : chalanItems) {
+			Moheader batch = moService.findMoheaderByXchalanAndXitem(chalan.getXordernum(), item.getXitem());
+			if(batch != null) allBatches.add(batch);
+		}
+
+		// Now expload bom and create default item if not created
+		List<String> errors = new ArrayList<>();
+		for(Moheader batch : allBatches) {
+			if(batch.isBomexploaded()) continue;
+			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			bmbomService.explodeBom(batch.getXbatch(), "Explode", errorCode);
+			String em = getProcedureErrorMessages(errorCode);
+			if(StringUtils.isNotBlank(em)) {
+				errors.add(em);
+				continue;
+			}
+			batch.setBomexploaded(true);
+			moService.updateMoHeader(batch);
+		}
+
+		model.addAttribute("batchList", allBatches);
+		model.addAttribute("chalan", chalan);
 		return "pages/production/batch/batch";
 	}
 

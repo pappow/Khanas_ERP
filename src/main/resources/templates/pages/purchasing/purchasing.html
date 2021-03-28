@@ -64,6 +64,12 @@
 											<a th:href="@{/purchasing/bqls/details}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${zbusiness ne null and zbusiness.central}">
+										<td><a th:href="@{/purchasing/bqls/allopenreq}">All Open Requisitions of Branches</a></td>
+										<td>
+											<a th:href="@{/purchasing/bqls/allopenreq}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 									<tr th:if="${zbusiness ne null and zbusiness.branch}">
 										<td><a th:href="@{/purchasing/requisition}">Order Requisition</a></td>
 										<td>
