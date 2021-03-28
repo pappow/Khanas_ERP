@@ -24,7 +24,11 @@ import com.asl.service.ImstockService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.PogrnService;
+
 import com.asl.service.ProductionSuggestionService;
+
+import com.asl.service.BmbomService;
+
 
 /**
  * @author Zubayer Ahamed
@@ -40,7 +44,11 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private PogrnService pogrnService;
 	@Autowired private ImstockService imstockService;
 	@Autowired private OpordService opordService;
+
 	@Autowired private OpdoService opdoService;
+
+	@Autowired private BmbomService bmbomService;
+
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -213,6 +221,15 @@ public class SearchSuggestController extends ASLAbstractController {
 
 		List<SearchSuggestResult> list = new ArrayList<>();
 		imstockService.searchXitem(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(),c.getXitem())));
+		return list;
+	}
+	
+	@GetMapping("/report/xbomkey/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllXbomkey(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		bmbomService.searchXbom(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXbomkey(),c.getXbomkey())));
 		return list;
 	}
 }

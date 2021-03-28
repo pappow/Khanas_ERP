@@ -41,6 +41,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine SUGL;
 	private ProfileLine SL;
 	private ProfileLine CL;
+	private ProfileLine BOML;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
@@ -147,6 +148,10 @@ public class ReportProfile implements Serializable {
 	}
 	public void setCL(ProfileLine profileLine) {
 		this.CL = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setBOML(ProfileLine profileLine) {
+		this.BOML = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 }
