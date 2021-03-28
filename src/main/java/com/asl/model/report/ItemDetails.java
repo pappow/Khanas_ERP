@@ -21,4 +21,8 @@ public class ItemDetails {
 	private String itemUnit;
 	private String itemCategory;
 	private String itemGroup;
+	
+	//Added by Sajjad
+	private String itemRate;
+	private String itemTotalAmount;
 }

@@ -45,36 +45,51 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/salesninvoice/deliveryorderchalan")
 public class DeliveryOrderChalanController extends ASLAbstractController {
 
-	@Autowired private OpordService opordService;
-	@Autowired private OpdoService opdoService;
-	@Autowired private XtrnService xtrnService;
-	@Autowired private ImmofgdetailService immofgdetailService;
+	@Autowired
+	private OpordService opordService;
+	@Autowired
+	private OpdoService opdoService;
+	@Autowired
+	private XtrnService xtrnService;
+	@Autowired
+	private ImmofgdetailService immofgdetailService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@GetMapping
 	public String loadDeliveryOrderChalanPage(Model model) {
 		model.addAttribute("deliveryorderchalan", getDefaultOpdoheader());
-		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+		model.addAttribute("deliveryorderchalanprefix",
+				xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(),
+						TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(
+				TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
 	@GetMapping("/{xdornum}")
 	public String loadSalesOrderChalanPage(@PathVariable String xdornum, Model model) {
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		if(oh == null) return "redirect:/salesninvoice/deliveryorderchalan";
+		if (oh == null)
+			return "redirect:/salesninvoice/deliveryorderchalan";
 
 		model.addAttribute("deliveryorderchalan", oh);
-		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
-		
+		model.addAttribute("deliveryorderchalanprefix",
+				xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(),
+						TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(
+				TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+
 		List<Opdoheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
-		if("Open".equalsIgnoreCase(oh.getXstatusord()))
-			allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
-		
-		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
-		
+		if ("Open".equalsIgnoreCase(oh.getXstatusord()))
+			allOpenAndConfirmesSalesOrders
+					.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
+							TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
+
+		allOpenAndConfirmesSalesOrders
+				.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
+						TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
+
 		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
 		model.addAttribute("chalandetails", opdoService.findOpdoDetailByXdornum(xdornum));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
@@ -91,18 +106,18 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(Opdoheader opdoheader, BindingResult bindingResult, Model model){
-		if(opdoheader == null || StringUtils.isBlank(opdoheader.getXtypetrn())) {
+	public @ResponseBody Map<String, Object> save(Opdoheader opdoheader, BindingResult bindingResult, Model model) {
+		if (opdoheader == null || StringUtils.isBlank(opdoheader.getXtypetrn())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		// if existing
 		Opdoheader existOh = opdoService.findOpdoHeaderByXdornum(opdoheader.getXdornum());
-		if(existOh != null) {
+		if (existOh != null) {
 			BeanUtils.copyProperties(opdoheader, existOh, "xdate", "xstatusord");
 			long count = opdoService.update(existOh);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setErrorStatusAndMessage("Chalan not updated");
 				return responseHelper.getResponse();
 			}
@@ -115,7 +130,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		opdoheader.setXstatusord("Open");
 		opdoheader.setXdate(new Date());
 		long count = opdoService.save(opdoheader);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Chalan not created");
 			return responseHelper.getResponse();
 		}
@@ -126,20 +141,27 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 	@GetMapping("/opendeliveryorder/query")
-	public String reloadTableWithData(@RequestParam String xdornum, @RequestParam String date, Model model) throws ParseException {
+	public String reloadTableWithData(@RequestParam String xdornum, @RequestParam String date, Model model)
+			throws ParseException {
 		model.addAttribute("deliveryorderchalan", opdoService.findOpdoHeaderByXdornum(xdornum));
 		List<Opdoheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
-		
-		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
-		
-		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
+
+		allOpenAndConfirmesSalesOrders
+				.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
+						TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
+
+		allOpenAndConfirmesSalesOrders
+				.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
+						TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
 		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan::opendeliveryorderstable";
 	}
 
 	@PostMapping("/opendeliveryorder/query")
-	public @ResponseBody Map<String, Object> queryForrequistionDetails(String xdornum, Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ xdornum +"&date=" + sdf.format(xdate));
+	public @ResponseBody Map<String, Object> queryForrequistionDetails(String xdornum, Date xdate, Model model) {
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
+				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + xdornum + "&date="
+						+ sdf.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
@@ -151,36 +173,38 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 	@PostMapping("/deliveryorderconfirm/{chalan}/{xdornum}")
-	public @ResponseBody Map<String, Object> confirmSalesOrderAndCreateChalanDetail(@PathVariable String chalan, @PathVariable String xdornum, Model model){
-		
+	public @ResponseBody Map<String, Object> confirmSalesOrderAndCreateChalanDetail(@PathVariable String chalan,
+			@PathVariable String xdornum, Model model) {
+
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		if(oh == null) {
+		if (oh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		if(StringUtils.isNotBlank(oh.getXdocnum())) {
-			responseHelper.setErrorStatusAndMessage("Sales order already added to chalan : " + oh.getXdocnum() + " . Please reload this page again");
+		if (StringUtils.isNotBlank(oh.getXdocnum())) {
+			responseHelper.setErrorStatusAndMessage(
+					"Sales order already added to chalan : " + oh.getXdocnum() + " . Please reload this page again");
 			return responseHelper.getResponse();
 		}
 
 		List<Opdodetail> details = opdoService.findOpdoDetailByXdornum(xdornum);
-		if(details == null || details.isEmpty()) {
+		if (details == null || details.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("This " + xdornum + " Sales Order has no item to add this chalan");
 			return responseHelper.getResponse();
 		}
 
 		// create or update chalan detail first
-		for(Opdodetail pd : details) {
+		for (Opdodetail pd : details) {
 			// check chalan detail already exist using item
 			Opdodetail existChalanDetail = opdoService.findOpdoDetailByXdornumAndXitem(chalan, pd.getXitem());
-			if(existChalanDetail != null) {  // update existing with qty
+			if (existChalanDetail != null) { // update existing with qty
 				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
 				long countChalanDetail = opdoService.updateDetail(existChalanDetail);
-				if(countChalanDetail == 0) {
+				if (countChalanDetail == 0) {
 					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
 					return responseHelper.getResponse();
 				}
-			} else {  // create new detail
+			} else { // create new detail
 				Opdodetail opdodetail = new Opdodetail();
 				opdodetail.setXdornum(chalan);
 				opdodetail.setXitem(pd.getXitem());
@@ -188,7 +212,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 				opdodetail.setXqtyord(pd.getXqtyord());
 				opdodetail.setXrate(pd.getXrate());
 				long countChalanDetail = opdoService.saveDetail(opdodetail);
-				if(countChalanDetail == 0) {
+				if (countChalanDetail == 0) {
 					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");
 					return responseHelper.getResponse();
 				}
@@ -199,47 +223,53 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		oh.setXdocnum(chalan);
 		oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);
-		
-		if(count == 0) {
+
+		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
+				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date="
+						+ sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable",
+				"/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
 		return responseHelper.getResponse();
 	}
 
 	@PostMapping("/deliveryorderrevoke/{chalan}/{xdornum}")
-	public @ResponseBody Map<String, Object> revokeSalesOrder(@PathVariable String chalan, @PathVariable String xdornum, Model model){
+	public @ResponseBody Map<String, Object> revokeSalesOrder(@PathVariable String chalan, @PathVariable String xdornum,
+			Model model) {
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		if(oh == null) {
+		if (oh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		List<Opdodetail> details = opdoService.findOpdoDetailByXdornum(xdornum);
-		if(details == null || details.isEmpty()) {
-			responseHelper.setErrorStatusAndMessage("This " + xdornum + " Sales Order has no item to remove from chalan");
+		if (details == null || details.isEmpty()) {
+			responseHelper
+					.setErrorStatusAndMessage("This " + xdornum + " Sales Order has no item to remove from chalan");
 			return responseHelper.getResponse();
 		}
 
 		// create or update chalan detail first
-		for(Opdodetail pd : details) {
+		for (Opdodetail pd : details) {
 			// check chalan detail already exist using item
 			Opdodetail existChalanDetail = opdoService.findOpdoDetailByXdornumAndXitem(chalan, pd.getXitem());
-			if(existChalanDetail == null) continue;
+			if (existChalanDetail == null)
+				continue;
 
 			// update existing with qty
 			existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().subtract(pd.getXqtyord()));
 			long countChalanDetail = 0;
-			if(BigDecimal.ZERO.equals(existChalanDetail.getXqtyord())) {
+			if (BigDecimal.ZERO.equals(existChalanDetail.getXqtyord())) {
 				countChalanDetail = opdoService.deleteDetail(existChalanDetail);
 			} else {
 				countChalanDetail = opdoService.updateDetail(existChalanDetail);
 			}
-			if(countChalanDetail == 0) {
+			if (countChalanDetail == 0) {
 				responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
 				return responseHelper.getResponse();
 			}
@@ -249,13 +279,16 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		oh.setXdocnum(null);
 		oh.setXstatusord("Open");
 		long count = opdoService.update(oh);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum="+ chalan +"&date=" + sdf.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
+				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date="
+						+ sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable",
+				"/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
 		return responseHelper.getResponse();
 	}
@@ -268,36 +301,32 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 	@PostMapping("/lockchalan/{xdornum}")
-	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xdornum, Model model){
-		
+	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xdornum, Model model) {
+
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		if(oh == null) {
+		if (oh == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		// transfer all chalan deails to immofgdetail
 		List<Opdodetail> chalandetails = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
-		for(Opdodetail c : chalandetails) {
+		for (Opdodetail c : chalandetails) {
 			/*
-			Immofgdetail id = new Immofgdetail();
-			id.setXtornum(c.getXordernum());
-			id.setXrow(c.getXrow());
-			id.setXunit(c.getXunit());
-			id.setXitem(c.getXitem());
-			id.setXqtyord(c.getXqtyord());
-			id.setXnote(c.getXlong());
-			long count = immofgdetailService.save(id);
-			if(count == 0) {
-				log.error("ERROR is : {}", "Can't insert chaland details to Immofgdetail table for chalan " + c.getXordernum());
-			}
-			*/
+			 * Immofgdetail id = new Immofgdetail(); id.setXtornum(c.getXordernum());
+			 * id.setXrow(c.getXrow()); id.setXunit(c.getXunit());
+			 * id.setXitem(c.getXitem()); id.setXqtyord(c.getXqtyord());
+			 * id.setXnote(c.getXlong()); long count = immofgdetailService.save(id);
+			 * if(count == 0) { log.error("ERROR is : {}",
+			 * "Can't insert chaland details to Immofgdetail table for chalan " +
+			 * c.getXordernum()); }
+			 */
 		}
 
 		// now lock chalan
 		oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't lock Chalan");
 			return responseHelper.getResponse();
 		}
@@ -307,34 +336,36 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/print/{xdornum}")
-	public ResponseEntity<byte[]> printChalanWithSalesOrderDetails(@PathVariable String xdornum) {
+	@GetMapping("/print/chalan/{pType}/{xdornum}")
+	public ResponseEntity<byte[]> printChalanWithSalesOrderDetails(@PathVariable String pType,
+			@PathVariable String xdornum) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
 		headers.add("X-Content-Type-Options", "nosniff");
 
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		if(oh == null) {
+		if (oh == null) {
 			message = "Chalan not found to do print";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		List<Opdoheader> salesOrders = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), oh.getXdornum());
-		if(salesOrders == null || salesOrders.isEmpty()) {
-			message = "Sales order not found in this chalan : " + xdornum;
+		List<Opdoheader> salesOrders = opdoService.findAllInvoiceOrderByChalan(
+				TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
+				TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), oh.getXdornum());
+		if (salesOrders == null || salesOrders.isEmpty()) {
+			message = "No sales order found in this chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-
 		List<SalesOrderChalanReport> allReports = new ArrayList<>();
 
-		for(Opdoheader so : salesOrders) {
+		for (Opdoheader so : salesOrders) {
 
 			SalesOrderChalanReport report = new SalesOrderChalanReport();
 			report.setBusinessName(sessionManager.getZbusiness().getZorg());
 			report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-			report.setReportName("Invoice Chalan");
+			report.setReportName("Delivery Chalan");
 			report.setFromDate(SDF.format(oh.getXdate()));
 			report.setToDate(SDF.format(oh.getXdate()));
 			report.setPrintDate(SDF.format(new Date()));
@@ -348,9 +379,17 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			salesOrder.setOrderNumber(so.getXdornum());
 			salesOrder.setReqBranch(so.getXcus());
 			salesOrder.setDate(SDF.format(so.getXdate()));
+			if ("invoices".equalsIgnoreCase(pType)) {
+				report.setReportName("Sales Invoice");
+
+				salesOrder.setTotalAmount(so.getXtotamt().toString());
+				salesOrder.setVatAmount(so.getXvatamt().toString());
+				salesOrder.setDiscountAmount(so.getXdiscamt().toString());
+				salesOrder.setGrandTotalAmount(so.getXgrandtot().toString());
+			}
 
 			List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(so.getXdornum());
-			if(items != null && !items.isEmpty()) {
+			if (items != null && !items.isEmpty()) {
 				items.parallelStream().forEach(it -> {
 					ItemDetails item = new ItemDetails();
 					item.setItemCode(it.getXitem());
@@ -359,6 +398,12 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 					item.setItemUnit(it.getXunitsel());
 					item.setItemCategory(it.getXcatitem());
 					item.setItemGroup(it.getXgitem());
+
+					if ("invoices".equalsIgnoreCase(pType)) {
+						item.setItemRate(it.getXrate().toString());
+						item.setItemTotalAmount(it.getXlineamt().toString());
+					}
+
 					salesOrder.getItems().add(item);
 				});
 			}
@@ -368,9 +413,12 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			allReports.add(report);
 
 		}
-
-		byte[] byt = getBatchPDFByte(allReports, "chalanreport.xsl");
-		if(byt == null) {
+		byte[] byt;
+		if ("invoices".equalsIgnoreCase(pType))
+			byt = getBatchPDFByte(allReports, "deliverychalanreport.xsl");
+		else
+			byt = getBatchPDFByte(allReports, "deliverychalaninvoicesreport.xsl");
+		if (byt == null) {
 			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -378,4 +426,103 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		headers.setContentType(new MediaType("application", "pdf"));
 		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
+
+	@GetMapping("/print/order/{pType}/{xdornum}")
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
+			@PathVariable String xdornum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if (oh == null) {
+			message = "Invoice not found to print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		Opdoheader chalan = opdoService.findOpdoHeaderByXdornum(oh.getXdocnum());
+		if (chalan == null) {
+			message = "Invoice is not assigned to a chalan";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		/*
+		 * List<Opdoheader> salesOrders =
+		 * opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.
+		 * SALES_AND_INVOICE_NUMBER.getCode(),
+		 * TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(),
+		 * oh.getXdornum()); if(salesOrders == null || salesOrders.isEmpty()) { message
+		 * = "No sales order found in this chalan : " + xdornum; return new
+		 * ResponseEntity<>(message.getBytes(), headers,
+		 * HttpStatus.INTERNAL_SERVER_ERROR); }
+		 */
+
+		// List<SalesOrderChalanReport> allReports = new ArrayList<>();
+		SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+
+		// for(Opdoheader so : salesOrders) {
+
+		SalesOrderChalanReport report = new SalesOrderChalanReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Delivery Chalan");
+		report.setFromDate(SDF.format(chalan.getXdate()));
+		report.setToDate(SDF.format(chalan.getXdate()));
+		report.setPrintDate(SDF.format(new Date()));
+		report.setCopyrightText("ASL");
+
+		report.setChalanNumber(chalan.getXdornum());
+		report.setChalanDate(SDF.format(chalan.getXdate()));
+		report.setChalanStatus(chalan.getXstatusar());
+
+		SalesOrder salesOrder = new SalesOrder();
+		salesOrder.setOrderNumber(oh.getXdornum());
+		salesOrder.setReqBranch(oh.getXcus());
+		salesOrder.setDate(SDF.format(oh.getXdate()));
+		if ("invoice".equalsIgnoreCase(pType)) {
+			report.setReportName("Sales Invoice");
+
+			salesOrder.setTotalAmount(oh.getXtotamt().toString());
+			salesOrder.setVatAmount(oh.getXvatamt().toString());
+			salesOrder.setDiscountAmount(oh.getXdiscamt().toString());
+			salesOrder.setGrandTotalAmount(oh.getXgrandtot().toString());
+		}
+
+		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
+		if (items != null && !items.isEmpty()) {
+			items.parallelStream().forEach(it -> {
+				ItemDetails item = new ItemDetails();
+				item.setItemCode(it.getXitem());
+				item.setItemName(it.getXdesc());
+				item.setItemQty(it.getXqtyord().toString());
+				item.setItemUnit(it.getXunitsel());
+				item.setItemCategory(it.getXcatitem());
+				item.setItemGroup(it.getXgitem());
+
+				if ("invoice".equalsIgnoreCase(pType)) {
+					item.setItemRate(it.getXrate().toString());
+					item.setItemTotalAmount(it.getXlineamt().toString());
+				}
+
+				salesOrder.getItems().add(item);
+			});
+		}
+
+		report.getSalesorders().add(salesOrder);
+
+		byte[] byt;
+		if ("invoice".equalsIgnoreCase(pType))
+			byt = getPDFByte(report, "deliverychalanreport.xsl");
+		else
+			byt = getPDFByte(report, "deliverychalaninvoicesreport.xsl");
+		if (byt == null) {
+			message = "Can't print report for chalan : " + xdornum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+
 }
