@@ -145,5 +145,11 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	public List<PoordHeader> searchXpornum(String xpornum){
 		return poordMapper.searchXpornum(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	@Override
+	public Cacus findBranchCustomerByRequsitionNumber(String xpornum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
