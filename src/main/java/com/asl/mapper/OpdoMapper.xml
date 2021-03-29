@@ -367,6 +367,17 @@
 			XDORNUM DESC
 	</select>
 
+	<select id="findPoordHeaderByXordernum" resultType="Opdoheader">
+		SELECT 
+			*
+		FROM 
+			OPDOHEADER
+		WHERE
+			ZID=#{zid}
+			AND ZACTIVE='1'
+			AND xordernum=#{xordernum}
+	</select>
+
 	<select id="findPoordHeaderByXordernumAndRequisitionnumber" resultType="Opdoheader">
 		SELECT 
 			*

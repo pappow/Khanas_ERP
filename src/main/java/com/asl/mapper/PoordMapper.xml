@@ -248,7 +248,18 @@
 			left join zbusiness z on z.zid=p.zid
 		where 
 			p.xpornum=#{xpornum}
+			and p.zid=#{branchid}
 			and z.branch='1'
+	</select>
+
+	<select id="findBranchCustomerByXcus" resultType="Cacus">
+		select 
+			*
+		from 
+			cacus
+		where 
+			xcuszid=#{xcus}
+			and zid=#{zid}
 	</select>
 
 </mapper>

@@ -135,9 +135,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
-	public Cacus findBranchCustomerByRequsitionNumber(String xpornum) {
+	public Cacus findBranchCustomerByRequsitionNumber(String xpornum, String branchid) {
 		if(StringUtils.isBlank(xpornum)) return null;
-		return poordMapper.findBranchCustomerByRequsitionNumber(xpornum, sessionManager.getBusinessId());
+		return poordMapper.findBranchCustomerByRequsitionNumber(xpornum, branchid, sessionManager.getBusinessId());
 	}
 
 	
