@@ -171,6 +171,15 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
+	<update id="deleteModetail" parameterType="Modetail">
+		DELETE FROM
+			modetail
+		WHERE
+			xrow=#{xrow, jdbcType=INTEGER}
+			AND xbatch=#{xbatch, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
 	<select id="findMoHeaderByXbatch" resultType="Moheader">
 		SELECT 
 			moheader.*,
@@ -181,6 +190,20 @@
 			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
 		WHERE 
 			moheader.xbatch=#{xbatch} 
+			AND moheader.zid=#{zid} 
+			AND moheader.zactive='1'
+	</select>
+
+	<select id="findMoHeaderByXchalan" resultType="Moheader">
+		SELECT 
+			moheader.*,
+			caitem.xdesc AS "xdesc",
+			caitem.xunitpur AS "xqtyprdunit"
+		FROM 
+			moheader 
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+		WHERE 
+			moheader.xchalan=#{xchalan} 
 			AND moheader.zid=#{zid} 
 			AND moheader.zactive='1'
 	</select>

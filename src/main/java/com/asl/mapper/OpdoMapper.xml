@@ -38,7 +38,7 @@
 			xtypetrn,
 			xtrn,
 			xchalancreated,
-			
+			requisitionnumber,
 			zid,
 			zauserid,
 			zuuserid,
@@ -80,7 +80,7 @@
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
 			#{xchalancreated, jdbcType=BOOLEAN},
-			
+			#{requisitionnumber, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -124,7 +124,7 @@
 			xexch=#{xexch, jdbcType=DECIMAL},
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
 			xstatuschalan=#{xstatuschalan, jdbcType=BOOLEAN},
-			
+			requisitionnumber=#{requisitionnumber, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -365,5 +365,17 @@
 			AND OPDOHEADER.XDOCNUM = #{xchalanref}
 		ORDER BY
 			XDORNUM DESC
+	</select>
+
+	<select id="findPoordHeaderByXordernumAndRequisitionnumber" resultType="Opdoheader">
+		SELECT 
+			*
+		FROM 
+			OPDOHEADER
+		WHERE
+			ZID=#{zid}
+			AND ZACTIVE='1'
+			AND xordernum=#{xordernum}
+			AND requisitionnumber=#{requisitionnumber}
 	</select>
 </mapper>

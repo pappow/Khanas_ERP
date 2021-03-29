@@ -7,17 +7,25 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
+import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.OpdoMapper;
+import com.asl.mapper.OpordMapper;
+import com.asl.mapper.PoordMapper;
 import com.asl.service.OpdoService;
 
 @Service
 public class OpdoServiceImpl extends AbstractGenericService implements OpdoService {
-	
-	@Autowired
-	private OpdoMapper opdoMapper;
+
+	@Autowired private OpdoMapper opdoMapper;
+	@Autowired private OpordMapper opordMapper;
+	@Autowired private PoordMapper poordMapper;
 
 	@Override
 	public long save(Opdoheader opdoHeader) {
@@ -161,6 +169,61 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	@Override
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xstatusord, String xdornum) {
 		return opdoMapper.searchOpdoHeaderWithSatus(xtypetrn, xdornum.toUpperCase(), xstatusord, sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
+	public long createSalesFromChalan(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return 0;
+
+		Opordheader chalan = opordMapper.findOpordHeaderByXordernum(xordernum, sessionManager.getBusinessId());
+		if(chalan == null) return 0;
+
+		List<Opordheader> salesOrders = opordMapper.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum, sessionManager.getBusinessId());
+		if(salesOrders == null || salesOrders.isEmpty()) return 0;
+
+		// create sales chalan first
+		Opdoheader deliveryChalan = new Opdoheader();
+		//deliveryChalan.set
+
+		// Create sales from sales order of chalan first
+		int salesSavedCount = 0;
+		for(Opordheader so : salesOrders) {
+			Opdoheader sales = new Opdoheader();
+			sales.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+			sales.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+			sales.setXdate(new Date());
+			sales.setXstatusord("Open");
+			
+
+			sales.setXordernum(so.getXordernum());
+			sales.setRequisitionnumber(so.getXpornum());
+			sales.setZid(sessionManager.getBusinessId());
+			Cacus customer = poordMapper.findBranchCustomerByRequsitionNumber(so.getXpornum(), sessionManager.getBusinessId());
+			if(customer != null) sales.setXcus(customer.getXcus());
+
+			long count = opdoMapper.saveOpdoHeader(sales);
+			if(count == 0) continue;
+			salesSavedCount++;
+
+			Opdoheader savedSales = opdoMapper.findPoordHeaderByXordernumAndRequisitionnumber(so.getXordernum(), so.getXpornum(), sessionManager.getBusinessId());
+			if(savedSales == null) continue;
+
+			// now prepare item details
+			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(so.getXordernum(), sessionManager.getBusinessId());
+			for(Oporddetail soItem : salesOrdeItems) {
+				Opdodetail item = new Opdodetail();
+				item.setXdornum(savedSales.getXdornum());
+				item.setXitem(soItem.getXitem());
+				item.setXqtyord(soItem.getXqtyord());
+				item.setXunitsel(soItem.getXunit());
+				item.setZid(sessionManager.getBusinessId());
+				long itemcount = opdoMapper.saveOpdoDetail(item);
+				if(itemcount == 0) continue;
+			}
+		}
+
+		return salesSavedCount == salesOrders.size() ? 1 : 0;
 	}
 
 }

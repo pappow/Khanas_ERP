@@ -19,8 +19,8 @@
 									<th>Req. Qty</th>
 									<th>Unit</th>
 									<th>Type</th>
-									<th data-nosort="Y" style="text-align:right;">
-										<button data-dismiss="modal" type="button" class="btn btn-success btn-add" th:attr="data-url=@{/production/batch/} + ${xbatch} + '/batchdetail/new/show', data-target-modal='batchdetailmodal'"><i class="fas fa-plus"></i></button>
+									<th data-nosort="Y" style="text-align:right;" th:if="${batch.xstatusmor ne 'Completed'}">
+										<button data-dismiss="modal" type="button" class="btn btn-success btn-add" th:attr="data-url=@{/production/batch/} + ${batch.xbatch} + '/batchdetail/new/show', data-target-modal='batchdetailmodal'"><i class="fas fa-plus"></i></button>
 									</th>
 								</tr>
 							</thead>
@@ -34,8 +34,9 @@
 									<td th:text="${b.xqtyreq}"></td>
 									<td th:text="${b.xunit}"></td>
 									<td th:text="${b.xtype}"></td>
-									<td style="text-align:right;">
+									<td style="text-align:right;" th:if="${batch.xstatusmor ne 'Completed'}">
 										<button data-dismiss="modal" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/} + ${b.xbatch} + '/batchdetail/' + ${b.xrow} + '/show', data-target-modal='batchdetailmodal'"><i class="fas fa-edit"></i></button>
+										<button data-dismiss="modal" type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/production/batch/} + ${b.xbatch} + '/batchdetail/' + ${b.xrow} + '/delete', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-trash"></i></button>
 									</td>
 								</tr>
 							</tbody>

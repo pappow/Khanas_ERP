@@ -75,6 +75,12 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "batchcreated")
 	private boolean batchcreated;
 
+	@Column(name = "productioncompleted")
+	private boolean productioncompleted;
+
+	@Column(name = "invoicecreated")
+	private boolean invoicecreated;
+
 	@Transient
 	private String branchname;
 }

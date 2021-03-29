@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 
@@ -40,4 +41,6 @@ public interface PoordService {
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype);
 
 	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem);
+
+	public Cacus findBranchCustomerByRequsitionNumber(String xpornum);
 }

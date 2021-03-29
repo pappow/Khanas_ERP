@@ -34,6 +34,8 @@ import com.asl.model.report.AllSalesOrderChalanReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrderChalan;
 import com.asl.service.ImmofgdetailService;
+import com.asl.service.MoService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.XtrnService;
 
@@ -51,9 +53,12 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private ImmofgdetailService immofgdetailService;
+	@Autowired private MoService moService;
+	@Autowired private OpdoService opdoService;
 
 	@GetMapping
 	public String loadSalesOrderChalanPage(Model model) {
+		model.addAttribute("productioncompleted", false);
 		model.addAttribute("salesorderchalan", getDefaultOpordheader());
 		model.addAttribute("salesorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("salesorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
@@ -65,6 +70,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
 		if(oh == null) return "redirect:/salesninvoice/salesorderchalan";
 
+		model.addAttribute("productioncompleted", moService.isProductionProcessCompleted(oh.getXordernum()));
 		model.addAttribute("salesorderchalan", oh);
 		model.addAttribute("salesorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("salesorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
@@ -292,6 +298,19 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Chalan locked successfully");
 		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + xordernum);
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/createinvoice/{xordernum}")
+	public @ResponseBody Map<String, Object> createInvoice(@PathVariable String xordernum, Model model){
+		long count = opdoService.createSalesFromChalan(xordernum);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + xordernum);
+		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
 		return responseHelper.getResponse();
 	}
 
