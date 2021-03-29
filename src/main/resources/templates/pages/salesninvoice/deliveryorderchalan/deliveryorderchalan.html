@@ -173,10 +173,12 @@
 								<table class="table table-striped table-bordered datatable nowrap" id="opendeliveryorderstable" th:fragment="opendeliveryorderstable">
 									<thead>
 										<tr>
-											<th>Order Number</th>
-											<th>Requisition</th>
+											<th>Order No.</th>
+											<th>Req no.</th>
 											<th>Date</th>
 											<th>Status</th>
+											<th>Chalan Status</th>
+											
 											<th data-nosort="Y" style="text-align: right">Action</th>
 										</tr>
 									</thead>
@@ -189,12 +191,16 @@
 											<td th:text="${os.xordernum}"></td>
 											<td th:text="${#dates.format(os.xdate, df)}"></td>
 											<td th:text="${os.xstatusord}"></td>
+											<td>
+												<span th:if="${os.xchalancreated == true}" class="text-success">Assigned</span>
+												<span th:if="${os.xchalancreated == false}" class="text-warning">Not Assigned</span>
+											</td>
 											<td style="text-align: right">
 												<button type="button" class="btn btn-warning btn-edit editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/ordreqdetails/} + ${os.xdornum} + '/show', data-target-modal='deliveryorderdetailmodal'"><i class="fas fa-eye"></i></button>
-												<button th:if="${os.xstatusord eq 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderconfirm/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-check-square"></i></button>
-												<a th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum) and deliveryorderchalan.zactive == true and deliveryorderchalan.xstatusord eq 'Confirmed'}" target="_blank" type="button" class="btn btn-success" th:href="@{/salesninvoice/deliveryorderchalan/print/order/delivery/} + ${os.xdornum}"><i class="fas fa-truck"></i></a>
+												<button th:if="${os.xchalancreated == false and os.xstatusord eq 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderconfirm/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-check-square"></i></button>
+												<a th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum)  and deliveryorderchalan.zactive == true and deliveryorderchalan.xstatusord eq 'Confirmed'}" target="_blank" type="button" class="btn btn-success" th:href="@{/salesninvoice/deliveryorderchalan/print/order/delivery/} + ${os.xdornum}"><i class="fas fa-truck"></i></a>
 												<a th:if="${not #strings.isEmpty(deliveryorderchalan.xdornum) and deliveryorderchalan.zactive == true and deliveryorderchalan.xstatusord eq 'Confirmed'}" target="_blank" type="button" class="btn btn-primary" th:href="@{/salesninvoice/deliveryorderchalan/print/order/invoice/} + ${os.xdornum}"><i class="fas fa-file-invoice-dollar"></i></a>
-												<button th:if="${os.xstatusord ne 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderrevoke/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-trash"></i></button>
+												<button th:if="${os.xchalancreated == true and os.xstatusord eq 'Open' and deliveryorderchalan.xstatusord eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/deliveryorderchalan/deliveryorderrevoke/} + ${deliveryorderchalan.xdornum}  + '/' + ${os.xdornum}"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
