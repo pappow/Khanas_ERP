@@ -141,4 +141,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	
+	@Override
+	public List<PoordHeader> searchXpornum(String xpornum){
+		return poordMapper.searchXpornum(xpornum.toUpperCase(), sessionManager.getBusinessId());
+	}
+	
 }

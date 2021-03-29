@@ -373,4 +373,9 @@
 			AND ZACTIVE='1'
 	</select>
 	
+	<select id="searchXpornum" resultType="Opordheader">
+		SELECT * FROM OPORDHEADER WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1' ORDER BY xpornum
+	</select>
+	
+	
 </mapper>

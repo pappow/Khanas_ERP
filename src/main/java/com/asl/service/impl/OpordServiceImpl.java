@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordHeader;
 import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
 import com.asl.service.OpordService;
+
 
 /**
  * @author Zubayer Ahamed
@@ -139,5 +141,10 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public List<Opordheader> searchOpordheaderByXtypetrnAndXtrnAndXordernum(String xtypetrn, String xtrn, String xordernum, String xstatus) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xordernum)) return Collections.emptyList();
 		return opordMapper.searchOpordheaderByXtypetrnAndXtrnAndXordernum(xtypetrn, xtrn, xordernum.toUpperCase(), xstatus, sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Opordheader> searchXpornum(String xpornum){
+		return opordMapper.searchXpornum(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
 }

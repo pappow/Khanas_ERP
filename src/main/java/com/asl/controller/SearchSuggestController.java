@@ -28,6 +28,7 @@ import com.asl.service.PogrnService;
 import com.asl.service.ProductionSuggestionService;
 
 import com.asl.service.BmbomService;
+import com.asl.service.PoordService;
 
 
 /**
@@ -48,6 +49,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private OpdoService opdoService;
 
 	@Autowired private BmbomService bmbomService;
+	@Autowired private PoordService poordService;
 
 
 	@GetMapping("/supplier/{hint}")
@@ -230,6 +232,23 @@ public class SearchSuggestController extends ASLAbstractController {
 
 		List<SearchSuggestResult> list = new ArrayList<>();
 		bmbomService.searchXbom(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXbomkey(),c.getXbomkey())));
+		return list;
+	}
+	
+	@GetMapping("/report/poor/xpornum/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllpornum(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		poordService.searchXpornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
+		return list;
+	}
+	@GetMapping("/report/opord/xpornum/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllxpornum(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+
+		List<SearchSuggestResult> list = new ArrayList<>();
+		opordService.searchXpornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
 }
