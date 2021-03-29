@@ -44,6 +44,10 @@ public interface OpdoService {
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
 
 	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
+	
+	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum);
+	
+	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xstatusord, String xdornum);
 
 	// Procedure Calls
 	public void procConfirmDO(String xdornum, String p_seq);

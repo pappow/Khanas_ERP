@@ -27,6 +27,9 @@ public interface OpdoMapper {
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid);
 	
+	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum, String zid);
+	public List<Opdoheader> searchOpdoHeaderWithSatus(String xtypetrn, String xdornum, String xstatusord, String zid);
+	
 	//For Delivery Chalan
 	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatusord, String xdate, String zid);
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);

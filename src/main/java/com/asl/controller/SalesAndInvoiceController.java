@@ -280,16 +280,31 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procConfirmDO(xdornum, p_seq);
 			//Error check here for procConfrimDo
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 			
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			opdoService.procIssuePricing(xdornum, opdoHeader.getXwh(), p_seq);
+			opdoService.procIssuePricing(opdoHeader.getXdocnum(), opdoHeader.getXwh(), p_seq);
 			//Error check here for procIssuePricing
+			em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 			
 		}
 		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())){
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procTransferOPtoAR(xdornum, "opdoheader", p_seq);
 			//Error check here for procTransferOPtoAR
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 			
 		}
 			
@@ -339,8 +354,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 				BeanUtils.copyProperties(opdoDetailList.get(i), opcrnDetail, "xrow", "xnote");
 				opcrnDetail.setXcrnnum(opcrnheader.getXcrnnum());
 				opcrnDetail.setXunit(opdoDetailList.get(i).getXunitsel());
-				//opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());
-				
+				//opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());				
 				
 				long nCount = opcrnService.saveDetail(opcrnDetail);
 				

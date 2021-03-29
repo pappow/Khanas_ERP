@@ -92,5 +92,15 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 		if(StringUtils.isBlank(xcrnnum) || xrow == 0) return null;
 		return opcrnMapper.findOpcrnDetailByXcrnnumAndXrow(xcrnnum, xrow, sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public void procConfirmCRN(String xcrnnum, String p_seq) {
+		opcrnMapper.procConfirmCRN(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum, p_seq);
+	}
+	
+	@Override
+	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq) {
+		opcrnMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, p_screen, p_seq);
+	}
 
 }

@@ -242,16 +242,31 @@ public class GrnReturnController extends ASLAbstractController {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			pocrnService.procConfirmCRN(xcrnnum, p_seq);
 			//Error check for procConfirmCRN
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 			
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh(), p_seq);		
 			//Error check for procIssuePricing
+			em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 			
 		}
 		if(!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			pocrnService.procTransferPRtoAP(xcrnnum, p_seq);
 			//Error check for procTransferPRtoAP
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 		}
 		
 		responseHelper.setSuccessStatusAndMessage("PRN Confirmed successfully");

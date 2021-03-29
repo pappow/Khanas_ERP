@@ -127,6 +127,9 @@ public class Opdoheader extends AbstractModel<String> {
 
 	@Column(name = "xvatait")
 	private String xvatait;
+	
+	@Column(name = "xchalancreated")
+	private boolean xchalancreated;
 
 	@Transient
 	private String xtrnopdo;

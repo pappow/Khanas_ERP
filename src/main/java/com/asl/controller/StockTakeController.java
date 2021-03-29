@@ -227,9 +227,14 @@ public class StockTakeController extends ASLAbstractController {
 		String p_seq;
 		if(!"Confirmed".equalsIgnoreCase(imtag.getXstatustag())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			//pogrnService.procInventory(x, pogrnHeader.getXpornum(), p_seq);
-		}
-		
+			imtagService.procStockTake(imtag.getXdate(), imtag.getXtagnum(), p_seq);
+			
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
+		}		
 		responseHelper.setSuccessStatusAndMessage("Imtag Confirmed successfully");
 		responseHelper.setRedirectUrl("/inventory/stocktake/" + imtag.getXtagnum());
 		return responseHelper.getResponse();

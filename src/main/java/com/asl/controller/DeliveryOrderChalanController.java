@@ -77,11 +77,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return "redirect:/salesninvoice/deliveryorderchalan";
 
 		model.addAttribute("deliveryorderchalan", oh);
-		model.addAttribute("deliveryorderchalanprefix",
-				xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(),
-						TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(
-				TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
 
 		List<Opdoheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
 		if ("Open".equalsIgnoreCase(oh.getXstatusord()))
@@ -224,6 +221,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		// now update sales order with chalan reference
 		oh.setXdocnum(chalan);
+		oh.setXchalancreated(true);
 		oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);
 
@@ -280,6 +278,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		// now update sales order with chalan reference
 		oh.setXdocnum(null);
+		oh.setXchalancreated(false);
 		oh.setXstatusord("Open");
 		long count = opdoService.update(oh);
 		if (count == 0) {

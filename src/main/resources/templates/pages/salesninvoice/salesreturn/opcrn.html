@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Purchase Order</title>
+<title>Sales Return</title>
 <meta th:remove="tag" th:include="commons :: common-meta" />
 <meta th:remove="tag" th:include="commons :: common-css" />
 <meta th:remove="tag" th:include="commons :: common-js" />
@@ -48,13 +48,13 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>GRN Return</h1>
+										<h1>Sales Return</h1>
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/salesninvoice/returnsales}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}" th:href="@{/salesninvoice/returnsales}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" th:href="@{/salesninvoice/returnsales/confirmsrn/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-success confirmprn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" th:href="@{/salesninvoice/returnsales/confirmsrn/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-success confirmsrn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" th:href="@{/salesninvoice/returnsales/archive/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == false}" th:href="@{/salesninvoice/returnsales/restore/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -75,9 +75,9 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}">
-														<label class="control-label col-md-4" for="xtrncrn">CRN Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">CRN Prefix : </label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrncrn}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${crnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
@@ -97,7 +97,7 @@
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
 																	th:value="${opcrnheader.xdornum}" 
-																	th:attr="search-url='search/supplier'"/>
+																	th:attr="search-url='search/confirmedinvoice'"/>
 															<input type="hidden" id="search-val" th:field="*{xdornum}"/>
 															<input type="hidden" id="search-des" value=""/>
 														</div>
@@ -243,7 +243,7 @@
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="opcrn : ${allopcrnheader}">
+												<tr th:each="opcrn : ${allOpcrnHeader}">
 													<td>
 														<a th:href="@{/salesninvoice/returnsales/} + ${opcrn.xcrnnum}" th:text="${opcrn.xcrnnum}"></a>
 													</td>
@@ -269,7 +269,7 @@
 								<h1>GRN Details</h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="pogrndetailtable" th:fragment="pogrndetailtable">
+								<table class="table table-striped table-bordered datatable nowrap" id="opcrndetailtable" th:fragment="opcrndetailtable">
 									<thead>
 										<tr>
 											<th>Row</th>
@@ -278,7 +278,7 @@
 											<th>Qty</th>
 											<th>Rate</th>
 											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/returnsales/} + ${opcrnheader.xcrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/returnsales/} + ${opcrnheader.xcrnnum} + '/opcrndetail/new/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -315,7 +315,7 @@
 <script>
 		$(document).ready(function(){
 			
-			$('a.confirmprn-btn-link').off('click').on('click', function(e){
+			$('a.confirmsrn-btn-link').off('click').on('click', function(e){
 				e.preventDefault();
 				var grnNum = $("#xgrnnum").val();
 				
