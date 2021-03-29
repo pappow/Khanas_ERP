@@ -103,7 +103,7 @@
 	</update>
 
 	<select id="getAllCaitems" resultType="Caitem">
-		SELECT * FROM Caitem WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Caitem WHERE zid=#{zid} AND zactive='1' ORDER BY xitem DESC
 	</select>
 
 	<select id="findByXcatitem" resultType="Caitem">

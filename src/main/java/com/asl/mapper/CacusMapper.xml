@@ -97,7 +97,13 @@
 	</update>
 
 	<select id="findByXcus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE zid=#{zid} AND xcus=#{xcus}
+		SELECT 
+			* 
+		FROM 
+			cacus 
+		WHERE 
+			zid=#{zid} 
+			AND xcus=#{xcus}
 	</select>
 	
 	<select id="findByXphone" resultType="Cacus">
@@ -109,7 +115,15 @@
 	</select>
 
 	<select id="getAllCacus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			cacus 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		ORDER BY
+			xcus DESC
 	</select>
 
 	<select id="searchCacus" resultType="Cacus">
@@ -122,5 +136,16 @@
 	
 	<select id="searchXgcus" resultType="Cacus">
 		SELECT * FROM Cacus WHERE (UPPER(xgcus) LIKE '%' || #{xgcus} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findCacusByXcuszid" resultType="Cacus">
+		SELECT 
+			*
+		FROM 
+			CACUS
+		WHERE
+			XCUSZID=#{xcuszid}
+			AND ZID=#{zid}
+			AND ZACTIVE='1'
 	</select>
 </mapper>
