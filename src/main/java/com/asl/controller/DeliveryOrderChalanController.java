@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.enums.ResponseStatus;
@@ -32,6 +33,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrder;
 import com.asl.model.report.SalesOrderChalanReport;
+import com.asl.service.CacusService;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
@@ -52,6 +54,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	private XtrnService xtrnService;
 	@Autowired
 	private ImmofgdetailService immofgdetailService;
+	@Autowired
+	private CacusService cacusService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -358,9 +362,10 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		}
 
 		List<SalesOrderChalanReport> allReports = new ArrayList<>();
+		Cacus cacus = new Cacus();
 
 		for (Opdoheader so : salesOrders) {
-
+			
 			SalesOrderChalanReport report = new SalesOrderChalanReport();
 			report.setBusinessName(sessionManager.getZbusiness().getZorg());
 			report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
@@ -375,8 +380,11 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			report.setChalanStatus(oh.getXstatusar());
 
 			SalesOrder salesOrder = new SalesOrder();
+			cacus = cacusService.findByXcus(so.getXcus());
 			salesOrder.setOrderNumber(so.getXdornum());
 			salesOrder.setReqBranch(so.getXcus());
+			salesOrder.setCustomer(cacus.getXorg());
+			salesOrder.setCustomerAddress(cacus.getXmadd());
 			salesOrder.setDate(SDF.format(so.getXdate()));
 			if ("invoices".equalsIgnoreCase(pType)) {
 				report.setReportName("Sales Invoice");
@@ -435,11 +443,12 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		headers.add("X-Content-Type-Options", "nosniff");
 
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+		
 		if (oh == null) {
 			message = "Invoice not found to print";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+		Cacus cacus = cacusService.findByXcus(oh.getXcus());
 		Opdoheader chalan = opdoService.findOpdoHeaderByXdornum(oh.getXdocnum());
 		if (chalan == null) {
 			message = "Invoice is not assigned to a chalan";
@@ -478,6 +487,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		SalesOrder salesOrder = new SalesOrder();
 		salesOrder.setOrderNumber(oh.getXdornum());
 		salesOrder.setReqBranch(oh.getXcus());
+		salesOrder.setCustomer(cacus.getXorg());
+		salesOrder.setCustomerAddress(cacus.getXmadd());
 		salesOrder.setDate(SDF.format(oh.getXdate()));
 		if ("invoice".equalsIgnoreCase(pType)) {
 			report.setReportName("Sales Invoice");
