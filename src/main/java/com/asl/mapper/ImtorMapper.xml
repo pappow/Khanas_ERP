@@ -201,7 +201,10 @@
 	</delete>
 	
 	<select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
-		SELECT * FROM ImtorHeader WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
+		SELECT * 
+		FROM 
+			ImtorHeader 
+		WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findImtorHeaderByXchalanref" resultType="ImtorHeader">
@@ -209,7 +212,7 @@
 	</select>
 	
 	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
-		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
 	</select>
 	
 	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">
@@ -217,7 +220,11 @@
 	</select>
 	
 	<select id="getAllImtorHeader" resultType="ImtorHeader">
-		SELECT * FROM ImtorHeader WHERE zid=#{zid} AND zactive='1'
+		SELECT *
+		FROM
+			ImtorHeader
+		WHERE zid=#{zid} AND zactive='1'
+		ORDER BY xtornum DESC
 	</select>
 	
 	<select id="findImtorDetailByXtornumAndXrow" resultType="ImtorDetail">

@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Opcrndetail;
+import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Pocrndetail;
+import com.asl.entity.PogrnDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.OpcrnService;
 import com.asl.service.OpdoService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
@@ -34,6 +40,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 	
 	@Autowired
 	private OpdoService opdoService;
+	@Autowired
+	private OpcrnService opcrnService;
 	@Autowired
 	private XcodesService xcodeService;
 	@Autowired
@@ -87,6 +95,11 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		//pogrn.setXtypetrn("Purchase");
 		opdoheader.setXstatusord("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
+		opdoheader.setXgrandtot(BigDecimal.ZERO);
+		opdoheader.setXvatamt(BigDecimal.ZERO);
+		opdoheader.setXdiscamt(BigDecimal.ZERO);
+		opdoheader.setXpaid(BigDecimal.ZERO);
+		opdoheader.setXchange(BigDecimal.ZERO);
 		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
 		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
@@ -102,9 +115,19 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(StringUtils.isBlank(opdoHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please select a customer to create invoice");
+			return responseHelper.getResponse();
+		}
 
 		// if existing record
 		
+		
+		opdoHeader.setXgrandtot((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()));
+		if(opdoHeader.getXtotamt().compareTo(opdoHeader.getXpaid()) == -1)
+			opdoHeader.setXchange(opdoHeader.getXpaid().subtract(opdoHeader.getXgrandtot()));
+		else
+			opdoHeader.setXchange(BigDecimal.ZERO);
 		Opdoheader existOpdoHeader = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
 		if(existOpdoHeader != null) {
 			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xdate");
@@ -168,6 +191,12 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		
 		if(opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		
+		// Check item already exist in detail list
+		if(opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(), opdoDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
 		}
 
@@ -267,6 +296,75 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
 
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/returnsales/{xdornum}")
+	public @ResponseBody Map<String, Object> retrunsales(@PathVariable String xdornum){
+		if(StringUtils.isBlank(xdornum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		// Validate
+
+		// Get OpdoHeader record by xdornum
+		Opdoheader opdoheader= opdoService.findOpdoHeaderByXdornum(xdornum);
+		
+		if(opdoheader != null) {
+			Opcrnheader opcrnheader = new Opcrnheader();
+			BeanUtils.copyProperties(opdoheader, opcrnheader, "xdate", "xtype", "xtypetrn", "xtrn");
+			opcrnheader.setXdornum(opdoheader.getXdornum());
+			opcrnheader.setXstatuscrn("Open");
+			opcrnheader.setXdate(new Date());
+			opcrnheader.setXcus(opdoheader.getXcus());
+			opcrnheader.setXtype(TransactionCodeType.SRN_RETURN.getCode());
+			opcrnheader.setXtypetrn("CRN Number");
+			opcrnheader.setXtrncrn(TransactionCodeType.SRN_RETURN.getCode());
+			opcrnheader.setXtrn(TransactionCodeType.SRN_RETURN.getdefaultCode());
+			
+			long count = opcrnService.save(opcrnheader);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			
+			opcrnheader = opcrnService.findOpcrnHeaderByXdornum(xdornum);
+			
+			//Get Sales Order details to Copy them in CRN
+			List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
+			Opcrndetail opcrnDetail;
+			
+			for(int i=0; i< opdoDetailList.size(); i++) {
+				opcrnDetail = new Opcrndetail();
+				BeanUtils.copyProperties(opdoDetailList.get(i), opcrnDetail, "xrow", "xnote");
+				opcrnDetail.setXcrnnum(opcrnheader.getXcrnnum());
+				opcrnDetail.setXunit(opdoDetailList.get(i).getXunitsel());
+				//opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());
+				
+				
+				long nCount = opcrnService.saveDetail(opcrnDetail);
+				
+				// Update Inventory				
+				if(nCount == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}				
+			}
+			
+			//Update PoordHeader Status
+			/*
+			opdoheader.setXstatusord("Returned"); 
+			long pCount = opdoService.update(opdoheader);
+			if(pCount == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}*/	
+			 
+			responseHelper.setSuccessStatusAndMessage("Sales Returned successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/salesreturn/" + opcrnheader.getXcrnnum());
+			return responseHelper.getResponse();
+		}	
+		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
 	}
 

@@ -118,7 +118,7 @@
 
 	<insert id="savePogrnDetail" parameterType="PogrnDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO PogrnDetail
 		(
@@ -209,19 +209,26 @@
 
 	<select id="findPogrnDetailByXgrnnumAndXrow"
 		resultType="PogrnDetail">
-		SELECT * FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND
+		SELECT * 
+		FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND
 		xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 
 
 	<select id="findPogrnDetailByXgrnnum" resultType="PogrnDetail">
-		SELECT * FROM
-		PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+		SELECT * 
+		FROM
+			PogrnDetail 
+		WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+		ORDER BY XROW ASC
 	</select>
 
 	<select id="getAllPogrnHeader" resultType="PogrnHeader">
-		SELECT * FROM
-		PogrnHeader WHERE zid=#{zid} AND zactive='1'
+		SELECT * 
+		FROM
+			PogrnHeader
+		WHERE zid=#{zid} AND zactive='1'
+		ORDER BY xgrnnum DESC
 	</select>
 	
 	<select id = "procInventory" statementType = "CALLABLE">

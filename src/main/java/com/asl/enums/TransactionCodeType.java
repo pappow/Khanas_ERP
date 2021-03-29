@@ -33,6 +33,7 @@ public enum TransactionCodeType {
 	BATCH_NUMBER("Batch Number", "BN--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
 	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),
+	SRN_RETURN("Sales Return", "SR--", null),
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null);
 
 	private String code;

@@ -17,91 +17,101 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Opcrnheader;
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.OpcrnService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
-@RequestMapping("/procurement/grnreturn")
-public class GrnReturnController extends ASLAbstractController {
-	
+@RequestMapping("/salesninvoice/returnsales")
+public class SalesReturnController extends ASLAbstractController {
+
 	@Autowired
 	private XcodesService xcodeService;
 	@Autowired
 	private XtrnService xtrnService;
 	@Autowired
+	private OpcrnService opcrnService;
+	@Autowired
 	private PocrnService pocrnService;
 	@Autowired
 	private PogrnService pogrnService;
-	
+
 	@GetMapping
 	public String loadGrnReturnPage(Model model) {
-		
-		model.addAttribute("pocrnheader", getDefaultPocrnHeader());
-		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PRN_NUMBER.getCode()));
-		model.addAttribute("allPocrnHeader", pocrnService.getAllPocrnheader());
-		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
+
+		model.addAttribute("opcrnheader", getDefaultOpcrnHeader());
+		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.SRN_RETURN.getCode()));
+		model.addAttribute("allOpcrnHeader", opcrnService.getAllOpcrnheader());
+		// model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		
-		return "pages/procurement/grnreturn/pocrn";
+
+		return "pages/salesninvoice/salesreturn/opcrn";
 	}
-	
+
 	@GetMapping("/{xcrnnum}")
 	public String loadGrnReturnPage(@PathVariable String xcrnnum, Model model) {
-		
-		Pocrnheader data = pocrnService.findPocrnHeaderByXcrnnum(xcrnnum); 
-		if(data == null) data = getDefaultPocrnHeader();
 
-		model.addAttribute("pocrnheader", data);
-		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
-		model.addAttribute("allPocrnHeader", pocrnService.getAllPocrnheader());
-		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
+		Opcrnheader data = opcrnService.findOpcrnHeaderByXcrnnum(xcrnnum);
+		if (data == null)
+			data = getDefaultOpcrnHeader();
+
+		model.addAttribute("opcrnheader", data);
+		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.SRN_RETURN.getCode()));
+		model.addAttribute("allOpcrnHeader", opcrnService.getAllOpcrnheader());
+		// model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("pocrnDetailsList", pocrnService.findPocrnDetailByXcrnnum(xcrnnum));
-		
-		return "pages/procurement/grnreturn/pocrn";
+		model.addAttribute("opcrnDetailsList", opcrnService.findOpcrnDetailByXcrnnum(xcrnnum));
+
+		return "pages/salesninvoice/salesreturn/opcrn";
 	}
-	
-	private Pocrnheader getDefaultPocrnHeader() {
-		Pocrnheader pocrn = new Pocrnheader();
-		
-		pocrn.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
-		pocrn.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
-		//pogrn.setXtypetrn("Purchase");
-		//pogrn.setXtotamt(BigDecimal.ZERO);
-		return pocrn;
+
+	private Opcrnheader getDefaultOpcrnHeader() {
+		Opcrnheader opcrn = new Opcrnheader();
+
+		opcrn.setXtype(TransactionCodeType.SRN_RETURN.getCode());
+		opcrn.setXtrncrn(TransactionCodeType.SRN_RETURN.getdefaultCode());
+		opcrn.setXtypetrn("CRN Number");
+		// pogrn.setXtypetrn("Purchase");
+		opcrn.setXgrandtot(BigDecimal.ZERO);
+		opcrn.setXtotamt(BigDecimal.ZERO);
+		opcrn.setXvatamt(BigDecimal.ZERO);
+		opcrn.setXaitamt(BigDecimal.ZERO);
+		opcrn.setXdiscamt(BigDecimal.ZERO);
+
+		return opcrn;
 	}
-	
+
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(Pocrnheader pocrnHeader, BindingResult bindingResult){
-		
-		
-		if((pocrnHeader == null || StringUtils.isBlank(pocrnHeader.getXtype()))) {
+	public @ResponseBody Map<String, Object> save(Pocrnheader pocrnHeader, BindingResult bindingResult) {
+
+		if ((pocrnHeader == null || StringUtils.isBlank(pocrnHeader.getXtype()))) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		// Validate
 
 		// if existing record
-		
+
 		Pocrnheader existPocrnHeader = pocrnService.findPocrnHeaderByXcrnnum(pocrnHeader.getXcrnnum());
-		if(existPocrnHeader != null) {
+		if (existPocrnHeader != null) {
 			BeanUtils.copyProperties(pocrnHeader, existPocrnHeader, "xcrnnum", "xgrnnum", "xtype", "xdate");
 			long count = pocrnService.update(existPocrnHeader);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
@@ -112,17 +122,17 @@ public class GrnReturnController extends ASLAbstractController {
 
 		// If new
 		long count = pocrnService.save(pocrnHeader);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("PRN created successfully");
 		responseHelper.setRedirectUrl("/procurement/grnreturn/" + pocrnHeader.getXcrnnum());
 		return responseHelper.getResponse();
-		
+
 	}
-	
-	@GetMapping("/pocrndetail/{xcrnnum}")
+
+	@GetMapping("/opcrndetail/{xcrnnum}")
 	public String reloadPocrnDetailTable(@PathVariable String xcrnnum, Model model) {
 		List<Pocrndetail> detailList = pocrnService.findPocrnDetailByXcrnnum(xcrnnum);
 		model.addAttribute("pocrnDetailsList", detailList);
@@ -131,22 +141,21 @@ public class GrnReturnController extends ASLAbstractController {
 		model.addAttribute("pocrnheader", header);
 		return "pages/procurement/grnreturn/pocrn::pocrndetailtable";
 	}
-	
-	
-	@GetMapping("{xcrnnum}/pocrndetail/{xrow}/show")
+
+	@GetMapping("{xcrnnum}/opcrndetail/{xrow}/show")
 	public String openPocrnDetailModal(@PathVariable String xcrnnum, @PathVariable String xrow, Model model) {
 
-		if("new".equalsIgnoreCase(xrow)) {
+		if ("new".equalsIgnoreCase(xrow)) {
 			Pocrndetail pocrndetail = new Pocrndetail();
 			pocrndetail.setXcrnnum(xcrnnum);
 			pocrndetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 			pocrndetail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 			pocrndetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			//pocrndetail.setXqtyprn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			// pocrndetail.setXqtyprn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			model.addAttribute("pocrndetail", pocrndetail);
 		} else {
 			Pocrndetail pocrndetail = pocrnService.findPocrnDetailByXcrnnumAndXrow(xcrnnum, Integer.parseInt(xrow));
-			if(pocrndetail == null) {
+			if (pocrndetail == null) {
 				pocrndetail = new Pocrndetail();
 				pocrndetail.setXcrnnum(xcrnnum);
 				pocrndetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
@@ -158,102 +167,107 @@ public class GrnReturnController extends ASLAbstractController {
 
 		return "pages/procurement/grnreturn/pocrndetailmodal::pocrndetailmodal";
 	}
-	
-	@PostMapping("/pocrndetail/save")
-	public @ResponseBody Map<String, Object> savePocrndetail(Pocrndetail pocrnDetail){
-		
-		if(pocrnDetail == null || StringUtils.isBlank(pocrnDetail.getXcrnnum())) {
+
+	@PostMapping("/opcrndetail/save")
+	public @ResponseBody Map<String, Object> savePocrndetail(Pocrndetail pocrnDetail) {
+
+		if (pocrnDetail == null || StringUtils.isBlank(pocrnDetail.getXcrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		
+
 		// modify line amount
-		pocrnDetail.setXlineamt(pocrnDetail.getXqtygrn().multiply(pocrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
-		
+		pocrnDetail
+				.setXlineamt(pocrnDetail.getXqtygrn().multiply(pocrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+
 		// if existing
-		Pocrndetail existDetail = pocrnService.findPocrnDetailByXcrnnumAndXrow(pocrnDetail.getXcrnnum(), pocrnDetail.getXrow());
-		if(existDetail != null) {
+		Pocrndetail existDetail = pocrnService.findPocrnDetailByXcrnnumAndXrow(pocrnDetail.getXcrnnum(),
+				pocrnDetail.getXrow());
+		if (existDetail != null) {
 			BeanUtils.copyProperties(pocrnDetail, existDetail, "xcrnnum", "xrow");
 			long count = pocrnService.updateDetail(existDetail);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/procurement/grnreturn/" +  pocrnDetail.getXcrnnum());
+			responseHelper.setRedirectUrl("/procurement/grnreturn/" + pocrnDetail.getXcrnnum());
 			responseHelper.setSuccessStatusAndMessage("PRN item updated successfully");
 			return responseHelper.getResponse();
 		}
 
 		// if new detail
 		long count = pocrnService.saveDetail(pocrnDetail);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/procurement/grnreturn/" +  pocrnDetail.getXcrnnum());
+		responseHelper.setRedirectUrl("/procurement/grnreturn/" + pocrnDetail.getXcrnnum());
 		responseHelper.setSuccessStatusAndMessage("PRN item saved successfully");
-		
+
 		return responseHelper.getResponse();
 	}
-	
-	@PostMapping("{xcrnnum}/pocrndetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deletePocrnDetail(@PathVariable String xcrnnum, @PathVariable String xrow, Model model) {
+
+	@PostMapping("{xcrnnum}/opcrndetail/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deletePocrnDetail(@PathVariable String xcrnnum, @PathVariable String xrow,
+			Model model) {
 		Pocrndetail pd = pocrnService.findPocrnDetailByXcrnnumAndXrow(xcrnnum, Integer.parseInt(xrow));
-		if(pd == null) {
+		if (pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		long count = pocrnService.deleteDetail(pd);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/procurement/grnreturn/" +  xcrnnum);
+		responseHelper.setRedirectUrl("/procurement/grnreturn/" + xcrnnum);
 		return responseHelper.getResponse();
 	}
-	
-	@GetMapping("/confirmprn/{xcrnnum}")
-		public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xcrnnum){
-		if(StringUtils.isBlank(xcrnnum)) {
+
+	@GetMapping("/confirmsrn/{xcrnnum}")
+	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xcrnnum) {
+		if (StringUtils.isBlank(xcrnnum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		// Validate
-		
-		//Get PocrnHeader record by Xcrnnum
+
+		// Get PocrnHeader record by Xcrnnum
 		Pocrnheader pocrnHeader = pocrnService.findPocrnHeaderByXcrnnum(xcrnnum);
 		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pocrnHeader.getXgrnnum());
 		List<Pocrndetail> pocrnHeaderList = pocrnService.findPocrnDetailByXcrnnum(xcrnnum);
-		
-		
-		if(!"Open".equalsIgnoreCase(pocrnHeader.getXstatusgrn())) {
+
+		if (!"Open".equalsIgnoreCase(pocrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("PRN already confirmed");
 			return responseHelper.getResponse();
 		}
-		if(pocrnHeaderList.size() == 0) {
+		if (pocrnHeaderList.size() == 0) {
 			responseHelper.setErrorStatusAndMessage("Please add details!");
 			return responseHelper.getResponse();
 		}
 		String p_seq;
-		if(!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			pocrnService.procConfirmCRN(xcrnnum, p_seq);
-			//Error check for procConfirmCRN
-			
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh(), p_seq);		
-			//Error check for procIssuePricing
-			
+			// Error check for procConfirmCRN
+
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			pocrnService.procIssuePricing(pogrnHeader.getXdocnum().toString(), pocrnHeader.getXwh(), p_seq);
+			// Error check for procIssuePricing
+
 		}
-		if(!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			pocrnService.procTransferPRtoAP(xcrnnum, p_seq);
-			//Error check for procTransferPRtoAP
+			// Error check for procTransferPRtoAP
 		}
-		
+
 		responseHelper.setSuccessStatusAndMessage("PRN Confirmed successfully");
 		responseHelper.setRedirectUrl("/procurement/grnreturn/" + xcrnnum);
 		return responseHelper.getResponse();

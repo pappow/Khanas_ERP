@@ -55,7 +55,7 @@
 										<a th:if="${#strings.isEmpty(opdoheader.xdornum)}" th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/confirmopdo/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success confirmopdo-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord == 'Returned' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/returngrn/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returngrn-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
+										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord == 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/returnsales/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success returnsales-btn-link"><i class="fas fa-tick-alt"></i> Return</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/archive/} + ${opdoheader.xdornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == false}" th:href="@{/salesninvoice/salesandinvoice/restore/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -115,7 +115,7 @@
 
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xdate"
@@ -253,12 +253,12 @@
 														</div>
 													</div>
 													
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xstaff">Employee: </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xstaff}">
 														</div>
-													</div>
+													</div> -->
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
@@ -342,7 +342,7 @@
 										<table class="table table-striped table-bordered datatable nowrap">
 											<thead>
 												<tr>
-													<th>Invoice Number</th>
+													<th>Invoice</th>
 													<th>Date</th>
 													<th>Branch</th>
 													<th>Sales Person</th>
@@ -393,9 +393,9 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${opdoDetailsList}">
-											<td th:text="${d.xrow}"></td>
+											<td th:text="${dStat.index +1}"></td>
 											<td>
-												<a href="" th:text="${d.xitem}"></a>
+												<a href="" th:text="${d.xitem} +' - '+ ${d.xdesc}"></a>
 											</td>
 											<td th:text="${d.xunitsel}"></td>
 											<td th:text="${d.xqtyord}"></td>
