@@ -5,7 +5,7 @@
 	<insert id="saveOpcrnHeader" parameterType="Opcrnheader">
 		<selectKey keyProperty="xcrnnum" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtrncrn}', '${xtrn}', 6) FROM DUAL
-		</selectKey> -->
+		</selectKey>
 		INSERT INTO Opcrnheader
 		(   
 			xcrnnum,
@@ -240,20 +240,14 @@
 		SELECT * FROM Opcrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
 	</select>
 	
-	<!-- <select id = "procConfirmCRN" statementType = "CALLABLE">
-		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, 
+	<select id = "procConfirmCRN" statementType = "CALLABLE">
+		{call DO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, 
 			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 	
-	<select id = "procIssuePricing" statementType = "CALLABLE">
-		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
-			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	<select id = "procTransferOPtoAR" statementType = "CALLABLE">
+		{call OP_transferOPtoAR(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_screen, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 	
-	<select id = "procTransferPRtoAP" statementType = "CALLABLE">
-		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
-			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
-	</select> -->
-
 
 </mapper>

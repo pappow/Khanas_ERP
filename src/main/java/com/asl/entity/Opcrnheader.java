@@ -84,7 +84,7 @@ public class Opcrnheader extends AbstractModel<String> {
 	private String xdisc;
 	
 	@Column(name = "xdiscf")
-	private String xdescf;
+	private String xdiscf;
 	
 	@Column(name = "xpaymenttype")
 	private String xpaymenttype;

@@ -37,6 +37,7 @@
 			xvoucher,
 			xtypetrn,
 			xtrn,
+			xchalancreated,
 			
 			zid,
 			zauserid,
@@ -78,6 +79,7 @@
 			#{xvoucher, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
+			#{xchalancreated, jdbcType=BOOLEAN},
 			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -121,6 +123,7 @@
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xexch=#{xexch, jdbcType=DECIMAL},
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
+			xstatuschalan=#{xstatuschalan, jdbcType=BOOLEAN},
 			
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -294,6 +297,16 @@
 		WHERE od.xdornum=#{xdornum} AND od.zid=#{zid} AND od.zactive='1'
 		ORDER BY XROW ASC
 	</select>
+	
+	
+	<select id="searchOpdoHeader" resultType="Opdoheader">
+		SELECT * FROM Opdoheader WHERE (UPPER(xdornum) LIKE '%' || #{xdornum} || '%') AND xtypetrn=#{xtypetrn} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="searchOpdoHeaderWithSatus" resultType="Opdoheader">
+		SELECT * FROM Opdoheader WHERE (UPPER(xdornum) LIKE '%' || #{xdornum} || '%') AND xstatusord=#{xstatusord} AND xtypetrn=#{xtypetrn} AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	
 	<select id = "procConfirmDO" statementType = "CALLABLE">
 		{call OP_confirmDO(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}

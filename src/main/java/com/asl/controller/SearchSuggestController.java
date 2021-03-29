@@ -14,15 +14,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
+import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
-import com.asl.service.ProductionSuggestionService;
 import com.asl.service.PogrnService;
+import com.asl.service.ProductionSuggestionService;
 
 /**
  * @author Zubayer Ahamed
@@ -38,6 +40,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private PogrnService pogrnService;
 	@Autowired private ImstockService imstockService;
 	@Autowired private OpordService opordService;
+	@Autowired private OpdoService opdoService;
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){
@@ -47,6 +50,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;
 	}
+	
+	@GetMapping("/confirmedinvoice/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getInvoices(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Opdoheader> opdoList = opdoService.searchOpdoHeader(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), "Confirmed", hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		opdoList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXdornum(), c.getXdornum())));
+		return list;
+	}
+
 
 	@GetMapping("/customer/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCustomers(@PathVariable String hint){

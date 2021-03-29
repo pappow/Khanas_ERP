@@ -31,6 +31,8 @@ public class SalesOrder {
 	private String vatAmount;
 	private String discountAmount;
 	private String grandTotalAmount;
+	private String customer;
+	private String customerAddress;
 	
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")

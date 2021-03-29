@@ -1,5 +1,6 @@
 package com.asl.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -29,5 +30,7 @@ public interface ImtagService {
 	public Imtdet findImtdetByXtagnumAndXitem(String xtagnum, String xitem);
 
 	public List<Imtdet> findImtdetByXtagnum(String xtagnum);
+	
+	public void procStockTake(Date xdate, String xtagnum, String p_seq);
 
 }

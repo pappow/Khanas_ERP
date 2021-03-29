@@ -169,4 +169,8 @@
 			JOIN caitem ON caitem.xitem = imt.xitem AND caitem.zid=#{zid}
 		WHERE imt.xtagnum=#{xtagnum} AND imt.zid=#{zid} AND imt.zactive='1'
 	</select>
+	
+	<select id = "procStockTake" statementType = "CALLABLE">
+		{call IM_processStockTake(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdate, jdbcType = DATE, mode = IN}, #{xtagnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
 </mapper>

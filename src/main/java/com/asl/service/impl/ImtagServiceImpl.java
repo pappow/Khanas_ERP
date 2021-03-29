@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -84,5 +85,10 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 	public List<Imtdet> findImtdetByXtagnum(String xtagnum) {
 		if(StringUtils.isBlank(xtagnum)) return Collections.emptyList();
 		return imtagMapper.findImtdetByXtagnum(xtagnum, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public void procStockTake(Date xdate, String xtagnum, String p_seq) {
+		imtagMapper.procStockTake(sessionManager.getBusinessId(),  sessionManager.getLoggedInUserDetails().getUsername(), xdate, xtagnum, p_seq);
 	}
 }

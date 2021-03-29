@@ -336,6 +336,11 @@ public class StockTransferOrderController extends ASLAbstractController {
 		if(!"Confirmed".equalsIgnoreCase(imtorHeader.getXstatustor())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			imtorService.procConfirmTO(xtornum, "Issue and Receive", p_seq);
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 		}
 		
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Confirmed successfully");

@@ -23,5 +23,9 @@ public interface OpcrnService {
 	public Opcrnheader findOpcrnHeaderByXcrnnum(String xcrnnum);
 	public Opcrnheader findOpcrnHeaderByXdornum(String xdornum);
 	public Opcrndetail findOpcrnDetailByXcrnnumAndXrow(String xcrnnum, int xrow);
+	
+	//Procedure Calls
+	public void procConfirmCRN(String xcrnnum, String p_seq);
+	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq);
 
 }
