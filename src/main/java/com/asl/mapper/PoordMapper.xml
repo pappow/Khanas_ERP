@@ -238,6 +238,10 @@
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">
 		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1' ORDER BY xrow DESC
 	</select>
+	
+	<select id="searchXpornum" resultType="PoordHeader">
+		SELECT * FROM PoordDetail WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1' ORDER BY xpornum
+	</select>
 
 	<select id="findBranchCustomerByRequsitionNumber" resultType="Cacus">
 		select 

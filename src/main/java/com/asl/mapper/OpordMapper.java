@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordHeader;
 import com.asl.model.BranchesRequisitions;
 
 /**
@@ -42,4 +43,7 @@ public interface OpordMapper {
 	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);
 
 	public List<Opordheader> searchOpordheaderByXtypetrnAndXtrnAndXordernum(String xtypetrn, String xtrn, String xordernum, String xstatus, String zid);
+	
+	//search
+	public List<Opordheader> searchXpornum(String xpornum, String zid);
 }

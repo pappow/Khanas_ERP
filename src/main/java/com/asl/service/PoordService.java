@@ -43,4 +43,9 @@ public interface PoordService {
 	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem);
 
 	public Cacus findBranchCustomerByRequsitionNumber(String xpornum, String branchid);
+
+	public Cacus findBranchCustomerByRequsitionNumber(String xpornum);
+
+	public List<PoordHeader> searchXpornum(String xpornum);
+
 }

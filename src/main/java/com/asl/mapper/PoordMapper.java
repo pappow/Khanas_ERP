@@ -42,6 +42,8 @@ public interface PoordMapper {
 	public List<PoordHeader> getPoordHeadersByXtype(String xtype, String zid);
 
 	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem, String zid);
+	
+	public List<PoordHeader> searchXpornum(String xpornum, String zid);
 
 	public Cacus findBranchCustomerByRequsitionNumber(String xpornum, String branchid, String zid);
 

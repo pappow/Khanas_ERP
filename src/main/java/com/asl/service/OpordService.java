@@ -9,6 +9,7 @@ import com.asl.controller.CustomerAdjustmentController;
 import com.asl.entity.Cacus;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordHeader;
 import com.asl.model.BranchesRequisitions;
 
 /**
@@ -58,4 +59,6 @@ public interface OpordService {
 
 	public List<Opordheader> searchOpordheaderByXtypetrnAndXtrnAndXordernum(String xtypetrn, String xtrn,
 			String xordernum, String xstatus);
+	
+	public List<Opordheader> searchXpornum(String xpornum);
 }
