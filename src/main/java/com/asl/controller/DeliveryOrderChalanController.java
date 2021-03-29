@@ -62,11 +62,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	@GetMapping
 	public String loadDeliveryOrderChalanPage(Model model) {
 		model.addAttribute("deliveryorderchalan", getDefaultOpdoheader());
-		model.addAttribute("deliveryorderchalanprefix",
-				xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(),
-						TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
-		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(
-				TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+		model.addAttribute("deliveryorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("deliveryorderchalanList", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
@@ -82,13 +79,9 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		List<Opdoheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
 		if ("Open".equalsIgnoreCase(oh.getXstatusord()))
-			allOpenAndConfirmesSalesOrders
-					.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
-							TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
+			allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrder(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), "Open", new Date()));
 
-		allOpenAndConfirmesSalesOrders
-				.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),
-						TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
+		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
 
 		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
 		model.addAttribute("chalandetails", opdoService.findOpdoDetailByXdornum(xdornum));
@@ -222,7 +215,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		// now update sales order with chalan reference
 		oh.setXdocnum(chalan);
 		oh.setXchalancreated(true);
-		oh.setXstatusord("Confirmed");
+		//oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);
 
 		if (count == 0) {
@@ -312,18 +305,21 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		}
 
 		// transfer all chalan deails to immofgdetail
+		/*
 		List<Opdodetail> chalandetails = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
 		for (Opdodetail c : chalandetails) {
-			/*
-			 * Immofgdetail id = new Immofgdetail(); id.setXtornum(c.getXordernum());
-			 * id.setXrow(c.getXrow()); id.setXunit(c.getXunit());
-			 * id.setXitem(c.getXitem()); id.setXqtyord(c.getXqtyord());
-			 * id.setXnote(c.getXlong()); long count = immofgdetailService.save(id);
-			 * if(count == 0) { log.error("ERROR is : {}",
-			 * "Can't insert chaland details to Immofgdetail table for chalan " +
-			 * c.getXordernum()); }
-			 */
-		}
+			
+			  Immofgdetail id = new Immofgdetail(); id.setXtornum(c.getXordernum());
+			  id.setXrow(c.getXrow()); id.setXunit(c.getXunit());
+			  id.setXitem(c.getXitem()); id.setXqtyord(c.getXqtyord());
+			  id.setXnote(c.getXlong()); long count = immofgdetailService.save(id);
+			  if(count == 0) { log.error("ERROR is : {}",
+			  "Can't insert chaland details to Immofgdetail table for chalan " +
+			  c.getXordernum()); }
+			 
+		}*/
+		
+		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum);
 
 		// now lock chalan
 		oh.setXstatusord("Confirmed");
@@ -522,9 +518,9 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		byte[] byt;
 		if ("invoice".equalsIgnoreCase(pType))
-			byt = getPDFByte(report, "deliverychalanreport.xsl");
-		else
 			byt = getPDFByte(report, "deliverychalaninvoicesreport.xsl");
+		else
+			byt = getPDFByte(report, "deliverychalanreport.xsl");
 		if (byt == null) {
 			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

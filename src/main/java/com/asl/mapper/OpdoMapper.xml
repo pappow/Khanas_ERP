@@ -123,7 +123,7 @@
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xexch=#{xexch, jdbcType=DECIMAL},
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
-			xstatuschalan=#{xstatuschalan, jdbcType=BOOLEAN},
+			xchalancreated=#{xchalancreated, jdbcType=BOOLEAN},
 			requisitionnumber=#{requisitionnumber, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -347,6 +347,7 @@
 			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
 			AND OPDOHEADER.XTRN=#{xtrn}
 			AND OPDOHEADER.XSTATUSORD=#{xstatusord}
+			AND OPDOHEADER.XCHALANCREATED = '0'
 			AND TO_CHAR(OPDOHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
 		ORDER BY
 			XDORNUM DESC
