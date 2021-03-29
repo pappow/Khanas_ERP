@@ -99,7 +99,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				batch.setXbomkey(bom != null ? bom.getXbomkey() : "");
 				batch.setXdate(new Date());
 				batch.setXqtyprd(item.getXqtyord());
-				batch.setXqtycom(BigDecimal.ZERO);
+				batch.setXqtycom(item.getXqtyord());
 				batch.setXstatusmor("Open");
 				batcList.add(batch);
 			}
@@ -123,6 +123,18 @@ public class ProductionBatchController extends ASLAbstractController {
 			if(details != null && !details.isEmpty()) {
 				batch.getModetails().addAll(details);
 			}
+		}
+
+		// Expload bom now
+		for(Moheader b : allBatches){
+
+			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			bmbomService.explodeBom(b.getXbatch(), "Explode", errorCode);
+			String em = getProcedureErrorMessages(errorCode);
+			if(StringUtils.isNotBlank(em)) continue;
+
+			b.setBomexploaded(true);
+			moService.updateMoHeader(b);
 		}
 
 		allBatches.sort(Comparator.comparing(Moheader::getXbatch).reversed());
@@ -160,25 +172,22 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// Expload bom now
-		if(StringUtils.isNotBlank(batch.getXbomkey())) {
-			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			bmbomService.explodeBom(batch.getXbatch(), "Explode", errorCode);
-			String em = getProcedureErrorMessages(errorCode);
-			if(StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage("Can't expload bom for this Batch " + xbatch);
-				return responseHelper.getResponse();
-			}
-
-			// set bom exploaded flag to batch
-			batch.setBomexploaded(true);
-		}
-
+		// set bom exploaded flag to batch
+		batch.setBomexploaded(true);
 		// Update batch now
 		batch.setXqtycom(BigDecimal.valueOf(qty).setScale(2, RoundingMode.DOWN));
 		long count = moService.updateMoHeader(batch);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't update batch : " + xbatch);
+			return responseHelper.getResponse();
+		}
+
+		// Expload bom now
+		String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+		bmbomService.explodeBom(batch.getXbatch(), "Explode", errorCode);
+		String em = getProcedureErrorMessages(errorCode);
+		if(StringUtils.isNotBlank(em)) {
+			responseHelper.setErrorStatusAndMessage("Can't expload bom for this Batch " + xbatch);
 			return responseHelper.getResponse();
 		}
 

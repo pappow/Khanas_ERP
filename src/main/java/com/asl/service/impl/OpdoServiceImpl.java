@@ -182,9 +182,24 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		List<Opordheader> salesOrders = opordMapper.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum, sessionManager.getBusinessId());
 		if(salesOrders == null || salesOrders.isEmpty()) return 0;
 
+		// check delivery chalan exist
+		Opdoheader existDeliveryChalan = opdoMapper.findPoordHeaderByXordernum(chalan.getXordernum(), sessionManager.getBusinessId());
+		if(existDeliveryChalan != null) return 0;
+
 		// create sales chalan first
 		Opdoheader deliveryChalan = new Opdoheader();
-		//deliveryChalan.set
+		deliveryChalan.setXtypetrn(TransactionCodeType.CHALAN_NUMBER.getCode());
+		deliveryChalan.setXtrn(TransactionCodeType.CHALAN_NUMBER.getdefaultCode());
+		deliveryChalan.setXdate(new Date());
+		deliveryChalan.setXstatusord("Open");
+		deliveryChalan.setZid(sessionManager.getBusinessId());
+		deliveryChalan.setXordernum(chalan.getXordernum());
+		long deliveryChalanCount = opdoMapper.saveOpdoHeader(deliveryChalan);
+		if(deliveryChalanCount == 0) return 0;
+
+		// Now fetch deliveryChalan again
+		Opdoheader savedDeliveryChalan = opdoMapper.findPoordHeaderByXordernum(chalan.getXordernum(), sessionManager.getBusinessId());
+		if(savedDeliveryChalan == null) return 0;
 
 		// Create sales from sales order of chalan first
 		int salesSavedCount = 0;
@@ -194,12 +209,13 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 			sales.setXdate(new Date());
 			sales.setXstatusord("Open");
-			
+			sales.setXdocnum(savedDeliveryChalan.getXdornum());
+			sales.setXchalancreated(true);
 
 			sales.setXordernum(so.getXordernum());
 			sales.setRequisitionnumber(so.getXpornum());
 			sales.setZid(sessionManager.getBusinessId());
-			Cacus customer = poordMapper.findBranchCustomerByRequsitionNumber(so.getXpornum(), sessionManager.getBusinessId());
+			Cacus customer = poordMapper.findBranchCustomerByXcus(so.getXcus(), sessionManager.getBusinessId());
 			if(customer != null) sales.setXcus(customer.getXcus());
 
 			long count = opdoMapper.saveOpdoHeader(sales);
@@ -221,6 +237,11 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				long itemcount = opdoMapper.saveOpdoDetail(item);
 				if(itemcount == 0) continue;
 			}
+		}
+
+		if(salesSavedCount == salesOrders.size()) {
+			chalan.setInvoicecreated(true);
+			opordMapper.updateOpordHeader(chalan);
 		}
 
 		return salesSavedCount == salesOrders.size() ? 1 : 0;

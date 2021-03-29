@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.PoordHeader;
 
 @Mapper
 public interface OpdoMapper {
@@ -41,5 +40,6 @@ public interface OpdoMapper {
 	public void procIssuePricing(String zid, String user, String xdocnum, String xwh, String p_seq);
 	public void procTransferOPtoAR(String zid, String user, String xdocnum, String p_screen, String p_seq);
 
+	public Opdoheader findPoordHeaderByXordernum(String xordernum, String zid);
 	public Opdoheader findPoordHeaderByXordernumAndRequisitionnumber(String xordernum, String requisitionnumber, String zid);
 }
