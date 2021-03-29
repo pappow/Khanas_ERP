@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.mapper.PoordMapper;
@@ -132,5 +133,12 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(xitem)) return null;
 		return poordMapper.findPoorddetailByXpornumAndXitem(xpornum, xitem, sessionManager.getBusinessId());
 	}
+
+	@Override
+	public Cacus findBranchCustomerByRequsitionNumber(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return null;
+		return poordMapper.findBranchCustomerByRequsitionNumber(xpornum, sessionManager.getBusinessId());
+	}
+
 	
 }

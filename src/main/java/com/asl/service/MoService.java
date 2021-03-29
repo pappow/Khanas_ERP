@@ -39,4 +39,8 @@ public interface MoService {
 	public void processProduction(String batch, String action, String errseq);
 
 	public Modetail findDefaultModetailByXbatch(String xbatch);
+
+	public long deleteModetail(Modetail modetail);
+
+	public boolean isProductionProcessCompleted(String xchalan);
 }

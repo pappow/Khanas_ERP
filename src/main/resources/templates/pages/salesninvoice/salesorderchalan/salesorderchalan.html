@@ -58,10 +58,11 @@
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == false and salesorderchalan.xstatus eq 'Open'}" th:href="@{/salesninvoice/salesorderchalan/restore/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Open'}" th:href="@{/salesninvoice/salesorderchalan/lockchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning restore-btn-link"><i class="fas fa-unlock-alt"></i> Lock Chalan</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-danger"><i class="fas fa-lock"></i> Locked</a>
-										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-file-invoice"></i> Create Invoice</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/production/suggestion/create/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-clipboard-list"></i> Create Suggestion</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/print/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-print"></i> Print</a>
-										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/production/batch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Create Batch</a>
+										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and not salesorderchalan.batchcreated}" th:href="@{/production/batch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Create Batch</a>
+										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and salesorderchalan.batchcreated}" th:href="@{/production/batch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Show Batch</a>
+										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and salesorderchalan.batchcreated and productioncompleted and not salesorderchalan.invoicecreated}" th:href="@{/salesninvoice/salesorderchalan/createinvoice/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-info archive-btn-link"><i class="fas fa-file-invoice"></i> Create Invoice</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/salesorderchalan/save}" th:object="${salesorderchalan}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -94,6 +95,20 @@
 														</div>
 													</div>
 
+													<div class="form-group" th:if="${productioncompleted}">
+														<label class="control-label col-md-4" for="xstatus">Production Status : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${productioncompleted ? 'Completed' : ''}" disabled="disabled"/>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${salesorderchalan.invoicecreated}">
+														<label class="control-label col-md-4" for="xstatus">Invoice Status : </label>
+														<div class="col-md-4">
+															<input type="text" class="form-control" th:value="${salesorderchalan.invoicecreated ? 'Invoice Created' : ''}" disabled="disabled"/>
+														</div>
+													</div>
+
 												</div>
 												<div class="col-md-4"></div>
 											</div>
@@ -113,6 +128,9 @@
 													<th>Chalan</th>
 													<th>Date</th>
 													<th>Status</th>
+													<th style="text-align: center;">Batch Created</th>
+													<th style="text-align: center;">Production Completed</th>
+													<th style="text-align: center;">Invoice Created</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -120,8 +138,11 @@
 													<td>
 														<a th:href="@{/salesninvoice/salesorderchalan/} + ${bh.xordernum}" th:text="${bh.xordernum}"></a>
 													</td>
-													<td  th:text="${#dates.format(bh.xdate, df)}"></td>
+													<td th:text="${#dates.format(bh.xdate, df)}"></td>
 													<td th:text="${bh.xstatus}"></td>
+													<td style="color: green; text-align: center;" th:text="${bh.batchcreated ? 'Y' : ''}"></td>
+													<td style="color: green; text-align: center;" th:text="${bh.productioncompleted ? 'Y' : ''}"></td>
+													<td style="color: green; text-align: center;" th:text="${bh.invoicecreated ? 'Y' : ''}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -212,7 +233,6 @@
 											<th>Unit</th>
 											<th>Category</th>
 											<th>Group</th>
-											<th th:if="${salesorderchalan.xstatus eq 'Confirmed'}">Action</th>
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -224,9 +244,6 @@
 											<td th:text="${cd.xunit}"></td>
 											<td th:text="${cd.xcatitem}"></td>
 											<td th:text="${cd.xgitem}"></td>
-											<td th:if="${salesorderchalan.xstatus eq 'Confirmed'}">
-												<a th:href="@{/production/batch/chalantobatch/} + ${salesorderchalan.xordernum} + '/' + ${cd.xitem}" target="_blank">Create Batch</a>
-											</td>
 										</tr>
 									</tbody>
 								</table>

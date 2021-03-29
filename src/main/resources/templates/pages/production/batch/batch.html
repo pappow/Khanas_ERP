@@ -91,8 +91,9 @@
 													<th>BOM</th>
 													<th>Production Qty</th>
 													<th>Qty Completed</th>
-													<th style="text-align: right">View Default</th>
-													<th style="text-align: right">View Detail</th>
+													<th style="text-align: center; width: 25px;">View Default</th>
+													<th style="text-align: center; width: 25px;">View Detail</th>
+													<th style="text-align: center; width: 25px;">Process Production</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -108,16 +109,20 @@
 													<td th:text="${b.xqtyprd} + ' ' + ${b.xqtyprdunit}"></td>
 													<td>
 														<form class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
-															<input style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
-															<button th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
+															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
+															<button th:if="${b.xstatusmor ne 'Completed'}" th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
 															<span style="line-height: 27px;"  th:text="${b.xqtyprdunit}"></span>
 														</form>
 													</td>
-													<td style="text-align: right">
+													<td style="text-align: center">
 														<button title="View Default" th:if="${b.bomexploaded}" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/default/show', data-target-modal='defaultbatchdetailmodal'"><i class="fas fa-eye"></i></button>
 													</td>
-													<td style="text-align: right">
+													<td style="text-align: center">
 														<button title="Add/Edit items" th:if="${b.bomexploaded}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
+													</td>
+													<td style="text-align: center">
+														<button th:if="${b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-delete editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
+														<span th:if="${b.xstatusmor eq 'Completed'}">Process completed</span>
 													</td>
 												</tr>
 											</tbody>

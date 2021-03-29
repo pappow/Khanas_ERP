@@ -263,12 +263,16 @@ function doItemDelete(url){
 			//console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.reloadurl){
-					doSectionReloadWithNewData(data);
-				} else if(data.redirecturl){
-					setTimeout(() => {
-						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1000);
+				if(data.triggermodalurl){
+					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+				} else {
+					if(data.reloadurl){
+						doSectionReloadWithNewData(data);
+					} else if(data.redirecturl){
+						setTimeout(() => {
+							window.location.replace(getBasepath() + data.redirecturl);
+						}, 1000);
+					}
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -299,12 +303,16 @@ function doItemConfirm(url){
 			//console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.reloadurl){
-					doSectionReloadWithNewData(data);
-				} else if(data.redirecturl){
-					setTimeout(() => {
-						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1000);
+				if(data.triggermodalurl){
+					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+				} else {
+					if(data.reloadurl){
+						doSectionReloadWithNewData(data);
+					} else if(data.redirecturl){
+						setTimeout(() => {
+							window.location.replace(getBasepath() + data.redirecturl);
+						}, 1000);
+					}
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -429,12 +437,16 @@ function submitMainForm(customurl, customform){
 			console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.reloadurl){
-					doSectionReloadWithNewData(data);
-				} else if(data.redirecturl){
-					setTimeout(() => {
-						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1000);
+				if(data.triggermodalurl){
+					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+				} else {
+					if(data.reloadurl){
+						doSectionReloadWithNewData(data);
+					} else if(data.redirecturl){
+						setTimeout(() => {
+							window.location.replace(getBasepath() + data.redirecturl);
+						}, 1000);
+					}
 				}
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
@@ -479,11 +491,18 @@ function submitMultipartForm(submitUrl, submitType){
 			console.log({data});
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
-				if(data.redirecturl){
-					setTimeout(() => {
-						window.location.replace(getBasepath() + data.redirecturl);
-					}, 1000);
+				if(data.triggermodalurl){
+					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+				} else {
+					if(data.redirecturl){
+						setTimeout(() => {
+							window.location.replace(getBasepath() + data.redirecturl);
+						}, 1000);
+					} else if(data.reloadurl){
+						doSectionReloadWithNewData(data);
+					}
 				}
+				
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
 			}

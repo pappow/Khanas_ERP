@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
+import com.asl.entity.Opordheader;
 import com.asl.mapper.MoMapper;
+import com.asl.mapper.OpordMapper;
 import com.asl.service.MoService;
 
 /**
@@ -22,6 +24,7 @@ import com.asl.service.MoService;
 public class MoServiceImpl extends AbstractGenericService implements MoService {
 
 	@Autowired private MoMapper moMapper;
+	@Autowired private OpordMapper opordMapper;
 
 	@Override
 	public long saveMoHeader(Moheader moheader) {
@@ -62,6 +65,13 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		if(modetail == null || StringUtils.isBlank(modetail.getXbatch()) || modetail.getXrow() == 0) return 0;
 		modetail.setZid(sessionManager.getBusinessId());
 		return moMapper.updateMoDetail(modetail);
+	}
+
+	@Override
+	public long deleteModetail(Modetail modetail) {
+		if(modetail == null || StringUtils.isBlank(modetail.getXbatch()) || modetail.getXrow() == 0) return 0;
+		modetail.setZid(sessionManager.getBusinessId());
+		return moMapper.deleteModetail(modetail);
 	}
 
 	@Override
@@ -108,6 +118,35 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public Modetail findDefaultModetailByXbatch(String xbatch) {
 		if(StringUtils.isBlank(xbatch)) return null;
 		return moMapper.findModetailByXbatchAndXtype(xbatch, "Default", sessionManager.getBusinessId());
+	}
+
+	@Override
+	public boolean isProductionProcessCompleted(String xchalan) {
+		if(StringUtils.isBlank(xchalan)) return false;
+
+		Opordheader chalan = opordMapper.findOpordHeaderByXordernum(xchalan, sessionManager.getBusinessId());
+		if(chalan == null) return false;
+		if(chalan.isProductioncompleted()) return true;
+
+		List<Moheader> batches = moMapper.findMoHeaderByXchalan(xchalan, sessionManager.getBusinessId());
+		if(batches == null || batches.isEmpty()) return false;
+
+		boolean productionCompleted = true;
+		for(Moheader batch : batches) {
+			if(!"Completed".equalsIgnoreCase(batch.getXstatusmor())) {
+				productionCompleted = false;
+				break;
+			}
+		}
+
+		if(!productionCompleted) return productionCompleted;
+
+		// update chalan with flag
+		chalan.setProductioncompleted(productionCompleted);
+		long count = opordMapper.updateOpordHeader(chalan);
+		if(count == 0) return false;
+
+		return productionCompleted;
 	}
 
 	

@@ -49,6 +49,8 @@ public interface OpdoService {
 	
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xstatusord, String xdornum);
 
+	public long createSalesFromChalan(String xordernum);
+
 	// Procedure Calls
 	public void procConfirmDO(String xdornum, String p_seq);
 

@@ -239,4 +239,16 @@
 		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1' ORDER BY xrow DESC
 	</select>
 
+	<select id="findBranchCustomerByRequsitionNumber" resultType="Cacus">
+		select 
+			c.*
+		from 
+			poordheader p
+			left join cacus c on c.xcuszid=p.zid and c.zid=#{zid}
+			left join zbusiness z on z.zid=p.zid
+		where 
+			p.xpornum=#{xpornum}
+			and z.branch='1'
+	</select>
+
 </mapper>

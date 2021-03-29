@@ -1,7 +1,9 @@
 package com.asl.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -121,7 +123,6 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xtypetrn;
 
 	// Added as for confirm Opdo procedure pre event
-
 	@Column(name = "xgrandtot")
 	private BigDecimal xgrandtot;
 
@@ -130,6 +131,9 @@ public class Opdoheader extends AbstractModel<String> {
 	
 	@Column(name = "xchalancreated")
 	private boolean xchalancreated;
+
+	@Column(name = "requisitionnumber")
+	private String requisitionnumber;
 
 	@Transient
 	private String xtrnopdo;
@@ -140,4 +144,6 @@ public class Opdoheader extends AbstractModel<String> {
 	@Transient
 	private String xphone;
 
+	@Transient
+	private List<Opdodetail> salesDetails = new ArrayList<>();
 }
