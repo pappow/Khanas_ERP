@@ -45,10 +45,16 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 	}
 
 	@Override
-	public List<Xusers> findByZemail(String zemail) {
+	public Xusers findUserByZemail(String zemail) {
+		if(StringUtils.isBlank(zemail)) return null;
+		return userMapper.findUserByZemail(zemail, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Xusers> findAllUserByZemail(String zemail) {
 		if (StringUtils.isBlank(zemail)) return Collections.emptyList();
 
-		List<Xusers> list = userMapper.findByZemail(zemail);
+		List<Xusers> list = userMapper.findAllUserByZemail(zemail);
 		if (list == null) return Collections.emptyList();
 		return list;
 	}

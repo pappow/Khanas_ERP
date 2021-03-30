@@ -118,8 +118,15 @@
 									</tr>
 
 									<tr>
-										<td colspan="2">System Settings</td>
+										<td colspan="2">System Administration</td>
 									</tr>
+									<tr>
+										<td><a th:href="@{/system/usersentry}">Users Entry</a></td>
+										<td>
+											<a th:href="@{/system/usersentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 									<tr th:if="${menuProfile.profileMaintenance ne null and menuProfile.profileMaintenance.display}">
 										<td><a th:href="@{/system/profile}" th:text="${menuProfile.profileMaintenance.screenPrompt}">Profile</a></td>
 										<td>

@@ -50,16 +50,16 @@ class AslErpApplicationTests {
 
 	@Test
 	void findByUsername() {
-		List<Xusers> list = userService.findByZemail("admin");
+		List<Xusers> list = userService.findAllUserByZemail("admin");
 		list.stream().forEach(l -> {
 			System.out.println(l.toString());
-			System.out.println(l.getSystemadmin());
+			System.out.println(l.isSystemadmin());
 		});
 	}
 
 	@Test
 	void update() {
-		List<Xusers> list = userService.findByZemail("admin");
+		List<Xusers> list = userService.findAllUserByZemail("admin");
 		Xusers user = list.get(0);
 		user.setXpassword("admin");
 		long count = userService.update(user);

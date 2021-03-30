@@ -2,17 +2,16 @@ package com.asl.entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.asl.enums.UserRole;
-import com.asl.util.BooleanToYesNo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,6 +37,7 @@ public class Xusers extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zemail")
+	@Size(max = 20, message = "Username maximum 20 character allowed")
 	private String zemail;
 
 	@Column(name = "xpassword")
@@ -110,8 +110,7 @@ public class Xusers extends AbstractModel<String> {
 	private String xvatregno;
 
 	@Column(name = "systemadmin")
-	@Convert(converter = BooleanToYesNo.class)
-	private Boolean systemadmin;
+	private boolean systemadmin;
 
 	@Transient
 	private String roles;
@@ -127,4 +126,7 @@ public class Xusers extends AbstractModel<String> {
 		roles = finalString;
 		return roles;
 	}
+
+	@Transient
+	private String newflag;
 }
