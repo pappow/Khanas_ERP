@@ -2,11 +2,11 @@ package com.asl.entity;
 
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,31 +19,36 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Entity
-@Table(name = "ProfileAllocation")
-@EqualsAndHashCode(of = { "paid" }, callSuper = false)
+@Table(name = "profileallocation")
+@IdClass(ProfileAllocationPK.class)
+@EqualsAndHashCode(of = { "zid","paid","zemail" }, callSuper = false)
 public class ProfileAllocation extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -8668618359438471462L;
 
-	@Column(name = "zid", nullable = false)
+	@Id
+	@Basic(optional = false)
+	@Column(name = "zid")
 	private String zid;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "paid", unique = true, nullable = false)
+	@Basic(optional = false)
+	@Column(name = "paid")
 	private Long paid;
 
-	@Column(name = "username", nullable = false)
-	private String username;
+	@Id
+	@Basic(optional = false)
+	@Column(name = "zemail", nullable = false)
+	private String zemail;
 
-	@Column(name = "reportProfileId")
-	private Long reportProfileId;
+	@Column(name = "reportprofilecode")
+	private String reportprofilecode;
 
-	@Column(name = "menuProfileId")
-	private Long menuProfileId;
+	@Column(name = "menuprofilecode")
+	private String menuprofilecode;
 
-	@Column(name = "userProfileId")
-	private Long userProfileId;
+	@Column(name = "userprofilecode")
+	private String userprofilecode;
 
 	@Transient
 	private String fullName;
@@ -57,4 +62,6 @@ public class ProfileAllocation extends AbstractModel<String> {
 	private List<Profile> reportProfiles;
 	@Transient
 	private List<Profile> menuProfiles;
+	@Transient
+	private List<Profile> userProfiles;
 }

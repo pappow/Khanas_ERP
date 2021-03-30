@@ -20,25 +20,25 @@ public interface ProfileService {
 
 	long update(Profile profile);
 
-	Profile findById(Long profileId);
+	Profile findByProfilecode(String profilecode);
 
-	Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType);
+	Profile findByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype);
 
 	List<Profile> getAllProfiles();
 
-	List<Profile> getAllProfiles(ProfileType profileType);
-
-	MenuProfile getLoggedInUserMenuProfile();
-
-	MenuProfile getMenuProfileById(Long profileId);
+	List<Profile> getAllProfilesByProfiletype(ProfileType profiletype);
 
 	MenuProfile getDefaultMenuProfile();
 
+	ReportProfile getDefaultReportProfile();
+
+	MenuProfile getLoggedInUserMenuProfile();
+
 	ReportProfile getLoggedInUserReportProfile();
 
-	ReportProfile getReportProfileById(Long profileId);
+	MenuProfile getMenuProfileByProfilecode(String profilecode);
 
-	ReportProfile getDefaultReportProfile();
+	ReportProfile getReportProfileByProfilecode(String profilecode);
 
 	String modifiedProfileCode(String pc);
 }

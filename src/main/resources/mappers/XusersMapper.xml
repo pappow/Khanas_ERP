@@ -4,7 +4,7 @@
 <mapper namespace="com.asl.mapper.XusersMapper">
 
 	<insert id="save" parameterType="Xusers">
-		INSERT INTO Xusers
+		INSERT INTO xusers
 		(
 			zemail,
 			xpassword,
@@ -81,7 +81,7 @@
 	<update id="update" 
 			parameterType="Xusers">
 		UPDATE 
-			Xusers 
+			xusers 
 		SET
 			xpassword=#{xpassword, jdbcType=VARCHAR},
 			xcus=#{xcus, jdbcType=VARCHAR},
@@ -120,10 +120,14 @@
 	</update>
 
 	<select id="getAllXusers" resultType="Xusers">
-		SELECT * FROM Xusers WHERE zid=#{zid}
+		SELECT * FROM xusers WHERE zid=#{zid} ORDER BY zemail DESC
 	</select>
 
-	<select id="findByZemail" resultType="Xusers">
+	<select id="findUserByZemail" resultType="Xusers">
+		SELECT * FROM xusers WHERE zemail=#{zemail} AND zid=#{zid}
+	</select>
+
+	<select id="findAllUserByZemail" resultType="Xusers">
 		SELECT * FROM Xusers WHERE zemail=#{zemail}
 	</select>
 

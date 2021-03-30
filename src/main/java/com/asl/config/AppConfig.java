@@ -36,4 +36,7 @@ public class AppConfig {
 
 	@Value("${default.report.xsl-path}")
 	private String xslPath;
+
+	@Value("${default.report.saved-xml-path}")
+	private String savedXmlPath;
 }

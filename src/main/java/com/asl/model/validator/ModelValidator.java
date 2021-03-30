@@ -1,5 +1,7 @@
 package com.asl.model.validator;
 
+import java.util.List;
+
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,10 @@ import org.springframework.validation.Errors;
 
 import com.asl.entity.ListHead;
 import com.asl.entity.Profile;
+import com.asl.entity.Xusers;
 import com.asl.service.ListService;
 import com.asl.service.ProfileService;
+import com.asl.service.XusersService;
 /**
  * @author Zubayer Ahamed
  * @since Dec 04, 2020
@@ -19,6 +23,7 @@ public class ModelValidator extends ConstraintValidator {
 
 	@Autowired private ListService listService;
 	@Autowired private ProfileService profileService;
+	@Autowired private XusersService xusersService;
 //	@Autowired private ShopService shopService;
 
 //	public void validateShop(Shop shop, Errors errors, Validator validator) {
@@ -48,6 +53,30 @@ public class ModelValidator extends ConstraintValidator {
 //		return errors;
 //	}
 
+	public void validateXuser(Xusers xusers, Errors errors, Validator validator) {
+		if(xusers == null || errors == null || validator == null) return;
+
+		super.validate(xusers, errors, validator);
+		if (errors.hasErrors()) return;
+
+		// check admin user
+		if("admin".equalsIgnoreCase(xusers.getZemail())) {
+			errors.rejectValue("zemail", "You are not allowed to create system admin user");
+			return;
+		}
+
+		// check username already exist
+		if("Y".equalsIgnoreCase(xusers.getNewflag())) {
+			List<Xusers> users = xusersService.findAllUserByZemail(xusers.getZemail());
+			if(users != null && !users.isEmpty()) {
+				errors.rejectValue("zemail", "Username already taken. Please try with another one");
+				return;
+			}
+		}
+		
+		
+	}
+
 	public void validateListHead(ListHead listHead, Errors errors, Validator validator) {
 		if(listHead == null || errors == null || validator == null) return;
 
@@ -70,10 +99,10 @@ public class ModelValidator extends ConstraintValidator {
 		if (errors.hasErrors()) return;
 
 		// Check for duplicate profile if this profile has id
-		Profile pr = profileService.findByProfileCodeAndProfileType(profile.getProfileCode().toUpperCase(), profile.getProfileType());
+		Profile pr = profileService.findByProfilecodeAndProfiletype(profile.getProfilecode().toUpperCase(), profile.getProfiletype());
 		if(pr == null) return;
 
-		if(profile.getProfileId() == null || (!profile.getProfileId().equals(pr.getProfileId()))) {
+		if(profile.getProfilecode() == null || (!profile.getProfilecode().equals(pr.getProfilecode()))) {
 			errors.rejectValue("profileCode", "Profile code exist");
 		}
 	}
