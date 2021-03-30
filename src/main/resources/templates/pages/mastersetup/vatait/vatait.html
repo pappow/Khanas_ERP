@@ -52,41 +52,24 @@
 										<h1>Vat and Tax</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(vatait.xvatait)}" th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(vatait.xvatait) and vatait.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(vatait.xvatait) and vatait.zactive == true}" th:href="@{/mastersetup/vatait/archive/} + ${vatait.xvatait}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(vatait.xvatait) and vatait.zactive == false}" th:href="@{/mastersetup/vatait/restore/} + ${vatait.xvatait}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/vatait/save}" th:object="${vatait}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(vatait.xvatait)}" th:field="*{xvatait}"/> -->
-											<!-- <input type="hidden" th:field="*{xtype}"/> -->
 											<div class="row">
 												<div class="col-md-6">
-
-													<!-- <div class="form-group" th:if="${#strings.isEmpty(caitem.xitem)}">
-														<label class="control-label col-md-4" for="xitem">Prefix : </label>
-														<div class="col-md-4">
-															<select class="form-control" th:field="*{codeType}">
-																<option th:each="prefix : ${itemxtrnnumbers}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
-															</select>
-														</div>
-													</div> -->
 
 													<div class="form-group" th:if="${#strings.isEmpty(vatait.xvatait)}">
 														<label class="control-label col-md-4" for="xvatait">VAT and Tax Identifier : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xvatait}">
+															<input type="text" class="form-control" th:field="*{xvatait}" required="required">
 														</div>
 													</div>
-													
+
 													<div class="form-group" th:if="${not #strings.isEmpty(vatait.xvatait)}">
 														<label class="control-label col-md-4" for="xvatait">VAT and Tax Identifier : </label>
 														<div class="col-md-8">
@@ -97,43 +80,45 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvat">Vat : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xvat}" min="0">
+															<input type="text" class="form-control" th:field="*{xvat}" min="0" required="required">
 														</div>
 													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xait">Tax : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xait}" min="0">
+															<input type="text" class="form-control" th:field="*{xait}" min="0" required="required">
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xstartdate">Start Date : </label>
 														<div class="input-group date col-md-6 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xstartdate" name="xstartdate"
+																	required="required"
 																	th:value="${vatait.xstartdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(vatait.xstartdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xenddate">End Date : </label>
 														<div class="input-group date col-md-6 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xstartdate" name="xenddate"
+																	required="required"
 																	th:value="${vatait.xenddate == null ? #dates.format(#dates.createNow(), df) : #dates.format(vatait.xenddate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 												</div>
 											</div>
 										</form>
@@ -156,15 +141,15 @@
 													<th>End Date</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 												<tr th:each="vatait : ${allVatait}">
 													<td>
 														<a th:href="@{/mastersetup/vatait/} + ${vatait.xvatait}" th:text="${vatait.xvatait}"></a>
 													</td>
 													<td th:text="${vatait.xvat}"></td>
 													<td th:text="${vatait.xait}"></td>
-													<td th:text="${vatait.xstartdate}"></td>
-													<td th:text="${vatait.xenddate}"></td>
+													<td th:text="${#dates.format(vatait.xstartdate, df)}"></td>
+													<td th:text="${#dates.format(vatait.xenddate, df)}"></td>
 												</tr>
 											</tbody>
 										</table>

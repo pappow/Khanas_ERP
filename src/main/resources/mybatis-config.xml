@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<package name="com.asl.entity"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mappers/ArhedMapper.xml"/>
+		<mapper resource="mappers/BmbomMapper.xml"/>
+		<mapper resource="mappers/CabankMapper.xml"/>
+		<mapper resource="mappers/CacusMapper.xml"/>
+		<mapper resource="mappers/CaitemMapper.xml"/>
+		<mapper resource="mappers/FormPagingMapper.xml"/>
+		<mapper resource="mappers/ImmofgdetailMapper.xml"/>
+		<mapper resource="mappers/ImstockMapper.xml"/>
+		<mapper resource="mappers/ImtagMapper.xml"/>
+		<mapper resource="mappers/ImtorMapper.xml"/>
+		<mapper resource="mappers/ImtrnMapper.xml"/>
+		<mapper resource="mappers/ListMapper.xml"/>
+		<mapper resource="mappers/MoMapper.xml"/>
+		<mapper resource="mappers/OpcrnMapper.xml"/>
+		<mapper resource="mappers/OpdoMapper.xml"/>
+		<mapper resource="mappers/OpordMapper.xml"/>
+		<mapper resource="mappers/OrderRequisitionMapper.xml"/>
+		<mapper resource="mappers/PaginationMapper.xml"/>
+		<mapper resource="mappers/PdmstMapper.xml"/>
+		<mapper resource="mappers/PocrnMapper.xml"/>
+		<mapper resource="mappers/PogrnMapper.xml"/>
+		<mapper resource="mappers/PoordMapper.xml"/>
+		<mapper resource="mappers/ProcErrorLogMapper.xml"/>
+		<mapper resource="mappers/ProductionSuggestionMapper.xml"/>
+		<mapper resource="mappers/ProfieLineMapper.xml"/>
+		<mapper resource="mappers/ProfieMapper.xml"/>
+		<mapper resource="mappers/ProfileAllocationMapper.xml"/>
+		<mapper resource="mappers/UserAuditRecordMapper.xml"/>
+		<mapper resource="mappers/VataitMapper.xml"/>
+		<mapper resource="mappers/XcodesMapper.xml"/>
+		<mapper resource="mappers/XtrnMapper.xml"/>
+		<mapper resource="mappers/XtrnpMapper.xml"/>
+		<mapper resource="mappers/XusersMapper.xml"/>
+		<mapper resource="mappers/ZaudittrailMapper.xml"/>
+		<mapper resource="mappers/ZbusinessMapper.xml"/>
+		<mapper resource="mappers/ZlogsMapper.xml"/>
+		<mapper resource="mappers/ZusersMapper.xml"/>
+	</mappers>
+</configuration>

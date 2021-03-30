@@ -488,10 +488,10 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		if ("invoice".equalsIgnoreCase(pType)) {
 			report.setReportName("Sales Invoice");
 
-			salesOrder.setTotalAmount(oh.getXtotamt().toString());
-			salesOrder.setVatAmount(oh.getXvatamt().toString());
-			salesOrder.setDiscountAmount(oh.getXdiscamt().toString());
-			salesOrder.setGrandTotalAmount(oh.getXgrandtot().toString());
+			salesOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setDiscountAmount(oh.getXdiscamt() != null ? oh.getXdiscamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
 		}
 
 		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
@@ -506,8 +506,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 				item.setItemGroup(it.getXgitem());
 
 				if ("invoice".equalsIgnoreCase(pType)) {
-					item.setItemRate(it.getXrate().toString());
-					item.setItemTotalAmount(it.getXlineamt().toString());
+					item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
+					item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
 				}
 
 				salesOrder.getItems().add(item);

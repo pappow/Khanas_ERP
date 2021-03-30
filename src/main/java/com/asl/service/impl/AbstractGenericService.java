@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.asl.config.AppConfig;
 import com.asl.service.ASLSessionManager;
 
 /**
@@ -18,6 +19,7 @@ public abstract class AbstractGenericService  {
 	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	protected static final String ERROR = "Error is {}, {}";
 	@Autowired protected ASLSessionManager sessionManager;
+	@Autowired protected AppConfig appConfig;
 
 	/**
 	 * Generate slug name

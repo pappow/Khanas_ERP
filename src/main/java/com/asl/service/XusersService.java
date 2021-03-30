@@ -17,7 +17,9 @@ public interface XusersService {
 
 	public long update(Xusers user);
 
-	public List<Xusers> findByZemail(String zemail);
+	public Xusers findUserByZemail(String zemail);
+
+	public List<Xusers> findAllUserByZemail(String zemail);
 
 	public List<Xusers> findByZemailAndXpassword(String zemail, String xpassword);
 

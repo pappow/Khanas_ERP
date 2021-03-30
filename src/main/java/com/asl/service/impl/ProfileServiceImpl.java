@@ -41,18 +41,18 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 	@Override
 	public long save(Profile profile) {
-		if(profile == null || StringUtils.isBlank(profile.getProfileCode())) return 0;
+		if(profile == null || StringUtils.isBlank(profile.getProfilecode())) return 0;
 
-		profile.setProfileCode(modifiedProfileCode(profile.getProfileCode()));
+		profile.setProfilecode(modifiedProfileCode(profile.getProfilecode()));
 		profile.setZid(sessionManager.getBusinessId());
 		return profileMapper.save(profile);
 	}
 
 	@Override
 	public long update(Profile profile) {
-		if(profile == null || StringUtils.isBlank(profile.getProfileCode())) return 0;
+		if(profile == null || StringUtils.isBlank(profile.getProfilecode())) return 0;
 
-		profile.setProfileCode(modifiedProfileCode(profile.getProfileCode()));
+		profile.setProfilecode(modifiedProfileCode(profile.getProfilecode()));
 		profile.setZid(sessionManager.getBusinessId());
 		return profileMapper.update(profile);
 	}
@@ -67,13 +67,13 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	}
 
 	@Override
-	public Profile findById(Long profileId) {
-		if(profileId == null) return null;
-		return profileMapper.findByProfileId(profileId);
+	public Profile findByProfilecode(String profilecode) {
+		if(StringUtils.isBlank(profilecode)) return null;
+		return profileMapper.findByProfilecode(profilecode);
 	}
 
 	@Override
-	public Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType) {
+	public Profile findByProfilecodeAndProfiletype(String profileCode, ProfileType profileType) {
 		if(StringUtils.isBlank(profileCode) || profileType == null) return null;
 		return profileMapper.findByProfileCodeAndProfileType(profileCode, profileType, sessionManager.getBusinessId());
 	}
@@ -85,7 +85,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	}
 
 	@Override
-	public List<Profile> getAllProfiles(ProfileType profileType) {
+	public List<Profile> getAllProfilesByProfiletype(ProfileType profileType) {
 		if(profileType == null) return Collections.emptyList();
 		List<Profile> list = profileMapper.getAllProfiles(profileType, sessionManager.getBusinessId());
 		return list != null ? list : Collections.emptyList();
@@ -93,20 +93,20 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 	@Override
 	public MenuProfile getLoggedInUserMenuProfile() {
-		ProfileAllocation pa = paService.findByUsername(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || pa.getMenuProfileId() == null) {
+		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
+		if(pa == null || StringUtils.isBlank(pa.getMenuprofilecode())) {
 			return getDefaultMenuProfile();
 		}
-		return getMenuProfileById(pa.getMenuProfileId());
+		return getMenuProfileByProfilecode(pa.getMenuprofilecode());
 	}
 
 	
 
 	@Override
-	public MenuProfile getMenuProfileById(Long profileId) {
-		if(profileId == null) return getDefaultMenuProfile();
+	public MenuProfile getMenuProfileByProfilecode(String profilecode) {
+		if(StringUtils.isBlank(profilecode)) return getDefaultMenuProfile();
 
-		Profile profile = findById(profileId);
+		Profile profile = findByProfilecode(profilecode);
 
 		List<ProfileLine> profileLines = new ArrayList<>();
 
@@ -115,24 +115,23 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		if(proxyProfileLines != null && !proxyProfileLines.isEmpty()) {
 			for(DataList dl : proxyProfileLines) {
 				ProfileLine pl = new ProfileLine(dl);
-				pl.setProfileId(profile.getProfileId());
+				pl.setProfilecode(profile.getProfilecode());
 				profileLines.add(pl);
 			}
 		}
 
-		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfileIdAndProfileType(profile.getProfileId(), profile.getProfileType());
+		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		profileLines.stream().forEach(proxy -> {
 			originalProfileLines.stream().forEach(original -> {
-				if(proxy.getProfileCode().equalsIgnoreCase(original.getProfileCode())) {
-					proxy.setProfileLineId(original.getProfileLineId());
-					proxy.setProfileId(original.getProfileId());
-					proxy.setProfileCode(original.getProfileCode());
-					proxy.setProfileType(original.getProfileType());
+				if(proxy.getProfilecode().equalsIgnoreCase(original.getProfilecode())) {
+					proxy.setProfilelineid(original.getProfilelineid());
+					proxy.setProfilecode(original.getProfilecode());
+					proxy.setProfiletype(original.getProfiletype());
 					proxy.setEnabled(original.isEnabled());
 					proxy.setDisplay(original.isDisplay());
 					proxy.setRequired(original.isRequired());
 					proxy.setSeqn(original.getSeqn());
-					if(StringUtils.isNotBlank(original.getScreenPrompt())) proxy.setScreenPrompt(original.getScreenPrompt());
+					if(StringUtils.isNotBlank(original.getScreenprompt())) proxy.setScreenprompt(original.getScreenprompt());
 				}
 			});
 		});
@@ -158,7 +157,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		EnumSet.allOf(com.asl.enums.MenuProfile.class).forEach(rm -> {
 			ProfileLine enumpl = new ProfileLine(rm);
 			profileLines.stream().forEach(pl -> {
-				if(pl.getProfileCode().equalsIgnoreCase(enumpl.getProfileCode())) {
+				if(pl.getProfilecode().equalsIgnoreCase(enumpl.getProfilecode())) {
 					BeanUtils.copyProperties(pl, enumpl);
 				}
 			});
@@ -173,20 +172,20 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 	@Override
 	public ReportProfile getLoggedInUserReportProfile() {
-		ProfileAllocation pa = paService.findByUsername(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || pa.getReportProfileId() == null) {
+		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
+		if(pa == null || StringUtils.isBlank(pa.getReportprofilecode())) {
 			log.debug("===> User \"{}\", don't have any specifc report profile", sessionManager.getLoggedInUserDetails().getUsername());
 			return getDefaultReportProfile();
 		}
 
-		return getReportProfileById(pa.getReportProfileId());
+		return getReportProfileByProfilecode(pa.getReportprofilecode());
 	}
 
 	@Override
-	public ReportProfile getReportProfileById(Long profileId) {
-		if(profileId == null) return getDefaultReportProfile();
+	public ReportProfile getReportProfileByProfilecode(String profilecode) {
+		if(StringUtils.isBlank(profilecode)) return getDefaultReportProfile();
 
-		Profile profile = findById(profileId);
+		Profile profile = findByProfilecode(profilecode);
 
 		List<ProfileLine> profileLines = new ArrayList<>();
 
@@ -195,24 +194,23 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		if(proxyProfileLines != null && !proxyProfileLines.isEmpty()) {
 			for(DataList dl : proxyProfileLines) {
 				ProfileLine pl = new ProfileLine(dl);
-				pl.setProfileId(profile.getProfileId());
+				pl.setProfilecode(profile.getProfilecode());
 				profileLines.add(pl);
 			}
 		}
 
-		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfileIdAndProfileType(profile.getProfileId(), profile.getProfileType());
+		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		profileLines.stream().forEach(proxy -> {
 			originalProfileLines.stream().forEach(original -> {
-				if(proxy.getProfileCode().equalsIgnoreCase(original.getProfileCode())) {
-					proxy.setProfileLineId(original.getProfileLineId());
-					proxy.setProfileId(original.getProfileId());
-					proxy.setProfileCode(original.getProfileCode());
-					proxy.setProfileType(original.getProfileType());
+				if(proxy.getProfilecode().equalsIgnoreCase(original.getProfilecode())) {
+					proxy.setProfilelineid(original.getProfilelineid());
+					proxy.setProfilecode(original.getProfilecode());
+					proxy.setProfiletype(original.getProfiletype());
 					proxy.setEnabled(original.isEnabled());
 					proxy.setDisplay(original.isDisplay());
 					proxy.setRequired(original.isRequired());
 					proxy.setSeqn(original.getSeqn());
-					if(StringUtils.isNotBlank(original.getScreenPrompt())) proxy.setScreenPrompt(original.getScreenPrompt());
+					if(StringUtils.isNotBlank(original.getScreenprompt())) proxy.setScreenprompt(original.getScreenprompt());
 				}
 			});
 		});
@@ -238,7 +236,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		EnumSet.allOf(ReportMenu.class).forEach(rm -> {
 			ProfileLine enumpl = new ProfileLine(rm);
 			profileLines.stream().forEach(pl -> {
-				if(pl.getProfileCode().equalsIgnoreCase(enumpl.getProfileCode())) {
+				if(pl.getProfilecode().equalsIgnoreCase(enumpl.getProfilecode())) {
 					BeanUtils.copyProperties(pl, enumpl);
 				}
 			});

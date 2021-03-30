@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.XcodesMapper">
+
+	<insert id="saveXcodes" parameterType="Xcodes">
+		INSERT INTO Xcodes
+		(
+			xtype,
+			xcode,
+			xdescdet,
+			xprops,
+			xacc,
+			xAccDisc,
+			xAccVat,
+			xAccAit,
+			xAccPur,
+			xAccAdj,
+			xAccCash,
+			xAccBank,
+			xAccArdBank,
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xtype, jdbcType=VARCHAR},
+			#{xcode, jdbcType=VARCHAR},
+			#{xdescdet, jdbcType=VARCHAR},
+			#{xprops, jdbcType=VARCHAR},
+			#{xacc, jdbcType=VARCHAR},
+			#{xAccDisc, jdbcType=VARCHAR},
+			#{xAccVat, jdbcType=VARCHAR},
+			#{xAccAit, jdbcType=VARCHAR},
+			#{xAccPur, jdbcType=VARCHAR},
+			#{xAccAdj, jdbcType=VARCHAR},
+			#{xAccCash, jdbcType=VARCHAR},
+			#{xAccBank, jdbcType=VARCHAR},
+			#{xAccArdBank, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updateXcodes" parameterType="Xcodes">
+		UPDATE
+			Xcodes
+		SET
+			xdescdet=#{xdescdet, jdbcType=VARCHAR},
+			xprops=#{xprops, jdbcType=VARCHAR},
+			xacc=#{xacc, jdbcType=VARCHAR},
+			xAccDisc=#{xAccDisc, jdbcType=VARCHAR},
+			xAccVat=#{xAccVat, jdbcType=VARCHAR},
+			xAccAit=#{xAccAit, jdbcType=VARCHAR},
+			xAccPur=#{xAccPur, jdbcType=VARCHAR},
+			xAccAdj=#{xAccAdj, jdbcType=VARCHAR},
+			xAccCash=#{xAccCash, jdbcType=VARCHAR},
+			xAccBank=#{xAccBank, jdbcType=VARCHAR},
+			xAccArdBank=#{xAccArdBank, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xcode=#{xcode}
+			AND xtype=#{xtype, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllXcodes" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
+	</select>
+
+	<select id="findByXtype" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
+	</select>
+
+	<select id="findByXcode" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xcode=#{xcode} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
+	</select>
+
+	<select id="findByXtypesAndXcodes" resultType="Xcodes">
+		SELECT * FROM Xcodes WHERE xtype=#{xtype} AND xcode=#{xcode} AND zid=#{zid}
+		<if test="zactive != null">
+			AND zactive=#{zactive}
+		</if>
+	</select>
+
+</mapper>

@@ -15,7 +15,10 @@ import com.asl.enums.ProfileType;
 public interface ProfileLineMapper {
 
 	long save(ProfileLine profileLine);
+
 	long update(ProfileLine profileLine);
-	ProfileLine findById(Long profileLineId);
-	List<ProfileLine> getAllByProfileIdAndProfileType(Long profileId, ProfileType profileType, String zid);
+
+	ProfileLine findByProfilelineid(Long profilelineid);
+
+	List<ProfileLine> getAllByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype, String zid);
 }

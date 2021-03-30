@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.ProfileAllocationMapper">
+
+	<insert id="save" 
+			parameterType="ProfileAllocation">
+		INSERT INTO ProfileAllocation
+		(
+			paid,
+			username,
+			reportProfileId,
+			menuProfileId,
+			userProfileId,
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			PROFILE_ALLOCATION_SEQ.nextval,
+			#{username, jdbcType=VARCHAR},
+			#{reportProfileId, jdbcType=BIGINT},
+			#{menuProfileId, jdbcType=BIGINT},
+			#{userProfileId, jdbcType=BIGINT},
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="ProfileAllocation">
+		UPDATE
+			ProfileAllocation
+		SET
+			username=#{username, jdbcType=VARCHAR},
+			reportProfileId=#{reportProfileId, jdbcType=BIGINT},
+			menuProfileId=#{menuProfileId, jdbcType=BIGINT},
+			userProfileId=#{userProfileId, jdbcType=BIGINT},
+			zid=#{zid, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			paid=#{paid}
+	</update>
+
+	<select id="findById" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE profileAllocationId=#{profileAllocationId}
+	</select>
+
+	<select id="getAllProfileAllocation" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE zid=#{zid}
+	</select>
+
+	<select id="findByUsername" resultType="ProfileAllocation">
+		SELECT * FROM ProfileAllocation WHERE username=#{username} AND zid=#{zid}
+	</select>
+
+</mapper>

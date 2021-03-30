@@ -15,7 +15,7 @@ public interface ProfileLineService {
 
 	long update(ProfileLine profileLine);
 
-	ProfileLine findById(Long profileLineId);
+	ProfileLine findByProfilelineid(Long profilelineid);
 
-	List<ProfileLine> getAllByProfileIdAndProfileType(Long profileId, ProfileType profileType);
+	List<ProfileLine> getAllByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype);
 }

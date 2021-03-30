@@ -14,15 +14,22 @@ import com.asl.entity.Cacus;
 public interface CacusMapper {
 
 	public long save(Cacus cacus);
+
 	public long update(Cacus cacus);
 
 	public Cacus findByXcus(String xcus, String zid);
+
 	public Cacus findByXphone(String xphone, String zid);
+
 	public List<Cacus> findByXtype(String xtype, String zid);
 
 	public List<Cacus> getAllCacus(String zid);
 
 	public List<Cacus> searchCacus(String xtype, String xcus, String zid);
+
 	public List<Cacus> searchXorg(String xorg, String zid);
+
 	public List<Cacus> searchXgcus(String xgcus, String zid);
+
+	public Cacus findCacusByXcuszid(String xcuszid, String zid);
 }

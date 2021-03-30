@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -55,7 +56,16 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		StringWriter result = new StringWriter();
 		jaxbMarshaller.marshal(ob, result);
+
+		
+
 		return result.toString();
+	}
+
+	private void saveXmlToFile(String xml) {
+		String path = appConfig.getSavedXmlPath();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd-hh-mm-ss");
+		
 	}
 
 	@Override

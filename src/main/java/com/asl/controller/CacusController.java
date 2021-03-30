@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -105,12 +106,16 @@ public class CacusController extends ASLAbstractController {
 			suppliersList.addAll(cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
 			customersList.addAll(cacusService.findByXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
 		}
+
 		model.addAttribute("supplierStatus", supplierStatus);
 		model.addAttribute("customerStatus", customerStatus);
 		model.addAttribute("supplierGroups", supplierGroups);
 		model.addAttribute("customerGroups", customerGroups);
 		model.addAttribute("supplierTypes", supplierTypes);
 		model.addAttribute("customerTypes", customerTypes);
+
+		suppliersList.sort(Comparator.comparing(Cacus::getXcus).reversed());
+		customersList.sort(Comparator.comparing(Cacus::getXcus).reversed());
 		model.addAttribute("suppliersList", suppliersList);
 		model.addAttribute("customersList", customersList);
 		if(Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) model.addAttribute("branchesList", zbusinessService.getAllBranchBusiness());
@@ -123,7 +128,16 @@ public class CacusController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		
+		// validation xcuszid
+		if("CUS".equalsIgnoreCase(cacusType) 
+				&& StringUtils.isNotBlank(cacus.getXcuszid()) 
+				&& StringUtils.isBlank(cacus.getXcus())
+				&& cacusService.findCacusByXcuszid(cacus.getXcuszid()) != null) {
+			// check this customer already exist with this branch id
+			responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
+			return responseHelper.getResponse();
+		}
+
 		// if existing
 		Cacus existingCacus = cacusService.findByXcus(cacus.getXcus());
 		if(existingCacus != null) {
