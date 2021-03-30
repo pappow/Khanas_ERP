@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.XusersMapper">
+
+	<insert id="save" parameterType="Xusers">
+		INSERT INTO Xusers
+		(
+			zemail,
+			xpassword,
+			xcus,
+			xrole,
+			xaccess,
+			xwh,
+			xsp,
+			xdformat,
+			xdsep,
+			xlastlogdate,
+			xname,
+			xoldpass,
+			xposition,
+			xpriority,
+			systemadmin,
+			xcontact,
+			xcrlimit,
+			xgcus,
+			xgsup,
+			xmadd,
+			xorg,
+			xphone,
+			xstatuscus,
+			xtype,
+			xvatregno,
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{zemail, jdbcType=VARCHAR},
+			#{xpassword, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
+			#{xrole, jdbcType=VARCHAR},
+			#{xaccess, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xsp, jdbcType=VARCHAR},
+			#{xdformat, jdbcType=VARCHAR},
+			#{xdsep, jdbcType=VARCHAR},
+			#{xlastlogdate, jdbcType=VARCHAR},
+			#{xname, jdbcType=VARCHAR},
+			#{xoldpass, jdbcType=VARCHAR},
+			#{xposition, jdbcType=VARCHAR},
+			#{xpriority, jdbcType=VARCHAR},
+			#{systemadmin, jdbcType=BOOLEAN},
+			#{xcontact, jdbcType=VARCHAR},
+			#{xcrlimit, jdbcType=VARCHAR},
+			#{xgcus, jdbcType=VARCHAR},
+			#{xgsup, jdbcType=VARCHAR},
+			#{xmadd, jdbcType=VARCHAR},
+			#{xorg,jdbcType=VARCHAR},
+			#{xphone, jdbcType=VARCHAR},
+			#{xstatuscus, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xvatregno, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" 
+			parameterType="Xusers">
+		UPDATE 
+			Xusers 
+		SET
+			xpassword=#{xpassword, jdbcType=VARCHAR},
+			xcus=#{xcus, jdbcType=VARCHAR},
+			xrole=#{xrole, jdbcType=VARCHAR},
+			xaccess=#{xaccess, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xsp=#{xsp, jdbcType=VARCHAR},
+			xdformat=#{xdformat, jdbcType=VARCHAR},
+			xdsep=#{xdsep, jdbcType=VARCHAR},
+			xlastlogdate=#{xlastlogdate, jdbcType=VARCHAR},
+			xname=#{xname, jdbcType=VARCHAR},
+			xoldpass=#{xoldpass, jdbcType=VARCHAR},
+			xposition=#{xposition, jdbcType=VARCHAR},
+			xpriority=#{xpriority, jdbcType=VARCHAR},
+			systemadmin=#{systemadmin, jdbcType=BOOLEAN},
+			xcontact=#{xcontact, jdbcType=VARCHAR},
+			xcrlimit=#{xcrlimit, jdbcType=VARCHAR},
+			xgcus=#{xgcus, jdbcType=VARCHAR},
+			xgsup=#{xgsup, jdbcType=VARCHAR},
+			xmadd=#{xmadd, jdbcType=VARCHAR},
+			xorg=#{xorg,jdbcType=VARCHAR},
+			xphone=#{xphone, jdbcType=VARCHAR},
+			xstatuscus=#{xstatuscus, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xvatregno=#{xvatregno, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			zemail=#{zemail, jdbcType=VARCHAR}
+			and zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllXusers" resultType="Xusers">
+		SELECT * FROM Xusers WHERE zid=#{zid}
+	</select>
+
+	<select id="findByZemail" resultType="Xusers">
+		SELECT * FROM Xusers WHERE zemail=#{zemail}
+	</select>
+
+	<select id="findByZemailAndZid" resultType="Xusers">
+		SELECT * FROM Xusers WHERE zemail=#{zemail} AND zid=#{zid}
+	</select>
+
+	<select id="findByZemailAndXpassword" resultType="Xusers">
+		SELECT * FROM Xusers WHERE zemail=#{zemail} AND xpassword=#{xpassword}
+	</select>
+
+</mapper>

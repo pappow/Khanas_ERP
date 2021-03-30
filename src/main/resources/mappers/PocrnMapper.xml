@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.PocrnMapper">
+
+	<insert id="savePocrnHeader" parameterType="Pocrnheader">
+		<selectKey keyProperty="xcrnnum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrncrn}', 6) FROM DUAL
+		</selectKey> -->
+		INSERT INTO Pocrnheader
+		(   
+			xcrnnum,
+			xgrnnum,
+			xdate,
+			xvoucher,
+			xcus,
+			xsup,
+			xstatusgrn,
+			xstatuscrn,
+			xwh,
+			xref,
+			xstatusap,
+			xpaymenttype,
+			xstatusjv,
+			xnote,
+			xtype,
+			xdategl,
+			
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xcrnnum},
+			#{xgrnnum, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xvoucher, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
+			#{xsup, jdbcType=VARCHAR},
+			#{xstatusgrn, jdbcType=VARCHAR},
+			#{xstatuscrn, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xref, jdbcType=VARCHAR},
+			#{xstatusap, jdbcType=VARCHAR},
+			#{xpaymenttype, jdbcType=VARCHAR},
+			#{xstatusjv, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xdategl, jdbcType=DATE},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+	
+		<update id="updatePocrnHeader" parameterType="Pocrnheader">
+		UPDATE
+		PocrnHeader
+		SET		
+		xdate=#{xdate, jdbcType=DATE},
+		xvoucher=#{xvoucher, jdbcType=VARCHAR},
+		xcus=#{xcus, jdbcType=VARCHAR},
+		xsup=#{xsup, jdbcType=VARCHAR},
+		xstatusgrn=#{xstatusgrn, jdbcType=VARCHAR},
+		xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
+		xwh=#{xwh, jdbcType=VARCHAR},
+		xref=#{xref, jdbcType=VARCHAR},
+		xstatusap=#{xstatusap, jdbcType=VARCHAR},
+		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+		xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+		xnote=#{xnote, jdbcType=VARCHAR},
+		xtype=#{xtype, jdbcType=VARCHAR},
+		xdategl=#{xdategl, jdbcType=DATE},
+
+		zid=#{zid, jdbcType=VARCHAR},
+		zauserid=#{zauserid, jdbcType=VARCHAR},
+		zuuserid=#{zuuserid, jdbcType=VARCHAR},
+		zaip=#{zaip, jdbcType=VARCHAR},
+		zuip=#{zuip, jdbcType=VARCHAR},
+		zactive=#{zactive, jdbcType=VARCHAR},
+		ztime=#{ztime, jdbcType=TIMESTAMP},
+		zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+		xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' 
+	</update>
+
+	<insert id="savePocrnDetail" parameterType="Pocrndetail">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COUNT(*) + 1 FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO Pocrndetail
+		(
+			xrow,
+			xcrnnum,
+			xunit,
+			xitem,
+			xqtyord,
+			xqtygrn,
+			xrate,
+			xlineamt,
+			xdocrow,
+			xlong,
+
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xrow},
+			#{xcrnnum, jdbcType=VARCHAR},
+			#{xunit, jdbcType=VARCHAR},
+			#{xitem, jdbcType=VARCHAR},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xqtygrn, jdbcType=DECIMAL},
+			#{xrate, jdbcType=DECIMAL},
+			#{xlineamt, jdbcType=DECIMAL},
+			#{xdocrow, jdbcType=INTEGER},
+			#{xlong, jdbcType=VARCHAR},
+			
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updatePocrnDetail" parameterType="Pocrndetail">
+		UPDATE 
+			Pocrndetail
+		SET
+			xunit=#{xunit, jdbcType=VARCHAR},
+			xitem=#{xitem, jdbcType=VARCHAR},
+			xqtyord=#{xqtyord, jdbcType=DECIMAL},
+			xqtygrn=#{xqtygrn, jdbcType=DECIMAL},
+			xrate=#{xrate, jdbcType=DECIMAL},
+			xlineamt=#{xrate, jdbcType=DECIMAL},
+			xdocrow=#{xdocrow, jdbcType=INTEGER},
+			xlong=#{xlong, jdbcType=VARCHAR},
+			
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xcrnnum=#{xcrnnum, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="findPocrnHeaderByXcrnnum" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findPocrnHeaderByXgrnnum" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPocrndetailByXcrnnumAndXrow" resultType="Pocrndetail">
+		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="getAllPocrnheader" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE zid=#{zid} AND zactive='1' ORDER BY xcrnnum DESC
+	</select>
+	
+	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
+		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
+	</select>
+	
+	<select id = "procConfirmCRN" statementType = "CALLABLE">
+		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, 
+			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procIssuePricing" statementType = "CALLABLE">
+		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
+			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+	
+	<select id = "procTransferPRtoAP" statementType = "CALLABLE">
+		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
+			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+
+
+</mapper>
