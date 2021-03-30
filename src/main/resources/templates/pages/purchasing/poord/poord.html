@@ -70,7 +70,6 @@
 											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
 											<input type="hidden" id="xpornum" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
-											<input type="hidden" class="form-control" th:field="*{xtotamt}">
 											<div class="row">
 												<div class="col-md-6">
 
@@ -112,7 +111,7 @@
 
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xdate"
@@ -138,7 +137,7 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
 														<div class="col-md-6">
-															<input type="number" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
+															<input type="text" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
 														</div>
 													</div>
 
@@ -269,7 +268,7 @@
 						if(status == "success")
 							showMessage("success", "GRN Created Successfully");
 						else if(status == "error")
-							showMessage("error", "Somthing went wrong.....");
+							showMessage("error", result.message);
 						//location.reload(true);
 						setTimeout(() => {
 							location.reload(true);
