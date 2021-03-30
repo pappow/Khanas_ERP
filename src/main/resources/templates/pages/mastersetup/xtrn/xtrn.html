@@ -53,15 +53,10 @@
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(xtrn.xtrn)}" th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${#strings.isEmpty(xtrn.xtrn)}" th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-redo-alt"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" th:href="@{/mastersetup/xtrn/archive/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == false}" th:href="@{/mastersetup/xtrn/restore/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/itemmaster/code/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xtrn.xcode) ? 'start' : xtrn.xcode} + '?table=xtrn&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xtrn.xcode) ? 'start' : xtrn.xcode} + '?table=xtrn&column=xcode&redirectUrl=/mastersetup/itemmaster/code'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/itemmaster/code/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/xtrn/save}" th:object="${xtrn}" method="post">
@@ -93,13 +88,13 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnum">Starting : </label>
 														<div class="col-md-6">
-															<input type="number" class="form-control" th:field="*{xnum}" min="0" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}">
+															<input type="number" class="form-control" th:field="*{xnum}" min="0" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}" required="required">
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xinc">Increment : </label>
 														<div class="col-md-6">
-															<input type="number" class="form-control" th:field="*{xinc}" min="1" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}">
+															<input type="number" class="form-control" th:field="*{xinc}" min="1" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}" required="required">
 														</div>
 													</div>
 													<div class="form-group">

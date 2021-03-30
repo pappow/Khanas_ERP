@@ -55,8 +55,9 @@ spring:
     location: banner.txt
 
 mybatis: 
+  config-location: classpath:mybatis-config.xml
 #  mapper-locations: classpath*:**/mapper/*.xml
-  typeAliasesPackage: com.asl.entity
+#  typeAliasesPackage: com.asl.entity
 
 JNDIName: jdbcTemplate
 default: 

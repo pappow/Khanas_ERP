@@ -9,7 +9,7 @@ import org.springframework.data.domain.AuditorAware;
 import com.asl.security.SpringSecurityAuditorAware;
 
 @SpringBootApplication
-@MapperScan("com.asl.mapper")
+//@MapperScan("com.asl.mapper")
 public class AslErpApplication {
 
 	public static void main(String[] args) {

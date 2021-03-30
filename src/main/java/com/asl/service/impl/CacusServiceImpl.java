@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,20 +53,32 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 
 	@Override
 	public List<Cacus> searchCacus(String xtype, String xcus){
+		if(StringUtils.isBlank(xtype) || StringUtils.isBlank(xcus)) return Collections.emptyList();
 		return cacusMapper.searchCacus(xtype, xcus.toUpperCase(), sessionManager.getBusinessId());
 	}
 	
 	@Override
 	public Cacus findByXphone(String xphone){
+		if(StringUtils.isBlank(xphone)) return null;
 		return cacusMapper.findByXphone(xphone, sessionManager.getBusinessId());
 	}
 
 	public List<Cacus> searchXorg(String xorg){
+		if(StringUtils.isBlank(xorg)) return Collections.emptyList();
 		return cacusMapper.searchXorg(xorg.toUpperCase(), sessionManager.getBusinessId());
 	}
 	
 	@Override
 	public List<Cacus> searchXgcus(String xgcus){
+		if(StringUtils.isBlank(xgcus)) return Collections.emptyList();
 		return cacusMapper.searchXorg(xgcus.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	@Override
+	public Cacus findCacusByXcuszid(String xcuszid) {
+		if(StringUtils.isBlank(xcuszid)) return null;
+		return cacusMapper.findCacusByXcuszid(xcuszid, sessionManager.getBusinessId());
+	}
+
+	
 }
