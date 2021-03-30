@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Immofgdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
@@ -33,6 +34,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.AllSalesOrderChalanReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrderChalan;
+import com.asl.service.CaitemService;
 import com.asl.service.ImmofgdetailService;
 import com.asl.service.MoService;
 import com.asl.service.OpdoService;
@@ -55,6 +57,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	@Autowired private ImmofgdetailService immofgdetailService;
 	@Autowired private MoService moService;
 	@Autowired private OpdoService opdoService;
+	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadSalesOrderChalanPage(Model model) {
@@ -169,6 +172,10 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		// create or update chalan detail first
 		for(Oporddetail pd : details) {
+			// if not production item, then don't add it to chalan
+			Caitem caitem = caitemService.findByXitem(pd.getXitem());
+			if(caitem == null || !caitem.isXproditem()) continue;
+
 			// check chalan detail already exist using item
 			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(chalan, pd.getXitem());
 			if(existChalanDetail != null) {  // update existing with qty

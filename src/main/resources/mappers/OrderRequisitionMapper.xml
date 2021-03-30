@@ -40,7 +40,7 @@
 			AND ZBUSINESS.BRANCH='1'
 			AND POORDHEADER.ZACTIVE='1'
 		ORDER BY
-			ZBUSINESS.ZORG
+			POORDHEADER.XPORNUM DESC
 	</select>
 
 	<select id="getAllBranchesRequisitionDetails" resultType="com.asl.model.BranchesRequisitions">

@@ -224,7 +224,6 @@
 											<th>Unit</th>
 											<th>Category</th>
 											<th>Group</th>
-											<th th:if="${deliveryorderchalan.xstatusord eq 'Confirmed'}">Action</th>
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -236,9 +235,6 @@
 											<td th:text="${cd.xunitsel}"></td>
 											<td th:text="${cd.xcatitem}"></td>
 											<td th:text="${cd.xgitem}"></td>
-											<td th:if="${deliveryorderchalan.xstatusord eq 'Confirmed'}">
-												<a th:href="@{/production/batch/chalantobatch/} + ${deliveryorderchalan.xdornum} + '/' + ${cd.xitem}" target="_blank">Create Batch</a>
-											</td>
 										</tr>
 									</tbody>
 								</table>
