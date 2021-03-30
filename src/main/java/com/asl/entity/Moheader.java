@@ -14,6 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +27,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "moheader")
 @IdClass(MoheaderPK.class)
+@XmlRootElement(name = "batch")
+@XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(of = { "zid", "xbatch" }, callSuper = false)
 public class Moheader extends AbstractModel<String> {
 
@@ -93,5 +100,7 @@ public class Moheader extends AbstractModel<String> {
 	private String xqtyprdunit;
 
 	@Transient
+	@XmlElementWrapper(name = "batchdetails")
+	@XmlElement(name = "batchdetail")
 	private List<Modetail> modetails = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -11,6 +12,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +31,7 @@ import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.ProductionBatchReport;
 import com.asl.service.BmbomService;
 import com.asl.service.MoService;
 import com.asl.service.OpordService;
@@ -323,6 +329,55 @@ public class ProductionBatchController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Process successfull");
 		return responseHelper.getResponse();
 	}
+
+	@GetMapping("/print/{xchalan}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xchalan) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xchalan);
+		if(chalan == null) {
+			message = "Chalan not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		List<Moheader> batchList = moService.findMoheaderByXchalan(xchalan);
+		if(batchList == null || batchList.isEmpty()) {
+			message = "No Item batch found for this chalan " + xchalan;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		for(Moheader batch : batchList) {
+			List<Modetail> details = moService.findModetailByXbatch(batch.getXbatch());
+			if(details == null || details.isEmpty()) continue;
+			details.sort(Comparator.comparing(Modetail::getXrow));
+			batch.getModetails().addAll(details);
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
+		ProductionBatchReport report = new ProductionBatchReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Production Batch Report of Chalan - " + xchalan);
+		report.setFromDate(sdf.format(chalan.getXdate()));
+		report.setToDate(sdf.format(chalan.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+
+		report.getBatches().addAll(batchList);
+
+		byte[] byt = getPDFByte(report, "productionbatch.xsl");
+		if(byt == null) {
+			message = "Can't generate report for chalan : " + xchalan;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+	
 
 //	@GetMapping
 //	public String loadProductionBatchPage(Model model) {

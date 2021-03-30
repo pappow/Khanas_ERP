@@ -149,6 +149,10 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		return productionCompleted;
 	}
 
-	
+	@Override
+	public List<Moheader> findMoheaderByXchalan(String xchalan) {
+		if(StringUtils.isBlank(xchalan)) return Collections.emptyList();
+		return moMapper.findMoHeaderByXchalan(xchalan, sessionManager.getBusinessId());
+	}
 
 }

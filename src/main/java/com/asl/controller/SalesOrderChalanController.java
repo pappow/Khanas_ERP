@@ -408,38 +408,4 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		return null;
 	}
 
-//	@GetMapping
-//	public String loadSalesOrderPage(Model model) {
-//		Opordheader chalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date());
-//		List<Oporddetail> chalanDetails = new ArrayList<>();
-//		if(chalan != null) {
-//			chalanDetails = opordService.findOporddetailByXordernum(chalan.getXordernum());
-//			if(chalanDetails == null) chalanDetails = new ArrayList<>();
-//		}
-//		if(chalan == null) chalan = new Opordheader();
-//		model.addAttribute("chalan", chalan);
-//		model.addAttribute("chalanDetails", chalanDetails);
-//		return "pages/salesninvoice/salesorderchalan/salesorderchalan";
-//	}
-//
-//	@GetMapping("/query")
-//	public String reloadTableWithData(@RequestParam String date, Model model) throws ParseException {
-//		Opordheader chalan = opordService.findOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), sdf.parse(date));
-//		List<Oporddetail> chalanDetails = new ArrayList<>();
-//		if(chalan != null) {
-//			chalanDetails = opordService.findOporddetailByXordernum(chalan.getXordernum());
-//			if(chalanDetails == null) chalanDetails = new ArrayList<>();
-//		}
-//		if(chalan == null) chalan = new Opordheader();
-//		model.addAttribute("chalan", chalan);
-//		model.addAttribute("chalanDetails", chalanDetails);
-//		return "pages/salesninvoice/salesorderchalan/salesorderchalan::salesorderchalansection";
-//	}
-//
-//	@PostMapping("/query")
-//	public @ResponseBody Map<String, Object> queryForChalanDetails(Date xdate, Model model){
-//		responseHelper.setReloadSectionIdWithUrl("salesorderchalansection", "/salesninvoice/salesorderchalan/query?date=" + sdf.format(xdate));
-//		responseHelper.setStatus(ResponseStatus.SUCCESS);
-//		return responseHelper.getResponse();
-//	}
 }
