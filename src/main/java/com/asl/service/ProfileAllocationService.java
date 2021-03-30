@@ -17,9 +17,9 @@ public interface ProfileAllocationService {
 
 	public long update(ProfileAllocation profileAllocation);
 
-	public ProfileAllocation findById(Long profileAllocationId);
+	public ProfileAllocation findByPaid(Long paid);
 
 	public List<ProfileAllocation> getAllProfileAllocation();
 
-	public ProfileAllocation findByUsername(String username);
+	public ProfileAllocation findByZemail(String zemail);
 }

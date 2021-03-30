@@ -86,12 +86,12 @@ public class ReportProfile implements Serializable {
 	}
 
 	public void setProfileLine(ProfileLine profileLine) {
-		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfileCode())) {
+		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfilecode())) {
 			log.warn("No profile or profile code found....");
 			return;
 		}
 
-		String code = profileLine.getProfileCode().toUpperCase();
+		String code = profileLine.getProfilecode().toUpperCase();
 		if(profileSetterMethods.containsKey(code)) {
 			Method method = profileSetterMethods.get(code);
 			try {
