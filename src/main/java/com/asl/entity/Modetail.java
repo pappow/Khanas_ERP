@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +20,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "modetail")
 @IdClass(ModetailPK.class)
+@XmlRootElement(name = "batch")
+@XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(of = { "zid", "xrow", "xbatch" }, callSuper = false)
 public class Modetail extends AbstractModel<String> {
 

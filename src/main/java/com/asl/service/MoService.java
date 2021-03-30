@@ -43,4 +43,6 @@ public interface MoService {
 	public long deleteModetail(Modetail modetail);
 
 	public boolean isProductionProcessCompleted(String xchalan);
+
+	public List<Moheader> findMoheaderByXchalan(String xchalan);
 }
