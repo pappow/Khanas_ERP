@@ -38,7 +38,7 @@ public interface OpdoMapper {
 	//Procedure Calls
 	public void procConfirmDO(String zid, String user, String xdornum, String p_seq);
 	public void procIssuePricing(String zid, String user, String xdocnum, String xwh, String p_seq);
-	public void procTransferOPtoAR(String zid, String user, String xdocnum, String p_screen, String p_seq);
+	public void procTransferOPtoAR(String zid, String user, String xdornum, String p_screen, String p_seq);
 
 	public Opdoheader findPoordHeaderByXordernum(String xordernum, String zid);
 	public Opdoheader findPoordHeaderByXordernumAndRequisitionnumber(String xordernum, String requisitionnumber, String zid);

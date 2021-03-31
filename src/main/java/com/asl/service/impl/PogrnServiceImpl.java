@@ -40,17 +40,19 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		if(pogrnDetail == null) return 0;
 		return pogrnMapper.updatePogrnHeaderTotalAmt(pogrnDetail);
 	}
+	
+	@Override
+	public long updatePogrnHeaderTotalAmtAndGrandTotalAmt(String xgrnnum) {
+		if(StringUtils.isBlank(xgrnnum)) return 0;
+		return pogrnMapper.updatePogrnHeaderTotalAmtAndGrandTotalAmt(xgrnnum, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public long saveDetail(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
-		long count = pogrnMapper.savePogrnDetail(pogrnDetail);
-		
-		if(count != 0) {
-			count = updatePogrnHeaderTotalAmt(pogrnDetail);
-		}
-		
+		long count = pogrnMapper.savePogrnDetail(pogrnDetail);		
+		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};
 		return count;
 	}
 
@@ -59,11 +61,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		long count = pogrnMapper.updatePogrnDetail(pogrnDetail);
-		
-		if(count != 0) {
-			count = updatePogrnHeaderTotalAmt(pogrnDetail);
-		}
-		
+		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};		
 		return count;
 	}
 
@@ -72,10 +70,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		if(pogrnDetail == null) return 0;
 		long count = pogrnMapper.deletePogrnDetail(pogrnDetail);
 		
-		if(count != 0) {
-			// Commmented due to the reason of xlineamt column not present in PogrnDetail. We need this to calculate xtotamt.
-			//count = updatePogrnHeaderTotalAmt(pogrnDetail);
-		}
+		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};
 		
 		return count;
 	}
@@ -127,5 +122,6 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	public List<PogrnHeader> searchPoord(String xpornum){
 		return pogrnMapper.searchPoord(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
+
 
 }

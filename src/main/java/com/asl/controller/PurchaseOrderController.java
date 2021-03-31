@@ -9,6 +9,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
+import com.asl.entity.Opdodetail;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
@@ -25,6 +31,10 @@ import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.PurchaseOrder;
+import com.asl.model.report.PurchaseReport;
+import com.asl.service.CacusService;
 import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
@@ -40,6 +50,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private PogrnService pogrnService;
 	@Autowired private ImtrnService imtrnService;
+	@Autowired private CacusService cacusService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
@@ -302,5 +313,68 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}	
 		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
+	}
+	
+
+	@GetMapping("/print/{xpornum}")
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xpornum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		PoordHeader oh = poordService.findPoordHeaderByXpornum(xpornum);
+		
+		
+		if (oh == null) {
+			message = "Purchase Order not found to print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cacus cacus = cacusService.findByXcus(oh.getXcus());
+		
+		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+
+		PurchaseReport report = new PurchaseReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Purchase Order");
+		report.setFromDate(SDF.format(oh.getXdate()));
+		report.setToDate(SDF.format(oh.getXdate()));
+		report.setPrintDate(SDF.format(new Date()));
+		//report.setCopyrightText("ASL");
+
+		PurchaseOrder purchaseOrder = new PurchaseOrder();
+		purchaseOrder.setOrderNumber(oh.getXpornum());
+		purchaseOrder.setSupplier(cacus.getXcus());
+		purchaseOrder.setSupplierName(cacus.getXorg());
+		purchaseOrder.setSupplierAddress(cacus.getXmadd());
+		purchaseOrder.setWarehouse(oh.getXwh());
+		purchaseOrder.setDate(SDF.format(oh.getXdate()));
+
+		List<PoordDetail> items = poordService.findPoorddetailByXpornum(oh.getXpornum());
+		if (items != null && !items.isEmpty()) {
+			items.parallelStream().forEach(it -> {
+				ItemDetails item = new ItemDetails();
+				item.setItemCode(it.getXitem());
+				item.setItemName(it.getXitemdesc());
+				item.setItemQty(it.getXqtyord().toString());
+				item.setItemUnit(it.getXunitpur());
+				item.setItemCategory(it.getXcatitem());
+				item.setItemGroup(it.getXgitem());
+
+				purchaseOrder.getItems().add(item);
+			});
+		}
+
+		report.getPurchaseorders().add(purchaseOrder);
+
+		byte[] byt = getPDFByte(report, "purchasereport.xsl");
+		if (byt == null) {
+			message = "Can't print report for Purchase Order : " + xpornum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
 }

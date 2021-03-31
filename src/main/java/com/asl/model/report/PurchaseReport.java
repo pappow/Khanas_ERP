@@ -12,10 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
 @Data
-@XmlRootElement(name = "grnreport")
+@XmlRootElement(name = "purchasereport")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GrnReport {
-	
+public class PurchaseReport {
 	
 	private String businessName;
 	private String businessAddress;
@@ -26,7 +25,8 @@ public class GrnReport {
 	private String copyrightText;
 	private String status;
 
-	@XmlElementWrapper(name = "grnorders")
-	@XmlElement(name = "grnorder")
-	private List<GRNOrder> grnorders = new ArrayList<>();
+	@XmlElementWrapper(name = "purchaseorders")
+	@XmlElement(name = "purchaseorder")
+	private List<PurchaseOrder> purchaseorders = new ArrayList<>();
+
 }

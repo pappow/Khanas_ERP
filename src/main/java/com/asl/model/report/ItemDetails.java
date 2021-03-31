@@ -22,7 +22,14 @@ public class ItemDetails {
 	private String itemCategory;
 	private String itemGroup;
 	
+	
 	//Added by Sajjad
 	private String itemRate;
 	private String itemTotalAmount;
+	
+	//For qty details
+	private String orderQty;
+	private String receivedQty;
+	private String deliveredQty;
+	
 }

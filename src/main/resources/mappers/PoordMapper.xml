@@ -208,7 +208,7 @@
 			poorddetail.zactive
 		FROM 
 			poorddetail 
-			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid='900000'
+			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{zid}
 		WHERE 
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{zid}

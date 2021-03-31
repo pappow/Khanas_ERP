@@ -303,21 +303,6 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-
-		// transfer all chalan deails to immofgdetail
-		/*
-		List<Opdodetail> chalandetails = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
-		for (Opdodetail c : chalandetails) {
-			
-			  Immofgdetail id = new Immofgdetail(); id.setXtornum(c.getXordernum());
-			  id.setXrow(c.getXrow()); id.setXunit(c.getXunit());
-			  id.setXitem(c.getXitem()); id.setXqtyord(c.getXqtyord());
-			  id.setXnote(c.getXlong()); long count = immofgdetailService.save(id);
-			  if(count == 0) { log.error("ERROR is : {}",
-			  "Can't insert chaland details to Immofgdetail table for chalan " +
-			  c.getXordernum()); }
-			 
-		}*/
 		
 		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum);
 		String p_seq;
