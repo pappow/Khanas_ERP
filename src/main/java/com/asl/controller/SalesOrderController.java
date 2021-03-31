@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,10 +110,26 @@ public class SalesOrderController extends ASLAbstractController {
 			if(branchRowMap.get(zorg) != null) {
 				BranchRow br = branchRowMap.get(zorg);
 
-				BranchItem bi = new BranchItem(bq.getXitem(), bq.getXqtyord());
-				br.getItems().add(bi);
+				boolean found = false;
+				BigDecimal val = BigDecimal.ZERO;
+				for(BranchItem bi : br.getItems()) {
+					if(bi.getXitem().equalsIgnoreCase(bq.getXitem())) {
+						bi.setXqtyord(bi.getXqtyord().add(bq.getXqtyord()));
+						val = val.add(bi.getXqtyord());
+						found = true;
+						break;
+					}
+				}
 
-				br.setTotalItemOrdered(br.getTotalItemOrdered().add(bi.getXqtyord()));
+				if(!found) {
+					BranchItem bi = new BranchItem(bq.getXitem(), bq.getXqtyord());
+					br.getItems().add(bi);
+					val = val.add(bi.getXqtyord());
+				}
+
+				br.setTotalItemOrdered(br.getTotalItemOrdered().add(val));
+
+				branchRowMap.put(zorg, br);
 			} else {
 				BranchRow br = new BranchRow();
 				br.setZorg(zorg);
