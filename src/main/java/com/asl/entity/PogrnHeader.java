@@ -101,6 +101,9 @@ public class PogrnHeader extends AbstractModel<String>{
 	@Column(name = "xdiscprime")
 	private BigDecimal xdiscprime;
 	
+	@Column(name = "xgrandtot")
+	private BigDecimal xgrandtot;
+	
 	@Column(name = "xdocnum")
 	private Integer xdocnum;
 	

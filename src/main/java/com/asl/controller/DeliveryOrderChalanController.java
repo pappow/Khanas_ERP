@@ -320,7 +320,42 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		}*/
 		
 		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum);
-
+		String p_seq;
+		for (Opdoheader order : invoiceList) {			
+			
+			if(!"Confirmed".equalsIgnoreCase(order.getXstatusord())) {
+				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+				opdoService.procConfirmDO(order.getXdornum(), p_seq);
+				//Error check here for procConfrimDo
+				String em = getProcedureErrorMessages(p_seq);
+				if(StringUtils.isNotBlank(em)) {
+					responseHelper.setErrorStatusAndMessage(em);
+					return responseHelper.getResponse();
+				}
+				
+				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+				opdoService.procIssuePricing(order.getXdocnum(), order.getXwh(), p_seq);
+				//Error check here for procIssuePricing
+				em = getProcedureErrorMessages(p_seq);
+				if(StringUtils.isNotBlank(em)) {
+					responseHelper.setErrorStatusAndMessage(em);
+					return responseHelper.getResponse();
+				}
+				
+			}
+			if(!"Confirmed".equalsIgnoreCase(order.getXstatusar())){
+				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+				opdoService.procTransferOPtoAR(order.getXdornum(), "opdoheader", p_seq);
+				//Error check here for procTransferOPtoAR
+				String em = getProcedureErrorMessages(p_seq);
+				if(StringUtils.isNotBlank(em)) {
+					responseHelper.setErrorStatusAndMessage(em);
+					return responseHelper.getResponse();
+				}
+				
+			}
+		}
+		
 		// now lock chalan
 		oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);

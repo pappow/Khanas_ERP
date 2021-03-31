@@ -76,7 +76,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 	
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
-		if((arhed == null || StringUtils.isBlank(arhed.getXtype())) || StringUtils.isBlank(arhed.getXtrnarhed()) && StringUtils.isBlank(arhed.getXvoucher())) {
+		if((arhed == null || StringUtils.isBlank(arhed.getXtrnarhed())) && StringUtils.isBlank(arhed.getXvoucher())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}

@@ -78,6 +78,7 @@
 			$(document).ready(function(){
 				// Init ui for modal
 				ck.ui.config.buttonevent();
+				$(".xitemsearch").click();
 				
 				$('#xqtyord').on('blur', function(e){
 					e.preventDefault();
@@ -108,6 +109,7 @@
 								$('input[name="xunitpur"]').val(data.xunitpur);
 								$('input.xunitpur-display').val(data.xunitpur);	
 								$('input[name="xrate"]').val(data.xrate);
+								$(".qty").val('1');
 								$(".qty").focus();
 								
 								//$('input[name="xtotamt"]').val(parseFloat($('input[name="xrate"]').val()) * parseFloat($('input[name="xqtyord"]').val()));

@@ -82,6 +82,10 @@ public class PurchaseOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(StringUtils.isBlank(poordHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please select a supplier to create purchase order!");
+			return responseHelper.getResponse();
+		}
 
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
@@ -245,6 +249,12 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		// Get PoordHeader record by Xpornum
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
+		//Get PO items to copy them in GRN.
+		List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
+		if(poordDetailList.size() == 0) {
+			responseHelper.setErrorStatusAndMessage("Please add items to create grn!");
+			return responseHelper.getResponse();
+		}
 		if(poordHeader != null) {
 			PogrnHeader pogrnHeader = new PogrnHeader();
 			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
@@ -261,8 +271,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			}
 			
 			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
-			//Get PO items to copy them in GRN.
-			List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
+			
 			PogrnDetail pogrnDetail;
 			for(int i=0; i< poordDetailList.size(); i++) {
 				pogrnDetail = new PogrnDetail();

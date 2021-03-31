@@ -100,7 +100,8 @@ public class StockTransferOrderController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			
-			if(!imtorHeader.getXchalanref().equalsIgnoreCase(existImtorHeader.getXchalanref()) && StringUtils.isNotBlank(existImtorHeader.getXchalanref())) {
+			
+			if(existImtorHeader != null && StringUtils.isNotBlank(existImtorHeader.getXchalanref()) && !imtorHeader.getXchalanref().equalsIgnoreCase(existImtorHeader.getXchalanref())) {
 				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
 				for(int i=0; i<imtorDetailList.size(); i++) {
 					long delCount = imtorService.deleteDetail(imtorDetailList.get(i));
@@ -160,6 +161,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
 			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtype(), imtorHeader.getXtrntor(), 6));
 		}
+		imtorHeader.setXstatustor("Open");
 		long count = imtorService.save(imtorHeader);		
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
