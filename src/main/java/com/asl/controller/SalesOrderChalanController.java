@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -340,20 +341,22 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
 		Zbusiness zb = sessionManager.getZbusiness();
 
 		AllSalesOrderChalanReport report = new AllSalesOrderChalanReport();
 		report.setBusinessName(zb.getZorg());
 		report.setBusinessAddress(zb.getXmadd());
-		report.setReportName("Sales Order Chalan Report");
-		report.setFromDate(SDF.format(oh.getXdate()));
-		report.setToDate(SDF.format(oh.getXdate()));
-		report.setPrintDate(SDF.format(new Date()));
+		report.setReportName("Sales Order Chalan Item Details Report : " + oh.getXordernum());
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
 
 		List<SalesOrderChalan> chalans = new ArrayList<>();
 		SalesOrderChalan chalan = new SalesOrderChalan();
 		chalan.setChalanName(oh.getXordernum());
-		chalan.setChalanDate(SDF.format(oh.getXdate()));
+		chalan.setChalanDate(sdf.format(oh.getXdate()));
 		chalan.setStatus(oh.getXstatus());
 		chalans.add(chalan);
 
@@ -361,6 +364,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		details.stream().forEach(d -> {
 			ItemDetails id = new ItemDetails();
 			id.setItemCode(d.getXitem());
+			id.setItemName(d.getXdesc());
 			id.setItemCategory(d.getXdesc());
 			id.setItemQty(d.getXqtyord().toString());
 			id.setItemUnit(d.getXunit());
@@ -371,7 +375,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		chalan.getItems().addAll(items);
 		report.getChalans().addAll(chalans);
 
-		byte[] byt = getPDFByte(report, "allsalesorderchalanreport.xsl");
+		byte[] byt = getPDFByte(report, "salesorderchalanitemdetailreport.xsl");
 		if(byt == null) {
 			message = "Can't generate pdf for chalan : " + xordernum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

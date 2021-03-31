@@ -209,6 +209,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 			sales.setXdate(new Date());
 			sales.setXstatusord("Open");
+			sales.setXstatusjv("Open");
+			sales.setXstatusar("Open");
 			sales.setXdocnum(savedDeliveryChalan.getXdornum());
 			sales.setXchalancreated(true);
 

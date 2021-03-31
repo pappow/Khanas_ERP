@@ -394,19 +394,21 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		List<SalesOrderChalanReport> allReports = new ArrayList<>();
 		Cacus cacus = new Cacus();
 
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
 		for (Opdoheader so : salesOrders) {
-			
+
 			SalesOrderChalanReport report = new SalesOrderChalanReport();
 			report.setBusinessName(sessionManager.getZbusiness().getZorg());
 			report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-			report.setReportName("Delivery Chalan");
-			report.setFromDate(SDF.format(oh.getXdate()));
-			report.setToDate(SDF.format(oh.getXdate()));
-			report.setPrintDate(SDF.format(new Date()));
-			report.setCopyrightText("ASL");
+			report.setReportName("Delivery Chalan : " + oh.getXdornum());
+			report.setFromDate(sdf.format(oh.getXdate()));
+			report.setToDate(sdf.format(oh.getXdate()));
+			report.setPrintDate(sdf.format(new Date()));
+			report.setCopyrightText("Copyright © 2021 - ASL");
 
 			report.setChalanNumber(oh.getXdornum());
-			report.setChalanDate(SDF.format(oh.getXdate()));
+			report.setChalanDate(sdf.format(oh.getXdate()));
 			report.setChalanStatus(oh.getXstatusar());
 
 			SalesOrder salesOrder = new SalesOrder();
@@ -415,14 +417,14 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			salesOrder.setReqBranch(so.getXcus());
 			salesOrder.setCustomer(cacus.getXorg());
 			salesOrder.setCustomerAddress(cacus.getXmadd());
-			salesOrder.setDate(SDF.format(so.getXdate()));
+			salesOrder.setDate(sdf.format(so.getXdate()));
 			if ("invoices".equalsIgnoreCase(pType)) {
-				report.setReportName("Sales Invoice");
+				report.setReportName("Sales Invoice : " + oh.getXdornum());
 
-				salesOrder.setTotalAmount(so.getXtotamt().toString());
-				salesOrder.setVatAmount(so.getXvatamt().toString());
-				salesOrder.setDiscountAmount(so.getXdiscamt().toString());
-				salesOrder.setGrandTotalAmount(so.getXgrandtot().toString());
+				salesOrder.setTotalAmount(so.getXtotamt() != null ? so.getXtotamt().toString() : "");
+				salesOrder.setVatAmount(so.getXvatamt() != null ? so.getXvatamt().toString() : "");
+				salesOrder.setDiscountAmount(so.getXdiscamt() != null ? so.getXdiscamt().toString() : "");
+				salesOrder.setGrandTotalAmount(so.getXgrandtot() != null ? so.getXgrandtot().toString() : "");
 			}
 
 			List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(so.getXdornum());
@@ -431,14 +433,14 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 					ItemDetails item = new ItemDetails();
 					item.setItemCode(it.getXitem());
 					item.setItemName(it.getXdesc());
-					item.setItemQty(it.getXqtyord().toString());
+					item.setItemQty(it.getXqtyord() != null ? it.getXqtyord().toString() : "");
 					item.setItemUnit(it.getXunitsel());
 					item.setItemCategory(it.getXcatitem());
 					item.setItemGroup(it.getXgitem());
 
 					if ("invoices".equalsIgnoreCase(pType)) {
-						item.setItemRate(it.getXrate().toString());
-						item.setItemTotalAmount(it.getXlineamt().toString());
+						item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : "");
+						item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : "");
 					}
 
 					salesOrder.getItems().add(item);
@@ -450,8 +452,9 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			allReports.add(report);
 
 		}
+
 		byte[] byt;
-		if ("invoices".equalsIgnoreCase(pType))
+		if (!"invoices".equalsIgnoreCase(pType))
 			byt = getBatchPDFByte(allReports, "deliverychalanreport.xsl");
 		else
 			byt = getBatchPDFByte(allReports, "deliverychalaninvoicesreport.xsl");
@@ -504,11 +507,11 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		SalesOrderChalanReport report = new SalesOrderChalanReport();
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-		report.setReportName("Delivery Chalan");
+		report.setReportName("Delivery Chalan : " + oh.getXdocnum());
 		report.setFromDate(SDF.format(chalan.getXdate()));
 		report.setToDate(SDF.format(chalan.getXdate()));
 		report.setPrintDate(SDF.format(new Date()));
-		report.setCopyrightText("ASL");
+		report.setCopyrightText("Copyright © 2021 - ASL");
 
 		report.setChalanNumber(chalan.getXdornum());
 		report.setChalanDate(SDF.format(chalan.getXdate()));
@@ -521,7 +524,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		salesOrder.setCustomerAddress(cacus.getXmadd());
 		salesOrder.setDate(SDF.format(oh.getXdate()));
 		if ("invoice".equalsIgnoreCase(pType)) {
-			report.setReportName("Sales Invoice");
+			report.setReportName("Sales Invoice  : " + oh.getXdocnum());
 
 			salesOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
 			salesOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
