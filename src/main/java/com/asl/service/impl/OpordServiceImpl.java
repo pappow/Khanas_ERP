@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
-import com.asl.entity.PoordHeader;
 import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
 import com.asl.service.OpordService;

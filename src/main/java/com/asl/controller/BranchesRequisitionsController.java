@@ -244,7 +244,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 		Map<String, TableColumn> columnRowMap = new HashMap<>();
 		Map<String, BranchRow> branchRowMap = new HashMap<>();
-		bqList.stream().forEach(bq -> {
+		for(BranchesRequisitions bq : bqList) {
 			String item = bq.getXitem();
 			if(columnRowMap.get(item) != null) {
 				TableColumn c = columnRowMap.get(item);
@@ -263,14 +263,24 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 			if(branchRowMap.get(zorg) != null) {
 				BranchRow br = branchRowMap.get(zorg);
 
-				BranchItem bi = new BranchItem(bq.getXitem(), bq.getXqtyord());
-				br.getItems().add(bi);
-				
-				
-				
-				
+				boolean found = false;
+				BigDecimal val = BigDecimal.ZERO;
+				for(BranchItem bi : br.getItems()) {
+					if(bi.getXitem().equalsIgnoreCase(bq.getXitem())) {
+						bi.setXqtyord(bi.getXqtyord().add(bq.getXqtyord()));
+						val = val.add(bi.getXqtyord());
+						found = true;
+						break;
+					}
+				}
 
-				br.setTotalItemOrdered(br.getTotalItemOrdered().add(bi.getXqtyord()));
+				if(!found) {
+					BranchItem bi = new BranchItem(bq.getXitem(), bq.getXqtyord());
+					br.getItems().add(bi);
+					val = val.add(bi.getXqtyord());
+				}
+
+				br.setTotalItemOrdered(br.getTotalItemOrdered().add(val));
 
 				branchRowMap.put(zorg, br);
 			} else {
@@ -284,7 +294,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 				branchRowMap.put(zorg, br);
 			}
-		});
+		}
 
 		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
 		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));

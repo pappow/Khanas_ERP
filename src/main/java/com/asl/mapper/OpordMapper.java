@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
-import com.asl.entity.PoordHeader;
 import com.asl.model.BranchesRequisitions;
 
 /**

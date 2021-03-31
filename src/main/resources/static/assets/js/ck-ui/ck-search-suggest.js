@@ -8,6 +8,7 @@ $(document).ready(function(){
 		var parent = $(this);
 		var serachUrl = $(this).attr('search-url');
 
+		console.log(hint);
 		if(hint == '') return;
 
 		$.ajax({
