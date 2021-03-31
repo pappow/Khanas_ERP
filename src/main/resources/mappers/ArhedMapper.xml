@@ -88,11 +88,9 @@
 		UPDATE Arhed 
 		SET
 		xcus=#{xcus, jdbcType=VARCHAR},
-		xdate=#{xdate, jdbcType=DATE},
-		xcus=#{xcus, jdbcType=VARCHAR},
 		xbank=#{xbank, jdbcType=VARCHAR},
 		xwh=#{xwh, jdbcType=VARCHAR},
-		xprime#{xprime, jdbcType=DECIMAL},
+		xprime=#{xprime, jdbcType=DECIMAL},
 		xbalprime=#{xbalprime, jdbcType=DECIMAL},
 		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
 		xref=#{xref, jdbcType=VARCHAR},

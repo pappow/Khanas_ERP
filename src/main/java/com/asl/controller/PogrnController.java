@@ -86,6 +86,7 @@ public class PogrnController extends ASLAbstractController {
 		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		pogrn.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 		pogrn.setXtypetrn("Purchase");
+		pogrn.setXvatait("No Vat");
 		pogrn.setXtotamt(BigDecimal.ZERO);
 		pogrn.setXvatamt(BigDecimal.ZERO);
 		pogrn.setXdiscprime(BigDecimal.ZERO);
