@@ -127,6 +127,16 @@
 			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
 	</update>
 
+	<update id="updatePogrnHeaderTotalAmtAndGrandTotalAmt">
+		UPDATE 
+			PogrnHeader
+		SET
+			xtotamt=(SELECT SUM(xlineamt) FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'),
+			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscamt) FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1')
+		WHERE
+			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+	</update>
+
 	<insert id="savePogrnDetail" parameterType="PogrnDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zactive='1' AND zid=#{zid}
@@ -227,19 +237,26 @@
 
 
 	<select id="findPogrnDetailByXgrnnum" resultType="PogrnDetail">
-		SELECT * 
+		SELECT pd.*,
+		caitem.xdesc as "xitemdesc", 
+		caitem.xcatitem,
+		caitem.xgitem 
 		FROM
-			PogrnDetail 
-		WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
-		ORDER BY XROW ASC
+			PogrnDetail pd
+			JOIN caitem on caitem.xitem=pd.xitem AND caitem.zid=#{zid}
+		WHERE 
+			pd.xgrnnum=#{xgrnnum} 
+			AND pd.zid=#{zid} 
+			AND pd.zactive='1'
+		ORDER BY pd.XROW ASC
 	</select>
 
 	<select id="getAllPogrnHeader" resultType="PogrnHeader">
-		SELECT * 
+		SELECT ph.*, c.xorg 
 		FROM
-			PogrnHeader
-		WHERE zid=#{zid} AND zactive='1'
-		ORDER BY xgrnnum DESC
+			PogrnHeader ph, Cacus c
+		WHERE ph.xcus=c.xcus AND ph.zid=#{zid} AND ph.zactive='1'
+		ORDER BY ph.xgrnnum DESC
 	</select>
 	
 	<select id = "procInventory" statementType = "CALLABLE">

@@ -15,6 +15,8 @@ public interface PogrnService {
 	public long update(PogrnHeader pogrnHeader);
 
 	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail);
+	
+	public long updatePogrnHeaderTotalAmtAndGrandTotalAmt(String xgrnnum);
 
 	public long saveDetail(PogrnDetail pogrnDetail);
 

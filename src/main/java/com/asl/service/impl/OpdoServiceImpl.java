@@ -138,8 +138,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	}
 
 	@Override
-	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq) {
-		opdoMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, p_screen, p_seq);
+	public void procTransferOPtoAR(String xdornum, String p_screen, String p_seq) {
+		opdoMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdornum, p_screen, p_seq);
 	}
 
 	@Override

@@ -56,7 +56,7 @@
 										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Create GRN</a>
-										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary grn-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == false}" th:href="@{/purchasing/poord/restore/} + ${poordheader.xpornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<!-- Form Pagination -->
@@ -175,6 +175,7 @@
 												<tr>
 													<th>Purchase Order</th>
 													<th>Date</th>
+													<th>Supplier</th>
 													<th>Total Amount</th>
 													<th>Status</th>
 												</tr>
@@ -185,6 +186,7 @@
 														<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(poord.xdate, df)}"></td>
+													<td th:text="${poord.xcus} + ' - ' + ${poord.xorg}"></td>
 													<td th:text="${poord.xtotamt}"></td>
 													<td th:text="${poord.xstatuspor}"></td>
 												</tr>
@@ -223,8 +225,10 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${d.xrow}"></td>
-											<td th:text="${d.xitem}"></td>
+											<td th:text="${dStat.index+1}"></td>
+											<td>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
+											</td>
 											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>

@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
@@ -26,6 +32,10 @@ import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.GRNOrder;
+import com.asl.model.report.GrnReport;
+import com.asl.model.report.ItemDetails;
+import com.asl.service.CacusService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.VataitService;
@@ -46,6 +56,8 @@ public class PogrnController extends ASLAbstractController {
 	private XtrnService xtrnService;
 	@Autowired
 	private VataitService vataitService;
+	@Autowired
+	private CacusService cacusService;
 	
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -54,9 +66,9 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
-		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
 		return "pages/purchasing/pogrn/pogrn";
@@ -72,9 +84,9 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
-		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
 		
@@ -107,9 +119,8 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please provide bill info");
 			return responseHelper.getResponse();
 		}
-
-		// if existing record
-		
+		pogrnHeader.setXgrandtot((pogrnHeader.getXtotamt().subtract(pogrnHeader.getXdiscprime())).add(pogrnHeader.getXvatamt()));
+		// if existing record		
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if(existPogrnHeader != null) {
 			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate", "xtotamt");
@@ -327,6 +338,14 @@ public class PogrnController extends ASLAbstractController {
 		//Get PogrnHeader record by Xgrnnum		
 		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
 		// Validate
+		if(StringUtils.isBlank(pogrnHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please provide a valid supplier to proceed!");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+			responseHelper.setErrorStatusAndMessage("Please add supplier bill no.!");
+			return responseHelper.getResponse();
+		}
 		
 		if("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
@@ -430,6 +449,75 @@ public class PogrnController extends ASLAbstractController {
 		}	
 		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
+	}
+	
+
+	@GetMapping("/print/{xgrnnum}")
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xgrnnum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
+		PogrnHeader oh = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		
+		if (oh == null) {
+			message = "Good Receipt Note not found to print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cacus cacus = cacusService.findByXcus(oh.getXcus());
+		
+		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+
+		GrnReport report = new GrnReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Good Receipt Note");
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+		//report.setCopyrightText("ASL");
+
+		GRNOrder grnOrder = new GRNOrder();
+		grnOrder.setOrderNumber(oh.getXgrnnum());
+		grnOrder.setPoNumber(oh.getXpornum());
+		grnOrder.setSupplier(cacus.getXcus());
+		grnOrder.setSupplierName(cacus.getXorg());
+		grnOrder.setSupplierAddress(cacus.getXmadd());
+		grnOrder.setWarehouse(oh.getXwh());
+		grnOrder.setDate(sdf.format(oh.getXdate()));
+		grnOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : "0.00");
+		grnOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : "0.00");
+		grnOrder.setDiscountAmount(oh.getXdiscprime() != null ? oh.getXdiscprime().toString() : "0.00");
+		grnOrder.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : "0.00");
+		
+
+		List<PogrnDetail> items = pogrnService.findPogrnDetailByXgrnnum(oh.getXgrnnum());
+		if (items != null && !items.isEmpty()) {
+			items.parallelStream().forEach(it -> {
+				ItemDetails item = new ItemDetails();
+				item.setItemCode(it.getXitem());
+				item.setItemName(it.getXitemdesc());
+				item.setItemQty(it.getXqtygrn().toString());
+				item.setItemUnit(it.getXunitpur());
+				item.setItemCategory(it.getXcatitem());
+				item.setItemGroup(it.getXgitem());
+
+				grnOrder.getItems().add(item);
+			});
+		}
+
+		report.getGrnorders().add(grnOrder);
+
+		byte[] byt = getPDFByte(report, "grnreport.xsl");
+		if (byt == null) {
+			message = "Can't print report for GRN : " + xgrnnum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
 
 }

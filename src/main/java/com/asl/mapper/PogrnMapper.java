@@ -11,6 +11,7 @@ public interface PogrnMapper {
 	public long savePogrnHeader(PogrnHeader pogrnHeader);
 	public long updatePogrnHeader(PogrnHeader pogrnHeader);
 	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail);
+	public long updatePogrnHeaderTotalAmtAndGrandTotalAmt(String xgrnnum, String zid);
 
 	public long savePogrnDetail(PogrnDetail pogrnDetail);
 	public long updatePogrnDetail(PogrnDetail pogrnDetail);

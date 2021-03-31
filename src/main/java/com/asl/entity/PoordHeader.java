@@ -68,4 +68,7 @@ public class PoordHeader extends AbstractModel<String> {
 
 	@Transient
 	private String xtrnpor;
+	
+	@Transient
+	private String xorg;
 }
