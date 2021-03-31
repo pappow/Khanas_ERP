@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -322,6 +323,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
 		headers.add("X-Content-Type-Options", "nosniff");
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 		PoordHeader oh = poordService.findPoordHeaderByXpornum(xpornum);
 		
@@ -338,9 +340,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
 		report.setReportName("Purchase Order");
-		report.setFromDate(SDF.format(oh.getXdate()));
-		report.setToDate(SDF.format(oh.getXdate()));
-		report.setPrintDate(SDF.format(new Date()));
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
 		//report.setCopyrightText("ASL");
 
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -349,7 +351,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		purchaseOrder.setSupplierName(cacus.getXorg());
 		purchaseOrder.setSupplierAddress(cacus.getXmadd());
 		purchaseOrder.setWarehouse(oh.getXwh());
-		purchaseOrder.setDate(SDF.format(oh.getXdate()));
+		purchaseOrder.setDate(sdf.format(oh.getXdate()));
 
 		List<PoordDetail> items = poordService.findPoorddetailByXpornum(oh.getXpornum());
 		if (items != null && !items.isEmpty()) {

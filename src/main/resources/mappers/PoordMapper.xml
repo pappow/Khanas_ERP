@@ -233,7 +233,7 @@
 	</select>
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xtype=#{xtype} AND zid=#{zid} AND zactive='1' ORDER BY xpornum DESC
+		SELECT ph.*, c.xorg FROM PoordHeader ph, Cacus c WHERE ph.xtype=#{xtype} AND ph.xcus = c.xcus AND ph.zid=#{zid} AND ph.zactive='1' ORDER BY xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">

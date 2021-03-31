@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,15 +24,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.Pocrndetail;
-import com.asl.entity.PogrnDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.SalesOrder;
+import com.asl.model.report.SalesOrderChalanReport;
+import com.asl.service.CacusService;
 import com.asl.service.OpcrnService;
 import com.asl.service.OpdoService;
 import com.asl.service.VataitService;
@@ -48,6 +56,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 	private XtrnService xtrnService;
 	@Autowired
 	private VataitService vataitService;
+	@Autowired
+	private CacusService cacusService;
 	
 	@GetMapping
 	public String loadInvoicePage(Model model) {
@@ -380,6 +390,96 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}	
 		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/print/{pType}/{xdornum}")
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
+			@PathVariable String xdornum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
+		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+		
+		if (oh == null) {
+			message = "Invoice not found to print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cacus cacus = cacusService.findByXcus(oh.getXcus());
+		Opdoheader chalan = opdoService.findOpdoHeaderByXdornum(oh.getXdocnum());
+		if (chalan == null) {
+			message = "Invoice is not assigned to a chalan";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+
+		// for(Opdoheader so : salesOrders) {
+
+		SalesOrderChalanReport report = new SalesOrderChalanReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Delivery Chalan");
+		report.setFromDate(sdf.format(chalan.getXdate()));
+		report.setToDate(sdf.format(chalan.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+		report.setCopyrightText("Copyright © 2021 - ASL");
+
+		report.setChalanNumber(chalan.getXdornum());
+		report.setChalanDate(sdf.format(chalan.getXdate()));
+		report.setChalanStatus(chalan.getXstatusar());
+
+		SalesOrder salesOrder = new SalesOrder();
+		salesOrder.setOrderNumber(oh.getXdornum());
+		salesOrder.setReqBranch(oh.getXcus());
+		salesOrder.setCustomer(cacus.getXorg());
+		salesOrder.setCustomerAddress(cacus.getXmadd());
+		salesOrder.setDate(sdf.format(oh.getXdate()));
+		if ("invoice".equalsIgnoreCase(pType)) {
+			report.setReportName("Invoice Order");
+
+			salesOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setDiscountAmount(oh.getXdiscamt() != null ? oh.getXdiscamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
+		}
+
+		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
+		if (items != null && !items.isEmpty()) {
+			items.parallelStream().forEach(it -> {
+				ItemDetails item = new ItemDetails();
+				item.setItemCode(it.getXitem());
+				item.setItemName(it.getXdesc());
+				item.setItemQty(it.getXqtyord().toString());
+				item.setItemUnit(it.getXunitsel());
+				item.setItemCategory(it.getXcatitem());
+				item.setItemGroup(it.getXgitem());
+
+				if ("invoice".equalsIgnoreCase(pType)) {
+					item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
+					item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
+				}
+
+				salesOrder.getItems().add(item);
+			});
+		}
+
+		report.getSalesorders().add(salesOrder);
+
+		byte[] byt;
+		if ("invoice".equalsIgnoreCase(pType))
+			byt = getPDFByte(report, "invoicereport.xsl");
+		else
+			byt = getPDFByte(report, "deliveryorderreport.xsl");
+		if (byt == null) {
+			message = "Can't print report for chalan : " + xdornum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
 
 

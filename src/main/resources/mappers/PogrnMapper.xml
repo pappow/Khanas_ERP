@@ -252,11 +252,11 @@
 	</select>
 
 	<select id="getAllPogrnHeader" resultType="PogrnHeader">
-		SELECT * 
+		SELECT ph.*, c.xorg 
 		FROM
-			PogrnHeader
-		WHERE zid=#{zid} AND zactive='1'
-		ORDER BY xgrnnum DESC
+			PogrnHeader ph, Cacus c
+		WHERE ph.xcus=c.xcus AND ph.zid=#{zid} AND ph.zactive='1'
+		ORDER BY ph.xgrnnum DESC
 	</select>
 	
 	<select id = "procInventory" statementType = "CALLABLE">

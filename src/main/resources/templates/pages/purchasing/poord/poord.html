@@ -175,6 +175,7 @@
 												<tr>
 													<th>Purchase Order</th>
 													<th>Date</th>
+													<th>Supplier</th>
 													<th>Total Amount</th>
 													<th>Status</th>
 												</tr>
@@ -185,6 +186,7 @@
 														<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(poord.xdate, df)}"></td>
+													<td th:text="${poord.xcus} + ' - ' + ${poord.xorg}"></td>
 													<td th:text="${poord.xtotamt}"></td>
 													<td th:text="${poord.xstatuspor}"></td>
 												</tr>
@@ -223,8 +225,10 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${d.xrow}"></td>
-											<td th:text="${d.xitem}"></td>
+											<td th:text="${dStat.index+1}"></td>
+											<td>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
+											</td>
 											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>

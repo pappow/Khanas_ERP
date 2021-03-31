@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -65,9 +66,9 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
-		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
 		return "pages/purchasing/pogrn/pogrn";
@@ -83,9 +84,9 @@ public class PogrnController extends ASLAbstractController {
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode()));
-		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
 		
@@ -337,6 +338,14 @@ public class PogrnController extends ASLAbstractController {
 		//Get PogrnHeader record by Xgrnnum		
 		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
 		// Validate
+		if(StringUtils.isBlank(pogrnHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please provide a valid supplier to proceed!");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+			responseHelper.setErrorStatusAndMessage("Please add supplier bill no.!");
+			return responseHelper.getResponse();
+		}
 		
 		if("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
@@ -449,9 +458,9 @@ public class PogrnController extends ASLAbstractController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
 		headers.add("X-Content-Type-Options", "nosniff");
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 		PogrnHeader oh = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-		
 		
 		if (oh == null) {
 			message = "Good Receipt Note not found to print";
@@ -465,9 +474,9 @@ public class PogrnController extends ASLAbstractController {
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
 		report.setReportName("Good Receipt Note");
-		report.setFromDate(SDF.format(oh.getXdate()));
-		report.setToDate(SDF.format(oh.getXdate()));
-		report.setPrintDate(SDF.format(new Date()));
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
 		//report.setCopyrightText("ASL");
 
 		GRNOrder grnOrder = new GRNOrder();
@@ -477,7 +486,7 @@ public class PogrnController extends ASLAbstractController {
 		grnOrder.setSupplierName(cacus.getXorg());
 		grnOrder.setSupplierAddress(cacus.getXmadd());
 		grnOrder.setWarehouse(oh.getXwh());
-		grnOrder.setDate(SDF.format(oh.getXdate()));
+		grnOrder.setDate(sdf.format(oh.getXdate()));
 		grnOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : "0.00");
 		grnOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : "0.00");
 		grnOrder.setDiscountAmount(oh.getXdiscprime() != null ? oh.getXdiscprime().toString() : "0.00");
