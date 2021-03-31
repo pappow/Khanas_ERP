@@ -28,4 +28,5 @@ public class ImstockServiceImpl extends AbstractGenericService implements Imstoc
 	public List<Imstock> search(String xwh, String xitem) {
 		return imstockMapper.search(xwh, xitem.toUpperCase(), sessionManager.getBusinessId());
 	}
+
 }

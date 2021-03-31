@@ -43,9 +43,9 @@ public class StockTransferOrderController extends ASLAbstractController {
 	public String loadTransferOrderdPage(Model model) {
 		model.addAttribute("imtorheader", getDefaultImtorHeader());
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeader());
-		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode()));
-		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		//model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		
 		return "pages/inventory/transferorder/imtor";
@@ -58,9 +58,9 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 		model.addAttribute("imtorheader", data);
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeader());
-		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode()));
+		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		return "pages/inventory/transferorder/imtor";
 	}
