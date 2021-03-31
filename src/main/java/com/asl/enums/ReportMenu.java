@@ -23,7 +23,8 @@ public enum ReportMenu {
 	CL(10, "CL", "Customer Ledger List", ReportParamMap.CL, "CL.rptdesign", "CL", "Y", "/report/CL"),
 	BOML(11, "BOML", "BOM List", ReportParamMap.BOML, "BOML.rptdesign", "BOML", "Y", "/report/BOML"),
 	PL(12, "PL", "Purchase Order List", ReportParamMap.PL, "PL.rptdesign", "PL", "Y", "/report/PL"),
-	SOL(13, "SOL", "Sales Order List", ReportParamMap.SOL, "SOL.rptdesign", "SOL", "Y", "/report/SOL");
+	SOL(13, "SOL", "Sales Order List", ReportParamMap.SOL, "SOL.rptdesign", "SOL", "Y", "/report/SOL"),
+	SOE(14, "SOE", "Supplier Opening Balanace", ReportParamMap.SOE, "SOE.rptdesign", "SOE", "Y", "/report/SOE");
 
 	private int group;
 	private String code;

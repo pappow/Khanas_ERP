@@ -24,6 +24,7 @@ public class ReportParamMap {
 	public static final Map<String, String> BOML = new HashMap<>();
 	public static final Map<String, String> PL = new HashMap<>();
 	public static final Map<String, String> SOL = new HashMap<>();
+	public static final Map<String, String> SOE = new HashMap<>();
 
 	public static final Map<String, String> SRS = new HashMap<>();
 	public static final Map<String, String> SRSV = new HashMap<>();
@@ -76,7 +77,7 @@ public class ReportParamMap {
 		
 		STOCKL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		STOCKL.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
-		STOCKL.put("param3", "XDESC|" + ReportParamDataType.STRING.name());
+		STOCKL.put("param3", "XWH|" + ReportParamDataType.STRING.name());
 		
 		ITEML.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		ITEML.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
@@ -121,6 +122,10 @@ public class ReportParamMap {
 		SOL.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
 		SOL.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
 		SOL.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
+		
+		SOE.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		SOE.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
+		
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
