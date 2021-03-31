@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -10,22 +11,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Caitem;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
+import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
 import com.asl.mapper.OpordMapper;
 import com.asl.mapper.PoordMapper;
 import com.asl.service.OpdoService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class OpdoServiceImpl extends AbstractGenericService implements OpdoService {
 
 	@Autowired private OpdoMapper opdoMapper;
 	@Autowired private OpordMapper opordMapper;
 	@Autowired private PoordMapper poordMapper;
+	@Autowired private CaitemMapper caitemMapper;
 
 	@Override
 	public long save(Opdoheader opdoHeader) {
@@ -224,22 +231,33 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			if(count == 0) continue;
 			salesSavedCount++;
 
+			// find recently saved sales header
 			Opdoheader savedSales = opdoMapper.findPoordHeaderByXordernumAndRequisitionnumber(so.getXordernum(), so.getXpornum(), sessionManager.getBusinessId());
 			if(savedSales == null) continue;
+
+			// total amount init for sales header
+			BigDecimal totalAmt = BigDecimal.ZERO;
 
 			// now prepare item details
 			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(so.getXordernum(), sessionManager.getBusinessId());
 			for(Oporddetail soItem : salesOrdeItems) {
+				Caitem caitem = caitemMapper.findByXitem(soItem.getXitem(), sessionManager.getBusinessId());
+				if(caitem == null) continue;
+
 				Opdodetail item = new Opdodetail();
 				item.setXdornum(savedSales.getXdornum());
 				item.setXitem(soItem.getXitem());
-				item.setXqtyord(soItem.getXqtyord());
+				item.setXqtyord(soItem.getXqtyord() != null ? soItem.getXqtyord() : BigDecimal.ZERO);
 				item.setXunitsel(soItem.getXunit());
 				item.setZid(sessionManager.getBusinessId());
 				item.setXcatitem(soItem.getXcatitem());
 				item.setXgitem(soItem.getXgitem());
+				item.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
 				long itemcount = opdoMapper.saveOpdoDetail(item);
 				if(itemcount == 0) continue;
+
+				// calculate totalAmt
+				totalAmt = totalAmt.add(item.getXqtyord().multiply(item.getXrate()));
 
 				// Add item for delivery chalan also
 				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(savedDeliveryChalan.getXdornum(), soItem.getXitem(), sessionManager.getBusinessId());
@@ -252,6 +270,11 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				}
 
 			}
+			
+			// now update sales header with total amount
+			savedSales.setXtotamt(totalAmt);
+			long count2 = opdoMapper.updateOpdoHeader(savedSales);
+			if(count2 == 0) log.error("Can't update sales header with total amount");
 		}
 
 		if(salesSavedCount == salesOrders.size()) {

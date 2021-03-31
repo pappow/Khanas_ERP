@@ -208,7 +208,7 @@
 			poorddetail.zactive
 		FROM 
 			poorddetail 
-			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{zid}
+			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{centralzid}
 		WHERE 
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{zid}
@@ -233,7 +233,17 @@
 	</select>
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
-		SELECT ph.*, c.xorg FROM PoordHeader ph, Cacus c WHERE ph.xtype=#{xtype} AND ph.xcus = c.xcus AND ph.zid=#{zid} AND ph.zactive='1' ORDER BY xpornum DESC
+		SELECT 
+			ph.*, c.xorg 
+		FROM 
+			POORDHEADER ph 
+			LEFT JOIN CACUS c ON c.xcus=ph.xcus
+		WHERE 
+			ph.xtype='Requisition Order'
+			AND ph.zid='900010' 
+			AND ph.zactive='1'
+		ORDER BY 
+			xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">
