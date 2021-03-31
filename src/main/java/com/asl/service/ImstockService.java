@@ -14,4 +14,6 @@ import com.asl.entity.Imstock;
 public interface ImstockService {
 
 	public List<Imstock> searchXitem(String xitem);
+
+	public List<Imstock> search(String xwh, String xitem);
 }

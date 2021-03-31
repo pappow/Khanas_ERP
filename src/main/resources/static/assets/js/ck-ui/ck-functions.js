@@ -531,6 +531,7 @@ function submitReportForm(customurl){
 	var submitType = targettedForm.attr('method');
 	var formData = $(targettedForm).serializeArray();
 	var reportType = $('#reportType').val();
+	if(reportType == undefined || reportType == '') reportType = "PDF";
 	var reportName = $('#reportName').val() != '' ? $('#reportName').val() : 'report';
 
 	$.ajax({

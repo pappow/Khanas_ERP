@@ -56,9 +56,7 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		StringWriter result = new StringWriter();
 		jaxbMarshaller.marshal(ob, result);
-
-		
-
+		log.info(result.toString());
 		return result.toString();
 	}
 
@@ -123,7 +121,6 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		if(ob == null || StringUtils.isBlank(template)) return null;
 
 		String xml = parseXMLString(ob);
-		log.info(xml);
 		if(StringUtils.isBlank(xml)) {
 			log.error(ERROR, "Cant't generate xml string from object");
 			return null;

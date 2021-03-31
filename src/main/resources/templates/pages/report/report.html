@@ -47,14 +47,19 @@
 								<h1><span th:text="${reportName}"></span></h1>
 							</div>
 							<div class="section-body togglebox">
-
-								<form id="reportform" class="form-horizontal" th:action="@{/report/print}" method="POST">
+								<form th:if="${not fopEnabled}" id="reportform" class="form-horizontal" th:action="@{/report/print}" method="POST">
+									<input type="hidden" id="reportName" th:value="${reportName}"/>
+									<input type="hidden" name="reportCode" th:value="${reportCode}"/>
+									<div th:include="pages/report/reports :: report-fields" th:with="df=${'E, dd-MMM-yyyy'}"></div>
+								</form>
+								<form th:if="${fopEnabled}" id="reportform" class="form-horizontal" th:action="@{/report/print/fop}" method="POST">
 									<input type="hidden" id="reportName" th:value="${reportName}"/>
 									<input type="hidden" name="reportCode" th:value="${reportCode}"/>
 									<div th:include="pages/report/reports :: report-fields" th:with="df=${'E, dd-MMM-yyyy'}"></div>
 								</form>
 								<div class="col-md-12" style="margin-top: 20px;">
-									<button class="btn btn-success pull-right confirm-rpt-birt-btn">Generate</button>
+									<button th:if="${not fopEnabled}" class="btn btn-success pull-right confirm-rpt-birt-btn">Generate</button>
+									<button th:if="${fopEnabled}" class="btn btn-success pull-right confirm-rpt-btn">Generate</button>
 								</div>
 							</div>
 						</section>
