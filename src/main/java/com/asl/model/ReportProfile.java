@@ -31,6 +31,7 @@ public class ReportProfile implements Serializable {
 	private static final long serialVersionUID = 5690006573031426825L;
 	private static final String ERROR = "Error is : {}, {}";
 
+
 	private ProfileLine RM0301;
 	private ProfileLine RM0302;
 	private ProfileLine RM0303;
@@ -66,6 +67,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine RM0606;
 	private ProfileLine RM0607;
 	private ProfileLine RM0608;
+
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();

@@ -23,6 +23,7 @@ public enum ReportMenu {
 	RM0310(999, "300", "Procurements", "Supplier Opening Balanace", ReportParamMap.RM0310, "Y", false, false, 1000),
 	RM0311(999, "300", "Procurements", "Supplier List", ReportParamMap.RM0311, "Y", false, false, 1000),
 
+
 	// Sales & Invoicing  -- M0400
 	RM0401(999, "400", "Sales & Invoicing", "Sales Order Listing", ReportParamMap.RM0401, "Y", false, false, 1000),
 	RM0402(999, "400", "Sales & Invoicing", "Sales Listing Detail", ReportParamMap.RM0402, "Y", false, false, 1000),
