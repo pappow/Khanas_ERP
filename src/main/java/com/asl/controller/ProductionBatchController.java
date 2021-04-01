@@ -107,6 +107,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				batch.setXqtyprd(item.getXqtyord());
 				batch.setXqtycom(item.getXqtyord());
 				batch.setXstatusmor("Open");
+				batch.setXwh("Production Store");
 				batcList.add(batch);
 			}
 
@@ -262,6 +263,8 @@ public class ProductionBatchController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 		}
+		
+		modetail.setXwh("Production Store");
 
 		// if existing
 		Modetail md = moService.findModetailByXrowAndXbatch(modetail.getXrow(), modetail.getXbatch());
