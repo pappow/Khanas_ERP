@@ -50,7 +50,7 @@
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
 									<tr>
-										<td colspan="2">Sales</td>
+										<td colspan="2">Sales Order</td>
 									</tr>
 									<tr>
 										<td><a th:href="@{/salesninvoice/salesorder}">Sales Orders (Branch)</a></td>
@@ -77,15 +77,19 @@
 										</td>
 									</tr>
 									
+									
 									<tr>
-										<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales Orders Invoice</a></td>
+										<td colspan="2">Sales</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales Invoice</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									
 									<tr>
-										<td><a th:href="@{/salesninvoice/directsales}">Sales Order Invoice (Direct)</a></td>
+										<td><a th:href="@{/salesninvoice/directsales}">Sales Invoice (Direct)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
