@@ -132,7 +132,7 @@
 			PogrnHeader
 		SET
 			xtotamt=(SELECT SUM(xlineamt) FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'),
-			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscamt) FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1')
+			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscprime) FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1')
 		WHERE
 			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
 	</update>

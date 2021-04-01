@@ -113,7 +113,15 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	@Override
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum) {
 		if(StringUtils.isBlank(xpornum)) return Collections.emptyList();
-		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId(), sessionManager.getZbusiness().getCentralzid());
+		
+		String centralZid = null;
+		if(Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) {
+			centralZid = sessionManager.getBusinessId();
+		} else {
+			centralZid = sessionManager.getZbusiness().getCentralzid();
+		}
+		
+		return poordMapper.findPoorddetailByXpornum(xpornum, sessionManager.getBusinessId(), centralZid);
 	}
 
 	@Override

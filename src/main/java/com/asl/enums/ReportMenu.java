@@ -17,7 +17,7 @@ public enum ReportMenu {
 	ITEML(4, "ITEML", "Item List", ReportParamMap.ITEML, "ITEML.rptdesign", "ITEML", "Y", "/report/ITEML", false, "ITEML.xsl", false, 1000),
 	POL(5, "POL", "Purchase Order List", ReportParamMap.POL, "POL.rptdesign", "POL", "Y", "/report/POL", false, "POL.xsl", false, 1000),
 	PDL(6, "PDL", "Purchase Deviation List", ReportParamMap.PDL, "PDL.rptdesign", "PDL", "Y", "/report/PDL", false, "PDL.xsl", false, 1000),
-	GRNL(7, "GRNL", "GRN List", ReportParamMap.GRNL, "GRNL.rptdesign", "GRNL", "Y", "/report/GRNL", false, "GRNL.xsl", false, 1000),
+	GRNL(7, "GRNL", "GRN List", ReportParamMap.GRNL, "GRNL.rptdesign", "GRNL", "Y", "/report/GRNL", true, "GRNL.xsl", false, 1000),
 	SUGL(8, "SUGL", "Suggestion List", ReportParamMap.SUGL, "SUGL.rptdesign", "SUGL", "Y", "/report/SUGL", false, "SUGL.xsl", false, 1000),
 	SL(9, "SL", "Supplier Ledger List", ReportParamMap.SL, "SL.rptdesign", "SL", "Y", "/report/SL", false, "SL.xsl", false, 1000),
 	CL(10, "CL", "Customer Ledger List", ReportParamMap.CL, "CL.rptdesign", "CL", "Y", "/report/CL", false, "CL.xsl", false, 1000),

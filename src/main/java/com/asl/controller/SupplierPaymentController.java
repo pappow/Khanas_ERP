@@ -39,7 +39,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 		
 		model.addAttribute("arhed", getDefaultArhed());		
 		model.addAttribute("allArhed", arhedService.getAllArheds());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.VOUCHER_NUMBER.getCode()));
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
@@ -57,7 +57,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 
 		model.addAttribute("arhed", data);
 		model.addAttribute("allArhed", arhedService.getAllArheds());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.VOUCHER_NUMBER.getCode()));
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeLiist", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
