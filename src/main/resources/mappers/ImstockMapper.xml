@@ -6,4 +6,24 @@
 	<select id="searchXitem" resultType="Imstock">
 		SELECT DISTINCT xitem FROM imstock WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%') AND zid=#{zid} ORDER BY xitem
 	</select>
+
+	<select id="search" resultType="Imstock">
+		SELECT
+			IM.*,
+			Z.ZORG,
+			Z.XMADD
+		FROM
+			IMSTOCK IM
+			LEFT JOIN ZBUSINESS Z ON Z.ZID=IM.ZID
+		WHERE
+			IM.ZID=#{zid}
+			<if test="xitem != null and xitem != ''">
+			AND XITEM=#{xitem}
+			</if>
+			<if test="xwh != null and xwh != ''">
+			AND XWH=#{xwh}
+			</if>
+		ORDER BY 
+			IM.XWH, IM.XITEM, IM.XCATITEM
+	</select>
 </mapper>

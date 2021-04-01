@@ -3,12 +3,20 @@ package com.asl.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +24,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.xml.sax.SAXException;
 
 import com.asl.enums.ReportMenu;
 import com.asl.enums.ReportParamDataType;
+import com.asl.enums.ReportType;
 import com.asl.model.RequestParameters;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +62,7 @@ public class ReportController extends ASLAbstractController {
 		model.addAttribute("selectedReport", rm.getCode());
 		model.addAttribute("reportCode", rm.getCode().toLowerCase());
 		model.addAttribute("reportName", rm.getDescription());
+		model.addAttribute("fopEnabled", rm.isFopEnabled());
 		return "pages/report/report";
 	}
 
@@ -79,6 +90,56 @@ public class ReportController extends ASLAbstractController {
 		});
 
 		return url.toString();
+	}
+
+	@PostMapping("/print/fop")
+	public ResponseEntity<Object> printFop(RequestParameters params) throws IOException {
+		ReportMenu rm = ReportMenu.valueOf(params.getReportCode().toUpperCase());
+
+		String message = "";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		// Parameters to send
+		String reportName = appConfig.getReportTemplatepath() + "/" + rm.getReportFile();
+		String reportTitle = "Test Report";
+		boolean attachment = true;
+
+		ReportType reportType = ReportType.PDF;
+		Map<String, Object> reportParams = new HashMap<>();
+		for(Map.Entry<String, String> m : rm.getParamMap().entrySet()) {
+			String reportParamFieldName = m.getKey();
+			String[] arr = m.getValue().split("\\|");
+			String cristalReportParamName = arr[0];
+			ReportParamDataType paramType = ReportParamDataType.valueOf(arr[1]);
+			Object method = RequestParameters.invokeGetter(params, reportParamFieldName);
+			if("reportViewType".equalsIgnoreCase(cristalReportParamName)) {
+				reportType = (ReportType) method;
+				continue;
+			}
+			convertObjectAndPutIntoMap(cristalReportParamName, paramType, method, reportParams);
+		}
+
+		// FOP
+		reportName = appConfig.getXslPath() + "/" + rm.getXslFile();
+		byte[] byt = null;
+		try {
+			byt = getReportFieldService(rm).getPDFReportByte(reportName, reportParams);
+		} catch (JAXBException | ParserConfigurationException | SAXException | TransformerFactoryConfigurationError
+				| TransformerException e) {
+			log.error(ERROR, e.getMessage(), e);
+		} catch (ParseException e) {
+			log.error(ERROR, e.getMessage(), e);
+		}
+		if(byt == null) {
+			String encodedString = Base64.getEncoder().encodeToString(message.getBytes());
+			return new ResponseEntity<>(encodedString, headers, HttpStatus.OK);
+		}
+
+		String encodedString = Base64.getEncoder().encodeToString(byt);
+		return new ResponseEntity<>(encodedString, headers, HttpStatus.OK);
+
 	}
 
 	private void convertObjectAndPutIntoMap(String paramName, ReportParamDataType paramType, Object method, Map<String, Object> reportParams) {
