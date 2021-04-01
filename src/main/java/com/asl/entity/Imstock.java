@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,13 +46,13 @@ public class Imstock extends AbstractModel<String> {
 	private String xdesc;
 
 	@Column(name = "xrate")
-	private Integer xrate;
+	private BigDecimal xrate;
 
 	@Column(name = "xmrp")
 	private String xmrp;
 
 	@Column(name = "xdealerp")
-	private Integer xdealerp;
+	private BigDecimal xdealerp;
 
 	@Column(name = "xgitem")
 	private String xgitem;
@@ -59,19 +61,19 @@ public class Imstock extends AbstractModel<String> {
 	private String xcatitem;
 
 	@Column(name = "xopalc")
-	private Integer xopalc;
+	private BigDecimal xopalc;
 
 	@Column(name = "xqtyit")
-	private Integer xqtyit;
+	private BigDecimal xqtyit;
 
 	@Column(name = "xqtyrt")
-	private Integer xqtyrt;
+	private BigDecimal xqtyrt;
 
 	@Column(name = "xinhand")
-	private Integer xinhand;
+	private BigDecimal xinhand;
 
 	@Column(name = "xavail")
-	private Integer xavail;
+	private BigDecimal xavail;
 
 	@Transient
 	private String zorg;
