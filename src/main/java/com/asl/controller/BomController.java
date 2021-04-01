@@ -84,6 +84,8 @@ public class BomController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Invalid item for BOM entry");
 			return responseHelper.getResponse();
 		}
+		
+		
 
 		// check existing
 		Bmbomheader existBom = bmbomService.findBmbomheaderByXbomkey(bmbomheader.getXbomkey());
@@ -201,6 +203,8 @@ public class BomController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Item not found in the system");
 			return responseHelper.getResponse();
 		}
+
+		bmbomdetail.setXwh("Production Store");
 
 		// if existing
 		Bmbomdetail existDetail = bmbomService.findBmbomdetailByXbomkeyAndXbomrow(bmbomdetail.getXbomkey(), bmbomdetail.getXbomrow());
