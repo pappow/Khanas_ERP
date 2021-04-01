@@ -220,9 +220,9 @@ public class SearchSuggestController extends ASLAbstractController {
 	@GetMapping("/report/stock/xitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAllXitem(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-
 		List<SearchSuggestResult> list = new ArrayList<>();
-		imstockService.searchXitem(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(),c.getXitem())));
+		List<Caitem> caitemList = caitemService.searchCaitem(hint);
+		caitemList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
 	

@@ -1,15 +1,25 @@
 package com.asl.service.report.impl;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
+import com.asl.enums.ReportParamDataType;
 import com.asl.model.DropdownOption;
 import com.asl.model.FormFieldBuilder;
 import com.asl.service.XcodesService;
@@ -50,4 +60,20 @@ public class GRNLServiceImpl extends AbstractReportService {
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
+
+	@Override
+	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
+			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+			TransformerFactoryConfigurationError, TransformerException, ParseException {
+		
+		String status = (String) reportParams.get("XGRNSTATUS");
+		String fromDate = (String) reportParams.get("FromDate");
+		String toDate = (String) reportParams.get("ToDate");
+		
+		
+		
+		return super.getPDFReportByte(templatePath, reportParams);
+	}
+
+	
 }

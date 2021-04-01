@@ -58,19 +58,10 @@
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success confirmimtor-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/archive/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == false}" th:href="@{/inventory/transferorder/restore/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/inventory/transferorder/save}" th:object="${imtorheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
-											<!-- <input type="hidden" th:field="*{xtype}"/> -->
 											<input type="hidden" id="xtornum" th:if="${not #strings.isEmpty(imtorheader.xtornum)}" class="form-control" th:field="*{xtornum}">
-											<!-- <input type="hidden" class="form-control" th:field="*{xtotamt}"> -->
 											<div class="row">
 												<div class="col-md-6">
 
@@ -132,15 +123,6 @@
 												</div>
 												<div class="col-md-6">
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatustor">T.O. Status : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatustor}">
-																<option th:each="s : ${torstatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div>
-													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xref">Ref : </label>
 														<div class="col-md-8">
