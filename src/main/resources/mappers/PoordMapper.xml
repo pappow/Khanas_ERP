@@ -239,8 +239,8 @@
 			POORDHEADER ph 
 			LEFT JOIN CACUS c ON c.xcus=ph.xcus
 		WHERE 
-			ph.xtype='Requisition Order'
-			AND ph.zid='900010' 
+			ph.xtype=#{xtype}
+			AND ph.zid=#{zid} 
 			AND ph.zactive='1'
 		ORDER BY 
 			xpornum DESC

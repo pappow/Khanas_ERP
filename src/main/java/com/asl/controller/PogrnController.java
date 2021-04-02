@@ -119,8 +119,16 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please provide bill info");
 			return responseHelper.getResponse();
 		}
+		
+		
+		if(pogrnHeader.getXdiscprime() == null)
+			pogrnHeader.setXdiscprime(BigDecimal.ZERO);
+		if(pogrnHeader.getXtotamt() == null)
+			pogrnHeader.setXtotamt(BigDecimal.ZERO);
 		pogrnHeader.setXgrandtot((pogrnHeader.getXtotamt().subtract(pogrnHeader.getXdiscprime())).add(pogrnHeader.getXvatamt()));
-		// if existing record		
+		
+		pogrnHeader.setXgrandtot(BigDecimal.ZERO);
+		// if existing record		 
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if(existPogrnHeader != null) {
 			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate", "xtotamt");

@@ -41,4 +41,6 @@ public interface PogrnService {
 
 	// Search
 	public List<PogrnHeader> searchPoord(String xpornum);
+	
+	//public List<PogrnHeader> search(String xwh,String sup,String status,String fromDate,String toDate);
 }

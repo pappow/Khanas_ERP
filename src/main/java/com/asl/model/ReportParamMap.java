@@ -95,9 +95,11 @@ public class ReportParamMap {
 		PDL.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
 		
 		GRNL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		GRNL.put("param2", "XGRNSTATUS|" + ReportParamDataType.STRING.name());
-		GRNL.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
-		GRNL.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
+		GRNL.put("param2", "XWH|" + ReportParamDataType.STRING.name());
+		GRNL.put("param3", "SUP|" + ReportParamDataType.STRING.name());
+		GRNL.put("param4", "XGRNSTATUS|" + ReportParamDataType.STRING.name());
+		GRNL.put("param5", "FromDate|" + ReportParamDataType.DATE.name());
+		GRNL.put("param6", "ToDate|" + ReportParamDataType.DATE.name());
 		
 		SUGL.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		SUGL.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());

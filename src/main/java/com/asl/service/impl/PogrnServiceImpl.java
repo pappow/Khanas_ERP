@@ -123,5 +123,11 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		return pogrnMapper.searchPoord(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
 
+	/*
+	 * @Override public List<PogrnHeader> search(String xwh, String sup, String
+	 * status, String fromDate, String toDate) { // TODO Auto-generated method stub
+	 * return pogrnMapper.search(xwh, sup, status, fromDate, toDate); }
+	 */
+
 
 }
