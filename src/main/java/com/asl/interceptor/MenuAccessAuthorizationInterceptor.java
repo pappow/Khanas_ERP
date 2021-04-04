@@ -48,7 +48,7 @@ public class MenuAccessAuthorizationInterceptor implements AsyncHandlerIntercept
 		boolean stat = true;
 		for (com.asl.enums.MenuProfile menu : com.asl.enums.MenuProfile.values()) {
 			if(modulePath.startsWith(menu.getMenuPath())) {
-				ProfileLine pl = MenuProfile.invokeGetter(mp, menu.getProfileField());
+				ProfileLine pl = MenuProfile.invokeGetter(mp, menu.getCode());
 				if(pl == null) {
 					stat = true;
 					continue;
