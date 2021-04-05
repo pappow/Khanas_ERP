@@ -43,8 +43,6 @@ public class ProfileController extends ASLAbstractController {
 		Profile profile = profileService.findByProfilecode(profilecode);
 		if(profile == null) return "redirect:/system/profile";
 
-		model.addAttribute("profile", profile);
-
 		if(ProfileType.M.equals(profile.getProfiletype())) {
 			model.addAttribute("menuprofile", profileService.getMenuProfileByProfilecode(profile.getProfilecode()));
 		} else if (ProfileType.U.equals(profile.getProfiletype())) {
@@ -53,6 +51,7 @@ public class ProfileController extends ASLAbstractController {
 			model.addAttribute("reportprofile", profileService.getReportProfileByProfilecode(profile.getProfilecode()));
 		}
 
+		model.addAttribute("profile", profile);
 		model.addAttribute("profiles", profileService.getAllProfiles());
 		return "pages/system/usersentry/profile/profile";
 	}

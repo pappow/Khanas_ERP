@@ -99,11 +99,11 @@ public class ModelValidator extends ConstraintValidator {
 		if (errors.hasErrors()) return;
 
 		// Check for duplicate profile if this profile has id
-		Profile pr = profileService.findByProfilecodeAndProfiletype(profile.getProfilecode().toUpperCase(), profile.getProfiletype());
+		if(!"Y".equalsIgnoreCase(profile.getNewflag())) return;
+
+ 		Profile pr = profileService.findByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		if(pr == null) return;
 
-		if(profile.getProfilecode() == null || (!profile.getProfilecode().equals(pr.getProfilecode()))) {
-			errors.rejectValue("profileCode", "Profile code exist");
-		}
+		errors.rejectValue("profilecode", "Profile code already exist");
 	}
 }

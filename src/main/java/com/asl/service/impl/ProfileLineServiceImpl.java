@@ -37,9 +37,9 @@ public class ProfileLineServiceImpl extends AbstractGenericService implements Pr
 	}
 
 	@Override
-	public ProfileLine findByProfilelineid(Long profilelineid) {
+	public ProfileLine findByProfilelineid(String profilelineid) {
 		if(profilelineid == null) return null;
-		return profileLineMapper.findByProfilelineid(profilelineid);
+		return profileLineMapper.findByProfilelineid(profilelineid, sessionManager.getBusinessId());
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public interface ProfileLineMapper {
 
 	long update(ProfileLine profileLine);
 
-	ProfileLine findByProfilelineid(Long profilelineid);
+	ProfileLine findByProfilelineid(String profilelineid, String zid);
 
 	List<ProfileLine> getAllByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype, String zid);
 }

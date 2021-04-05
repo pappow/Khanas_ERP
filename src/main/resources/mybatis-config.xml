@@ -29,8 +29,8 @@
 		<mapper resource="mappers/PoordMapper.xml"/>
 		<mapper resource="mappers/ProcErrorLogMapper.xml"/>
 		<mapper resource="mappers/ProductionSuggestionMapper.xml"/>
-		<mapper resource="mappers/ProfieLineMapper.xml"/>
-		<mapper resource="mappers/ProfieMapper.xml"/>
+		<mapper resource="mappers/ProfileLineMapper.xml"/>
+		<mapper resource="mappers/ProfileMapper.xml"/>
 		<mapper resource="mappers/ProfileAllocationMapper.xml"/>
 		<mapper resource="mappers/UserAuditRecordMapper.xml"/>
 		<mapper resource="mappers/VataitMapper.xml"/>

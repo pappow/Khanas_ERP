@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.asl.enums.MenuProfile;
 import com.asl.enums.ProfileType;
 import com.asl.enums.ReportMenu;
+import com.asl.enums.TransactionCodeType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @IdClass(ProfileLinePK.class)
 @Table(name = "profileline")
-@EqualsAndHashCode(of = { "zid", "profilelineid", "profilecode" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid", "profilelineid", "profilelinecode", "profilecode" }, callSuper = false)
 public class ProfileLine extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -9011140154721641297L;
@@ -45,7 +46,13 @@ public class ProfileLine extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "profilelineid")
-	private int profilelineid;
+	private String profilelineid;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "profilelinecode")
+	@Size(max = 50, message = "Profile code maximum 50 character allowed")
+	private String profilelinecode;
 
 	@Id
 	@Basic(optional = false)
@@ -72,6 +79,12 @@ public class ProfileLine extends AbstractModel<String> {
 	@Column(name = "seqn")
 	private int seqn;
 
+	@Column(name= "xtypetrn")
+	private String xtypetrn;
+
+	@Column(name= "xtrn")
+	private String xtrn;
+
 	@Transient
 	private String managerprompt;
 
@@ -93,21 +106,31 @@ public class ProfileLine extends AbstractModel<String> {
 
 	public ProfileLine(ReportMenu rm) {
 		this.seqn = rm.getGroup();
+
+		this.profilelinecode = rm.getCode();
 		this.profiletype = ProfileType.R;
-		this.profilecode = rm.getCode();
+
 		this.managerprompt = rm.getDescription();
 		this.screenprompt = rm.getDescription();
 		this.display = "Y".equalsIgnoreCase(rm.getDefaultAccess());
 		this.required = false;
+
+		this.xtypetrn = TransactionCodeType.PROFILE_LINE.getCode();
+		this.xtrn = TransactionCodeType.PROFILE_LINE.getdefaultCode();
 	}
 
 	public ProfileLine(MenuProfile rm) {
 		this.seqn = rm.getSeqn();
+
+		this.profilelinecode = rm.getCode();
 		this.profiletype = ProfileType.M;
-		this.profilecode = rm.getCode();
+
 		this.managerprompt = rm.getDescription();
 		this.screenprompt = rm.getDescription();
 		this.display = "Y".equalsIgnoreCase(rm.getDefaultAccess());
 		this.required = false;
+
+		this.xtypetrn = TransactionCodeType.PROFILE_LINE.getCode();
+		this.xtrn = TransactionCodeType.PROFILE_LINE.getdefaultCode();
 	}
 }

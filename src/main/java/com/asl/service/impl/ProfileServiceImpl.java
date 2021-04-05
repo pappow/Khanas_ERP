@@ -69,7 +69,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	@Override
 	public Profile findByProfilecode(String profilecode) {
 		if(StringUtils.isBlank(profilecode)) return null;
-		return profileMapper.findByProfilecode(profilecode);
+		return profileMapper.findByProfilecode(profilecode, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 	@Override
 	public List<Profile> getAllProfiles() {
-		List<Profile> list = profileMapper.getAllProfiles(sessionManager.getBusinessId());
+		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId());
 		return list != null ? list : Collections.emptyList();
 	}
 
@@ -100,8 +100,6 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		return getMenuProfileByProfilecode(pa.getMenuprofilecode());
 	}
 
-	
-
 	@Override
 	public MenuProfile getMenuProfileByProfilecode(String profilecode) {
 		if(StringUtils.isBlank(profilecode)) return getDefaultMenuProfile();
@@ -109,6 +107,13 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		Profile profile = findByProfilecode(profilecode);
 
 		List<ProfileLine> profileLines = new ArrayList<>();
+
+		// Generate profile lines from enum first
+		for(com.asl.enums.MenuProfile item : com.asl.enums.MenuProfile.values()) {
+			ProfileLine pl = new ProfileLine(item);
+			pl.setProfilecode(profilecode);
+			profileLines.add(pl);
+		}
 
 		// All datalist profile lines
 		List<DataList> proxyProfileLines = listService.getList("PROFILE", null, null, ProfileType.M.getCode());

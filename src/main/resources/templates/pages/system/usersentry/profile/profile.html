@@ -108,7 +108,7 @@
 													<tr>
 														<th>Profile Code</th>
 														<th>Profile Type</th>
-														<th>Status</th>
+														<th>Active?</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -117,7 +117,7 @@
 															<a th:href="@{/system/profile/} + ${p.profilecode}" th:text="${p.profilecode}"></a>
 														</td>
 														<td th:text="${p.profiletype}"></td>
-														<td th:text="${p.zactive eq '1' ? 'Y' : 'N'}"></td>
+														<td th:text="${p.zactive ? 'Y' : 'N'}"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -143,9 +143,9 @@
 									</thead>
 									<tbody>
 										<tr th:each="pl, in : ${menuprofile.profileLines}">
-											<td th:text="${pl.managerPrompt}">Prompts</td>
+											<td th:text="${pl.managerprompt}">Prompts</td>
 											<td style="text-align: center;" th:text="${pl.display ? 'Y' : 'N'}"></td>
-											<td th:text="${pl.screenPrompt}"></td>
+											<td th:text="${pl.screenprompt}"></td>
 											<td style="text-align: right;">
 												<button type="button" 
 														class="btn btn-default btn-edit editmode"
