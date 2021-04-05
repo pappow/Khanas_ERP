@@ -24,7 +24,7 @@
 									</button>
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
-									<div class="nav navbar-nav" th:if="${menuProfile.dashboard ne null and menuProfile.dashboard.display}">
+									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/system/usersentry}">Users Entry</a></li>
 									</div>
@@ -59,13 +59,13 @@
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/system/profile}">Manage Role</a></td>
+										<td><a th:href="@{/system/profile}">Manage Profile</a></td>
 										<td>
 											<a th:href="@{/system/profile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/system/profileallocation}">Role Allocation</a></td>
+										<td><a th:href="@{/system/profileallocation}">Profile Allocation</a></td>
 										<td>
 											<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>

@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.asl.enums.ProfileType;
@@ -46,4 +47,7 @@ public class Profile extends AbstractModel<String> {
 	@Column(name = "profiletype")
 	@Enumerated(EnumType.STRING)
 	private ProfileType profiletype;
+
+	@Transient
+	private String newflag;
 }
