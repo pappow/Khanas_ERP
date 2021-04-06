@@ -30,6 +30,7 @@ public class MenuProfile implements Serializable {
 	private static final long serialVersionUID = 5690006573031426825L;
 
 	private ProfileLine M0100;
+	private ProfileLine M0101;
 	private ProfileLine M0102;
 	private ProfileLine M0103;
 	private ProfileLine M0104;
@@ -126,12 +127,12 @@ public class MenuProfile implements Serializable {
 	}
 
 	public void setProfileLine(ProfileLine profileLine) {
-		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfilecode())) {
+		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfilelinecode())) {
 			log.warn("No profile or profile code found....");
 			return;
 		}
 
-		String code = profileLine.getProfilecode().toUpperCase();
+		String code = profileLine.getProfilelinecode().toUpperCase();
 		if(profileSetterMethods.containsKey(code)) {
 			Method method = profileSetterMethods.get(code);
 			try {
@@ -147,6 +148,22 @@ public class MenuProfile implements Serializable {
 	// Setter methods
 	public void setM0100(ProfileLine profileLine) {
 		this.M0100 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0101(ProfileLine profileLine) {
+		this.M0101 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0102(ProfileLine profileLine) {
+		this.M0102 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0103(ProfileLine profileLine) {
+		this.M0103 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0104(ProfileLine profileLine) {
+		this.M0104 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
