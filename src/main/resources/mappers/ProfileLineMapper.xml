@@ -10,6 +10,7 @@
 		INSERT INTO profileline
 		(	
 			profilelineid,
+			profilelinecode,
 			profilecode,
 			profiletype,
 			enabled,
@@ -17,6 +18,7 @@
 			required,
 			screenprompt,
 			seqn,
+			pgroup,
 			xtypetrn,
 			xtrn,
 			zid,
@@ -31,6 +33,7 @@
 		VALUES
 		(
 			#{profilelineid, jdbcType=VARCHAR},
+			#{profilelinecode, jdbcType=VARCHAR},
 			#{profilecode, jdbcType=VARCHAR},
 			#{profiletype, jdbcType=VARCHAR},
 			#{enabled, jdbcType=BOOLEAN},
@@ -38,6 +41,7 @@
 			#{required, jdbcType=BOOLEAN},
 			#{screenprompt, jdbcType=VARCHAR},
 			#{seqn, jdbcType=INTEGER},
+			#{pgroup, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
@@ -54,11 +58,12 @@
 	<update id="update" parameterType="ProfileLine">
 		UPDATE profileline
 		SET
-			enabled=#{enabled, jdbcType=BIGINT},
-			display=#{display, jdbcType=BIGINT},
-			required=#{required, jdbcType=BIGINT},
-			screenPrompt=#{screenPrompt, jdbcType=VARCHAR},
-			seqn=#{seqn, jdbcType=BIGINT},
+			enabled=#{enabled, jdbcType=BOOLEAN},
+			display=#{display, jdbcType=BOOLEAN},
+			required=#{required, jdbcType=BOOLEAN},
+			screenprompt=#{screenprompt, jdbcType=VARCHAR},
+			seqn=#{seqn, jdbcType=INTEGER},
+			pgroup=#{pgroup, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
@@ -70,7 +75,18 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			profilelineid=#{profilelineid, jdbcType=VARCHAR}
+			AND profilelinecode=#{profilelinecode, jdbcType=VARCHAR}
 			AND profilecode=#{profilecode, jdbcType=VARCHAR}
+			AND profiletype=#{profiletype, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateAllProfileLines" parameterType="ProfileLine">
+		UPDATE profileline
+		SET
+			display=#{display, jdbcType=BOOLEAN}
+		WHERE
+			profilecode=#{profilecode, jdbcType=VARCHAR}
 			AND profiletype=#{profiletype, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
@@ -83,4 +99,16 @@
 		SELECT * FROM Profileline WHERE profilecode=#{profilecode} AND profiletype=#{profiletype} AND zid=#{zid}
 	</select>
 
+	<select id="findByProfilelinecodeAndProfilecodeAndProfiletype" resultType="ProfileLine">
+		SELECT
+			*
+		FROM
+			profileline
+		WHERE
+			profilelinecode=#{profilelinecode}
+			AND profilecode=#{profilecode}
+			AND profiletype=#{profiletype} 
+			AND zid=#{zid}
+			AND zactive='1'
+	</select>
 </mapper>

@@ -56,7 +56,14 @@
 	</select>
 
 	<select id="findByProfileCodeAndProfileType" resultType="Profile">
-		SELECT * FROM profile WHERE profilecode=#{profilecode} AND profiletype=#{profiletype} AND zid=#{zid}
+		SELECT 
+			* 
+		FROM 
+			profile 
+		WHERE 
+			profilecode=#{profilecode} 
+			AND profiletype=#{profiletype} 
+			AND zid=#{zid}
 	</select>
 
 	<select id="getAllProfiles" resultType="Profile">

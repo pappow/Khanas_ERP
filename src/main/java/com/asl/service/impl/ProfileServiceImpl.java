@@ -2,6 +2,7 @@ package com.asl.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -128,8 +129,9 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		profileLines.stream().forEach(proxy -> {
 			originalProfileLines.stream().forEach(original -> {
-				if(proxy.getProfilecode().equalsIgnoreCase(original.getProfilecode())) {
+				if(proxy.getProfilelinecode().equalsIgnoreCase(original.getProfilelinecode())) {
 					proxy.setProfilelineid(original.getProfilelineid());
+					proxy.setProfilelinecode(original.getProfilelinecode());
 					proxy.setProfilecode(original.getProfilecode());
 					proxy.setProfiletype(original.getProfiletype());
 					proxy.setEnabled(original.isEnabled());
@@ -142,6 +144,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		});
 		MenuProfile rp = new MenuProfile();
 		profileLines.stream().forEach(rp::setProfileLine);
+		rp.getProfileLines().sort(Comparator.comparing(ProfileLine::getProfilelinecode));
 
 		return rp;
 	}

@@ -15,7 +15,11 @@ public interface ProfileLineService {
 
 	long update(ProfileLine profileLine);
 
+	long updateAllProfileLines(String profilecode, ProfileType profiletype, boolean display);
+
 	ProfileLine findByProfilelineid(String profilelineid);
+
+	ProfileLine findByProfilelinecodeAndProfilecodeAndProfiletype(String profilelinecode, String profilecode, ProfileType profiletype);
 
 	List<ProfileLine> getAllByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype);
 }
