@@ -34,30 +34,30 @@ public class ProfileAllocation extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "paid")
-	private Long paid;
+	private String paid;
 
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zemail", nullable = false)
 	private String zemail;
 
-	@Column(name = "reportprofilecode")
-	private String reportprofilecode;
+	@Column(name = "rpcode")
+	private String rpcode;
 
-	@Column(name = "menuprofilecode")
-	private String menuprofilecode;
+	@Column(name = "mpcode")
+	private String mpcode;
 
-	@Column(name = "userprofilecode")
-	private String userprofilecode;
+	@Column(name = "upcode")
+	private String upcode;
+
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
+
+	@Column(name = "xtrn")
+	private String xtrn;
 
 	@Transient
-	private String fullName;
-	@Transient
-	private String menuProfileName;
-	@Transient
-	private String userProfileName;
-	@Transient
-	private String reportProfileName;
+	private String xname;
 	@Transient
 	private List<Profile> reportProfiles;
 	@Transient

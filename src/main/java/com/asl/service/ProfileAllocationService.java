@@ -17,7 +17,7 @@ public interface ProfileAllocationService {
 
 	public long update(ProfileAllocation profileAllocation);
 
-	public ProfileAllocation findByPaid(Long paid);
+	public ProfileAllocation findByPaid(String paid);
 
 	public List<ProfileAllocation> getAllProfileAllocation();
 

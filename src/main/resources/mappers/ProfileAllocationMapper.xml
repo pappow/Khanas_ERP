@@ -3,15 +3,19 @@
 
 <mapper namespace="com.asl.mapper.ProfileAllocationMapper">
 
-	<insert id="save" 
-			parameterType="ProfileAllocation">
-		INSERT INTO ProfileAllocation
+	<insert id="save" parameterType="ProfileAllocation">
+		<selectKey keyProperty="paid" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO profileallocation
 		(
 			paid,
-			username,
-			reportProfileId,
-			menuProfileId,
-			userProfileId,
+			zemail,
+			mpcode,
+			rpcode,
+			upcode,
+			xtypetrn,
+			xtrn,
 			zid,
 			zauserid,
 			zuuserid,
@@ -23,11 +27,13 @@
 		)
 		VALUES
 		(
-			PROFILE_ALLOCATION_SEQ.nextval,
-			#{username, jdbcType=VARCHAR},
-			#{reportProfileId, jdbcType=BIGINT},
-			#{menuProfileId, jdbcType=BIGINT},
-			#{userProfileId, jdbcType=BIGINT},
+			#{paid, jdbcType=VARCHAR},
+			#{zemail, jdbcType=VARCHAR},
+			#{mpcode, jdbcType=VARCHAR},
+			#{rpcode, jdbcType=VARCHAR},
+			#{upcode, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -39,16 +45,15 @@
 		)
 	</insert>
 
-	<update id="update" 
-			parameterType="ProfileAllocation">
+	<update id="update" parameterType="ProfileAllocation">
 		UPDATE
-			ProfileAllocation
+			profileallocation
 		SET
-			username=#{username, jdbcType=VARCHAR},
-			reportProfileId=#{reportProfileId, jdbcType=BIGINT},
-			menuProfileId=#{menuProfileId, jdbcType=BIGINT},
-			userProfileId=#{userProfileId, jdbcType=BIGINT},
-			zid=#{zid, jdbcType=VARCHAR},
+			mpcode=#{mpcode, jdbcType=VARCHAR},
+			rpcode=#{rpcode, jdbcType=VARCHAR},
+			upcode=#{upcode, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -57,19 +62,44 @@
 			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			paid=#{paid}
+			paid=#{paid, jdbcType=VARCHAR}
+			AND zemail=#{zemail, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<select id="findById" resultType="ProfileAllocation">
-		SELECT * FROM ProfileAllocation WHERE profileAllocationId=#{profileAllocationId}
+	<select id="findByPaid" resultType="ProfileAllocation">
+		SELECT 
+			* 
+		FROM 
+			profileallocation 
+		WHERE 
+			paid=#{paid}
+			AND zid=#{zid}
 	</select>
 
 	<select id="getAllProfileAllocation" resultType="ProfileAllocation">
-		SELECT * FROM ProfileAllocation WHERE zid=#{zid}
+		SELECT
+			U.XNAME,
+			U.ZEMAIL,
+			PA.MPCODE,
+			PA.RPCODE,
+			PA.UPCODE
+		FROM
+			XUSERS U
+			LEFT JOIN PROFILEALLOCATION PA ON PA.ZEMAIL = U.ZEMAIL
+		WHERE
+			U.ZACTIVE='1'
+			AND U.ZID=#{zid}
 	</select>
 
-	<select id="findByUsername" resultType="ProfileAllocation">
-		SELECT * FROM ProfileAllocation WHERE username=#{username} AND zid=#{zid}
+	<select id="findByZemail" resultType="ProfileAllocation">
+		SELECT 
+			* 
+		FROM 
+			profileallocation 
+		WHERE 
+			zemail=#{zemail} 
+			AND zid=#{zid}
 	</select>
 
 </mapper>

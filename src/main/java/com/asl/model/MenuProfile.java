@@ -30,6 +30,9 @@ public class MenuProfile implements Serializable {
 	private static final long serialVersionUID = 5690006573031426825L;
 
 	private ProfileLine M0100;
+	private ProfileLine M0102;
+	private ProfileLine M0103;
+	private ProfileLine M0104;
 
 	private ProfileLine M0200;
 	private ProfileLine M0201;

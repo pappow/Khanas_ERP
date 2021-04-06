@@ -76,6 +76,9 @@
 			<if test="profiletype != null and profiletype != ''">
 				AND profiletype=#{profiletype}
 			</if>
+			<if test="zactive != null and zactive != ''">
+				AND zactive=#{zactive}
+			</if>
 	</select>
 
 </mapper>

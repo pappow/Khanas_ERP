@@ -22,5 +22,5 @@ public interface ProfileMapper {
 
 	Profile findByProfileCodeAndProfileType(String profilecode, ProfileType profiletype, String zid);
 
-	List<Profile> getAllProfiles(ProfileType profiletype, String zid);
+	List<Profile> getAllProfiles(ProfileType profiletype, String zid, Boolean zactive);
 }

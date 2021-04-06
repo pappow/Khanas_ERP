@@ -30,16 +30,18 @@ public class ProfileAllocationServiceImpl extends AbstractGenericService impleme
 
 	@Override
 	public long update(ProfileAllocation profileAllocation) {
-		if(profileAllocation == null || StringUtils.isBlank(profileAllocation.getZemail())) return 0;
+		if(profileAllocation == null 
+				|| StringUtils.isBlank(profileAllocation.getZemail()) 
+				|| StringUtils.isBlank(profileAllocation.getPaid())) return 0;
 
 		profileAllocation.setZid(sessionManager.getBusinessId());
 		return profileAllocationMapper.update(profileAllocation);
 	}
 
 	@Override
-	public ProfileAllocation findByPaid(Long paid) {
-		if(paid == null) return null;
-		return profileAllocationMapper.findById(paid);
+	public ProfileAllocation findByPaid(String paid) {
+		if(StringUtils.isBlank(paid)) return null;
+		return profileAllocationMapper.findByPaid(paid, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class ProfileAllocationServiceImpl extends AbstractGenericService impleme
 	@Override
 	public ProfileAllocation findByZemail(String username) {
 		if(StringUtils.isBlank(username)) return null;
-		return profileAllocationMapper.findByUsername(username, sessionManager.getBusinessId()); 
+		return profileAllocationMapper.findByZemail(username, sessionManager.getBusinessId()); 
 	}
 
 	

@@ -35,7 +35,8 @@ public enum TransactionCodeType {
 	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),
 	SRN_RETURN("Sales Return", "SR--", null),
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
-	PROFILE_LINE("Profile Line", "PRL-", null);
+	PROFILE_LINE("Profile Line", "PRL-", null),
+	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null);
 
 	private String code;
 	private String defaultCode;

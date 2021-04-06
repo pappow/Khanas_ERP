@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -121,10 +120,10 @@ public class ProfileController extends ASLAbstractController {
 		if("Y".equalsIgnoreCase(profile.getNewflag())) {
 			long count = profileService.save(profile);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setSuccessStatusAndMessage("Can't save profile : " + profile.getProfilecode());
 				return responseHelper.getResponse();
 			}
-			responseHelper.setErrorStatusAndMessage("Can't save profile : " + profile.getProfilecode());
+			responseHelper.setSuccessStatusAndMessage("Profile saved successfully");
 			responseHelper.setRedirectUrl("/system/profile/" + profile.getProfilecode());
 			return responseHelper.getResponse();
 		}

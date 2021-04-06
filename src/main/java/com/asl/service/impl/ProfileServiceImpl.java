@@ -80,25 +80,31 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	}
 
 	@Override
+	public List<Profile> getAllLiveProfiles() {
+		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId(), Boolean.TRUE);
+		return list != null ? list : Collections.emptyList();
+	}
+
+	@Override
 	public List<Profile> getAllProfiles() {
-		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId());
+		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId(), null);
 		return list != null ? list : Collections.emptyList();
 	}
 
 	@Override
 	public List<Profile> getAllProfilesByProfiletype(ProfileType profileType) {
 		if(profileType == null) return Collections.emptyList();
-		List<Profile> list = profileMapper.getAllProfiles(profileType, sessionManager.getBusinessId());
+		List<Profile> list = profileMapper.getAllProfiles(profileType, sessionManager.getBusinessId(), null);
 		return list != null ? list : Collections.emptyList();
 	}
 
 	@Override
 	public MenuProfile getLoggedInUserMenuProfile() {
 		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || StringUtils.isBlank(pa.getMenuprofilecode())) {
+		if(pa == null || StringUtils.isBlank(pa.getMpcode())) {
 			return getDefaultMenuProfile();
 		}
-		return getMenuProfileByProfilecode(pa.getMenuprofilecode());
+		return getMenuProfileByProfilecode(pa.getMpcode());
 	}
 
 	@Override
@@ -181,12 +187,12 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	@Override
 	public ReportProfile getLoggedInUserReportProfile() {
 		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || StringUtils.isBlank(pa.getReportprofilecode())) {
+		if(pa == null || StringUtils.isBlank(pa.getRpcode())) {
 			log.debug("===> User \"{}\", don't have any specifc report profile", sessionManager.getLoggedInUserDetails().getUsername());
 			return getDefaultReportProfile();
 		}
 
-		return getReportProfileByProfilecode(pa.getReportprofilecode());
+		return getReportProfileByProfilecode(pa.getRpcode());
 	}
 
 	@Override
