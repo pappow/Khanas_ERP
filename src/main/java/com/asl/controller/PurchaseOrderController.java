@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
-import com.asl.entity.Opdodetail;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
@@ -36,7 +35,6 @@ import com.asl.model.report.ItemDetails;
 import com.asl.model.report.PurchaseOrder;
 import com.asl.model.report.PurchaseReport;
 import com.asl.service.CacusService;
-import com.asl.service.ImtrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
@@ -50,7 +48,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private PogrnService pogrnService;
-	@Autowired private ImtrnService imtrnService;
 	@Autowired private CacusService cacusService;
 
 	@GetMapping

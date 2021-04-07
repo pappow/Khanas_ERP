@@ -132,7 +132,7 @@ public class ASLAbstractController {
 	protected ReportFieldService getReportFieldService(ReportMenu reportMenu) {
 		if(reportMenu == null) return null;
 		try {
-			return (ReportFieldService) appContext.getBean(reportMenu.getCode().toLowerCase() + "Service");
+			return (ReportFieldService) appContext.getBean(reportMenu.name() + "Service");
 		} catch (Exception e) {
 			log.error(ERROR, e.getMessage(), e);
 			return null;

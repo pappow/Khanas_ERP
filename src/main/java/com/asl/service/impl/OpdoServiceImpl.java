@@ -263,10 +263,10 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(savedDeliveryChalan.getXdornum(), soItem.getXitem(), sessionManager.getBusinessId());
 				if(chItem != null) {
 					chItem.setXqtyord(chItem.getXqtyord().add(item.getXqtyord()));
-					long chItemCount = opdoMapper.updateOpdoDetail(chItem);
+					opdoMapper.updateOpdoDetail(chItem);
 				} else {
 					item.setXdornum(deliveryChalan.getXdornum());
-					long chItemCount = opdoMapper.saveOpdoDetail(item);
+					opdoMapper.saveOpdoDetail(item);
 				}
 
 			}

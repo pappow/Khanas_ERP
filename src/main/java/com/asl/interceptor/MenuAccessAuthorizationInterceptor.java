@@ -14,7 +14,6 @@ import com.asl.enums.UserRole;
 import com.asl.model.LoggedInUserDetails;
 import com.asl.model.MenuProfile;
 import com.asl.service.ASLSessionManager;
-import com.asl.service.ProfileService;
 
 /**
  * @author Zubayer Ahamed
@@ -23,7 +22,6 @@ import com.asl.service.ProfileService;
 @Component
 public class MenuAccessAuthorizationInterceptor implements AsyncHandlerInterceptor {
 
-	@Autowired private ProfileService profileService;
 	@Autowired private ASLSessionManager sessionManager;
 	@Autowired private AppConfig appConfig;
 

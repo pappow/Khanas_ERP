@@ -2,7 +2,6 @@ package com.asl.service.report.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,8 +12,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("plService")
-public class PLServiceImpl extends AbstractReportService {
+@Service("RM0311Service")
+public class RM0311ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -25,16 +24,21 @@ public class PLServiceImpl extends AbstractReportService {
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
-		
-		//BOM ID
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "PO-Number", "search/report/poor/xpornum", "", false));
-		
-		// From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(3, "From Date", new Date(), true));
 
-		// To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(4, "To Date", new Date(), true));
-		
+		// xcus
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/report/sup", "", false));
+
+//		// xorg
+//		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
+//
+//		// xphone
+//		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", false));
+//
+//		// xgcus
+//		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Corporate", true));
+//
+//		// xstatuscus
+//		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

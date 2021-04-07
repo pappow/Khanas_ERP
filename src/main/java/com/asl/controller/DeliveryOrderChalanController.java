@@ -34,26 +34,17 @@ import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrder;
 import com.asl.model.report.SalesOrderChalanReport;
 import com.asl.service.CacusService;
-import com.asl.service.ImmofgdetailService;
 import com.asl.service.OpdoService;
-import com.asl.service.OpordService;
 import com.asl.service.XtrnService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 @RequestMapping("/salesninvoice/deliveryorderchalan")
 public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@Autowired
-	private OpordService opordService;
-	@Autowired
 	private OpdoService opdoService;
 	@Autowired
 	private XtrnService xtrnService;
-	@Autowired
-	private ImmofgdetailService immofgdetailService;
 	@Autowired
 	private CacusService cacusService;
 
@@ -485,7 +476,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		 */
 
 		// List<SalesOrderChalanReport> allReports = new ArrayList<>();
-		SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
 
 		// for(Opdoheader so : salesOrders) {
 

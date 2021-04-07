@@ -48,8 +48,8 @@ public class ReportAccessAuthorizationInterceptor implements AsyncHandlerInterce
 
 		boolean stat = true;
 		for (ReportMenu menu : ReportMenu.values()) {
-			if(modulePath.startsWith(menu.getMenuPath())) {
-				ProfileLine pl = ReportProfile.invokeGetter(rp, menu.getProfileField());
+			if(modulePath.startsWith("/report/" + menu.name())) {
+				ProfileLine pl = ReportProfile.invokeGetter(rp, menu.name());
 				if(pl == null) {
 					stat = false;
 					continue;

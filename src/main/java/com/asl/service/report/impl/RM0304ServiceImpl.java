@@ -12,8 +12,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("suglService")
-public class SUGLServiceImpl extends AbstractReportService {
+@Service("pdlService")
+public class RM0304ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -25,8 +25,8 @@ public class SUGLServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// chalan
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Chalan", "search/report/chalan", "", true));
+		// xpornum - PO Number
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "PO-Number", "search/report/ponumber", "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

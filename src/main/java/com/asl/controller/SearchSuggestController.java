@@ -18,17 +18,14 @@ import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
+import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
-import com.asl.service.ImstockService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.PogrnService;
-
-import com.asl.service.ProductionSuggestionService;
-
-import com.asl.service.BmbomService;
 import com.asl.service.PoordService;
+import com.asl.service.ProductionSuggestionService;
 
 
 /**
@@ -43,7 +40,6 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private ProductionSuggestionService productionSuggestionService;
 	@Autowired private PogrnService pogrnService;
-	@Autowired private ImstockService imstockService;
 	@Autowired private OpordService opordService;
 
 	@Autowired private OpdoService opdoService;

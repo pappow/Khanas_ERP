@@ -89,7 +89,7 @@ public class ProductionStockTransferOrderController extends ASLAbstractControlle
 		
 		imtorHeader.setXtype(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
 		imtorHeader.setXtrntor(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
-		String transactionCode = "";
+		//String transactionCode = "";
 		// if existing record
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
 		

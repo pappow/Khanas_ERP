@@ -23,8 +23,6 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.OpcrnService;
-import com.asl.service.PocrnService;
-import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -38,10 +36,6 @@ public class SalesReturnController extends ASLAbstractController {
 	private XtrnService xtrnService;
 	@Autowired
 	private OpcrnService opcrnService;
-	@Autowired
-	private PocrnService pocrnService;
-	@Autowired
-	private PogrnService pogrnService;
 
 	@GetMapping
 	public String loadGrnReturnPage(Model model) {

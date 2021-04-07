@@ -414,7 +414,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
 
 		// for(Opdoheader so : salesOrders) {
 
