@@ -13,8 +13,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("slService")
-public class SLServiceImpl extends AbstractReportService {
+@Service("RM0307Service")
+public class RM0307ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();

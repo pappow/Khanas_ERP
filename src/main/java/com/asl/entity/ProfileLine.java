@@ -111,9 +111,9 @@ public class ProfileLine extends AbstractModel<String> {
 	}
 
 	public ProfileLine(ReportMenu rm) {
-		this.seqn = rm.getGroup();
+		this.seqn = rm.getSeqn();
 
-		this.profilelinecode = rm.getCode();
+		this.profilelinecode = rm.name();
 		this.profiletype = ProfileType.R;
 
 		this.managerprompt = rm.getDescription();

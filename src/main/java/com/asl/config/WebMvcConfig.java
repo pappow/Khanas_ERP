@@ -47,7 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	private String[] getReportPaths() {
 		List<String> paths = new ArrayList<>();
 		EnumSet.allOf(ReportMenu.class).forEach(rm -> {
-			paths.add(rm.getMenuPath() + "/**");
+			paths.add("/report/" + rm.name() + "/**");
 		});
 		return paths.toArray(new String[paths.size()]);
 	}

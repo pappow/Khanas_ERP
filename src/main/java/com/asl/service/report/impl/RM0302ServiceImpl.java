@@ -12,8 +12,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("itemlService")
-public class ITEMLServiceImpl extends AbstractReportService {
+@Service("RM0302Service")
+public class RM0302ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -25,8 +25,8 @@ public class ITEMLServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// caitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item Code/Name", "search/caitem", "", true));
+		// chalan
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Chalan", "search/report/chalan", "", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

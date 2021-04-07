@@ -31,20 +31,41 @@ public class ReportProfile implements Serializable {
 	private static final long serialVersionUID = 5690006573031426825L;
 	private static final String ERROR = "Error is : {}, {}";
 
-	private ProfileLine SUPL;
-	private ProfileLine CUSL;
-	private ProfileLine STOCKL;
-	private ProfileLine ITEML;
-	private ProfileLine POL;
-	private ProfileLine PDL;
-	private ProfileLine GRNL;
-	private ProfileLine SUGL;
-	private ProfileLine SL;
-	private ProfileLine CL;
-	private ProfileLine BOML;
-	private ProfileLine PL;
-	private ProfileLine SOL;
-	private ProfileLine SOE;
+	private ProfileLine RM0301;
+	private ProfileLine RM0302;
+	private ProfileLine RM0303;
+	private ProfileLine RM0304;
+	private ProfileLine RM0305;
+	private ProfileLine RM0306;
+	private ProfileLine RM0307;
+	private ProfileLine RM0308;
+	private ProfileLine RM0309;
+	private ProfileLine RM0310;
+	private ProfileLine RM0311;
+
+	private ProfileLine RM0401;
+	private ProfileLine RM0402;
+	private ProfileLine RM0403;
+	private ProfileLine RM0404;
+	private ProfileLine RM0405;
+	private ProfileLine RM0406;
+	private ProfileLine RM0407;
+	private ProfileLine RM0408;
+	private ProfileLine RM0409;
+
+	private ProfileLine RM0501;
+	private ProfileLine RM0502;
+	private ProfileLine RM0503;
+	private ProfileLine RM0504;
+
+	private ProfileLine RM0601;
+	private ProfileLine RM0602;
+	private ProfileLine RM0603;
+	private ProfileLine RM0604;
+	private ProfileLine RM0605;
+	private ProfileLine RM0606;
+	private ProfileLine RM0607;
+	private ProfileLine RM0608;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
@@ -57,7 +78,7 @@ public class ReportProfile implements Serializable {
 	}
 
 	public static void setterCaller() {
-		EnumSet.allOf(ReportMenu.class).forEach(rm -> addSetter(rm.getCode(), rm.getProfileField()));
+		EnumSet.allOf(ReportMenu.class).forEach(rm -> addSetter(rm.name(), rm.name()));
 	}
 
 	public static void addSetter(String code, String fieldName) {
@@ -87,12 +108,12 @@ public class ReportProfile implements Serializable {
 	}
 
 	public void setProfileLine(ProfileLine profileLine) {
-		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfilecode())) {
+		if(profileLine == null || StringUtils.isEmpty(profileLine.getProfilelinecode())) {
 			log.warn("No profile or profile code found....");
 			return;
 		}
 
-		String code = profileLine.getProfilecode().toUpperCase();
+		String code = profileLine.getProfilelinecode().toUpperCase();
 		if(profileSetterMethods.containsKey(code)) {
 			Method method = profileSetterMethods.get(code);
 			try {
@@ -106,67 +127,139 @@ public class ReportProfile implements Serializable {
 	}
 
 	// Setter methods
-	public void setSUPL(ProfileLine profileLine) {
-		this.SUPL = profileLine;
+	public void setRM0301(ProfileLine profileLine) {
+		this.RM0301 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0302(ProfileLine profileLine) {
+		this.RM0302 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0303(ProfileLine profileLine) {
+		this.RM0303 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0304(ProfileLine profileLine) {
+		this.RM0304 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0305(ProfileLine profileLine) {
+		this.RM0305 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0306(ProfileLine profileLine) {
+		this.RM0306 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0307(ProfileLine profileLine) {
+		this.RM0307 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0308(ProfileLine profileLine) {
+		this.RM0308 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0309(ProfileLine profileLine) {
+		this.RM0309 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0310(ProfileLine profileLine) {
+		this.RM0310 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0311(ProfileLine profileLine) {
+		this.RM0311 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
-	public void setCUSL(ProfileLine profileLine) {
-		this.CUSL = profileLine;
+
+	public void setRM0401(ProfileLine profileLine) {
+		this.RM0401 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0402(ProfileLine profileLine) {
+		this.RM0402 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0403(ProfileLine profileLine) {
+		this.RM0403 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0404(ProfileLine profileLine) {
+		this.RM0404 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0405(ProfileLine profileLine) {
+		this.RM0405 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0406(ProfileLine profileLine) {
+		this.RM0406 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0407(ProfileLine profileLine) {
+		this.RM0407 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0408(ProfileLine profileLine) {
+		this.RM0408 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0409(ProfileLine profileLine) {
+		this.RM0409 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
-	public void setSTOCKL(ProfileLine profileLine) {
-		this.STOCKL = profileLine;
+
+	public void setRM0501(ProfileLine profileLine) {
+		this.RM0501 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0502(ProfileLine profileLine) {
+		this.RM0502 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0503(ProfileLine profileLine) {
+		this.RM0503 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0504(ProfileLine profileLine) {
+		this.RM0504 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
-	public void setITEML(ProfileLine profileLine) {
-		this.ITEML = profileLine;
+
+	public void setRM0601(ProfileLine profileLine) {
+		this.RM0601 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0602(ProfileLine profileLine) {
+		this.RM0602 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0603(ProfileLine profileLine) {
+		this.RM0603 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0604(ProfileLine profileLine) {
+		this.RM0604 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0605(ProfileLine profileLine) {
+		this.RM0605 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0606(ProfileLine profileLine) {
+		this.RM0606 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0607(ProfileLine profileLine) {
+		this.RM0607 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0608(ProfileLine profileLine) {
+		this.RM0608 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
-	public void setPOL(ProfileLine profileLine) {
-		this.POL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-
-	public void setPDL(ProfileLine profileLine) {
-		this.PDL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-
-	public void setGRNL(ProfileLine profileLine) {
-		this.GRNL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-
-	public void setSUGL(ProfileLine profileLine) {
-		this.SUGL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setSL(ProfileLine profileLine) {
-		this.SL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setCL(ProfileLine profileLine) {
-		this.CL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setBOML(ProfileLine profileLine) {
-		this.BOML = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setPL(ProfileLine profileLine) {
-		this.PL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setSOL(ProfileLine profileLine) {
-		this.SOL = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setSOE(ProfileLine profileLine) {
-		this.SOE = profileLine;
-		addToProfileLineMap(profileLine);
-	}
 }

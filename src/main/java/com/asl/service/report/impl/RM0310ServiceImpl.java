@@ -2,7 +2,6 @@ package com.asl.service.report.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,8 +12,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("clService")
-public class CLServiceImpl extends AbstractReportService {
+@Service("RM0310Service")
+public class RM0310ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -26,11 +25,8 @@ public class CLServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
-
-		// To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
+		// xcus -Supplier
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Supplier", "search/report/sup", "", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

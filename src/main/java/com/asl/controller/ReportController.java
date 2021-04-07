@@ -58,9 +58,9 @@ public class ReportController extends ASLAbstractController {
 		}
 
 		model.addAttribute("fieldsList", getReportFieldService(rm).getReportFields());
-		model.addAttribute("menuGroup", rm.getGroup());
-		model.addAttribute("selectedReport", rm.getCode());
-		model.addAttribute("reportCode", rm.getCode().toLowerCase());
+		model.addAttribute("menuGroup", rm.getSeqn());
+		model.addAttribute("selectedReport", rm.name());
+		model.addAttribute("reportCode", rm.name());
 		model.addAttribute("reportName", rm.getDescription());
 		model.addAttribute("fopEnabled", rm.isFopEnabled());
 		return "pages/report/report";
@@ -84,7 +84,7 @@ public class ReportController extends ASLAbstractController {
 			convertObjectAndPutIntoMap(cristalReportParamName, paramType, method, reportParams);
 		}
 
-		StringBuilder url = new StringBuilder(rm.getReportFile()).append("&__toolbar=false&__showtitle=false&__title=report");
+		StringBuilder url = new StringBuilder(rm.name() + ".rptdesign").append("&__toolbar=false&__showtitle=false&__title=report");
 		reportParams.entrySet().parallelStream().forEach(m -> {
 			url.append("&" + m.getKey() + "=" + m.getValue());
 		});
@@ -102,7 +102,7 @@ public class ReportController extends ASLAbstractController {
 		headers.add("X-Content-Type-Options", "nosniff");
 
 		// Parameters to send
-		String reportName = appConfig.getReportTemplatepath() + "/" + rm.getReportFile();
+		String reportName = appConfig.getReportTemplatepath() + "/" + rm.name() + ".rptdesign";
 		String reportTitle = "Test Report";
 		boolean attachment = true;
 
@@ -122,7 +122,7 @@ public class ReportController extends ASLAbstractController {
 		}
 
 		// FOP
-		reportName = appConfig.getXslPath() + "/" + rm.getXslFile();
+		reportName = appConfig.getXslPath() + "/" + rm.name() + ".xsl";
 		byte[] byt = null;
 		try {
 			byt = getReportFieldService(rm).getPDFReportByte(reportName, reportParams);
