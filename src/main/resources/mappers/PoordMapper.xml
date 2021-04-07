@@ -277,4 +277,38 @@
 			and zid=#{zid}
 	</select>
 
+	<select id="getRM0301" resultType="com.asl.model.report.RM0301">
+		SELECT 
+			poh.xpornum, 
+			poh.xdate,
+			poh.xcus,
+			cacus.xorg,
+			poh.xstatuspor, 
+			pod.xitem, 
+			caitem.xdesc,
+			pod.xqtyord, 
+			pod.xqtygrn, 
+			pod.xrate, 
+			pod.xunitpur,
+			pod.xlineamt
+		FROM 
+			poordheader poh
+			JOIN poorddetail pod ON pod.zid=poh.zid AND pod.xpornum=poh.xpornum
+			LEFT JOIN caitem ON caitem.xitem = pod.xitem
+			LEFT JOIN cacus ON cacus.xcus = poh.xcus
+		WHERE
+			poh.zid=#{zid} 
+			AND to_char(poh.xdate,'yyyy-MM-dd') &gt;= #{fdate} 
+			AND to_char(poh.xdate,'yyyy-MM-dd') &lt;= #{tdate} 
+			<if test="xcus != null and xcus != ''">
+				AND poh.xcus=#{xcus} 
+			</if>
+			<if test="xstatuspor != null and xstatuspor != ''">
+				AND poh.xstatuspor=#{xstatuspor} 
+			</if>
+			<if test="xitem != null and xitem != ''">
+				AND pod.xitem=#{xitem} 
+			</if>
+	</select>
+
 </mapper>

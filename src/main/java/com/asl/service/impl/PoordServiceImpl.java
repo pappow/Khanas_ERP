@@ -11,6 +11,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.mapper.PoordMapper;
+import com.asl.model.report.RM0301;
 import com.asl.service.PoordService;
 
 @Service
@@ -159,5 +160,12 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<RM0301> getRM0301(String fdate, String tdate, String xcus, String xstatuspor, String xitem) {
+		if(StringUtils.isBlank(fdate) || StringUtils.isBlank(tdate)) return Collections.emptyList();
+		return poordMapper.getRM0301(fdate, tdate, xcus, xstatuspor, xitem, sessionManager.getBusinessId());
+	}
+
 	
 }

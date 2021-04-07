@@ -48,4 +48,6 @@ public interface PoordService {
 
 	public List<PoordHeader> searchXpornum(String xpornum);
 
+	// REPORT
+	public List<com.asl.model.report.RM0301> getRM0301(String fdate, String tdate, String xcus, String xstatuspor, String xitem);
 }
