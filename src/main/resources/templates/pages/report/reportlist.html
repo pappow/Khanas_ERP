@@ -41,81 +41,21 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-12 content-area">
+					<div class="col-md-12 content-area" th:each="plg : ${plmap}">
 						<!-- Section data maintenance -->
 						<section id="data-maintenance" style="margin-top: 10px;">
 							<div class="section-header sectionbartoggle">
-								<h1><i class="fas fa-chevron-down"></i> Procurements</h1>
+								<h1><i class="fas fa-chevron-down"></i> <span th:text="${plg.key}"></span></h1>
 							</div>
 							<div class="section-body togglebox">
 								<table class="table dashboard-menu-table">
 									<tr>
-										<td colspan="2">Procurements</td>
+										<td colspan="2" th:text="${plg.key}">Procurements</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/report/POL}">Purchase Order Listing</a></td>
+									<tr th:each="pl, in : ${plg.value.profileLines}">
+										<td><a th:href="@{/report/} + ${pl.profilelinecode}" th:text="${pl.screenprompt}">Purchase Order Listing</a></td>
 										<td>
-											<a th:href="@{/report/POL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/SUGL}">Purchase Suggestion</a></td>
-										<td>
-											<a th:href="@{/report/SUGL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/PL}">Purchase Listing</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-										<tr>
-										<td><a th:href="@{/report/PDL}">Purchase Deviation Listing</a></td>
-										<td>
-											<a th:href="@{/report/PDL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/GRNL}">GRN Listing</a></td>
-										<td>
-											<a th:href="@{/report/GRNL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">GRN Return Listing</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/SL}">Supplier Ledger Detail</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Supplier Ledger Summary</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Supplier Payment Listing</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/SOE}">Supplier Opening Balance</a></td>
-										<td>
-											<a th:href="@{/report/SOE}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/SUPL}">Supplier List</a></td>
-										<td>
-											<a th:href="@{/report/SUPL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											<a th:href="@{/report/} + ${pl.profilelinecode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 								</table>
@@ -123,8 +63,8 @@
 						</section>
 					</div>
 
-					<div class="col-md-12 content-area">
-						<!-- Section data maintenance -->
+					<!-- <div class="col-md-12 content-area">
+						Section data maintenance
 						<section id="data-maintenance" style="margin-top: 10px;">
 							<div class="section-header sectionbartoggle">
 								<h1><i class="fas fa-chevron-down"></i> Sales & Invoicing</h1>
@@ -194,7 +134,7 @@
 					</div>
 
 					<div class="col-md-12 content-area">
-						<!-- Section data maintenance -->
+						Section data maintenance
 						<section id="data-maintenance" style="margin-top: 10px;">
 							<div class="section-header sectionbartoggle">
 								<h1><i class="fas fa-chevron-down"></i> Production</h1>
@@ -234,7 +174,7 @@
 					</div>
 
 					<div class="col-md-12 content-area">
-						<!-- Section data maintenance -->
+						Section data maintenance
 						<section id="data-maintenance" style="margin-top: 10px;">
 							<div class="section-header sectionbartoggle">
 								<h1><i class="fas fa-chevron-down"></i> Inventory</h1>
@@ -295,7 +235,7 @@
 								</table>
 							</div>
 						</section>
-					</div>
+					</div> -->
 
 				</div>
 			</div>

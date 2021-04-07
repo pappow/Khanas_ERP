@@ -3,9 +3,11 @@ package com.asl.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -13,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,10 +29,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import com.asl.entity.ProfileLine;
 import com.asl.enums.ReportMenu;
 import com.asl.enums.ReportParamDataType;
 import com.asl.enums.ReportType;
+import com.asl.model.ProfileLineWrapper;
+import com.asl.model.ReportProfile;
 import com.asl.model.RequestParameters;
+import com.asl.service.ProfileService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,8 +49,33 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/report")
 public class ReportController extends ASLAbstractController {
 
+	@Autowired ProfileService profileService;
+
 	@GetMapping
 	public String loadReportPage(Model model) {
+		ReportProfile rp = (ReportProfile) sessionManager.getFromMap("reportProfile");
+		if(rp == null) {
+			rp = profileService.getLoggedInUserReportProfile();
+			sessionManager.addToMap("reportProfile", rp);
+		}
+
+		Map<String, ProfileLineWrapper> profileLinesMap = new HashMap<>();
+		rp.getProfileLines().stream().forEach(pl -> {
+			if(profileLinesMap.get(pl.getPgroupname()) != null) {
+				ProfileLineWrapper wrapper = profileLinesMap.get(pl.getPgroupname());
+				wrapper.getProfileLines().add(pl);
+				if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+			} else {
+				List<ProfileLine> list = new ArrayList<>();
+				list.add(pl);
+				ProfileLineWrapper wrapper = new ProfileLineWrapper();
+				wrapper.getProfileLines().add(pl);
+				if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+				profileLinesMap.put(pl.getPgroupname(), wrapper);
+			}
+		});
+
+		model.addAttribute("plmap", profileLinesMap);
 		return "pages/report/reportlist";
 	}
 

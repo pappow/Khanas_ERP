@@ -110,7 +110,18 @@ public class ASLAbstractController {
 
 	@ModelAttribute("reportProfile")
 	public ReportProfile getLoggedInUserReportProfile() {
-		return profileService.getLoggedInUserReportProfile();
+		ReportProfile rp = (ReportProfile) sessionManager.getFromMap("reportProfile");
+		if(rp != null) return rp;
+
+		rp = profileService.getLoggedInUserReportProfile();
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		if(!"anonymousUser".equalsIgnoreCase(username)) {
+			sessionManager.addToMap("reportProfile", rp);
+		}
+
+		return rp;
 	}
 
 	@ModelAttribute("menuProfile")
