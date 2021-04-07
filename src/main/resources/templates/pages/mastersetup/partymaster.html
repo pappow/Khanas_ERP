@@ -49,14 +49,14 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
-									<tr>
-										<td><a th:href="@{/mastersetup/cacus?cacusType=SUP}">Supplier Entry</a></td>
+									<tr th:if="${menuProfile.M0205 ne null and menuProfile.M0205.display}">
+										<td><a th:href="@{/mastersetup/cacus?cacusType=SUP}" th:text="${menuProfile.M0205.screenprompt}">Supplier Entry</a></td>
 										<td>
 											<a th:href="@{/mastersetup/cacus?cacusType=SUP}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/cacus?cacusType=CUS}">Customer Entry</a></td>
+									<tr th:if="${menuProfile.M0206 ne null and menuProfile.M0206.display}">
+										<td><a th:href="@{/mastersetup/cacus?cacusType=CUS}" th:text="${menuProfile.M0206.screenprompt}">Customer Entry</a></td>
 										<td>
 											<a th:href="@{/mastersetup/cacus?cacusType=CUS}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>

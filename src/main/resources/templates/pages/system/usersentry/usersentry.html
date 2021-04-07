@@ -52,20 +52,20 @@
 									<tr>
 										<td colspan="2">Users Entry</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/system/xusers}">Manage Users</a></td>
+									<tr th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
+										<td><a th:href="@{/system/xusers}" th:text="${menuProfile.M0102.screenprompt}">Manage Users</a></td>
 										<td>
 											<a th:href="@{/system/xusers}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/system/profile}">Manage Profile</a></td>
+									<tr th:if="${menuProfile.M0103 ne null and menuProfile.M0103.display}">
+										<td><a th:href="@{/system/profile}" th:text="${menuProfile.M0103.screenprompt}">Manage Profile</a></td>
 										<td>
 											<a th:href="@{/system/profile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/system/profileallocation}">Profile Allocation</a></td>
+									<tr th:if="${menuProfile.M0104 ne null and menuProfile.M0104.display}">
+										<td><a th:href="@{/system/profileallocation}" th:text="${menuProfile.M0104.screenprompt}">Profile Allocation</a></td>
 										<td>
 											<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>

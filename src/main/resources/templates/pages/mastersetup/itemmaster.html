@@ -49,8 +49,8 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
-									<tr>
-										<td><a th:href="@{/mastersetup/caitem}">Item Entry</a></td>
+									<tr th:if="${menuProfile.M0207 ne null and menuProfile.M0207.display}">
+										<td><a th:href="@{/mastersetup/caitem}" th:text="${menuProfile.M0207.screenprompt}">Item Entry</a></td>
 										<td>
 											<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>

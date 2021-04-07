@@ -34,6 +34,7 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0102;
 	private ProfileLine M0103;
 	private ProfileLine M0104;
+	private ProfileLine M0105;
 
 	private ProfileLine M0200;
 	private ProfileLine M0201;
@@ -58,6 +59,7 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0308;
 	private ProfileLine M0309;
 	private ProfileLine M0310;
+	private ProfileLine M0311;
 
 	private ProfileLine M0400;
 	private ProfileLine M0401;
@@ -166,6 +168,10 @@ public class MenuProfile implements Serializable {
 		this.M0104 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
+	public void setM0105(ProfileLine profileLine) {
+		this.M0105 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
 
 	public void setM0200(ProfileLine profileLine) {
 		this.M0200 = profileLine;
@@ -254,6 +260,10 @@ public class MenuProfile implements Serializable {
 	}
 	public void setM0310(ProfileLine profileLine) {
 		this.M0310 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0311(ProfileLine profileLine) {
+		this.M0311 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 

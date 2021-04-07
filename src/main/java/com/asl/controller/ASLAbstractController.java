@@ -15,6 +15,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.xml.sax.SAXException;
@@ -113,7 +115,18 @@ public class ASLAbstractController {
 
 	@ModelAttribute("menuProfile")
 	public MenuProfile getLoggedInUserMenuProfile() {
-		return profileService.getLoggedInUserMenuProfile();
+		MenuProfile mp = (MenuProfile) sessionManager.getFromMap("menuProfile");
+		if(mp != null) return mp;
+
+		mp = profileService.getLoggedInUserMenuProfile();
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		if(!"anonymousUser".equalsIgnoreCase(username)) {
+			sessionManager.addToMap("menuProfile", mp);
+		}
+
+		return mp;
 	}
 
 	protected ReportFieldService getReportFieldService(ReportMenu reportMenu) {
