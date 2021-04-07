@@ -24,7 +24,7 @@
 									</button>
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
-									<div class="nav navbar-nav" th:if="${menuProfile.dashboard ne null and menuProfile.dashboard.display}">
+									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/mastersetup/vataitmaster}">Vat and Tax Master</a></li>
 									</div>
@@ -49,8 +49,8 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
-									<tr>
-										<td><a th:href="@{/mastersetup/vatait}">Vat And Tax</a></td>
+									<tr th:if="${menuProfile.M0210 ne null and menuProfile.M0210.display}">
+										<td><a th:href="@{/mastersetup/vatait}" th:text="${menuProfile.M0210.screenprompt}">Vat And Tax</a></td>
 										<td>
 											<a th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>

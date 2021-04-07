@@ -2,6 +2,7 @@ package com.asl.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	@Override
 	public Profile findByProfilecode(String profilecode) {
 		if(StringUtils.isBlank(profilecode)) return null;
-		return profileMapper.findByProfilecode(profilecode);
+		return profileMapper.findByProfilecode(profilecode, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -79,28 +80,32 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	}
 
 	@Override
+	public List<Profile> getAllLiveProfiles() {
+		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId(), Boolean.TRUE);
+		return list != null ? list : Collections.emptyList();
+	}
+
+	@Override
 	public List<Profile> getAllProfiles() {
-		List<Profile> list = profileMapper.getAllProfiles(sessionManager.getBusinessId());
+		List<Profile> list = profileMapper.getAllProfiles(null, sessionManager.getBusinessId(), null);
 		return list != null ? list : Collections.emptyList();
 	}
 
 	@Override
 	public List<Profile> getAllProfilesByProfiletype(ProfileType profileType) {
 		if(profileType == null) return Collections.emptyList();
-		List<Profile> list = profileMapper.getAllProfiles(profileType, sessionManager.getBusinessId());
+		List<Profile> list = profileMapper.getAllProfiles(profileType, sessionManager.getBusinessId(), null);
 		return list != null ? list : Collections.emptyList();
 	}
 
 	@Override
 	public MenuProfile getLoggedInUserMenuProfile() {
 		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || StringUtils.isBlank(pa.getMenuprofilecode())) {
+		if(pa == null || StringUtils.isBlank(pa.getMpcode())) {
 			return getDefaultMenuProfile();
 		}
-		return getMenuProfileByProfilecode(pa.getMenuprofilecode());
+		return getMenuProfileByProfilecode(pa.getMpcode());
 	}
-
-	
 
 	@Override
 	public MenuProfile getMenuProfileByProfilecode(String profilecode) {
@@ -109,6 +114,13 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		Profile profile = findByProfilecode(profilecode);
 
 		List<ProfileLine> profileLines = new ArrayList<>();
+
+		// Generate profile lines from enum first
+		for(com.asl.enums.MenuProfile item : com.asl.enums.MenuProfile.values()) {
+			ProfileLine pl = new ProfileLine(item);
+			pl.setProfilecode(profilecode);
+			profileLines.add(pl);
+		}
 
 		// All datalist profile lines
 		List<DataList> proxyProfileLines = listService.getList("PROFILE", null, null, ProfileType.M.getCode());
@@ -123,8 +135,9 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		profileLines.stream().forEach(proxy -> {
 			originalProfileLines.stream().forEach(original -> {
-				if(proxy.getProfilecode().equalsIgnoreCase(original.getProfilecode())) {
+				if(proxy.getProfilelinecode().equalsIgnoreCase(original.getProfilelinecode())) {
 					proxy.setProfilelineid(original.getProfilelineid());
+					proxy.setProfilelinecode(original.getProfilelinecode());
 					proxy.setProfilecode(original.getProfilecode());
 					proxy.setProfiletype(original.getProfiletype());
 					proxy.setEnabled(original.isEnabled());
@@ -137,6 +150,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		});
 		MenuProfile rp = new MenuProfile();
 		profileLines.stream().forEach(rp::setProfileLine);
+		rp.getProfileLines().sort(Comparator.comparing(ProfileLine::getProfilelinecode));
 
 		return rp;
 	}
@@ -173,12 +187,12 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 	@Override
 	public ReportProfile getLoggedInUserReportProfile() {
 		ProfileAllocation pa = paService.findByZemail(sessionManager.getLoggedInUserDetails().getUsername());
-		if(pa == null || StringUtils.isBlank(pa.getReportprofilecode())) {
+		if(pa == null || StringUtils.isBlank(pa.getRpcode())) {
 			log.debug("===> User \"{}\", don't have any specifc report profile", sessionManager.getLoggedInUserDetails().getUsername());
 			return getDefaultReportProfile();
 		}
 
-		return getReportProfileByProfilecode(pa.getReportprofilecode());
+		return getReportProfileByProfilecode(pa.getRpcode());
 	}
 
 	@Override

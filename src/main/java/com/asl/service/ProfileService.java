@@ -24,6 +24,8 @@ public interface ProfileService {
 
 	Profile findByProfilecodeAndProfiletype(String profilecode, ProfileType profiletype);
 
+	public List<Profile> getAllLiveProfiles();
+
 	List<Profile> getAllProfiles();
 
 	List<Profile> getAllProfilesByProfiletype(ProfileType profiletype);

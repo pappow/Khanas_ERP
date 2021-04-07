@@ -24,7 +24,7 @@
 									</button>
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
-									<div class="nav navbar-nav" th:if="${menuProfile.dashboard ne null and menuProfile.dashboard.display}">
+									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/inventory}">Inventory Management</a></li>
 									</div>
@@ -52,84 +52,37 @@
 									<tr>
 										<td colspan="2">Inventory Management</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/inventory/openingentry}">Stock Opening Entry</a></td>
+									<tr th:if="${menuProfile.M0601 ne null and menuProfile.M0601.display}">
+										<td><a th:href="@{/inventory/openingentry}" th:text="${menuProfile.M0601.screenprompt}">Stock Opening Entry</a></td>
 										<td>
 											<a th:href="@{/inventory/openingentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/inventory/productissue}">Product Issue Entry</a></td>
+									<tr th:if="${menuProfile.M0602 ne null and menuProfile.M0602.display}">
+										<td><a th:href="@{/inventory/productissue}" th:text="${menuProfile.M0602.screenprompt}">Product Issue Entry</a></td>
 										<td>
 											<a th:href="@{/inventory/productissue}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/inventory/imtrn}">Inventory</a></td>
+									<tr th:if="${menuProfile.M0603 ne null and menuProfile.M0603.display}">
+										<td><a th:href="@{/inventory/imtrn}" th:text="${menuProfile.M0603.screenprompt}">Inventory</a></td>
 										<td>
 											<a th:href="@{/inventory/imtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/inventory/stocktake}">Stock-Take Entry</a></td>
+									<tr th:if="${menuProfile.M0604 ne null and menuProfile.M0604.display}">
+										<td><a th:href="@{/inventory/stocktake}" th:text="${menuProfile.M0604.screenprompt}">Stock-Take Entry</a></td>
 										<td>
 											<a th:href="@{/inventory/stocktake}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/inventory/transferorder}">Transfer Order</a></td>
+									<tr th:if="${menuProfile.M0605 ne null and menuProfile.M0605.display}">
+										<td><a th:href="@{/inventory/transferorder}" th:text="${menuProfile.M0605.screenprompt}">Transfer Order</a></td>
 										<td>
 											<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
-									<tr>
-										<td colspan="2">Reports</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/STOCKL}">Current Stock</a></td>
-										<td>
-											<a th:href="@{/report/STOCKL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Date Wise Stock Status</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Stock Low Status</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Inventory Consumption Report</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Item Transaction Detail</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Item Transaction Summary</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/ITEML}">Item List</a></td>
-										<td>
-											<a th:href="@{/report/ITEML}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
 								</table>
 							</div>
 						</section>

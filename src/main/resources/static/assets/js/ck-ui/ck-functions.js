@@ -435,6 +435,7 @@ function submitMainForm(customurl, customform){
 		beforeSend : loadingMask2.show(),
 		success : function(data) {
 			console.log({data});
+			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.triggermodalurl){
@@ -451,7 +452,6 @@ function submitMainForm(customurl, customform){
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
 			}
-			loadingMask2.hide();
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");

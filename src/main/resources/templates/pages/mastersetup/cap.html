@@ -24,7 +24,7 @@
 									</button>
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
-									<div class="nav navbar-nav" th:if="${menuProfile.dashboard ne null and menuProfile.dashboard.display}">
+									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/mastersetup/cap}">Codes and parameters</a></li>
 									</div>
@@ -49,148 +49,18 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
-									<tr>
-										<td><a th:href="@{/mastersetup/xcodes}">Codes</a></td>
+									<tr th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
+										<td><a th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0208.screenprompt}">Codes</a></td>
 										<td>
 											<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/xtrn}">Transaction Codes</a></td>
+									<tr th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
+										<td><a th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0209.screenprompt}">Transaction Codes</a></td>
 										<td>
 											<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-<!-- 
-									<tr>
-										<td colspan="2">AR Codes & Parameters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">AR Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Related Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td colspan="2">AP Codes & Paraters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">AP Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Related Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td colspan="2">PO Codes & Paramters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">PO Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">GRN Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">GRN Return Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Purchase Type</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td colspan="2">DO Codes & Parameters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">SO Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">DO Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">Sales Return Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td colspan="2">IM Codes & Parameters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">IM Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Related Transaction Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">Store Setup</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td colspan="2">MM Codes & Parameters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">BOM Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Batch Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									
-									<tr>
-										<td colspan="2">PD Codes & Parameters</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">Employee Code</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr> -->
 								</table>
 							</div>
 						</section>

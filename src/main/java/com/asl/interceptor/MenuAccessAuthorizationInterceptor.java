@@ -42,13 +42,14 @@ public class MenuAccessAuthorizationInterceptor implements AsyncHandlerIntercept
 		LoggedInUserDetails liud = sessionManager.getLoggedInUserDetails();
 		if(liud != null && liud.getRoles() != null && liud.getRoles().contains(UserRole.SYSTEM_ADMIN.getCode()) && "Y".equalsIgnoreCase(appConfig.getAllowSystemAdmin())) return true;
 
-		MenuProfile mp = profileService.getLoggedInUserMenuProfile();
+		//MenuProfile mp = profileService.getLoggedInUserMenuProfile();
+		MenuProfile mp = (MenuProfile) sessionManager.getFromMap("menuProfile");
 		if(mp == null) return false;
 
 		boolean stat = true;
 		for (com.asl.enums.MenuProfile menu : com.asl.enums.MenuProfile.values()) {
 			if(modulePath.startsWith(menu.getMenuPath())) {
-				ProfileLine pl = MenuProfile.invokeGetter(mp, menu.getProfileField());
+				ProfileLine pl = MenuProfile.invokeGetter(mp, menu.getCode());
 				if(pl == null) {
 					stat = true;
 					continue;

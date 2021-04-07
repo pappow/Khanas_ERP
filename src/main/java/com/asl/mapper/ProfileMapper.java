@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Profile;
 import com.asl.enums.ProfileType;
-import com.asl.model.MenuProfile;
 
 /**
  * @author Zubayer Ahamed
@@ -19,15 +18,9 @@ public interface ProfileMapper {
 
 	long update(Profile profile);
 
-	Profile findByProfilecode(String profilecode);
+	Profile findByProfilecode(String profilecode, String zid);
 
-	Profile findByProfileCodeAndProfileType(String profileCode, ProfileType profileType, String zid);
+	Profile findByProfileCodeAndProfileType(String profilecode, ProfileType profiletype, String zid);
 
-	List<Profile> getAllProfiles(String zid);
-
-	List<Profile> getAllProfiles(ProfileType profileType, String zid);
-
-	MenuProfile getMenuProfileById(Long profileId, String zid);
-
-	String modifiedProfileCode(String pc);
+	List<Profile> getAllProfiles(ProfileType profiletype, String zid, Boolean zactive);
 }

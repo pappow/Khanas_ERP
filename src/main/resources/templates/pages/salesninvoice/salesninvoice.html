@@ -24,7 +24,7 @@
 									</button>
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
-									<div class="nav navbar-nav" th:if="${menuProfile.dashboard ne null and menuProfile.dashboard.display}">
+									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/salesninvoice}">Sales & Invoicing</a></li>
 									</div>
@@ -52,134 +52,72 @@
 									<tr>
 										<td colspan="2">Sales Order</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/salesninvoice/salesorder}">Sales Orders (Branch)</a></td>
+									<tr th:if="${menuProfile.M0401 ne null and menuProfile.M0401.display}">
+										<td><a th:href="@{/salesninvoice/salesorder}" th:text="${menuProfile.M0401.screenprompt}">Sales Orders (Branch)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/salesninvoice/salesorder/allopensalesorder}">All Open Sales Orders (Branch)</a></td>
+									<tr th:if="${menuProfile.M0402 ne null and menuProfile.M0402.display}">
+										<td><a th:href="@{/salesninvoice/salesorder/allopensalesorder}" th:text="${menuProfile.M0402.screenprompt}">All Open Sales Orders (Branch)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesorder/allopensalesorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/salesninvoice/salesorder/detailmatrix}">Sales Orders Matrix (Branch)</a></td>
+									<tr th:if="${menuProfile.M0403 ne null and menuProfile.M0403.display}">
+										<td><a th:href="@{/salesninvoice/salesorder/detailmatrix}" th:text="${menuProfile.M0403.screenprompt}">Sales Orders Matrix (Branch)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesorder/detailmatrix}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/salesninvoice/salesorderchalan}">Sales Orders Chalan (Branch)</a></td>
+									<tr th:if="${menuProfile.M0404 ne null and menuProfile.M0404.display}">
+										<td><a th:href="@{/salesninvoice/salesorderchalan}" th:text="${menuProfile.M0404.screenprompt}">Sales Orders Chalan (Branch)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesorderchalan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									
+
+
 									<tr>
 										<td colspan="2">Sales</td>
 									</tr>
-									<tr>
-										<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales Invoice</a></td>
+									<tr th:if="${menuProfile.M0405 ne null and menuProfile.M0405.display}">
+										<td><a th:href="@{/salesninvoice/salesandinvoice}" th:text="${menuProfile.M0405.screenprompt}">Sales Invoice</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/salesninvoice/directsales}">Sales Invoice (Direct)</a></td>
+									<tr th:if="${menuProfile.M0406 ne null and menuProfile.M0406.display}">
+										<td><a th:href="@{/salesninvoice/directsales}" th:text="${menuProfile.M0406.screenprompt}">Sales Invoice (Direct)</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/salesninvoice/deliveryorderchalan}">Delivery Orders chalan</a></td>
+									<tr th:if="${menuProfile.M0407 ne null and menuProfile.M0407.display}">
+										<td><a th:href="@{/salesninvoice/deliveryorderchalan}" th:text="${menuProfile.M0407.screenprompt}">Delivery Orders chalan</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/deliveryorderchalan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/salesninvoice/moneyreceipt}">Money Receipt</a></td>
+									<tr th:if="${menuProfile.M0408 ne null and menuProfile.M0408.display}">
+										<td><a th:href="@{/salesninvoice/moneyreceipt}" th:text="${menuProfile.M0408.screenprompt}">Money Receipt</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/salesninvoice/returnsales}">Sales Return</a></td>
+									<tr th:if="${menuProfile.M0409 ne null and menuProfile.M0409.display}">
+										<td><a th:href="@{/salesninvoice/returnsales}" th:text="${menuProfile.M0409.screenprompt}">Sales Return</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/returnsales}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><a th:href="@{/salesninvoice/customeradjustment}">Customer Adjustment</a></td>
+									<tr th:if="${menuProfile.M0410 ne null and menuProfile.M0410.display}">
+										<td><a th:href="@{/salesninvoice/customeradjustment}" th:text="${menuProfile.M0410.screenprompt}">Customer Adjustment</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/customeradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
-									<tr>
-										<td colspan="2">Reports</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/SOL}">Sales Order Listing</a></td>
-										<td>
-											<a th:href="@{/report/SOL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Sales Listing Detail</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Sales Listing Summary</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Money Receipt Listing</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Customer Ledger Detail</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Customer Ledger Summary</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Both Party Ledger</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report/CUSL}">Customer List</a></td>
-										<td>
-											<a th:href="@{/report/CUSL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">Receivable and Collection Statement</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
 								</table>
 							</div>
 						</section>

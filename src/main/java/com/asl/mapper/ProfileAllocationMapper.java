@@ -15,8 +15,8 @@ public interface ProfileAllocationMapper {
 
 	public long save(ProfileAllocation profileAllocation);
 	public long update(ProfileAllocation profileAllocation);
-	public ProfileAllocation findById(Long profileAllocationId);
+	public ProfileAllocation findByPaid(String paid, String zid);
 	public List<ProfileAllocation> getAllProfileAllocation(String zid);
-	public ProfileAllocation findByUsername(String username, String zid);
+	public ProfileAllocation findByZemail(String zemail, String zid);
 
 }

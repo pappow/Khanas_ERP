@@ -14,6 +14,7 @@ public class ProfileLinePK implements Serializable {
 	private static final long serialVersionUID = -6952207808761772245L;
 
 	private String zid;
-	private int profilelineid;
+	private String profilelineid;
+	private String profilelinecode;
 	private String profilecode;
 }

@@ -48,75 +48,84 @@
 							</div>
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
-									<tr>
-										<td colspan="2">Master Setup</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/partymaster}">Party Master</a></td>
-										<td>
-											<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/itemmaster}">Item Master</a></td>
-										<td>
-											<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/mastersetup/cap}">Code & Parameters</a></td>
-										<td>
-											<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									
-									<tr>
-										<td><a th:href="@{/mastersetup/vataitmaster}">Vat and Tax</a></td>
-										<td>
-											<a th:href="@{/mastersetup/vataitmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0200 ne null and menuProfile.M0200.display}">
+										<tr>
+											<td colspan="2" th:text="${menuProfile.M0200.screenprompt}">Master Setup</td>
+										</tr>
+										<tr th:if="${menuProfile.M0201 ne null and menuProfile.M0201.display}">
+											<td><a th:href="@{/mastersetup/partymaster}" th:text="${menuProfile.M0201.screenprompt}">Party Master</a></td>
+											<td>
+												<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0202 ne null and menuProfile.M0202.display}">
+											<td><a th:href="@{/mastersetup/itemmaster}" th:text="${menuProfile.M0202.screenprompt}">Item Master</a></td>
+											<td>
+												<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0203 ne null and menuProfile.M0203.display}">
+											<td><a th:href="@{/mastersetup/cap}" th:text="${menuProfile.M0203.screenprompt}">Code & Parameters</a></td>
+											<td>
+												<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0204 ne null and menuProfile.M0204.display}">
+											<td><a th:href="@{/mastersetup/vataitmaster}" th:text="${menuProfile.M0204.screenprompt}">Vat and Tax</a></td>
+											<td>
+												<a th:href="@{/mastersetup/vataitmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 
-									<tr>
-										<td colspan="2">Procurements</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/purchasing}">Procurements</a></td>
-										<td>
-											<a th:href="@{/purchasing}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
+										<tr>
+											<td colspan="2" th:text="${menuProfile.M0300.screenprompt}">Procurements</td>
+										</tr>
+										<tr th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
+											<td><a th:href="@{/purchasing}" th:text="${menuProfile.M0300.screenprompt}">Procurements</a></td>
+											<td>
+												<a th:href="@{/purchasing}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 
-									<tr th:if="${isCentral}">
-										<td colspan="2">Sales & Invoicing</td>
-									</tr>
-									<tr th:if="${isCentral}">
-										<td><a th:href="@{/salesninvoice}">Sales & Invoicing</a></td>
-										<td>
-											<a th:href="@{/salesninvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0400 ne null and menuProfile.M0400.display}">
+										<tr th:if="${isCentral}">
+											<td colspan="2" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoicing</td>
+										</tr>
+										<tr th:if="${isCentral}">
+											<td><a th:href="@{/salesninvoice}" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoicing</a></td>
+											<td>
+												<a th:href="@{/salesninvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 
-									<tr th:if="${isCentral}">
-										<td colspan="2">Production</td>
-									</tr>
-									<tr th:if="${isCentral}">
-										<td><a th:href="@{/production}">Production</a></td>
-										<td>
-											<a th:href="@{/production}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0500 ne null and menuProfile.M0500.display}">
+										<tr th:if="${isCentral}">
+											<td colspan="2" th:text="${menuProfile.M0500.screenprompt}">Production</td>
+										</tr>
+										<tr th:if="${isCentral}">
+											<td><a th:href="@{/production}" th:text="${menuProfile.M0500.screenprompt}">Production</a></td>
+											<td>
+												<a th:href="@{/production}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 
-									<tr>
-										<td colspan="2">Inventory</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/inventory}">Inventory</a></td>
-										<td>
-											<a th:href="@{/inventory}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									
+									<span th:if="${menuProfile.M0600 ne null and menuProfile.M0600.display}">
+										<tr>
+											<td colspan="2" th:text="${menuProfile.M0600.screenprompt}">Inventory</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/inventory}" th:text="${menuProfile.M0600.screenprompt}">Inventory</a></td>
+											<td>
+												<a th:href="@{/inventory}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
 									<tr>
 										<td colspan="2">Convention Hall Module</td>
 									</tr>
@@ -127,50 +136,35 @@
 										</td>
 									</tr>
 
-									<tr>
-										<td colspan="2">Report</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/report}">All Report</a></td>
-										<td>
-											<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0700 ne null and menuProfile.M0700.display}">
+										<tr>
+											<td colspan="2" th:text="${menuProfile.M0700.screenprompt}">Report</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/report}" th:text="${menuProfile.M0700.screenprompt}">All Report</a></td>
+											<td>
+												<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 
-									<tr>
-										<td colspan="2">System Administration</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/system/usersentry}">Users Entry</a></td>
-										<td>
-											<a th:href="@{/system/usersentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-
-									<tr>
-										<td><a th:href="@{/system/profile}">Profile</a></td>
-										<td>
-											<a th:href="@{/system/profile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/system/profileallocation}">Profile allocation</a></td>
-										<td>
-											<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/system/list}">List</a></td>
-										<td>
-											<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/user}">User</a></td>
-										<td>
-											<a th:href="@{/user}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									<span th:if="${menuProfile.M0100 ne null and menuProfile.M0100.display}">
+										<tr>
+											<td colspan="2" th:text="${menuProfile.M0100.screenprompt}">System Administration</td>
+										</tr>
+										<tr th:if="${menuProfile.M0101 ne null and menuProfile.M0101.display}">
+											<td><a th:href="@{/system/usersentry}" th:text="${menuProfile.M0101.screenprompt}">Users Entry</a></td>
+											<td>
+												<a th:href="@{/system/usersentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0105 ne null and menuProfile.M0105.display}">
+											<td><a th:href="@{/system/list}" th:text="${menuProfile.M0105.screenprompt}">List</a></td>
+											<td>
+												<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 									<tr>
 										<td><a th:href="@{/logout}" >Logout</a></td>
 										<td>
