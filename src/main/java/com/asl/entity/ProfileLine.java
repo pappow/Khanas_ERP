@@ -88,6 +88,9 @@ public class ProfileLine extends AbstractModel<String> {
 	@Column(name = "pgroup")
 	private String pgroup;
 
+	@Transient
+	private String pgroupname;
+
 	@Column(name = "parent")
 	private String parent;
 
@@ -112,6 +115,8 @@ public class ProfileLine extends AbstractModel<String> {
 
 	public ProfileLine(ReportMenu rm) {
 		this.seqn = rm.getSeqn();
+		this.pgroup = rm.getGroup();
+		this.pgroupname = rm.getGroupName();
 
 		this.profilelinecode = rm.name();
 		this.profiletype = ProfileType.R;

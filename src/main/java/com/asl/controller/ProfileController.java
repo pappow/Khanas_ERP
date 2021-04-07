@@ -73,7 +73,6 @@ public class ProfileController extends ASLAbstractController {
 					profileLinesMap.put(pl.getPgroup(), wrapper);
 				}
 			});
-			model.addAttribute("plmap", profileLinesMap);
 		} else if (ProfileType.U.equals(profile.getProfiletype())) {
 			// TODO: 
 		} else if (ProfileType.R.equals(profile.getProfiletype())) {
@@ -341,9 +340,9 @@ public class ProfileController extends ASLAbstractController {
 		if(ProfileType.M.equals(profiletype)) {
 			return "pages/system/usersentry/profile/menuprofilelinemodal::menuprofilelinemodal";
 		} else if (ProfileType.R.equals(profiletype)) {
-			return "pages/profile/menuprofilelinemodal::reportprofilelinemodal";
+			return "pages/system/usersentry/profile/reportprofilelinemodal::reportprofilelinemodal";
 		} else {
-			return "pages/profile/menuprofilelinemodal::menuprofilelinemodal";
+			return "pages/system/usersentry/profile/userprofilelinemodal::userprofilelinemodal";
 		}
 	}
 

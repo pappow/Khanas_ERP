@@ -203,6 +203,13 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 		List<ProfileLine> profileLines = new ArrayList<>();
 
+		// Generate profile lines from enum first
+		for(ReportMenu item : ReportMenu.values()) {
+			ProfileLine pl = new ProfileLine(item);
+			pl.setProfilecode(profilecode);
+			profileLines.add(pl);
+		}
+
 		// All datalist profile lines
 		List<DataList> proxyProfileLines = listService.getList("PROFILE", null, null, ProfileType.R.getCode());
 		if(proxyProfileLines != null && !proxyProfileLines.isEmpty()) {
@@ -216,8 +223,9 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		List<ProfileLine> originalProfileLines = profileLineService.getAllByProfilecodeAndProfiletype(profile.getProfilecode(), profile.getProfiletype());
 		profileLines.stream().forEach(proxy -> {
 			originalProfileLines.stream().forEach(original -> {
-				if(proxy.getProfilecode().equalsIgnoreCase(original.getProfilecode())) {
+				if(proxy.getProfilelinecode().equalsIgnoreCase(original.getProfilelinecode())) {
 					proxy.setProfilelineid(original.getProfilelineid());
+					proxy.setProfilelinecode(original.getProfilelinecode());
 					proxy.setProfilecode(original.getProfilecode());
 					proxy.setProfiletype(original.getProfiletype());
 					proxy.setEnabled(original.isEnabled());

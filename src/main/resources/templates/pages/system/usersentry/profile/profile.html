@@ -172,80 +172,57 @@
 										<script th:src="@{/assets/pages/system/usersentry/profile/profile.js}"></script>
 									</table>
 								</div>
-							
-								<!-- <table class="table table-stripped table-hover profilelinetable" id="profilelinetable" th:fragment="profilelinetable">
-									<thead>
-										<tr>
-											<th rowspan="2">Menu</th>
-											<th style="text-align: center">Display
-												
-											</th>
-											<th rowspan="2">Display text</th>
-											<th rowspan="2">Edit</th>
-										</tr>
-										<tr>
-											<th style="text-align: center">
-												<input 	class="pl-display form-control"
-														th:attr="data-url=@{/system/profile/allprofilelines/update},profilecode=${profile.profilecode},profiletype=${profile.profiletype}" 
-														type="checkbox"
-														th:checked="${allchecked}"/>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="pl, in : ${menuprofile.profileLines}" th:attr="style='background:' + ${pl.group} + ''">
-											<td th:text="${pl.profilelinecode} + ' - ' + ${pl.managerprompt}">Prompts</td>
-											<td style="text-align: center;">
-												<input 	class="pl-display"
-														th:attr="data-url=@{/system/profile/profileline/save},profilecode=${pl.profilecode},profiletype=${pl.profiletype},profilelineid=${pl.profilelineid},screenprompt=${pl.screenprompt},seqn=${pl.seqn}" 
-														th:id="${pl.profilelinecode}" 
-														type="checkbox" 
-														th:checked="${pl.display}"/>
-											</td>
-											<td th:text="${pl.screenprompt}"></td>
-											<td>
-												<button type="button" 
-														class="btn btn-default btn-edit editmode"
-														th:attr="data-url=@{/system/profile/profilelinemodal/} + ${pl.profilelinecode} + '/' + ${pl.profilecode} + '/' + ${pl.profiletype} + '/show', data-target-modal='menuprofilelinemodal'"
-														><i class="fas fa-edit"></i></button>
-											</td>
-										</tr>
-									</tbody>
-									<script th:src="@{/assets/pages/system/usersentry/profile/profile.js}"></script>
-								</table> -->
 							</div>
 						</section>
 
-						<!-- <section th:if="${profile.profilecode != null && profile.profiletype == T(com.asl.enums.ProfileType).R}">
+						<section th:if="${profile.profilecode != null && profile.profiletype == T(com.asl.enums.ProfileType).R && profile.zactive}" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1><i class="fas fa-chevron-down"></i> Report options</h1>
+								<h1>Report options</h1>
 							</div>
-							<div class="section-body togglebox">
-								<table class="table table-stripped table-hover" id="profilelinetable" th:fragment="reportProfilelinetable">
-									<thead>
-										<tr>
-											<th>Report Code</th>
-											<th style="text-align: center">Display</th>
-											<th>Report Name</th>
-											<th style="text-align: right;">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="pl, in : ${reportprofile.profileLines}">
-											<td th:text="${pl.managerPrompt}">Prompts</td>
-											<td style="text-align: center;" th:text="${pl.display ? 'Y' : 'N'}"></td>
-											<td th:text="${pl.screenPrompt}"></td>
-											<td style="text-align: right;">
-												<button type="button" 
-														class="btn btn-default btn-edit editmode"
-														th:attr="data-url=@{/system/profile/profilelinemodal/} + ${pl.profileId} + '/' + ${pl.profileLineId} + '/' + ${pl.profileCode} + '/' + ${pl.profileType} + '/show', data-target-modal='menuprofilelinemodal'"
-														><i class="fas fa-edit"></i></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="section-body">
+								<div id="profilelinetable" th:fragment="profilelinetable">
+									<table style="margin-top: 20px; margin-bottom: 60px;" th:each="plg : ${plmap}" class="table table-stripped table-bordered table-hover profilelinetable">
+										<thead>
+											<tr>
+												<th width="45%" rowspan="2">Report Name</th>
+												<th width="5%" style="text-align: center; border-bottom: none;">Display</th>
+												<th width="45%" rowspan="2">Display text</th>
+												<th width="5%" rowspan="2" style="text-align: center">Edit</th>
+											</tr>
+											<tr>
+												<th style="text-align: center; border-top: none;">
+													<input 	class="pl-display"
+															th:attr="data-url=@{/system/profile/allprofilelines/update},pgroup=${plg.key},profilecode=${profile.profilecode},profiletype=${profile.profiletype}" 
+															type="checkbox"
+															th:checked="${plg.value.allchecked}"/>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="pl, in : ${plg.value.profileLines}">
+												<td th:text="${pl.profilelinecode} + ' - ' + ${pl.managerprompt}">Prompts</td>
+												<td style="text-align: center;">
+													<input 	class="pl-display"
+															th:attr="data-url=@{/system/profile/profileline/save},pgroup=${pl.pgroup},profilecode=${pl.profilecode},profiletype=${pl.profiletype},profilelineid=${pl.profilelineid},screenprompt=${pl.screenprompt},seqn=${pl.seqn}" 
+															th:id="${pl.profilelinecode}" 
+															type="checkbox" 
+															th:checked="${pl.display}"/>
+												</td>
+												<td th:text="${pl.screenprompt}"></td>
+												<td style="text-align: center">
+													<button type="button" 
+															class="btn btn-default btn-edit editmode"
+															th:attr="data-url=@{/system/profile/profilelinemodal/} + ${pl.profilelinecode} + '/' + ${pl.profilecode} + '/' + ${pl.profiletype} + '/show', data-target-modal='reportprofilelinemodal'"
+															><i class="fas fa-edit"></i></button>
+												</td>
+											</tr>
+										</tbody>
+										<script th:src="@{/assets/pages/system/usersentry/profile/profile.js}"></script>
+									</table>
+								</div>
 							</div>
-						</section> -->
+						</section>
+
 					</div>
 				</div>
 			</div>
@@ -253,6 +230,7 @@
 
 		<!-- Modal -->
 		<div id="menuprofilelinemodal-section"></div>
+		<div id="reportprofilelinemodal-section"></div>
 
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
