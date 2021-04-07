@@ -5,11 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.asl.controller.CustomerAdjustmentController;
-import com.asl.entity.Cacus;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
-import com.asl.entity.PoordHeader;
 import com.asl.model.BranchesRequisitions;
 
 /**

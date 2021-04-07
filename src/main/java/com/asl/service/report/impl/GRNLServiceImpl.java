@@ -1,6 +1,5 @@
 package com.asl.service.report.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -14,21 +13,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import com.asl.entity.Imstock;
-import com.asl.entity.PogrnHeader;
 import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
-import com.asl.enums.ReportParamDataType;
 import com.asl.model.DropdownOption;
 import com.asl.model.FormFieldBuilder;
-import com.asl.model.report.STOCKLReport;
-import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
 
 /**
@@ -40,8 +32,6 @@ public class GRNLServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
-	@Autowired
-	private PogrnService pogrnService;
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
