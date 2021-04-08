@@ -23,6 +23,7 @@ public class ImmofgdetailServiceImpl extends AbstractGenericService implements I
 	public long save(Immofgdetail immofgdetail) {
 		if(immofgdetail == null) return 0;
 		immofgdetail.setZid(sessionManager.getBusinessId());
+		immofgdetail.setZauserid(getAuditUser());
 		return immofgdetailMapper.save(immofgdetail);
 	}
 
@@ -30,6 +31,7 @@ public class ImmofgdetailServiceImpl extends AbstractGenericService implements I
 	public long update(Immofgdetail immofgdetail) {
 		if(immofgdetail == null) return 0;
 		immofgdetail.setZid(sessionManager.getBusinessId());
+		immofgdetail.setZuuserid(getAuditUser());
 		return immofgdetailMapper.update(immofgdetail);
 	}
 

@@ -23,6 +23,7 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 		if(opcrnheader == null)
 			return 0;
 		opcrnheader.setZid(sessionManager.getBusinessId());
+		opcrnheader.setZauserid(getAuditUser());
 		return opcrnMapper.saveOpcrnHeader(opcrnheader);
 	}
 
@@ -31,6 +32,7 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 		if (opcrnheader == null || StringUtils.isBlank(opcrnheader.getXcrnnum())) return 0;
 		if(StringUtils.isBlank(opcrnheader.getZid()))
 			opcrnheader.setZid(sessionManager.getBusinessId());
+		opcrnheader.setZuuserid(getAuditUser());
 		return opcrnMapper.updateOpcrnHeader(opcrnheader);
 	}
 
@@ -39,6 +41,7 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 		if(opcrndetail == null || StringUtils.isBlank(opcrndetail.getXcrnnum()))
 			return 0;
 		opcrndetail.setZid(sessionManager.getBusinessId());
+		opcrndetail.setZauserid(getAuditUser());
 		long count = opcrnMapper.saveOpcrnDetail(opcrndetail);
 
 		return count;
@@ -48,6 +51,7 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 	public long updateDetail(Opcrndetail opcrndetail) {
 		if(opcrndetail == null || StringUtils.isBlank(opcrndetail.getXcrnnum())) return 0;
 		opcrndetail.setZid(sessionManager.getBusinessId());
+		opcrndetail.setZuuserid(getAuditUser());
 		long count = opcrnMapper.updateOpcrnDetail(opcrndetail);
 		return count;
 	}

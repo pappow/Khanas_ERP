@@ -26,6 +26,7 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 		if (xusers == null) return 0;
 		xusers.setZemail(modifyZemail(xusers.getZemail()));
 		xusers.setZid(sessionManager.getBusinessId());
+		xusers.setZauserid(getAuditUser());
 		return userMapper.save(xusers);
 	}
 
@@ -33,6 +34,7 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 	public long update(Xusers user) {
 		if (user == null) return 0;
 		user.setZid(sessionManager.getBusinessId());
+		user.setZuuserid(getAuditUser());
 		return userMapper.update(user);
 	}
 

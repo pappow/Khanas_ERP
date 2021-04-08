@@ -30,6 +30,7 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public long saveMoHeader(Moheader moheader) {
 		if(moheader == null || StringUtils.isBlank(moheader.getXtypetrn())) return 0;
 		moheader.setZid(sessionManager.getBusinessId());
+		moheader.setZauserid(getAuditUser());
 		return moMapper.saveMoHeader(moheader);
 	}
 
@@ -50,6 +51,7 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public long updateMoHeader(Moheader moheader) {
 		if(moheader == null || StringUtils.isBlank(moheader.getXbatch())) return 0;
 		moheader.setZid(sessionManager.getBusinessId());
+		moheader.setZuuserid(getAuditUser());
 		return moMapper.updateMoHeader(moheader);
 	}
 
@@ -57,6 +59,7 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public long saveMoDetail(Modetail modetail) {
 		if(modetail == null || StringUtils.isBlank(modetail.getXbatch())) return 0;
 		modetail.setZid(sessionManager.getBusinessId());
+		modetail.setZauserid(getAuditUser());
 		return moMapper.saveMoDetail(modetail);
 	}
 
@@ -64,6 +67,7 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	public long updateMoDetail(Modetail modetail) {
 		if(modetail == null || StringUtils.isBlank(modetail.getXbatch()) || modetail.getXrow() == 0) return 0;
 		modetail.setZid(sessionManager.getBusinessId());
+		modetail.setZuuserid(getAuditUser());
 		return moMapper.updateMoDetail(modetail);
 	}
 

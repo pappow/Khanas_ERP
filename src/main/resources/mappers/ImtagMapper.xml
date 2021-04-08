@@ -62,8 +62,6 @@
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -125,9 +123,7 @@
 			xitem=#{xitem, jdbcType=VARCHAR},
 			xunit=#{xunit, jdbcType=VARCHAR},
 			xqty=#{xqty, jdbcType=DECIMAL},
-			xstatustag=#{xstatustag, jdbcType=VARCHAR},			
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
+			xstatustag=#{xstatustag, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

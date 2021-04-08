@@ -23,6 +23,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 		if(pocrnheader == null)
 			return 0;
 		pocrnheader.setZid(sessionManager.getBusinessId());
+		pocrnheader.setZauserid(getAuditUser());
 		return pocrnMapper.savePocrnHeader(pocrnheader);
 	}
 
@@ -31,6 +32,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 		if (pocrnheader == null || StringUtils.isBlank(pocrnheader.getXcrnnum())) return 0;
 		if(StringUtils.isBlank(pocrnheader.getZid()))
 			pocrnheader.setZid(sessionManager.getBusinessId());
+		pocrnheader.setZuuserid(getAuditUser());
 		return pocrnMapper.updatePocrnHeader(pocrnheader);
 	}
 
@@ -39,6 +41,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 		if(pocrndetail == null || StringUtils.isBlank(pocrndetail.getXcrnnum()))
 			return 0;
 		pocrndetail.setZid(sessionManager.getBusinessId());
+		pocrndetail.setZauserid(getAuditUser());
 		long count = pocrnMapper.savePocrnDetail(pocrndetail);
 
 		return count;
@@ -48,6 +51,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 	public long updateDetail(Pocrndetail pocrndetail) {
 		if(pocrndetail == null || StringUtils.isBlank(pocrndetail.getXcrnnum())) return 0;
 		pocrndetail.setZid(sessionManager.getBusinessId());
+		pocrndetail.setZuuserid(getAuditUser());
 		long count = pocrnMapper.updatePocrnDetail(pocrndetail);
 		return count;
 	}

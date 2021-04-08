@@ -128,7 +128,6 @@
 			xtrncrn=#{xtrncrn, jdbcType=VARCHAR},
 	
 			zid=#{zid, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -207,8 +206,6 @@
 			xsrate=#{xsrate, jdbcType=DECIMAL},
 			xrategrn=#{xrategrn, jdbcType=DECIMAL},
 			xdocrow=#{xdocrow, jdbcType=INTEGER},
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

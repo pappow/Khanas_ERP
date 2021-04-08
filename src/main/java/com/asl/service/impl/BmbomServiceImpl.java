@@ -25,6 +25,7 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	public long saveBmbomheader(Bmbomheader bmbomheader) {
 		if(bmbomheader == null || StringUtils.isBlank(bmbomheader.getXitem())) return 0;
 		bmbomheader.setZid(sessionManager.getBusinessId());
+		bmbomheader.setZauserid(getAuditUser());
 		return bmbomMapper.saveBmBomHeader(bmbomheader);
 	}
 
@@ -32,6 +33,7 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	public long updateBmbomheader(Bmbomheader bmbomheader) {
 		if(bmbomheader == null || StringUtils.isBlank(bmbomheader.getXitem())) return 0;
 		bmbomheader.setZid(sessionManager.getBusinessId());
+		bmbomheader.setZuuserid(getAuditUser());
 		return bmbomMapper.updateBmBomHeader(bmbomheader);
 	}
 
@@ -39,6 +41,7 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	public long saveBmbomdetail(Bmbomdetail bmbomdetail) {
 		if(bmbomdetail == null || StringUtils.isBlank(bmbomdetail.getXbomkey())) return 0;
 		bmbomdetail.setZid(sessionManager.getBusinessId());
+		bmbomdetail.setZauserid(getAuditUser());
 		return bmbomMapper.saveBmBomDetail(bmbomdetail);
 	}
 
@@ -46,6 +49,7 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	public long updateBmbomdetail(Bmbomdetail bmbomdetail) {
 		if(bmbomdetail == null || StringUtils.isBlank(bmbomdetail.getXbomkey())) return 0;
 		bmbomdetail.setZid(sessionManager.getBusinessId());
+		bmbomdetail.setZuuserid(getAuditUser());
 		return bmbomMapper.updateBmBomDetail(bmbomdetail);
 	}
 

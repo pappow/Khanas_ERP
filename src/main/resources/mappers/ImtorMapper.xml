@@ -90,7 +90,6 @@
 			#{xlong, jdbcType=VARCHAR},
 			
 			#{zid, jdbcType=VARCHAR},
-			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
 			#{zuip, jdbcType=VARCHAR},
@@ -183,8 +182,6 @@
 			xqtyord=#{xqtyord, jdbcType=DECIMAL},
 			xrate=#{xrate, jdbcType=DECIMAL},
 			xnote=#{xnote, jdbcType=VARCHAR},
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

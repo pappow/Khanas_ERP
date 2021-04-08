@@ -38,7 +38,6 @@
 		UPDATE profile
 		SET
 			description=#{description, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

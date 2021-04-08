@@ -25,6 +25,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	public long save(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
 		xtrn.setZid(sessionManager.getBusinessId());
+		xtrn.setZauserid(getAuditUser());
 		try {
 			return xtrnMapper.save(xtrn);
 		} catch (Exception e) {
@@ -35,6 +36,8 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public long update(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
+		xtrn.setZid(sessionManager.getBusinessId());
+		xtrn.setZuuserid(getAuditUser());
 		try {
 			return xtrnMapper.update(xtrn);
 		} catch (Exception e) {

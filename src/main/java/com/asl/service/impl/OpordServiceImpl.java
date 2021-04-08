@@ -28,6 +28,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long saveOpordHeader(Opordheader opordheader) {
 		if(opordheader == null) return 0;
 		opordheader.setZid(sessionManager.getBusinessId());
+		opordheader.setZauserid(getAuditUser());
 		return opordMapper.saveOpordHeader(opordheader);
 	}
 
@@ -35,6 +36,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long updateOpordHeader(Opordheader opordheader) {
 		if(opordheader == null) return 0;
 		opordheader.setZid(sessionManager.getBusinessId());
+		opordheader.setZuuserid(getAuditUser());
 		return opordMapper.updateOpordHeader(opordheader);
 	}
 
@@ -42,6 +44,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long saveOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
 		oporddetail.setZid(sessionManager.getBusinessId());
+		oporddetail.setZauserid(getAuditUser());
 		return opordMapper.saveOpordDetail(oporddetail);
 	}
 
@@ -49,6 +52,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long updateOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
 		oporddetail.setZid(sessionManager.getBusinessId());
+		oporddetail.setZuuserid(getAuditUser());
 		return opordMapper.updateOpordDetail(oporddetail);
 	}
 

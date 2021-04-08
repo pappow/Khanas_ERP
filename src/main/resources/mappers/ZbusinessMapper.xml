@@ -106,7 +106,6 @@
 			central=#{central, jdbcType=BOOLEAN},
 			branch=#{branch, jdbcType=BOOLEAN},
 			centralzid=#{centralzid, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

@@ -126,7 +126,6 @@
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
 			xchalancreated=#{xchalancreated, jdbcType=BOOLEAN},
 			requisitionnumber=#{requisitionnumber, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -207,8 +206,6 @@
 			xlong=#{xlong, jdbcType=VARCHAR},
 			xrategrn=#{xrategrn, jdbcType=DECIMAL},
 			xqtycrn=#{xqtycrn, jdbcType=DECIMAL},
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

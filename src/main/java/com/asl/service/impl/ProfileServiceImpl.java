@@ -46,6 +46,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 		profile.setProfilecode(modifiedProfileCode(profile.getProfilecode()));
 		profile.setZid(sessionManager.getBusinessId());
+		profile.setZauserid(getAuditUser());
 		return profileMapper.save(profile);
 	}
 
@@ -55,6 +56,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 
 		profile.setProfilecode(modifiedProfileCode(profile.getProfilecode()));
 		profile.setZid(sessionManager.getBusinessId());
+		profile.setZuuserid(getAuditUser());
 		return profileMapper.update(profile);
 	}
 

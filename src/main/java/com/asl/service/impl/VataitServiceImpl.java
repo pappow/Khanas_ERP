@@ -21,6 +21,7 @@ public class VataitServiceImpl extends AbstractGenericService implements VataitS
 		if (vatait == null)
 			return 0;
 		vatait.setZid(sessionManager.getBusinessId());
+		vatait.setZauserid(getAuditUser());
 		return vataitMapper.saveVatait(vatait);
 	}
 
@@ -29,6 +30,7 @@ public class VataitServiceImpl extends AbstractGenericService implements VataitS
 		if (vatait == null)
 			return 0;
 		vatait.setZid(sessionManager.getBusinessId());
+		vatait.setZuuserid(getAuditUser());
 		return vataitMapper.updateVatait(vatait);
 	}
 

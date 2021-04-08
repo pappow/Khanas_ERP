@@ -24,6 +24,7 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	public long save(Cacus cacus) {
 		if(cacus == null || StringUtils.isBlank(cacus.getXtype()) || StringUtils.isBlank(cacus.getXcustype())) return 0;
 		cacus.setZid(sessionManager.getBusinessId());
+		cacus.setZauserid(getAuditUser());
 		return cacusMapper.save(cacus);
 	}
 
@@ -31,6 +32,7 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	public long update(Cacus cacus) {
 		if(cacus == null || StringUtils.isBlank(cacus.getXtype()) || StringUtils.isBlank(cacus.getXcustype())) return 0;
 		cacus.setZid(sessionManager.getBusinessId());
+		cacus.setZuuserid(getAuditUser());
 		return cacusMapper.update(cacus);
 	}
 

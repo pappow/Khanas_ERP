@@ -26,6 +26,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 				|| StringUtils.isBlank(poordHeader.getXtrnpor()))
 			return 0;
 		poordHeader.setZid(sessionManager.getBusinessId());
+		poordHeader.setZauserid(getAuditUser());
 		return poordMapper.savePoordHeader(poordHeader);
 	}
 
@@ -33,6 +34,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	public long update(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) return 0;
 		if(StringUtils.isBlank(poordHeader.getZid())) poordHeader.setZid(sessionManager.getBusinessId());
+		poordHeader.setZuuserid(getAuditUser());
 		return poordMapper.updatePoordHeader(poordHeader);
 	}
 
@@ -59,6 +61,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	public long saveDetail(PoordDetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
+		poordDetail.setZauserid(getAuditUser());
 		long count = poordMapper.savePoordDetail(poordDetail);
 		if(count != 0) {
 			count = updatePoordHeaderTotalAmt(poordDetail);
@@ -76,6 +79,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	public long updateDetail(PoordDetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
+		poordDetail.setZuuserid(getAuditUser());
 		long count = poordMapper.updatePoordDetail(poordDetail);
 		if(count != 0) {
 			count = updatePoordHeaderTotalAmt(poordDetail);

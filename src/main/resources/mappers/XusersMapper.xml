@@ -107,7 +107,6 @@
 			xstatuscus=#{xstatuscus, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xvatregno=#{xvatregno, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

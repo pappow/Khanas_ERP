@@ -276,7 +276,13 @@ public class ProfileController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("profilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		if(ProfileType.M.equals(profileLine.getProfiletype())) {
+			responseHelper.setReloadSectionIdWithUrl("menuprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		} else if(ProfileType.U.equals(profileLine.getProfiletype())) {
+			responseHelper.setReloadSectionIdWithUrl("userprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		} else {
+			responseHelper.setReloadSectionIdWithUrl("reportprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		}
 		responseHelper.setSuccessStatusAndMessage("Profile Line updated successfully");
 		return responseHelper.getResponse();
 	}

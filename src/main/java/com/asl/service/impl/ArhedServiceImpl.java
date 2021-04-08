@@ -23,6 +23,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 				|| StringUtils.isBlank(arhed.getXtrnarhed()))
 			return 0;
 		arhed.setZid(sessionManager.getBusinessId());
+		arhed.setZauserid(getAuditUser());
 		return arhedMapper.saveArhed(arhed);
 	}
 
@@ -31,6 +32,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 		if (arhed == null || StringUtils.isBlank(arhed.getXvoucher()))
 			return 0;
 		arhed.setZid(sessionManager.getBusinessId());
+		arhed.setZuuserid(getAuditUser());
 		return arhedMapper.updateArhed(arhed);
 	}
 

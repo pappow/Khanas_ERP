@@ -100,7 +100,6 @@
 			xemail=#{xemail, jdbcType=VARCHAR},
 			xmadd=#{xmadd, jdbcType=VARCHAR},
 			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
