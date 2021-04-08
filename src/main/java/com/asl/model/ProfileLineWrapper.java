@@ -15,4 +15,5 @@ import lombok.Data;
 public class ProfileLineWrapper {
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private boolean allchecked = true;
+	private boolean allenabled = true;
 }

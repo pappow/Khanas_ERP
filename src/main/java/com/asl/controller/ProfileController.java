@@ -83,12 +83,14 @@ public class ProfileController extends ASLAbstractController {
 					ProfileLineWrapper wrapper = profileLinesMap.get(pl.getPgroup());
 					wrapper.getProfileLines().add(pl);
 					if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+					if(wrapper.isAllenabled()) wrapper.setAllenabled(pl.isEnabled());
 				} else {
 					List<ProfileLine> list = new ArrayList<>();
 					list.add(pl);
 					ProfileLineWrapper wrapper = new ProfileLineWrapper();
 					wrapper.getProfileLines().add(pl);
 					if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+					if(wrapper.isAllenabled()) wrapper.setAllenabled(pl.isEnabled());
 					profileLinesMap.put(pl.getPgroup(), wrapper);
 				}
 			});
@@ -210,21 +212,31 @@ public class ProfileController extends ASLAbstractController {
 
 			for(ProfileLine pl : rp.getProfileLines()) {
 				if(!pl.getPgroup().equalsIgnoreCase(profileLine.getPgroup())) continue;
-				if(StringUtils.isBlank(pl.getProfilelineid()) && pl.isDisplay() != profileLine.isDisplay()) {
+				if((StringUtils.isBlank(pl.getProfilelineid()) && pl.isDisplay() != profileLine.isDisplay())
+						|| (StringUtils.isBlank(pl.getProfilelineid()) && pl.isEnabled() != profileLine.isEnabled())) {
 					// create new
 					pl.setPgroup(profileLine.getPgroup());
 					pl.setDisplay(profileLine.isDisplay());
+					pl.setEnabled(profileLine.isEnabled());
 					profileLineService.save(pl);
-				} else if(StringUtils.isNotBlank(pl.getProfilelineid()) && pl.isDisplay() != profileLine.isDisplay()){
+				} else if((StringUtils.isNotBlank(pl.getProfilelineid()) && pl.isDisplay() != profileLine.isDisplay())
+						|| (StringUtils.isNotBlank(pl.getProfilelineid()) && pl.isEnabled() != profileLine.isEnabled())){
 					// update existing
 					pl.setPgroup(profileLine.getPgroup());
 					pl.setDisplay(profileLine.isDisplay());
+					pl.setEnabled(profileLine.isEnabled());
 					profileLineService.update(pl);
 				}
 			}
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("profilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		if(ProfileType.M.equals(profileLine.getProfiletype())) {
+			responseHelper.setReloadSectionIdWithUrl("menuprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		} else if(ProfileType.U.equals(profileLine.getProfiletype())) {
+			responseHelper.setReloadSectionIdWithUrl("userprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		} else {
+			responseHelper.setReloadSectionIdWithUrl("reportprofilelinetable", "/system/profile/profilelines/" + profileLine.getProfilecode() + "/" + profileLine.getProfiletype());
+		}
 		responseHelper.setSuccessStatusAndMessage("Profile Line updated successfully");
 		return responseHelper.getResponse();
 	}
@@ -289,7 +301,6 @@ public class ProfileController extends ASLAbstractController {
 					profileLinesMap.put(pl.getPgroup(), wrapper);
 				}
 			});
-			model.addAttribute("plmap", profileLinesMap);
 		} else if (ProfileType.U.equals(profiletype)) {
 			// TODO: 
 		} else if (ProfileType.R.equals(profiletype)) {
@@ -300,12 +311,14 @@ public class ProfileController extends ASLAbstractController {
 					ProfileLineWrapper wrapper = profileLinesMap.get(pl.getPgroup());
 					wrapper.getProfileLines().add(pl);
 					if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+					if(wrapper.isAllenabled()) wrapper.setAllenabled(pl.isEnabled());
 				} else {
 					List<ProfileLine> list = new ArrayList<>();
 					list.add(pl);
 					ProfileLineWrapper wrapper = new ProfileLineWrapper();
 					wrapper.getProfileLines().add(pl);
 					if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+					if(wrapper.isAllenabled()) wrapper.setAllenabled(pl.isEnabled());
 					profileLinesMap.put(pl.getPgroup(), wrapper);
 				}
 			});
@@ -319,7 +332,13 @@ public class ProfileController extends ASLAbstractController {
 		p.setProfiletype(profiletype);
 		model.addAttribute("profile", p);
 
-		return "pages/system/usersentry/profile/profile::profilelinetable";
+		if(ProfileType.M.equals(profiletype)) {
+			return "pages/system/usersentry/profile/profile::menuprofilelinetable";
+		} else if (ProfileType.U.equals(profiletype)) {
+			return "pages/system/usersentry/profile/profile::userprofilelinetable";
+		} else {
+			return "pages/system/usersentry/profile/profile::reportprofilelinetable";
+		}
 	}
 
 	@GetMapping("/profilelinemodal/{profilelinecode}/{profilecode}/{profiletype}/show")

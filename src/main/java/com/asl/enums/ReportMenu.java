@@ -43,11 +43,11 @@ public enum ReportMenu {
 
 	// Inventory  -- M0600
 	RM0601(999, "600", "Inventory", "Stock List", ReportParamMap.RM0601, "Y", true, false, 1000),
-	RM0602(999, "600", "Inventory", "Date Wise Stock Status", ReportParamMap.RM0602, "Y", true, false, 1000),
-	RM0603(999, "600", "Inventory", "Stock Low Status", ReportParamMap.RM0603, "Y", true, false, 1000),
-	RM0604(999, "600", "Inventory", "Inventory Consumption Report", ReportParamMap.RM0604, "Y", true, false, 1000),
-	RM0606(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0605, "Y", true, false, 1000),
-	RM0607(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0606, "Y", true, false, 1000),
+	RM0602(999, "600", "Inventory", "Date Wise Stock Status", ReportParamMap.RM0602, "Y", false, false, 1000),
+	RM0603(999, "600", "Inventory", "Stock Low Status", ReportParamMap.RM0603, "Y", false, false, 1000),
+	RM0604(999, "600", "Inventory", "Inventory Consumption Report", ReportParamMap.RM0604, "Y", false, false, 1000),
+	RM0606(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0605, "Y", false, false, 1000),
+	RM0607(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0606, "Y", false, false, 1000),
 	RM0608(999, "600", "Inventory", "Item List", ReportParamMap.RM0607, "Y", false, false, 1000);
 
 
