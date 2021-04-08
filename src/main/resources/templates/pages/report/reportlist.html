@@ -55,9 +55,8 @@
 									<tr th:each="pl, in : ${plg.value.profileLines}">
 										<td><a th:href="@{/report/} + ${pl.profilelinecode}" th:text="${pl.profilelinecode} + ' - ' + ${pl.screenprompt}">Purchase Order Listing</a></td>
 										<td>
-<<<<<<< Upstream, based on upstream/develop
+
 											<a th:href="@{/report/} + ${pl.profilelinecode}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-=======
 											<a th:href="@{/report/POL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
@@ -119,7 +118,6 @@
 										<td><a th:href="@{/report/SUPL}">Supplier List</a></td>
 										<td>
 											<a th:href="@{/report/SUPL}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
->>>>>>> 7924160 01-04-21
 										</td>
 									</tr>
 								</table>
