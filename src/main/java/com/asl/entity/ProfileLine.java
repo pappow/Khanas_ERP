@@ -125,6 +125,7 @@ public class ProfileLine extends AbstractModel<String> {
 		this.screenprompt = rm.getDescription();
 		this.display = "Y".equalsIgnoreCase(rm.getDefaultAccess());
 		this.required = false;
+		this.enabled = rm.isFopEnabled();
 
 		this.xtypetrn = TransactionCodeType.PROFILE_LINE.getCode();
 		this.xtrn = TransactionCodeType.PROFILE_LINE.getdefaultCode();

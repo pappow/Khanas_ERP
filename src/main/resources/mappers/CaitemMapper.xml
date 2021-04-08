@@ -91,7 +91,6 @@
 			xmodel=#{xmodel, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xproditem=#{xproditem, jdbcType=BOOLEAN},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

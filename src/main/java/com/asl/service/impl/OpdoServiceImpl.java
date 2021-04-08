@@ -39,6 +39,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		if (opdoHeader == null)
 			return 0;
 		opdoHeader.setZid(sessionManager.getBusinessId());
+		opdoHeader.setZauserid(getAuditUser());
 		return opdoMapper.saveOpdoHeader(opdoHeader);
 	}
 
@@ -48,6 +49,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			return 0;
 		if(StringUtils.isBlank(opdoHeader.getZid()))
 			opdoHeader.setZid(sessionManager.getBusinessId());
+		opdoHeader.setZuuserid(getAuditUser());
 		return opdoMapper.updateOpdoHeader(opdoHeader);
 	}
 
@@ -55,6 +57,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	public long saveDetail(Opdodetail opdoDetail) {
 		if(opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) return 0;
 		opdoDetail.setZid(sessionManager.getBusinessId());
+		opdoDetail.setZauserid(getAuditUser());
 		long count = opdoMapper.saveOpdoDetail(opdoDetail);
 		if(count != 0) { count = updateOpdoHeaderTotalAmtAndGrandTotalAmt(opdoDetail.getXdornum()); }
 		 
@@ -65,6 +68,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	public long updateDetail(Opdodetail opdoDetail) {
 		if(opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) return 0;
 		opdoDetail.setZid(sessionManager.getBusinessId());
+		opdoDetail.setZuuserid(getAuditUser());
 		long count = opdoMapper.updateOpdoDetail(opdoDetail);
 		if(count != 0) { count = updateOpdoHeaderTotalAmtAndGrandTotalAmt(opdoDetail.getXdornum()); }
 		return count;

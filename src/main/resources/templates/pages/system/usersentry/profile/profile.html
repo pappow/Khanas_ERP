@@ -132,7 +132,7 @@
 								<h1>Menu options</h1>
 							</div>
 							<div class="section-body">
-								<div id="profilelinetable" th:fragment="profilelinetable">
+								<div id="menuprofilelinetable" th:fragment="menuprofilelinetable">
 									<table style="margin-top: 20px; margin-bottom: 60px;" th:each="plg : ${plmap}" class="table table-stripped table-bordered table-hover profilelinetable">
 										<thead>
 											<tr>
@@ -169,7 +169,7 @@
 												</td>
 											</tr>
 										</tbody>
-										<script th:src="@{/assets/pages/system/usersentry/profile/profile.js}"></script>
+										<script th:src="@{/assets/pages/system/usersentry/profile/menu-profile.js}"></script>
 									</table>
 								</div>
 							</div>
@@ -180,21 +180,28 @@
 								<h1>Report options</h1>
 							</div>
 							<div class="section-body">
-								<div id="profilelinetable" th:fragment="profilelinetable">
+								<div id="reportprofilelinetable" th:fragment="reportprofilelinetable">
 									<table style="margin-top: 20px; margin-bottom: 60px;" th:each="plg : ${plmap}" class="table table-stripped table-bordered table-hover profilelinetable">
 										<thead>
 											<tr>
-												<th width="45%" rowspan="2">Report Name</th>
+												<th width="40%" rowspan="2">Report Name</th>
 												<th width="5%" style="text-align: center; border-bottom: none;">Display</th>
+												<th width="5%" style="text-align: center; border-bottom: none;">FOP Engine</th>
 												<th width="45%" rowspan="2">Display text</th>
 												<th width="5%" rowspan="2" style="text-align: center">Edit</th>
 											</tr>
 											<tr>
 												<th style="text-align: center; border-top: none;">
 													<input 	class="pl-display"
-															th:attr="data-url=@{/system/profile/allprofilelines/update},pgroup=${plg.key},profilecode=${profile.profilecode},profiletype=${profile.profiletype}" 
+															th:attr="data-url=@{/system/profile/allprofilelines/update},enabled=${plg.value.allenabled},pgroup=${plg.key},profilecode=${profile.profilecode},profiletype=${profile.profiletype}" 
 															type="checkbox"
 															th:checked="${plg.value.allchecked}"/>
+												</th>
+												<th style="text-align: center; border-top: none;">
+													<input 	class="pl-enabled"
+															th:attr="data-url=@{/system/profile/allprofilelines/update},display=${plg.value.allchecked},pgroup=${plg.key},profilecode=${profile.profilecode},profiletype=${profile.profiletype}" 
+															type="checkbox"
+															th:checked="${plg.value.allenabled}"/>
 												</th>
 											</tr>
 										</thead>
@@ -203,10 +210,17 @@
 												<td th:text="${pl.profilelinecode} + ' - ' + ${pl.managerprompt}">Prompts</td>
 												<td style="text-align: center;">
 													<input 	class="pl-display"
-															th:attr="data-url=@{/system/profile/profileline/save},pgroup=${pl.pgroup},profilecode=${pl.profilecode},profiletype=${pl.profiletype},profilelineid=${pl.profilelineid},screenprompt=${pl.screenprompt},seqn=${pl.seqn}" 
+															th:attr="data-url=@{/system/profile/profileline/save},enabled=${pl.enabled},pgroup=${pl.pgroup},profilecode=${pl.profilecode},profiletype=${pl.profiletype},profilelineid=${pl.profilelineid},screenprompt=${pl.screenprompt},seqn=${pl.seqn}" 
 															th:id="${pl.profilelinecode}" 
 															type="checkbox" 
 															th:checked="${pl.display}"/>
+												</td>
+												<td style="text-align: center;">
+													<input 	class="pl-enabled"
+															th:attr="data-url=@{/system/profile/profileline/save},display=${pl.display},pgroup=${pl.pgroup},profilecode=${pl.profilecode},profiletype=${pl.profiletype},profilelineid=${pl.profilelineid},screenprompt=${pl.screenprompt},seqn=${pl.seqn}" 
+															th:id="${pl.profilelinecode}" 
+															type="checkbox" 
+															th:checked="${pl.enabled}"/>
 												</td>
 												<td th:text="${pl.screenprompt}"></td>
 												<td style="text-align: center">
@@ -217,7 +231,7 @@
 												</td>
 											</tr>
 										</tbody>
-										<script th:src="@{/assets/pages/system/usersentry/profile/profile.js}"></script>
+										<script th:src="@{/assets/pages/system/usersentry/profile/report-profile.js}"></script>
 									</table>
 								</div>
 							</div>

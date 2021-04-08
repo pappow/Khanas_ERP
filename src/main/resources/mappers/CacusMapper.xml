@@ -85,7 +85,6 @@
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xisrandom=#{xisrandom, jdbcType=BOOLEAN},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

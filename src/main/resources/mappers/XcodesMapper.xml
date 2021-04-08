@@ -69,7 +69,6 @@
 			xAccCash=#{xAccCash, jdbcType=VARCHAR},
 			xAccBank=#{xAccBank, jdbcType=VARCHAR},
 			xAccArdBank=#{xAccArdBank, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

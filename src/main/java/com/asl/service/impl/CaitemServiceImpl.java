@@ -21,6 +21,7 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	public long save(Caitem caitem) {
 		if (caitem == null || StringUtils.isBlank(caitem.getXtype())) return 0;
 		caitem.setZid(sessionManager.getBusinessId());
+		caitem.setZauserid(getAuditUser());
 		return caitemMapper.saveCaitem(caitem);
 	}
 
@@ -28,6 +29,7 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	public long update(Caitem caitem) {
 		if (caitem == null || StringUtils.isBlank(caitem.getXitem())) return 0;
 		caitem.setZid(sessionManager.getBusinessId());
+		caitem.setZuuserid(getAuditUser());
 		return caitemMapper.updateCaitem(caitem);
 	}
 

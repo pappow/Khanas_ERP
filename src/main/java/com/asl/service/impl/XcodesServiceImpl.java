@@ -25,12 +25,15 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	public long save(Xcodes xcodes) {
 		if (xcodes == null || StringUtils.isBlank(xcodes.getXtype()) || StringUtils.isBlank(xcodes.getXcode())) return 0;
 		xcodes.setZid(sessionManager.getBusinessId());
+		xcodes.setZauserid(getAuditUser());
 		return xcodesMapper.saveXcodes(xcodes);
 	}
 
 	@Override
 	public long update(Xcodes xcodes) {
 		if (xcodes == null || StringUtils.isBlank(xcodes.getXtype()) || StringUtils.isBlank(xcodes.getXcode())) return 0;
+		xcodes.setZid(sessionManager.getBusinessId());
+		xcodes.setZuuserid(getAuditUser());
 		return xcodesMapper.updateXcodes(xcodes);
 	}
 

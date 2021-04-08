@@ -13,7 +13,6 @@
 			xtyperel,
 			zemail,
 			xref,
-			
 			zid,
 			zauserid,
 			zuuserid,
@@ -30,7 +29,6 @@
 			#{xtyperel, jdbcType=VARCHAR},
 			#{zemail, jdbcType=VARCHAR},
 			#{xref, jdbcType=VARCHAR},	
-			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -48,8 +46,6 @@
 		SET
 			zemail=#{zemail, jdbcType=VARCHAR},
 			xref=#{xref, jdbcType=VARCHAR},	
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

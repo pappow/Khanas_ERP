@@ -22,12 +22,14 @@ public class ZbusinessServiceImpl extends AbstractGenericService implements Zbus
 	@Override
 	public long save(Zbusiness zbusiness) {
 		if(zbusiness == null || StringUtils.isBlank(zbusiness.getZid())) return 0;
+		zbusiness.setZauserid(getAuditUser());
 		return businessMapper.save(zbusiness);
 	}
 
 	@Override
 	public long update(Zbusiness zbusiness) {
 		if(zbusiness == null || StringUtils.isBlank(zbusiness.getZid())) return 0;
+		zbusiness.setZuuserid(getAuditUser());
 		return businessMapper.update(zbusiness);
 	}
 

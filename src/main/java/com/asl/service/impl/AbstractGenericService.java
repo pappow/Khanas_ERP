@@ -33,4 +33,7 @@ public abstract class AbstractGenericService  {
 		return name;
 	}
 
+	protected String getAuditUser() {
+		return sessionManager.getLoggedInUserDetails().getUsername();
+	}
 }

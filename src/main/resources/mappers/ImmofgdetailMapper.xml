@@ -59,7 +59,6 @@
 			xrate=#{xrate, jdbcType=DECIMAL},	
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

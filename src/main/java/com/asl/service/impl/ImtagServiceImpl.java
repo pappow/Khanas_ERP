@@ -24,6 +24,7 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 		if (imtag == null)
 			return 0;
 		imtag.setZid(sessionManager.getBusinessId());
+		imtag.setZauserid(getAuditUser());
 		return imtagMapper.saveImtag(imtag);
 	}
 
@@ -31,6 +32,7 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 	public long updateImtag(Imtag imtag) {
 		if (imtag == null || StringUtils.isBlank(imtag.getXtagnum())) return 0;
 		imtag.setZid(sessionManager.getBusinessId());
+		imtag.setZuuserid(getAuditUser());
 		return imtagMapper.updateImtag(imtag);
 	}
 
@@ -38,6 +40,7 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 	public long saveImtdet(Imtdet imtdet) {
 		if(imtdet == null || StringUtils.isBlank(imtdet.getXtagnum())) return 0;
 		imtdet.setZid(sessionManager.getBusinessId());
+		imtdet.setZauserid(getAuditUser());
 		long count = imtagMapper.saveImtdet(imtdet);
 		return count;
 	}
@@ -46,6 +49,7 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 	public long updateImtdet(Imtdet imtdet) {
 		if(imtdet == null || StringUtils.isBlank(imtdet.getXtagnum())) return 0;
 		imtdet.setZid(sessionManager.getBusinessId());
+		imtdet.setZuuserid(getAuditUser());
 		long count = imtagMapper.updateImtdet(imtdet);
 		return count;
 	}

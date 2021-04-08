@@ -52,7 +52,7 @@
 									<tr>
 										<td colspan="2" th:text="${plg.key}">Procurements</td>
 									</tr>
-									<tr th:each="pl, in : ${plg.value.profileLines}">
+									<tr th:if="${pl ne null and pl.display}" th:each="pl, in : ${plg.value.profileLines}">
 										<td><a th:href="@{/report/} + ${pl.profilelinecode}" th:text="${pl.profilelinecode} + ' - ' + ${pl.screenprompt}">Purchase Order Listing</a></td>
 										<td>
 

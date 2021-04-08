@@ -112,7 +112,6 @@
 		xtyperec=#{xtyperec, jdbcType=VARCHAR},
 		xinvnum=#{xtyperec, jdbcType=VARCHAR},
 
-		zauserid=#{zauserid, jdbcType=VARCHAR},
 		zuuserid=#{zuuserid, jdbcType=VARCHAR},
 		zaip=#{zaip, jdbcType=VARCHAR},
 		zuip=#{zuip, jdbcType=VARCHAR},

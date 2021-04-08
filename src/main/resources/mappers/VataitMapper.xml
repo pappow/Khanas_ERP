@@ -49,8 +49,6 @@
 			xait=#{xait, jdbcType=DECIMAL},
 			xstartdate=#{xstartdate, jdbcType=DATE},
 			xenddate=#{xenddate, jdbcType=DATE},
-			
-			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

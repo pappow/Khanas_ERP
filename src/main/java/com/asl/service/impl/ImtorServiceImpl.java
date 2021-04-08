@@ -21,7 +21,8 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public long save(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrntor()))
 			return 0;
-		imtorHeader.setZid(sessionManager.getBusinessId());					
+		imtorHeader.setZid(sessionManager.getBusinessId());
+		imtorHeader.setZauserid(getAuditUser());
 		if(StringUtils.isNotBlank(imtorHeader.getXtornum()) && StringUtils.isNotBlank(imtorHeader.getXchalanref()))
 			return imtorMapper.saveImtorHeaderWithChalan(imtorHeader);
 		
@@ -32,6 +33,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public long update(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtornum())) return 0;
 		if(StringUtils.isBlank(imtorHeader.getZid())) imtorHeader.setZid(sessionManager.getBusinessId());
+		imtorHeader.setZuuserid(getAuditUser());
 		return imtorMapper.updateImtorHeader(imtorHeader);
 	}
 
@@ -39,6 +41,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public long saveDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
 		imtorDetail.setZid(sessionManager.getBusinessId());
+		imtorDetail.setZauserid(getAuditUser());
 		long count = imtorMapper.saveImtorDetail(imtorDetail);
 		//if(count != 0) {count = updatePoordHeaderTotalAmt(imtorDetail);}
 		return count;
@@ -48,6 +51,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public long updateDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
 		imtorDetail.setZid(sessionManager.getBusinessId());
+		imtorDetail.setZuuserid(getAuditUser());
 		long count = imtorMapper.updateImtorDetail(imtorDetail);
 		//if(count != 0) {count = updatePoordHeaderTotalAmt(imtorDetail);}
 		return count;

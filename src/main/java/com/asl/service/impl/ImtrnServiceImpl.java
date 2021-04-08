@@ -22,6 +22,7 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 				|| StringUtils.isBlank(imtrn.getXtrnimtrn()))
 			return 0;
 		imtrn.setZid(sessionManager.getBusinessId());
+		imtrn.setZauserid(getAuditUser());
 		return imtrnMapper.saveImtrn(imtrn);
 	}
 
@@ -30,6 +31,7 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 		if (imtrn == null || StringUtils.isBlank(imtrn.getXimtrnnum()))
 			return 0;
 		imtrn.setZid(sessionManager.getBusinessId());
+		imtrn.setZuuserid(getAuditUser());
 		return imtrnMapper.updateImtrn(imtrn);
 	}
 
