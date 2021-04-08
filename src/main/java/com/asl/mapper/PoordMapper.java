@@ -49,4 +49,5 @@ public interface PoordMapper {
 
 	public Cacus findBranchCustomerByXcus(String xcus, String zid);
 
+	public List<com.asl.model.report.RM0301> getRM0301(String fdate, String tdate, String xcus, String xstatuspor, String xitem, String zid);
 }

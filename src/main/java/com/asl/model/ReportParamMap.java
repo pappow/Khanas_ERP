@@ -51,6 +51,13 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0607 = new HashMap<>();
 
 	static {
+		RM0301.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0301.put("param2", "FDATE|" + ReportParamDataType.DATESTRING.name());
+		RM0301.put("param3", "TDATE|" + ReportParamDataType.DATESTRING.name());
+		RM0301.put("param4", "XSTATUSPOR|" + ReportParamDataType.STRING.name());
+		RM0301.put("param5", "XCUS|" + ReportParamDataType.STRING.name());
+		RM0301.put("param6", "XITEM|" + ReportParamDataType.STRING.name());
+
 		RM0311.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0311.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
 		RM0311.put("param3", "XORG|" + ReportParamDataType.STRING.name());
@@ -75,11 +82,6 @@ public class ReportParamMap {
 		RM0607.put("param4", "XCAITEM|" + ReportParamDataType.STRING.name());
 		RM0607.put("param5", "XGITEM|" + ReportParamDataType.STRING.name());
 		RM0607.put("param6", "XPRODITEM|" + ReportParamDataType.STRING.name());
-
-		RM0301.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0301.put("param2", "XCUS|" + ReportParamDataType.STRING.name());
-		RM0301.put("param3", "FromDate|" + ReportParamDataType.DATE.name());
-		RM0301.put("param4", "ToDate|" + ReportParamDataType.DATE.name());
 
 		RM0304.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0304.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());
