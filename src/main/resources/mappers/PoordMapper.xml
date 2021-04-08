@@ -283,6 +283,7 @@
 			poh.xdate,
 			poh.xcus,
 			cacus.xorg,
+			cacus.xmadd,
 			poh.xstatuspor, 
 			pod.xitem, 
 			caitem.xdesc,

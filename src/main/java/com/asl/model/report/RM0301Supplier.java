@@ -2,7 +2,9 @@ package com.asl.model.report;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,4 +34,6 @@ public class RM0301Supplier {
 	private BigDecimal totalQtyOrder;
 	private BigDecimal totalQtyPurchased;
 	private BigDecimal totalAmount;
+
+	private Map<String, RM0301PurchaseOrder> om = new HashMap<>();
 }

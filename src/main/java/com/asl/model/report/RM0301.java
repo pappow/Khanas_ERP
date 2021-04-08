@@ -15,6 +15,7 @@ public class RM0301 {
 	private String xpornum;
 	private Date xdate;
 	private String xcus;
+	private String xmadd;
 	private String xorg;
 	private String xstatuspor;
 	private String xitem;
