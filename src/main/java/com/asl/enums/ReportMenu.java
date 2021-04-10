@@ -11,7 +11,7 @@ import com.asl.model.ReportParamMap;
 public enum ReportMenu {
 
 	// Procurements  -- M0300
-	RM0301(999, "300", "Procurements", "Purchase Order Listing", ReportParamMap.RM0301, "Y", false, false, 1000),
+	RM0301(999, "300", "Procurements", "Purchase Order Listing", ReportParamMap.RM0301, "Y", true, false, 1000),
 	RM0302(999, "300", "Procurements", "Suggestion List", ReportParamMap.RM0302, "Y", false, false, 1000),
 	RM0303(999, "300", "Procurements", "Purchase Listing", ReportParamMap.RM0303, "Y", false, false, 1000),
 	RM0304(999, "300", "Procurements", "Purchase Deviation Listing", ReportParamMap.RM0304, "Y", false, false, 1000),

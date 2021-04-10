@@ -53,24 +53,21 @@ public class ReportController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadReportPage(Model model) {
-		ReportProfile rp = (ReportProfile) sessionManager.getFromMap("reportProfile");
-		if(rp == null) {
-			rp = profileService.getLoggedInUserReportProfile();
-			sessionManager.addToMap("reportProfile", rp);
-		}
+		ReportProfile rp = getLoggedInUserReportProfile();
 
 		Map<String, ProfileLineWrapper> profileLinesMap = new HashMap<>();
 		rp.getProfileLines().stream().forEach(pl -> {
 			if(profileLinesMap.get(pl.getPgroupname()) != null) {
 				ProfileLineWrapper wrapper = profileLinesMap.get(pl.getPgroupname());
 				wrapper.getProfileLines().add(pl);
-				if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+				if(!wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
 			} else {
 				List<ProfileLine> list = new ArrayList<>();
 				list.add(pl);
 				ProfileLineWrapper wrapper = new ProfileLineWrapper();
+				wrapper.setAllchecked(false);
 				wrapper.getProfileLines().add(pl);
-				if(wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
+				if(!wrapper.isAllchecked()) wrapper.setAllchecked(pl.isDisplay());
 				profileLinesMap.put(pl.getPgroupname(), wrapper);
 			}
 		});
