@@ -12,7 +12,7 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("pdlService")
+@Service("RM0304Service")
 public class RM0304ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {

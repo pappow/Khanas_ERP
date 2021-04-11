@@ -67,7 +67,7 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "Open", false));
 
 		// xcus - Customer / Supplier
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", false));
 
 		// Item
 		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/report/stock/xitem", "", false));
@@ -86,11 +86,15 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		String xcus = (String) reportParams.get("XCUS");
 		String xstatuspor = (String) reportParams.get("XSTATUSPOR");
 		String xitem = (String) reportParams.get("XITEM");
+		
+		SimpleDateFormat sdf3 = new SimpleDateFormat("dd-MMM-yyyy"); 		
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd"); 		
+		fdate = sdf2.format(sdf3.parse(fdate)); 		
+		tdate = sdf2.format(sdf3.parse(tdate));
 
 		List<RM0301> list = poordService.getRM0301(fdate, tdate, xcus, xstatuspor, xitem);
 		if(list == null || list.isEmpty()) return new byte[0];
 
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 		RM0301Report report = new RM0301Report();
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
