@@ -93,6 +93,7 @@
 														<label class="control-label col-md-4" for="xcatitem">Item Category</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xcatitem}">
+																<option value="">-- Select --</option>
 																<option th:each="category : ${xitemCategories}" th:value="${category.xcode}" th:text="${category.xcode}"></option>
 															</select>
 														</div>
@@ -101,6 +102,7 @@
 														<label class="control-label col-md-4" for="xgitem">Item group</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xgitem}">
+																<option value="">-- Select --</option>
 																<option th:each="group : ${xitemGroups}" th:value="${group.xcode}" th:text="${group.xcode}"></option>
 															</select>
 														</div>
