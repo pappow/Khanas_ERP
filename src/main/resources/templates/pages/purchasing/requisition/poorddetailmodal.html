@@ -64,7 +64,16 @@
 
 				// Get item purchase unit
 				$('.xitemsearch').on('blur', function(){
+					console.log($('input[name="xitem"]').val());
+					
 					setTimeout(() => {
+						if($('input[name="xitem"]').val() == ''){
+							$('input[name="xunitpur"]').val("");
+							$('input.xunitpur-display').val("");
+							$('input#xqtyord').val("1.00");
+							return;
+						}
+
 						$.ajax({
 							url : getBasepath() + '/mastersetup/caitem/centralitem/purunit/' + $('input[name="xitem"]').val(),
 							type : 'GET',

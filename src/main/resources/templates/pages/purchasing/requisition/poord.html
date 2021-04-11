@@ -56,16 +56,9 @@
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true and poordheader.xstatuspor == 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true and poordheader.xstatuspor == 'Open'}" th:href="@{/purchasing/requisition/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == false}" th:href="@{/purchasing/requisition/restore/} + ${poordheader.xpornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/requisition/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
 											<input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
 											<input type="hidden" class="form-control" th:field="*{xtotamt}">
