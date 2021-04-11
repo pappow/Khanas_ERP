@@ -77,7 +77,7 @@
 										</td>
 									</tr>
 
-									<tr>
+									<tr th:if="${isCentral}">
 										<td colspan="2">Purchasing</td>
 									</tr>
 									<tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
