@@ -10,8 +10,6 @@
 			<div class="modal-body">
 				<div class="row">
 					<form id="mainform-modal" th:action="@{/purchasing/requisition/poorddetail/save}" method="post" class="form-horizontal" th:object="${poorddetail}">
-						<!-- <input type="hidden" id="listHeadId" name="listHeadId" th:value="${listHead.listHeadId}"/>
-						<input type="hidden" th:field="*{listId}"/> -->
 						<input type="hidden" th:field="*{xpornum}"/>
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
 						<div class="col-md-6">
@@ -33,9 +31,6 @@
 								<div class="col-sm-8">
 									<input type="hidden" th:field="*{xunitpur}"/>
 									<input type="text" th:value="${poorddetail.xunitpur}" class="form-control xunitpur-display" disabled="disabled"/>
-									<!-- <select class="form-control" th:field="*{xunitpur}">
-										<option th:each="p : ${purchaseUnit}" th:value="${p.xcode}" th:text="${p.xcode}">Select</option>
-									</select> -->
 								</div>
 							</div>
 							<div class="form-group">
@@ -76,8 +71,9 @@
 							beforeSend : loadingMask2.show(),
 							success : function(data) {
 								loadingMask2.hide();
-								$('input[name="xunitpur"]').val(data);
-								$('input.xunitpur-display').val(data);
+								$('input[name="xunitpur"]').val(data.xunitpur);
+								$('input.xunitpur-display').val(data.xunitpur);
+								$('input#xqtyord').val(data.xminqty);
 							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");

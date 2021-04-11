@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Validator;
@@ -15,6 +16,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -72,6 +74,7 @@ public class ASLAbstractController {
 	@Autowired protected XcodesService xcodesService;
 	@Autowired protected ProcErrorLogService errorService;
 	@Autowired protected PrintingService printingService;
+	@Autowired protected Environment env;
 
 	@ModelAttribute("brandName")
 	protected String brandName() {
@@ -91,6 +94,11 @@ public class ASLAbstractController {
 	@ModelAttribute("isBranch")
 	public boolean isBranch() {
 		return sessionManager.isBranch();
+	}
+
+	@ModelAttribute("isConvention")
+	public boolean isConventionCenter() {
+		return Arrays.asList(env.getActiveProfiles()).contains("convention");
 	}
 
 	@ModelAttribute("logoName")

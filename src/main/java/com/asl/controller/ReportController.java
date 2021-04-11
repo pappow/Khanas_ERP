@@ -91,7 +91,12 @@ public class ReportController extends ASLAbstractController {
 		model.addAttribute("selectedReport", rm.name());
 		model.addAttribute("reportCode", rm.name());
 		model.addAttribute("reportName", rm.getDescription());
-		model.addAttribute("fopEnabled", rm.isFopEnabled());
+		getLoggedInUserReportProfile().getProfileLines().parallelStream().forEach(i -> {
+			if(i.getProfilelinecode().equalsIgnoreCase(menuCode)) {
+				model.addAttribute("fopEnabled", i.isEnabled());
+			}
+		});
+
 		return "pages/report/report";
 	}
 

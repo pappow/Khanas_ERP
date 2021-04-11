@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.CaitemService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
@@ -36,6 +38,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
+	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
@@ -196,6 +199,15 @@ public class OrderRequisitionController extends ASLAbstractController {
 		// Validation
 		if(poordDetail.getXqtyord() == null || poordDetail.getXqtyord().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid quantity entered");
+			return responseHelper.getResponse();
+		}
+		Caitem item = caitemService.findCentralItemByXitem(poordDetail.getXitem());
+		if(item == null) {
+			responseHelper.setErrorStatusAndMessage("Item not exist into system");
+			return responseHelper.getResponse();
+		}
+		if(item.getXminqty().compareTo(poordDetail.getXqtyord()) == 1) {
+			responseHelper.setErrorStatusAndMessage("You can't order this item below " + item.getXminqty());
 			return responseHelper.getResponse();
 		}
 
