@@ -52,8 +52,8 @@ public class ReportParamMap {
 
 	static {
 		RM0301.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0301.put("param2", "FDATE|" + ReportParamDataType.DATESTRING.name());
-		RM0301.put("param3", "TDATE|" + ReportParamDataType.DATESTRING.name());
+		RM0301.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		RM0301.put("param3", "TDATE|" + ReportParamDataType.DATE.name());
 		RM0301.put("param4", "XSTATUSPOR|" + ReportParamDataType.STRING.name());
 		RM0301.put("param5", "XCUS|" + ReportParamDataType.STRING.name());
 		RM0301.put("param6", "XITEM|" + ReportParamDataType.STRING.name());

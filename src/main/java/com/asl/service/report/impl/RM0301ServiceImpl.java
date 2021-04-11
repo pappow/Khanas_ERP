@@ -67,7 +67,7 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "Open", false));
 
 		// xcus - Customer / Supplier
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", false));
 
 		// Item
 		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/report/stock/xitem", "", false));
