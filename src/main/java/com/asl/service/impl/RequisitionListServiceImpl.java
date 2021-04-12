@@ -41,7 +41,7 @@ public class RequisitionListServiceImpl extends AbstractGenericService implement
 	@Override
 	public List<PoordDetail> getDetailListByXpornumAndBranchZid(String xpornum, String branchzid) {
 		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(branchzid)) return Collections.emptyList();
-		return requisitionListMapper.getDetailListByXpornumAndBranchZid(xpornum, branchzid);
+		return requisitionListMapper.getDetailListByXpornumAndBranchZid(xpornum, branchzid, sessionManager.getBusinessId());
 	}
 
 }

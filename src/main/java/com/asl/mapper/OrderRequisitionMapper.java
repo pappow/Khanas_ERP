@@ -13,5 +13,5 @@ public interface OrderRequisitionMapper {
 	public List<BranchesRequisitions> getAllOpenBranchesRequisitions(String zid);
 	public List<BranchesRequisitions> getAllBranchesRequisitions(String xdate, String zid);
 	public List<BranchesRequisitions> getAllBranchesRequisitionDetails(String xdate, String zid);
-	public List<PoordDetail> getDetailListByXpornumAndBranchZid(String xpornum, String branchzid) ;
+	public List<PoordDetail> getDetailListByXpornumAndBranchZid(String xpornum, String branchzid, String zid) ;
 }
