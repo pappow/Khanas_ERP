@@ -32,4 +32,8 @@ public class ProductionPlanningsReport {
 	@XmlElement(name = "chalan")
 	private List<SalesOrderChalan> chalans = new ArrayList<>();
 
+	@XmlElementWrapper(name = "items")
+	@XmlElement(name = "item")
+	private List<ItemDetails> itemDetails = new ArrayList<>();
+
 }

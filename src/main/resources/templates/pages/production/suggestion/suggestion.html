@@ -74,6 +74,21 @@
 										</tr>
 									</tbody>
 								</table>
+
+								<table class="table table-stripped table-bordered">
+									<thead>
+										<tr>
+											<th>Raw Material</th>
+											<th>Qty</th>
+										</tr>
+									</thead>
+									<tbody th:if="${mp.key eq suggestions.key}" th:each="mp : ${totalMap}">
+										<tr th:each="m : ${mp.value}">
+											<td th:text="${m.key}">1</td>
+											<td th:text="${m.value}">2</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</section>
 					</div>
