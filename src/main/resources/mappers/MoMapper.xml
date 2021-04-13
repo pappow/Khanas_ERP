@@ -260,7 +260,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
-			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem AND caitem.zid=#{zid}
 		WHERE 
 			moheader.xchalan=#{xchalan} 
 			AND moheader.xitem=#{xitem} 

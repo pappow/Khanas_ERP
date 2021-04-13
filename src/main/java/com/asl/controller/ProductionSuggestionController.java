@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,15 +54,28 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		}
 
 		Map<String, List<ProductionSuggestion>> allSuggestions = new HashMap<>();
+		Map<String, Map<String, BigDecimal>> totalMap = new HashMap<>();
 		for(Opordheader c : allChalans) {
 			List<ProductionSuggestion> list = new ArrayList<>();
 			if(c != null) {
 				list = productionSuggestionService.getProductionSuggestion(c.getXordernum(), c.getXdate());
 			}
 			allSuggestions.put(c.getXordernum(), list);
+
+			Map<String, BigDecimal> m = new HashMap<>();
+			for(ProductionSuggestion p : list) {
+				if(m.get(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )") != null) {
+					BigDecimal qty = BigDecimal.valueOf(Double.valueOf(p.getXrawqty()));
+					m.put(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )", m.get(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )").add(qty));
+				} else {
+					m.put(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )", BigDecimal.valueOf(Double.valueOf(p.getXrawqty())));
+				}
+			}
+			totalMap.put(c.getXordernum(), m);
 		}
 
 		model.addAttribute("allSuggestions", allSuggestions);
+		model.addAttribute("totalMap", totalMap);
 		return "pages/production/suggestion/suggestion";
 	}
 
@@ -126,6 +140,9 @@ public class ProductionSuggestionController extends ASLAbstractController {
 			s.setRawMaterialQty(d.getXrawqty());
 			s.setRawMaterialUnit(d.getXrawunit());
 			suggestions.add(s);
+
+			
+			
 		});
 		chalan.getSuggestions().addAll(suggestions);
 		report.getChalans().addAll(chalans);

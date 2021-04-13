@@ -95,7 +95,7 @@
 							</div>
 						</section>
 
-						<section th:if="${profile.profileId != null && profile.profileType == T(com.asl.enums.ProfileType).M}">
+						<section th:if="${not #strings.isEmpty(profile.profilecode) && profile.profiletype == T(com.asl.enums.ProfileType).M}">
 							<div class="section-header sectionbartoggle">
 								<h1><i class="fas fa-chevron-down"></i> Menu options</h1>
 							</div>
@@ -113,11 +113,11 @@
 										<tr th:each="pl, in : ${menuprofile.profileLines}">
 											<td th:text="${pl.managerPrompt}">Prompts</td>
 											<td style="text-align: center;" th:text="${pl.display ? 'Y' : 'N'}"></td>
-											<td th:text="${pl.screenPrompt}"></td>
+											<td th:text="${pl.screenprompt}"></td>
 											<td style="text-align: right;">
 												<button type="button" 
 														class="btn btn-default btn-edit editmode"
-														th:attr="data-url=@{/system/profile/profilelinemodal/} + ${pl.profileId} + '/' + ${pl.profileLineId} + '/' + ${pl.profileCode} + '/' + ${pl.profileType} + '/show', data-target-modal='menuprofilelinemodal'"
+														th:attr="data-url=@{/system/profile/profilelinemodal/} + ${pl.profilelinecode} + '/' + ${pl.profilelineid} + '/' + ${pl.profilecode} + '/' + ${pl.profiletype} + '/show', data-target-modal='menuprofilelinemodal'"
 														><i class="fas fa-edit"></i></button>
 											</td>
 										</tr>
