@@ -353,6 +353,9 @@ public class ProductionBatchController extends ASLAbstractController {
 		}
 
 		for(Moheader batch : batchList) {
+			if(batch.getXqtyprd() != null && batch.getXqtycom() != null) {
+				batch.setDeviation(batch.getXqtycom().subtract(batch.getXqtyprd()));
+			}
 			List<Modetail> details = moService.findModetailByXbatch(batch.getXbatch());
 			if(details == null || details.isEmpty()) continue;
 			details.sort(Comparator.comparing(Modetail::getXrow));
