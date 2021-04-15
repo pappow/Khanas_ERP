@@ -103,4 +103,7 @@ public class Moheader extends AbstractModel<String> {
 	@XmlElementWrapper(name = "batchdetails")
 	@XmlElement(name = "batchdetail")
 	private List<Modetail> modetails = new ArrayList<>();
+
+	@Transient
+	private BigDecimal deviation;
 }

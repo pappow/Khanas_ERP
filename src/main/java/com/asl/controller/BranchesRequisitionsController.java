@@ -9,7 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +42,9 @@ import com.asl.service.RequisitionListService;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/purchasing/bqls")
 public class BranchesRequisitionsController extends ASLAbstractController {
@@ -76,7 +88,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@GetMapping("/query/matrix")
 	public String reloadTableWithDataMatrix(@RequestParam String date, Model model) throws ParseException {
-		generateMatrixData(sdf.parse(date), model);
+		generateMatrixData(sdf.parse(date), new MatrixReport(), model);
 		return "pages/purchasing/branchesrequisitions/bqlsdetail::branchesorderreqmatrixtable";
 	}
 
@@ -95,8 +107,38 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@GetMapping("/details")
 	public String loadRqlsDetails(Model model) {
-		generateMatrixData(new Date(), model);
+		generateMatrixData(new Date(), new MatrixReport(), model);
 		return "pages/purchasing/branchesrequisitions/bqlsdetail";
+	}
+
+	@GetMapping("/details/{date}/print")
+	public ResponseEntity<byte[]> printMatrix(@PathVariable String date, Model model) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = null;
+		try {
+			d = sdf.parse(date);
+		} catch (ParseException e) {
+			log.error(ERROR, e.getMessage(), e);
+			message = "Chalan not parse date";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		MatrixReport mr = new MatrixReport();
+		generateMatrixData(new Date(), mr, model);
+
+		byte[] byt = getPDFByte(mr, "salesorderchalanitemdetailreport.xsl");
+		if(byt == null) {
+			message = "Can't generate pdf";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
 
 	@PostMapping("/ordreqconfirm/allopen/{branchzid}/{xpornum}")
@@ -236,7 +278,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	private void generateMatrixData(Date date, Model model) {
+	private void generateMatrixData(Date date, MatrixReport mr, Model model) {
 		List<TableColumn> distinctItems = new ArrayList<>();
 		List<BranchRow> distinctBranch = new ArrayList<>();
 
@@ -299,13 +341,37 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
 		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));
 
+		SimpleDateFormat pdate = new SimpleDateFormat("yyyy-MM-dd");
+		model.addAttribute("datadate", pdate.format(date));
 		model.addAttribute("distinctBranch", distinctBranch);
 		model.addAttribute("distinctItems", distinctItems);
 		model.addAttribute("bqlsDetailsList", bqList);
+
+		mr.setColumns(distinctItems);
+		mr.setRows(distinctBranch);
+		mr.setItems(bqList);
 	}
 }
 
 @Data
+@XmlRootElement(name = "matrixreport")
+@XmlAccessorType(XmlAccessType.FIELD)
+class MatrixReport{
+	@XmlElementWrapper(name = "columns")
+	@XmlElement(name = "column")
+	List<TableColumn> columns = new ArrayList<>();
+
+	@XmlElementWrapper(name = "rows")
+	@XmlElement(name = "row")
+	List<BranchRow> rows = new ArrayList<>();
+
+	@XmlElementWrapper(name = "items")
+	@XmlElement(name = "item")
+	List<BranchesRequisitions> items = new ArrayList<>();
+}
+
+@Data
+@XmlRootElement(name = "columns")
 class TableColumn{
 	private String xitem;
 	private String xdesc;
@@ -314,14 +380,15 @@ class TableColumn{
 }
 
 @Data
+@XmlRootElement(name = "row")
 class BranchRow{
 	private String zorg;
 	private List<BranchItem> items = new ArrayList<>();
-	//TOdo:   VUL 
 	private BigDecimal totalItemOrdered;
 }
 
 @Data
+@XmlRootElement(name = "item")
 @AllArgsConstructor
 class BranchItem{
 	private String xitem;
