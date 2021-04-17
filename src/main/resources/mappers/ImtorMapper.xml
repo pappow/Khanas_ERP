@@ -205,7 +205,13 @@
 	</select>
 	
 	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
-		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
+		SELECT 
+			det.*, caitem.xdesc as "xitemdesc"
+		FROM 
+			ImtorDetail det
+			JOIN caitem on caitem.xitem=det.xitem AND caitem.zid=#{centralzid}
+		WHERE 
+			det.xtornum=#{xtornum} AND det.zid=#{zid} AND det.zactive='1' ORDER BY det.xrow ASC
 	</select>
 	
 	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">

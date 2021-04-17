@@ -90,7 +90,13 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum) {
 		if(StringUtils.isBlank(xtornum))
 			return null;
-		return imtorMapper.findImtorDetailByXtornum(xtornum, sessionManager.getBusinessId());
+		String centralZid = null;
+		if(Boolean.TRUE.equals(sessionManager.getZbusiness().getCentral())) {
+			centralZid = sessionManager.getBusinessId();
+		} else {
+			centralZid = sessionManager.getZbusiness().getCentralzid();
+		}
+		return imtorMapper.findImtorDetailByXtornum(xtornum, sessionManager.getBusinessId(), centralZid);
 	}
 	
 	@Override

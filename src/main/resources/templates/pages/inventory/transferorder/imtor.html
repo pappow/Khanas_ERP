@@ -203,7 +203,7 @@
 									<tbody>
 										<tr th:each="d : ${imtordetailsList}">
 											<td th:text="${dStat.index +1}"></td>
-											<td th:text="${d.xitem}"></td>
+											<td th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xrate}"></td>

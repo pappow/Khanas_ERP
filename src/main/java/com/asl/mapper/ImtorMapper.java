@@ -24,7 +24,7 @@ public interface ImtorMapper {
 	
 	public ImtorDetail findImtorDetailByXtornumAndXrow(String xtornum, int xrow, String zid);
 	public ImtorDetail findImtorDetailByXtornumAndXitem(String xtornum, String xitem, String zid);
-	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum, String zid);
+	public List<ImtorDetail> findImtorDetailByXtornum(String xtornum, String zid, String centralzid);
 	public List<ImtorDetail> findImtorDetailByXtornumAndXchalanref(String xtornum, String xchalanref, String zid);
 	
 	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail);

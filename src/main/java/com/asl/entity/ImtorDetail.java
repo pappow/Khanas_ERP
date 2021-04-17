@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,5 +54,12 @@ public class ImtorDetail extends AbstractModel<String> {
 
 	@Column(name = "xnote")
 	private String xnote;
+	
+	@Transient
+	private String xitemdesc;
+	@Transient
+	private String xcatitem;
+	@Transient
+	private String xgitem;
 	
 }

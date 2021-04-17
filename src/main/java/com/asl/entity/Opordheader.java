@@ -1,5 +1,6 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -83,4 +84,40 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Transient
 	private String branchname;
+	
+	@Column(name="xfunction")
+	private String xfunction;
+
+	@Column(name="xtotguest")
+	private int xtotguest;
+
+	@Column(name="xbookdate")
+	private Date xboodate;
+
+	@Column(name="xfuncdate")
+	private Date xfuncdate;
+
+	@Column(name="xstarttime")
+	private String xstarttime;
+
+	@Column(name="xendtime")
+	private String xendtime;
+
+	@Column(name="xfacamt")
+	private BigDecimal xfacamt;
+
+	@Column(name="xfoodamt")
+	private BigDecimal xfoodamt;
+
+	@Column(name="xhallamt")
+	private BigDecimal xhallamt;
+	
+	@Column(name="xdiscamt")
+	private BigDecimal xdiscamt;
+	
+	@Column(name = "xtotamt")
+	private BigDecimal xtotamt;
+	
+	@Column(name = "xgrandtot")
+	private BigDecimal xgrandtot;
 }
