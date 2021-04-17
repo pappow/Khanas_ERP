@@ -67,7 +67,7 @@
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
 			ztime=#{ztime, jdbcType=TIMESTAMP},
-			ztime=#{zutime, jdbcType=TIMESTAMP}
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xtagnum=#{xtagnum, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}

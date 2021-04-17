@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(menuAccessInterceptor()).addPathPatterns(getMenuPaths()); 
+		//registry.addInterceptor(menuAccessInterceptor()).addPathPatterns(getMenuPaths()); 
 		registry.addInterceptor(reportAccessInterceptor()).addPathPatterns(getReportPaths());
 	}
 
