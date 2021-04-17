@@ -9,12 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,12 +30,14 @@ import com.asl.entity.PoordHeader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.report.BranchItem;
+import com.asl.model.report.BranchRow;
+import com.asl.model.report.MatrixReport;
+import com.asl.model.report.TableColumn;
 import com.asl.service.OpordService;
 import com.asl.service.PoordService;
 import com.asl.service.RequisitionListService;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -129,7 +125,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		}
 
 		MatrixReport mr = new MatrixReport();
-		generateMatrixData(new Date(), mr, model);
+		generateMatrixData(d, mr, model);
 
 		byte[] byt = getPDFByte(mr, "salesorderchalanitemdetailreport.xsl");
 		if(byt == null) {
@@ -351,46 +347,4 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		mr.setRows(distinctBranch);
 		mr.setItems(bqList);
 	}
-}
-
-@Data
-@XmlRootElement(name = "matrixreport")
-@XmlAccessorType(XmlAccessType.FIELD)
-class MatrixReport{
-	@XmlElementWrapper(name = "columns")
-	@XmlElement(name = "column")
-	List<TableColumn> columns = new ArrayList<>();
-
-	@XmlElementWrapper(name = "rows")
-	@XmlElement(name = "row")
-	List<BranchRow> rows = new ArrayList<>();
-
-	@XmlElementWrapper(name = "items")
-	@XmlElement(name = "item")
-	List<BranchesRequisitions> items = new ArrayList<>();
-}
-
-@Data
-@XmlRootElement(name = "columns")
-class TableColumn{
-	private String xitem;
-	private String xdesc;
-	private BigDecimal totalQty;
-	private String xunitpur;
-}
-
-@Data
-@XmlRootElement(name = "row")
-class BranchRow{
-	private String zorg;
-	private List<BranchItem> items = new ArrayList<>();
-	private BigDecimal totalItemOrdered;
-}
-
-@Data
-@XmlRootElement(name = "item")
-@AllArgsConstructor
-class BranchItem{
-	private String xitem;
-	private BigDecimal xqtyord;
 }

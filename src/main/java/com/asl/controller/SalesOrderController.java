@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.report.BranchItem;
+import com.asl.model.report.BranchRow;
+import com.asl.model.report.TableColumn;
 import com.asl.service.OpordService;
 
 /**
