@@ -56,7 +56,7 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		StringWriter result = new StringWriter();
 		jaxbMarshaller.marshal(ob, result);
-		log.info(result.toString());
+		//log.info(result.toString());
 		return result.toString();
 	}
 

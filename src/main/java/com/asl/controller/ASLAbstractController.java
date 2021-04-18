@@ -61,6 +61,7 @@ public class ASLAbstractController {
 	protected static final String DEFAULT_REPORT = "DEFAULT_REPORT";
 	protected static final String ERROR = "Error is : {}, {}"; 
 	protected static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+	protected static final SimpleDateFormat SDF2 = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 	@Autowired protected ApplicationContext appContext;
 	@Autowired protected AppConfig appConfig;

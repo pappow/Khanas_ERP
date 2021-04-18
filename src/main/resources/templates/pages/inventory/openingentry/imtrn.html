@@ -223,8 +223,12 @@
 		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$('.xitemsearch').on('blur', function(){										
+				$('.xitemsearch').on('blur', function(){
 					setTimeout(() => {
+						if( $('input[name="xitem"]').val() == '') {
+							
+							return;
+						}
 						$.ajax({
 							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
@@ -233,7 +237,7 @@
 								loadingMask2.hide();
 								$('input[name="xrate"]').val(data.xrate);
 								//$(".qty").focus();
-							},							
+							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");
 								loadingMask2.hide();

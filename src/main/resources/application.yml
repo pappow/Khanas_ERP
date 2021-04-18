@@ -68,9 +68,9 @@ default:
   site-title: Khana's <span class="title-divider">ERP</span>
   logo-name: asl.png
   copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
-  im-ex-path: E:/ASL/importexport
-  logging-path: E:/ASL/logs 
+  im-ex-path: D:/ASL/importexport
+  logging-path: D:/ASL/logs 
   report: 
-    template-path: E:/ASL/cr-reports
-    xsl-path: E:/ASL/xsl
-    saved-xml-path: E:/ASL/report/savedxml 
+    template-path: D:/ASL/cr-reports
+    xsl-path: D:/ASL/xsl
+    saved-xml-path: D:/ASL/report/savedxml
