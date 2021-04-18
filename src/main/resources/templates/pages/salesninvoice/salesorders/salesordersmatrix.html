@@ -87,6 +87,11 @@
 								<table class="table table-striped table-bordered nowrap" id="salesordersmatrixtable" th:fragment="salesordersmatrixtable">
 									<thead>
 										<tr>
+											<th th:attr="colspan=${#lists.size(distinctItems) + 1}">
+												<a target="_blank" th:href="@{/salesninvoice/salesorder/details/} + ${datadate} + '/print'"><i class="fas fa-print"></i> Print</a>
+											</th>
+										</tr>
+										<tr>
 											<th rowspan="3">
 												Item <i class="fas fa-arrow-right"></i>
 												<br/>

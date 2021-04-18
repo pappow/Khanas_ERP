@@ -13,14 +13,22 @@ import lombok.Data;
 
 /**
  * @author Zubayer Ahamed
- * @since Apr 15, 2021
+ * @since Apr 17, 2021
  */
 @Data
-@XmlRootElement(name = "matrixreport")
+@XmlRootElement(name = "data")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MatrixReport extends AbstractReportModel {
+public class MatrixReportData {
 
-	@XmlElementWrapper(name = "datas")
-	@XmlElement(name = "data")
-	List<MatrixReportData> datas = new ArrayList<>();
+	@XmlElementWrapper(name = "columns")
+	@XmlElement(name = "column")
+	List<TableColumn> columns = new ArrayList<>();
+
+	@XmlElementWrapper(name = "rows")
+	@XmlElement(name = "row")
+	List<BranchRow> rows = new ArrayList<>();
+
+	@XmlElementWrapper(name = "totals")
+	@XmlElement(name = "total")
+	List<Total> totals = new ArrayList<>();
 }
