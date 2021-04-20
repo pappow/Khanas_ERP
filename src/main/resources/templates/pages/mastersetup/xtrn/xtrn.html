@@ -52,7 +52,7 @@
 										<h1>Transaction Code</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(xtrn.xtrn)}" th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-redo-alt"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" th:href="@{/mastersetup/xtrn/archive/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>

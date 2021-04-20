@@ -226,7 +226,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/requisition/" +  poordDetail.getXpornum());
+			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/requisition/poorddetail/" + poordDetail.getXpornum());
 			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -237,7 +237,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/requisition/" +  poordDetail.getXpornum());
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/requisition/poorddetail/" + poordDetail.getXpornum());
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -246,9 +246,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 	public String reloadPoordDetailTabble(@PathVariable String xpornum, Model model) {
 		List<PoordDetail> detailList = poordService.findPoorddetailByXpornum(xpornum);
 		model.addAttribute("poorddetailsList", detailList);
-		PoordHeader header = new PoordHeader();
-		header.setXpornum(xpornum);
-		model.addAttribute("poordheader", header);
+		model.addAttribute("poordheader", poordService.findPoordHeaderByXpornum(xpornum));
 		return "pages/purchasing/requisition/poord::poorddetailtable";
 	}
 
@@ -267,7 +265,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/requisition/" +  xpornum);
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/requisition/poorddetail/" + xpornum);
 		return responseHelper.getResponse();
 	}
 }
