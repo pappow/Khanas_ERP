@@ -42,7 +42,7 @@ public enum ReportMenu {
 	RM0504(999, "500", "Production", "Production Analysis (Expected vs Actual)", ReportParamMap.RM0504, "Y", false, false, 1000),
 
 	// Inventory  -- M0600
-	RM0601(999, "600", "Inventory", "Stock List", ReportParamMap.RM0601, "Y", false, false, 1000),
+	RM0601(999, "600", "Inventory", "Stock List", ReportParamMap.RM0601, "Y", true, false, 1000),
 	RM0602(999, "600", "Inventory", "Date Wise Stock Status", ReportParamMap.RM0602, "Y", false, false, 1000),
 	RM0603(999, "600", "Inventory", "Stock Low Status", ReportParamMap.RM0603, "Y", false, false, 1000),
 	RM0604(999, "600", "Inventory", "Inventory Consumption Report", ReportParamMap.RM0604, "Y", false, false, 1000),

@@ -13,7 +13,7 @@ logging:
 
 server:
   servlet:
-    context-path: /asl-erp/
+    context-path: /aju-erp/
     session: 
       persistent: true
   port: 8081
@@ -65,7 +65,7 @@ default:
 #  birtUrl: http://103.231.135.60/birt/frameset?__report=khanas/
 #  birtUrl: http://localhost:8080/birt/frameset?__report=khanas/
   allow-system-admin: Y
-  site-title: Khana's <span class="title-divider">ERP</span>
+  site-title: AJU <span class="title-divider">ERP</span>
   logo-name: asl.png
   copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
   im-ex-path: D:/ASL/importexport
