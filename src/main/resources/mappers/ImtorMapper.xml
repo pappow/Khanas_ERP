@@ -19,7 +19,6 @@
 			xstatustor,
 			xtrn,
 			xlong,
-						
 			zid,
 			zauserid,
 			zuuserid,
@@ -41,7 +40,6 @@
 			#{xstatustor, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
-			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -66,9 +64,7 @@
 			xstatustor,
 			xtrn,
 			xlong,
-						
 			zid,
-			zauserid,
 			zuuserid,
 			zaip,
 			zuip,
@@ -88,7 +84,6 @@
 			#{xstatustor, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
-			
 			#{zid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
