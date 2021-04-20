@@ -48,6 +48,7 @@ public class BusinessDashboardController extends ASLAbstractController {
 
 		List<Business> businesses = new ArrayList<>();
 		for(Xusers xus : list) {
+			if(Boolean.FALSE.equals(xus.getZactive())) continue;
 			Zbusiness zb = zbusinessService.findBById(xus.getZid());
 			if(zb == null) continue;
 			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getZorg(), zb.getCentral(), zb.getBranch()));
