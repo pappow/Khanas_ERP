@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,7 @@ public class LoginController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		users = users.stream().filter(f -> Boolean.TRUE.equals(f.getZactive())).collect(Collectors.toList());
 		sessionManager.addToMap("FAKE_LOGIN_USER", users);
 
 		responseHelper.setSuccessStatusAndMessage("Logged in successfully");
