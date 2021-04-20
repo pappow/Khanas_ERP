@@ -57,9 +57,11 @@
 									<input type="hidden" name="reportCode" th:value="${reportCode}"/>
 									<div th:include="pages/report/reports :: report-fields" th:with="df=${'E, dd-MMM-yyyy'}"></div>
 								</form>
-								<div class="col-md-12" style="margin-top: 20px;">
-									<button th:if="${not fopEnabled}" class="btn btn-success pull-right confirm-rpt-birt-btn">Generate</button>
-									<button th:if="${fopEnabled}" class="btn btn-success pull-right confirm-rpt-btn">Generate</button>
+								<div class="col-md-6" style="margin-top: 20px;">
+									<div class="col-md-6 col-md-offset-4" style="padding-left:10px;">
+										<button th:if="${not fopEnabled}" class="btn btn-sm btn-success confirm-rpt-birt-btn">Generate</button>
+										<button th:if="${fopEnabled}" class="btn btn-sm btn-success confirm-rpt-btn">Generate</button>
+									</div>
 								</div>
 							</div>
 						</section>

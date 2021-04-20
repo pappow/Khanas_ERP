@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -54,6 +55,8 @@ public class BusinessDashboardController extends ASLAbstractController {
 			businesses.add(new Business(xus.getZemail(), xus.getXpassword(), zb.getZid(), zb.getZorg(), zb.getCentral(), zb.getBranch()));
 		}
 
+		model.addAttribute("centralAvailable", !businesses.stream().filter(f -> f.isCentral()).collect(Collectors.toList()).isEmpty());
+		model.addAttribute("branchAvailable", !businesses.stream().filter(f -> f.isBranch()).collect(Collectors.toList()).isEmpty());
 		model.addAttribute("businesses", businesses);
 
 		return "pages/business/business-dashboard";

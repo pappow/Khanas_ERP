@@ -97,7 +97,7 @@
 				<div class="row">
 					<div class="col-md-12 content-area">
 						<!-- Section data maintenance -->
-						<section id="data-maintenance" style="margin-top: 30px;">
+						<section th:if="${centralAvailable}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
 								<h1>Central</h1>
 							</div>
@@ -116,7 +116,7 @@
 						</section>
 					
 						<!-- Section data maintenance -->
-						<section id="data-maintenance" style="margin-top: 30px;">
+						<section th:if="${branchAvailable}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
 								<h1>Choose Your Branch</h1>
 							</div>

@@ -10,15 +10,14 @@
 					<span class="ckbigmenu-text">Dashboard</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li" th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
-				<a th:href="@{/purchasing}">
-					<span class="ckbigmenu-icon" style="background:  #0c09f7;">
-						<i class="fas fa-shopping-basket"></i>
+			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0700 ne null and menuProfile.M0700.display}">
+				<a th:href="@{/report}">
+					<span class="ckbigmenu-icon" style="background:  #f76109;">
+						<i class="fas fa-file-pdf"></i>
 					</span>
-					<span class="ckbigmenu-text" th:text="${menuProfile.M0300.screenprompt}">Procurements</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0700.screenprompt}">Report</span>
 				</a>
 			</li>
-
 			<li class="ckbigmenu-li">
 				<a th:href="@{/logout}">
 					<span class="ckbigmenu-icon" style="background: red;">
@@ -27,8 +26,58 @@
 					<span class="ckbigmenu-text">Logout</span>
 				</a>
 			</li>
+			<li class="ckbigmenu-li" th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
+				<a th:href="@{/purchasing}">
+					<span class="ckbigmenu-icon" style="background:  #961b39;">
+						<i class="fas fa-shopping-basket"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0300.screenprompt}">Procurements</span>
+				</a>
+			</li>
+			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display}">
+				<a th:href="@{/salesninvoice}">
+					<span class="ckbigmenu-icon" style="background:  #961b39;">
+						<i class="fas fa-file-invoice-dollar"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoice</span>
+				</a>
+			</li>
+			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0500 ne null and menuProfile.M0500.display}">
+				<a th:href="@{/production}">
+					<span class="ckbigmenu-icon" style="background:  #961b39;">
+						<i class="fas fa-industry"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0500.screenprompt}">Production</span>
+				</a>
+			</li>
+			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0600 ne null and menuProfile.M0600.display}">
+				<a th:href="@{/inventory}">
+					<span class="ckbigmenu-icon" style="background:  #961b39;">
+						<i class="fas fa-warehouse"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0600.screenprompt}">Inventory Management</span>
+				</a>
+			</li>
 
 			<li class="ckbigmenu-showall">Show all</li>
+
+			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${isCentral and menuProfile.M0201 ne null and menuProfile.M0201.display}">
+				<a th:href="@{/mastersetup/partymaster}">
+					<span class="ckbigmenu-icon" style="background: green;">
+						<i class="fas fa-truck"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0201.screenprompt}">Party Master</span>
+				</a>
+			</li>
+
+			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display}">
+				<a th:href="@{/mastersetup/itemmaster}">
+					<span class="ckbigmenu-icon" style="background: green;">
+						<i class="fas fa-box-open"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0202.screenprompt}">Item Master</span>
+				</a>
+			</li>
 
 			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${menuProfile.M0203 ne null and menuProfile.M0203.display}">
 				<a th:href="@{/mastersetup/cap}">
@@ -36,6 +85,14 @@
 						<i class="fas fa-qrcode"></i>
 					</span>
 					<span class="ckbigmenu-text">Code & Parameters</span>
+				</a>
+			</li>
+			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${isCentral and menuProfile.M0204 ne null and menuProfile.M0204.display}">
+				<a th:href="@{/mastersetup/vataitmaster}">
+					<span class="ckbigmenu-icon" style="background: green;">
+						<i class="fas fa-funnel-dollar"></i>
+					</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0204.screenprompt}">Vat & Tax</span>
 				</a>
 			</li>
 			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${menuProfile.M0101 ne null and menuProfile.M0101.display}">
