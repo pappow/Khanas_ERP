@@ -7,7 +7,7 @@ package com.asl.enums;
 public enum MenuProfile {
 
 	M0100(9999, "M0100", "100","MASTER", "System Administration", "Y","/system"),
-	M0101(9999, "M0101", "100","M0100", "User Entry", "Y","/system/userentry"),
+	M0101(9999, "M0101", "100","M0100", "User & Profile", "Y","/system/userentry"),
 	M0102(9999, "M0102", "100","M0101", "Manage Users", "Y","/system/xusers"),
 	M0103(9999, "M0103", "100","M0101", "Manage Profile", "Y","/system/profile"),
 	M0104(9999, "M0104", "100","M0101", "Profile Allocation", "Y","/system/profileallocation"),

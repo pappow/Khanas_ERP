@@ -10,62 +10,15 @@
 					<span class="ckbigmenu-text">Dashboard</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/cacus?cacusType=CUS}">
-					<span class="ckbigmenu-icon" style="background: green;">
-						<i class="fas fa-user"></i>
-					</span>
-					<span class="ckbigmenu-text">Customer</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/cacus?cacusType=SUP}">
-					<span class="ckbigmenu-icon" style="background: #0c09f7;">
-						<i class="fas fa-user"></i>
-					</span>
-					<span class="ckbigmenu-text">Supplier</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/caitem}">
-					<span class="ckbigmenu-icon" style="background: green;">
-						<i class="fas fa-drumstick-bite"></i>
-					</span>
-					<span class="ckbigmenu-text">Item</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/xcodes}">
-					<span class="ckbigmenu-icon" style="background: green;">
-						<i class="fas fa-qrcode"></i>
-					</span>
-					<span class="ckbigmenu-text">Codes</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/xtrn}">
+			<li class="ckbigmenu-li" th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
+				<a th:href="@{/purchasing}">
 					<span class="ckbigmenu-icon" style="background:  #0c09f7;">
-						<i class="fas fa-qrcode"></i>
+						<i class="fas fa-shopping-basket"></i>
 					</span>
-					<span class="ckbigmenu-text">Transaction Codes</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0300.screenprompt}">Procurements</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/mastersetup/vatait}">
-					<span class="ckbigmenu-icon" style="background:  green;">
-						<i class="fas fa-dollar-sign"></i>
-					</span>
-					<span class="ckbigmenu-text">Vat and Tax</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li">
-				<a th:href="@{/report}">
-					<span class="ckbigmenu-icon" style="background:  green;">
-						<i class="fas fa-paste"></i>
-					</span>
-					<span class="ckbigmenu-text">Report</span>
-				</a>
-			</li>
+
 			<li class="ckbigmenu-li">
 				<a th:href="@{/logout}">
 					<span class="ckbigmenu-icon" style="background: red;">
@@ -77,56 +30,23 @@
 
 			<li class="ckbigmenu-showall">Show all</li>
 
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/system/profile}">
-					<span class="ckbigmenu-icon" style="background: #000;">
-						<i class="fas fa-id-badge"></i>
+			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${menuProfile.M0203 ne null and menuProfile.M0203.display}">
+				<a th:href="@{/mastersetup/cap}">
+					<span class="ckbigmenu-icon" style="background: green;">
+						<i class="fas fa-qrcode"></i>
 					</span>
-					<span class="ckbigmenu-text">Profile</span>
+					<span class="ckbigmenu-text">Code & Parameters</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/system/profileallocation}">
-					<span class="ckbigmenu-icon" style="background: #000;">
-						<i class="fas fa-fingerprint"></i>
-					</span>
-					<span class="ckbigmenu-text">Profile Allocation</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/system/list}">
-					<span class="ckbigmenu-icon" style="background: #000;">
-						<i class="fas fa-th-list"></i>
-					</span>
-					<span class="ckbigmenu-text">List</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/importexport/listimportexport}">
-					<span class="ckbigmenu-icon" style="background: #0c09f7;">
-						<i class="fas fa-file-import"></i>
-					</span>
-					<span class="ckbigmenu-text">List Im/Ex</span>
-				</a>
-			</li>
-			
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/user}">
+			<li class="ckbigmenu-li hidable-menu nodisplay" th:if="${menuProfile.M0101 ne null and menuProfile.M0101.display}">
+				<a th:href="@{/system/usersentry}">
 					<span class="ckbigmenu-icon" style="background: green;">
 						<i class="fas fa-users-cog"></i>
 					</span>
-					<span class="ckbigmenu-text">Manage User</span>
+					<span class="ckbigmenu-text" th:text="${menuProfile.M0101.screenprompt}">User & Profile</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li hidable-menu nodisplay">
-				<a th:href="@{/shop}">
-					<span class="ckbigmenu-icon" style="background: green;">
-						<i class="fas fa-store"></i>
-					</span>
-					<span class="ckbigmenu-text">Shop</span>
-				</a>
-			</li>
-			
+
 		</ul>
 	</li>
 </ul>
