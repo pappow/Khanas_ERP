@@ -27,6 +27,7 @@ import com.asl.config.AppConfig;
 import com.asl.entity.ProcErrorLog;
 import com.asl.entity.Zbusiness;
 import com.asl.enums.ReportMenu;
+import com.asl.model.LoggedInUserDetails;
 import com.asl.model.MenuProfile;
 import com.asl.model.ReportProfile;
 import com.asl.model.ResponseHelper;
@@ -76,6 +77,11 @@ public class ASLAbstractController {
 	@Autowired protected ProcErrorLogService errorService;
 	@Autowired protected PrintingService printingService;
 	@Autowired protected Environment env;
+
+	@ModelAttribute("loggedInUser")
+	protected LoggedInUserDetails loggedInUser() {
+		return sessionManager.getLoggedInUserDetails();
+	}
 
 	@ModelAttribute("brandName")
 	protected String brandName() {

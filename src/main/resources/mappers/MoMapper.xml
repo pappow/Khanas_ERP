@@ -186,7 +186,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
-			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem AND caitem.zid=#{zid}
 		WHERE 
 			moheader.xbatch=#{xbatch} 
 			AND moheader.zid=#{zid} 
@@ -200,7 +200,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
-			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem AND caitem.zid=#{zid}
 		WHERE 
 			moheader.xchalan=#{xchalan} 
 			AND moheader.zid=#{zid} 
@@ -214,7 +214,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
-			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem AND caitem.zid=#{zid}
 		WHERE 
 			modetail.xrow=#{xrow} 
 			AND modetail.xbatch=#{xbatch} 
@@ -229,7 +229,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
-			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem AND caitem.zid=#{zid}
 		WHERE 
 			modetail.xbatch=#{xbatch} 
 			AND modetail.zid=#{zid} 
@@ -245,7 +245,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			moheader 
-			LEFT JOIN caitem ON caitem.xitem = moheader.xitem
+			LEFT JOIN caitem ON caitem.xitem = moheader.xitem AND caitem.zid=#{zid}
 		WHERE 
 			moheader.zid=#{zid} 
 			AND moheader.zactive='1'
@@ -275,7 +275,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
-			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem AND caitem.zid=#{zid}
 		WHERE
 			modetail.xbatch=#{xbatch} 
 			AND modetail.xitem=#{xitem} 
@@ -294,7 +294,7 @@
 			caitem.xunitpur AS "xqtyprdunit"
 		FROM 
 			modetail 
-			LEFT JOIN caitem ON caitem.xitem = modetail.xitem
+			LEFT JOIN caitem ON caitem.xitem = modetail.xitem AND caitem.zid=#{zid}
 		WHERE
 			modetail.xbatch=#{xbatch} 
 			AND modetail.xtype=#{xtype}
