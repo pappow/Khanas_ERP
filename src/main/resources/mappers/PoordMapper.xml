@@ -235,7 +235,7 @@
 			ph.*, c.xorg 
 		FROM 
 			POORDHEADER ph 
-			LEFT JOIN CACUS c ON c.xcus=ph.xcus
+			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid=#{zid}
 		WHERE 
 			ph.xtype=#{xtype}
 			AND ph.zid=#{zid} 
