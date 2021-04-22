@@ -80,7 +80,7 @@ class AslErpApplicationTests {
 	void savePoordHeader() {
 		PoordHeader ph = new PoordHeader();
 		ph.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
-		ph.setXtrnpor("PO-");
+		ph.setXtrn("PO-");
 		
 		long count = poordService.save(ph);
 		System.out.println(count);

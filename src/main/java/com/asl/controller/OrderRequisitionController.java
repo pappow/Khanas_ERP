@@ -71,6 +71,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
 		poord.setXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
+		poord.setXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode());
 		poord.setXtotamt(BigDecimal.ZERO);
 		poord.setXstatuspor("Open");
 		poord.setXdate(new Date());
@@ -79,7 +80,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
-		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrnpor()) && StringUtils.isBlank(poordHeader.getXpornum())) {
+		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrn()) && StringUtils.isBlank(poordHeader.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -197,6 +198,10 @@ public class OrderRequisitionController extends ASLAbstractController {
 		}
 
 		// Validation
+		if(StringUtils.isBlank(poordDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Please select an item first");
+			return responseHelper.getResponse();
+		}
 		if(poordDetail.getXqtyord() == null || poordDetail.getXqtyord().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid quantity entered");
 			return responseHelper.getResponse();
@@ -267,5 +272,10 @@ public class OrderRequisitionController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/requisition/poorddetail/" + xpornum);
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/centralitem/purunit/{xitem}")
+	public @ResponseBody Caitem getCentralItemPurchaseUnit(@PathVariable String xitem) {
+		return caitemService.findCentralItemByXitem(xitem);
 	}
 }

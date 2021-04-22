@@ -63,7 +63,7 @@ public class PogrnController extends ASLAbstractController {
 	public String loadGRNPage(Model model) {
 		
 		model.addAttribute("pogrnheader", getDefaultPogrnHeader());
-		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
@@ -81,7 +81,7 @@ public class PogrnController extends ASLAbstractController {
 		if(data == null) data = getDefaultPogrnHeader();
 
 		model.addAttribute("pogrnheader", data);
-		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode()));
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
 		//model.addAttribute("allPogrnHeader", new ArrayList<PogrnHeader>());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));

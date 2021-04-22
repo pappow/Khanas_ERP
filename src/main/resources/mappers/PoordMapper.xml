@@ -5,7 +5,7 @@
 
 	<insert id="savePoordHeader" parameterType="PoordHeader">
 		<selectKey keyProperty="xpornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnpor}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO PoordHeader
 		(
@@ -18,6 +18,7 @@
 			xtotamt,
 			xtype,
 			xtypetrn,
+			xtrn,
 			xstatuspor,
 			xnote,
 			zid,
@@ -40,6 +41,7 @@
 			#{xtotamt, jdbcType=DECIMAL},
 			#{xtype, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
 			#{xstatuspor, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
@@ -65,6 +67,7 @@
 			xtotamt=#{xtotamt, jdbcType=DECIMAL},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
 			xstatuspor=#{xstatuspor, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
@@ -197,6 +200,8 @@
 			poorddetail.xrow,
 			poorddetail.xitem,
 			caitem.xdesc as "xitemdesc",
+			caitem.xcatitem,
+			caitem.xgitem,
 			poorddetail.xnote,
 			poorddetail.xlineamt,
 			poorddetail.xunitpur,
@@ -232,16 +237,17 @@
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
 		SELECT 
-			ph.*, c.xorg 
+			ph.*, c.xorg, grn.xgrnnum
 		FROM 
 			POORDHEADER ph 
-			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid=#{zid}
+			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid = ph.zid
+			LEFT JOIN pogrnheader grn ON grn.xpornum = ph.xpornum and grn.zid=ph.zid
 		WHERE 
 			ph.xtype=#{xtype}
 			AND ph.zid=#{zid} 
 			AND ph.zactive='1'
 		ORDER BY 
-			xpornum DESC
+			ph.xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">

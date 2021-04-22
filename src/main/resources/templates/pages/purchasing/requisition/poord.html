@@ -60,14 +60,15 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/requisition/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" th:field="*{xtype}"/>
+											<input type="hidden" th:field="*{xtypetrn}"/>
 											<input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
 											<input type="hidden" class="form-control" th:field="*{xtotamt}">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group" th:if="${#strings.isEmpty(poordheader.xpornum)}">
-														<label class="control-label col-md-4" for="xitem">Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrnpor}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${poprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
@@ -153,7 +154,7 @@
 								<table class="table table-striped table-bordered datatable nowrap" id="poorddetailtable" th:fragment="poorddetailtable">
 									<thead>
 										<tr>
-											<th>Row</th>
+											<th>SL.</th>
 											<th>Item Code</th>
 											<th>Qty</th>
 											<th>Unit</th>
@@ -165,7 +166,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${d.xrow}"></td>
+											<td th:text="${#lists.size(poorddetailsList) - dStat.index}"></td>
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
 											</td>
