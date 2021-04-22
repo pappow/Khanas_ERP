@@ -26,7 +26,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/purchasing}">Purchasing</a></li>
-										<li class="active"><a th:href="@{/purchasing/poord}">Order</a></li>
+										<li class="active"><a th:href="@{/purchasing/poord}">Purchase Order</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -36,8 +36,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
@@ -49,47 +48,38 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Order</h1>
+										<h1>Create Purchase Order</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Create GRN</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.zactive == true}" th:href="@{/purchasing/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == false}" th:href="@{/purchasing/poord/restore/} + ${poordheader.xpornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/poord/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
-											<input type="hidden" id="xpornum" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
+											<input type="hidden" th:field="*{xtypetrn}"/>
+											<input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
 											<div class="row">
 												<div class="col-md-6">
-
 													<div class="form-group" th:if="${#strings.isEmpty(poordheader.xpornum)}">
-														<label class="control-label col-md-4" for="xitem">P.O. Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">P.O. Prefix : </label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrnpor}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${poprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
 													</div>
-
 													<div class="form-group" th:if="${not #strings.isEmpty(poordheader.xpornum)}">
 														<label class="control-label col-md-4" for="xpornum">PO Number : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xpornum}" disabled="disabled">
+															<input type="text" class="form-control" th:value="*{xpornum}" disabled="disabled">
 														</div>
 													</div>
-
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xcus">Supplier No : </label>
 														<div class="col-sm-8">
@@ -102,14 +92,12 @@
 															<input type="hidden" id="search-des" value=""/>
 														</div>
 													</div>
-
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xref">Supplier Ref : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xref}">
 														</div>
 													</div>
-
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
 														<div class="input-group date col-md-7 datepicker">
@@ -123,7 +111,6 @@
 															</div>
 														</div>
 													</div>
-
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 														<div class="col-md-8">
@@ -132,7 +119,6 @@
 															</select>
 														</div>
 													</div>
-
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
@@ -141,23 +127,19 @@
 															<input type="text" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
 														</div>
 													</div>
-
+													<input type="hidden" th:field="*{xstatuspor}"/>
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatuspor">PO Status : </label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatuspor}">
-																<option th:each="s : ${postatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
+															<input type="text" class="form-control" th:value="*{xstatuspor}" disabled="disabled">
 														</div>
 													</div>
-
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnote">Note : </label>
 														<div class="col-md-8">
 															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
 														</div>
 													</div>
-
 												</div>
 											</div>
 										</form>
@@ -167,7 +149,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Orders</h1>
+										<h1>All Purchase Orders</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">
@@ -201,17 +183,16 @@
 					</div>
 
 					<div class="col-md-12">
-						<!-- poorddetail section -->
 						<section th:if="${not #strings.isEmpty(poordheader.xpornum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/purchasing/poord/poorddetails/} + ${poordheader.xpornum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>Order Details</h1>
+								<h1>Purchase Order Items</h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered datatable nowrap" id="poorddetailtable" th:fragment="poorddetailtable">
 									<thead>
 										<tr>
-											<th>Row</th>
+											<th>SL.</th>
 											<th>Item Code</th>
 											<th>Note</th>
 											<th>Qty</th>

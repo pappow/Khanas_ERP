@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Caitem;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
@@ -35,6 +36,7 @@ import com.asl.model.report.ItemDetails;
 import com.asl.model.report.PurchaseOrder;
 import com.asl.model.report.PurchaseReport;
 import com.asl.service.CacusService;
+import com.asl.service.CaitemService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
@@ -49,14 +51,15 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private PogrnService pogrnService;
 	@Autowired private CacusService cacusService;
+	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		return "pages/purchasing/poord/poord";
 	}
 
@@ -64,12 +67,13 @@ public class PurchaseOrderController extends ASLAbstractController {
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
 		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum); 
 		if(data == null) data = getDefaultPoordHeader();
+		data.setXtypetrn(data.getXtype());
 
 		model.addAttribute("poordheader", data);
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		return "pages/purchasing/poord/poord";
 	}
@@ -77,8 +81,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
 		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
-		//poord.setXtype("Purchase");
-		//poord.setXtypetrn("PO Number");
+		poord.setXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode());
 		poord.setXstatuspor("Open");
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
@@ -86,10 +89,11 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
-		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrnpor()) && StringUtils.isBlank(poordHeader.getXpornum())) {
+		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrn()) && StringUtils.isBlank(poordHeader.getXpornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		// Validate
 		if(StringUtils.isBlank(poordHeader.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Please select a supplier to create purchase order!");
@@ -99,7 +103,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
 		if(existPoordHeader != null) {
-			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate", "xtotamt");
+			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xtypetrn", "xtrn", "xtotamt");
 			long count = poordService.update(existPoordHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
@@ -133,15 +137,22 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor()) || "Confirmed".equalsIgnoreCase(poordHeader.getXstatuspor())) {
+			responseHelper.setErrorStatusAndMessage("Confirmed Purchase Order can't be archived");
 			return responseHelper.getResponse();
 		}
 
 		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
 		long count = poordService.update(poordHeader);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't archive Purchase Order");
+			return responseHelper.getResponse();
+		}
+
+		long totalDetail = poordService.countOfRequisitionDetailsByXpornum(xpornum);
+		long dcount = poordService.archiveAllPoordDetailByXpornum(xpornum);
+		if(dcount == 0 && totalDetail > 0) {
+			responseHelper.setErrorStatusAndMessage("Purchase order archived successfully, but item details not archived");
 			return responseHelper.getResponse();
 		}
 
@@ -375,5 +386,11 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		headers.setContentType(new MediaType("application", "pdf"));
 		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+
+	@GetMapping("/caitem/itemdetail/{xitem}")
+	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
+		Caitem centralCaitem = caitemService.findByXitem(xitem);
+		return centralCaitem;
 	}
 }

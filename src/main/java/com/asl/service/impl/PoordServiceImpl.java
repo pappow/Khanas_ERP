@@ -23,7 +23,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	@Override
 	public long save(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())
-				|| StringUtils.isBlank(poordHeader.getXtrnpor()))
+				|| StringUtils.isBlank(poordHeader.getXtrn()))
 			return 0;
 		poordHeader.setZid(sessionManager.getBusinessId());
 		poordHeader.setZauserid(getAuditUser());

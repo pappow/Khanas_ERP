@@ -25,6 +25,7 @@ $(document).ready(function(){
 	}, 1000));
 
 	$(".searchsuggest").off('blur').on('blur', function(){
+		console.log('here');
 		var targetElement = $(this);
 		var parent = $(targetElement).parent();
 

@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div id="poorddetailmodal" th:fragment="poorddetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+<div id="poorddetailmodal" th:fragment="poorddetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
 	<div class="modal-dialog modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -23,7 +23,7 @@
 											th:value="${poorddetail.xitem}" 
 											th:attr="search-url='search/caitem/requisition'"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" value=""/>
-									<input type="hidden" id="search-des" value=""/>
+									<input type="hidden" id="search-des" th:value="${poorddetail.xitem}"/>
 								</div>
 							</div>
 							<div class="form-group">
