@@ -15,7 +15,7 @@
 	</select>
 
 	<select id = "createSuggestion" statementType = "CALLABLE">
-		{call proc_suggesstion(#{xordernum, jdbcType = VARCHAR, mode = IN})}
+		{call proc_suggesstion(#{xordernum, jdbcType = VARCHAR, mode = IN}, #{zid, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
 	<delete id="deleteSuggestion">
