@@ -15,9 +15,12 @@ import lombok.Data;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Suggestion {
 
+	private String xitem;
 	private String productionItem;
 	private String productionItemQty;
 	private String productionItemUnit;
+	
+	private String xrawmaterial;
 	private String rawMaterial;
 	private String rawMaterialQty;
 	private String rawMaterialUnit;

@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Zubayer Ahamed
@@ -18,15 +19,10 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "productionplanningsreport")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProductionPlanningsReport {
+@EqualsAndHashCode(callSuper = true)
+public class ProductionPlanningsReport extends AbstractReportModel {
 
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	private String printDate;
-	private String copyrightText;
+	private static final long serialVersionUID = -2577217110271006869L;
 
 	@XmlElementWrapper(name = "chalans")
 	@XmlElement(name = "chalan")
@@ -35,5 +31,9 @@ public class ProductionPlanningsReport {
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")
 	private List<ItemDetails> itemDetails = new ArrayList<>();
+
+	@XmlElementWrapper(name = "rawitems")
+	@XmlElement(name = "rawitem")
+	private List<RawMaterialItems> rawItems = new ArrayList<>();
 
 }

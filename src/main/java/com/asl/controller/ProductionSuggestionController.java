@@ -26,6 +26,7 @@ import com.asl.entity.Zbusiness;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.ProductionSuggestion;
 import com.asl.model.report.ProductionPlanningsReport;
+import com.asl.model.report.RawMaterialItems;
 import com.asl.model.report.SalesOrderChalan;
 import com.asl.model.report.Suggestion;
 import com.asl.service.OpordService;
@@ -65,10 +66,10 @@ public class ProductionSuggestionController extends ASLAbstractController {
 			Map<String, BigDecimal> m = new HashMap<>();
 			for(ProductionSuggestion p : list) {
 				if(m.get(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )") != null) {
-					BigDecimal qty = BigDecimal.valueOf(Double.valueOf(p.getXrawqty()));
+					BigDecimal qty = p.getXrawqty() != null ? p.getXrawqty() : BigDecimal.ZERO;
 					m.put(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )", m.get(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )").add(qty));
 				} else {
-					m.put(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )", BigDecimal.valueOf(Double.valueOf(p.getXrawqty())));
+					m.put(p.getXrawitem() + " - " + p.getXrawdes() + " (" + p.getXrawunit() +" )", p.getXrawqty() != null ? p.getXrawqty() : BigDecimal.ZERO);
 				}
 			}
 			totalMap.put(c.getXordernum(), m);
@@ -133,19 +134,35 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		List<Suggestion> suggestions = new ArrayList<>();
 		details.stream().forEach(d -> {
 			Suggestion s = new Suggestion();
-			s.setProductionItem(d.getXitemdes());
-			s.setProductionItemQty(d.getXqtyord());
+			s.setXitem(d.getXitem());
+			s.setXrawmaterial(d.getXrawitem());
+			s.setProductionItem(d.getXitem() + " - " + d.getXitemdes());
+			s.setProductionItemQty(d.getXqtyord() != null ? d.getXqtyord().toString() : BigDecimal.ZERO.toString());
 			s.setProductionItemUnit(d.getXitemunit());
-			s.setRawMaterial(d.getXrawdes());
-			s.setRawMaterialQty(d.getXrawqty());
+			s.setRawMaterial(d.getXrawitem() + " - " + d.getXrawdes());
+			s.setRawMaterialQty(d.getXrawqty() != null ? d.getXrawqty().toString() : BigDecimal.ZERO.toString());
 			s.setRawMaterialUnit(d.getXrawunit());
 			suggestions.add(s);
-
-			
-			
 		});
 		chalan.getSuggestions().addAll(suggestions);
 		report.getChalans().addAll(chalans);
+
+		Map<String, RawMaterialItems> rawMap = new HashMap<>();
+		for(ProductionSuggestion s : details) {
+			if(rawMap.get(s.getXrawitem()) != null) {
+				RawMaterialItems rm = rawMap.get(s.getXrawitem());
+				rm.setXqtyl(rm.getXqtyl().add(s.getXrawqty()));
+			} else {
+				RawMaterialItems rm = new RawMaterialItems();
+				rm.setXitem(s.getXrawitem() + " - " + s.getXrawdes() + " (" + s.getXrawunit() + ")");
+				rm.setXqtyl(s.getXrawqty());
+				rawMap.put(s.getXrawitem(), rm);
+			}
+		}
+
+		List<RawMaterialItems> rmList = new ArrayList<>();
+		rawMap.entrySet().stream().forEach(m -> rmList.add(m.getValue()));
+		report.getRawItems().addAll(rmList);
 
 		byte[] byt = getPDFByte(report, "productionplanningofchalanreport.xsl");
 		if(byt == null) {
