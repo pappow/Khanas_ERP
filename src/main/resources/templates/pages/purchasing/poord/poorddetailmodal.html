@@ -90,6 +90,8 @@
 					$('#xlineamt').val(qty * rate);
 				}
 
+				var olditem = $('input[name="xitem"]').val();
+
 				// Get item purchase unit
 				$('.xitemsearch').on('blur', function(){
 					setTimeout(() => {
@@ -101,11 +103,15 @@
 							return;
 						}
 
+						if(olditem != '' && olditem == $('input[name="xitem"]').val()) return;
+
 						$.ajax({
 							url : getBasepath() + '/purchasing/poord/caitem/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							beforeSend : loadingMask2.show(),
 							success : function(data) {
+								if(data == undefined || data == null) return;
+
 								loadingMask2.hide();
 								$('input[name="xunitpur"]').val(data.xunitpur);
 								$('input.xunitpur-display').val(data.xunitpur);	
@@ -114,7 +120,6 @@
 
 								$(".qty").focus();
 								$('#xlineamt').val($(".qty").val() * data.xrate);
-								//$('input[name="xtotamt"]').val(parseFloat($('input[name="xrate"]').val()) * parseFloat($('input[name="xqtyord"]').val()));
 							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");

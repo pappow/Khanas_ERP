@@ -19,7 +19,6 @@
 									<input 	type="text" 
 											class="form-control searchsuggest xitemsearch" 
 											placeholder="Search..." 
-											required="required"
 											th:value="${poorddetail.xitem}" 
 											th:attr="search-url='search/caitem/requisition'"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" value=""/>
@@ -62,6 +61,8 @@
 				// Init ui for modal
 				ck.ui.config.buttonevent();
 
+				var olditem = $('input[name="xitem"]').val();
+
 				// Get item purchase unit
 				$('.xitemsearch').on('blur', function(){
 					console.log($('input[name="xitem"]').val());
@@ -74,8 +75,10 @@
 							return;
 						}
 
+						if(olditem != '' && olditem == $('input[name="xitem"]').val()) return;
+
 						$.ajax({
-							url : getBasepath() + '/mastersetup/caitem/centralitem/purunit/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/purchasing/requisition/centralitem/purunit/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							beforeSend : loadingMask2.show(),
 							success : function(data) {

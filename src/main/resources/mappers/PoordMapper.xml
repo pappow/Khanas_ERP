@@ -200,6 +200,8 @@
 			poorddetail.xrow,
 			poorddetail.xitem,
 			caitem.xdesc as "xitemdesc",
+			caitem.xcatitem,
+			caitem.xgitem,
 			poorddetail.xnote,
 			poorddetail.xlineamt,
 			poorddetail.xunitpur,
@@ -235,16 +237,17 @@
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
 		SELECT 
-			ph.*, c.xorg 
+			ph.*, c.xorg, grn.xgrnnum
 		FROM 
 			POORDHEADER ph 
-			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid=#{zid}
+			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid = ph.zid
+			LEFT JOIN pogrnheader grn ON grn.xpornum = ph.xpornum and grn.zid=ph.zid
 		WHERE 
 			ph.xtype=#{xtype}
 			AND ph.zid=#{zid} 
 			AND ph.zactive='1'
 		ORDER BY 
-			xpornum DESC
+			ph.xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">

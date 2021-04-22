@@ -196,6 +196,10 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		// Check item already exist in detail list
+		if(StringUtils.isBlank(poordDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Please select an item");
+			return responseHelper.getResponse();
+		}
 		if(poordDetail.getXrow() == 0 && poordService.findPoorddetailByXpornumAndXitem(poordDetail.getXpornum(), poordDetail.getXitem()) != null) {
 			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
@@ -213,8 +217,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
-			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
+			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
+			responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
+			responseHelper.setSuccessStatusAndMessage("Order Item detail updated successfully");
 			return responseHelper.getResponse();
 		}
 
@@ -224,8 +229,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  poordDetail.getXpornum());
-		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
+		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Order Item detail saved successfully");
 		return responseHelper.getResponse();
 	}
 
@@ -233,10 +239,17 @@ public class PurchaseOrderController extends ASLAbstractController {
 	public String reloadPoordDetailTabble(@PathVariable String xpornum, Model model) {
 		List<PoordDetail> detailList = poordService.findPoorddetailByXpornum(xpornum);
 		model.addAttribute("poorddetailsList", detailList);
-		PoordHeader header = new PoordHeader();
-		header.setXpornum(xpornum);
-		model.addAttribute("poordheader", header);
+		model.addAttribute("poordheader", poordService.findPoordHeaderByXpornum(xpornum));
 		return "pages/purchasing/poord/poord::poorddetailtable";
+	}
+
+	@GetMapping("/poordheaderform/{xpornum}")
+	public String reloadPoordheaderForm(@PathVariable String xpornum, Model model) {
+		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("poordheader", poordService.findPoordHeaderByXpornum(xpornum));
+		return "pages/purchasing/poord/poord::poordheaderform";
 	}
 
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
@@ -254,25 +267,26 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" +  xpornum);
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + xpornum);
+		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + xpornum);
 		return responseHelper.getResponse();
 	}
-	
-	
+
 	@GetMapping("/creategrn/{xpornum}")
 	public @ResponseBody Map<String, Object> creategrn(@PathVariable String xpornum){
-		if(StringUtils.isBlank(xpornum)) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		// Validate
-
 		// Get PoordHeader record by Xpornum
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
+		if(poordHeader == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
+			return responseHelper.getResponse();
+		}
+
 		//Get PO items to copy them in GRN.
 		List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
-		if(poordDetailList.size() == 0) {
+		if(poordDetailList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("Please add items to create grn!");
+			responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
 			return responseHelper.getResponse();
 		}
 		if(poordHeader != null) {
@@ -287,6 +301,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			long count = pogrnService.save(pogrnHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
 				return responseHelper.getResponse();
 			}
 			
@@ -304,6 +319,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 				// Update Inventory				
 				if(nCount == 0) {
 					responseHelper.setStatus(ResponseStatus.ERROR);
+					responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
 					return responseHelper.getResponse();
 				}				
 			}
@@ -313,6 +329,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			long pCount = poordService.update(poordHeader);
 			if(pCount == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
 				return responseHelper.getResponse();
 			}			
 			 
@@ -347,11 +364,10 @@ public class PurchaseOrderController extends ASLAbstractController {
 		PurchaseReport report = new PurchaseReport();
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-		report.setReportName("Purchase Order");
+		report.setReportName("Purchase Order Report");
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
-		//report.setCopyrightText("ASL");
 
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
 		purchaseOrder.setOrderNumber(oh.getXpornum());
@@ -360,6 +376,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		purchaseOrder.setSupplierAddress(cacus.getXmadd());
 		purchaseOrder.setWarehouse(oh.getXwh());
 		purchaseOrder.setDate(sdf.format(oh.getXdate()));
+		purchaseOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
 
 		List<PoordDetail> items = poordService.findPoorddetailByXpornum(oh.getXpornum());
 		if (items != null && !items.isEmpty()) {
@@ -367,18 +384,19 @@ public class PurchaseOrderController extends ASLAbstractController {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
 				item.setItemName(it.getXitemdesc());
-				item.setItemQty(it.getXqtyord().toString());
+				item.setItemQty(it.getXqtyord() != null ? it.getXqtyord().toString() : BigDecimal.ZERO.toString());
 				item.setItemUnit(it.getXunitpur());
 				item.setItemCategory(it.getXcatitem());
 				item.setItemGroup(it.getXgitem());
-
+				item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
+				item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
 				purchaseOrder.getItems().add(item);
 			});
 		}
 
 		report.getPurchaseorders().add(purchaseOrder);
 
-		byte[] byt = getPDFByte(report, "purchasereport.xsl");
+		byte[] byt = getPDFByte(report, "purchaseorderreport.xsl");
 		if (byt == null) {
 			message = "Can't print report for Purchase Order : " + xpornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

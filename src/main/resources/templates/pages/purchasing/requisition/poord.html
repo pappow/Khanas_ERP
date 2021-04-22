@@ -154,7 +154,7 @@
 								<table class="table table-striped table-bordered datatable nowrap" id="poorddetailtable" th:fragment="poorddetailtable">
 									<thead>
 										<tr>
-											<th>Row</th>
+											<th>SL.</th>
 											<th>Item Code</th>
 											<th>Qty</th>
 											<th>Unit</th>
@@ -166,7 +166,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${d.xrow}"></td>
+											<td th:text="${#lists.size(poorddetailsList) - dStat.index}"></td>
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
 											</td>

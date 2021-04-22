@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Zubayer Ahamed
@@ -19,7 +20,10 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "RM0301")
 @XmlAccessorType(XmlAccessType.FIELD)
+@EqualsAndHashCode(callSuper = true)
 public class RM0301Report extends AbstractReportModel {
+
+	private static final long serialVersionUID = -2108948210560662297L;
 
 	@XmlElementWrapper(name = "suppliers")
 	@XmlElement(name = "supplier")

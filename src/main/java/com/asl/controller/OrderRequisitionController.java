@@ -198,6 +198,10 @@ public class OrderRequisitionController extends ASLAbstractController {
 		}
 
 		// Validation
+		if(StringUtils.isBlank(poordDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Please select an item first");
+			return responseHelper.getResponse();
+		}
 		if(poordDetail.getXqtyord() == null || poordDetail.getXqtyord().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid quantity entered");
 			return responseHelper.getResponse();
@@ -268,5 +272,10 @@ public class OrderRequisitionController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/requisition/poorddetail/" + xpornum);
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/centralitem/purunit/{xitem}")
+	public @ResponseBody Caitem getCentralItemPurchaseUnit(@PathVariable String xitem) {
+		return caitemService.findCentralItemByXitem(xitem);
 	}
 }
