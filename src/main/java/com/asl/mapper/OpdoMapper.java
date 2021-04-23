@@ -26,6 +26,7 @@ public interface OpdoMapper {
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid);
+	public List<Opdoheader> findOpdoXdornum(String xdornum, String zid);
 	
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum, String zid);
 	public List<Opdoheader> searchOpdoHeaderWithSatus(String xtypetrn, String xdornum, String xstatusord, String zid);

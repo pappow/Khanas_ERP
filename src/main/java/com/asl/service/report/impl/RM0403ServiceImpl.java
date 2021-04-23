@@ -2,6 +2,7 @@ package com.asl.service.report.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0311Service")
-public class RM0311ServiceImpl extends AbstractReportService {
+@Service("RM0403Service")
+public class RM0403ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
@@ -30,30 +31,33 @@ public class RM0311ServiceImpl extends AbstractReportService {
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE);
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
+		
+		
+		// From Date
+		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
 
-		// xcus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Supplier Group", options, "", false));
+		// To Date
+		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
-//		// xorg
-//		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
-//
-//		// xphone
-//		fieldsList.add(FormFieldBuilder.generateInputField(4, "XPHONE", "01515634889", false));
-//
-//		// xgcus
-//		fieldsList.add(FormFieldBuilder.generateInputField(5, "XGCUS", "Corporate", true));
-//
-//		// xstatuscus
-//		fieldsList.add(FormFieldBuilder.generateInputField(6, "XSTATUSCUS", "Active", true));
+		// xitem
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
+		
+		// xgrnstatus
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Do Status", options, "", false));
+		
+		// DO number
+		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Do Number", "search/report/opdo/xdornum", "", false));
+		
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
 }
+  

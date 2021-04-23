@@ -18,23 +18,20 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0401Service")
-public class RM0401ServiceImpl extends AbstractReportService {
+@Service("RM0312Service")
+public class RM0312ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
-	
+
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
 	}
 
 	private List<FormFieldBuilder> generateFields() {
+
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
 		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
 		List<DropdownOption> group = new ArrayList<>();
@@ -52,22 +49,22 @@ public class RM0401ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
 		// xitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Supplier", "search/report/sup", "", false));
 		
-		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Status", options, "", false));
+		// status
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Status", "search/report/xstatuscrn", "", false));
 		
 		// Item Code
 		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item Code", "search/report/stock/xitem", "", false));
 		
 		// Item Name
 		fieldsList.add(FormFieldBuilder.generateSearchField(7, "Item Name", "search/report/caitemname", "", false));
-				
+		
 		// Item Group
 		fieldsList.add(FormFieldBuilder.generateDropdownField(8, "Item Group", group, "", false));
-
-				
+	
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
+
 }

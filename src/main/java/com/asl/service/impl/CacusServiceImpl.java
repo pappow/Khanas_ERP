@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Caitem;
 import com.asl.mapper.CacusMapper;
 import com.asl.service.CacusService;
 

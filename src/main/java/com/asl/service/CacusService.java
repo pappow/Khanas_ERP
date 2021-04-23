@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Caitem;
 
 /**
  * @author Zubayer Ahamed
@@ -32,4 +33,6 @@ public interface CacusService {
 	public List<Cacus> searchXgcus(String xgcus);
 
 	public Cacus findCacusByXcuszid(String xcuszid);
+	
+	
 }

@@ -21,7 +21,8 @@ public interface CaitemService {
 
 	public Caitem findByXitem(String xitem);
 
-	// public Xcodes findByXtypesAndXcodes(String xType, String xCodes);
+ // public Xcodes findByXtypesAndXcodes(String xType, String xCodes);
+	
 	public List<Caitem> searchCaitem(String hint);
 
 	public List<Caitem> searchFinishedProductionCaitem(String hint);
@@ -35,4 +36,7 @@ public interface CaitemService {
 	public Caitem findCentralItemByXitem(String xitem);
 
 	public List<Caitem> getWithoutProductionCaitems(String hint);
+	
+	public List<Caitem> searchItemName(String xdesc);
+	
 }

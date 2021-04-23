@@ -25,20 +25,8 @@ public class RM0408ServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// xcus
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer", "search/report/cus", "", true));
-
-//		// xorg
-//		fieldsList.add(FormFieldBuilder.generateSearchField(3, "Organization", "search/report/xorg", "", false));
-//
-//		// xphone
-//		fieldsList.add(FormFieldBuilder.generateInputField(4, "Phone", "", false));
-//
-//		// xgcus
-//		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Customer Group", "search/report/xgcus","", false));
-//
-//		// xstatuscus
-//		fieldsList.add(FormFieldBuilder.generateInputField(6, "Status", "Active", false));
+		// xgcus
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Customer Group", "search/report/xgcus","", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
