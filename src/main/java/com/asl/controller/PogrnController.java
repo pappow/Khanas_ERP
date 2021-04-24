@@ -89,12 +89,15 @@ public class PogrnController extends ASLAbstractController {
 		PogrnHeader pogrn = new PogrnHeader();
 		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		pogrn.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
+		pogrn.setXdate(new Date());
+		pogrn.setXstatusgrn("Open");
 		pogrn.setXtypetrn("Purchase");
 		pogrn.setXvatait("No Vat");
 		pogrn.setXtotamt(BigDecimal.ZERO);
 		pogrn.setXvatamt(BigDecimal.ZERO);
+		pogrn.setXaitamt(BigDecimal.ZERO);
 		pogrn.setXdiscprime(BigDecimal.ZERO);
-		pogrn.setXdate(new Date());
+		pogrn.setXgrandtot(BigDecimal.ZERO);
 		return pogrn;
 	}
 
@@ -106,10 +109,14 @@ public class PogrnController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		// Validate
-		if (StringUtils.isBlank(pogrnHeader.getXinvnum())) {
-			responseHelper.setErrorStatusAndMessage("Please provide bill info");
+		if (StringUtils.isBlank(pogrnHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please Select Supplier");
 			return responseHelper.getResponse();
 		}
+//		if (StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+//			responseHelper.setErrorStatusAndMessage("Please provide bill info");
+//			return responseHelper.getResponse();
+//		}
 
 		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
 		if (pogrnHeader.getXtotamt() == null) pogrnHeader.setXtotamt(BigDecimal.ZERO);
@@ -239,107 +246,38 @@ public class PogrnController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	/*
-	 * @GetMapping("/confirmgrn/{xgrnnum}") public @ResponseBody Map<String, Object>
-	 * confirmgrn(@PathVariable String xgrnnum){ if(StringUtils.isBlank(xgrnnum)) {
-	 * responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); } // Validate
-	 * 
-	 * //Get PogrnHeader record by Xgrnnum PogrnHeader pogrnHeader =
-	 * pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-	 * 
-	 * if(pogrnHeader != null) {
-	 * 
-	 * List<PogrnDetail> pogrnDetailList =
-	 * pogrnService.findPogrnDetailByXgrnnum(xgrnnum); Imtrn imtrn; for(int i=0; i<
-	 * pogrnDetailList.size(); i++) {
-	 * 
-	 * imtrn = new Imtrn(); BeanUtils.copyProperties(pogrnDetailList.get(i), imtrn);
-	 * imtrn.setXdate(pogrnHeader.getXdate()); imtrn.setXwh(pogrnHeader.getXwh());
-	 * imtrn.setXqty(pogrnDetailList.get(i).getXqtygrn()); imtrn.setXsign(+1);
-	 * imtrn.setXtype(TransactionCodeType.INVENTORY_NUMBER.getCode());
-	 * imtrn.setXtrnimtrn(TransactionCodeType.INVENTORY_NUMBER.getdefaultCode());
-	 * //imtrn.set
-	 * 
-	 * long imtrnCount = imtrnService.save(imtrn); if(imtrnCount == 0) {
-	 * responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); } }
-	 * 
-	 * //Create Arhed (Account Payable)
-	 * 
-	 * Arhed arhed = new Arhed(); BeanUtils.copyProperties(pogrnHeader, arhed);
-	 * arhed.setXprime(pogrnHeader.getXtotamt());
-	 * //arhed.setXbalprime(pogrnHeader.getXtotamt());
-	 * arhed.setXbase(pogrnHeader.getXtotamt());
-	 * arhed.setXdiscprime(pogrnHeader.getXdiscprime()); arhed.setXsign(-1);
-	 * arhed.setXtyperec("Due"); arhed.setXstatusjv("Confirmed");
-	 * arhed.setXtype(TransactionCodeType.ACCOUNT_PAYABLE.getCode());
-	 * arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYABLE.getdefaultCode());
-	 * long arCount = arhedService.save(arhed);
-	 * 
-	 * if(arCount == 0) { responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); }
-	 * 
-	 * 
-	 * //Update PoordHeader Status
-	 * 
-	 * PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(pornum);
-	 * poordHeader.setXstatuspor("GRN Confirmed"); long pCount =
-	 * poordService.update(poordHeader); if(pCount == 0) {
-	 * responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); }
-	 * 
-	 * //Update grn status pogrnHeader.setXstatusgrn("GRN Confirmed"); long grnCount
-	 * = pogrnService.update(pogrnHeader); if(grnCount == 0) {
-	 * responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); }
-	 * 
-	 * 
-	 * responseHelper.setSuccessStatusAndMessage("GRN Confirmed successfully");
-	 * responseHelper.setRedirectUrl("/purchasing/pogrn/" +
-	 * pogrnHeader.getXgrnnum()); return responseHelper.getResponse();
-	 * 
-	 * } responseHelper.setStatus(ResponseStatus.ERROR); return
-	 * responseHelper.getResponse(); }
-	 */
-
-	@GetMapping("/confirmgrn/{xgrnnum}")
+	@PostMapping("/confirmgrn/{xgrnnum}")
 	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xgrnnum) {
-		if (StringUtils.isBlank(xgrnnum)) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		if(pogrnHeader == null) {
+			responseHelper.setErrorStatusAndMessage("GRN not found in this system");
 			return responseHelper.getResponse();
 		}
 
-		// Get PogrnHeader record by Xgrnnum
-		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
 		// Validate
 		if (StringUtils.isBlank(pogrnHeader.getXcus())) {
-			responseHelper.setErrorStatusAndMessage("Please provide a valid supplier to proceed!");
+			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
-		if (StringUtils.isBlank(pogrnHeader.getXinvnum())) {
-			responseHelper.setErrorStatusAndMessage("Please add supplier bill no.!");
-			return responseHelper.getResponse();
-		}
-
+//		if (StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+//			responseHelper.setErrorStatusAndMessage("Please add supplier bill no.!");
+//			return responseHelper.getResponse();
+//		}
 		if ("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
 			return responseHelper.getResponse();
 		}
-		Xcodes xcode = xcodeService.findByXtypesAndXcodes(CodeType.WAREHOUSE.getCode(), pogrnHeader.getXwh());
-		if (xcode == null) {
-			responseHelper.setErrorStatusAndMessage("A valid warehouse must be selected.");
-			return responseHelper.getResponse();
-		}
+
 		List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
-		if (pogrnDetailList.size() == 0) {
-			responseHelper.setErrorStatusAndMessage("Please add detail!");
+		if (pogrnDetailList == null || pogrnDetailList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("GRN has no item details");
 			return responseHelper.getResponse();
 		}
+
 		String p_seq;
 		if (!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pogrnService.procInventory(xgrnnum, pogrnHeader.getXpornum(), p_seq);
+			pogrnService.procInventory(pogrnHeader.getXgrnnum(), pogrnHeader.getXpornum(), p_seq);
 			String em = getProcedureErrorMessages(p_seq);
 			if (StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
@@ -349,7 +287,7 @@ public class PogrnController extends ASLAbstractController {
 
 		if (!"Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusap())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pogrnService.procTransferPOtoAP(xgrnnum, p_seq);
+			pogrnService.procTransferPOtoAP(pogrnHeader.getXgrnnum(), p_seq);
 			String em = getProcedureErrorMessages(p_seq);
 			if (StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);

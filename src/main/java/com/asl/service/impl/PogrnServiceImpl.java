@@ -99,9 +99,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 
 	@Override
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum) {
-		if (StringUtils.isBlank(xgrnnum))
-			return null;
-
+		if (StringUtils.isBlank(xgrnnum)) return null;
 		return pogrnMapper.findPogrnHeaderByXgrnnum(xgrnnum, sessionManager.getBusinessId());
 	}
 
@@ -129,11 +127,13 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
+	@Transactional
 	public void procInventory(String xgrnnum, String xpornum, String p_seq) {
 		pogrnMapper.procInventory(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum, xpornum, p_seq);
 	}
-	
+
 	@Override
+	@Transactional
 	public void procTransferPOtoAP(String xgrnnum, String p_seq) {
 		pogrnMapper.procTransferPOtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xgrnnum, p_seq);
 	}
