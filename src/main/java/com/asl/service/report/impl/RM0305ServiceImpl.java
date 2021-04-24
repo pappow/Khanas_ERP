@@ -43,30 +43,39 @@ public class RM0305ServiceImpl extends AbstractReportService {
 
 		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
+		options.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		
+		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
+		List<DropdownOption> group = new ArrayList<>();
+		group.add(new DropdownOption("", "-- Select --"));
+		groupList.stream().forEach(x -> group.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
-
-		// xwh
-		List<Xcodes> xwhList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
-		List<DropdownOption> xwhop = new ArrayList<>();
-		xwhop.add(new DropdownOption("", "-- Select --"));
-		xwhList.stream().forEach(x -> xwhop.add(new DropdownOption(x.getXcode(), x.getXcode())));
-		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Warehouse", xwhop, " ", false));
-
-		// xitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(3, "Supplier", "search/report/stock/xitem", "", false));
-
-		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "GRN Status", options, "Confirmed", true));
-
+		
+		
 		// From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(5, "From Date", new Date(), true));
+		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
 
 		// To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(6, "To Date", new Date(), true));
+		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
+		// xitem
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Supplier", "search/report/sup", "", false));
+		
+		// Item Code
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Item Code", "search/report/stock/xitem", "", false));
+		
+		// Item Group
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Item Group", group, "", false));
+
+		// Item Name
+		fieldsList.add(FormFieldBuilder.generateSearchField(7, "Item Name", "search/report/caitemname", "", false));
+		
+		// xgrnstatus
+		fieldsList.add(FormFieldBuilder.generateDropdownField(8, "Status", options, "", false));
+				
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}

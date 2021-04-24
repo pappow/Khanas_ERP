@@ -28,4 +28,5 @@ public interface PocrnMapper {
 	public void procIssuePricing(String zid, String user, String xtrnnum, String xwh, String p_seq);
 	public void procTransferPRtoAP(String zid, String user, String xcrnnum, String p_seq);
 	
+	public List<Pocrnheader> findPocrnXstatuscrn(String xstatuscrn, String zid);
 }

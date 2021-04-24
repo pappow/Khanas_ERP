@@ -25,5 +25,6 @@ public interface CaitemMapper {
 	public List<Caitem> searchCentralCaitemForRequisition(String xitem, String centralzid);
 	public Caitem findCentralItemByXitem(String xitem, String centralzid);
 	
+	public List<Caitem> searchItemName(String xdesc, String zid);
 	
 }

@@ -16,6 +16,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
+import com.asl.entity.Pocrnheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.BmbomService;
@@ -24,6 +25,7 @@ import com.asl.service.CaitemService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.PogrnService;
+import com.asl.service.PocrnService;
 import com.asl.service.PoordService;
 import com.asl.service.ProductionSuggestionService;
 
@@ -41,9 +43,8 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private ProductionSuggestionService productionSuggestionService;
 	@Autowired private PogrnService pogrnService;
 	@Autowired private OpordService opordService;
-
-	@Autowired private OpdoService opdoService;
-
+	@Autowired private PocrnService pocrnService;
+	@Autowired private OpdoService  opdoService;
 	@Autowired private BmbomService bmbomService;
 	@Autowired private PoordService poordService;
 
@@ -242,9 +243,32 @@ public class SearchSuggestController extends ASLAbstractController {
 	@GetMapping("/report/opord/xpornum/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAllxpornum(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-
 		List<SearchSuggestResult> list = new ArrayList<>();
 		opordService.searchXpornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
+		return list;
+	}
+	
+	@GetMapping("/report/opdo/xdornum/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllxdornum(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<SearchSuggestResult> list = new ArrayList<>();
+		opdoService.findOpdoXdornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXdornum(),c.getXdornum())));
+		return list;
+	}
+	
+	@GetMapping("/report/caitemname/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getItemName(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchItemName(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXdesc(), c.getXdesc())));
+		return list;
+	}
+	
+	@GetMapping("/report/xstatuscrn/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getCrnstatus(@PathVariable String hint){
+		List<Pocrnheader> crnStatusList = pocrnService.findPocrnXstatuscrn(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		crnStatusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXstatuscrn(), c.getXstatuscrn())));
 		return list;
 	}
 }

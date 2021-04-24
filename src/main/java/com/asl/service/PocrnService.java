@@ -36,5 +36,7 @@ public interface PocrnService {
 	public void procIssuePricing(String xtrnnum, String xwh, String p_seq);
 
 	public void procTransferPRtoAP(String xcrnnum, String p_seq);
+	
+	public List<Pocrnheader> findPocrnXstatuscrn(String xstatuscrn);
 
 }

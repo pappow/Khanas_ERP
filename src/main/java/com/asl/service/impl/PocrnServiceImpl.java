@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.mapper.PocrnMapper;
@@ -110,5 +111,11 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 	public void procTransferPRtoAP(String xcrnnum, String p_seq) {
 		pocrnMapper.procTransferPRtoAP(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xcrnnum, p_seq);
 	}	
+	
+	@Override
+	public List<Pocrnheader> findPocrnXstatuscrn(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return pocrnMapper.findPocrnXstatuscrn(hint.toUpperCase(), sessionManager.getBusinessId());
+	}
 
 }

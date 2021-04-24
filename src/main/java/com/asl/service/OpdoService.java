@@ -57,4 +57,7 @@ public interface OpdoService {
 	public void procIssuePricing(String xdocnum, String xwh, String p_seq);
 
 	public void procTransferOPtoAR(String xdornum, String p_screen, String p_seq);
+	
+	//Search menu
+	public List<Opdoheader> findOpdoXdornum(String xdornum);
 }

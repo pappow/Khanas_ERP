@@ -113,6 +113,10 @@
 	<select id="findByXitem" resultType="Caitem">
 		SELECT * FROM Caitem WHERE xitem=#{xitem} AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id="searchItemName" resultType="Caitem">
+		SELECT * FROM Caitem WHERE (UPPER(xdesc) LIKE '%' || #{xdesc} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
 
 	<select id="searchCaitem" resultType="Caitem">
 		SELECT * FROM Caitem WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'

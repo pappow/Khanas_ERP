@@ -64,6 +64,7 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		options.add(new DropdownOption("Open", "Open"));
 		options.add(new DropdownOption("Confirmed", "Confirmed"));
 		options.add(new DropdownOption("GRN Created", "GRN Created"));
+		
 		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "Open", false));
 
 		// xcus - Customer / Supplier

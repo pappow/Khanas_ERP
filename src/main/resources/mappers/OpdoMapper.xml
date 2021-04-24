@@ -305,6 +305,10 @@
 		SELECT * FROM Opdoheader WHERE (UPPER(xdornum) LIKE '%' || #{xdornum} || '%') AND xstatusord=#{xstatusord} AND xtypetrn=#{xtypetrn} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="findOpdoXdornum" resultType="Opdoheader">
+		SELECT * FROM Opdoheader WHERE (UPPER(xdornum) LIKE '%' || #{xdornum} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	
 	<select id = "procConfirmDO" statementType = "CALLABLE">
 		{call OP_confirmDO(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}

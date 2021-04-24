@@ -204,6 +204,9 @@
 		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
 			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-
-
+	
+	<select id="findPocrnXstatuscrn" resultType="Pocrnheader">
+		SELECT * FROM Pocrnheader WHERE (UPPER(xstatuscrn) LIKE '%' || #{xstatuscrn} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
 </mapper>

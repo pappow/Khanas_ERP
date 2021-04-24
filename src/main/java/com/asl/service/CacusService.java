@@ -32,4 +32,6 @@ public interface CacusService {
 	public List<Cacus> searchXgcus(String xgcus);
 
 	public Cacus findCacusByXcuszid(String xcuszid);
+	
+	
 }
