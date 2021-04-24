@@ -144,6 +144,12 @@ ck.ui.config.editmode = function(){
 			submitMainForm();
 		});
 	}
+	if($('a.btn.confirm-btn-link').length > 0){
+		$('a.btn.confirm-btn-link').off('click').on('click', function(e){
+			e.preventDefault();
+			submitMainForm($(this).attr('href'));
+		});
+	}
 
 	// Bind archive button event
 	if($('li.archive-btn.editmode').length > 0){

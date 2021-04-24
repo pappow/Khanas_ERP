@@ -145,10 +145,10 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<SearchSuggestResult> list = new ArrayList<>();
 
 		List<Cacus> supList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
-		supList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		supList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 
 		List<Cacus> cusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
-		cusList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		cusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 
 		return list;
 	}
@@ -158,7 +158,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		productionSuggestionService.searchClananNumbers(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c, c)));
+		productionSuggestionService.searchClananNumbers(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c, c)));
 
 		return list;
 	}
@@ -168,7 +168,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		pogrnService.searchPoord(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
+		pogrnService.searchPoord(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
 	
@@ -179,7 +179,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<SearchSuggestResult> list = new ArrayList<>();
 
 		List<Cacus> cusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
-		cusList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		cusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 
 		return list;
 	}
@@ -191,7 +191,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<SearchSuggestResult> list = new ArrayList<>();
 
 		List<Cacus> supList = cacusService.searchCacus(TransactionCodeType.SUPPLIER_NUMBER.getCode(), hint);
-		supList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		supList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 
 		return list;
 	}
@@ -201,7 +201,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		cacusService.searchXorg(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXorg(),c.getXorg())));
+		cacusService.searchXorg(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXorg(),c.getXorg())));
 		return list;
 	}
 	
@@ -210,7 +210,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		cacusService.searchXgcus(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXgcus(),c.getXgcus())));
+		cacusService.searchXgcus(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXgcus(),c.getXgcus())));
 		return list;
 	}
 	
@@ -219,7 +219,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<SearchSuggestResult> list = new ArrayList<>();
 		List<Caitem> caitemList = caitemService.searchCaitem(hint);
-		caitemList.parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
 	
@@ -228,7 +228,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		bmbomService.searchXbom(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXbomkey(),c.getXbomkey())));
+		bmbomService.searchXbom(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXbomkey(),c.getXbomkey())));
 		return list;
 	}
 	
@@ -237,14 +237,14 @@ public class SearchSuggestController extends ASLAbstractController {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 
 		List<SearchSuggestResult> list = new ArrayList<>();
-		poordService.searchXpornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
+		poordService.searchXpornum(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
 	@GetMapping("/report/opord/xpornum/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAllxpornum(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<SearchSuggestResult> list = new ArrayList<>();
-		opordService.searchXpornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
+		opordService.searchXpornum(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXpornum(),c.getXpornum())));
 		return list;
 	}
 	
@@ -252,7 +252,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	public @ResponseBody List<SearchSuggestResult> getAllxdornum(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<SearchSuggestResult> list = new ArrayList<>();
-		opdoService.findOpdoXdornum(hint).parallelStream().forEach(c -> list.add(new SearchSuggestResult(c.getXdornum(),c.getXdornum())));
+		opdoService.findOpdoXdornum(hint).stream().forEach(c -> list.add(new SearchSuggestResult(c.getXdornum(),c.getXdornum())));
 		return list;
 	}
 	

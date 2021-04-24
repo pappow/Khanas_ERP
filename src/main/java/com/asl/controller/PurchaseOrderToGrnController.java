@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,6 @@ import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
-import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.ServiceException;
 import com.asl.service.PogrnService;
@@ -68,6 +68,11 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 		pogrnHeader.setXdate(new Date());
 		pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
 		pogrnHeader.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
+		pogrnHeader.setXvatamt(BigDecimal.ZERO);
+		pogrnHeader.setXaitamt(BigDecimal.ZERO);
+		pogrnHeader.setXdiscprime(BigDecimal.ZERO);
+		pogrnHeader.setXgrandtot(pogrnHeader.getXtotamt() != null ? pogrnHeader.getXtotamt() : BigDecimal.ZERO);
+		pogrnHeader.setXvatait("No Vat");
 
 		long count = pogrnService.save(pogrnHeader);
 		if(count == 0) {
