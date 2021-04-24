@@ -19,11 +19,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "pogrnheader")
 @IdClass(PogrnHeaderPK.class)
 @EqualsAndHashCode(of = { "zid", "xgrnnum" }, callSuper = false)
-public class PogrnHeader extends AbstractModel<String>{
-	
-	/**
-	 * 
-	 */
+public class PogrnHeader extends AbstractModel<String> {
+
 	private static final long serialVersionUID = 3246354454094927618L;
 
 	@Id
@@ -38,76 +35,76 @@ public class PogrnHeader extends AbstractModel<String>{
 
 	@Column(name = "xdate")
 	private Date xdate;
-	
+
 	@Column(name = "xcus")
 	private String xcus;
-	
+
 	@Column(name = "xtype")
 	private String xtype;
-	
+
 	@Column(name = "xwh")
 	private String xwh;
-	
+
 	@Column(name = "xstatusgrn")
 	private String xstatusgrn;
-	
+
 	@Column(name = "xinvnum")
 	private String xinvnum;
-	
+
 	@Column(name = "xpcnum")
 	private String xpcnum;
-	
+
 	@Column(name = "xstatusap")
 	private String xstatusap;
-	
+
 	@Column(name = "xref")
 	private String xref;
-	
+
 	@Column(name = "xtotamt")
 	private BigDecimal xtotamt;
-	
+
 	@Column(name = "xpornum")
 	private String xpornum;
-	
+
 	@Column(name = "xstatusjv")
 	private String xstatusjv;
-	
+
 	@Column(name = "xstatuscrn")
 	private String xstatuscrn;
-	
+
 	@Column(name = "xvoucher")
 	private String xvoucher;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
-	
+
 	@Transient
 	private String xtrngrn;
-	
-	//Following additional fields have been proposed for Arhed Purpose
-	
+
+	// Following additional fields have been proposed for Arhed Purpose
+
 	@Column(name = "xvatait")
 	private String xvatait;
-	
+
 	@Column(name = "xvatamt")
 	private BigDecimal xvatamt;
-	
+
 	@Column(name = "xaitamt")
 	private BigDecimal xaitamt;
-	
+
 	@Column(name = "xdiscprime")
 	private BigDecimal xdiscprime;
-	
+
 	@Column(name = "xgrandtot")
 	private BigDecimal xgrandtot;
-	
+
 	@Column(name = "xdocnum")
 	private Integer xdocnum;
-	
+
 	@Transient
 	private String xorg;
-	
+
 }
