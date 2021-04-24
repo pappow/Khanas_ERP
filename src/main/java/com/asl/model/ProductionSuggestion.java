@@ -1,5 +1,7 @@
 package com.asl.model;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 /**
@@ -9,11 +11,13 @@ import lombok.Data;
 @Data
 public class ProductionSuggestion {
 
+	private String xitem;
 	private String xitemdes;
-	private String xqtyord;
+	private BigDecimal xqtyord;
 	private String xitemunit;
+
 	private String xrawitem;
-	private String xrawqty;
-	private String xrawunit;
 	private String xrawdes;
+	private BigDecimal xrawqty;
+	private String xrawunit;
 }

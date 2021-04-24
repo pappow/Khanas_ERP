@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
@@ -37,7 +35,6 @@ import com.asl.model.report.PurchaseOrder;
 import com.asl.model.report.PurchaseReport;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
-import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
@@ -49,7 +46,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
 	@Autowired private XtrnService xtrnService;
-	@Autowired private PogrnService pogrnService;
 	@Autowired private CacusService cacusService;
 	@Autowired private CaitemService caitemService;
 
@@ -272,76 +268,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> creategrn(@PathVariable String xpornum){
-		// Get PoordHeader record by Xpornum
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
-			return responseHelper.getResponse();
-		}
-
-		//Get PO items to copy them in GRN.
-		List<PoordDetail> poordDetailList = poordService.findPoorddetailByXpornum(xpornum);
-		if(poordDetailList.isEmpty()) {
-			responseHelper.setErrorStatusAndMessage("Please add items to create grn!");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
-			return responseHelper.getResponse();
-		}
-		if(poordHeader != null) {
-			PogrnHeader pogrnHeader = new PogrnHeader();
-			BeanUtils.copyProperties(poordHeader, pogrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-			pogrnHeader.setXpornum(xpornum);
-			pogrnHeader.setXstatusgrn("Open");
-			pogrnHeader.setXdate(new Date());
-			pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-			pogrnHeader.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
-			
-			long count = pogrnService.save(pogrnHeader);
-			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
-				return responseHelper.getResponse();
-			}
-			
-			pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
-			
-			PogrnDetail pogrnDetail;
-			for(int i=0; i< poordDetailList.size(); i++) {
-				pogrnDetail = new PogrnDetail();
-				//Copying PO items to GRN items.
-				BeanUtils.copyProperties(poordDetailList.get(i), pogrnDetail, "xrow", "xnote");
-				pogrnDetail.setXgrnnum(pogrnHeader.getXgrnnum());
-				pogrnDetail.setXqtygrn(poordDetailList.get(i).getXqtyord());
-				long nCount = pogrnService.saveDetail(pogrnDetail);
-				
-				// Update Inventory				
-				if(nCount == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
-					return responseHelper.getResponse();
-				}				
-			}
-			
-			//Update PoordHeader Status
-			poordHeader.setXstatuspor("Confirmed");
-			long pCount = poordService.update(poordHeader);
-			if(pCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				responseHelper.setRedirectUrl("/purchasing/poord/" + xpornum);
-				return responseHelper.getResponse();
-			}			
-			 
-			responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
-			return responseHelper.getResponse();
-		}	
-		responseHelper.setStatus(ResponseStatus.ERROR);
-		return responseHelper.getResponse();
-	}
-	
-
 	@GetMapping("/print/{xpornum}")
 	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xpornum) {
 		String message;
@@ -351,14 +277,13 @@ public class PurchaseOrderController extends ASLAbstractController {
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 		PoordHeader oh = poordService.findPoordHeaderByXpornum(xpornum);
-		
-		
+
 		if (oh == null) {
 			message = "Purchase Order not found to print";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Cacus cacus = cacusService.findByXcus(oh.getXcus());
-		
+
 		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
 
 		PurchaseReport report = new PurchaseReport();

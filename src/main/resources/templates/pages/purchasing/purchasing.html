@@ -86,6 +86,12 @@
 											<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${isCentral and menuProfile.M0312 ne null and menuProfile.M0312.display}">
+										<td><a th:href="@{/procurement/potogrn}" th:text="${menuProfile.M0312.screenprompt}">PO to GRN</a></td>
+										<td>
+											<a th:href="@{/procurement/potogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 									<tr th:if="${isCentral and menuProfile.M0305 ne null and menuProfile.M0305.display}">
 										<td><a th:href="@{/purchasing/grn}" th:text="${menuProfile.M0305.screenprompt}">Direct GRN</a></td>
 										<td>

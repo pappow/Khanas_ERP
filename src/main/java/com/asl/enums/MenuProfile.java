@@ -37,6 +37,7 @@ public enum MenuProfile {
 	M0309(9999, "M0309", "300", "M0300", "Supplier Opening Entry", "Y","/purchasing/supopenentry"),
 	M0310(9999, "M0310", "300", "M0300", "GRN Return", "Y","/procurement/grnreturn"),
 	M0311(9999, "M0311", "300", "M0300", "Order Requisition", "Y","/purchasing/requisition"),
+	M0312(9999, "M0312", "300", "M0300", "PO to GRN", "Y","/procurement/potogrn"),
 
 	M0400(9999, "M0400", "400", "MASTER", "Sales & Invoicing", "Y","/salesninvoice"),
 	M0401(9999, "M0401", "400", "M0400", "Sales Orders (Branch)", "Y","/salesninvoice/salesorder"),

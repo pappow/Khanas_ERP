@@ -3,6 +3,8 @@ package com.asl.service.impl;
 import java.util.Collections;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.mapper.PogrnMapper;
+import com.asl.model.ServiceException;
 import com.asl.service.PogrnService;
 
 @Service
@@ -54,9 +57,24 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		pogrnDetail.setZauserid(getAuditUser());
-		long count = pogrnMapper.savePogrnDetail(pogrnDetail);		
+		long count = pogrnMapper.savePogrnDetail(pogrnDetail);
 		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};
 		return count;
+	}
+
+	@Override
+	@Transactional
+	public long saveDetails(List<PogrnDetail> pogrnDetails) throws ServiceException {
+		if(pogrnDetails == null || pogrnDetails.isEmpty()) return 0;
+		long totalCount = 0;
+		for(PogrnDetail pogrnDetail : pogrnDetails) {
+			pogrnDetail.setZid(sessionManager.getBusinessId());
+			pogrnDetail.setZauserid(getAuditUser());
+			long count = pogrnMapper.savePogrnDetail(pogrnDetail);
+			if(count == 0) throw new ServiceException("Can't save GRN details");
+			totalCount += count;
+		}
+		return totalCount;
 	}
 
 	@Override
@@ -86,12 +104,10 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 
 		return pogrnMapper.findPogrnHeaderByXgrnnum(xgrnnum, sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public PogrnHeader findPogrnHeaderByXpornum(String xpornum) {
-		if (StringUtils.isBlank(xpornum))
-			return null;
-
+		if (StringUtils.isBlank(xpornum)) return null;
 		return pogrnMapper.findPogrnHeaderByXpornum(xpornum, sessionManager.getBusinessId());
 	}
 

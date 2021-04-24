@@ -57,20 +57,16 @@
 										<tr>
 											<th>Production Item</th>
 											<th>Production Item Qty</th>
-											<th>Production Item Unit</th>
 											<th>Raw Material</th>
 											<th>Raw Material Qty</th>
-											<th>Raw Material Unit</th>
 										</tr>
 									</thead>
 									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 										<tr th:each="s : ${suggestions.value}">
-											<td th:text="${s.xitemdes}"></td>
-											<td th:text="${s.xqtyord}"></td>
-											<td th:text="${s.xitemunit}"></td>
-											<td th:text="${s.xrawdes}"></td>
-											<td th:text="${s.xrawqty}"></td>
-											<td th:text="${s.xrawunit}"></td>
+											<td th:text="${s.xitem} + ' - ' + ${s.xitemdes}"></td>
+											<td th:text="${s.xqtyord} + ' (' + ${s.xitemunit} + ')'"></td>
+											<td th:text="${s.xrawitem} + ' - ' + ${s.xrawdes}"></td>
+											<td th:text="${s.xrawqty} + ' (' + ${s.xrawunit} + ')'"></td>
 										</tr>
 									</tbody>
 								</table>

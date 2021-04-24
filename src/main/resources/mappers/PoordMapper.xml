@@ -21,6 +21,7 @@
 			xtrn,
 			xstatuspor,
 			xnote,
+			xgrnnum,
 			zid,
 			zauserid,
 			zuuserid,
@@ -44,6 +45,7 @@
 			#{xtrn, jdbcType=VARCHAR},
 			#{xstatuspor, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
+			#{xgrnnum, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -70,6 +72,7 @@
 			xtrn=#{xtrn, jdbcType=VARCHAR},
 			xstatuspor=#{xstatuspor, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
+			xgrnnum=#{xgrnnum, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -237,11 +240,10 @@
 
 	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
 		SELECT 
-			ph.*, c.xorg, grn.xgrnnum
+			ph.*, c.xorg
 		FROM 
 			POORDHEADER ph 
 			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid = ph.zid
-			LEFT JOIN pogrnheader grn ON grn.xpornum = ph.xpornum and grn.zid=ph.zid
 		WHERE 
 			ph.xtype=#{xtype}
 			AND ph.zid=#{zid} 

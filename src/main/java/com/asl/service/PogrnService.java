@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
+import com.asl.model.ServiceException;
 
 @Component
 public interface PogrnService {
@@ -19,6 +20,8 @@ public interface PogrnService {
 	public long updatePogrnHeaderTotalAmtAndGrandTotalAmt(String xgrnnum);
 
 	public long saveDetail(PogrnDetail pogrnDetail);
+
+	public long saveDetails(List<PogrnDetail> pogrnDetail)  throws ServiceException;
 
 	public long updateDetail(PogrnDetail pogrnDetail);
 
