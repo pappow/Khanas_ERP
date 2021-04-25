@@ -28,7 +28,6 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -118,18 +117,19 @@ public class PogrnController extends ASLAbstractController {
 //			return responseHelper.getResponse();
 //		}
 
-		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
 		if (pogrnHeader.getXtotamt() == null) pogrnHeader.setXtotamt(BigDecimal.ZERO);
-		pogrnHeader.setXgrandtot((pogrnHeader.getXtotamt().subtract(pogrnHeader.getXdiscprime())).add(pogrnHeader.getXvatamt()));
+		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
+		if (pogrnHeader.getXaitamt() == null) pogrnHeader.setXaitamt(BigDecimal.ZERO);
+		BigDecimal grandTotal = pogrnHeader.getXtotamt().add(pogrnHeader.getXvatamt()).add(pogrnHeader.getXaitamt()).subtract(pogrnHeader.getXdiscprime());
+		pogrnHeader.setXgrandtot(grandTotal);
 
-		pogrnHeader.setXgrandtot(BigDecimal.ZERO);
 		// if existing record
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if (existPogrnHeader != null) {
-			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate", "xtotamt");
+			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate");
 			long count = pogrnService.update(existPogrnHeader);
 			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update GRN");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("GRN updated successfully");
@@ -140,23 +140,12 @@ public class PogrnController extends ASLAbstractController {
 		// If new
 		long count = pogrnService.save(pogrnHeader);
 		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't create GRN");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("GRN created successfully");
 		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 		return responseHelper.getResponse();
-
-	}
-
-	@GetMapping("/pogrndetail/{xgrnnum}")
-	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
-		List<PogrnDetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
-		model.addAttribute("pogrnDetailsList", detailList);
-		PogrnHeader header = new PogrnHeader();
-		header.setXgrnnum(xgrnnum);
-		model.addAttribute("pogrnheader", header);
-		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
 	}
 
 	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
@@ -191,9 +180,13 @@ public class PogrnController extends ASLAbstractController {
 
 	@PostMapping("/pogrndetail/save")
 	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail pogrnDetail) {
-
 		if (pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		if(pogrnDetail.getXqtygrn() == null || pogrnDetail.getXqtygrn().equals(BigDecimal.ZERO) || pogrnDetail.getXqtygrn().compareTo(BigDecimal.ZERO) == -1){
+			responseHelper.setErrorStatusAndMessage("Quantity must be greater then 0");
 			return responseHelper.getResponse();
 		}
 
@@ -201,8 +194,7 @@ public class PogrnController extends ASLAbstractController {
 		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(),
-				pogrnDetail.getXrow());
+		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
 		if (existDetail != null) {
 			BeanUtils.copyProperties(pogrnDetail, existDetail, "xgrnnum", "xrow");
 			long count = pogrnService.updateDetail(existDetail);
@@ -210,7 +202,11 @@ public class PogrnController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnDetail.getXgrnnum());
+
+			// calcualate grn header grand total
+
+			responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
+			responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
 			responseHelper.setSuccessStatusAndMessage("GRN Item updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -221,10 +217,30 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnDetail.getXgrnnum());
-		responseHelper.setSuccessStatusAndMessage("GRN Item saved successfully");
 
+		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
+		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
+		responseHelper.setSuccessStatusAndMessage("GRN Item saved successfully");
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/pogrndetail/{xgrnnum}")
+	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
+		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
+		model.addAttribute("pogrnheader", pogrnService.findPogrnHeaderByXgrnnum(xgrnnum));
+		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
+	}
+
+	@GetMapping("/pogrnheaderform/{xgrnnum}")
+	public String loadPogrnheaderform(@PathVariable String xgrnnum, Model model) {
+		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		model.addAttribute("pogrnheader", data);
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+		return "pages/purchasing/pogrn/pogrn::pogrnheaderform";
 	}
 
 	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
@@ -242,7 +258,8 @@ public class PogrnController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/pogrn/" + xgrnnum);
+		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + xgrnnum);
+		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + xgrnnum);
 		return responseHelper.getResponse();
 	}
 

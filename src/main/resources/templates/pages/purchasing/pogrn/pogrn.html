@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>GRN - Good Receipt Note</title>
-<meta th:remove="tag" th:include="commons :: common-meta" />
-<meta th:remove="tag" th:include="commons :: common-css" />
-<meta th:remove="tag" th:include="commons :: common-js" />
+	<title>GRN - Good Receipt Note</title>
+	<meta th:remove="tag" th:include="commons :: common-meta" />
+	<meta th:remove="tag" th:include="commons :: common-css" />
+	<meta th:remove="tag" th:include="commons :: common-js" />
 </head>
 <body>
 	<!-- Header section -->
 	<div class="header-section" th:include="commons :: header-section"></div>
-	
+
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
 			<div class="container-fluid">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
@@ -61,143 +61,199 @@
 										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == false}" th:href="@{/purchasing/pogrn/restore/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/pogrn/save}" th:object="${pogrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<input type="hidden" th:field="*{xtype}"/>
-											<input type="hidden" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}" class="form-control" th:field="*{xgrnnum}">
-											<input type="hidden" class="form-control" th:field="*{xtotamt}">
-											<div class="row">
-												<div class="col-md-6">
+										<div id="pogrnheaderform" th:fragment="pogrnheaderform">
+											<form id="mainform" class="form-horizontal" th:action="@{/purchasing/pogrn/save}" th:object="${pogrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+												<input type="hidden" th:field="*{xtype}"/>
+												<input type="hidden" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}" class="form-control" th:field="*{xgrnnum}">
+												<input type="hidden" class="form-control" th:field="*{xtotamt}">
+												<div class="row">
+													<div class="col-md-6">
 
-													<div class="form-group" th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}">
-														<label class="control-label col-md-4" for="xtrngrn">GRN Prefix : </label>
-														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrngrn}">
-																<option th:each="prefix : ${grnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
-															</select>
-														</div>
-													</div>
-
-													<div class="form-group" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}">
-														<label class="control-label col-md-4" for="xgrnnum">GRN Number : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:value="*{xgrnnum}" disabled="disabled">
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xcus">Supplier No : </label>
-														<div class="col-sm-6">
-															<input 	type="text" 
-																	class="form-control searchsuggest" 
-																	placeholder="Search..." 
-																	th:value="${pogrnheader.xcus}" 
-																	th:attr="search-url='search/supplier'"/>
-															<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
-															<input type="hidden" id="search-des" th:value="*{xcus}"/>
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xinvnum">Supplier Bill No : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xinvnum}">
-														</div>
-													</div>
-
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdate">Date : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xdate"
-																	name="xdate"
-																	th:value="${pogrnheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(pogrnheader.xdate, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
+														<div class="form-group" th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}">
+															<label class="control-label col-md-4" for="xtrngrn">GRN Prefix : </label>
+															<div class="col-md-4">
+																<select class="form-control" th:field="*{xtrngrn}">
+																	<option th:each="prefix : ${grnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+																</select>
 															</div>
 														</div>
-													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
-															</select>
+														<div class="form-group" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}">
+															<label class="control-label col-md-4" for="xgrnnum">GRN Number : </label>
+															<div class="col-md-8">
+																<input type="text" class="form-control" th:value="*{xgrnnum}" disabled="disabled">
+															</div>
 														</div>
-													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xvoucher}">
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xcus">Supplier No : </label>
+															<div class="col-sm-6">
+																<input 	type="text" 
+																		class="form-control searchsuggest" 
+																		placeholder="Search..." 
+																		th:value="${pogrnheader.xcus}" 
+																		th:attr="search-url='search/supplier'"/>
+																<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
+																<input type="hidden" id="search-des" th:value="*{xcus}"/>
+															</div>
 														</div>
-													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>
-														<div class="col-md-8">
-															<input type="hidden" class="form-control" th:field="*{xstatusgrn}"/>
-															<input type="text" class="form-control" th:value="*{xstatusgrn}" disabled="disabled"/>
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xinvnum">Supplier Bill No : </label>
+															<div class="col-md-8">
+																<input type="text" class="form-control" th:field="*{xinvnum}">
+															</div>
 														</div>
-													</div>
 
+														<div class="form-group datepicker">
+															<label class="control-label col-md-4" for="xdate">Date : </label>
+															<div class="input-group date col-md-6 datepicker">
+																<input 	type="datepicker" 
+																		class="form-control" 
+																		id="xdate"
+																		name="xdate"
+																		th:value="${pogrnheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(pogrnheader.xdate, df)}"/>
+																<div class="input-group-addon">
+																	<span class="glyphicon glyphicon-calendar"></span>
+																</div>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xwh">Warehouse : </label>
+															<div class="col-md-8">
+																<select class="form-control" th:field="*{xwh}">
+																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
+															<div class="col-md-8">
+																<input type="text" class="form-control" th:field="*{xvoucher}">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xnote">Note : </label>
+															<div class="col-md-8">
+																<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>
+															<div class="col-md-8">
+																<input type="hidden" class="form-control" th:field="*{xstatusgrn}"/>
+																<input type="text" class="form-control" th:value="*{xstatusgrn}" disabled="disabled"/>
+															</div>
+														</div>
+
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
+															<div class="col-md-6">
+																<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
+															<div class="col-md-8">
+																<select class="form-control vatait-select" th:field="*{xvatait}">
+																	<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
+															<div class="col-md-6">
+																<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
+																<input type="text" class="form-control xvatamt-show" min="0" th:value="${pogrnheader.xvatamt}" disabled="disabled">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
+															<div class="col-md-6">
+																<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xaitamt}" min="0">
+																<input type="text" class="form-control xaitamt-show" min="0" th:value="${pogrnheader.xaitamt}" disabled="disabled">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xdiscprime">Prime Discount: </label>
+															<div class="col-md-6">
+																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscprime}" min="0">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xgrandtot">Grand Total: </label>
+															<div class="col-md-6">
+																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xgrandtot}" min="0" disabled="disabled">
+															</div>
+														</div>
+
+													</div>
 												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
-														</div>
-													</div>
+											</form>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
-														<div class="col-md-8">
-															<select class="form-control vatait-select" th:field="*{xvatait}">
-																<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
-															</select>
-														</div>
-													</div>
+											<script>
+												$(document).ready(function(){
+													$("input[name='xdiscprime']").off('blur').on('blur', function(e){
+														var vatAmount = parseFloat($('input[name="xvatamt"]').val());
+														var aitAmount = parseFloat($('input[name="xaitamt"]').val());
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
-															<input type="text" class="form-control xvatamt-show" min="0" th:value="${pogrnheader.xvatamt}" disabled="disabled">
-														</div>
-													</div>
+														if($("input[name='xdiscprime']").val() == '') $("input[name='xdiscprime']").val(0);
+														var totalAmt = parseFloat($("input[name='xtotamt']").val());
+														var discountPrime = parseFloat($("input[name='xdiscprime']").val());
+														var grandTotal = totalAmt + vatAmount + aitAmount - discountPrime;
+														$('input[name="xgrandtot"]').val(grandTotal);
+													})
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xaitamt}" min="0">
-															<input type="text" class="form-control xaitamt-show" min="0" th:value="${pogrnheader.xaitamt}" disabled="disabled">
-														</div>
-													</div>
+													$(".vatait-select").off('change').on("change", function(){
+														var vataitId = $(".vatait-select").val()
+														loadingMask2.show();
+														$.ajax({
+															url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
+															type : 'GET',
+															success: function(data){
+																loadingMask2.hide();
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xdiscprime">Prime Discount: </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscprime}" min="0">
-														</div>
-													</div>
+																var vatPercent = parseFloat(data.xvat);
+																var aitPercent = parseFloat(data.xait);
+																var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
+																var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xnote">Note : </label>
-														<div class="col-md-8">
-															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
-														</div>
-													</div>
+																$('input[name="xvatamt"]').val(vatAmount);
+																$('input.xvatamt-show').val(vatAmount);
+																$('input[name="xaitamt"]').val(aitAmount);
+																$('input.xaitamt-show').val(aitAmount);
 
-												</div>
-											</div>
-										</form>
+																if($("input[name='xdiscprime']").val() == '') $("input[name='xdiscprime']").val(0);
+																var totalAmt = parseFloat($("input[name='xtotamt']").val());
+																var discountPrime = parseFloat($("input[name='xdiscprime']").val());
+																var grandTotal = totalAmt + vatAmount + aitAmount - discountPrime;
+																$('input[name="xgrandtot"]').val(grandTotal);
+															},
+															error : function(jqXHR, status, errorThrown){
+																showMessage(status, "Something went wrong .... ");
+																loadingMask2.hide();
+															}
+														});
+													});
+												})
+											</script>
+
+										</div>
 									</div>
 								</section>
 							</div>
-							
-							
+
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
@@ -288,32 +344,10 @@
 
 	<!-- Footer section -->
 	<div class="footer-section" th:include="commons :: footer-section"></div>
-</body>
 
-<script>
+	<script>
 		$(document).ready(function(){
-			
-			$('a.confirmgrn-btn-link').off('click').on('click', function(e){
-				e.preventDefault();
-				var grnNum = $("#xgrnnum").val();
-				
-				$.ajax({
-					url: getBasepath() + "/purchasing/pogrn/confirmgrn/" + grnNum,
-					success: function(result){
-						var status = result.status.toLowerCase()
-						
-						if(status == "success")
-							showMessage("success", "GRN Confirmed");
-						else if(status == "error")
-							showMessage("error", result.message);
-						//location.reload(true);
-						setTimeout(() => {
-							//location.reload(true);
-						}, 1400);
-					}
-				});
-			});
-			
+
 			$('a.returngrn-btn-link').off('click').on('click', function(e){
 				e.preventDefault();
 				var grnNum = $("#xgrnnum").val();
@@ -322,7 +356,6 @@
 					url: getBasepath() + "/purchasing/pogrn/returngrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
-						
 						if(status == "success")
 							showMessage("success", "GRN return order created. Finalize from GRN return.");
 						else if(status == "error")
@@ -334,33 +367,11 @@
 					}
 				});
 			});
-			
-			$(".vatait-select").on("change", function(){
-				var vataitId = $(".vatait-select").val()
-				$.ajax({
-					url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
-					type : 'GET',
-					beforeSend : loadingMask2.show(),
-					success: function(data){
-						loadingMask2.hide();
-						console.log(data.xvat);
-						var vatPercent = parseFloat(data.xvat);
-						var aitPercent = parseFloat(data.xait);
-						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
-						
-						$('input[name="xvatamt"]').val(vatAmount);
-						$('input.xvatamt-show').val(vatAmount);
-						$('input[name="xaitamt"]').val(aitAmount);
-						$('input.xaitamt-show').val(aitAmount);
-					},
-					error : function(jqXHR, status, errorThrown){
-						showMessage(status, "Something went wrong .... ");
-						loadingMask2.hide();
-					}
-				});
-			});
+
 
 		});
 	</script>
+</body>
+
+
 </html>

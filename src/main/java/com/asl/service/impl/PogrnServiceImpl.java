@@ -53,12 +53,13 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
+	@Transactional
 	public long saveDetail(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		pogrnDetail.setZauserid(getAuditUser());
 		long count = pogrnMapper.savePogrnDetail(pogrnDetail);
-		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};
+		if(count != 0) count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());
 		return count;
 	}
 
@@ -78,22 +79,22 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
+	@Transactional
 	public long updateDetail(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) return 0;
 		pogrnDetail.setZid(sessionManager.getBusinessId());
 		pogrnDetail.setZuuserid(getAuditUser());
 		long count = pogrnMapper.updatePogrnDetail(pogrnDetail);
-		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};		
+		if(count != 0) count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());
 		return count;
 	}
 
 	@Override
+	@Transactional
 	public long deleteDetail(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null) return 0;
 		long count = pogrnMapper.deletePogrnDetail(pogrnDetail);
-		
-		if(count != 0) { count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());};
-		
+		if(count != 0) count = updatePogrnHeaderTotalAmtAndGrandTotalAmt(pogrnDetail.getXgrnnum());
 		return count;
 	}
 

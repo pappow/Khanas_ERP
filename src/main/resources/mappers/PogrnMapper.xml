@@ -127,13 +127,20 @@
 	</update>
 
 	<update id="updatePogrnHeaderTotalAmtAndGrandTotalAmt">
-		UPDATE 
-			PogrnHeader
+		UPDATE
+			pogrnheader pgh
 		SET
-			xtotamt=(SELECT SUM(xlineamt) FROM PogrnDetail WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'),
-			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscprime) FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1')
+			pgh.xtotamt=Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid),
+			pgh.xvatamt=(Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100,
+			pgh.xaitamt=(Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100,
+			pgh.xgrandtot=  Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) 
+							+ ((Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100)
+							+ ((Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100)
+							- pgh.xdiscprime
 		WHERE
-			xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
+			pgh.xgrnnum=#{xgrnnum}
+			AND pgh.zid=#{zid}
+			AND zactive='1'
 	</update>
 
 	<insert id="savePogrnDetail" parameterType="PogrnDetail">
