@@ -148,16 +148,6 @@ public class PogrnController extends ASLAbstractController {
 
 	}
 
-	@GetMapping("/pogrndetail/{xgrnnum}")
-	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
-		List<PogrnDetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
-		model.addAttribute("pogrnDetailsList", detailList);
-		PogrnHeader header = new PogrnHeader();
-		header.setXgrnnum(xgrnnum);
-		model.addAttribute("pogrnheader", header);
-		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
-	}
-
 	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
 	public String openPogrnDetailModal(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
 
@@ -209,7 +199,9 @@ public class PogrnController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnDetail.getXgrnnum());
+
+			responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
+			responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
 			responseHelper.setSuccessStatusAndMessage("GRN Item updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -220,10 +212,30 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnDetail.getXgrnnum());
-		responseHelper.setSuccessStatusAndMessage("GRN Item saved successfully");
 
+		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
+		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
+		responseHelper.setSuccessStatusAndMessage("GRN Item saved successfully");
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/pogrndetail/{xgrnnum}")
+	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
+		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
+		model.addAttribute("pogrnheader", pogrnService.findPogrnHeaderByXgrnnum(xgrnnum));
+		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
+	}
+
+	@GetMapping("/pogrnheaderform/{xgrnnum}")
+	public String loadPogrnheaderform(@PathVariable String xgrnnum, Model model) {
+		PogrnHeader data = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		model.addAttribute("pogrnheader", data);
+		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+		return "pages/purchasing/pogrn/pogrn::pogrnheaderform";
 	}
 
 	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
@@ -241,7 +253,8 @@ public class PogrnController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/pogrn/" + xgrnnum);
+		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + xgrnnum);
+		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + xgrnnum);
 		return responseHelper.getResponse();
 	}
 

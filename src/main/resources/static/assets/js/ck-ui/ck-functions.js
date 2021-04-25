@@ -100,8 +100,6 @@ var loadingMask2 = {
  * @returns
  */
 function triggerUpdateButton(){
-	//console.log('%cTrigger update button...', 'color: green');
-
 	$('li.editmode').addClass('nodisplay');
 	$('a.btn.editmode').addClass('nodisplay');
 	$('li.viewmode').removeClass('nodisplay');
@@ -122,8 +120,6 @@ function triggerUpdateButton(){
 	$('input.form-control-input2[disabled!="disabled"]').parent().css("margin-left", "0px");
 }
 function triggerUpdateButtonSpecific(tableId){
-	//console.log('%cTrigger update button...', 'color: green');
-
 	$('li.editmode').addClass('nodisplay');
 	$('a.btn.editmode').addClass('nodisplay');
 	$('li.viewmode').removeClass('nodisplay');
@@ -147,11 +143,9 @@ function triggerUpdateButtonSpecific(tableId){
  * Trigger Cancel Button
  */
 function triggerCancelButton(){
-	//console.log('%cTrigger cancel button...', 'color: green');
 	var href = location.href;
 	if(href.lastIndexOf('copy') != -1){
 		href = href.slice(0,-5)
-		//console.log(href);
 		window.location.replace(href);
 		return;
 	}
@@ -165,15 +159,19 @@ function triggerCancelButton(){
  * @returns
  */
 function modalLoader(url, modalid){
+	loadingMask2.show();
+
 	$.ajax({
 		url : url,
 		type : 'GET',
 		success : function(data){
+			loadingMask2.hide();
 			$('#' + modalid + '-section').html(data);
 			$('#' + modalid).modal({backdrop: 'static', keyboard: false}, 'show');
 		},
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
+			loadingMask2.hide();
 		},
 	});
 }
@@ -253,14 +251,13 @@ function bindTableButtonsEvent(targetTable){
  * @returns
  */
 function doItemDelete(url){
-	//console.log('%cTrigger delete item ... ', 'color: red');
+	loadingMask2.show();
 
 	$.ajax({
 		url : url,
 		type : 'POST',
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			//console.log({data});
+			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.triggermodalurl){
@@ -280,8 +277,8 @@ function doItemDelete(url){
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
-		},
-		complete: loadingMask2.hide()
+			loadingMask2.hide();
+		}
 	});
 	
 }
@@ -293,14 +290,13 @@ function doItemDelete(url){
  * @returns
  */
 function doItemConfirm(url){
-	//console.log('%cTrigger confirm item ... ', 'color: green');
+	loadingMask2.show();
 
 	$.ajax({
 		url : url,
 		type : 'POST',
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			//console.log({data});
+			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.triggermodalurl){
@@ -320,8 +316,8 @@ function doItemConfirm(url){
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
-		},
-		complete: loadingMask2.hide()
+			loadingMask2.hide();
+		}
 	});
 	
 }
@@ -409,11 +405,11 @@ function dataTableInitSpecific(tableId){
  * @returns
  */
 function submitMainForm(customurl, customform){
+	loadingMask2.show();
+
 	if(customform == undefined && $('form#mainform').length < 1) return;
-	//console.log('%cForm submit triggered', 'color: green');
 
 	var targettedForm = customform == undefined ? $('form#mainform') : customform;
-	//console.log('%cValidting form','color: green');
 	if(!targettedForm.smkValidate()) return;
 
 	var submitUrl = (customurl != undefined) ? customurl : targettedForm.attr('action');
@@ -425,16 +421,11 @@ function submitMainForm(customurl, customform){
 		return;
 	}
 
-	//console.log('%cUrl : ' + submitUrl + ', Type : ' + submitType,'color: green');
-	//console.log({formData});
-
 	$.ajax({
 		url : submitUrl,
 		type :submitType,
 		data : formData,
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
 			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
@@ -467,6 +458,8 @@ function submitMainForm(customurl, customform){
  * @returns
  */
 function submitMultipartForm(submitUrl, submitType){
+	loadingMask2.show();
+
 	var files = $('#fileuploader').get(0).files;
 	if (files.length == 0){
 		alert("No files selected to upload");
@@ -486,9 +479,8 @@ function submitMultipartForm(submitUrl, submitType){
 		cache: false,
 		processData: false,
 		contentType: false,
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			console.log({data});
+			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				showMessage(data.status.toLowerCase(), data.message);
 				if(data.triggermodalurl){
@@ -502,15 +494,14 @@ function submitMultipartForm(submitUrl, submitType){
 						doSectionReloadWithNewData(data);
 					}
 				}
-				
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
 			}
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
-		},
-		complete: loadingMask2.hide(),
+			loadingMask2.hide();
+		}
 	});
 }
 
@@ -520,11 +511,11 @@ function submitMultipartForm(submitUrl, submitType){
  * @returns
  */
 function submitReportForm(customurl){
+	loadingMask2.show();
+
 	if($('form#reportform').length < 1) return;
-	console.log('%cForm submit triggered', 'color: green');
 
 	var targettedForm = $('form#reportform');
-	console.log('%cValidting form','color: green');
 	if(!targettedForm.smkValidate()) return;
 
 	var submitUrl = (customurl != undefined) ? customurl : targettedForm.attr('action');
@@ -538,7 +529,6 @@ function submitReportForm(customurl){
 		url : submitUrl,
 		type : submitType,
 		data : formData,
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
 			loadingMask2.hide();
 			var arrrayBuffer = base64ToArrayBuffer(data);
@@ -592,26 +582,23 @@ function base64ToArrayBuffer(base64) {
  * @returns
  */
 function submitModalForm(customurl){
+	loadingMask2.show();
+
 	if($('form#mainform-modal').length < 1) return;
-	console.log('%cForm submit triggered from modal', 'color: green');
 
 	var targettedForm = $('form#mainform-modal');
-	console.log('%cValidting form','color: green');
 	if(!targettedForm.smkValidate()) return;
 
 	var submitUrl = (customurl != undefined) ? customurl : targettedForm.attr('action');
 	var submitType = targettedForm.attr('method');
 	var formData = $(targettedForm).serializeArray();
-	console.log('%cUrl : ' + submitUrl + ', Type : ' + submitType,'color: green');
-	console.log({formData});
 
 	$.ajax({
 		url : submitUrl,
 		type :submitType,
 		data : formData,
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			//console.log({data});
+			loadingMask2.hide();
 			if(data.status == 'SUCCESS'){
 				$('div.modal').modal('hide');
 				showMessage(data.status.toLowerCase(), data.message);
@@ -629,7 +616,6 @@ function submitModalForm(customurl){
 			} else {
 				showMessage(data.status.toLowerCase(), data.message);
 			}
-			loadingMask2.hide()
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
@@ -644,72 +630,55 @@ function submitModalForm(customurl){
  * @returns
  */
 function doSectionReloadWithNewData(rdata){
-	console.log({rdata})
+	loadingMask2.show();
 	$.ajax({
 		url : getBasepath() + rdata.reloadurl,
 		type : 'GET',
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			//console.log({data});
+			loadingMask2.hide();
 			var wrapperelement = $('#' + rdata.reloadelementid + "_wrapper");
-			// first section reload
 			if($(wrapperelement).length > 0){
 				wrapperelement.html("");
 				wrapperelement.append(data);
-
-				//dataTableInit();
 				dataTableInitSpecific(rdata.reloadelementid);
-				//triggerUpdateButtonSpecific(rdata.reloadelementid);
-				//triggerUpdateButton();
 			} else {
-				//console.log("Normal table");
 				var target = $('#' + rdata.reloadelementid);
 				var parentElement = target.parent();
 				parentElement.html("");
 				parentElement.append(data);
 				bindTableButtonsEvent($('#' + rdata.reloadelementid));
 			}
-
-			loadingMask2.hide()
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
-			loadingMask2.hide()
+			loadingMask2.hide();
 		}
 	});
 
 	// 2nd reload url
 	if(rdata.secondreloadurl == undefined) return;
+	loadingMask2.show();
 	$.ajax({
 		url : getBasepath() + rdata.secondreloadurl,
 		type : 'GET',
-		beforeSend : loadingMask2.show(),
 		success : function(data) {
-			//console.log({data});
+			loadingMask2.hide();
 			var wrapperelement = $('#' + rdata.secondreloadelementid + "_wrapper");
-			// first section reload
 			if($(wrapperelement).length > 0){
 				wrapperelement.html("");
 				wrapperelement.append(data);
-
-				//dataTableInit();
 				dataTableInitSpecific(rdata.secondreloadelementid);
-				//triggerUpdateButtonSpecific(rdata.reloadelementid);
-				//triggerUpdateButton();
 			} else {
-				//console.log("Normal table");
 				var target = $('#' + rdata.secondreloadelementid);
 				var parentElement = target.parent();
 				parentElement.html("");
 				parentElement.append(data);
 				bindTableButtonsEvent($('#' + rdata.secondreloadelementid));
 			}
-
-			loadingMask2.hide()
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
-			loadingMask2.hide()
+			loadingMask2.hide();
 		}
 	});
 
