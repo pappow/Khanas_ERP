@@ -71,7 +71,8 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 		pogrnHeader.setXvatamt(BigDecimal.ZERO);
 		pogrnHeader.setXaitamt(BigDecimal.ZERO);
 		pogrnHeader.setXdiscprime(BigDecimal.ZERO);
-		pogrnHeader.setXgrandtot(pogrnHeader.getXtotamt() != null ? pogrnHeader.getXtotamt() : BigDecimal.ZERO);
+		BigDecimal grandTotal = pogrnHeader.getXtotamt().add(pogrnHeader.getXvatamt()).add(pogrnHeader.getXaitamt()).subtract(pogrnHeader.getXdiscprime());
+		pogrnHeader.setXgrandtot(grandTotal);
 		pogrnHeader.setXvatait("No Vat");
 
 		long count = pogrnService.save(pogrnHeader);

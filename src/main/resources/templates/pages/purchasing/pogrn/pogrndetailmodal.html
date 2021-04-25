@@ -10,10 +10,7 @@
 			<div class="modal-body">
 				<div class="row">
 					<form id="mainform-modal" th:action="@{/purchasing/pogrn/pogrndetail/save}" method="post" class="form-horizontal" th:object="${pogrndetail}">
-						<!-- <input type="hidden" id="listHeadId" name="listHeadId" th:value="${listHead.listHeadId}"/>
-						<input type="hidden" th:field="*{listId}"/> -->
 						<input type="hidden" th:field="*{xgrnnum}"/>
-												
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
 						<div class="col-md-6">
 							<div class="form-group">

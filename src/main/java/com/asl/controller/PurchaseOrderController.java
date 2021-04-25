@@ -200,6 +200,10 @@ public class PurchaseOrderController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
 		}
+		if(BigDecimal.ZERO.equals(poordDetail.getXqtyord()) || poordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1){
+			responseHelper.setErrorStatusAndMessage("Purchase Quantity should be minimum 1");
+			return responseHelper.getResponse();
+		}
 
 		// modify line amount
 		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));

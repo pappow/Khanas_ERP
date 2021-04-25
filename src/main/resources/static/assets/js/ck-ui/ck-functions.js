@@ -209,7 +209,7 @@ function bindDataTableButtonsEvent(datatable){
 					doItemDelete(url);
 				}
 			});
-			
+
 			// Confirm Btn
 			$(row).find('button.btn-confirm').off('click').on('click', function(e){
 				var url = $(this).data('url');
@@ -225,7 +225,6 @@ function bindDataTableButtonsEvent(datatable){
  * Bind normal table button event
  */
 function bindTableButtonsEvent(targetTable){
-	//console.log('%cBind normal table button event', 'color: green');
 	// New or edit button
 	$(targetTable).find('button.btn-edit, button.btn-add').off('click').on('click', function(e){
 		e.preventDefault();
@@ -405,8 +404,6 @@ function dataTableInitSpecific(tableId){
  * @returns
  */
 function submitMainForm(customurl, customform){
-	loadingMask2.show();
-
 	if(customform == undefined && $('form#mainform').length < 1) return;
 
 	var targettedForm = customform == undefined ? $('form#mainform') : customform;
@@ -421,6 +418,7 @@ function submitMainForm(customurl, customform){
 		return;
 	}
 
+	loadingMask2.show();
 	$.ajax({
 		url : submitUrl,
 		type :submitType,
@@ -458,8 +456,6 @@ function submitMainForm(customurl, customform){
  * @returns
  */
 function submitMultipartForm(submitUrl, submitType){
-	loadingMask2.show();
-
 	var files = $('#fileuploader').get(0).files;
 	if (files.length == 0){
 		alert("No files selected to upload");
@@ -471,6 +467,7 @@ function submitMultipartForm(submitUrl, submitType){
 		formData.append("files[]", files[x]);
 	}
 
+	loadingMask2.show();
 	$.ajax({
 		url : submitUrl,
 		type :submitType,
@@ -511,8 +508,6 @@ function submitMultipartForm(submitUrl, submitType){
  * @returns
  */
 function submitReportForm(customurl){
-	loadingMask2.show();
-
 	if($('form#reportform').length < 1) return;
 
 	var targettedForm = $('form#reportform');
@@ -525,6 +520,7 @@ function submitReportForm(customurl){
 	if(reportType == undefined || reportType == '') reportType = "PDF";
 	var reportName = $('#reportName').val() != '' ? $('#reportName').val() : 'report';
 
+	loadingMask2.show();
 	$.ajax({
 		url : submitUrl,
 		type : submitType,
@@ -582,8 +578,6 @@ function base64ToArrayBuffer(base64) {
  * @returns
  */
 function submitModalForm(customurl){
-	loadingMask2.show();
-
 	if($('form#mainform-modal').length < 1) return;
 
 	var targettedForm = $('form#mainform-modal');
@@ -593,6 +587,7 @@ function submitModalForm(customurl){
 	var submitType = targettedForm.attr('method');
 	var formData = $(targettedForm).serializeArray();
 
+	loadingMask2.show();
 	$.ajax({
 		url : submitUrl,
 		type :submitType,

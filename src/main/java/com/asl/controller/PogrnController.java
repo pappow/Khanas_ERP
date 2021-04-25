@@ -117,18 +117,19 @@ public class PogrnController extends ASLAbstractController {
 //			return responseHelper.getResponse();
 //		}
 
-		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
 		if (pogrnHeader.getXtotamt() == null) pogrnHeader.setXtotamt(BigDecimal.ZERO);
-		pogrnHeader.setXgrandtot((pogrnHeader.getXtotamt().subtract(pogrnHeader.getXdiscprime())).add(pogrnHeader.getXvatamt()));
+		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
+		if (pogrnHeader.getXaitamt() == null) pogrnHeader.setXaitamt(BigDecimal.ZERO);
+		BigDecimal grandTotal = pogrnHeader.getXtotamt().add(pogrnHeader.getXvatamt()).add(pogrnHeader.getXaitamt()).subtract(pogrnHeader.getXdiscprime());
+		pogrnHeader.setXgrandtot(grandTotal);
 
-		pogrnHeader.setXgrandtot(BigDecimal.ZERO);
 		// if existing record
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if (existPogrnHeader != null) {
-			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate", "xtotamt");
+			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtype", "xdate");
 			long count = pogrnService.update(existPogrnHeader);
 			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update GRN");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("GRN updated successfully");
@@ -139,13 +140,12 @@ public class PogrnController extends ASLAbstractController {
 		// If new
 		long count = pogrnService.save(pogrnHeader);
 		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't create GRN");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("GRN created successfully");
 		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 		return responseHelper.getResponse();
-
 	}
 
 	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
@@ -180,9 +180,13 @@ public class PogrnController extends ASLAbstractController {
 
 	@PostMapping("/pogrndetail/save")
 	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail pogrnDetail) {
-
 		if (pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		if(pogrnDetail.getXqtygrn() == null || pogrnDetail.getXqtygrn().equals(BigDecimal.ZERO) || pogrnDetail.getXqtygrn().compareTo(BigDecimal.ZERO) == -1){
+			responseHelper.setErrorStatusAndMessage("Quantity must be greater then 0");
 			return responseHelper.getResponse();
 		}
 
@@ -190,8 +194,7 @@ public class PogrnController extends ASLAbstractController {
 		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(),
-				pogrnDetail.getXrow());
+		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
 		if (existDetail != null) {
 			BeanUtils.copyProperties(pogrnDetail, existDetail, "xgrnnum", "xrow");
 			long count = pogrnService.updateDetail(existDetail);
@@ -199,6 +202,8 @@ public class PogrnController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
+
+			// calcualate grn header grand total
 
 			responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
 			responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
