@@ -225,6 +225,11 @@ input.file-input-control{
 	height: 30px;
 	font-size: 12px;
 }
+
+input[type=time].form-control{
+	line-height: 18px !important;
+}
+
 input.form-control[disabled], textarea.form-control[disabled], select.form-control[disabled]{
 	border: none !important;
 	background-color: transparent !important;
@@ -293,6 +298,43 @@ select.form-control[disabled] {
 input[type=checkbox], input[type=radio] {
     margin-top: 1px !important;
 }
+
+/*
+=========================================
+============ Custom Paddings style =========
+=========================================
+*/
+
+.padding-5{
+	padding: 5px;
+}
+.padding-10{
+	padding: 10px;
+}
+.padding-15{
+	padding: 15px;
+}
+
+
+/*
+=========================================
+============ Custom Paddings style =========
+=========================================
+*/
+
+.margin-5{
+	margin: 5px;
+}
+.margin-10{
+	margin: 10px;
+}
+.margin-15{
+	margin: 15px;
+}
+
+
+
+
 /*
 =========================================
 ============ Search suggest =========
@@ -452,7 +494,7 @@ li.ckbigmenu-li a:hover .ckbigmenu-icon{
 }
 
 .section-header {
-	//border-bottom: 2px solid #222;
+	/* border-bottom: 2px solid #222; */
 }
 
 .section-header h1 {

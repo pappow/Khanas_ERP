@@ -24,6 +24,23 @@
 			batchcreated,
 			productioncompleted,
 			invoicecreated,
+			xfunction,
+			xtotguest,
+			xbookdate,
+			xfuncdate,
+			xstarttime,
+			xendtime,
+			xfacamt,
+			xfoodamt,
+			xhallamt,
+			xdiscamt,
+			xtotamt,
+			xgrandtot,
+			xadvamt,
+			xcheckindate,
+			xcheckoutdate,
+			xroomamt,
+			
 			zid,
 			zauserid,
 			zuuserid,
@@ -50,6 +67,22 @@
 			#{batchcreated, jdbcType=BOOLEAN},
 			#{productioncompleted, jdbcType=BOOLEAN},
 			#{invoicecreated, jdbcType=BOOLEAN},
+			#{xfunction, jdbcType=VARCHAR},
+			#{xtotguest, jdbcType=INTEGER},
+			#{xbookdate, jdbcType=DATE},
+			#{xfuncdate, jdbcType=DATE},
+			#{xstarttime, jdbcType=VARCHAR},
+			#{xendtime, jdbcType=VARCHAR},
+			#{xfacamt, jdbcType=DECIMAL},
+			#{xfoodamt, jdbcType=DECIMAL},
+			#{xhallamt, jdbcType=DECIMAL},
+			#{xdiscamt, jdbcType=DECIMAL},
+			#{xtotamt, jdbcType=DECIMAL},
+			#{xgrandtot, jdbcType=DECIMAL},
+			#{xadvamt, jdbcType=DECIMAL},
+			#{xcheckindate, jdbcType=DATE},
+			#{xcheckoutdate, jdbcType=DATE},
+			#{xroomamt, jdbcType=DECIMAL},			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -78,6 +111,23 @@
 			batchcreated=#{batchcreated, jdbcType=BOOLEAN},
 			productioncompleted=#{productioncompleted, jdbcType=BOOLEAN},
 			invoicecreated=#{invoicecreated, jdbcType=BOOLEAN},
+			xfunction=#{xfunction, jdbcType=VARCHAR},
+			xtotguest=#{xtotguest, jdbcType=INTEGER},
+			xbookdate=#{xbookdate, jdbcType=DATE},
+			xfuncdate=#{xfuncdate, jdbcType=DATE},
+			xstarttime=#{xstarttime, jdbcType=VARCHAR},
+			xendtime=#{xendtime, jdbcType=VARCHAR},
+			xfacamt=#{xfacamt, jdbcType=DECIMAL},
+			xfoodamt=#{xfoodamt, jdbcType=DECIMAL},
+			xhallamt=#{xhallamt, jdbcType=DECIMAL},
+			xdiscamt=#{xdiscamt, jdbcType=DECIMAL},
+			xtotamt=#{xtotamt, jdbcType=DECIMAL},
+			xgrandtot=#{xgrandtot, jdbcType=DECIMAL},
+			xadvamt=#{xadvamt, jdbcType=DECIMAL},
+			xcheckindate=#{xcheckindate, jdbcType=DATE},
+			xcheckoutdate=#{xcheckoutdate, jdbcType=DATE},
+			xroomamt=#{xroomamt, jdbcType=DECIMAL},
+			
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -104,6 +154,7 @@
 			xcomtype,
 			xqtydel,
 			xlong,
+			xlineamt,
 			zid,
 			zauserid,
 			zuuserid,
@@ -124,6 +175,7 @@
 			#{xcomtype, jdbcType=VARCHAR},
 			#{xqtydel, jdbcType=DECIMAL},
 			#{xlong, jdbcType=VARCHAR},
+			#{xlineamt, jdbcType=DECIMAL},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -146,6 +198,7 @@
 			xcomtype=#{xcomtype, jdbcType=VARCHAR},
 			xqtydel=#{xqtydel, jdbcType=DECIMAL},
 			xlong=#{xlong, jdbcType=VARCHAR},
+			xlineamt=#{xlineamt, jdbcType=DECIMAL},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -174,16 +227,18 @@
 
 	<select id="findOporddetailByXordernumAndXrow" resultType="Oporddetail">
 		SELECT 
-			* 
+			od.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem 
 		FROM 
-			oporddetail 
+			oporddetail od
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
 		WHERE 
-			xordernum=#{xordernum} 
-			AND xrow=#{xrow} 
-			AND zid=#{zid} 
-			AND zactive='1'
-		ORDER BY
-			XROW DESC
+			od.xordernum=#{xordernum} 
+			AND od.xrow=#{xrow} 
+			AND od.zid=#{zid} 
+			AND od.zactive='1'
 	</select>
 
 	<select id="findOporddetailByXordernum" resultType="Oporddetail">
@@ -373,6 +428,82 @@
 	
 	<select id="searchXpornum" resultType="Opordheader">
 		SELECT * FROM OPORDHEADER WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1' ORDER BY xpornum
+	</select>
+	
+	<select id="findAvailableRoomsByDate" resultType="Caitem">
+		SELECT item.* FROM CAITEM item WHERE item.xitem LIKE 'ICRM-%' 
+			AND item.xitem NOT IN 
+				(SELECT opd.xitem FROM OPORDHEADER oph
+					LEFT JOIN OPORDDETAIL opd ON opd.xordernum = oph.xordernum
+						WHERE oph.xcheckindate &lt;= CAST(#{xcheckindate} AS DATE) 
+							AND oph.xcheckoutdate &gt; CAST(#{xcheckindate} AS DATE) and oph.zid=#{zid})
+			AND item.zid=#{zid}
+	</select>
+	
+	<select id="findBookedRoomsByXordernum" resultType="Oporddetail">
+		SELECT 
+			od.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem 
+		FROM 
+			oporddetail od
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+		WHERE 
+			od.xordernum=#{xordernum}
+			AND od.xitem LIKE 'ICRM-%'
+			AND od.zid=#{zid} 
+			AND od.zactive='1'
+		ORDER BY
+			od.xitem DESC
+	</select>
+	
+	<select id="findAvailableHallsByDate" resultType="Caitem">
+		SELECT item.* FROM CAITEM item WHERE item.xitem LIKE 'ICHL-%' 
+			AND item.xitem NOT IN 
+				(SELECT opd.xitem FROM OPORDHEADER oph
+					LEFT JOIN OPORDDETAIL opd ON opd.xordernum = oph.xordernum
+						WHERE oph.xfuncdate = CAST(#{xfuncdate} AS DATE) and oph.zid=#{zid})
+			AND item.zid=#{zid}
+	</select>
+	
+	<select id="findBookedHallsByXordernum" resultType="Oporddetail">
+	
+		SELECT 
+			od.*,
+			caitem.xdesc,
+			caitem.xgitem,
+			caitem.xcatitem 
+		FROM 
+			oporddetail od
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+		WHERE 
+			od.xordernum=#{xordernum}
+			AND od.xitem LIKE 'ICHL-%'
+			AND od.zid=#{zid} 
+			AND od.zactive='1'
+		ORDER BY
+			od.xitem DESC
+		
+	</select>
+	
+	<select id="findBookedRoomsByDate" resultType="Caitem">
+		SELECT item.* FROM CAITEM item WHERE item.xitem LIKE 'ICRM-%' 
+			AND item.xitem IN 
+				(SELECT opd.xitem FROM OPORDHEADER oph
+					LEFT JOIN OPORDDETAIL opd ON opd.xordernum = oph.xordernum
+						WHERE oph.xcheckindate &lt;= CAST(#{xcheckindate} AS DATE) 
+							AND oph.xcheckoutdate &gt; CAST(#{xcheckindate} AS DATE) and oph.zid=#{zid})
+			AND item.zid=#{zid}
+	</select>
+	
+	<select id="findBookedHallsByXfuncdate" resultType="Caitem">
+		SELECT item.* FROM CAITEM item WHERE item.xitem LIKE 'ICHL-%' 
+			AND item.xitem IN 
+				(SELECT opd.xitem FROM OPORDHEADER oph
+					LEFT JOIN OPORDDETAIL opd ON opd.xordernum = oph.xordernum
+						WHERE oph.xfuncdate = CAST(#{xfuncdate} AS DATE) and oph.zid=#{zid})
+			AND item.zid=#{zid}
 	</select>
 	
 	

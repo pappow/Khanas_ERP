@@ -39,7 +39,7 @@ public class Oporddetail extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
-	private Integer xrow;
+	private int xrow;
 
 	@Column(name = "xunit")
 	private String xunit;
@@ -68,4 +68,8 @@ public class Oporddetail extends AbstractModel<String> {
 	private String xgitem;
 	@Transient
 	private String xcatitem;
+	
+	//Added for Convention Management
+	@Column(name = "xlineamt")
+	private BigDecimal xlineamt;
 }

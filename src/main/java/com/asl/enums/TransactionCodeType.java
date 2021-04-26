@@ -45,7 +45,11 @@ public enum TransactionCodeType {
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 
-	VOUCHER_NUMBER("Voucher Number", "VCH-",null);
+	VOUCHER_NUMBER("Voucher Number", "VCH-",null),
+	
+	//Convention Hall Codes
+	HALL_BOOKING_SALES_ORDER("Hall Booking SO", "HBSO-", null),
+	ROOM_BOOKING_SALES_ORDER("Room Booking SO", "RBSO-", null);
 
 	private String code;
 	private String defaultCode;

@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.mapper.OpordMapper;
@@ -150,4 +152,39 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public List<Opordheader> searchXpornum(String xpornum){
 		return opordMapper.searchXpornum(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	@Override
+	public List<Caitem> findAvailableRoomsByDate(Date xcheckindate) {
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MMM-yyyy");
+		return opordMapper.findAvailableRoomsByDate(formater.format(xcheckindate), sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Caitem> findBookedRoomsByDate(Date xcheckindate) {
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MMM-yyyy");
+		return opordMapper.findBookedRoomsByDate(formater.format(xcheckindate), sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Oporddetail> findBookedRoomsByXordernum(String xordernum) {
+		return opordMapper.findBookedRoomsByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Caitem> findAvailableHallsByDate(Date xfuncdate) {
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MMM-yyyy");
+		return opordMapper.findAvailableHallsByDate(formater.format(xfuncdate), sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Caitem> findBookedHallsByXfuncdate(Date xfuncdate) {
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MMM-yyyy");
+		return opordMapper.findBookedHallsByXfuncdate(formater.format(xfuncdate), sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Oporddetail> findBookedHallsByXordernum(String xordernum) {
+		return opordMapper.findBookedHallsByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+	
 }

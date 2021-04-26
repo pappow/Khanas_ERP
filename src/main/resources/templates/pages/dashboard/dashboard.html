@@ -135,6 +135,12 @@
 											<a th:href="@{/conventionmanagement}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${isConvention}">
+										<td><a th:href="@{/roommanagement}">Room Management</a></td>
+										<td>
+											<a th:href="@{/roommanagement}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 
 									<span th:if="${isCentral and menuProfile.M0700 ne null and menuProfile.M0700.display}">
 										<tr>

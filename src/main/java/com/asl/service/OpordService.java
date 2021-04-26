@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;
@@ -58,4 +59,16 @@ public interface OpordService {
 			String xordernum, String xstatus);
 	
 	public List<Opordheader> searchXpornum(String xpornum);
+	
+	public List<Caitem> findAvailableRoomsByDate(Date xcheckindate);
+	
+	public List<Caitem> findBookedRoomsByDate(Date xfuncdate);
+	
+	public List<Oporddetail> findBookedRoomsByXordernum(String xordernum);
+	
+	public List<Caitem> findAvailableHallsByDate(Date xfuncdate);
+	
+	public List<Caitem> findBookedHallsByXfuncdate(Date xfuncdate);
+	
+	public List<Oporddetail> findBookedHallsByXordernum(String xordernum);
 }

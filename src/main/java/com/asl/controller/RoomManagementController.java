@@ -12,22 +12,20 @@ import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 
 @Controller
-@RequestMapping("/conventionmanagement")
-public class ConventionManagementController extends ASLAbstractController {
+@RequestMapping("/roommanagement")
+public class RoomManagementController extends ASLAbstractController{
 	
 	@Autowired
 	OpordService opordService;
 	@Autowired
-	CaitemService caitemService;	
+	CaitemService caitemService;
 	
 	@GetMapping
 	public String loadConventionManagementMenuPage(Model model) {
-		model.addAttribute("availableHalls", opordService.findAvailableHallsByDate(new Date()));
-		model.addAttribute("bookedHalls", opordService.findBookedHallsByXfuncdate(new Date()));
-		
-		//model.addAttribute("allHalls", caitemService.searchCaitem("ICHL-"));
-		
-		return "pages/conventionmanagement/conventionmanagement";
+		model.addAttribute("availableRooms", opordService.findAvailableRoomsByDate(new Date()));
+		model.addAttribute("bookedRooms", opordService.findBookedRoomsByDate(new Date()));
+		//model.addAttribute("allRooms", caitemService.searchCaitem("ICRM-"));
+		return "pages/roommanagement/roommanagement";
 	}
 
 

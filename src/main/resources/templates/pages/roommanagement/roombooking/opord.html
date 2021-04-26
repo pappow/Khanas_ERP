@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Room Booking</title>
+		<meta th:remove="tag" th:include="commons :: common-meta" />
+		<meta th:remove="tag" th:include="commons :: common-css" />
+		<meta th:remove="tag" th:include="commons :: common-js" />
+	</head>
+	<body>
+		<!-- Header section -->
+		<div class="header-section" th:include="commons :: header-section"></div>
+
+		<!-- Menu section -->
+		<div class="navbar-inverse menu-section">
+			<div class="container-fluid">
+				<div class="row">
+					<nav class="navbar navbar-inverse">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+										<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+									</button>
+								</div>
+								<div class="collapse navbar-collapse" id="myNavbar">
+									<div class="nav navbar-nav">
+										<li><a th:href="@{/}">Dashboard</a></li>
+										<li><a th:href="@{/roommanagement}">Room Management</a></li>
+										<li class="active"><a th:href="@{/roommanagement/roombooking}">Room Booking</a></li>
+									</div>
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
+								</div>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Content section -->
+		<div>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<section id="data-maintenance" style="margin-top: 30px;">
+							<div class="section-header sectionbartoggle">
+								<h1>Filter Available Rooms</h1>
+							</div>
+							<div class="section-body section-border">
+								<div class="row" th:with="df=${'E, dd-MMM-yyyy'}">
+									<!-- <form id="mainform" class="form-horizontal" th:action="@{/roommanagement/roombooking/query}" method="post" > -->
+										<div class="col-md-4 col-md-offset-3">
+											<div class="form-group datepicker">
+												<label class="control-label col-md-4" for="searchDate">Check In Date : </label>
+												<div class="input-group date col-md-8 datepicker">
+													<input 	type="datepicker" 
+															class="form-control" 
+															id="searchDate"
+															name="searchDate"
+															th:value="${#dates.format(#dates.createNow(), df)}"/>
+													<div class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="">
+												<button class="btn btn-sm btn-success query-btn" type="button"><i class="fas fa-search"></i> Search</button>
+											</div>
+										</div>
+								</div>
+							</div>
+						</section>
+					</div>
+					
+					<div class="col-md-12" id="allRooms" th:fragment="allRooms">
+						<div class="room-card text-center add-room" th:each="room : ${availableRooms}" >
+							<div class="padding-5">
+								<span th:text="${room.xdesc}" class="fa-1x room-xdesc"></span>
+							</div>
+							<div>
+								Price - <span th:text="${room.xrate}" class="room-xrate"></span>
+							</div>
+							<div class="padding-5">
+								<span th:text="${room.xcatitem}" class="label label-info fa-sm">Delux</span>
+							</div>
+						</div>
+						
+						<div class="room-card-red text-center remove-room" th:each="room : ${bookedRooms}" >
+							<div class="padding-5">
+								<span th:text="${room.xrow}" class="hidden room-xrow"></span>
+								<span th:text="${room.xdesc}" class="fa-1x"></span>
+							</div>
+							<div>
+								Price - <span th:text="${room.xrate}"></span>
+							</div>
+							<div class="padding-5">
+								<span th:text="${room.xcatitem}" class="label label-info fa-sm">Delux</span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="col-md-12 content-area">
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Section list head -->
+								<section id="data-maintenance" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										<h1>Room Booking</h1>
+									</div>
+									<div class="form-action-button">
+										<a th:href="@{/roommanagement/roombooking}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:if="${#strings.isEmpty(opordheader.xordernum)}" th:href="@{/roommanagement/roombooking}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<!-- <a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/roommanagement/roombooking/creategrn/} + ${opordheader.xordernum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Book Room </a> -->
+										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord == 'Confirmed' and opordheader.zactive == true}" th:href="@{/roommanagement/roombooking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/roommanagement/roombooking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
+										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.zactive == false}" th:href="@{/roommanagement/roombooking/restore/} + ${opordheader.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<!-- Form Pagination -->
+										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
+										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
+										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
+										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
+									</div>
+									<div class="section-body section-border">
+										<form id="mainform" class="form-horizontal" th:action="@{/roommanagement/roombooking/save}" th:object="${opordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
+											<!-- <input type="hidden" th:if="${not #strings.isEmpty(opordheader.xordernum)}" th:field="*{xpornum}"/> -->
+											<input type="hidden" th:field="*{xtypetrn}"/>
+											<input type="hidden" th:field="*{xordernum}" th:if="${not #strings.isEmpty(opordheader.xordernum)}" />
+											<input type="hidden" th:field="*{xtrn}" th:if="${not #strings.isEmpty(opordheader.xordernum)}" />
+											<input type="hidden" id="xpornum" th:if="${not #strings.isEmpty(opordheader.xordernum)}" class="form-control" th:field="*{xpornum}">
+											<div class="row">
+												<div class="col-md-6">
+
+													<div class="form-group" th:if="${#strings.isEmpty(opordheader.xordernum)}">
+														<label class="control-label col-md-4" for="xtrn">S.O. Prefix : </label>
+														<div class="col-md-4">
+															<select class="form-control" th:field="*{xtrn}">
+																<option th:each="prefix : ${soprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+															</select>
+														</div>
+													</div>
+													<div th:if="${not #strings.isEmpty(opordheader.xordernum)}">
+														<label class="control-label col-md-4" for="xordernum">Order Number : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xordernum}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xcus">Customer : </label>
+														<div class="col-sm-8">
+															<input 	type="text" 
+																	class="form-control searchsuggest" 
+																	placeholder="Search..." 
+																	th:value="${opordheader.xcus}" 
+																	th:attr="search-url='search/customer'"/>
+															<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
+															<input type="hidden" id="search-des" value=""/>
+														</div>
+													</div>
+													
+
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xbookdate">Booking Date : </label>
+														<div class="input-group date col-md-6 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xbookdate"
+																	name="xbookdate"
+																	th:value="${opordheader.xbookdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xbookdate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+													
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xcheckindate">Check In Date : </label>
+														<div class="input-group date col-md-6 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xcheckindate"
+																	name="xcheckindate"
+																	th:value="${opordheader.xcheckindate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xcheckindate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+													
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xcheckoutdate">Check Out Date : </label>
+														<div class="input-group date col-md-6 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xcheckoutdate"
+																	name="xcheckoutdate"
+																	th:value="${opordheader.xcheckoutdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xcheckoutdate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstarttime">Start Time : </label>
+														<div class="col-md-5">
+															<input type="time" class="form-control" th:field="*{xstarttime}">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xendtime">End Time : </label>
+														<div class="col-md-5">
+															<input type="time" class="form-control" th:field="*{xendtime}">
+														</div>
+													</div>
+
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfacamt">Facilities Charge : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xfacamt}" min="0" disabled="disabled">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfoodamt">Food Purpose : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xfoodamt}" min="0" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xroomamt">Room Charge : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xroomamt}" min="0" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xdiscamt">Discount : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xdiscamt}" min="0">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xnote">Note : </label>
+														<div class="col-md-8">
+															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														</div>
+													</div>
+												</div>												
+											</div>
+										</form>
+									</div>
+								</section>
+							</div>
+							
+							<div class="col-md-6">
+								<section id="list-manager" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										<h1>All Room Bookings</h1>
+									</div>
+									<div class="section-body">
+										<table class="table table-striped table-bordered datatable nowrap">
+											<thead>
+												<tr>
+													<th>Booking Order</th>
+													<th>Booking Date</th>
+													<th>Customer</th>
+													<th>From</th>
+													<th>To</th>
+													<th>Status</th>
+												</tr>
+											</thead>
+											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+												<tr th:each="order : ${bookingOrderList}">
+													<td>
+														<a th:href="@{/roommanagement/roombooking/} + ${order.xordernum}" th:text="${order.xordernum}"></a>
+													</td>
+													<td  th:text="${#dates.format(order.xbookdate, df)}"></td>
+													<td th:text="${order.xcus}"></td>
+													<td th:text="${order.xstarttime}"></td>
+													<td th:text="${order.xendtime}"></td>
+													<td th:text="${order.xstatusord}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				
+					<div class="col-md-12">
+						<!-- detail section -->
+						<section th:if="${not #strings.isEmpty(opordheader.xordernum)}" id="data-maintenance" style="margin-top: 30px;">
+							<a id="listlines-url" th:href="@{/roommanagement/roombookings/oporddetails/} + ${opordheader.xordernum}"></a>
+							<div class="section-header sectionbartoggle">
+								<h1>Order Details</h1>
+							</div>
+							<div class="section-body">
+								<table class="table table-striped table-bordered datatable nowrap" id="oporddetailtable" th:fragment="oporddetailtable">
+									<thead>
+										<tr>
+											<th>Row</th>
+											<th>Item</th>
+											<th>Item Category</th>
+											<th>Amount</th>
+											<th data-nosort="Y" style="text-align: right;" th:if="${opordheader.xstatusord != 'Confirmed'}">
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/roommanagement/roombooking/} + ${opordheader.xordernum} + '/oporddetail/new/show', data-target-modal='oporddetailmodal'"><i class="fas fa-plus"></i></button>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="d : ${oporddetailsList}">
+											<td th:text="${dStat.index+1}"></td>
+											<td>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
+											</td>
+											<td th:text="${d.xcatitem}"></td>
+											<td th:text="${d.xlineamt}"></td>
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${opordheader.xstatusord != 'Confirmed'}">
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/roommanagement/roombooking/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/show', data-target-modal='oporddetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/roommanagement/roombooking/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal -->
+		<div id="oporddetailmodal-section"></div>
+		
+		
+		<form id="room-form" th:action="@{/roommanagement/roombooking/oporddetail/save}" method="post" class="form-horizontal" th:object="${oporddetail}">
+			<input type="hidden" th:field="*{xordernum}"/>
+			<input type="hidden" th:field="*{xitem}" value=""/>
+			<input type="hidden" th:field="*{xrate}" min="0"/>
+			<input type="hidden" th:field="*{xqtyord}" value="1"/>
+			<input type="hidden" th:field="*{xlineamt}" min="0"/>
+		</form>
+		
+		<!-- Footer section -->
+		<div class="footer-section" th:include="commons :: footer-section"></div>
+	</body>
+	<style>
+		.room-card{
+			width: 10%;
+			background-color: #17a261 ;
+			margin: 1%;
+			border-radius: 5px;
+			color: white;
+			padding: 10px;
+			display: inline-block;
+		}
+		
+		.room-card-red{
+			width: 10%;
+			background-color: #c9302c ;
+			margin: 1%;
+			border-radius: 5px;
+			color: white;
+			padding: 10px;
+			display: inline-block;
+		}
+		
+	</style>
+	
+	<script>
+	$(document).ready(function(){
+		$("#allRooms").delegate('.add-room','click', function(){
+			if($("#mainform").find("input[name='xordernum']").val() == "" || $("#mainform").find("input[name='xordernum']").val() == undefined)
+				return;
+			console.log("Logged: >>>");
+			$("#room-form").find("input[name='xordernum']").val($("#mainform").find("input[name='xordernum']").val());
+			$("#room-form").find("input[name='xitem']").val($(this).find(".room-xdesc").text());
+			$("#room-form").find("input[name='xrate']").val($(this).find(".room-xrate").text());
+			$("#room-form").find("input[name='xlineamt']").val($(this).find(".room-xrate").text());
+			$("#room-form").submit();
+		});
+		
+		$("#allRooms").delegate('.remove-room','click', function(){
+			var url = "/asl-erp/roommanagement/roombooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".room-xrow").text() +"/delete";
+			console.log("Remove Del Logged: >>>" + url);
+			doItemDelete(url);
+		});
+		
+		
+		$(".query-btn").on("click", function(){
+			$.ajax({
+				url : getBasepath() + '/roommanagement/roombooking/availableroombydate/' + $('input[name="searchDate"]').val(),
+				type : 'GET',
+				beforeSend : loadingMask2.show(),
+				success : function(data) {
+					loadingMask2.hide();					
+					var wrapperelement = $("#allRooms");
+					wrapperelement.html("");
+					wrapperelement.append(data);
+					dataTableInitSpecific("allRooms");					
+				},							
+				error : function(jqXHR, status, errorThrown){
+					showMessage(status, "Something went wrong .... ");
+					loadingMask2.hide();
+				}
+			});
+		});
+	});
+	</script>
+	
+</html>

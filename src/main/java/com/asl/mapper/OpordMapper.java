@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;
@@ -45,4 +46,18 @@ public interface OpordMapper {
 	
 	//search
 	public List<Opordheader> searchXpornum(String xpornum, String zid);
+	
+	public List<Caitem> findAvailableRoomsByDate(String xcheckindate, String zid);
+	
+	public List<Caitem> findBookedRoomsByDate(String xcheckindate, String zid);
+	
+	public List<Oporddetail> findBookedRoomsByXordernum(String xordernum, String zid);
+	
+	public List<Caitem> findAvailableHallsByDate(String xfuncdate, String zid);
+	
+	public List<Caitem> findBookedHallsByXfuncdate(String xfuncdate, String zid);
+	
+	public List<Oporddetail> findBookedHallsByXordernum(String xordernum, String zid);
+	
+	
 }

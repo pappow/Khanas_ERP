@@ -85,16 +85,20 @@ public class Opordheader extends AbstractModel<String> {
 	@Transient
 	private String branchname;
 	
+	//Following variables are added for Convention Management
+	
 	@Column(name="xfunction")
 	private String xfunction;
 
 	@Column(name="xtotguest")
-	private int xtotguest;
+	private Integer xtotguest;
 
 	@Column(name="xbookdate")
-	private Date xboodate;
+	@Temporal(TemporalType.DATE)
+	private Date xbookdate;
 
 	@Column(name="xfuncdate")
+	@Temporal(TemporalType.DATE)
 	private Date xfuncdate;
 
 	@Column(name="xstarttime")
@@ -120,4 +124,25 @@ public class Opordheader extends AbstractModel<String> {
 	
 	@Column(name = "xgrandtot")
 	private BigDecimal xgrandtot;
+	
+	@Column(name = "xadvamt")
+	private BigDecimal xadvamt;
+	
+	//Following variables are added for Convention Management (Room Booking)
+	
+	@Column(name = "xcheckindate")
+	@Temporal(TemporalType.DATE)
+	private Date xcheckindate;
+	
+	@Column(name = "xcheckoutdate")
+	@Temporal(TemporalType.DATE)
+	private Date xcheckoutdate;
+	
+	@Column(name = "xroomamt")
+	private BigDecimal xroomamt;
+	
+	@Transient
+	private boolean isbooked;
+	
+	
 }
