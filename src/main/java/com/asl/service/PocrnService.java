@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
+import com.asl.model.ServiceException;
 
 @Component
 public interface PocrnService {
@@ -15,6 +16,8 @@ public interface PocrnService {
 	public long update(Pocrnheader pocrnheader);
 
 	public long saveDetail(Pocrndetail pocrndetail);
+
+	public long saveDetails(List<Pocrndetail> pocrndetail) throws ServiceException;
 
 	public long updateDetail(Pocrndetail pocrndetail);
 

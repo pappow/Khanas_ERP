@@ -19,10 +19,7 @@ import lombok.EqualsAndHashCode;
 @IdClass(PogrnDetailPK.class)
 @EqualsAndHashCode(of = { "zid", "xgrnnum", "xrow" }, callSuper = false)
 public class PogrnDetail extends AbstractModel<String> {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 208492314185601309L;
 
 	@Id
@@ -34,7 +31,7 @@ public class PogrnDetail extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xgrnnum")
 	private String xgrnnum;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
@@ -42,31 +39,31 @@ public class PogrnDetail extends AbstractModel<String> {
 
 	@Column(name = "xdocrow")
 	private String xdocrow;
-	
+
 	@Column(name = "xcomtype")
 	private String xcomtype;
-	
+
 	@Column(name = "xitem")
-	private String xitem;	
-	
+	private String xitem;
+
 	@Column(name = "xqtygrn")
 	private BigDecimal xqtygrn;
-	
+
 	@Column(name = "xrate")
 	private BigDecimal xrate;
-	
+
 	@Column(name = "xlineamt")
 	private BigDecimal xlineamt;
-	
+
 	@Column(name = "xqtyprn")
 	private BigDecimal xqtyprn;
-	
+
 	@Column(name = "xunitpur")
 	private String xunitpur;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Transient
 	private String xitemdesc;
 	@Transient

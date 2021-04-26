@@ -10,20 +10,16 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @XmlRootElement(name = "grnreport")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GrnReport {
-	
-	
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	private String printDate;
-	private String copyrightText;
+@EqualsAndHashCode(callSuper = true)
+public class GrnReport extends AbstractReportModel{
+
+	private static final long serialVersionUID = -8875986826852915473L;
+
 	private String status;
 
 	@XmlElementWrapper(name = "grnorders")
