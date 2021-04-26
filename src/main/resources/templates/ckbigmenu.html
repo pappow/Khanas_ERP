@@ -103,7 +103,14 @@
 					<span class="ckbigmenu-text" th:text="${menuProfile.M0101.screenprompt}">User & Profile</span>
 				</a>
 			</li>
-
+			<li class="ckbigmenu-li hidable-menu nodisplay">
+				<a th:href="@{/system/aslprocerror}">
+					<span class="ckbigmenu-icon" style="background: green;">
+						<i class="fas fa-bug"></i>
+					</span>
+					<span class="ckbigmenu-text">PROC Errors</span>
+				</a>
+			</li>
 		</ul>
 	</li>
 </ul>

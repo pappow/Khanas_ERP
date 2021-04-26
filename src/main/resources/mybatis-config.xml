@@ -42,5 +42,6 @@
 		<mapper resource="mappers/ZbusinessMapper.xml"/>
 		<mapper resource="mappers/ZlogsMapper.xml"/>
 		<mapper resource="mappers/ZusersMapper.xml"/>
+		<mapper resource="mappers/ASLProcErrorMapper.xml"/>
 	</mappers>
 </configuration>
