@@ -104,6 +104,9 @@ public class PogrnHeader extends AbstractModel<String> {
 	@Column(name = "xdocnum")
 	private Integer xdocnum;
 
+	@Column(name = "xcrnnum")
+	private String xcrnnum;
+
 	@Transient
 	private String xorg;
 

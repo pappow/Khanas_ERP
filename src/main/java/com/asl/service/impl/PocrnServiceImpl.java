@@ -3,14 +3,16 @@ package com.asl.service.impl;
 import java.util.Collections;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asl.entity.Caitem;
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.mapper.PocrnMapper;
+import com.asl.model.ServiceException;
 import com.asl.service.PocrnService;
 
 @Service
@@ -39,13 +41,27 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 
 	@Override
 	public long saveDetail(Pocrndetail pocrndetail) {
-		if(pocrndetail == null || StringUtils.isBlank(pocrndetail.getXcrnnum()))
-			return 0;
+		if(pocrndetail == null || StringUtils.isBlank(pocrndetail.getXcrnnum())) return 0;
 		pocrndetail.setZid(sessionManager.getBusinessId());
 		pocrndetail.setZauserid(getAuditUser());
 		long count = pocrnMapper.savePocrnDetail(pocrndetail);
 
 		return count;
+	}
+
+	@Override
+	@Transactional
+	public long saveDetails(List<Pocrndetail> pocrndetail) throws ServiceException {
+		if(pocrndetail == null || pocrndetail.isEmpty()) return 0;
+		long totalCount = 0;
+		for(Pocrndetail pocrnDetail : pocrndetail) {
+			pocrnDetail.setZid(sessionManager.getBusinessId());
+			pocrnDetail.setZauserid(getAuditUser());
+			long count = pocrnMapper.savePocrnDetail(pocrnDetail);
+			if(count == 0) throw new ServiceException("Can't save CRN details");
+			totalCount += count;
+		}
+		return totalCount;
 	}
 
 	@Override
@@ -83,11 +99,10 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 			return null;		
 		return pocrnMapper.findPocrnHeaderByXcrnnum(xcrnnum, sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public Pocrnheader findPocrnHeaderByXgrnnum(String xgrnnum) {
-		if(StringUtils.isBlank(xgrnnum)) 
-			return null;		
+		if(StringUtils.isBlank(xgrnnum)) return null;
 		return pocrnMapper.findPocrnHeaderByXgrnnum(xgrnnum, sessionManager.getBusinessId());
 	}
 

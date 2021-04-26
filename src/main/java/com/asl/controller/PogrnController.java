@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,19 +29,25 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
+import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ServiceException;
 import com.asl.model.report.GRNOrder;
 import com.asl.model.report.GrnReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.service.CacusService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
+import com.asl.service.PoordService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/purchasing/pogrn")
 public class PogrnController extends ASLAbstractController {
@@ -51,6 +58,7 @@ public class PogrnController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private VataitService vataitService;
 	@Autowired private CacusService cacusService;
+	@Autowired private PoordService poordService;
 
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -148,6 +156,47 @@ public class PogrnController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@PostMapping("/archive/{xgrnnum}")
+	public  @ResponseBody Map<String, Object> archive(@PathVariable String xgrnnum) {
+		PogrnHeader header = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		if(header == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find GRN in the system");
+			return responseHelper.getResponse();
+		}
+
+		// first remove all item details
+		if(pogrnService.countOfPogrndetailByXgrnnum(xgrnnum) > 0 && pogrnService.archiveDetailsByXgrnnum(xgrnnum) < 1) {
+			responseHelper.setErrorStatusAndMessage("Can't archive GRN item details");
+			return responseHelper.getResponse();
+		}
+
+		// 2nd remove reference from purchase order if have reference
+		if(StringUtils.isNotBlank(header.getXpornum())) {
+			PoordHeader ph = poordService.findPoordHeaderByXpornum(header.getXpornum());
+			if(ph != null) {
+				ph.setXstatuspor("Open");
+				ph.setXgrnnum(null);
+				long phcount = poordService.update(ph);
+				if(phcount == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't remove Purchase Order reference from GRN");
+					return responseHelper.getResponse();
+				}
+			}
+		}
+
+		// 3rd now archive GRN
+		header.setZactive(Boolean.FALSE);
+		long hcount = pogrnService.update(header);
+		if(hcount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't archive GRN");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("GRN archived successfully");
+		responseHelper.setRedirectUrl("/purchasing/pogrn/");
+		return responseHelper.getResponse();
+	}
+
 	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
 	public String openPogrnDetailModal(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
 
@@ -202,8 +251,6 @@ public class PogrnController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-
-			// calcualate grn header grand total
 
 			responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/purchasing/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
 			responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/purchasing/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
@@ -276,10 +323,6 @@ public class PogrnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
-//		if (StringUtils.isBlank(pogrnHeader.getXinvnum())) {
-//			responseHelper.setErrorStatusAndMessage("Please add supplier bill no.!");
-//			return responseHelper.getResponse();
-//		}
 		if ("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
 			return responseHelper.getResponse();
@@ -317,67 +360,74 @@ public class PogrnController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/returngrn/{xgrnnum}")
+	@PostMapping("/returngrn/{xgrnnum}")
 	public @ResponseBody Map<String, Object> returngrn(@PathVariable String xgrnnum) {
-		if (StringUtils.isBlank(xgrnnum)) {
+		// Get PoordHeader record by Xpornum
+		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		if(pogrnHeader == null) {
+			responseHelper.setErrorStatusAndMessage("GRN not found in the system to do return");
+			return responseHelper.getResponse();
+		}
+
+		// validation
+		if("GRN Returned".equalsIgnoreCase(pogrnHeader.getXstatusgrn())){
+			responseHelper.setErrorStatusAndMessage("This GRN already returned. Return number is : " + pogrnHeader.getXcrnnum());
+			return responseHelper.getResponse();
+		}
+
+		Pocrnheader pocrnHeader = new Pocrnheader();
+		BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
+		pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
+		pocrnHeader.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
+		pocrnHeader.setXgrnnum(xgrnnum);
+		pocrnHeader.setXstatuscrn("Open");
+		pocrnHeader.setXdate(new Date());
+		pocrnHeader.setXsup(pogrnHeader.getXcus());
+		// pocrnHeader.setXtypetrn("??");
+
+		long count = pocrnService.save(pocrnHeader);
+		if (count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create GRN Return");
+			return responseHelper.getResponse();
+		}
+
+		pocrnHeader = pocrnService.findPocrnHeaderByXgrnnum(xgrnnum);
+
+		// Get GRN items to copy them in CRN.
+		List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+		List<Pocrndetail> detailsList = new ArrayList<>();
+		for (int i = 0; i < pogrnDetailList.size(); i++) {
+			Pocrndetail pocrnDetail = new Pocrndetail();
+			// Copying PO items to GRN items.
+			BeanUtils.copyProperties(pogrnDetailList.get(i), pocrnDetail, "xrow", "xnote");
+			pocrnDetail.setXcrnnum(pocrnHeader.getXcrnnum());
+			pocrnDetail.setXqtygrn(pogrnDetailList.get(i).getXqtygrn());
+			detailsList.add(pocrnDetail);
+		}
+
+		try {
+			long dcount = pocrnService.saveDetails(detailsList);
+			if(dcount == 0) {
+				responseHelper.setErrorStatusAndMessage("GRN Return detail not saved");
+				return responseHelper.getResponse();
+			}
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
+
+		// Update PoGRNHeader Status with pocrn reference
+		pogrnHeader.setXcrnnum(pocrnHeader.getXcrnnum());
+		pogrnHeader.setXstatusgrn("GRN Returned"); // Is it final?
+		long pCount = pogrnService.update(pogrnHeader);
+		if (pCount == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		// Validate
 
-		// Get PoordHeader record by Xpornum
-		PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-
-		if (pogrnHeader != null) {
-			Pocrnheader pocrnHeader = new Pocrnheader();
-			BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-			pocrnHeader.setXgrnnum(xgrnnum);
-			pocrnHeader.setXstatuscrn("Open");
-			pocrnHeader.setXdate(new Date());
-			pocrnHeader.setXsup(pogrnHeader.getXcus());
-			pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
-			pocrnHeader.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
-			// pocrnHeader.setXtypetrn("??");
-
-			long count = pocrnService.save(pocrnHeader);
-			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-			pocrnHeader = pocrnService.findPocrnHeaderByXgrnnum(xgrnnum);
-			// Get GRN items to copy them in CRN.
-			List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
-			Pocrndetail pocrnDetail;
-			for (int i = 0; i < pogrnDetailList.size(); i++) {
-				pocrnDetail = new Pocrndetail();
-				// Copying PO items to GRN items.
-				BeanUtils.copyProperties(pogrnDetailList.get(i), pocrnDetail, "xrow", "xnote");
-				pocrnDetail.setXcrnnum(pocrnHeader.getXcrnnum());
-				pocrnDetail.setXqtygrn(pogrnDetailList.get(i).getXqtygrn());
-
-				long nCount = pocrnService.saveDetail(pocrnDetail);
-
-				// Update Inventory
-				if (nCount == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					return responseHelper.getResponse();
-				}
-			}
-
-			// Update PoordHeader Status
-			pogrnHeader.setXstatusgrn("GRN Returned"); // Is it final?
-			long pCount = pogrnService.update(pogrnHeader);
-			if (pCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-			responseHelper.setSuccessStatusAndMessage("GRN Returned successfully");
-			responseHelper.setRedirectUrl("/procurement/grnreturn" + pocrnHeader.getXcrnnum());
-			return responseHelper.getResponse();
-		}
-		responseHelper.setStatus(ResponseStatus.ERROR);
+		responseHelper.setSuccessStatusAndMessage("GRN Returned successfully");
+		responseHelper.setRedirectUrl("/purchasing/pogrn/" + pogrnHeader.getXgrnnum());
 		return responseHelper.getResponse();
 	}
 
@@ -390,11 +440,11 @@ public class PogrnController extends ASLAbstractController {
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 		PogrnHeader oh = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-
 		if (oh == null) {
 			message = "Good Receipt Note not found to print";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 		Cacus cacus = cacusService.findByXcus(oh.getXcus());
 
 		// SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
@@ -406,37 +456,40 @@ public class PogrnController extends ASLAbstractController {
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
-		// report.setCopyrightText("ASL");
 
-		GRNOrder grnOrder = new GRNOrder();
-		grnOrder.setOrderNumber(oh.getXgrnnum());
-		grnOrder.setPoNumber(oh.getXpornum());
-		grnOrder.setSupplier(cacus.getXcus());
-		grnOrder.setSupplierName(cacus.getXorg());
-		grnOrder.setSupplierAddress(cacus.getXmadd());
-		grnOrder.setWarehouse(oh.getXwh());
-		grnOrder.setDate(sdf.format(oh.getXdate()));
-		grnOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : "0.00");
-		grnOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : "0.00");
-		grnOrder.setDiscountAmount(oh.getXdiscprime() != null ? oh.getXdiscprime().toString() : "0.00");
-		grnOrder.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : "0.00");
+		GRNOrder grn = new GRNOrder();
+		grn.setOrderNumber(oh.getXgrnnum());
+		grn.setPoNumber(oh.getXpornum());
+		grn.setReturnNumber(oh.getXcrnnum());
+		grn.setSupplier(cacus.getXcus());
+		grn.setSupplierName(cacus.getXorg());
+		grn.setSupplierAddress(cacus.getXmadd());
+		grn.setWarehouse(oh.getXwh());
+		grn.setDate(sdf.format(oh.getXdate()));
+		grn.setVatAit(oh.getXvatait());
+		grn.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+		grn.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
+		grn.setTaxAmount(oh.getXaitamt() != null ? oh.getXaitamt().toString() : BigDecimal.ZERO.toString());
+		grn.setDiscountAmount(oh.getXdiscprime() != null ? oh.getXdiscprime().toString() : BigDecimal.ZERO.toString());
+		grn.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
 
 		List<PogrnDetail> items = pogrnService.findPogrnDetailByXgrnnum(oh.getXgrnnum());
 		if (items != null && !items.isEmpty()) {
-			items.parallelStream().forEach(it -> {
+			items.stream().forEach(it -> {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
 				item.setItemName(it.getXitemdesc());
-				item.setItemQty(it.getXqtygrn().toString());
+				item.setItemQty(it.getXqtygrn() != null ? it.getXqtygrn().toString() : BigDecimal.ZERO.toString());
+				item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
+				item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
 				item.setItemUnit(it.getXunitpur());
 				item.setItemCategory(it.getXcatitem());
 				item.setItemGroup(it.getXgitem());
-
-				grnOrder.getItems().add(item);
+				grn.getItems().add(item);
 			});
 		}
 
-		report.getGrnorders().add(grnOrder);
+		report.getGrnorders().add(grn);
 
 		byte[] byt = getPDFByte(report, "grnreport.xsl");
 		if (byt == null) {

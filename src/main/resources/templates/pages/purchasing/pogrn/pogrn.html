@@ -53,12 +53,11 @@
 									<div class="form-action-button">
 										<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/confirmgrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-info returngrn-btn-link"><i class="fas fa-clipboard-check"></i> Return</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/print/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.zactive == false}" th:href="@{/purchasing/pogrn/restore/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/confirmgrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-info confirm-btn-link"><i class="fas fa-clipboard-check"></i> Return</a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/print/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 									</div>
 									<div class="section-body section-border">
 										<div id="pogrnheaderform" th:fragment="pogrnheaderform">
@@ -269,6 +268,7 @@
 													<th>Supplier</th>
 													<th>Warehouse</th>
 													<th>Status</th>
+													<th>Return No.</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -281,6 +281,7 @@
 													<td th:text="${pogrn.xorg}"></td>
 													<td th:text="${pogrn.xwh}"></td>
 													<td th:text="${pogrn.xstatusgrn}"></td>
+													<td th:text="${pogrn.xcrnnum}"></td>
 												</tr>
 											</tbody>
 										</table>

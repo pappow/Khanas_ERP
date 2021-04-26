@@ -27,6 +27,8 @@ public interface PogrnService {
 
 	public long deleteDetail(PogrnDetail pogrnDetail);
 
+	public long archiveDetailsByXgrnnum(String xgrnnum);
+
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum);
 
 	public PogrnHeader findPogrnHeaderByXpornum(String xpornum);
@@ -44,6 +46,8 @@ public interface PogrnService {
 
 	// Search
 	public List<PogrnHeader> searchPoord(String xpornum);
+
+	public long countOfPogrndetailByXgrnnum(String xgrnnum);
 	
 	//public List<PogrnHeader> search(String xwh,String sup,String status,String fromDate,String toDate);
 }

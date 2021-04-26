@@ -1,5 +1,6 @@
 package com.asl.model.report;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,10 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "grnorder")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GRNOrder {
-	
+public class GRNOrder implements Serializable {
+
+	private static final long serialVersionUID = -6915726758526307512L;
+
 	private String orderNumber;
 	private String poNumber;
 	private String date;
@@ -26,9 +29,12 @@ public class GRNOrder {
 	private String warehouse;
 	private String totalAmount;
 	private String vatAmount;
+	private String taxAmount;
 	private String discountAmount;
 	private String grandTotalAmount;
-	
+	private String returnNumber;
+	private String vatAit;
+
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")
 	private List<ItemDetails> items = new ArrayList<>();

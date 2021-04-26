@@ -144,11 +144,26 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		return pogrnMapper.searchPoord(xpornum.toUpperCase(), sessionManager.getBusinessId());
 	}
 
+	@Override
+	@Transactional
+	public long archiveDetailsByXgrnnum(String xgrnnum) {
+		if(StringUtils.isBlank(xgrnnum)) return 0;
+		return pogrnMapper.archiveDetailsByXgrnnum(xgrnnum, sessionManager.getLoggedInUserDetails().getUsername(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long countOfPogrndetailByXgrnnum(String xgrnnum) {
+		if(StringUtils.isBlank(xgrnnum)) return 0;
+		return pogrnMapper.countOfPogrndetailByXgrnnum(xgrnnum, sessionManager.getBusinessId());
+	}
+
+
 	/*
 	 * @Override public List<PogrnHeader> search(String xwh, String sup, String
 	 * status, String fromDate, String toDate) { // TODO Auto-generated method stub
 	 * return pogrnMapper.search(xwh, sup, status, fromDate, toDate); }
 	 */
 
+	
 
 }
