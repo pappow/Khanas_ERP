@@ -40,7 +40,7 @@
 			xcheckindate,
 			xcheckoutdate,
 			xroomamt,
-			
+			xdornum,
 			zid,
 			zauserid,
 			zuuserid,
@@ -82,7 +82,8 @@
 			#{xadvamt, jdbcType=DECIMAL},
 			#{xcheckindate, jdbcType=DATE},
 			#{xcheckoutdate, jdbcType=DATE},
-			#{xroomamt, jdbcType=DECIMAL},			
+			#{xroomamt, jdbcType=DECIMAL},
+			#{xdornum, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -127,7 +128,7 @@
 			xcheckindate=#{xcheckindate, jdbcType=DATE},
 			xcheckoutdate=#{xcheckoutdate, jdbcType=DATE},
 			xroomamt=#{xroomamt, jdbcType=DECIMAL},
-			
+			xdornum=#{xdornum, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

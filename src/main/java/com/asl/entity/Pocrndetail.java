@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,11 +17,11 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "pocrndetail")
 @IdClass(PocrndetailPK.class)
-@EqualsAndHashCode(of = { "zid","xrow", "xcrnnum" }, callSuper = false)
-public class Pocrndetail extends AbstractModel<String>{
-	
+@EqualsAndHashCode(of = { "zid", "xrow", "xcrnnum" }, callSuper = false)
+public class Pocrndetail extends AbstractModel<String> {
+
 	private static final long serialVersionUID = -3661015633860005572L;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
@@ -35,29 +36,31 @@ public class Pocrndetail extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xrow")
 	private int xrow;
-	
+
 	@Column(name = "xunit")
 	private String xunit;
-	
+
 	@Column(name = "xitem")
 	private String xitem;
-	
+
 	@Column(name = "xqtyord")
 	private BigDecimal xqtyord;
-	
+
 	@Column(name = "xqtygrn")
 	private BigDecimal xqtygrn;
-	
+
 	@Column(name = "xrate")
 	private BigDecimal xrate;
-	
+
 	@Column(name = "xlineamt")
 	private BigDecimal xlineamt;
-	
+
 	@Column(name = "xdocrow")
 	private int xdocrow;
-	
+
 	@Column(name = "xlong")
 	private String xlong;
 
+	@Transient
+	private String xitemname;
 }

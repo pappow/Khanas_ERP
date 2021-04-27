@@ -276,7 +276,14 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xordernum, Model model){
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
 		if(oh == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Sales order not found in the system");
+			return responseHelper.getResponse();
+		}
+
+		// check chalan has any sales order assigned
+		List<Opordheader> allAssigendSalesOrder = opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum);
+		if(allAssigendSalesOrder == null || allAssigendSalesOrder.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("This chalan has no sales order assigned");
 			return responseHelper.getResponse();
 		}
 

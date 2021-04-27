@@ -64,7 +64,7 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "xpornum")
 	private String xpornum;
 
-	@Column(name= "xtypetrn")
+	@Column(name = "xtypetrn")
 	private String xtypetrn;
 
 	@Column(name = "xtrn")
@@ -84,65 +84,67 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Transient
 	private String branchname;
-	
-	//Following variables are added for Convention Management
-	
-	@Column(name="xfunction")
+
+	// Following variables are added for Convention Management
+
+	@Column(name = "xfunction")
 	private String xfunction;
 
-	@Column(name="xtotguest")
+	@Column(name = "xtotguest")
 	private Integer xtotguest;
 
-	@Column(name="xbookdate")
+	@Column(name = "xbookdate")
 	@Temporal(TemporalType.DATE)
 	private Date xbookdate;
 
-	@Column(name="xfuncdate")
+	@Column(name = "xfuncdate")
 	@Temporal(TemporalType.DATE)
 	private Date xfuncdate;
 
-	@Column(name="xstarttime")
+	@Column(name = "xstarttime")
 	private String xstarttime;
 
-	@Column(name="xendtime")
+	@Column(name = "xendtime")
 	private String xendtime;
 
-	@Column(name="xfacamt")
+	@Column(name = "xfacamt")
 	private BigDecimal xfacamt;
 
-	@Column(name="xfoodamt")
+	@Column(name = "xfoodamt")
 	private BigDecimal xfoodamt;
 
-	@Column(name="xhallamt")
+	@Column(name = "xhallamt")
 	private BigDecimal xhallamt;
-	
-	@Column(name="xdiscamt")
+
+	@Column(name = "xdiscamt")
 	private BigDecimal xdiscamt;
-	
+
 	@Column(name = "xtotamt")
 	private BigDecimal xtotamt;
-	
+
 	@Column(name = "xgrandtot")
 	private BigDecimal xgrandtot;
-	
+
 	@Column(name = "xadvamt")
 	private BigDecimal xadvamt;
-	
-	//Following variables are added for Convention Management (Room Booking)
-	
+
+	// Following variables are added for Convention Management (Room Booking)
+
 	@Column(name = "xcheckindate")
 	@Temporal(TemporalType.DATE)
 	private Date xcheckindate;
-	
+
 	@Column(name = "xcheckoutdate")
 	@Temporal(TemporalType.DATE)
 	private Date xcheckoutdate;
-	
+
 	@Column(name = "xroomamt")
 	private BigDecimal xroomamt;
-	
+
+	@Column(name = "xdornum")
+	private String xdornum;
+
 	@Transient
 	private boolean isbooked;
-	
-	
+
 }

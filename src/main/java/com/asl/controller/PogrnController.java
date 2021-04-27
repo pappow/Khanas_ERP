@@ -396,25 +396,30 @@ public class PogrnController extends ASLAbstractController {
 		// Get GRN items to copy them in CRN.
 		List<PogrnDetail> pogrnDetailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
 		List<Pocrndetail> detailsList = new ArrayList<>();
-		for (int i = 0; i < pogrnDetailList.size(); i++) {
-			Pocrndetail pocrnDetail = new Pocrndetail();
-			// Copying PO items to GRN items.
-			BeanUtils.copyProperties(pogrnDetailList.get(i), pocrnDetail, "xrow", "xnote");
-			pocrnDetail.setXcrnnum(pocrnHeader.getXcrnnum());
-			pocrnDetail.setXqtygrn(pogrnDetailList.get(i).getXqtygrn());
-			detailsList.add(pocrnDetail);
+		if(pogrnDetailList != null && !pogrnDetailList.isEmpty()) {
+			for (int i = 0; i < pogrnDetailList.size(); i++) {
+				Pocrndetail pocrnDetail = new Pocrndetail();
+				// Copying PO items to GRN items.
+				BeanUtils.copyProperties(pogrnDetailList.get(i), pocrnDetail, "xrow", "xnote");
+				pocrnDetail.setXcrnnum(pocrnHeader.getXcrnnum());
+				pocrnDetail.setXqtygrn(pogrnDetailList.get(i).getXqtygrn());
+				pocrnDetail.setXunit(pogrnDetailList.get(i).getXunitpur());
+				detailsList.add(pocrnDetail);
+			}
 		}
 
-		try {
-			long dcount = pocrnService.saveDetails(detailsList);
-			if(dcount == 0) {
-				responseHelper.setErrorStatusAndMessage("GRN Return detail not saved");
+		if(!detailsList.isEmpty()) {
+			try {
+				long dcount = pocrnService.saveDetails(detailsList);
+				if(dcount == 0) {
+					responseHelper.setErrorStatusAndMessage("GRN Return detail not saved");
+					return responseHelper.getResponse();
+				}
+			} catch (ServiceException e) {
+				log.error(ERROR, e.getMessage(), e);
+				responseHelper.setErrorStatusAndMessage(e.getMessage());
 				return responseHelper.getResponse();
 			}
-		} catch (ServiceException e) {
-			log.error(ERROR, e.getMessage(), e);
-			responseHelper.setErrorStatusAndMessage(e.getMessage());
-			return responseHelper.getResponse();
 		}
 
 		// Update PoGRNHeader Status with pocrn reference

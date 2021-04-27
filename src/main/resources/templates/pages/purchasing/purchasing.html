@@ -104,6 +104,13 @@
 											<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
+										<td><a th:href="@{/procurement/grnreturn}" th:text="${menuProfile.M0310.screenprompt}">GRN Return</a></td>
+										<td>
+											<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 									<tr th:if="${isCentral and menuProfile.M0307 ne null and menuProfile.M0307.display}">
 										<td><a th:href="@{/purchasing/supplierpayment}" th:text="${menuProfile.M0307.screenprompt}">Supplier Payment</a></td>
 										<td>
@@ -122,12 +129,7 @@
 											<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
-										<td><a th:href="@{/procurement/grnreturn}" th:text="${menuProfile.M0310.screenprompt}">GRN Return</a></td>
-										<td>
-											<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 
 								</table>
 							</div>

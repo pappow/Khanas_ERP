@@ -290,6 +290,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 		if(salesSavedCount == salesOrders.size()) {
 			chalan.setInvoicecreated(true);
+			chalan.setXdornum(savedDeliveryChalan.getXdornum());
 			opordMapper.updateOpordHeader(chalan);
 		}
 
