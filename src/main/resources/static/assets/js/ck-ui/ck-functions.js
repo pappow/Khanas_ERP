@@ -241,6 +241,14 @@ function bindTableButtonsEvent(targetTable){
 			doItemDelete(url);
 		}
 	});
+	
+	// Confirm button
+	$(targetTable).find('button.btn-confirm').off('click').on('click', function(e){
+		var url = $(this).data('url');
+		if(confirm("Are you sure you want to make it confirm?")){
+			doItemConfirm(url);
+		}
+	});
 }
 
 

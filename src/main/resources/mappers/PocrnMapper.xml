@@ -8,7 +8,7 @@
 			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrncrn}', 6) FROM DUAL
 		</selectKey> -->
 		INSERT INTO Pocrnheader
-		(   
+		(
 			xcrnnum,
 			xgrnnum,
 			xdate,
@@ -25,7 +25,6 @@
 			xnote,
 			xtype,
 			xdategl,
-			
 			zid,
 			zauserid,
 			zuuserid,
@@ -53,7 +52,6 @@
 			#{xnote, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
 			#{xdategl, jdbcType=DATE},
-			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -64,35 +62,34 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
-		<update id="updatePocrnHeader" parameterType="Pocrnheader">
-		UPDATE
-		PocrnHeader
-		SET		
-		xdate=#{xdate, jdbcType=DATE},
-		xvoucher=#{xvoucher, jdbcType=VARCHAR},
-		xcus=#{xcus, jdbcType=VARCHAR},
-		xsup=#{xsup, jdbcType=VARCHAR},
-		xstatusgrn=#{xstatusgrn, jdbcType=VARCHAR},
-		xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
-		xwh=#{xwh, jdbcType=VARCHAR},
-		xref=#{xref, jdbcType=VARCHAR},
-		xstatusap=#{xstatusap, jdbcType=VARCHAR},
-		xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
-		xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
-		xnote=#{xnote, jdbcType=VARCHAR},
-		xtype=#{xtype, jdbcType=VARCHAR},
-		xdategl=#{xdategl, jdbcType=DATE},
 
-		zid=#{zid, jdbcType=VARCHAR},
-		zuuserid=#{zuuserid, jdbcType=VARCHAR},
-		zaip=#{zaip, jdbcType=VARCHAR},
-		zuip=#{zuip, jdbcType=VARCHAR},
-		zactive=#{zactive, jdbcType=VARCHAR},
-		ztime=#{ztime, jdbcType=TIMESTAMP},
-		zutime=#{zutime, jdbcType=TIMESTAMP}
+	<update id="updatePocrnHeader" parameterType="Pocrnheader">
+		UPDATE
+			PocrnHeader
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xvoucher=#{xvoucher, jdbcType=VARCHAR},
+			xcus=#{xcus, jdbcType=VARCHAR},
+			xsup=#{xsup, jdbcType=VARCHAR},
+			xstatusgrn=#{xstatusgrn, jdbcType=VARCHAR},
+			xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xref=#{xref, jdbcType=VARCHAR},
+			xstatusap=#{xstatusap, jdbcType=VARCHAR},
+			xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+			xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xdategl=#{xdategl, jdbcType=DATE},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-		xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' 
+			xcrnnum=#{xcrnnum} 
+			AND zid=#{zid} 
 	</update>
 
 	<insert id="savePocrnDetail" parameterType="Pocrndetail">
@@ -111,7 +108,6 @@
 			xlineamt,
 			xdocrow,
 			xlong,
-
 			zid,
 			zauserid,
 			zuuserid,
@@ -133,7 +129,6 @@
 			#{xlineamt, jdbcType=DECIMAL},
 			#{xdocrow, jdbcType=INTEGER},
 			#{xlong, jdbcType=VARCHAR},
-			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -157,7 +152,6 @@
 			xlineamt=#{xrate, jdbcType=DECIMAL},
 			xdocrow=#{xdocrow, jdbcType=INTEGER},
 			xlong=#{xlong, jdbcType=VARCHAR},
-			
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -173,7 +167,7 @@
 	<select id="findPocrnHeaderByXcrnnum" resultType="Pocrnheader">
 		SELECT * FROM Pocrnheader WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="findPocrnHeaderByXgrnnum" resultType="Pocrnheader">
 		SELECT * FROM Pocrnheader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid} AND zactive='1'
 	</select>
@@ -185,28 +179,38 @@
 	<select id="getAllPocrnheader" resultType="Pocrnheader">
 		SELECT * FROM Pocrnheader WHERE zid=#{zid} AND zactive='1' ORDER BY xcrnnum DESC
 	</select>
-	
+
 	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
-		SELECT * FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
+		SELECT 
+			pocrndetail.*,
+			Func_GetItemNameWZID(xitem, zid) AS xitemname
+		FROM 
+			pocrndetail 
+		WHERE 
+			xcrnnum=#{xcrnnum} 
+			AND zid=#{zid} 
+			AND zactive='1' 
+		ORDER BY 
+			xrow ASC
 	</select>
-	
+
 	<select id = "procConfirmCRN" statementType = "CALLABLE">
 		{call PO_confirmCRN(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, 
 			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-	
+
 	<select id = "procIssuePricing" statementType = "CALLABLE">
 		{call PROC_Issue_Pricing(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
 			#{xtrnnum, jdbcType = VARCHAR, mode = IN}, #{xwh, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-	
+
 	<select id = "procTransferPRtoAP" statementType = "CALLABLE">
 		{call PR_transferPRtoAP(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN},
 			#{xcrnnum, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-	
+
 	<select id="findPocrnXstatuscrn" resultType="Pocrnheader">
 		SELECT * FROM Pocrnheader WHERE (UPPER(xstatuscrn) LIKE '%' || #{xstatuscrn} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 </mapper>

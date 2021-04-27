@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Purchase Order</title>
+<title>GRN Return</title>
 <meta th:remove="tag" th:include="commons :: common-meta" />
 <meta th:remove="tag" th:include="commons :: common-css" />
 <meta th:remove="tag" th:include="commons :: common-js" />
@@ -57,20 +57,11 @@
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" th:href="@{/procurement/grnreturn/confirmprn/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-success confirmprn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == true}" th:href="@{/procurement/grnreturn/archive/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.zactive == false}" th:href="@{/procurement/grnreturn/restore/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/procurement/grnreturn/save}" th:object="${pocrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(pocrnheader.xcrnnum)}" class="form-control" th:field="*{xgrnnum}"> -->
 											<input type="hidden" th:if="${not #strings.isEmpty(pocrnheader.xcrnnum)}" class="form-control" th:field="*{xcrnnum}">
-											<!-- <input type="hidden" class="form-control" th:field="*{xtotamt}"> -->
 											<div class="row">
 												<div class="col-md-6">
 
@@ -82,14 +73,14 @@
 															</select>
 														</div>
 													</div>
-													
+
 													<div class="form-group" th:if="${not #strings.isEmpty(pocrnheader.xcrnnum)}">
 														<label class="control-label col-md-4" for="xcrnnum">CRN Number : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcrnnum}" disabled="disabled">
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xgrnnum">GRN Number : </label>
 														<div class="col-sm-8">
@@ -110,22 +101,6 @@
 															<input type="text" class="form-control" th:value="${pocrnheader.xcus}" disabled/>
 														</div>
 													</div>
-													
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xinvnum">Supplier Bill No : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xinvnum}">
-														</div>
-													</div> -->
-
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xstatuspor">Purchase Type : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatuspor}">
-																<option th:each="s : ${postatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div> -->
 
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
@@ -149,27 +124,24 @@
 															</select>
 														</div>
 													</div>
-													
-													
 
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>
+														<label class="control-label col-md-4" for="xstatucgrn">Status : </label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatusgrn}">
-																<option th:each="s : ${grnStatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
+															<input type="hidden" class="form-control" th:field="*{xstatuscrn}"/>
+															<input type="text" class="form-control" th:value="*{xstatuscrn}" disabled="disabled"/>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xvoucher}">
 														</div>
 													</div>
-												
+
 													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
 														<div class="col-md-6">
@@ -224,8 +196,7 @@
 									</div>
 								</section>
 							</div>
-							
-							
+
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
@@ -236,6 +207,7 @@
 											<thead>
 												<tr>
 													<th>Return Number</th>
+													<th>GRN Number</th>
 													<th>Date</th>
 													<th>Warehouse</th>
 													<th>Supplier Number</th>
@@ -247,10 +219,11 @@
 													<td>
 														<a th:href="@{/procurement/grnreturn/} + ${pocrn.xcrnnum}" th:text="${pocrn.xcrnnum}"></a>
 													</td>
+													<td th:text="${pocrn.xgrnnum}"></td>
 													<td  th:text="${#dates.format(pocrn.xdate, df)}"></td>
 													<td th:text="${pocrn.xwh}"></td>
 													<td th:text="${pocrn.xcus}"></td>
-													<td th:text="${pocrn.xstatusgrn}"></td>
+													<td th:text="${pocrn.xstatuscrn}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -259,7 +232,7 @@
 
 							</div>
 						</div>
-						
+
 					</div>
 
 					<div class="col-md-12">
@@ -274,11 +247,13 @@
 										<tr>
 											<th>Row</th>
 											<th>Item Code</th>
-											<th>Note</th>
 											<th>Qty</th>
 											<th>Rate</th>
+											<th>Unit</th>
+											<th>Line Amount</th>
+											<th>Note</th>
 											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/new/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -286,13 +261,15 @@
 										<tr th:each="d : ${pocrnDetailsList}">
 											<td th:text="${d.xrow}"></td>
 											<td>
-												<a href="" th:text="${d.xitem}"></a>
+												<a href="" th:text="${d.xitemname}"></a>
 											</td>
-											<td th:text="${d.xlong}"></td>
 											<td th:text="${d.xqtygrn}"></td>
 											<td th:text="${d.xrate}"></td>
+											<td th:text="${d.xunit}"></td>
+											<td th:text="${d.xlineamt}"></td>
+											<td th:text="${d.xlong}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/procurement/grnreturn/} + ${pocrnheader.xcrnnum} + '/pogrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
@@ -306,7 +283,7 @@
 		</div>
 		
 	<!-- Modal -->
-	<div id="pogrndetailmodal-section"></div>
+	<div id="pocrndetailmodal-section"></div>
 
 	<!-- Footer section -->
 	<div class="footer-section" th:include="commons :: footer-section"></div>

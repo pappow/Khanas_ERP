@@ -38,6 +38,8 @@ public interface MoService {
 
 	public void processProduction(String batch, String action, String errseq);
 
+	public void bulkProcessProduction(List<String> batchList, String action, String errseq);
+
 	public Modetail findDefaultModetailByXbatch(String xbatch);
 
 	public long deleteModetail(Modetail modetail);

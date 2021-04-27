@@ -87,6 +87,17 @@
 												<a target="_blank" th:href="@{/production/batch/print/} + ${chalan.xordernum}"><i class="fas fa-print"></i> Print</a>
 											</h1>
 											<thead th:if="${not #lists.isEmpty(batchList)}">
+												<tr th:if="${not productioncompleted}" style="background: #ddd; border: 1px solid #000;">
+													<th style="text-align: right; border: 1px solid #000;" colspan="8">Bulk Process</th>
+													<th style="text-align: center; border: 1px solid #000;">
+														<button title="Process Production" 
+																type="button" 
+																class="btn btn-warning btn-confirm editmode" 
+																th:attr="data-url=@{/production/batch/bulkprocessproduction/} + ${chalan.xordernum}">
+															<i class="fas fa-mortar-pestle"></i>
+														</button>
+													</th>
+												</tr>
 												<tr>
 													<th>SN.</th>
 													<th>Batch</th>
@@ -124,13 +135,15 @@
 														<button title="Add/Edit items" th:if="${b.bomexploaded}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
 													</td>
 													<td style="text-align: center">
-														<button th:if="${b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-delete editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
+														<button th:if="${b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-confirm editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
 														<span th:if="${b.xstatusmor eq 'Completed'}">Process completed</span>
 													</td>
 												</tr>
 											</tbody>
 											<script>
 												$(document).ready(function(){
+													bindTableButtonsEvent($('#batchdetailtable'));
+
 													$('.batch-submit').off('click').on('click', function(e){
 														e.preventDefault();
 														var form = $(this).parent('form');
@@ -165,7 +178,7 @@
 
 		<script type="text/javascript">
 			$(document).ready(function(){
-				
+
 				$('.query-submit-btn').on('click', function(e){
 					e.preventDefault();
 					submitMainForm();

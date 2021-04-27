@@ -119,6 +119,15 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void bulkProcessProduction(List<String> batchList, String action, String errseq) {
+		if(batchList == null || batchList.isEmpty()) return;
+		for(String batch : batchList) {
+			moMapper.processProduction(batch, action, errseq, sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername());
+		}
+	}
+
+	@Override
 	public Modetail findDefaultModetailByXbatch(String xbatch) {
 		if(StringUtils.isBlank(xbatch)) return null;
 		return moMapper.findModetailByXbatchAndXtype(xbatch, "Default", sessionManager.getBusinessId());

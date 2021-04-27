@@ -88,8 +88,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 
 	@Override
 	public List<Pocrndetail> findPocrnDetailByXcrnnum(String xcrnnum) {
-		if(StringUtils.isBlank(xcrnnum)) 
-			return Collections.emptyList();		
+		if(StringUtils.isBlank(xcrnnum)) return Collections.emptyList();
 		return pocrnMapper.findPocrnDetailByXcrnnum(xcrnnum, sessionManager.getBusinessId());
 	}
 
