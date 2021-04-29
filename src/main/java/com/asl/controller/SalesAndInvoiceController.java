@@ -3,7 +3,6 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -45,104 +45,115 @@ import com.asl.service.XtrnService;
 @Controller
 @RequestMapping("/salesninvoice/salesandinvoice")
 public class SalesAndInvoiceController extends ASLAbstractController {
-	
-	@Autowired
-	private OpdoService opdoService;
-	@Autowired
-	private OpcrnService opcrnService;
-	@Autowired
-	private XcodesService xcodeService;
-	@Autowired
-	private XtrnService xtrnService;
-	@Autowired
-	private VataitService vataitService;
-	@Autowired
-	private CacusService cacusService;
-	
+
+	@Autowired private OpdoService opdoService;
+	@Autowired private OpcrnService opcrnService;
+	@Autowired private XcodesService xcodeService;
+	@Autowired private XtrnService xtrnService;
+	@Autowired private VataitService vataitService;
+	@Autowired private CacusService cacusService;
+
 	@GetMapping
 	public String loadInvoicePage(Model model) {
-		
+
 		model.addAttribute("opdoheader", getDefaultOpdoHeader());
-		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode()));
 		model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
-		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
-		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
-		model.addAttribute("payStatusList", new ArrayList<>());
-		model.addAttribute("arStatusList", new ArrayList<>());
-		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode()));
+
+		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
-		
+
+		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("payStatusList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode(), Boolean.TRUE));
+
 		return "pages/salesninvoice/salesandinvoice/opdo";
 	}
-	
+
 	@GetMapping("/{xdornum}")
 	public String loadInvoicePage(@PathVariable String xdornum, Model model) {
-		
-		Opdoheader data = opdoService.findOpdoHeaderByXdornum(xdornum); 
-		if(data == null) data = getDefaultOpdoHeader();
+		Opdoheader data = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if (data == null) return "redirect:/salesninvoice/salesandinvoice";
 
 		model.addAttribute("opdoheader", data);
-		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode()));
 		model.addAttribute("allOpdoHeader", opdoService.findAllOpdoHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode()));
-		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
-		model.addAttribute("payStatusList", new ArrayList<>());
-		model.addAttribute("arStatusList", new ArrayList<>());		
-		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode()));
+
+		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
+
+		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("payStatusList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode(), Boolean.TRUE));
+
 		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
-		
+
 		return "pages/salesninvoice/salesandinvoice/opdo";
 	}
-	
+
 	private Opdoheader getDefaultOpdoHeader() {
 		Opdoheader opdoheader = new Opdoheader();
 		opdoheader.setXtype(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
-		//pogrn.setXtypetrn("Purchase");
+		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXstatusord("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
 		opdoheader.setXgrandtot(BigDecimal.ZERO);
+		opdoheader.setXvatait("No Vat");
 		opdoheader.setXvatamt(BigDecimal.ZERO);
+		opdoheader.setXait(BigDecimal.ZERO);
 		opdoheader.setXdiscamt(BigDecimal.ZERO);
 		opdoheader.setXpaid(BigDecimal.ZERO);
 		opdoheader.setXchange(BigDecimal.ZERO);
-		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
-		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
-		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		opdoheader.setXpaystatus("Due");
 		return opdoheader;
 	}
-	
-	
+
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(Opdoheader opdoHeader, BindingResult bindingResult){
-				
-		if((opdoHeader == null || StringUtils.isBlank(opdoHeader.getXtype()))) {
+	public @ResponseBody Map<String, Object> save(Opdoheader opdoHeader, BindingResult bindingResult) {
+		if (opdoHeader == null || StringUtils.isBlank(opdoHeader.getXtype())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		// Validate
-		if(StringUtils.isBlank(opdoHeader.getXcus())) {
+		if (StringUtils.isBlank(opdoHeader.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Please select a customer to create invoice");
 			return responseHelper.getResponse();
 		}
 
-		// if existing record
-		
-		
-		opdoHeader.setXgrandtot((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()));
-		if(opdoHeader.getXtotamt().compareTo(opdoHeader.getXpaid()) == -1)
+		Vatait vatait = vataitService.findVataitByXvatait(opdoHeader.getXvatait());
+		if(opdoHeader.getXtotamt() == null) opdoHeader.setXtotamt(BigDecimal.ZERO);
+		if(StringUtils.isNotBlank(opdoHeader.getXvatait()) && !"No Vat".equalsIgnoreCase(opdoHeader.getXvatait()) && vatait != null) {
+			if(opdoHeader.getXvatamt() == null) opdoHeader.setXvatamt((opdoHeader.getXtotamt().multiply(vatait.getXvat())).divide(BigDecimal.valueOf(100)));
+			if(opdoHeader.getXait() == null) opdoHeader.setXait((opdoHeader.getXtotamt().multiply(vatait.getXait())).divide(BigDecimal.valueOf(100)));
+		} else {
+			if(opdoHeader.getXvatamt() == null) opdoHeader.setXvatamt(BigDecimal.ZERO);
+			if(opdoHeader.getXait() == null) opdoHeader.setXait(BigDecimal.ZERO);
+		}
+		if(opdoHeader.getXdiscamt() == null) opdoHeader.setXdiscamt(BigDecimal.ZERO);
+		if(opdoHeader.getXpaid() == null) opdoHeader.setXpaid(BigDecimal.ZERO);
+		if(opdoHeader.getXchange() == null) opdoHeader.setXchange(BigDecimal.ZERO);
+		BigDecimal grandTotal = (opdoHeader.getXtotamt().add(opdoHeader.getXvatamt()).add(opdoHeader.getXait())).subtract(opdoHeader.getXdiscamt());
+		opdoHeader.setXgrandtot(grandTotal);
+
+		if (opdoHeader.getXgrandtot().compareTo(opdoHeader.getXpaid()) == -1) {
 			opdoHeader.setXchange(opdoHeader.getXpaid().subtract(opdoHeader.getXgrandtot()));
-		else
+		} else {
 			opdoHeader.setXchange(BigDecimal.ZERO);
+		}
+
+		// if existing record
 		Opdoheader existOpdoHeader = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
-		if(existOpdoHeader != null) {
-			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xdate");
+		if (existOpdoHeader != null) {
+			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xtypetrn", "xdate", "xtrnopdo", "xtrn");
 			long count = opdoService.update(existOpdoHeader);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
@@ -153,16 +164,15 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 
 		// If new
 		long count = opdoService.save(opdoHeader);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoHeader.getXdornum());
 		return responseHelper.getResponse();
-		
 	}
-	
+
 	@GetMapping("/opdodetail/{xdornum}")
 	public String reloadOpdoDetailTable(@PathVariable String xdornum, Model model) {
 		List<Opdodetail> detailList = opdoService.findOpdoDetailByXdornum(xdornum);
@@ -172,19 +182,19 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("opdoheader", header);
 		return "pages/salesninvoice/salesandinvoice/opdo::opdodetailtable";
 	}
-	
+
 	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
 	public String openOpdoDetailModal(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
 
-		if("new".equalsIgnoreCase(xrow)) {
-			Opdodetail opdodetail= new Opdodetail();
+		if ("new".equalsIgnoreCase(xrow)) {
+			Opdodetail opdodetail = new Opdodetail();
 			opdodetail.setXdornum(xdornum);
 			opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			opdodetail.setXqtyord(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			model.addAttribute("opdodetail", opdodetail);
 		} else {
 			Opdodetail opdodetail = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
-			if(opdodetail == null) {
+			if (opdodetail == null) {
 				opdodetail = new Opdodetail();
 				opdodetail.setXdornum(xdornum);
 				opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
@@ -195,18 +205,23 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 		return "pages/salesninvoice/salesandinvoice/opdodetailmodal::opdodetailmodal";
 	}
-	
+
 	@PostMapping("/opdodetail/save")
-	public @ResponseBody Map<String, Object> saveOpdodetail(Opdodetail opdoDetail){
-		
-		if(opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) {
+	public @ResponseBody Map<String, Object> saveOpdodetail(Opdodetail opdoDetail) {
+		if (opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		
+		if(StringUtils.isBlank(opdoDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Item not selected! Please select an item");
+			return responseHelper.getResponse();
+		}
+
 		// Check item already exist in detail list
-		if(opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(), opdoDetail.getXitem()) != null) {
-			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
+		if (opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(),
+				opdoDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage(
+					"Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
 		}
 
@@ -214,128 +229,135 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
-		if(existDetail != null) {
+		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(),
+				opdoDetail.getXrow());
+		if (existDetail != null) {
 			BeanUtils.copyProperties(opdoDetail, existDetail, "xdornum", "xrow");
 			long count = opdoService.updateDetail(existDetail);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  opdoDetail.getXdornum());
+			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoDetail.getXdornum());
 			responseHelper.setSuccessStatusAndMessage("Invoice item updated successfully");
 			return responseHelper.getResponse();
 		}
 
 		// if new detail
 		long count = opdoService.saveDetail(opdoDetail);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  opdoDetail.getXdornum());
-		responseHelper.setSuccessStatusAndMessage("Invoice item saved successfully");		
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoDetail.getXdornum());
+		responseHelper.setSuccessStatusAndMessage("Invoice item saved successfully");
 		return responseHelper.getResponse();
 	}
-	
+
 	@PostMapping("{xdornum}/opdodetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
+	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow,
+			Model model) {
 		Opdodetail pd = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
-		if(pd == null) {
+		if (pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		long count = opdoService.deleteDetail(pd);
-		if(count == 0) {
+		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" +  xdornum);
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
 		return responseHelper.getResponse();
 	}
-	
+
 	@GetMapping("/confirmopdo/{xdornum}")
-	public @ResponseBody Map<String, Object> confirmOpdo(@PathVariable String xdornum){
-		if(StringUtils.isBlank(xdornum)) {
+	public @ResponseBody Map<String, Object> confirmOpdo(@PathVariable String xdornum) {
+		if (StringUtils.isBlank(xdornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
-		
-		if(opdoDetailList.size()==0){
+		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
+				.intValue();
+
+		if (opdoDetailList.size() == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		if(!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
-			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
+		if (!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
+					.intValue();
 			opdoHeader.setXpaid(BigDecimal.valueOf(paid));
 		}
 		Integer xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99)).intValue();
-		
-		if(grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+
+		if (grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
 			responseHelper.setErrorStatusAndMessage("Paid amount not to be less than Receivable!");
 			return responseHelper.getResponse();
 		}
-		
-		//Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
-		//PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
-		
+
+		// Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		// PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+
 		String p_seq;
-		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procConfirmDO(xdornum, p_seq);
-			//Error check here for procConfrimDo
+			// Error check here for procConfrimDo
 			String em = getProcedureErrorMessages(p_seq);
-			if(StringUtils.isNotBlank(em)) {
+			if (StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
-			
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procIssuePricing(opdoHeader.getXdocnum(), opdoHeader.getXwh(), p_seq);
-			//Error check here for procIssuePricing
+			// Error check here for procIssuePricing
 			em = getProcedureErrorMessages(p_seq);
-			if(StringUtils.isNotBlank(em)) {
+			if (StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
-			
+
 		}
-		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())){
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procTransferOPtoAR(xdornum, "opdoheader", p_seq);
-			//Error check here for procTransferOPtoAR
+			// Error check here for procTransferOPtoAR
 			String em = getProcedureErrorMessages(p_seq);
-			if(StringUtils.isNotBlank(em)) {
+			if (StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
-			
+
 		}
-			
+
 		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
 
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
 		return responseHelper.getResponse();
 	}
-	
+
 	@GetMapping("/returnsales/{xdornum}")
-	public @ResponseBody Map<String, Object> retrunsales(@PathVariable String xdornum){
-		if(StringUtils.isBlank(xdornum)) {
+	public @ResponseBody Map<String, Object> retrunsales(@PathVariable String xdornum) {
+		if (StringUtils.isBlank(xdornum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		// Validate
 
 		// Get OpdoHeader record by xdornum
-		Opdoheader opdoheader= opdoService.findOpdoHeaderByXdornum(xdornum);
-		
-		if(opdoheader != null) {
+		Opdoheader opdoheader = opdoService.findOpdoHeaderByXdornum(xdornum);
+
+		if (opdoheader != null) {
 			Opcrnheader opcrnheader = new Opcrnheader();
 			BeanUtils.copyProperties(opdoheader, opcrnheader, "xdate", "xtype", "xtypetrn", "xtrn");
 			opcrnheader.setXdornum(opdoheader.getXdornum());
@@ -346,52 +368,51 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			opcrnheader.setXtypetrn("CRN Number");
 			opcrnheader.setXtrncrn(TransactionCodeType.SRN_RETURN.getCode());
 			opcrnheader.setXtrn(TransactionCodeType.SRN_RETURN.getdefaultCode());
-			
+
 			long count = opcrnService.save(opcrnheader);
-			if(count == 0) {
+			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			
+
 			opcrnheader = opcrnService.findOpcrnHeaderByXdornum(xdornum);
-			
-			//Get Sales Order details to Copy them in CRN
+
+			// Get Sales Order details to Copy them in CRN
 			List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
 			Opcrndetail opcrnDetail;
-			
-			for(int i=0; i< opdoDetailList.size(); i++) {
+
+			for (int i = 0; i < opdoDetailList.size(); i++) {
 				opcrnDetail = new Opcrndetail();
 				BeanUtils.copyProperties(opdoDetailList.get(i), opcrnDetail, "xrow", "xnote");
 				opcrnDetail.setXcrnnum(opcrnheader.getXcrnnum());
 				opcrnDetail.setXunit(opdoDetailList.get(i).getXunitsel());
-				//opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());				
-				
+				// opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());
+
 				long nCount = opcrnService.saveDetail(opcrnDetail);
-				
-				// Update Inventory				
-				if(nCount == 0) {
+
+				// Update Inventory
+				if (nCount == 0) {
 					responseHelper.setStatus(ResponseStatus.ERROR);
 					return responseHelper.getResponse();
-				}				
+				}
 			}
-			
-			//Update PoordHeader Status
+
+			// Update PoordHeader Status
 			/*
-			opdoheader.setXstatusord("Returned"); 
-			long pCount = opdoService.update(opdoheader);
-			if(pCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}*/	
-			 
+			 * opdoheader.setXstatusord("Returned"); long pCount =
+			 * opdoService.update(opdoheader); if(pCount == 0) {
+			 * responseHelper.setStatus(ResponseStatus.ERROR); return
+			 * responseHelper.getResponse(); }
+			 */
+
 			responseHelper.setSuccessStatusAndMessage("Sales Returned successfully");
 			responseHelper.setRedirectUrl("/salesninvoice/salesreturn/" + opcrnheader.getXcrnnum());
 			return responseHelper.getResponse();
-		}	
+		}
 		responseHelper.setStatus(ResponseStatus.ERROR);
 		return responseHelper.getResponse();
 	}
-	
+
 	@GetMapping("/print/{pType}/{xdornum}")
 	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
 			@PathVariable String xdornum) {
@@ -402,7 +423,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
-		
+
 		if (oh == null) {
 			message = "Invoice not found to print";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -413,8 +434,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			message = "Invoice is not assigned to a chalan";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
+
+		// SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
 
 		// for(Opdoheader so : salesOrders) {
 
@@ -440,10 +461,13 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		if ("invoice".equalsIgnoreCase(pType)) {
 			report.setReportName("Invoice Order");
 
-			salesOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder
+					.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
 			salesOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
-			salesOrder.setDiscountAmount(oh.getXdiscamt() != null ? oh.getXdiscamt().toString() : BigDecimal.ZERO.toString());
-			salesOrder.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setDiscountAmount(
+					oh.getXdiscamt() != null ? oh.getXdiscamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setGrandTotalAmount(
+					oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
 		}
 
 		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
@@ -459,7 +483,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 
 				if ("invoice".equalsIgnoreCase(pType)) {
 					item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
-					item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
+					item.setItemTotalAmount(
+							it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
 				}
 
 				salesOrder.getItems().add(item);
@@ -481,6 +506,5 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		headers.setContentType(new MediaType("application", "pdf"));
 		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
 	}
-
 
 }

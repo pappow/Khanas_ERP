@@ -41,12 +41,9 @@ import com.asl.service.XtrnService;
 @RequestMapping("/salesninvoice/deliveryorderchalan")
 public class DeliveryOrderChalanController extends ASLAbstractController {
 
-	@Autowired
-	private OpdoService opdoService;
-	@Autowired
-	private XtrnService xtrnService;
-	@Autowired
-	private CacusService cacusService;
+	@Autowired private OpdoService opdoService;
+	@Autowired private XtrnService xtrnService;
+	@Autowired private CacusService cacusService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

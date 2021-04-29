@@ -8,7 +8,7 @@
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Opdoheader
-		(   
+		(
 			xdornum,
 			xdocnum,
 			xdate,
@@ -40,6 +40,8 @@
 			xtrn,
 			xchalancreated,
 			requisitionnumber,
+			xvatait,
+			xait,
 			zid,
 			zauserid,
 			zuuserid,
@@ -82,6 +84,8 @@
 			#{xtrn, jdbcType=VARCHAR},
 			#{xchalancreated, jdbcType=BOOLEAN},
 			#{requisitionnumber, jdbcType=VARCHAR},
+			#{xvatait, jdbcType=VARCHAR},
+			#{xait, jdbcType=DECIMAL},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -126,6 +130,8 @@
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
 			xchalancreated=#{xchalancreated, jdbcType=BOOLEAN},
 			requisitionnumber=#{requisitionnumber, jdbcType=VARCHAR},
+			xvatait=#{xvatait, jdbcType=VARCHAR},
+			xait=#{xait, jdbcType=DECIMAL},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},

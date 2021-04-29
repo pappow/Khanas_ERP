@@ -25,7 +25,7 @@
 											th:value="${imtordetail.xitem}" 
 											th:attr="search-url='search/caitem'"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
-									<input type="hidden" id="search-des" value=""/>
+									<input type="hidden" id="search-des" th:value="*{xitem}"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -72,8 +72,11 @@
 				ck.ui.config.buttonevent();			
 				
 				// Get item purchase unit
-				$('.xitemsearch').on('blur', function(){										
+				$('.xitemsearch').on('blur', function(){
 					setTimeout(() => {
+						
+						if($('input[name="xitem"]').val() == '') return;
+						
 						$.ajax({
 							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
