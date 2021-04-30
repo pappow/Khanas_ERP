@@ -245,15 +245,22 @@
 		WHERE
 			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
 	</update>
-	
+
 	<update id="updateOpdoHeaderTotalAmtAndGrandTotalAmt">
 		UPDATE 
-			Opdoheader
+			opdoheader oph
 		SET
-			xtotamt=(SELECT SUM(xlineamt) FROM Opdodetail WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'),
-			xgrandtot=(SELECT SUM(xtotamt + xvatamt - xdiscamt) FROM Opdoheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1')
+			oph.xtotamt=Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid),
+			oph.xvatamt=(Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100,
+			oph.xait=(Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100,
+			oph.xgrandtot=  Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid) 
+							+ ((Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							+ ((Func_GetTotalAmtOpdoDetails(oph.xdornum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							- oph.xdiscamt
 		WHERE
-			xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+			oph.xdornum=#{xdornum} 
+			AND oph.zid=#{zid} 
+			AND oph.zactive='1'
 	</update>
 
 	<select id="findOpdoHeaderByXdornum" resultType="Opdoheader">

@@ -55,9 +55,9 @@ public class ProfileAllocationController extends ASLAbstractController {
 		model.addAttribute("pa", pa);
 
 		List<Profile> profiles = profileService.getAllProfiles();
-		model.addAttribute("mpcodes", profiles.parallelStream().filter(p -> ProfileType.M.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
-		model.addAttribute("rpcodes", profiles.parallelStream().filter(p -> ProfileType.R.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
-		model.addAttribute("upcodes", profiles.parallelStream().filter(p -> ProfileType.U.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
+		model.addAttribute("mpcodes", profiles.stream().filter(p -> ProfileType.M.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
+		model.addAttribute("rpcodes", profiles.stream().filter(p -> ProfileType.R.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
+		model.addAttribute("upcodes", profiles.stream().filter(p -> ProfileType.U.equals(p.getProfiletype()) && Boolean.TRUE.equals(p.getZactive())).collect(Collectors.toList()));
 		return "pages/system/usersentry/pa/pamodal::pamodal";
 	}
 

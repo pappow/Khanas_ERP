@@ -230,14 +230,6 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// Update status
-		ph.setXstatuspor("Confirmed");
-		long count = poordService.update(ph);
-		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
 		// Create sales order header
 		Opordheader oh = new Opordheader();
 		oh.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
@@ -275,6 +267,15 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 				responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
 				return responseHelper.getResponse();
 			}
+		}
+
+		// Update status and order reference
+		ph.setXstatuspor("Confirmed");
+		ph.setXordernum(savedoh.getXordernum());
+		long count = poordService.update(ph);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
 		}
 
 

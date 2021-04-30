@@ -20,7 +20,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
 import com.asl.mapper.OpordMapper;
-import com.asl.mapper.PoordMapper;
+import com.asl.service.CacusService;
 import com.asl.service.OpdoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +31,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 	@Autowired private OpdoMapper opdoMapper;
 	@Autowired private OpordMapper opordMapper;
-	@Autowired private PoordMapper poordMapper;
 	@Autowired private CaitemMapper caitemMapper;
+	@Autowired private CacusService cacusService;
 
 	@Override
 	public long save(Opdoheader opdoHeader) {
@@ -60,7 +60,6 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		opdoDetail.setZauserid(getAuditUser());
 		long count = opdoMapper.saveOpdoDetail(opdoDetail);
 		if(count != 0) { count = updateOpdoHeaderTotalAmtAndGrandTotalAmt(opdoDetail.getXdornum()); }
-		 
 		return count;
 	}
 
@@ -111,7 +110,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		if(StringUtils.isBlank(xdornum) || StringUtils.isBlank(xitem)) return null;
 		return opdoMapper.findOpdoDetailByXdornumAndXitem(xdornum, xitem, sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum) {
 		if(StringUtils.isBlank(xdornum))
@@ -232,12 +231,17 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXdocnum(savedDeliveryChalan.getXdornum());   // assign this sales to delivery chalan
 			sales.setXchalancreated(true);
 			sales.setXvatait("No Vat");
+			sales.setXtotamt(BigDecimal.ZERO);
+			sales.setXait(BigDecimal.ZERO);
+			sales.setXvatamt(BigDecimal.ZERO);
+			sales.setXdiscamt(BigDecimal.ZERO);
+			sales.setXgrandtot(BigDecimal.ZERO);
+			Cacus customer = cacusService.findCacusByXcuszid(salesOrder.getXcus());
+			if(customer != null) sales.setXcus(customer.getXcus());  // set branch reference for this sales
 
 			sales.setXordernum(salesOrder.getXordernum());  // set sales order reference
 			sales.setRequisitionnumber(salesOrder.getXpornum());  // set branch requisition number reference
 			sales.setZid(sessionManager.getBusinessId());
-			Cacus customer = poordMapper.findBranchCustomerByXcus(salesOrder.getXcus(), sessionManager.getBusinessId());
-			if(customer != null) sales.setXcus(customer.getXcus());   // set branch reference for this sales
 
 			long count = opdoMapper.saveOpdoHeader(sales);
 			if(count == 0) continue;
@@ -248,52 +252,42 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			if(savedSales == null) continue;
 
 			salesOrder.setXdornum(savedSales.getXdornum()); // now set sales reference back to sales order
-			opordMapper.saveOpordHeader(salesOrder); // updated sales order with sales reference
-
-			// total amount init for sales header
-			BigDecimal totalAmt = BigDecimal.ZERO;
+			opordMapper.updateOpordHeader(salesOrder); // updated sales order with sales reference
 
 			// now prepare item details from sales order to sales
 			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(salesOrder.getXordernum(), sessionManager.getBusinessId());
-			if(salesOrdeItems != null && !salesOrdeItems.isEmpty()) {
-				for(Oporddetail salesOrderItem : salesOrdeItems) {
-					Caitem caitem = caitemMapper.findByXitem(salesOrderItem.getXitem(), sessionManager.getBusinessId());
-					if(caitem == null) continue;
+			if(salesOrdeItems == null || salesOrdeItems.isEmpty()) continue;
 
-					Opdodetail salesItem = new Opdodetail();
-					salesItem.setXdornum(savedSales.getXdornum());  // set sales reference for its items
-					salesItem.setXitem(salesOrderItem.getXitem());
-					salesItem.setXqtyord(salesOrderItem.getXqtyord() != null ? salesOrderItem.getXqtyord() : BigDecimal.ZERO);
-					salesItem.setXunitsel(salesOrderItem.getXunit());
-					salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
-					salesItem.setXlineamt(salesOrderItem.getXlineamt() != null ? salesOrderItem.getXlineamt() : BigDecimal.ZERO);
-					salesItem.setXcatitem(salesOrderItem.getXcatitem());
-					salesItem.setXgitem(salesOrderItem.getXgitem());
-					salesItem.setZid(sessionManager.getBusinessId());
+			for(Oporddetail salesOrderItem : salesOrdeItems) {
+				Caitem caitem = caitemMapper.findByXitem(salesOrderItem.getXitem(), sessionManager.getBusinessId());
+				if(caitem == null) continue;
 
-					long salesItemCount = opdoMapper.saveOpdoDetail(salesItem);
-					if(salesItemCount == 0) continue;
+				Opdodetail salesItem = new Opdodetail();
+				salesItem.setXdornum(savedSales.getXdornum());  // set sales reference for its items
+				salesItem.setXitem(salesOrderItem.getXitem());
+				salesItem.setXqtyord(salesOrderItem.getXqtyord() != null ? salesOrderItem.getXqtyord() : BigDecimal.ZERO);
+				salesItem.setXunitsel(salesOrderItem.getXunit());
+				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
+				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
+				salesItem.setXcatitem(salesOrderItem.getXcatitem());
+				salesItem.setXgitem(salesOrderItem.getXgitem());
+				salesItem.setZid(sessionManager.getBusinessId());
 
-					// calculate totalAmt
-					totalAmt = totalAmt.add(salesItem.getXqtyord().multiply(salesItem.getXrate()));
+				long salesItemCount = saveDetail(salesItem);
+				if(salesItemCount == 0) continue;
 
-					// Add item for delivery chalan also
-					Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(savedDeliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
-					if(chItem != null) {
-						chItem.setXqtyord(chItem.getXqtyord().add(salesItem.getXqtyord()));
-						opdoMapper.updateOpdoDetail(chItem);
-					} else {
-						salesItem.setXdornum(deliveryChalan.getXdornum());
-						opdoMapper.saveOpdoDetail(salesItem);
-					}
-
+				// Add item for delivery chalan also
+				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(savedDeliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
+				if(chItem != null) {
+					chItem.setXqtyord(chItem.getXqtyord().add(salesItem.getXqtyord()));
+					opdoMapper.updateOpdoDetail(chItem);
+				} else {
+					salesItem.setXdornum(deliveryChalan.getXdornum());
+					opdoMapper.saveOpdoDetail(salesItem);
 				}
+
 			}
 
-			// now update sales header with total amount
-			savedSales.setXtotamt(totalAmt);
-			long count2 = opdoMapper.updateOpdoHeader(savedSales);
-			if(count2 == 0) log.error("Can't update sales header with total amount");
 		}
 
 		if(salesSavedCount == salesOrdersOfProductionChalan.size()) {

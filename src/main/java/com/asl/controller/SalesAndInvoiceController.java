@@ -175,12 +175,23 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 
 	@GetMapping("/opdodetail/{xdornum}")
 	public String reloadOpdoDetailTable(@PathVariable String xdornum, Model model) {
-		List<Opdodetail> detailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		model.addAttribute("opdoDetailsList", detailList);
-		Opdoheader header = new Opdoheader();
-		header.setXdornum(xdornum);
-		model.addAttribute("opdoheader", header);
+		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
+		model.addAttribute("opdoheader", opdoService.findOpdoHeaderByXdornum(xdornum));
 		return "pages/salesninvoice/salesandinvoice/opdo::opdodetailtable";
+	}
+
+	@GetMapping("/opdoheaderform/{xdornum}")
+	public String reloadOpdoheaderform(@PathVariable String xdornum, Model model) {
+		model.addAttribute("opdoheader", opdoService.findOpdoHeaderByXdornum(xdornum));
+		model.addAttribute("opdoprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("payStatusList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode(), Boolean.TRUE));
+		return "pages/salesninvoice/salesandinvoice/opdo::opdoheaderform";
 	}
 
 	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
@@ -216,21 +227,26 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Item not selected! Please select an item");
 			return responseHelper.getResponse();
 		}
+		if(opdoDetail.getXqtyord() == null || opdoDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
+			responseHelper.setErrorStatusAndMessage("Item quantity can't be less then one");
+			return responseHelper.getResponse();
+		}
+		if(opdoDetail.getXqtyord() == null || opdoDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Item Rate can't be negative");
+			return responseHelper.getResponse();
+		}
 
 		// Check item already exist in detail list
-		if (opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(),
-				opdoDetail.getXitem()) != null) {
-			responseHelper.setErrorStatusAndMessage(
-					"Item already added into detail list. Please add another one or update existing");
+		if (opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(), opdoDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
 		}
 
 		// modify line amount
-		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate()).setScale(2, RoundingMode.DOWN));
 
 		// if existing
-		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(),
-				opdoDetail.getXrow());
+		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
 		if (existDetail != null) {
 			BeanUtils.copyProperties(opdoDetail, existDetail, "xdornum", "xrow");
 			long count = opdoService.updateDetail(existDetail);
@@ -238,7 +254,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoDetail.getXdornum());
+			responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
 			responseHelper.setSuccessStatusAndMessage("Invoice item updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -249,17 +266,17 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoDetail.getXdornum());
+		responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
 		responseHelper.setSuccessStatusAndMessage("Invoice item saved successfully");
 		return responseHelper.getResponse();
 	}
 
 	@PostMapping("{xdornum}/opdodetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow,
-			Model model) {
+	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
 		Opdodetail pd = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
 		if (pd == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Detail item can't found to do delete");
 			return responseHelper.getResponse();
 		}
 
@@ -270,7 +287,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
+		responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + xdornum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + xdornum);
 		return responseHelper.getResponse();
 	}
 
@@ -472,7 +490,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 
 		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
 		if (items != null && !items.isEmpty()) {
-			items.parallelStream().forEach(it -> {
+			items.stream().forEach(it -> {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
 				item.setItemName(it.getXdesc());

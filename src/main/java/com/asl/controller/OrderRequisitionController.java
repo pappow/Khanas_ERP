@@ -42,6 +42,8 @@ public class OrderRequisitionController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
+		sessionManager.getLoggedInUserDetails().getRoles().stream().forEach(s -> System.out.println(s.toString()));
+		
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 

@@ -171,7 +171,7 @@ public class ASLAbstractController {
 		if(errors == null || errors.isEmpty()) return null;
 
 		StringBuilder message = new StringBuilder();
-		errors.parallelStream().forEach(e -> {
+		errors.stream().forEach(e -> {
 			message.append(e.getOsqlCode() + " - " + e.getErrorMessage());
 		});
 		return message.toString();
