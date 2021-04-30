@@ -34,3 +34,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/hs_err_pid4224.log
