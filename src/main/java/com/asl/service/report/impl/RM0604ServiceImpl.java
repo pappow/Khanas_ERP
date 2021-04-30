@@ -2,6 +2,7 @@ package com.asl.service.report.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0608Service")
-public class RM0608ServiceImpl extends AbstractReportService {
+@Service("RM0604Service")
+public class RM0604ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
@@ -42,15 +43,21 @@ public class RM0608ServiceImpl extends AbstractReportService {
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
+		
+		//From Date
+		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
+
+		// To Date
+		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
 		// caitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item Code/Name", "search/caitem", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item Code/Name", "search/caitem", "", true));
 		
 		// Item Group
-		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Item Group", Itemgroups, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Group", Itemgroups, "", false));
 		
 		// Item Category
-		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Item Category", ItemCategory, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Item Category", ItemCategory, "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

@@ -32,4 +32,7 @@ public interface ArhedService {
 	public Arhed findAdarByXcus(String xcus);
 
 	public List<Arhed> getAllAdars();
+	
+	//Search Field
+	public List<Arhed> findByXstaff(String xstaff);
 }

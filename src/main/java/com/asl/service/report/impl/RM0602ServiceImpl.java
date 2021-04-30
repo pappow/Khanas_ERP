@@ -18,8 +18,8 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0403Service")
-public class RM0403ServiceImpl extends AbstractReportService {
+@Service("RM0602Service")
+public class RM0602ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
@@ -30,34 +30,36 @@ public class RM0403ServiceImpl extends AbstractReportService {
 
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
-
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
+		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
+		List<DropdownOption> Itemgroups = new ArrayList<>();
+		Itemgroups.add(new DropdownOption("", "-- Select --"));
+		groupList.stream().forEach(x -> Itemgroups.add(new DropdownOption(x.getXcode(), x.getXcode())));
+
+		List<Xcodes> categoryList = xcodesService.findByXtype(CodeType.ITEM_CATEGORY.getCode(), Boolean.TRUE);
+		List<DropdownOption> ItemCategory = new ArrayList<>();
+		ItemCategory.add(new DropdownOption("", "-- Select --"));
+		categoryList.stream().forEach(x -> ItemCategory.add(new DropdownOption(x.getXcode(), x.getXcode())));
+
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 		
-		
-		// From Date
+		//From Date
 		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
 
 		// To Date
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
-		// customer
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
+		// caitem
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item Code/Name", "search/caitem", "", true));
 		
-		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Do Status", options, "", false));
+		// Item Group
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Group", Itemgroups, "", false));
 		
-		// DO number
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Do Number", "search/report/opdo/xdornum", "", false));
-		
+		// Item Category
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Item Category", ItemCategory, "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
 }
-  

@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Arhed;
+import com.asl.entity.Modetail;
 import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.ArhedMapper;
 import com.asl.service.ArhedService;
@@ -91,4 +93,11 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	public List<Arhed> getAllAdars() {
 		return arhedMapper.getAllAdars(TransactionCodeType.ACCOUNT_ADAR.getdefaultCode(), sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public List<Arhed> findByXstaff(String xstaff){
+		if(StringUtils.isBlank(xstaff)) return Collections.emptyList();
+		return arhedMapper.findByXstaff(xstaff, sessionManager.getBusinessId());
+	}
+	
 }

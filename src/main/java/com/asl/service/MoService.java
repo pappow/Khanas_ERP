@@ -47,4 +47,10 @@ public interface MoService {
 	public boolean isProductionProcessCompleted(String xchalan);
 
 	public List<Moheader> findMoheaderByXchalan(String xchalan);
+	
+	//search field
+	
+	public List<Moheader> findModetailXbatch(String xbatch);
+	
+	public List<Modetail> findModetailByXtype(String xtype);	
 }
