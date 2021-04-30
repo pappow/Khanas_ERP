@@ -309,7 +309,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		List<PoordDetail> items = poordService.findPoorddetailByXpornum(oh.getXpornum());
 		if (items != null && !items.isEmpty()) {
-			items.parallelStream().forEach(it -> {
+			items.stream().forEach(it -> {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
 				item.setItemName(it.getXitemdesc());

@@ -128,7 +128,10 @@ public class Opdoheader extends AbstractModel<String> {
 
 	@Column(name = "xvatait")
 	private String xvatait;
-	
+
+	@Column(name = "xait")
+	private BigDecimal xait; 
+
 	@Column(name = "xchalancreated")
 	private boolean xchalancreated;
 

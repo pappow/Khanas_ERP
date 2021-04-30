@@ -41,12 +41,9 @@ import com.asl.service.XtrnService;
 @RequestMapping("/salesninvoice/deliveryorderchalan")
 public class DeliveryOrderChalanController extends ASLAbstractController {
 
-	@Autowired
-	private OpdoService opdoService;
-	@Autowired
-	private XtrnService xtrnService;
-	@Autowired
-	private CacusService cacusService;
+	@Autowired private OpdoService opdoService;
+	@Autowired private XtrnService xtrnService;
+	@Autowired private CacusService cacusService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -288,17 +285,20 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@PostMapping("/lockchalan/{xdornum}")
 	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xdornum, Model model) {
-
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
 		if (oh == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Delivery chalan " + xdornum + " not exist in this system");
 			return responseHelper.getResponse();
 		}
-		
+
 		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum);
+		if(invoiceList == null || invoiceList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("No Sales invoice assigned in this delivery chalan : " + xdornum);
+			return responseHelper.getResponse();
+		}
+
 		String p_seq;
-		for (Opdoheader order : invoiceList) {			
-			
+		for (Opdoheader order : invoiceList) {
 			if(!"Confirmed".equalsIgnoreCase(order.getXstatusord())) {
 				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 				opdoService.procConfirmDO(order.getXdornum(), p_seq);
@@ -308,7 +308,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 					responseHelper.setErrorStatusAndMessage(em);
 					return responseHelper.getResponse();
 				}
-				
+
 				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 				opdoService.procIssuePricing(order.getXdocnum(), order.getXwh(), p_seq);
 				//Error check here for procIssuePricing
@@ -319,6 +319,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 				}
 				
 			}
+
 //			if(!"Confirmed".equalsIgnoreCase(order.getXstatusar())){
 //				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 //				opdoService.procTransferOPtoAR(order.getXdornum(), "opdoheader", p_seq);
@@ -405,7 +406,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 			List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(so.getXdornum());
 			if (items != null && !items.isEmpty()) {
-				items.parallelStream().forEach(it -> {
+				items.stream().forEach(it -> {
 					ItemDetails item = new ItemDetails();
 					item.setItemCode(it.getXitem());
 					item.setItemName(it.getXdesc());
@@ -510,7 +511,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
 		if (items != null && !items.isEmpty()) {
-			items.parallelStream().forEach(it -> {
+			items.stream().forEach(it -> {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
 				item.setItemName(it.getXdesc());

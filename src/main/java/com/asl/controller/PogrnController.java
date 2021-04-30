@@ -30,6 +30,7 @@ import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordHeader;
+import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -125,9 +126,16 @@ public class PogrnController extends ASLAbstractController {
 //			return responseHelper.getResponse();
 //		}
 
+		Vatait vatait = vataitService.findVataitByXvatait(pogrnHeader.getXvatait());
 		if (pogrnHeader.getXtotamt() == null) pogrnHeader.setXtotamt(BigDecimal.ZERO);
+		if(StringUtils.isNotBlank(pogrnHeader.getXvatait()) && !"No Vat".equalsIgnoreCase(pogrnHeader.getXvatait()) && vatait != null) {
+			if(pogrnHeader.getXvatamt() == null) pogrnHeader.setXvatamt((pogrnHeader.getXtotamt().multiply(vatait.getXvat())).divide(BigDecimal.valueOf(100)));
+			if(pogrnHeader.getXaitamt() == null) pogrnHeader.setXaitamt((pogrnHeader.getXtotamt().multiply(vatait.getXait())).divide(BigDecimal.valueOf(100)));
+		} else {
+			if (pogrnHeader.getXvatamt() == null) pogrnHeader.setXvatamt(BigDecimal.ZERO);
+			if (pogrnHeader.getXaitamt() == null) pogrnHeader.setXaitamt(BigDecimal.ZERO);
+		}
 		if (pogrnHeader.getXdiscprime() == null) pogrnHeader.setXdiscprime(BigDecimal.ZERO);
-		if (pogrnHeader.getXaitamt() == null) pogrnHeader.setXaitamt(BigDecimal.ZERO);
 		BigDecimal grandTotal = pogrnHeader.getXtotamt().add(pogrnHeader.getXvatamt()).add(pogrnHeader.getXaitamt()).subtract(pogrnHeader.getXdiscprime());
 		pogrnHeader.setXgrandtot(grandTotal);
 

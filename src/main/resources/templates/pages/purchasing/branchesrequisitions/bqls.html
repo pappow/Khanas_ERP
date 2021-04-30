@@ -89,6 +89,7 @@
 											<th>Branch Name</th>
 											<th>Date</th>
 											<th>Status</th>
+											<th>Sales Order</th>
 											<th data-nosort="Y" style="text-align: right">Action</th>
 										</tr>
 									</thead>
@@ -98,6 +99,7 @@
 											<td th:text="${r.zorg}"></td>
 											<td th:text="${#dates.format(r.xdate, df)}"></td>
 											<td th:text="${r.xstatuspor}"></td>
+											<td th:text="${r.xordernum}"></td>
 											<td style="text-align: right;">
 												<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/purchasing/bqls/ordreqdetails/} + ${r.branchzid} + '/' + ${r.xpornum} + '/show', data-target-modal='branchorderreqdetailmodal'"><i class="fas fa-eye"></i></button>
 												<button th:if="${r.xstatuspor eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/purchasing/bqls/ordreqconfirm/} + ${r.branchzid} + '/' + ${r.xpornum}"><i class="fas fa-check-square"></i></button>

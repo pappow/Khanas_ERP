@@ -42,9 +42,7 @@ public class VataitServiceImpl extends AbstractGenericService implements VataitS
 
 	@Override
 	public Vatait findVataitByXvatait(String xvatait) {
-		if (StringUtils.isBlank(xvatait))
-			return null;
-
+		if (StringUtils.isBlank(xvatait)) return null;
 		return vataitMapper.findVataitByXvatait(xvatait, sessionManager.getBusinessId());
 	}
 

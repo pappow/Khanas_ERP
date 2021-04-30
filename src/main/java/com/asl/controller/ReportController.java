@@ -91,7 +91,7 @@ public class ReportController extends ASLAbstractController {
 		model.addAttribute("selectedReport", rm.name());
 		model.addAttribute("reportCode", rm.name());
 		model.addAttribute("reportName", rm.getDescription());
-		getLoggedInUserReportProfile().getProfileLines().parallelStream().forEach(i -> {
+		getLoggedInUserReportProfile().getProfileLines().stream().forEach(i -> {
 			if(i.getProfilelinecode().equalsIgnoreCase(menuCode)) {
 				model.addAttribute("fopEnabled", i.isEnabled());
 			}
@@ -119,7 +119,7 @@ public class ReportController extends ASLAbstractController {
 		}
 
 		StringBuilder url = new StringBuilder(rm.name() + ".rptdesign").append("&__toolbar=false&__showtitle=false&__title=report");
-		reportParams.entrySet().parallelStream().forEach(m -> {
+		reportParams.entrySet().stream().forEach(m -> {
 			url.append("&" + m.getKey() + "=" + m.getValue());
 		});
 

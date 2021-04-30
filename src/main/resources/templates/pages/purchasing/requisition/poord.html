@@ -167,9 +167,7 @@
 									<tbody>
 										<tr th:each="d : ${poorddetailsList}">
 											<td th:text="${#lists.size(poorddetailsList) - dStat.index}"></td>
-											<td>
-												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
-											</td>
+											<td th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xunitpur}"></td>
 											<td th:text="${d.xnote}"></td>
