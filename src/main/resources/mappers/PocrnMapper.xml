@@ -183,7 +183,7 @@
 	<select id="findPocrnDetailByXcrnnum" resultType="Pocrndetail">
 		SELECT 
 			pocrndetail.*,
-			Func_GetItemNameWZID(xitem, zid) AS xitemname
+			Func_GetItemName(xitem, zid) AS xitemname
 		FROM 
 			pocrndetail 
 		WHERE 

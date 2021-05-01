@@ -21,74 +21,79 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "imtrn")
 @IdClass(ImtrnPK.class)
-@EqualsAndHashCode(of = { "zid","ximtrnnum" }, callSuper = false)
-public class Imtrn extends AbstractModel<String>{
-	
-private static final long serialVersionUID = 6798215592259037811L;
+@EqualsAndHashCode(of = { "zid", "ximtrnnum" }, callSuper = false)
+public class Imtrn extends AbstractModel<String> {
 
-@Id
-@Basic(optional = false)
-@Column(name = "zid")
-private String zid;
+	private static final long serialVersionUID = 6798215592259037811L;
 
-@Id
-@Basic(optional = false)
-@Column(name = "ximtrnnum")
-private String ximtrnnum;
+	@Id
+	@Basic(optional = false)
+	@Column(name = "zid")
+	private String zid;
 
-@Column(name = "xtype")
-private String xtype;
+	@Id
+	@Basic(optional = false)
+	@Column(name = "ximtrnnum")
+	private String ximtrnnum;
 
-@Column(name = "xdate")
-@Temporal(TemporalType.DATE)
-private Date xdate;
+	@Column(name = "xtype")
+	private String xtype;
 
-@Column(name = "xwh")
-private String xwh;
+	@Column(name = "xdate")
+	@Temporal(TemporalType.DATE)
+	private Date xdate;
 
-@Column(name = "xitem")
-private String xitem;
+	@Column(name = "xwh")
+	private String xwh;
 
-@Column(name = "xqty")
-private BigDecimal xqty;
+	@Column(name = "xitem")
+	private String xitem;
 
-@Column(name = "xordernum")
-private String xordernum;
+	@Column(name = "xqty")
+	private BigDecimal xqty;
 
-@Column(name = "xrate")
-private BigDecimal xrate;
+	@Column(name = "xordernum")
+	private String xordernum;
 
-@Column(name = "xref")
-private String xref;
+	@Column(name = "xrate")
+	private BigDecimal xrate;
 
-@Column(name = "xval")
-private BigDecimal xval;
+	@Column(name = "xref")
+	private String xref;
 
-@Column(name = "xdocnum")
-private String xdocnum;
+	@Column(name = "xval")
+	private BigDecimal xval;
 
-@Column(name = "xstatus")
-private String xstatus;
+	@Column(name = "xdocnum")
+	private String xdocnum;
 
-@Column(name = "xdocrow")
-private Integer xdocrow;
+	@Column(name = "xstatus")
+	private String xstatus;
 
-@Column(name = "xstatusjv")
-private String xstatusjv;
+	@Column(name = "xdocrow")
+	private Integer xdocrow;
 
-@Column(name = "xsign")
-private Integer xsign;
+	@Column(name = "xstatusjv")
+	private String xstatusjv;
 
-@Column(name = "xvoucher")
-private String xvoucher;
+	@Column(name = "xsign")
+	private Integer xsign;
 
-@Column(name = "xnote")
-private String xnote;
+	@Column(name = "xvoucher")
+	private String xvoucher;
 
-@Column(name = "xunit")
-private String xunit;
+	@Column(name = "xnote")
+	private String xnote;
 
-@Transient
-private String xtrnimtrn;
+	@Column(name = "xunit")
+	private String xunit;
 
+	@Column(name = "xtrn")
+	private String xtrn;
+
+//	@Transient
+//	private String xtrnimtrn;
+
+	@Transient
+	private String itemdes;
 }

@@ -2,11 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.ImtrnMapper">
-	
-	
+
 	<insert id="saveImtrn" parameterType="Imtrn">
 		<selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Imtrn
 		(
@@ -28,7 +27,7 @@
 			xvoucher,
 			xnote,
 			xunit,
-						
+			xtrn,
 			zid,
 			zauserid,
 			zuuserid,
@@ -58,7 +57,7 @@
 			#{xvoucher, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
 			#{xunit, jdbcType=VARCHAR},
-			
+			#{xtrn, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -69,7 +68,7 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
+
 	<update id="updateImtrn" parameterType="Imtrn">
 		UPDATE
 			Imtrn
@@ -79,7 +78,7 @@
 			xwh=#{xwh, jdbcType=VARCHAR},
 			xitem=#{xitem, jdbcType=VARCHAR},
 			xqty=#{xqty, jdbcType=DECIMAL},
-			xordernum=#{xordernum, jdbcType=VARCHAR},	
+			xordernum=#{xordernum, jdbcType=VARCHAR},
 			xrate=#{xrate, jdbcType=DECIMAL},
 			xref=#{xref, jdbcType=VARCHAR},
 			xval=#{xval, jdbcType=DECIMAL},
@@ -91,6 +90,7 @@
 			xvoucher=#{xvoucher, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xunit=#{xunit, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -101,13 +101,24 @@
 			ximtrnnum=#{ximtrnnum}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
-	
+
 	<select id="findImtrnByXimtrnnum" resultType="Imtrn">
-		SELECT * FROM Imtrn WHERE ximtrnnum=#{ximtrnnum} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM imtrn WHERE ximtrnnum=#{ximtrnnum} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
+	<delete id="deleteByXimtrnnum">
+		DELETE FROM imtrn WHERE ximtrnnum=#{ximtrnnum} AND zid=#{zid} AND zactive='1'
+	</delete>
+
 	<select id="getAllImtrn" resultType="Imtrn">
-		SELECT * FROM Imtrn WHERE zid=#{zid} AND zactive='1'
+		SELECT 
+			imtrn.*,
+			Func_GetItemName(xitem, zid) as itemdes
+		FROM 
+			imtrn 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
 	</select>
-	
+
 </mapper>

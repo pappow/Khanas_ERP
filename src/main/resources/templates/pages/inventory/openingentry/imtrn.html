@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Purchase Order</title>
+		<title>Stock Opening Entry</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -52,41 +52,33 @@
 										<h1>Stock Opening Entry</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/inventory/openingentry}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:href="@{/inventory/openingentry}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(imtrn.ximtrnnum)}" th:href="@{/inventory/openingentry}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == true}" th:href="@{/inventory/openingentry/archive/} + ${imtrn.ximtrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == false}" th:href="@{/inventory/openingentry/restore/} + ${imtrn.ximtrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
+										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == true}" th:href="@{/inventory/openingentry/archive/} + ${imtrn.ximtrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/inventory/openingentry/save}" th:object="${imtrn}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
 											<input type="hidden" th:if="${not #strings.isEmpty(imtrn.ximtrnnum)}" class="form-control" th:field="*{ximtrnnum}">
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group" th:if="${#strings.isEmpty(imtrn.ximtrnnum)}">
-														<label class="control-label col-md-4" for="xtrnimtrn">Inv. Prefix : </label>
+														<label class="control-label col-md-4" for="xtrnimtrn">Prefix : </label>
 														<div class="col-md-5">
-															<select class="form-control" th:field="*{xtrnimtrn}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${imtrnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
 													</div>
-													
+
 													<div class="form-group" th:if="${not #strings.isEmpty(imtrn.ximtrnnum)}">
 														<label class="control-label col-md-4" for="ximtrnnum">Imt Number : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{ximtrnnum}" disabled="disabled">
+															<input type="text" class="form-control" th:value="*{ximtrnnum}" disabled="disabled">
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
 														<div class="input-group date col-md-6 datepicker">
@@ -94,24 +86,14 @@
 																	class="form-control" 
 																	id="xdate"
 																	name="xdate"
+																	required="required"
 																	th:value="${imtrn.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(imtrn.xdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xitem">Item : </label>
-														<div class="col-md-8">
-															<input 	type="text" 
-																	class="form-control searchsuggest xitemsearch" 
-																	placeholder="Search..." 
-																	th:value="${imtrn.xitem}" 
-																	th:attr="search-url='search/caitem'"/>
-															<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
-															<input type="hidden" id="search-des" value=""/>
-														</div>
-													</div>
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 														<div class="col-md-8">
@@ -120,16 +102,47 @@
 															</select>
 														</div>
 													</div>
+
+													<div class="form-group" th:if="${#strings.isEmpty(imtrn.ximtrnnum)}">
+														<label class="control-label col-md-4" for="xitem">Item : </label>
+														<div class="col-md-8">
+															<input 	type="text" 
+																	class="form-control searchsuggest xitemsearch" 
+																	placeholder="Search..." 
+																	th:value="${imtrn.xitem}" 
+																	th:attr="search-url='search/caitem'"/>
+															<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
+															<input type="hidden" id="search-des" th:value="*{xitem}"/>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(imtrn.ximtrnnum)}">
+														<label class="control-label col-md-4" for="xitem">Item : </label>
+														<div class="col-md-8">
+															<input type="hidden" th:field="*{xitem}" class="form-control"/>
+															<input type="text" th:value="*{xitem}" class="form-control" disabled="disabled"/>
+														</div>
+													</div>
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xqty">Quantity : </label>
 														<div class="col-md-5">
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xqty}" min="0">
 														</div>
 													</div>
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xrate">Rate : </label>
 														<div class="col-md-5">
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}" min="0">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xitem">Unit : </label>
+														<div class="col-md-8">
+															<input type="hidden" th:field="*{xunit}" class="form-control"/>
+															<input type="text" th:value="*{xunit}" class="form-control xunit-display" disabled="disabled"/>
 														</div>
 													</div>
 												</div>
@@ -158,12 +171,6 @@
 															<input type="number" class="form-control" th:field="*{xdocrow}" min="1">
 														</div>
 													</div>
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xstatusjv">Journal Voucher Status : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xstatusjv}">
-														</div>
-													</div> -->
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnote">Note : </label>
 														<div class="col-md-8">
@@ -176,12 +183,11 @@
 									</div>
 								</section>
 							</div>
-							
-							
+
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Inv Items</h1>
+										<h1>All Inventory Opening Entries</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">
@@ -189,9 +195,10 @@
 												<tr>
 													<th>Inv. Number</th>
 													<th>Date</th>
+													<th>Item</th>
 													<th>Qty</th>
 													<th>Rate</th>
-													<th>Status</th>
+													<th>Unit</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
@@ -200,9 +207,12 @@
 														<a th:href="@{/inventory/openingentry/} + ${imtrn.ximtrnnum}" th:text="${imtrn.ximtrnnum}"></a>
 													</td>
 													<td  th:text="${#dates.format(imtrn.xdate, df)}"></td>
+													<td>
+														<a th:href="@{/mastersetup/caitem/} + ${imtrn.xitem}" th:text="${imtrn.itemdes}" target="_blank"></a>
+													</td>
 													<td th:text="${imtrn.xqty}"></td>
 													<td th:text="${imtrn.xrate}"></td>
-													<td th:text="${imtrn.xstatus}"></td>
+													<td th:text="${imtrn.xunit}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -216,27 +226,30 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+
 		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$('.xitemsearch').on('blur', function(){
 					setTimeout(() => {
 						if( $('input[name="xitem"]').val() == '') {
-							
+							$('input[name="xrate"]').val(0);
+							$('input[name="xunit"]').val("");
+							$('input.xunit-display').val("");
 							return;
 						}
+						loadingMask2.show(),
 						$.ajax({
-							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/inventory/openingentry/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
-							beforeSend : loadingMask2.show(),
 							success : function(data) {
 								loadingMask2.hide();
 								$('input[name="xrate"]').val(data.xrate);
-								//$(".qty").focus();
+								$('input[name="xunit"]').val(data.xunitpur);
+								$('input.xunit-display').val(data.xunitpur);
 							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");

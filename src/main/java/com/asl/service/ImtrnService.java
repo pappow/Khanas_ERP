@@ -17,4 +17,5 @@ public interface ImtrnService {
 
 	public List<Imtrn> getAllImtrn();
 
+	public long deleteByXimtrnnum(String ximtrnnum);
 }
