@@ -320,17 +320,17 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 				
 			}
 
-//			if(!"Confirmed".equalsIgnoreCase(order.getXstatusar())){
-//				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-//				opdoService.procTransferOPtoAR(order.getXdornum(), "opdoheader", p_seq);
-//				//Error check here for procTransferOPtoAR
-//				String em = getProcedureErrorMessages(p_seq);
-//				if(StringUtils.isNotBlank(em)) {
-//					responseHelper.setErrorStatusAndMessage(em);
-//					return responseHelper.getResponse();
-//				}
-//				
-//			}
+			if(!"Confirmed".equalsIgnoreCase(order.getXstatusar())){
+				p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+				opdoService.procTransferOPtoAR(order.getXdornum(), "opdoheader", p_seq);
+				//Error check here for procTransferOPtoAR
+				String em = getProcedureErrorMessages(p_seq);
+				if(StringUtils.isNotBlank(em)) {
+					responseHelper.setErrorStatusAndMessage(em);
+					return responseHelper.getResponse();
+				}
+				
+			}
 		}
 		
 		// now lock chalan

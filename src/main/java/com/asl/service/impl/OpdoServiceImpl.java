@@ -209,6 +209,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		deliveryChalan.setXtrn(TransactionCodeType.CHALAN_NUMBER.getdefaultCode());
 		deliveryChalan.setXdate(new Date());
 		deliveryChalan.setXstatusord("Open");
+		deliveryChalan.setXstatusar("Open");
+		deliveryChalan.setXstatusjv("Open");
 		deliveryChalan.setZid(sessionManager.getBusinessId());
 		deliveryChalan.setXordernum(productionChalan.getXordernum());  // production chalan reference 
 		long deliveryChalanCount = opdoMapper.saveOpdoHeader(deliveryChalan);

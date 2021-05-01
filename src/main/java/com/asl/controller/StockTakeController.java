@@ -30,71 +30,65 @@ import com.asl.service.XtrnService;
 @Controller
 @RequestMapping("/inventory/stocktake")
 public class StockTakeController extends ASLAbstractController {
-	
-	@Autowired
-	private ImtagService imtagService;
-	@Autowired
-	private XcodesService xcodeService;
-	@Autowired
-	private XtrnService xtrnService;
-	
 
-	
+	@Autowired private ImtagService imtagService;
+	@Autowired private XcodesService xcodeService;
+	@Autowired private XtrnService xtrnService;
+
 	@GetMapping
 	public String loadStockTakePage(Model model) {
-		
 		model.addAttribute("imtag", getDefaultImtag());
-		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode()));
+		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode(), Boolean.TRUE));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
-		
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		return "pages/inventory/stocktake/imtag";
 	}
-	
+
 	@GetMapping("/{xtagnum}")
 	public String loadStockTakePage(@PathVariable String xtagnum, Model model) {
-		
 		Imtag data = imtagService.findImtagByXtagnum(xtagnum);
 		if(data == null) data = getDefaultImtag();
 
 		model.addAttribute("imtag", data);
-		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode()));
+		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode(), Boolean.TRUE));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtagDetailsList", imtagService.findImtdetByXtagnum(xtagnum));
-		
+
 		return "pages/inventory/stocktake/imtag";
 	}
-	
+
 	private Imtag getDefaultImtag() {
 		Imtag imtag= new Imtag();
 		imtag.setXtype(TransactionCodeType.STOCK_TAKE.getCode());
 		imtag.setXtypetrn(TransactionCodeType.STOCK_TAKE.getCode());
 		imtag.setXtrn(TransactionCodeType.STOCK_TAKE.getdefaultCode());
 		imtag.setXtrnimtag(TransactionCodeType.STOCK_TAKE.getdefaultCode()); // Removal queue
+		imtag.setXstatustag("Open");
 		return imtag;
 	}
-	
+
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Imtag imtag, BindingResult bindingResult){
-		
-		
 		if((imtag == null || StringUtils.isBlank(imtag.getXtype()))) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		// Validate
+		if(imtag.getXdate() == null) {
+			responseHelper.setErrorStatusAndMessage("Date required");
+			return responseHelper.getResponse();
+		}
 
 		// if existing record
-		
 		Imtag existImtag = imtagService.findImtagByXtagnum(imtag.getXtagnum());
 		if(existImtag != null) {
-			BeanUtils.copyProperties(imtag, existImtag, "xtagnum", "xtype", "xdate");
+			BeanUtils.copyProperties(imtag, existImtag, "xtagnum", "xtype", "xdate","xtypetrn","xtrn","xtrnimtag");
 			long count = imtagService.updateImtag(existImtag);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update stock take entry");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Stock Take Entry updated successfully");
@@ -105,13 +99,12 @@ public class StockTakeController extends ASLAbstractController {
 		// If new
 		long count = imtagService.saveImtag(imtag);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't create stock take entry");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Stock Take Entry created successfully");
 		responseHelper.setRedirectUrl("/inventory/stocktake/" + imtag.getXtagnum());
 		return responseHelper.getResponse();
-		
 	}
 
 	
@@ -199,14 +192,14 @@ public class StockTakeController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/inventory/stocktake/" +  xtagnum);
 		return responseHelper.getResponse();
 	}
-	
-	@GetMapping("/confirmstocktake/{xtagnum}")
+
+	@PostMapping("/confirmstocktake/{xtagnum}")
 	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xtagnum){
 		if(StringUtils.isBlank(xtagnum)) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		
+
 		//Get PogrnHeader record by Xgrnnum		
 		Imtag imtag = imtagService.findImtagByXtagnum(xtagnum);
 		// Validate		
@@ -228,7 +221,7 @@ public class StockTakeController extends ASLAbstractController {
 		if(!"Confirmed".equalsIgnoreCase(imtag.getXstatustag())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			imtagService.procStockTake(imtag.getXdate(), imtag.getXtagnum(), p_seq);
-			
+
 			String em = getProcedureErrorMessages(p_seq);
 			if(StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);

@@ -33,7 +33,7 @@ import com.asl.service.XtrnService;
 @Controller
 @RequestMapping("/inventory/transferorder")
 public class StockTransferOrderController extends ASLAbstractController {
-	
+
 	@Autowired private ImtorService imtorService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private XtrnService xtrnService;
@@ -46,8 +46,6 @@ public class StockTransferOrderController extends ASLAbstractController {
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
-		//model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
-		
 		return "pages/inventory/transferorder/imtor";
 	}
 
@@ -67,40 +65,37 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	private ImtorHeader getDefaultImtorHeader() {
 		ImtorHeader imtorHeader = new ImtorHeader();
-		//imtorHeader.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
-		//imtorHeader.setXtotamt(BigDecimal.ZERO);
+		imtorHeader.setXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
+		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
 		imtorHeader.setXstatustor("Open");
 		return imtorHeader;
 	}
+
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(ImtorHeader imtorHeader, BindingResult bindingResult){
-		if((imtorHeader == null) || StringUtils.isBlank(imtorHeader.getXtrntor()) && StringUtils.isBlank(imtorHeader.getXtornum())) {
+		if(imtorHeader == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		// Validate
 		if(imtorHeader.getXfwh().equalsIgnoreCase(imtorHeader.getXtwh())) {
-			responseHelper.setErrorStatusAndMessage("Stock cannot be transferred to same warehouse !");;
+			responseHelper.setErrorStatusAndMessage("Stock can't be transfered to same warehouse !");
 			return responseHelper.getResponse();
 		}
-		
-		imtorHeader.setXtype(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
-		imtorHeader.setXtrntor(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
-		//String transactionCode = "";
+
 		// if existing record
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
-		
 		List<Oporddetail> opordDetailList = new ArrayList<Oporddetail>();
 		List<ImtorDetail> imtorDetailList;
 		//Validate and get records for chalan ref
 		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
-			Opordheader opordHeader = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());			
+			Opordheader opordHeader = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());
 			if(opordHeader == null) {
 				responseHelper.setErrorStatusAndMessage("Please provide a valid Chalan Ref");
 				return responseHelper.getResponse();
 			}
-			
-			
+
 			if(existImtorHeader != null && StringUtils.isNotBlank(existImtorHeader.getXchalanref()) && !imtorHeader.getXchalanref().equalsIgnoreCase(existImtorHeader.getXchalanref())) {
 				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
 				for(int i=0; i<imtorDetailList.size(); i++) {
@@ -114,7 +109,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 			
 			opordDetailList = opordService.findOporddetailByXordernum(opordHeader.getXordernum());	
 		}
-		
+
 		if(existImtorHeader != null) {
 			//Delete details if chalan ref is empty
 			if(StringUtils.isBlank(imtorHeader.getXchalanref()) && StringUtils.isNotBlank(existImtorHeader.getXchalanref())) {
@@ -125,9 +120,9 @@ public class StockTransferOrderController extends ASLAbstractController {
 						responseHelper.setErrorStatusAndMessage("Failed to delete detail for Chalan : " + existImtorHeader.getXchalanref());
 						return responseHelper.getResponse();
 					}
-				}			
+				}
 			}
-			
+
 			String previousChalan = existImtorHeader.getXchalanref();
 			BeanUtils.copyProperties(imtorHeader, existImtorHeader, "xtornum", "xdate");
 			long count = imtorService.update(existImtorHeader);
@@ -135,7 +130,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			
+
 			if(0<opordDetailList.size() && !imtorHeader.getXchalanref().equalsIgnoreCase(previousChalan)) {
 				ImtorDetail imtorDetail;
 				
@@ -159,17 +154,17 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 		// If new
 		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
-			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtype(), imtorHeader.getXtrntor(), 6));
+			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtypetrn(), imtorHeader.getXtrn(), 6));
 		}
 		imtorHeader.setXstatustor("Open");
-		long count = imtorService.save(imtorHeader);		
+		long count = imtorService.save(imtorHeader);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		if(0<opordDetailList.size() && StringUtils.isNotBlank(imtorHeader.getXtornum())) {
 			ImtorDetail imtorDetail;
-			
+
 			for(int i=0; i<opordDetailList.size(); i++) {
 				imtorDetail = new ImtorDetail();
 				BeanUtils.copyProperties(opordDetailList.get(i), imtorDetail, "xrow");
@@ -183,47 +178,43 @@ public class StockTransferOrderController extends ASLAbstractController {
 				}
 			}
 		}
-		
+
 		responseHelper.setSuccessStatusAndMessage("Transfer Order created successfully");
 		responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
 		return responseHelper.getResponse();
 	}
-	/*
-	@PostMapping("/archive/{xpornum}")
-	public @ResponseBody Map<String, Object> archive(@PathVariable String xpornum){
-		return doArchiveOrRestore(xpornum, true);
-	}
 
-	@PostMapping("/restore/{xpornum}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xpornum){
-		return doArchiveOrRestore(xpornum, false);
-	}
-
-	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
-		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+	@PostMapping("/archive/{xtornum}")
+	public @ResponseBody Map<String, Object> archive(@PathVariable String xtornum){
+		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
+		if(imtorHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Can't archive transfer order");
 			return responseHelper.getResponse();
 		}
 
-		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = poordService.update(poordHeader);
+		List<ImtorDetail> details = imtorService.findImtorDetailByXtornum(xtornum);
+		if(details != null && !details.isEmpty()) {
+			long dcount = imtorService.deleteImtorDetailByXtornum(xtornum);
+			if(dcount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't archive transfer order");
+				return responseHelper.getResponse();
+			}
+		}
+
+		imtorHeader.setZactive(Boolean.FALSE);
+		long count = imtorService.update(imtorHeader);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't archive transfer order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Purchase order updated successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Deleted Successfully");
+		responseHelper.setRedirectUrl("/inventory/transferorder");
 		return responseHelper.getResponse();
 	}
-	*/
-	
+
 	@GetMapping("{xtornum}/imtordetail/{xrow}/show")
 	public String openImtorDetailModal(@PathVariable String xtornum, @PathVariable String xrow, Model model) {
-
-		//model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
-
 		if("new".equalsIgnoreCase(xrow)) {
 			ImtorDetail imtordetail = new ImtorDetail();
 			imtordetail.setXtornum(xtornum);
@@ -240,15 +231,18 @@ public class StockTransferOrderController extends ASLAbstractController {
 			}
 			model.addAttribute("imtordetail", imtordetail);
 		}
-
 		return "pages/inventory/transferorder/imtordetailmodal::imtordetailmodal";
 	}
-	
 
 	@PostMapping("/imtordetail/save")
 	public @ResponseBody Map<String, Object> savePoorddetail(ImtorDetail imtorDetail){
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum()) || StringUtils.isBlank(imtorDetail.getXitem())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		if(StringUtils.isBlank(imtorDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Please select an item");
 			return responseHelper.getResponse();
 		}
 
@@ -258,7 +252,6 @@ public class StockTransferOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		
 		// if existing
 		ImtorDetail existDetail = imtorService.findImtorDetailByXtornumAndXrow(imtorDetail.getXtornum(), imtorDetail.getXrow());
 		if(existDetail != null) {
@@ -268,7 +261,8 @@ public class StockTransferOrderController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/inventory/transferorder/" +  imtorDetail.getXtornum());
+
+			responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/transferorder/imtordetail/" + imtorDetail.getXtornum());
 			responseHelper.setSuccessStatusAndMessage("Transfer Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -279,22 +273,19 @@ public class StockTransferOrderController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setRedirectUrl("/inventory/transferorder/" +  imtorDetail.getXtornum());
+
+		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/transferorder/imtordetail/" + imtorDetail.getXtornum());
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
 
 	@GetMapping("/imtordetail/{xtornum}")
 	public String reloadImtorDetailTabble(@PathVariable String xtornum, Model model) {
-		List<ImtorDetail> detailList = imtorService.findImtorDetailByXtornum(xtornum);
-		model.addAttribute("imtordetailsList", detailList);
-		ImtorHeader header = new ImtorHeader();
-		header.setXtornum(xtornum);
-		model.addAttribute("imtorheader", header);
+		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
+		model.addAttribute("imtorheader", imtorService.findImtorHeaderByXtornum(xtornum));
 		return "pages/inventory/transferorder/imtor::imtordetailtable";
 	}
-	
-	
+
 	@PostMapping("{xtornum}/imtordetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteImtorDetail(@PathVariable String xtornum, @PathVariable String xrow, Model model) {
 		ImtorDetail detail = imtorService.findImtorDetailByXtornumAndXrow(xtornum, Integer.parseInt(xrow));
@@ -310,30 +301,30 @@ public class StockTransferOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/inventory/transferorder/" +  xtornum);
+		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/transferorder/imtordetail/" + xtornum);
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/confirmimtor/{xtornum}")
+	@PostMapping("/confirmimtor/{xtornum}")
 	public @ResponseBody Map<String, Object> confirmimtor(@PathVariable String xtornum){
-		if(StringUtils.isBlank(xtornum)) {
+		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
+		if(imtorHeader == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		
-		//Get PogrnHeader record by Xgrnnum		
-		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
+
 		// Validate
-		
 		if("Confirmed".equalsIgnoreCase(imtorHeader.getXstatustor())) {
 			responseHelper.setErrorStatusAndMessage("Transfer Order already confirmed");
 			return responseHelper.getResponse();
 		}
+
 		List<ImtorDetail> imtorDetailList = imtorService.findImtorDetailByXtornum(xtornum);
-		if(imtorDetailList.size() == 0) {
+		if(imtorDetailList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("Please add detail!");
 			return responseHelper.getResponse();
 		}
+
 		String p_seq;
 		if(!"Confirmed".equalsIgnoreCase(imtorHeader.getXstatustor())) {
 			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
@@ -344,7 +335,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 		}
-		
+
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Confirmed successfully");
 		responseHelper.setRedirectUrl("/inventory/transferorder/" + xtornum);
 		return responseHelper.getResponse();

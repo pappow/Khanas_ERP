@@ -77,7 +77,7 @@ public class ProductionStockTransferOrderController extends ASLAbstractControlle
 	}
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(ImtorHeader imtorHeader, BindingResult bindingResult){
-		if((imtorHeader == null) || StringUtils.isBlank(imtorHeader.getXtrntor()) && StringUtils.isBlank(imtorHeader.getXtornum())) {
+		if((imtorHeader == null) || StringUtils.isBlank(imtorHeader.getXtrn()) && StringUtils.isBlank(imtorHeader.getXtornum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -87,8 +87,8 @@ public class ProductionStockTransferOrderController extends ASLAbstractControlle
 			return responseHelper.getResponse();
 		}
 		
-		imtorHeader.setXtype(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
-		imtorHeader.setXtrntor(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
+		imtorHeader.setXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
+		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
 		//String transactionCode = "";
 		// if existing record
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
@@ -162,7 +162,7 @@ public class ProductionStockTransferOrderController extends ASLAbstractControlle
 
 		// If new
 		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
-			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtype(), imtorHeader.getXtrntor(), 6));
+			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtypetrn(), imtorHeader.getXtrn(), 6));
 		}
 		imtorHeader.setXstatustor("Open");
 		long count = imtorService.save(imtorHeader);		
