@@ -20,9 +20,7 @@ server:
   error:
     whitelabel:
       enabled: false
-spring:
-  profiles: 
-    active: dev
+spring: 
   application:
     name: asl-erp
   thymeleaf:
