@@ -68,7 +68,7 @@ public class ProductIssueController extends ASLAbstractController {
 		imtrn.setXqty(BigDecimal.ZERO);
 		imtrn.setXsign(+1);
 		imtrn.setXtype(TransactionCodeType.INVENTORY_NUMBER.getCode());
-		imtrn.setXtrnimtrn(TransactionCodeType.INVENTORY_NUMBER.getdefaultCode());
+		imtrn.setXtrn(TransactionCodeType.INVENTORY_NUMBER.getdefaultCode());
 		return imtrn;
 	}
 
