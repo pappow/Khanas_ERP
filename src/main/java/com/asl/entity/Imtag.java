@@ -19,11 +19,11 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "imtag")
 @IdClass(ImtagPK.class)
-@EqualsAndHashCode(of = { "zid","xtagnum" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid", "xtagnum" }, callSuper = false)
 public class Imtag extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -2195786645048298298L;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
@@ -33,33 +33,33 @@ public class Imtag extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xtagnum")
 	private String xtagnum;
-	
+
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
-	
+
 	@Column(name = "xdatecom")
 	@Temporal(TemporalType.DATE)
 	private Date xdatecom;
-	
+
 	@Column(name = "xref")
 	private String xref;
-	
+
 	@Column(name = "xwh")
 	private String xwh;
-	
+
 	@Column(name = "xstatustag")
 	private String xstatustag;
-	
+
 	@Column(name = "xtype")
 	private String xtype;
-	
+
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
-	
+
 	@Column(name = "xtrn")
 	private String xtrn;
-	
+
 	@Transient
 	private String xtrnimtag;
 }

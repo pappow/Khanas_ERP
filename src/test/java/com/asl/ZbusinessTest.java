@@ -1,5 +1,8 @@
 package com.asl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +17,12 @@ public class ZbusinessTest {
 
 	@Test
 	void testZbusinessSave() {
-		Zbusiness z = getBranch2();
-		long count = zbusinessService.save(z);
-		System.out.println(count);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
+		System.out.println(sdf.format(new Date()).toUpperCase());
+		
+//		Zbusiness z = getBranch2();
+//		long count = zbusinessService.save(z);
+//		System.out.println(count);
 	}
 
 	@Test

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Purchase Order</title>
+		<title>Stock Transfer Order</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -36,8 +36,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
@@ -52,23 +51,23 @@
 										<h1>Stock transfer order</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
+										<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(imtorheader.xtornum)}" th:href="@{/inventory/transferorder}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Create Order</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success confirmimtor-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/archive/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.zactive == false}" th:href="@{/inventory/transferorder/restore/} + ${imtorheader.xtornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-paper-plane"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/transferorder/archive/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/inventory/transferorder/save}" th:object="${imtorheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<input type="hidden" id="xtornum" th:if="${not #strings.isEmpty(imtorheader.xtornum)}" class="form-control" th:field="*{xtornum}">
+											<input type="hidden" class="form-control" th:field="*{xtypetrn}">
+											<input type="hidden" th:if="${not #strings.isEmpty(imtorheader.xtornum)}" class="form-control" th:field="*{xtornum}">
 											<div class="row">
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(imtorheader.xtornum)}">
-														<label class="control-label col-md-4" for="xtrntor">Prefix : </label>
+														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
 														<div class="col-md-6">
-															<select class="form-control" th:field="*{xtrntor}">
+															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${imtorprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
@@ -77,17 +76,17 @@
 													<div class="form-group" th:if="${not #strings.isEmpty(imtorheader.xtornum)}">
 														<label class="control-label col-md-4" for="xtornum">T.O. Number : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xtornum}" disabled="disabled">
+															<input type="text" class="form-control" th:value="*{xtornum}" disabled="disabled">
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xchalanref">Chalan Ref: </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xchalanref}">
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
 														<div class="input-group date col-md-7 datepicker">
@@ -95,6 +94,7 @@
 																	class="form-control" 
 																	id="xdate"
 																	name="xdate"
+																	required="required"
 																	th:value="${imtorheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(imtorheader.xdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
@@ -110,7 +110,7 @@
 															</select>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtwh">To Warehouse : </label>
 														<div class="col-md-8">
@@ -122,6 +122,13 @@
 
 												</div>
 												<div class="col-md-6">
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatustor">Status : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xstatustor}">
+														</div>
+													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xref">Ref : </label>
@@ -227,7 +234,7 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	
+
 	<script>
 		$(document).ready(function(){
 			$('a.confirmimtor-btn-link').off('click').on('click', function(e){

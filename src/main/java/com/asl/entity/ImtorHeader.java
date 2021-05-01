@@ -10,7 +10,6 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +18,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "imtorheader")
 @IdClass(ImtorHeaderPK.class)
-@EqualsAndHashCode(of = { "zid","xtornum" }, callSuper = false)
-public class ImtorHeader extends AbstractModel<String>{
+@EqualsAndHashCode(of = { "zid", "xtornum" }, callSuper = false)
+public class ImtorHeader extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -1246892187349642823L;
 
@@ -33,40 +32,36 @@ public class ImtorHeader extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xtornum")
 	private String xtornum;
-	
+
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
-	
+
 	@Column(name = "xref")
 	private String xref;
-	
+
 	@Column(name = "xdatecom")
 	@Temporal(TemporalType.DATE)
 	private Date xdatecom;
-	
+
 	@Column(name = "xfwh")
 	private String xfwh;
-	
+
 	@Column(name = "xtwh")
 	private String xtwh;
-	
+
 	@Column(name = "xstatustor")
 	private String xstatustor;
-	
+
 	@Column(name = "xtrn")
 	private String xtrn;
-	
+
 	@Column(name = "xlong")
 	private String xlong;
-	
+
 	@Column(name = "xchalanref")
 	private String xchalanref;
 
-	@Transient
-	private String xtype;
-
-	@Transient
-	private String xtrntor;
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
 }
-

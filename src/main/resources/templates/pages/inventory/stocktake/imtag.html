@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Purchase Order</title>
+		<title>Stock Take</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -36,8 +36,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
@@ -55,29 +54,21 @@
 										<a th:href="@{/inventory/stocktake}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
 										<a th:if="${#strings.isEmpty(imtag.xtagnum)}" th:href="@{/inventory/stocktake}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.xstatustag != 'Confirmed' and imtag.zactive == true}" th:href="@{/inventory/stocktake/confirmstocktake/} + ${imtag.xtagnum}" class="btn btn-sm btn-success confirmstocktake-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.xstatustag != 'Confirmed' and imtag.zactive == true}" th:href="@{/inventory/stocktake/confirmstocktake/} + ${imtag.xtagnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-paper-plane"></i> Confirm</a>
 										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" th:href="@{/inventory/stocktake/archive/} + ${imtag.xtagnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == false}" th:href="@{/inventory/stocktake/restore/} + ${imtag.xtagnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/inventory/stocktake/save}" th:object="${imtag}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtype}"/>
 											<input type="hidden" th:field="*{xtypetrn}">
-											<input type="hidden" id="xtagnum" th:if="${not #strings.isEmpty(imtag.xtagnum)}" class="form-control" th:field="*{xtagnum}">
-											<!-- <input type="hidden" class="form-control" th:field="*{xtotamt}"> -->
+											<input type="hidden" th:if="${not #strings.isEmpty(imtag.xtagnum)}" class="form-control" th:field="*{xtagnum}">
 											<div class="row">
 												<div class="col-md-12">
 
 													<div class="form-group" th:if="${#strings.isEmpty(imtag.xtagnum)}">
 														<label class="control-label col-md-4" for="xtrn">Prefix : </label>
-														<div class="col-md-5">
+														<div class="col-md-3">
 															<select class="form-control" th:field="*{xtrn}">
 																<option th:each="prefix : ${imtagprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
@@ -87,10 +78,10 @@
 													<div class="form-group" th:if="${not #strings.isEmpty(imtag.xtagnum)}">
 														<label class="control-label col-md-4" for="xtagnum">TAG Number : </label>
 														<div class="col-md-5">
-															<input type="text" class="form-control" th:field="*{xtagnum}" disabled="disabled">
+															<input type="text" class="form-control" th:value="*{xtagnum}" disabled="disabled">
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date : </label>
 														<div class="input-group date col-md-4 datepicker">
@@ -98,13 +89,14 @@
 																	class="form-control" 
 																	id="xdate"
 																	name="xdate"
+																	required="required"
 																	th:value="${imtag.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(imtag.xdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdatecom">Date Complete: </label>
 														<div class="input-group date col-md-4 datepicker">
@@ -127,16 +119,15 @@
 															</select>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatustag">Tag Status : </label>
 														<div class="col-md-5">
-															<select class="form-control" th:field="*{xstatustag}">
-																<option th:each="s : ${imtagstatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
+															<input type="hidden" class="form-control" th:field="*{xstatustag}"/>
+															<input type="text" class="form-control" th:value="*{xstatustag}" disabled="disabled"/>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xref">Ref : </label>
 														<div class="col-md-5">
@@ -231,30 +222,4 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	
-	<script>
-		$(document).ready(function(){
-			
-			$('a.confirmstocktake-btn-link').off('click').on('click', function(e){
-				e.preventDefault();
-				var tagNum = $("#xtagnum").val();
-				
-				$.ajax({
-					url: getBasepath() + "/inventory/stocktake/confirmstocktake/" + tagNum,
-					success: function(result){
-						var status = result.status.toLowerCase()
-						
-						if(status == "success")
-							showMessage("success", "Stock Take Confirmed");
-						else if(status == "error")
-							showMessage("error", result.message);
-						//location.reload(true);
-						setTimeout(() => {
-							location.reload(true);
-						}, 1500);
-					}
-				});
-			});			
-		});
-	</script>
 </html>

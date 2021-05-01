@@ -39,4 +39,6 @@ public interface ImtorService {
 	// Procedure calls
 	public void procConfirmTO(String xtornum, String p_action, String p_seq);
 
+	public long deleteImtorDetailByXtornum(String xtornum);
+
 }

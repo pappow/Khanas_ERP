@@ -5,7 +5,7 @@
 
 	<insert id="saveImtorHeader" parameterType="ImtorHeader">
 		<selectKey keyProperty="xtornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrntor}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO ImtorHeader
 		(
@@ -18,6 +18,7 @@
 			xtwh,
 			xstatustor,
 			xtrn,
+			xtypetrn,
 			xlong,
 			zid,
 			zauserid,
@@ -39,6 +40,7 @@
 			#{xtwh, jdbcType=VARCHAR},	
 			#{xstatustor, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -50,7 +52,7 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
+
 	<insert id="saveImtorHeaderWithChalan" parameterType="ImtorHeader">
 		INSERT INTO ImtorHeader
 		(
@@ -63,6 +65,7 @@
 			xtwh,
 			xstatustor,
 			xtrn,
+			xtypetrn,
 			xlong,
 			zid,
 			zuuserid,
@@ -83,6 +86,7 @@
 			#{xtwh, jdbcType=VARCHAR},	
 			#{xstatustor, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -93,10 +97,10 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
+
 	<update id="updateImtorHeader" parameterType="ImtorHeader">
 		UPDATE
-			ImtorHeader
+			imtorHeader
 		SET
 			xchalanref=#{xchalanref, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
@@ -106,8 +110,8 @@
 			xtwh=#{xtwh, jdbcType=VARCHAR},	
 			xstatustor=#{xstatustor, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xlong=#{xlong, jdbcType=VARCHAR},
-			
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -119,7 +123,7 @@
 			xtornum=#{xtornum}
 			AND zid=#{zid}
 	</update>
-	
+
 	<insert id="saveImtorDetail" parameterType="ImtorDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
@@ -165,8 +169,7 @@
 			#{zutime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
-	
+
 	<update id="updateImtorDetail" parameterType="ImtorDetail">
 		UPDATE 
 			ImtorDetail
@@ -188,22 +191,26 @@
 			AND xrow=#{xrow, jdbcType=INTEGER}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
-	
+
 	<delete id="deleteImtorDetail" parameterType="ImtorDetail">
 		DELETE FROM ImtorDetail WHERE xrow=#{xrow} AND xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
 	</delete>
-	
+
+	<delete id="deleteImtorDetailByXtornum">
+		DELETE FROM imtordetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+	</delete>
+
 	<select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
 		SELECT * 
 		FROM 
 			ImtorHeader 
 		WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="findImtorHeaderByXchalanref" resultType="ImtorHeader">
 		SELECT * FROM ImtorHeader WHERE xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
 		SELECT 
 			det.*, caitem.xdesc as "xitemdesc"
@@ -213,11 +220,11 @@
 		WHERE 
 			det.xtornum=#{xtornum} AND det.zid=#{zid} AND det.zactive='1' ORDER BY det.xrow ASC
 	</select>
-	
+
 	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id="getAllImtorHeader" resultType="ImtorHeader">
 		SELECT *
 		FROM
@@ -225,7 +232,7 @@
 		WHERE zid=#{zid} AND zactive='1'
 		ORDER BY xtornum DESC
 	</select>
-	
+
 	<select id="findImtorDetailByXtornumAndXrow" resultType="ImtorDetail">
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
@@ -233,7 +240,7 @@
 	<select id="findImtorDetailByXtornumAndXitem" resultType="ImtorDetail">
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
 	</select>
-	
+
 	<select id = "procConfirmTO" statementType = "CALLABLE">
 		{call IM_confirmTO(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xtornum, jdbcType = VARCHAR, mode = IN}, #{p_action, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>

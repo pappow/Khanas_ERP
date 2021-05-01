@@ -28,6 +28,7 @@ import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -102,6 +103,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXstatusord("Open");
+		opdoheader.setXstatusar("Open");
+		opdoheader.setXstatusjv("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
 		opdoheader.setXgrandtot(BigDecimal.ZERO);
 		opdoheader.setXvatait("No Vat");
@@ -163,6 +166,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 
 		// If new
+		opdoHeader.setXstatusar("Open");
+		opdoHeader.setXstatusjv("Open");
 		long count = opdoService.save(opdoHeader);
 		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);

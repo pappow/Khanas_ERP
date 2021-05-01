@@ -13,13 +13,13 @@ import com.asl.service.ImtorService;
 
 @Service
 public class ImtorServiceImpl extends AbstractGenericService implements ImtorService {
-	
+
 	@Autowired
 	private ImtorMapper imtorMapper;
 
 	@Override
 	public long save(ImtorHeader imtorHeader) {
-		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrntor()))
+		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrn()))
 			return 0;
 		imtorHeader.setZid(sessionManager.getBusinessId());
 		imtorHeader.setZauserid(getAuditUser());
@@ -121,7 +121,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 			return null;
 		return imtorMapper.findImtorDetailByXtornumAndXitem(xtornum, xitem, sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail) {
 		if(imtorDetail == null) return 0;
@@ -133,4 +133,11 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		imtorMapper.procConfirmTO(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtornum, p_action, p_seq);
 	}
 
+	@Override
+	public long deleteImtorDetailByXtornum(String xtornum) {
+		if(StringUtils.isBlank(xtornum)) return 0;
+		return imtorMapper.deleteImtorDetailByXtornum(xtornum, sessionManager.getBusinessId());
+	}
+
+	
 }
