@@ -29,5 +29,6 @@ public interface ArhedMapper {
 	public Arhed findAdarByXcus(String xcus, String xtrn, String zid);
 	public List<Arhed> getAllAdars(String xtrn, String zid);
 	
-
+	//Search Field
+	public List<Arhed> findByXstaff(String xstaff, String zid);
 }

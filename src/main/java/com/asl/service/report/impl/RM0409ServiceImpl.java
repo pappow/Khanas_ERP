@@ -1,12 +1,21 @@
 package com.asl.service.report.impl;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
@@ -18,24 +27,30 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0403Service")
-public class RM0403ServiceImpl extends AbstractReportService {
+@Service("RM0409Service")
+public class RM0409ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private XcodesService xcodesService;
-	
+
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
 	}
 
 	private List<FormFieldBuilder> generateFields() {
-		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 		
+		List<Xcodes> CusgroupList = xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE);
+		List<DropdownOption> group = new ArrayList<>();
+		group.add(new DropdownOption("", "-- Select --"));
+		CusgroupList.stream().forEach(x -> group.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		
+		List<Xcodes> paymentType = xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE);
+		List<DropdownOption> paytype = new ArrayList<>();
+		paytype.add(new DropdownOption("", "-- Select --"));
+		paymentType.stream().forEach(x -> paytype.add(new DropdownOption(x.getXcode(), x.getXcode())));
+
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 		
@@ -46,18 +61,13 @@ public class RM0403ServiceImpl extends AbstractReportService {
 		// To Date
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
-		// customer
+		// Customer
 		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
 		
-		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Do Status", options, "", false));
-		
-		// DO number
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Do Number", "search/report/opdo/xdornum", "", false));
-		
-
+				
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
+
+
 }
-  

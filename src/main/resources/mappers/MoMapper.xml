@@ -301,5 +301,13 @@
 			AND modetail.zid=#{zid} 
 			AND modetail.zactive='1'
 	</select>
+	
+	<select id="findModetailXbatch" resultType="Moheader">
+		SELECT distinct xbatch FROM moheader WHERE (UPPER(xbatch) LIKE '%' || #{xbatch} || '%') AND zid=#{zid}
+	</select>
+	
+	<select id="findModetailByXtype" resultType="Modetail">
+		SELECT distinct xtype FROM modetail WHERE (UPPER(xtype) LIKE '%' || #{xtype} || '%') AND zid=#{zid}
+	</select>
 
 </mapper>

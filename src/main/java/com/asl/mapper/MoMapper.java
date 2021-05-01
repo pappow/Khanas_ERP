@@ -29,7 +29,7 @@ public interface MoMapper {
 	public Modetail findModetailByXrowAndXbatch(int xrow, String xbatch, String zid);
 
 	public List<Modetail> findModetailByXbatch(String xbatch, String zid);
-
+	
 	public List<Moheader> getAllMoheader(String zid);
 
 	public Moheader findMoheaderByXchalanAndXitem(String xchalan, String xitem, String zid);
@@ -41,4 +41,9 @@ public interface MoMapper {
 	public Modetail findModetailByXbatchAndXtype(String xbatch, String xtype, String zid);
 
 	public long deleteModetail(Modetail modetail);
+	
+	//search field
+	public List<Moheader> findModetailXbatch(String xbatch, String zid);
+	
+	public List<Modetail> findModetailByXtype(String xtype, String zid);	
 }

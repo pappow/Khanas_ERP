@@ -167,5 +167,15 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		if(StringUtils.isBlank(xchalan)) return Collections.emptyList();
 		return moMapper.findMoHeaderByXchalan(xchalan, sessionManager.getBusinessId());
 	}
-
+	@Override
+	public List<Moheader> findModetailXbatch(String xbatch){
+		if(StringUtils.isBlank(xbatch)) return Collections.emptyList();
+		return moMapper.findModetailXbatch(xbatch, sessionManager.getBusinessId());
+	}
+	@Override
+	public List<Modetail> findModetailByXtype(String xtype){
+		if(StringUtils.isBlank(xtype)) return Collections.emptyList();
+		return moMapper.findModetailByXtype(xtype, sessionManager.getBusinessId());
+	}
+	
 }

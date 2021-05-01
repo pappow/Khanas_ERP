@@ -162,5 +162,9 @@
 	<select id="getAllArhedByXtrn" resultType="Arhed">
 		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id="findByXstaff" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xstaff) LIKE #{xstaff} ||'%') AND zid=#{zid} AND zactive='1'
+	</select>
 
 </mapper>

@@ -17,8 +17,12 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pocrnheader;
+import com.asl.entity.Moheader;
+import com.asl.entity.Modetail;
+import com.asl.entity.Arhed;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
+import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
@@ -27,6 +31,7 @@ import com.asl.service.OpordService;
 import com.asl.service.PogrnService;
 import com.asl.service.PocrnService;
 import com.asl.service.PoordService;
+import com.asl.service.MoService;
 import com.asl.service.ProductionSuggestionService;
 
 
@@ -47,6 +52,8 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private OpdoService  opdoService;
 	@Autowired private BmbomService bmbomService;
 	@Autowired private PoordService poordService;
+	@Autowired private MoService MoService;
+	@Autowired private ArhedService arhedService;
 
 
 	@GetMapping("/supplier/{hint}")
@@ -269,6 +276,29 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<Pocrnheader> crnStatusList = pocrnService.findPocrnXstatuscrn(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		crnStatusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXstatuscrn(), c.getXstatuscrn())));
+		return list;
+	}
+	@GetMapping("/report/xbatch/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getXbatch(@PathVariable String hint){
+		List<Moheader> xbatchList = MoService.findModetailXbatch(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		xbatchList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXbatch(), c.getXbatch())));
+		return list;
+	}
+	
+	@GetMapping("/report/xtype/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getXtype(@PathVariable String hint){
+		List<Modetail> xtypeList = MoService.findModetailByXtype(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		xtypeList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXtype(), c.getXtype())));
+		return list;
+	}
+	
+	@GetMapping("/report/xstaff/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getXstaff(@PathVariable String hint){
+		List<Arhed> xstaffList = arhedService.findByXstaff(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		xstaffList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXtype(), c.getXtype())));
 		return list;
 	}
 }

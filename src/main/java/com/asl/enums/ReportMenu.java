@@ -47,9 +47,9 @@ public enum ReportMenu {
 	RM0602(999, "600", "Inventory", "Date Wise Stock Status", ReportParamMap.RM0602, "Y", false, false, 1000),
 	RM0603(999, "600", "Inventory", "Stock Low Status", ReportParamMap.RM0603, "Y", false, false, 1000),
 	RM0604(999, "600", "Inventory", "Inventory Consumption Report", ReportParamMap.RM0604, "Y", false, false, 1000),
-	RM0606(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0606, "Y", false, false, 1000),
-	RM0607(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0607, "Y", false, false, 1000),
-	RM0608(999, "600", "Inventory", "Item List", ReportParamMap.RM0608, "Y", false, false, 1000);
+	RM0605(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0605, "Y", false, false, 1000),
+	RM0606(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0606, "Y", false, false, 1000),
+	RM0607(999, "600", "Inventory", "Item List", ReportParamMap.RM0607, "Y", false, false, 1000);
 
 
 	private int seqn;
