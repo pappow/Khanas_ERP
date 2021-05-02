@@ -47,6 +47,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		if(oporddetail == null) return 0;
 		oporddetail.setZid(sessionManager.getBusinessId());
 		oporddetail.setZauserid(getAuditUser());
+		System.out.println(">>>>> " + oporddetail.getXitem());
 		return opordMapper.saveOpordDetail(oporddetail);
 	}
 
