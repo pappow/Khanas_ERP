@@ -386,12 +386,12 @@
 			$("#hall-form").find("input[name='xlineamt']").val($(this).find(".hall-xrate").text());
 			//$("#hall-form").submit();
 			
-			submitMainForm("/asl-erp/conventionmanagement/hallbooking/oporddetail/save", $("#hall-form"));
+			submitMainForm(getBasepath() +"/conventionmanagement/hallbooking/oporddetail/save", $("#hall-form"));
 		});
 		
 		$("#allHalls").delegate('.remove-hall','click', function(){
 			console.log("Remove Logged: >>>" + $(this).find(".hall-xrow").text());
-			var url = "/asl-erp/conventionmanagement/hallbooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".hall-xrow").text() +"/delete";
+			var url = getBasepath() + "/conventionmanagement/hallbooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".hall-xrow").text() +"/delete";
 			$(".btn-remove-hall").attr("href", url);
 			doItemDelete(url);
 			//$(".btn-remove-hall").click();

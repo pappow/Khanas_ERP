@@ -398,7 +398,7 @@
 		});
 		
 		$("#allRooms").delegate('.remove-room','click', function(){
-			var url = "/asl-erp/roommanagement/roombooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".room-xrow").text() +"/delete";
+			var url = getBasepath() + "/roommanagement/roombooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".room-xrow").text() +"/delete";
 			console.log("Remove Del Logged: >>>" + url);
 			doItemDelete(url);
 		});
