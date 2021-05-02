@@ -2,7 +2,7 @@ logging:
   level:
     com: 
       asl: 
-        mapper: TRACE
+        mapper: INFO
     root: INFO
     org:
       springframework:
@@ -57,14 +57,14 @@ mybatis:
 
 JNDIName: jdbcTemplate
 default: 
-  birtUrl: http://62.171.179.61:8080/birt/frameset?__report=khanas/
+  birtUrl: http://62.171.179.61:2021/birt/frameset?__report=khanas/
   allow-system-admin: Y
   site-title: AJU <span class="title-divider">ERP</span>
   logo-name: asl.png
   copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
-  im-ex-path: D:/ASL/importexport
-  logging-path: D:/ASL/logs 
+  im-ex-path: D:/KHANAS/importexport
+  logging-path: D:/KHANAS/logs 
   report: 
-    template-path: D:/ASL/cr-reports
-    xsl-path: D:/ASL/xsl
-    saved-xml-path: D:/ASL/report/savedxml
+    template-path: D:/KHANAS/cr-reports
+    xsl-path: D:/KHANAS/xsl
+    saved-xml-path: D:/KHANAS/report/savedxml
