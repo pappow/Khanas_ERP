@@ -331,6 +331,9 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// Check chalan has all process completed
+		moService.isProductionProcessCompleted(mh.getXchalan());
+
 		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" + mh.getXchalan());
 		responseHelper.setSuccessStatusAndMessage("Process successfull");
 		return responseHelper.getResponse();
@@ -356,6 +359,9 @@ public class ProductionBatchController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage(em);
 			return responseHelper.getResponse();
 		}
+
+		// Set production complete flag to chalan
+		moService.isProductionProcessCompleted(xchalan);
 
 		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" +xchalan);
 		responseHelper.setSuccessStatusAndMessage("Process successfull");

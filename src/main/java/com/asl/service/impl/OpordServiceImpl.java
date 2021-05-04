@@ -131,6 +131,12 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	}
 
 	@Override
+	public List<Opordheader> findAllProductionCompletedChalan(String xtypetrn, String xtrn) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return Collections.emptyList();
+		return opordMapper.findAllProductionCompletedChalan(xtypetrn, xtrn, sessionManager.getBusinessId());
+	}
+
+	@Override
 	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, Date date) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn) || StringUtils.isBlank(xstatus)) return Collections.emptyList();
 		if(date == null) date = new Date();

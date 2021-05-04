@@ -147,4 +147,7 @@ public class Opordheader extends AbstractModel<String> {
 	@Transient
 	private boolean isbooked;
 
+	@Column(name = "xtornum")
+	private String xtornum;
+
 }
