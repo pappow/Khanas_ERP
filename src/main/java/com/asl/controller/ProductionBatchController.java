@@ -170,7 +170,7 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		if(BigDecimal.valueOf(qty).compareTo(BigDecimal.ZERO) == -1 || BigDecimal.valueOf(qty).compareTo(BigDecimal.ZERO) == 0) {
+		if(BigDecimal.valueOf(qty).compareTo(BigDecimal.ZERO) == -1) {
 			responseHelper.setErrorStatusAndMessage("Please enter valid completed quantity");
 			return responseHelper.getResponse();
 		}
