@@ -13,6 +13,8 @@
 						<input type="hidden" th:field="*{xtornum}"/>
 						<input type="hidden" th:field="*{xchalanref}"/>
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
+						<input type="hidden" id="xfwh" name="xfwh" th:value="${fromWarehouse}"/>
+						<input type="hidden" id="xtwh" name="xtwh" th:value="${toWarehouse}"/>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xitem">Item Code : </label>
@@ -46,13 +48,34 @@
 									<input type="text" th:value="*{xrate}" class="form-control xrate-display" min="0" disabled="disabled"/>
 								</div>
 							</div>
-						</div>
-						<div class="col-md-6">
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xnote">Note : </label>
 								<div class="col-sm-8">
 									<textarea rows="6" cols="" class="form-control" th:field="*{xnote}"></textarea>
 								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<h4 class="text-center">Available Quantity In Stock</h4>
+							<div>
+								<table class="table table-bordered table-stripped" id="stocktable" th:fragment="stocktable">
+									<thead>
+										<tr>
+											<th>Warehouse</th>
+											<th>Incoming</th>
+											<th>In Hand</th>
+											<th>Available</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="a : ${availablestock}">
+											<td th:text="${a.xwh}"></td>
+											<td th:text="${a.xqtyrt}"></td>
+											<td th:text="${a.xinhand}"></td>
+											<td th:text="${a.xavail}"></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</form>
@@ -77,12 +100,17 @@
 							$('input.xunit-display').val("");
 							$('input[name="xrate"]').val(0);
 							$(".xrate-display").val(0);
+
+							var rdata = {};
+							rdata.reloadurl = '/inventory/transferorder/stock/blankitem';
+							rdata.reloadelementid = 'stocktable';
+							doSectionReloadWithNewData(rdata);
 							return;
 						}
 
 						loadingMask2.show(),
 						$.ajax({
-							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/inventory/transferorder/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							success : function(data) {
 								loadingMask2.hide();
@@ -90,6 +118,11 @@
 								$('input.xunit-display').val(data.xunitpur);
 								$('input[name="xrate"]').val(data.xrate);
 								$(".xrate-display").val(data.xrate);
+
+								var rdata = {};
+								rdata.reloadurl = '/inventory/transferorder/stock/' + $('input[name="xitem"]').val();
+								rdata.reloadelementid = 'stocktable';
+								doSectionReloadWithNewData(rdata);
 							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");

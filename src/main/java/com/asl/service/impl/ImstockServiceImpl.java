@@ -1,7 +1,9 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,19 @@ import com.asl.service.ImstockService;
 @Service
 public class ImstockServiceImpl extends AbstractGenericService implements ImstockService {
 
-	@Autowired
-	private ImstockMapper imstockMapper;
+	@Autowired private ImstockMapper imstockMapper;
+
+	@Override
+	public List<Imstock> findByXitem(String xitem) {
+		if(StringUtils.isBlank(xitem)) return Collections.emptyList();
+		return imstockMapper.findByXitem(xitem, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Imstock findByXitemAndXwh(String xitem, String xwh) {
+		if(StringUtils.isBlank(xitem) || StringUtils.isBlank(xwh)) return null;
+		return imstockMapper.findByXitemAndXwh(xitem, xwh, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public List<Imstock> searchXitem(String xitem) {

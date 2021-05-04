@@ -13,6 +13,10 @@ import com.asl.entity.Imstock;
 @Component
 public interface ImstockService {
 
+	public List<Imstock> findByXitem(String xitem);
+
+	public Imstock findByXitemAndXwh(String xitem, String xwh);
+
 	public List<Imstock> searchXitem(String xitem);
 
 	public List<Imstock> search(String xwh, String xitem);

@@ -58,7 +58,7 @@
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == false and salesorderchalan.xstatus eq 'Open'}" th:href="@{/salesninvoice/salesorderchalan/restore/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Open'}" th:href="@{/salesninvoice/salesorderchalan/lockchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning restore-btn-link"><i class="fas fa-unlock-alt"></i> Lock Chalan</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-danger"><i class="fas fa-lock"></i> Locked</a>
-										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and not #lists.isEmpty(chalandetails)}" th:href="@{/production/suggestion/create/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-clipboard-list"></i> Create Suggestion</a>
+										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and not #lists.isEmpty(chalandetails)}" th:href="@{/production/suggestion/create/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-success"><i class="fas fa-clipboard-list"></i> Create Suggestion</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and not salesorderchalan.batchcreated and not #lists.isEmpty(chalandetails)}" th:href="@{/production/batch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Create Batch</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and salesorderchalan.batchcreated}" th:href="@{/production/batch/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-warning"><i class="fas fa-thumbtack"></i> Show Batch</a>
 										<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed' and ((salesorderchalan.batchcreated and productioncompleted and not salesorderchalan.invoicecreated) OR #lists.isEmpty(chalandetails))}" th:href="@{/salesninvoice/salesorderchalan/createinvoice/} + ${salesorderchalan.xordernum}" class="btn btn-sm btn-info archive-btn-link"><i class="fas fa-file-invoice"></i> Create Sales Invoice & Delivery Chalan</a>
@@ -121,32 +121,34 @@
 										<h1>Chalan List</h1>
 									</div>
 									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
-											<thead>
-												<tr>
-													<th>Chalan</th>
-													<th>Date</th>
-													<th>Status</th>
-													<th style="text-align: center;">Batch Created</th>
-													<th style="text-align: center;">Production Completed</th>
-													<th style="text-align: center;">Invoice Created</th>
-													<th>Delivery Chalan No.</th>
-												</tr>
-											</thead>
-											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="bh : ${salesorderchalanList}">
-													<td>
-														<a th:href="@{/salesninvoice/salesorderchalan/} + ${bh.xordernum}" th:text="${bh.xordernum}"></a>
-													</td>
-													<td th:text="${#dates.format(bh.xdate, df)}"></td>
-													<td th:text="${bh.xstatus}"></td>
-													<td style="color: green; text-align: center;" th:text="${bh.batchcreated ? 'Y' : ''}"></td>
-													<td style="color: green; text-align: center;" th:text="${bh.productioncompleted ? 'Y' : ''}"></td>
-													<td style="color: green; text-align: center;" th:text="${bh.invoicecreated ? 'Y' : ''}"></td>
-													<td th:text="${bh.xdornum}"></td>
-												</tr>
-											</tbody>
-										</table>
+										<div style="overflow-x: scroll; overflow-y: none;">
+											<table class="table table-striped table-bordered datatable nowrap">
+												<thead>
+													<tr>
+														<th>Chalan</th>
+														<th>Date</th>
+														<th>Status</th>
+														<th style="text-align: center;">Batch Created</th>
+														<th style="text-align: center;">Production Completed</th>
+														<th style="text-align: center;">Invoice Created</th>
+														<th>Delivery Chalan No.</th>
+													</tr>
+												</thead>
+												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+													<tr th:each="bh : ${salesorderchalanList}">
+														<td>
+															<a th:href="@{/salesninvoice/salesorderchalan/} + ${bh.xordernum}" th:text="${bh.xordernum}"></a>
+														</td>
+														<td th:text="${#dates.format(bh.xdate, df)}"></td>
+														<td th:text="${bh.xstatus}"></td>
+														<td style="color: green; text-align: center;" th:text="${bh.batchcreated ? 'Y' : ''}"></td>
+														<td style="color: green; text-align: center;" th:text="${bh.productioncompleted ? 'Y' : ''}"></td>
+														<td style="color: green; text-align: center;" th:text="${bh.invoicecreated ? 'Y' : ''}"></td>
+														<td th:text="${bh.xdornum}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</section>
 
@@ -191,32 +193,34 @@
 									</div>
 								</div>
 
-								<table class="table table-striped table-bordered datatable nowrap" id="opensalesorderstable" th:fragment="opensalesorderstable">
-									<thead>
-										<tr>
-											<th>Sales Order No.</th>
-											<th>Requisition</th>
-											<th>Date</th>
-											<th>Status</th>
-											<th>Sales Invoice No.</th>
-											<th data-nosort="Y" style="text-align: right">Action</th>
-										</tr>
-									</thead>
-									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-										<tr th:each="os : ${opensalesorders}">
-											<td th:text="${os.xordernum}"></td>
-											<td th:text="${os.xpornum} + ' - ' + ${os.branchname}"></td>
-											<td th:text="${#dates.format(os.xdate, df)}"></td>
-											<td th:text="${os.xstatus}"></td>
-											<td th:text="${os.xdornum}"></td>
-											<td style="text-align: right">
-												<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/ordreqdetails/} + ${os.xordernum} + '/show', data-target-modal='salesorderdetailmodal'"><i class="fas fa-eye"></i></button>
-												<button th:if="${os.xstatus eq 'Open' and salesorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/salesorderconfirm/} + ${salesorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-check-square"></i></button>
-												<button th:if="${os.xstatus ne 'Open' and salesorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/salesorderrevoke/} + ${salesorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-trash"></i></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+								<div style="overflow-x: scroll; overflow-y: none;">
+									<table class="table table-striped table-bordered datatable nowrap" id="opensalesorderstable" th:fragment="opensalesorderstable">
+										<thead>
+											<tr>
+												<th>Sales Order No.</th>
+												<th>Requisition</th>
+												<th>Date</th>
+												<th>Status</th>
+												<th>Sales Invoice No.</th>
+												<th data-nosort="Y" style="text-align: right">Action</th>
+											</tr>
+										</thead>
+										<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+											<tr th:each="os : ${opensalesorders}">
+												<td th:text="${os.xordernum}"></td>
+												<td th:text="${os.xpornum} + ' - ' + ${os.branchname}"></td>
+												<td th:text="${#dates.format(os.xdate, df)}"></td>
+												<td th:text="${os.xstatus}"></td>
+												<td th:text="${os.xdornum}"></td>
+												<td style="text-align: right">
+													<button type="button" class="btn btn-primary btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/ordreqdetails/} + ${os.xordernum} + '/show', data-target-modal='salesorderdetailmodal'"><i class="fas fa-eye"></i></button>
+													<button th:if="${os.xstatus eq 'Open' and salesorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-success btn-confirm editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/salesorderconfirm/} + ${salesorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-check-square"></i></button>
+													<button th:if="${os.xstatus ne 'Open' and salesorderchalan.xstatus eq 'Open'}" type="button" class="btn btn-danger btn-confirm editmode" th:attr="data-url=@{/salesninvoice/salesorderchalan/salesorderrevoke/} + ${salesorderchalan.xordernum}  + '/' + ${os.xordernum}"><i class="fas fa-trash"></i></button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</section>
 					</div>
@@ -231,28 +235,30 @@
 								</h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="salesorderchalandetailtable" th:fragment="salesorderchalandetailtable">
-									<thead>
-										<tr>
-											<th>Item</th>
-											<th>Qty</th>
-											<th>Unit</th>
-											<th>Category</th>
-											<th>Group</th>
-										</tr>
-									</thead>
-									<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-										<tr th:each="cd : ${chalandetails}">
-											<td>
-												<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem} + ' - ' + ${cd.xdesc}"></a>
-											</td>
-											<td th:text="${cd.xqtyord}"></td>
-											<td th:text="${cd.xunit}"></td>
-											<td th:text="${cd.xcatitem}"></td>
-											<td th:text="${cd.xgitem}"></td>
-										</tr>
-									</tbody>
-								</table>
+								<div style="overflow-x: scroll; overflow-y: none;">
+									<table class="table table-striped table-bordered datatable nowrap" id="salesorderchalandetailtable" th:fragment="salesorderchalandetailtable">
+										<thead>
+											<tr>
+												<th>Item</th>
+												<th>Qty</th>
+												<th>Unit</th>
+												<th>Category</th>
+												<th>Group</th>
+											</tr>
+										</thead>
+										<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+											<tr th:each="cd : ${chalandetails}">
+												<td>
+													<a th:href="@{/mastersetup/caitem/} + ${cd.xitem}" target="_blank" th:text="${cd.xitem} + ' - ' + ${cd.xdesc}"></a>
+												</td>
+												<td th:text="${cd.xqtyord}"></td>
+												<td th:text="${cd.xunit}"></td>
+												<td th:text="${cd.xcatitem}"></td>
+												<td th:text="${cd.xgitem}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</section>
 					</div>

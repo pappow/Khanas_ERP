@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
+import com.asl.entity.Imstock;
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
 import com.asl.entity.Oporddetail;
@@ -25,6 +28,8 @@ import com.asl.entity.Opordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.CaitemService;
+import com.asl.service.ImstockService;
 import com.asl.service.ImtorService;
 import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
@@ -38,6 +43,8 @@ public class StockTransferOrderController extends ASLAbstractController {
 	@Autowired private XcodesService xcodeService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private OpordService opordService;
+	@Autowired private ImstockService imstockService;
+	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadTransferOrderdPage(Model model) {
@@ -215,12 +222,19 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	@GetMapping("{xtornum}/imtordetail/{xrow}/show")
 	public String openImtorDetailModal(@PathVariable String xtornum, @PathVariable String xrow, Model model) {
+		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
+		if(imtorHeader == null) return "redirect:/inventory/transferorder";
+
+		model.addAttribute("fromWarehouse", imtorHeader.getXfwh());
+		model.addAttribute("toWarehouse", imtorHeader.getXfwh());
+
 		if("new".equalsIgnoreCase(xrow)) {
 			ImtorDetail imtordetail = new ImtorDetail();
 			imtordetail.setXtornum(xtornum);
 			imtordetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 			imtordetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			model.addAttribute("imtordetail", imtordetail);
+			model.addAttribute("availablestock", Collections.emptyList());
 		} else {
 			ImtorDetail imtordetail = imtorService.findImtorDetailByXtornumAndXrow(xtornum, Integer.parseInt(xrow));
 			if(imtordetail == null) {
@@ -230,12 +244,13 @@ public class StockTransferOrderController extends ASLAbstractController {
 				imtordetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			}
 			model.addAttribute("imtordetail", imtordetail);
+			model.addAttribute("availablestock", imstockService.findByXitem(imtordetail.getXitem()));
 		}
 		return "pages/inventory/transferorder/imtordetailmodal::imtordetailmodal";
 	}
 
 	@PostMapping("/imtordetail/save")
-	public @ResponseBody Map<String, Object> savePoorddetail(ImtorDetail imtorDetail){
+	public @ResponseBody Map<String, Object> savePoorddetail(ImtorDetail imtorDetail, String xfwh){
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum()) || StringUtils.isBlank(imtorDetail.getXitem())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -252,9 +267,25 @@ public class StockTransferOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		if(imtorDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid quantity");
+			return responseHelper.getResponse();
+		}
+
 		// if existing
 		ImtorDetail existDetail = imtorService.findImtorDetailByXtornumAndXrow(imtorDetail.getXtornum(), imtorDetail.getXrow());
 		if(existDetail != null) {
+			// check the item is transfer eligible, that means it has enough stock available
+			Imstock stock = imstockService.findByXitemAndXwh(imtorDetail.getXitem(), xfwh);
+			if(stock == null) {
+				responseHelper.setErrorStatusAndMessage("There is no stock information available in system for item : " + imtorDetail.getXitem());
+				return responseHelper.getResponse();
+			}
+			if(stock.getXinhand().compareTo(imtorDetail.getXqtyord()) == -1) {
+				responseHelper.setErrorStatusAndMessage("Stock not available");
+				return responseHelper.getResponse();
+			}
+
 			BeanUtils.copyProperties(imtorDetail, existDetail, "xtornum", "xrow");
 			long count = imtorService.updateDetail(existDetail);
 			if(count == 0) {
@@ -264,6 +295,16 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 			responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/transferorder/imtordetail/" + imtorDetail.getXtornum());
 			responseHelper.setSuccessStatusAndMessage("Transfer Order detail updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		Imstock stock = imstockService.findByXitemAndXwh(imtorDetail.getXitem(), xfwh);
+		if(stock == null) {
+			responseHelper.setErrorStatusAndMessage("There is no stock information available in system for item : " + imtorDetail.getXitem());
+			return responseHelper.getResponse();
+		}
+		if(stock.getXavail().compareTo(imtorDetail.getXqtyord()) == -1) {
+			responseHelper.setErrorStatusAndMessage("Stock not available");
 			return responseHelper.getResponse();
 		}
 
@@ -339,5 +380,16 @@ public class StockTransferOrderController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Confirmed successfully");
 		responseHelper.setRedirectUrl("/inventory/transferorder/" + xtornum);
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/itemdetail/{xitem}")
+	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
+		return caitemService.findByXitem(xitem);
+	}
+
+	@GetMapping("/stock/{xitem}")
+	public String findAvailableStockInfo(@PathVariable String xitem, Model model){
+		model.addAttribute("availablestock", imstockService.findByXitem(xitem));
+		return "pages/inventory/transferorder/imtordetailmodal::stocktable";
 	}
 }
