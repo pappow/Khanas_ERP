@@ -3,6 +3,14 @@
 
 <mapper namespace="com.asl.mapper.ImstockMapper">
 
+	<select id="findByXitem" resultType="Imstock">
+		SELECT * FROM imstock WHERE xitem=#{xitem} AND zid=#{zid} ORDER BY xwh
+	</select>
+
+	<select id="findByXitemAndXwh" resultType="Imstock">
+		SELECT * FROM imstock WHERE xitem=#{xitem} AND XWH=#{xwh} AND zid=#{zid} ORDER BY xwh
+	</select>
+
 	<select id="searchXitem" resultType="Imstock">
 		SELECT DISTINCT xitem FROM imstock WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%') AND zid=#{zid} ORDER BY xitem
 	</select>
