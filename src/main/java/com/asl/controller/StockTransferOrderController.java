@@ -2,7 +2,6 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +22,12 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Imstock;
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
-import com.asl.entity.Oporddetail;
-import com.asl.entity.Opordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
 import com.asl.service.ImtorService;
-import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -42,7 +38,6 @@ public class StockTransferOrderController extends ASLAbstractController {
 	@Autowired private ImtorService imtorService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private XtrnService xtrnService;
-	@Autowired private OpordService opordService;
 	@Autowired private ImstockService imstockService;
 	@Autowired private CaitemService caitemService;
 
@@ -91,103 +86,30 @@ public class StockTransferOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// if existing record
+		// If existing
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
-		List<Oporddetail> opordDetailList = new ArrayList<Oporddetail>();
-		List<ImtorDetail> imtorDetailList;
-		//Validate and get records for chalan ref
-		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
-			Opordheader opordHeader = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());
-			if(opordHeader == null) {
-				responseHelper.setErrorStatusAndMessage("Please provide a valid Chalan Ref");
-				return responseHelper.getResponse();
-			}
-
-			if(existImtorHeader != null && StringUtils.isNotBlank(existImtorHeader.getXchalanref()) && !imtorHeader.getXchalanref().equalsIgnoreCase(existImtorHeader.getXchalanref())) {
-				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
-				for(int i=0; i<imtorDetailList.size(); i++) {
-					long delCount = imtorService.deleteDetail(imtorDetailList.get(i));
-					if(delCount == 0) {
-						responseHelper.setErrorStatusAndMessage("Failed to delete detail for Chalan : " + existImtorHeader.getXchalanref());
-						return responseHelper.getResponse();
-					}
-				}
-			}
-			
-			opordDetailList = opordService.findOporddetailByXordernum(opordHeader.getXordernum());	
-		}
-
 		if(existImtorHeader != null) {
-			//Delete details if chalan ref is empty
-			if(StringUtils.isBlank(imtorHeader.getXchalanref()) && StringUtils.isNotBlank(existImtorHeader.getXchalanref())) {
-				imtorDetailList = imtorService.findImtorDetailByXtornumAndXchalanref(existImtorHeader.getXtornum(), existImtorHeader.getXchalanref());
-				for(int i=0; i<imtorDetailList.size(); i++) {
-					long delCount = imtorService.deleteDetail(imtorDetailList.get(i));
-					if(delCount == 0) {
-						responseHelper.setErrorStatusAndMessage("Failed to delete detail for Chalan : " + existImtorHeader.getXchalanref());
-						return responseHelper.getResponse();
-					}
-				}
-			}
-
-			String previousChalan = existImtorHeader.getXchalanref();
-			BeanUtils.copyProperties(imtorHeader, existImtorHeader, "xtornum", "xdate");
+			BeanUtils.copyProperties(imtorHeader, existImtorHeader, "xtypetrn", "xtrn");
 			long count = imtorService.update(existImtorHeader);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update Transfer Order");
 				return responseHelper.getResponse();
 			}
 
-			if(0<opordDetailList.size() && !imtorHeader.getXchalanref().equalsIgnoreCase(previousChalan)) {
-				ImtorDetail imtorDetail;
-				
-				for(int i=0; i<opordDetailList.size(); i++) {
-					imtorDetail = new ImtorDetail();
-					BeanUtils.copyProperties(opordDetailList.get(i), imtorDetail, "xrow");
-					imtorDetail.setXtornum(imtorHeader.getXtornum());
-					imtorDetail.setXchalanref(imtorHeader.getXchalanref());
-					
-					long dCount = imtorService.saveDetail(imtorDetail);
-					if(dCount == 0) {
-						responseHelper.setStatus(ResponseStatus.ERROR);
-						return responseHelper.getResponse();
-					}
-				}
-			}
-			responseHelper.setSuccessStatusAndMessage("Transfer Order updated successfully");
-			responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
+			responseHelper.setSuccessStatusAndMessage("Transfer Order Updated Successfully");
+			responseHelper.setRedirectUrl("/inventory/transferorder/" + existImtorHeader.getXtornum());
 			return responseHelper.getResponse();
 		}
 
 		// If new
-		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())){
-			imtorHeader.setXtornum(xtrnService.generateAndGetXtrnNumber(imtorHeader.getXtypetrn(), imtorHeader.getXtrn(), 6));
-		}
-		imtorHeader.setXstatustor("Open");
 		long count = imtorService.save(imtorHeader);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't Create Transfer Order");
 			return responseHelper.getResponse();
 		}
-		if(0<opordDetailList.size() && StringUtils.isNotBlank(imtorHeader.getXtornum())) {
-			ImtorDetail imtorDetail;
 
-			for(int i=0; i<opordDetailList.size(); i++) {
-				imtorDetail = new ImtorDetail();
-				BeanUtils.copyProperties(opordDetailList.get(i), imtorDetail, "xrow");
-				imtorDetail.setXtornum(imtorHeader.getXtornum());
-				imtorDetail.setXchalanref(imtorHeader.getXchalanref());
-				
-				long dCount = imtorService.saveDetail(imtorDetail);
-				if(dCount == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					return responseHelper.getResponse();
-				}
-			}
-		}
-
-		responseHelper.setSuccessStatusAndMessage("Transfer Order created successfully");
-		responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
+		responseHelper.setSuccessStatusAndMessage("Transfer Order Created Successfully");
+		responseHelper.setRedirectUrl("/inventory/transferorder/");
 		return responseHelper.getResponse();
 	}
 
@@ -363,6 +285,19 @@ public class StockTransferOrderController extends ASLAbstractController {
 		List<ImtorDetail> imtorDetailList = imtorService.findImtorDetailByXtornum(xtornum);
 		if(imtorDetailList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("Please add detail!");
+			return responseHelper.getResponse();
+		}
+
+		// Stock validation check
+		StringBuilder error = new StringBuilder();
+		for(ImtorDetail id : imtorDetailList) {
+			Imstock is = imstockService.findByXitemAndXwh(id.getXitem(), imtorHeader.getXfwh());
+			if(is == null || is.getXinhand().compareTo(id.getXqtyord()) == -1) {
+				error.append("Item " + is.getXitem() + " not available in " + imtorHeader.getXfwh() + " to do transfer\n");
+			}
+		}
+		if(StringUtils.isNotBlank(error.toString())) {
+			responseHelper.setErrorStatusAndMessage(error.toString());
 			return responseHelper.getResponse();
 		}
 

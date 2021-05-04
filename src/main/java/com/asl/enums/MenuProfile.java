@@ -62,6 +62,7 @@ public enum MenuProfile {
 	M0603(9999, "M0603", "600", "M0600", "Inventory", "N","/inventory/imtrn"),
 	M0604(9999, "M0604", "600", "M0600", "Stock-Take Entry", "Y","/inventory/stocktake"),
 	M0605(9999, "M0605", "600", "M0600", "Transfer Order", "Y","/inventory/transferorder"),
+	M0606(9999, "M0606", "600", "M0600", "Production Chalan to Transfer Order", "Y","/inventory/pchtotrord"),
 
 	M0700(9999, "M0700", "700", "MASTER", "Report", "Y","/report");
 

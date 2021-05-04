@@ -80,10 +80,11 @@
 														</div>
 													</div>
 
-													<div class="form-group">
+													<div class="form-group" th:if="${not #strings.isEmpty(imtorheader.xchalanref)}">
 														<label class="control-label col-md-4" for="xchalanref">Chalan Ref: </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xchalanref}">
+															<input type="hidden" class="form-control" th:field="*{xchalanref}">
+															<input type="text" class="form-control" th:value="*{xchalanref}" disabled="disabled">
 														</div>
 													</div>
 
@@ -126,7 +127,8 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstatustor">Status : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xstatustor}">
+															<input type="hidden" class="form-control" th:field="*{xstatustor}">
+															<input type="text" class="form-control" th:value="*{xstatustor}" disabled="disabled">
 														</div>
 													</div>
 
@@ -161,6 +163,7 @@
 												<tr>
 													<th>Transfer Order</th>
 													<th>Date</th>
+													<th>Production Chalan</th>
 													<th>From</th>
 													<th>To</th>
 													<th>Status</th>
@@ -172,6 +175,7 @@
 														<a th:href="@{/inventory/transferorder/} + ${imtor.xtornum}" th:text="${imtor.xtornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(imtor.xdate, df)}"></td>
+													<td th:text="${imtor.xchalanref}"></td>
 													<td th:text="${imtor.xfwh}"></td>
 													<td th:text="${imtor.xtwh}"></td>
 													<td th:text="${imtor.xstatustor}"></td>
@@ -202,7 +206,7 @@
 											<th>Qty</th>
 											<th>Unit</th>
 											<th>Rate</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th th:if="${imtorheader.xstatustor eq 'Open'}" data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/inventory/transferorder/} + ${imtorheader.xtornum} + '/imtordetail/new/show', data-target-modal='imtordetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -214,7 +218,7 @@
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xrate}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td th:if="${imtorheader.xstatustor eq 'Open'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/inventory/transferorder/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/show', data-target-modal='imtordetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/inventory/transferorder/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
@@ -234,30 +238,4 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-
-	<script>
-		$(document).ready(function(){
-			$('a.confirmimtor-btn-link').off('click').on('click', function(e){
-				e.preventDefault();
-				var tornum = $("#xtornum").val();
-				
-				$.ajax({
-					url: getBasepath() + "/inventory/transferorder/confirmimtor/" + tornum,
-					success: function(result){
-						var status = result.status.toLowerCase();
-						
-						if(status == "success")
-							showMessage("success", "Transfer Order Confirmed");
-						else if(status == "error")
-							showMessage("error", result.message);
-						//location.reload(true);
-						setTimeout(() => {
-							location.reload(true);
-						}, 1200);
-					}
-				});
-			});
-		});
-		
-	</script>
 </html>

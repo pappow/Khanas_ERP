@@ -41,6 +41,7 @@
 			xcheckoutdate,
 			xroomamt,
 			xdornum,
+			xtornum,
 			zid,
 			zauserid,
 			zuuserid,
@@ -84,6 +85,7 @@
 			#{xcheckoutdate, jdbcType=DATE},
 			#{xroomamt, jdbcType=DECIMAL},
 			#{xdornum, jdbcType=VARCHAR},
+			#{xtornum, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -129,6 +131,7 @@
 			xcheckoutdate=#{xcheckoutdate, jdbcType=DATE},
 			xroomamt=#{xroomamt, jdbcType=DECIMAL},
 			xdornum=#{xdornum, jdbcType=VARCHAR},
+			xtornum=#{xtornum, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -309,6 +312,21 @@
 			AND opordheader.zactive='1'
 		ORDER BY
 			OPORDHEADER.XORDERNUM DESC
+	</select>
+
+	<select id="findAllProductionCompletedChalan" resultType="Opordheader">
+		SELECT 
+			*
+		FROM 
+			opordheader
+		WHERE 
+			xtypetrn=#{xtypetrn}
+			AND xtrn=#{xtrn}
+			AND zid=#{zid} 
+			AND zactive='1'
+			AND productioncompleted='1'
+		ORDER BY
+			XORDERNUM DESC
 	</select>
 
 	<select id="findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus" resultType="Opordheader">

@@ -5,10 +5,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
 import com.asl.mapper.ImtorMapper;
+import com.asl.model.ServiceException;
 import com.asl.service.ImtorService;
 
 @Service
@@ -48,6 +50,23 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	}
 
 	@Override
+	@Transactional
+	public long saveDetail(List<ImtorDetail> imtorDetails) throws ServiceException {
+		if(imtorDetails == null || imtorDetails.isEmpty()) return 0;
+		long totalCount = 0;
+		for(ImtorDetail id : imtorDetails) {
+			id.setZid(sessionManager.getBusinessId());
+			id.setZauserid(getAuditUser());
+			long count = imtorMapper.saveImtorDetail(id);
+			if(count == 0) {
+				throw new ServiceException("All details not saved");
+			}
+			totalCount += count;
+		}
+		return totalCount;
+	}
+
+	@Override
 	public long updateDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
 		imtorDetail.setZid(sessionManager.getBusinessId());
@@ -67,17 +86,13 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 
 	@Override
 	public ImtorHeader findImtorHeaderByXtornum(String xtornum) {
-		if (StringUtils.isBlank(xtornum))
-			return null;
-
+		if (StringUtils.isBlank(xtornum)) return null;
 		return imtorMapper.findImtorHeaderByXtornum(xtornum, sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref) {
-		if (StringUtils.isBlank(xchalanref))
-			return null;
-
+		if (StringUtils.isBlank(xchalanref)) return null;
 		return imtorMapper.findImtorHeaderByXchalanref(xchalanref, sessionManager.getBusinessId());
 	}
 

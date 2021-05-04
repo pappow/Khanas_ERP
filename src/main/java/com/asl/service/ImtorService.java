@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
+import com.asl.model.ServiceException;
 
 @Component
 public interface ImtorService {
@@ -15,6 +16,8 @@ public interface ImtorService {
 	public long update(ImtorHeader imtorHeader);
 
 	public long saveDetail(ImtorDetail imtorDetail);
+
+	public long saveDetail(List<ImtorDetail> imtorDetails) throws ServiceException;
 
 	public long updateDetail(ImtorDetail imtorDetail);
 
