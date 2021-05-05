@@ -101,20 +101,13 @@ public class Opordheader extends AbstractModel<String> {
 	@Temporal(TemporalType.DATE)
 	private Date xfuncdate;
 
-	@Column(name = "xstarttime")
-	private String xstarttime;
-
-	@Column(name = "xendtime")
-	private String xendtime;
-
 	@Column(name = "xfacamt")
 	private BigDecimal xfacamt;
 
 	@Column(name = "xfoodamt")
 	private BigDecimal xfoodamt;
 
-	@Column(name = "xhallamt")
-	private BigDecimal xhallamt;
+
 
 	@Column(name = "xdiscamt")
 	private BigDecimal xdiscamt;
@@ -150,4 +143,32 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "xtornum")
 	private String xtornum;
 
+	@Column(name= "xstartdate")
+	@Temporal(TemporalType.DATE)
+	private Date xstartdate;
+
+	@Column(name= "xenddate")
+	@Temporal(TemporalType.DATE)
+	private Date xenddate;
+
+	@Column(name = "xstarttime")
+	private String xstarttime;
+
+	@Column(name = "xendtime")
+	private String xendtime;
+
+	@Column(name = "xhallamt")
+	private BigDecimal xhallamt;
+
+	@Column(name = "xfunctionamt")
+	private BigDecimal xfunctionamt;
+
+	@Column(name = "xvatait")
+	private String xvatait;
+
+	@Column(name = "xvatamt")
+	private BigDecimal xvatamt;
+
+	@Column(name = "xaitamt")
+	private BigDecimal xaitamt;
 }

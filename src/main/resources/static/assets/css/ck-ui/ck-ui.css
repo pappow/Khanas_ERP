@@ -274,7 +274,6 @@ div.input-group{
 	font-size: 13px;
 }
 .date-time-wrapper {
-	width: 30%;
 	display: inline-table;
 }
 .timepicker > input.form-control{

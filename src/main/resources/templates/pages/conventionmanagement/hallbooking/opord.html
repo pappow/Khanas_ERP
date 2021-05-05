@@ -36,64 +36,12 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-12">
-						<section id="data-maintenance" style="margin-top: 30px;">
-							<div class="section-header sectionbartoggle">
-								<h1>Filter Halls</h1>
-							</div>
-							<div class="section-body section-border">
-								<div class="row" th:with="df=${'E, dd-MMM-yyyy'}">
-									<div class="col-md-4 col-md-offset-3">
-										<div class="form-group datepicker">
-											<label class="control-label col-md-4" for="searchDate">Date : </label>
-											<div class="input-group date col-md-8 datepicker">
-												<input 	type="datepicker" 
-														class="form-control" 
-														id="searchDate"
-														name="searchDate"
-														th:value="${#dates.format(#dates.createNow(), df)}"/>
-												<div class="input-group-addon">
-													<span class="glyphicon glyphicon-calendar"></span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-2">
-										<div class="">
-											<button class="btn btn-sm btn-success query-btn" type="button"><i class="fas fa-search"></i> Search</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
-					
-					<div class="col-md-12" id="allHalls" th:fragment="allHalls">
-						<div class="hall-card text-center add-hall" th:each="hall : ${availableHalls}" >
-							<div class="padding-5">
-								<span th:text="${hall.xdesc}" class="fa-1x hall-xdesc"></span>
-							</div>
-							<div>
-								Price - <span th:text="${hall.xrate}" class="hall-xrate"></span>
-							</div>
-						</div>
-						
-						<div class="hall-card-red text-center remove-hall" th:each="bHall : ${bookedHalls}" >
-							<div class="padding-5">
-								<span th:text="${bHall.xrow}" class="hidden hall-xrow"></span>
-								<span th:text="${bHall.xdesc}" class="fa-1x hall-xdesc"></span>
-							</div>
-							<div>
-								Price - <span th:text="${bHall.xrate}" class="hall-xrate"></span>
-							</div>
-						</div>
-					</div>
-				
+
 					<div class="col-md-12 content-area">
 						<div class="row">
 						<div class="col-md-6">
@@ -103,27 +51,20 @@
 										<h1>Hall Booking</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/conventionmanagement/booking}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(opordheader.xordernum)}" th:href="@{/conventionmanagement/booking}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+
+
+										
 										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<!-- <a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/booking/creategrn/} + ${opordheader.xordernum}" class="btn btn-sm btn-success grn-btn-link"><i class="fas fa-tags"></i> Book Room </a> -->
 										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord == 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/booking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
 										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/booking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
 										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.zactive == false}" th:href="@{/conventionmanagement/booking/restore/} + ${opordheader.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/conventionmanagement/hallbooking/save}" th:object="${opordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(opordheader.xordernum)}" th:field="*{xpornum}"/> -->
 											<input type="hidden" th:field="*{xtypetrn}"/>
-											<input type="hidden" th:field="*{xordernum}" th:if="${not #strings.isEmpty(opordheader.xordernum)}" />
-											<input type="hidden" th:field="*{xtrn}" th:if="${not #strings.isEmpty(opordheader.xordernum)}" />
-											<input type="hidden" id="xpornum" th:if="${not #strings.isEmpty(opordheader.xordernum)}" class="form-control" th:field="*{xpornum}">
+											<input type="hidden" th:field="*{xtrn}" th:if="${not #strings.isEmpty(opordheader.xordernum)}"/>
 											<div class="row">
 												<div class="col-md-6">
 
@@ -131,14 +72,16 @@
 														<label class="control-label col-md-4" for="xtrn">P.O. Prefix : </label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{xtrn}">
-																<option th:each="prefix : ${soprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+																<option th:each="prefix : ${hallbookingpreffix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
 													</div>
-													<div th:if="${not #strings.isEmpty(opordheader.xordernum)}">
-														<label class="control-label col-md-4" for="xordernum">Order Number : </label>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(opordheader.xordernum)}">
+														<label class="control-label col-md-4" for="xordernum">Booking Number : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xordernum}" disabled="disabled">
+															<input type="hidden" th:field="*{xordernum}" class="form-control"/>
+															<input type="text" class="form-control" th:value="*{xordernum}" disabled="disabled">
 														</div>
 													</div>
 
@@ -148,101 +91,86 @@
 															<input 	type="text" 
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
-																	th:value="${opordheader.xcus}" 
+																	th:value="*{xcus}" 
 																	th:attr="search-url='search/customer'"/>
 															<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
-															<input type="hidden" id="search-des" value=""/>
+															<input type="hidden" id="search-des" th:value="*{xcus}"/>
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xfunction">Function : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xfunction}">
-														</div>
-													</div>
-													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtotguest">Total Guests : </label>
-														<div class="col-md-8">
-															<input type="text" data-smk-type="number" class="form-control" th:field="*{xtotguest}">
+														<div class="col-md-3">
+															<input type="number" class="form-control" th:field="*{xtotguest}" min="0">
 														</div>
 													</div>
 
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xbookdate">Booking Date : </label>
+														<label class="control-label col-md-4" for="xdate">Booking Date : </label>
 														<div class="input-group date col-md-6 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
-																	id="xbookdate"
-																	name="xbookdate"
-																	th:value="${opordheader.xbookdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xbookdate, df)}"/>
+																	id="xdate"
+																	name="xdate"
+																	required="required"
+																	th:value="${opordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xfuncdate">Function Date : </label>
+														<label class="control-label col-md-4" for="xstartdate">Function Start Date : </label>
 														<div class="input-group date col-md-6 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
-																	id="xfuncdate"
-																	name="xfuncdate"
-																	th:value="${opordheader.xfuncdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xfuncdate, df)}"/>
+																	id="xstartdate"
+																	name="xstartdate"
+																	required="required"
+																	th:value="${opordheader.xstartdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xstartdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstarttime">Start Time : </label>
-														<div class="col-md-5">
-															<input type="time" class="form-control" th:field="*{xstarttime}">
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xendtime">End Time : </label>
-														<div class="col-md-5">
-															<input type="time" class="form-control" th:field="*{xendtime}">
+														<div class="input-group time col-md-4 date-time-wrapper timepicker">
+															<input class="form-control" data-type="timepicker" placeholder="Start" required="required" th:field="*{xstarttime}"/>
+															<span class="input-group-append input-group-addon">
+																<span class="input-group-text">
+																	<i class="fa fa-clock"></i>
+																</span>
+															</span>
 														</div>
 													</div>
 
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xfacamt">Facilities Charge : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xfacamt}" min="0" disabled="disabled">
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xenddate">Function End Date : </label>
+														<div class="input-group date col-md-6 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xenddate"
+																	name="xenddate"
+																	required="required"
+																	th:value="${opordheader.xenddate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xenddate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xfoodamt">Food Purpose : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xfoodamt}" min="0" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xhallamt">Hall Charge : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xhallamt}" min="0" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xdiscamt">Discount : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xdiscamt}" min="0" disabled="disabled">
+														<label class="control-label col-md-4" for="xendtime">End Time : </label>
+														<div class="input-group time col-md-4 date-time-wrapper timepicker">
+															<input class="form-control" data-type="timepicker" placeholder="Start" required="required" th:field="*{xendtime}"/>
+															<span class="input-group-append input-group-addon">
+																<span class="input-group-text">
+																	<i class="fa fa-clock"></i>
+																</span>
+															</span>
 														</div>
 													</div>
 
@@ -252,13 +180,105 @@
 															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
 														</div>
 													</div>
-												</div>												
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatus">Status : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xstatus}">
+															<input type="text" class="form-control" th:value="*{xstatus}" disabled="disabled">
+														</div>
+													</div>
+
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xhallamt">Hall : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xhallamt}">
+															<input type="text" class="form-control" th:value="*{xhallamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfunctionamt">Function : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xfunctionamt}">
+															<input type="text" class="form-control" th:value="*{xfunctionamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfoodamt">Food : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xfoodamt}">
+															<input type="text" class="form-control" th:value="*{xfoodamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfacamt">Facilities : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xfacamt}">
+															<input type="text" class="form-control" th:value="*{xfacamt}" disabled="disabled">
+														</div>
+													</div>
+
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xtotamt}">
+															<input type="text" class="form-control" th:value="*{xtotamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
+														<div class="col-md-6">
+															<select class="form-control" th:field="*{xvatait}">
+																<option th:each="x : ${vataitList}" th:value="${x.xvatait}" th:text="${x.xvatait}"></option>
+															</select>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatamt">Vat : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xvatamt}">
+															<input type="text" class="form-control" th:value="*{xvatamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xaitamt">Tax : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xaitamt}">
+															<input type="text" class="form-control" th:value="*{xaitamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xdiscamt">Discount : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xdiscamt}" min="0">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xgrandtot">Grand Total : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xgrandtot}">
+															<input type="text" class="form-control" th:value="*{xgrandtot}" disabled="disabled">
+														</div>
+													</div>
+
+												</div>
 											</div>
 										</form>
 									</div>
 								</section>
 							</div>
-							
+
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
@@ -294,7 +314,7 @@
 							</div>
 						</div>
 					</div>
-				
+
 					<div class="col-md-12">
 						<!-- detail section -->
 						<section th:if="${not #strings.isEmpty(opordheader.xordernum)}" id="data-maintenance" style="margin-top: 30px;">
@@ -339,14 +359,8 @@
 		
 		<!-- Modal -->
 		<div id="oporddetailmodal-section"></div>
+
 		
-		<form id="hall-form" th:action="@{/conventionmanagement/hallbooking/oporddetail/save}" method="post" class="form-horizontal" th:object="${oporddetail}">
-			<input type="hidden" th:field="*{xordernum}"/>
-			<input type="hidden" th:field="*{xitem}" value=""/>
-			<input type="hidden" th:field="*{xrate}" min="0"/>
-			<input type="hidden" th:field="*{xqtyord}" value="1"/>
-			<input type="hidden" th:field="*{xlineamt}" min="0"/>
-		</form>
 		<a  class="btn btn-danger btn-delete hidden btn-remove-hall" href="#"></a>
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
