@@ -256,7 +256,7 @@ ck.ui.config.dateAndTimepicker = function(){
 		}
 	});
 	$(".timepicker").datetimepicker({
-		format: "HH:mm:ss",   // LT, LTS
+		format: "HH:mm",   // LT, LTS
 		icons: {
 			up: "fa fa-chevron-up",
 			down: "fa fa-chevron-down"
