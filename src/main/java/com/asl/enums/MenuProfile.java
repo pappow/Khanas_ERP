@@ -12,6 +12,7 @@ public enum MenuProfile {
 	M0103(9999, "M0103", "100","M0101", "Manage Profile", "Y","/system/profile"),
 	M0104(9999, "M0104", "100","M0101", "Profile Allocation", "Y","/system/profileallocation"),
 	M0105(9999, "M0105", "100","M0100", "List", "Y","/system/list"),
+	M0106(9999, "M0106", "100","M0100", "Staff", "Y","/system/staff"),
 
 	M0200(9999, "M0200", "200", "MASTER", "Master Setup", "Y","/mastersetup"),
 	M0201(9999, "M0201", "200", "M0200", "Party Master", "Y","/mastersetup/partymaster"),

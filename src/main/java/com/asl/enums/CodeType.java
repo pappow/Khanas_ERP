@@ -7,12 +7,19 @@ package com.asl.enums;
 public enum CodeType {
 
 	BANK_STATUS("Bank Status"),
+	BLOOD_GROUP("Blood Group"),
 
 	CURRENCY_OF_COST("Currency of Cost"),
 	CURRENCY_OF_PRICE("Currency of Price"),
 	CUSTOMER_GROUP("Customer Group"),
 	CUSTOMER_STATUS("Customer Status"),
 	CHEQUE_STATUS("Cheque Status"),
+
+	EMPLOYEE_CATEGORY("Employee Category"),
+	EMPLOYEE_DEPARTMENT("Employee Department"),
+	EMPLOYEE_DESIGNATION("Employee Designation"),
+	EMPLOYEE_STATUS("Employee Status"),
+	EMPLOYEE_TYPE("Employment Type"),
 
 	GRN_STATUS("GRN Status"),
 	GRN_RETURN_STATUS("GRN Return Status"),
@@ -31,6 +38,7 @@ public enum CodeType {
 	PAYMENT_MODE("Payment Mode"),
 
 	REQUISITION_ORDER_STATUS("Requisition Order Status"),
+	RELIGION("Religion"),
 
 	SELLING_UNIT("Selling Unit"),
 	STOCK_TYPE("Stock Type"),
@@ -39,6 +47,7 @@ public enum CodeType {
 	SUPPLIER_STATUS("Supplier Status"),
 	STATUS("Status"),
 	SALES_AND_INVOICE_STATUS("Sales & Invoice Status"),
+	SEX("Sex"),
 
 	TAX_CATEGORY("Tax Category"),
 	TRANSFER_ORDER_STATUS("Transfer Order Status"),

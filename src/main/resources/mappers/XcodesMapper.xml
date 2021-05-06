@@ -93,6 +93,7 @@
 		<if test="zactive != null">
 			AND zactive=#{zactive}
 		</if>
+		ORDER BY xcode ASC
 	</select>
 
 	<select id="findByXcode" resultType="Xcodes">
