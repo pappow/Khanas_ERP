@@ -83,4 +83,12 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 		return resultList;
 	}
 
+	@Override
+	public Xusers findUserByXstaff(String xstaff) {
+		if(StringUtils.isBlank(xstaff)) return null;
+		return userMapper.findUserByXstaff(xstaff, sessionManager.getBusinessId());
+	}
+
+	
+
 }

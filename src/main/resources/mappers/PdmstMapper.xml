@@ -3,14 +3,20 @@
 
 <mapper namespace="com.asl.mapper.PdmstMapper">
 	<insert id="save" parameterType="Pdmst">
-		<!-- <selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
-		</selectKey> -->
+		<selectKey keyProperty="xstaff" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
 		INSERT INTO Pdmst
 		(
 			xstaff,
 			xname,
+			xemail,
+			xphone,
+			xmobile,
+			xmadd,
+			xpadd,
 			xsex,
+			xempstatus,
 			xposition,
 			xdesignation,
 			xdeptname,
@@ -19,17 +25,15 @@
 			xdatejoin,
 			xdatecom,
 			xenddate,
-			xempstatus,
 			xemptype,
-			xdistrct,
+			xdistrict,
 			xreligion,
 			xbloodgroup,
-			xphone,
-			xpadd,
-			xmobile,	
-			xemail,	
-			xmadd,		
-				
+			xtypetrn,
+			xtrn,
+			username,
+			allowlogin,
+
 			zid,
 			zauserid,
 			zuuserid,
@@ -43,7 +47,13 @@
 		(
 			#{xstaff, jdbcType=VARCHAR},
 			#{xname, jdbcType=VARCHAR},
+			#{xemail, jdbcType=VARCHAR},
+			#{xphone, jdbcType=VARCHAR},
+			#{xmobile, jdbcType=VARCHAR},
+			#{xmadd, jdbcType=VARCHAR},
+			#{xpadd, jdbcType=VARCHAR},
 			#{xsex, jdbcType=VARCHAR},
+			#{xempstatus, jdbcType=VARCHAR},
 			#{xposition, jdbcType=VARCHAR},
 			#{xdesignation, jdbcType=VARCHAR},
 			#{xdeptname, jdbcType=VARCHAR},
@@ -52,18 +62,15 @@
 			#{xdatejoin, jdbcType=DATE},
 			#{xdatecom, jdbcType=DATE},
 			#{xenddate, jdbcType=DATE},
-			#{xempstatus, jdbcType=VARCHAR},
 			#{xemptype, jdbcType=VARCHAR},
-			#{xdistrct, jdbcType=VARCHAR},
+			#{xdistrict, jdbcType=VARCHAR},
 			#{xreligion, jdbcType=VARCHAR},
 			#{xbloodgroup, jdbcType=VARCHAR},
-			#{xphone, jdbcType=VARCHAR},
-			#{xpadd, jdbcType=VARCHAR},
-			#{xmobile, jdbcType=VARCHAR},
-			#{xemail, jdbcType=VARCHAR},
-			#{xmadd, jdbcType=VARCHAR},
-				
-			
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{username, jdbcType=VARCHAR},
+			#{allowlogin, jdbcType=BOOLEAN},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -77,10 +84,16 @@
 	
 	<update id="update" parameterType="Pdmst">
 		UPDATE
-			Pdmst
+			pdmst
 		SET
 			xname=#{xname, jdbcType=VARCHAR},
+			xemail=#{xemail, jdbcType=VARCHAR},
+			xphone=#{xphone, jdbcType=VARCHAR},
+			xmobile=#{xmobile, jdbcType=VARCHAR},
+			xmadd=#{xmadd, jdbcType=VARCHAR},
+			xpadd=#{xpadd, jdbcType=VARCHAR},
 			xsex=#{xsex, jdbcType=VARCHAR},
+			xempstatus=#{xempstatus, jdbcType=VARCHAR},
 			xposition=#{xposition, jdbcType=VARCHAR},
 			xdesignation=#{xdesignation, jdbcType=VARCHAR},
 			xdeptname=#{xdeptname, jdbcType=VARCHAR},
@@ -89,17 +102,15 @@
 			xdatejoin=#{xdatejoin, jdbcType=DATE},
 			xdatecom=#{xdatecom, jdbcType=DATE},
 			xenddate=#{xenddate, jdbcType=DATE},
-			xempstatus=#{xempstatus, jdbcType=VARCHAR},
 			xemptype=#{xemptype, jdbcType=VARCHAR},
-			xdistrct=#{xdistrct, jdbcType=VARCHAR},
+			xdistrict=#{xdistrict, jdbcType=VARCHAR},
 			xreligion=#{xreligion, jdbcType=VARCHAR},
 			xbloodgroup=#{xbloodgroup, jdbcType=VARCHAR},
-			xphone=#{xphone, jdbcType=VARCHAR},
-			xpadd=#{xpadd, jdbcType=VARCHAR},
-			xmobile=#{xmobile, jdbcType=VARCHAR},
-			xemail=#{xemail, jdbcType=VARCHAR},
-			xmadd=#{xmadd, jdbcType=VARCHAR},
-			
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			username=#{username, jdbcType=VARCHAR},
+			allowlogin=#{allowlogin, jdbcType=BOOLEAN},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -110,12 +121,30 @@
 			xstaff=#{xstaff, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
-	
+
 	<select id="findPdmstByXstaff" resultType="Pdmst">
-		SELECT * FROM Pdmst WHERE xstaff=#{xstaff} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM pdmst WHERE xstaff=#{xstaff} AND zid=#{zid} 
+		<if test="zactive != null and zactive != ''">
+			AND zactive=#{zactive}
+		</if>
 	</select>
-	
+
 	<select id="getAllPdmst" resultType="Pdmst">
-		SELECT * FROM Pdmst WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM pdmst WHERE zid=#{zid} 
+		<if test="zactive != null and zactive != ''">
+			AND zactive=#{zactive}
+		</if>
+	</select>
+
+	<select id="searchStaff" resultType="Pdmst">
+		SELECT 
+			* 
+		FROM 
+			pdmst 
+		WHERE 
+			(UPPER(xstaff) LIKE '%' || #{xstaff} || '%' OR UPPER(xname) LIKE '%' || #{xstaff} || '%'  OR UPPER(xmobile) LIKE '%' || #{xstaff} || '%') 
+			AND zid=#{zid} 
+			AND zactive='1'
+			AND allowlogin='1'
 	</select>
 </mapper>

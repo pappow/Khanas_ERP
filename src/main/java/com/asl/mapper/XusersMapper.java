@@ -26,4 +26,6 @@ public interface XusersMapper {
 	public Xusers findByZemailAndZid(String zemail, String zid);
 
 	public List<Xusers> findByZemailAndXpassword(String zemail, String xpassword);
+
+	public Xusers findUserByXstaff(String xstaff, String zid);
 }

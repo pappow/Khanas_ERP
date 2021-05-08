@@ -60,7 +60,6 @@
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/caitem/save}" th:object="${caitem}" method="post">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
 											<input type="hidden" th:if="${not #strings.isEmpty(caitem.xitem)}" th:field="*{xitem}"/>
 											<input type="hidden" th:field="*{xtype}"/>
 											<div class="row">

@@ -16,6 +16,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
+import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.Moheader;
 import com.asl.entity.Modetail;
@@ -28,6 +29,7 @@ import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
+import com.asl.service.PdmstService;
 import com.asl.service.PogrnService;
 import com.asl.service.PocrnService;
 import com.asl.service.PoordService;
@@ -54,7 +56,16 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private PoordService poordService;
 	@Autowired private MoService MoService;
 	@Autowired private ArhedService arhedService;
+	@Autowired private PdmstService pdmstService;
 
+	@GetMapping("/staff/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Pdmst> pdmstList = pdmstService.searchStaff(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		pdmstList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXstaff(), c.getXstaff() + " - " + c.getXname())));
+		return list;
+	}
 
 	@GetMapping("/supplier/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getSuppliers(@PathVariable String hint){

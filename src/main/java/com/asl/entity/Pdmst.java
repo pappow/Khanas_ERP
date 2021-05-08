@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -85,8 +86,6 @@ public class Pdmst extends AbstractModel<String> {
 	@Temporal(TemporalType.DATE)
 	private Date xenddate;
 
-	
-
 	@Column(name = "xemptype")
 	private String xemptype;
 
@@ -99,16 +98,18 @@ public class Pdmst extends AbstractModel<String> {
 	@Column(name = "xbloodgroup")
 	private String xbloodgroup;
 
-	
-
-	
-	
-
-	
-
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 
 	@Column(name = "xtrn")
 	private String xtrn;
+
+	@Column(name = "allowlogin")
+	private boolean allowlogin;
+
+	@Column(name = "username")
+	private String username;
+
+	@Transient
+	private String password;
 }

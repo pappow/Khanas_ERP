@@ -112,6 +112,9 @@ public class Xusers extends AbstractModel<String> {
 	@Column(name = "systemadmin")
 	private boolean systemadmin;
 
+	@Column(name = "xstaff")
+	private String xstaff;
+
 	@Transient
 	private String roles;
 
@@ -129,4 +132,7 @@ public class Xusers extends AbstractModel<String> {
 
 	@Transient
 	private String newflag;
+
+	@Transient
+	private String staffname;
 }
