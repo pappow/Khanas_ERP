@@ -301,13 +301,40 @@
 			AND modetail.zid=#{zid} 
 			AND modetail.zactive='1'
 	</select>
-	
+
 	<select id="findModetailXbatch" resultType="Moheader">
 		SELECT distinct xbatch FROM moheader WHERE (UPPER(xbatch) LIKE '%' || #{xbatch} || '%') AND zid=#{zid}
 	</select>
-	
+
 	<select id="findModetailByXtype" resultType="Modetail">
 		SELECT distinct xtype FROM modetail WHERE (UPPER(xtype) LIKE '%' || #{xtype} || '%') AND zid=#{zid}
 	</select>
 
+	<select id="dailyProductionReport" resultType="DailyProductionBatchDetail">
+		select
+			moh.xbatch,
+			moh.xdate,
+			moh.xitem,
+			Func_GetItemName(moh.xitem, moh.zid) finishedgood,
+			bmd.xbomcomp,
+			Func_GetItemName(bmd.xbomcomp, bmd.zid) rawmaterial,
+			moh.xqtyprd,
+			moh.xqtycom,
+			((mod.xqtyreq / 1000) + COALESCE(moda.xqtyreq,0)) deflt,
+			modw.xqtyreq wastage,
+			(moh.xqtycom - moh.xqtyprd) deviation 
+		from 
+			moheader moh
+			left join bmbomheader bmh on bmh.xbomkey = moh.xbomkey and bmh.zid = moh.zid and bmh.zactive='1'
+			left join bmbomdetail bmd on bmd.xbomkey = bmh.xbomkey and bmd.zid = bmh.zid and bmh.zactive='1'
+			left join modetail mod on mod.xbatch = moh.xbatch and mod.zid = moh.zid and mod.zactive='1' and mod.xtype='Default'
+			left join modetail modw on modw.xbatch = moh.xbatch and modw.zid = moh.zid and modw.zactive='1' and modw.xitem=bmd.xbomcomp and modw.xtype='Wastage'
+			left join modetail moda on moda.xbatch = moh.xbatch and moda.zid = moh.zid and moda.zactive='1' and moda.xitem=bmd.xbomcomp and moda.xtype='Addition'
+		where 
+			moh.zid=#{zid}
+			and moh.zactive='1'
+			and moh.xchalan=#{xchalan}
+		order by 
+			moh.xbatch desc
+	</select>
 </mapper>
