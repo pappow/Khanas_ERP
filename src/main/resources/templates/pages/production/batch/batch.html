@@ -129,7 +129,7 @@
 														</form>
 													</td>
 													<td style="text-align: center">
-														<button th:if="${not #strings.isEmpty(b.xbatch)}" title="View Default" th:if="${b.bomexploaded}" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/default/show', data-target-modal='defaultbatchdetailmodal'"><i class="fas fa-eye"></i></button>
+														<button title="View Default" th:if="${b.bomexploaded and not #strings.isEmpty(b.xbatch)}" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/default/show', data-target-modal='defaultbatchdetailmodal'"><i class="fas fa-eye"></i></button>
 													</td>
 													<td style="text-align: center">
 														<button title="Add/Edit items" th:if="${b.bomexploaded}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
