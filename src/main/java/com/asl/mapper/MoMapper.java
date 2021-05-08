@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Moheader;
+import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
 
 /**
@@ -45,5 +46,7 @@ public interface MoMapper {
 	//search field
 	public List<Moheader> findModetailXbatch(String xbatch, String zid);
 	
-	public List<Modetail> findModetailByXtype(String xtype, String zid);	
+	public List<Modetail> findModetailByXtype(String xtype, String zid);
+
+	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan, String zid);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 
@@ -52,5 +53,7 @@ public interface MoService {
 	
 	public List<Moheader> findModetailXbatch(String xbatch);
 	
-	public List<Modetail> findModetailByXtype(String xtype);	
+	public List<Modetail> findModetailByXtype(String xtype);
+
+	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan);
 }

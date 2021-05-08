@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +26,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Bmbomheader;
+import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.DailyProductionBatchReport;
+import com.asl.model.report.FinishedGood;
 import com.asl.model.report.ProductionBatchReport;
+import com.asl.model.report.RawMaterial;
 import com.asl.service.BmbomService;
 import com.asl.service.MoService;
 import com.asl.service.OpordService;
@@ -410,6 +415,91 @@ public class ProductionBatchController extends ASLAbstractController {
 		report.getBatches().addAll(batchList);
 
 		byte[] byt = getPDFByte(report, "productionbatch.xsl");
+		if(byt == null) {
+			message = "Can't generate report for chalan : " + xchalan;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+
+	@GetMapping("/print/dailyproduction/{xchalan}")
+	public ResponseEntity<byte[]> printDailyProductionReport(@PathVariable String xchalan) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xchalan);
+		if(chalan == null) {
+			message = "Chalan not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		List<DailyProductionBatchDetail> batchDetails = moService.dailyProductionReport(xchalan);
+		if(batchDetails == null || batchDetails.isEmpty()) {
+			message = "No Item batch found for this chalan " + xchalan;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
+		DailyProductionBatchReport report = new DailyProductionBatchReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Daily Production Report");
+		report.setFromDate(sdf.format(chalan.getXdate()));
+		report.setToDate(sdf.format(chalan.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+
+		Map<String, RawMaterial> group = new HashMap<>();
+		for(DailyProductionBatchDetail b : batchDetails) {
+			String key = StringUtils.isNotBlank(b.getXbomcomp()) ? b.getXbomcomp() : b.getXitem();
+			String name = StringUtils.isNotBlank(b.getXbomcomp()) ? b.getRawmaterial() : b.getFinishedgood();
+			if(group.get(key) != null) {
+				RawMaterial rm = group.get(key);
+
+				FinishedGood fg = new FinishedGood();
+				fg.setCode(b.getXitem());
+				fg.setNamee(b.getFinishedgood());
+				fg.setProductionRawQty(b.getDeflt() != null ? b.getDeflt() : BigDecimal.ZERO);
+				fg.setProductionQty(b.getXqtyprd() != null ? b.getXqtyprd() : BigDecimal.ZERO);
+				fg.setCompletedQuantity(b.getXqtycom() != null ? b.getXqtycom() : BigDecimal.ZERO);
+				fg.setWastage(b.getWastage() != null ? b.getWastage() : BigDecimal.ZERO);
+				fg.setDeviation(b.getDeviation() != null ? b.getDeviation() : BigDecimal.ZERO);
+				rm.getFinishedGoods().add(fg);
+
+				rm.setQty(rm.getQty().add(fg.getProductionRawQty()));
+				rm.setWastage(rm.getWastage().add(fg.getWastage()));
+			} else {
+				RawMaterial rm = new RawMaterial();
+				rm.setCode(key);
+				rm.setName(name);
+
+				FinishedGood fg = new FinishedGood();
+				fg.setCode(b.getXitem());
+				fg.setNamee(b.getFinishedgood());
+				fg.setProductionRawQty(b.getDeflt() != null ? b.getDeflt() : BigDecimal.ZERO);
+				fg.setProductionQty(b.getXqtyprd() != null ? b.getXqtyprd() : BigDecimal.ZERO);
+				fg.setCompletedQuantity(b.getXqtycom() != null ? b.getXqtycom() : BigDecimal.ZERO);
+				fg.setWastage(b.getWastage() != null ? b.getWastage() : BigDecimal.ZERO);
+				fg.setDeviation(b.getDeviation() != null ? b.getDeviation() : BigDecimal.ZERO);
+				rm.getFinishedGoods().add(fg);
+
+				rm.setQty(fg.getProductionRawQty());
+				rm.setWastage(fg.getWastage());
+
+				group.put(key, rm);
+			}
+
+		}
+
+		for(Map.Entry<String, RawMaterial> r : group.entrySet()) {
+			report.getRawMaterials().add(r.getValue());
+		}
+
+		byte[] byt = getPDFByte(report, "productionbatchreport.xsl");
 		if(byt == null) {
 			message = "Can't generate report for chalan : " + xchalan;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

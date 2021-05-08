@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Opordheader;
@@ -167,15 +168,23 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		if(StringUtils.isBlank(xchalan)) return Collections.emptyList();
 		return moMapper.findMoHeaderByXchalan(xchalan, sessionManager.getBusinessId());
 	}
+
 	@Override
 	public List<Moheader> findModetailXbatch(String xbatch){
 		if(StringUtils.isBlank(xbatch)) return Collections.emptyList();
 		return moMapper.findModetailXbatch(xbatch, sessionManager.getBusinessId());
 	}
+
 	@Override
 	public List<Modetail> findModetailByXtype(String xtype){
 		if(StringUtils.isBlank(xtype)) return Collections.emptyList();
 		return moMapper.findModetailByXtype(xtype, sessionManager.getBusinessId());
 	}
-	
+
+	@Override
+	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan) {
+		if(StringUtils.isBlank(xchalan)) return Collections.emptyList();
+		return moMapper.dailyProductionReport(xchalan, sessionManager.getBusinessId());
+	}
+
 }
