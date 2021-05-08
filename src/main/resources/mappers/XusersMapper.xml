@@ -31,6 +31,7 @@
 			xstatuscus,
 			xtype,
 			xvatregno,
+			xstaff,
 			zid,
 			zauserid,
 			zuuserid,
@@ -67,6 +68,7 @@
 			#{xstatuscus, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
 			#{xvatregno, jdbcType=VARCHAR},
+			#{xstaff, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -107,6 +109,7 @@
 			xstatuscus=#{xstatuscus, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xvatregno=#{xvatregno, jdbcType=VARCHAR},
+			xstaff=#{xstaff, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -119,7 +122,26 @@
 	</update>
 
 	<select id="getAllXusers" resultType="Xusers">
-		SELECT * FROM xusers WHERE zid=#{zid} ORDER BY zemail DESC
+		SELECT 
+			xusers.*,
+			pdmst.xname as staffname 
+		FROM 
+			xusers 
+			LEFT JOIN pdmst ON pdmst.xstaff=xusers.xstaff AND pdmst.zid=xusers.zid AND pdmst.zactive='1'
+		WHERE 
+			xusers.zid=#{zid} 
+		ORDER BY 
+			xusers.zemail DESC
+	</select>
+
+	<select id="findUserByXstaff" resultType="Xusers">
+		SELECT
+			* 
+		FROM
+			xusers
+		WHERE
+			xstaff=#{xstaff}
+			AND zid=#{zid}
 	</select>
 
 	<select id="findUserByZemail" resultType="Xusers">

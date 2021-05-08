@@ -70,6 +70,12 @@
 											<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${menuProfile.M0106 ne null and menuProfile.M0106.display}">
+										<td><a th:href="@{/system/staff}" th:text="${menuProfile.M0106.screenprompt}">Staff</a></td>
+										<td>
+											<a th:href="@{/system/staff}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 								</table>
 							</div>
 						</section>

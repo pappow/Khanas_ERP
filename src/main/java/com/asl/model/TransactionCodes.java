@@ -20,6 +20,7 @@ public class TransactionCodes {
 	public static final Map<String, String> INVENTORY_TRANSACTION = new HashMap<>();
 	public static final Map<String, String> SALES_ORDER = new HashMap<>();
 	public static final Map<String, String> CHALAN_NUMBER = new HashMap<>();
+	public static final Map<String, String> EMPLOYEE_ID = new HashMap<>();
 	public static final Map<String, String> AP_TRANSACTION = new HashMap<>();
 	public static final Map<String, String> AR_TRANSACTION = new HashMap<>();
 	public static final Map<String, String> INVENTORY_TRANSFER_ORDER = new HashMap<>();

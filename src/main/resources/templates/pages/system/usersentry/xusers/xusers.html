@@ -60,17 +60,30 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/system/xusers/save}" th:object="${xusers}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<div class="row">
-												<div class="col-md-6">
+												<div class="col-md-12">
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xname">Full Name</label>
-														<div class="col-md-8">
+														<div class="col-md-6">
 															<input type="text" class="form-control" th:field="*{xname}">
 														</div>
 													</div>
 
 													<div class="form-group">
+														<label class="control-label col-sm-4" for="xitem">Staff : </label>
+														<div class="col-sm-6">
+															<input 	type="text" 
+																	class="form-control searchsuggest xitemsearch" 
+																	placeholder="Search..." 
+																	th:value="*{xstaff}" 
+																	th:attr="search-url='search/staff'"/>
+															<input type="hidden" id="search-val" th:field="*{xstaff}" value=""/>
+															<input type="hidden" id="search-des" th:value="*{xstaff}"/>
+														</div>
+													</div>
+
+													<div class="form-group">
 														<label class="control-label col-md-4" for="zemail">Username</label>
-														<div class="col-md-8">
+														<div class="col-md-6">
 															<input th:if="${not #strings.isEmpty(xusers.zemail)}" type="hidden" th:field="*{zemail}"/>
 															<input type="hidden" name="newflag" id="newflag" th:value="${#strings.isEmpty(xusers.zemail) ? 'Y' : 'N'}"/>
 															<input type="text" class="form-control" th:field="*{zemail}" required="required" th:disabled="${not #strings.isEmpty(xusers.zemail)}">
@@ -79,64 +92,24 @@
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xpassword">Password</label>
-														<div class="col-md-8">
+														<div class="col-md-6">
 															<input type="password" class="form-control" th:field="*{xpassword}" th:required="${#strings.isEmpty(xusers.zemail)}">
 														</div>
 													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xphone">Phone</label>
-														<div class="col-md-8">
+														<div class="col-md-6">
 															<input type="text" class="form-control" th:field="*{xphone}">
 														</div>
 													</div>
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xmadd">Address</label>
-														<div class="col-md-8">
-															<textarea rows="" cols="" class="form-control" th:field="*{xmadd}"></textarea>
+														<div class="col-md-6">
+															<textarea rows="3" cols="" class="form-control" th:field="*{xmadd}"></textarea>
 														</div>
 													</div>
-
-													<!-- <div class="form-group" th:if="${#strings.isEmpty(poordheader.xpornum)}">
-														<label class="control-label col-md-4" for="xitem">Prefix : </label>
-														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrnpor}">
-																<option th:each="prefix : ${poprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
-															</select>
-														</div>
-													</div>
-
-													
-
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdate">Date : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xdate"
-																	name="xdate"
-																	th:value="${poordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(poordheader.xdate, df)}"/
-																	th:attr="disabled=${poordheader.xstatuspor != 'Open'}">
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatuspor">Requistion Status : </label>
-														<div class="col-md-8">
-															<input type="text" th:field="*{xstatuspor}" class="form-control" disabled="disabled"/>
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xnote">Note : </label>
-														<div class="col-md-8">
-															<textarea class="form-control" th:field="*{xnote}" rows="3" th:attr="disabled=${poordheader.xstatuspor != 'Open'}"></textarea>
-														</div>
-													</div> -->
 
 												</div>
 											</div>
@@ -150,28 +123,34 @@
 										<h1>All Users</h1>
 									</div>
 									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
-											<thead>
-												<tr>
-													<th>Full Name</th>
-													<th>Username</th>
-													<th>Phone</th>
-													<th>Address</th>
-													<th>Active?</th>
-												</tr>
-											</thead>
-											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="u : ${xusersList}">
-													<td th:text="${u.xname}"></td>
-													<td>
-														<a th:href="@{/system/xusers/} + ${u.zemail}" th:text="${u.zemail}"></a>
-													</td>
-													<td th:text="${u.xphone}"></td>
-													<td th:text="${u.xmadd}"></td>
-													<td th:text="${u.zactive ? 'Y' : 'N'}"></td>
-												</tr>
-											</tbody>
-										</table>
+										<div style="overflow-x: scroll;">
+											<table class="table table-striped table-bordered datatable nowrap">
+												<thead>
+													<tr>
+														<th>Full Name</th>
+														<th>Username</th>
+														<th>Staff ID/Name</th>
+														<th>Phone</th>
+														<th>Address</th>
+														<th>Active?</th>
+													</tr>
+												</thead>
+												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+													<tr th:each="u : ${xusersList}">
+														<td th:text="${u.xname}"></td>
+														<td>
+															<a th:href="@{/system/xusers/} + ${u.zemail}" th:text="${u.zemail}"></a>
+														</td>
+														<td>
+															<a th:href="@{/system/staff/} + ${u.xstaff}" th:if="${not #strings.isEmpty(u.xstaff)}" th:text="${u.xstaff} + ' - ' + ${u.staffname}" target="_blank"></a>
+														</td>
+														<td th:text="${u.xphone}"></td>
+														<td th:text="${u.xmadd}"></td>
+														<td th:text="${u.zactive ? 'Y' : 'N'}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</section>
 

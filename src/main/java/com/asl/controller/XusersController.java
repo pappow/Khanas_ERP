@@ -51,6 +51,17 @@ public class XusersController extends ASLAbstractController{
 		// modify zemail first
 		xusers.setZemail(xusersService.modifyZemail(xusers.getZemail()));
 
+		// validation
+		if(StringUtils.isBlank(xusers.getXstaff())) {
+			responseHelper.setErrorStatusAndMessage("Staff ID required");
+			return responseHelper.getResponse();
+		}
+		Xusers xs = xusersService.findUserByXstaff(xusers.getXstaff());
+		if(xs != null && !xs.getZemail().equalsIgnoreCase(xusers.getZemail())) {
+			responseHelper.setErrorStatusAndMessage("Staff ID alredy assigned with user : " + xs.getZemail());
+			return responseHelper.getResponse();
+		}
+
 		// Validate xusers data
 		modelValidator.validateXuser(xusers, bindingResult, validator);
 		if(bindingResult.hasErrors()) return modelValidator.getValidationMessage(bindingResult);

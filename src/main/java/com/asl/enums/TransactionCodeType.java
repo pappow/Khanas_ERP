@@ -22,6 +22,8 @@ public enum TransactionCodeType {
 	CUSTOMER_NUMBER("Customer Number", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
 	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER),
 
+	EMPLOYEE_ID("Employee ID", "EID-", TransactionCodes.EMPLOYEE_ID),
+
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
 
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
