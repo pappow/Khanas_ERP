@@ -92,4 +92,7 @@ public class Caitem extends AbstractModel<String> {
 
 	@Column(name = "xproditem")
 	private boolean xproditem;
+
+	@Column(name = "xseqn")
+	private Long xseqn;
 }
