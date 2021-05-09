@@ -43,5 +43,6 @@
 		<mapper resource="mappers/ZlogsMapper.xml"/>
 		<mapper resource="mappers/ZusersMapper.xml"/>
 		<mapper resource="mappers/ASLProcErrorMapper.xml"/>
+		<mapper resource="mappers/DailyDistributionMapper.xml"/>
 	</mappers>
 </configuration>

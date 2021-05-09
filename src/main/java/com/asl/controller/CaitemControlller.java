@@ -63,12 +63,8 @@ public class CaitemControlller extends ASLAbstractController {
 		Caitem caitem = new Caitem();
 		caitem.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		caitem.setXminqty(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-//		caitem.setXcfpur(xcfpur);
-//		caitem.setXcfsel(xcfsel);
-//		caitem.setXcost(xcost);
-//		caitem.setXdealerp(xdealerp);
-//		caitem.setXmrp(xmrp);
 		caitem.setXtype(TransactionCodeType.ITEM_NUMBER.getCode());
+		caitem.setXseqn(Long.valueOf(999999));
 		return caitem;
 	}
 

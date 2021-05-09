@@ -94,5 +94,5 @@ public class Caitem extends AbstractModel<String> {
 	private boolean xproditem;
 
 	@Column(name = "xseqn")
-	private Long xseqn;
+	private Long xseqn = Long.valueOf(999999);
 }
