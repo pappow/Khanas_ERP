@@ -78,7 +78,7 @@
 													</div>
 
 													<div class="form-group" th:if="${not #strings.isEmpty(opordheader.xordernum)}">
-														<label class="control-label col-md-4" for="xordernum">Booking Number : </label>
+														<label class="control-label col-md-4" for="xordernum">Booking NO. : </label>
 														<div class="col-md-8">
 															<input type="hidden" th:field="*{xordernum}" class="form-control"/>
 															<input type="text" class="form-control" th:value="*{xordernum}" disabled="disabled">
@@ -100,19 +100,23 @@
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtotguest">Total Guests : </label>
-														<div class="col-md-3">
+														<div class="col-md-5">
 															<input type="number" class="form-control" th:field="*{xtotguest}" min="0">
 														</div>
 													</div>
 
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Booking Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
+															<input 	type="hidden" 
+																	class="form-control" 
+																	id="xdate" 
+																	name="xdate" 
+																	th:value="${opordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xdate, df)}"/>
 															<input 	type="datepicker" 
 																	class="form-control" 
-																	id="xdate"
-																	name="xdate"
 																	required="required"
+																	disabled="disabled"
 																	th:value="${opordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
@@ -121,8 +125,8 @@
 													</div>
 
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xstartdate">Function Start Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<label class="control-label col-md-4" for="xstartdate">Start Date : </label>
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xstartdate"
@@ -148,8 +152,8 @@
 													</div>
 
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xenddate">Function End Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<label class="control-label col-md-4" for="xenddate">End Date : </label>
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xenddate"
@@ -289,10 +293,9 @@
 											<thead>
 												<tr>
 													<th>Booking Order</th>
-													<th>Date</th>
-													<th>Customer</th>
-													<th>From</th>
-													<th>To</th>
+													<th>Booking Date</th>
+													<th>Start Date</th>
+													<th>End Date</th>
 													<th>Status</th>
 												</tr>
 											</thead>
@@ -301,11 +304,10 @@
 													<td>
 														<a th:href="@{/conventionmanagement/hallbooking/} + ${order.xordernum}" th:text="${order.xordernum}"></a>
 													</td>
-													<td  th:text="${#dates.format(order.xfuncdate, df)}"></td>
-													<td th:text="${order.xcus}"></td>
-													<td th:text="${order.xstarttime}"></td>
-													<td th:text="${order.xendtime}"></td>
-													<td th:text="${order.xstatusord}"></td>
+													<td th:text="${#dates.format(order.xdate, df)}"></td>
+													<td th:text="${#dates.format(order.xstartdate, df)} + ' - ' + ${order.xstarttime}"></td>
+													<td th:text="${#dates.format(order.xenddate, df)} + ' - ' + ${order.xendtime}"></td>
+													<td th:text="${order.xstatus}"></td>
 												</tr>
 											</tbody>
 										</table>

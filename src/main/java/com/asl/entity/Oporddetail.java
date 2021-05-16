@@ -72,4 +72,5 @@ public class Oporddetail extends AbstractModel<String> {
 	//Added for Convention Management
 	@Column(name = "xlineamt")
 	private BigDecimal xlineamt;
+
 }
