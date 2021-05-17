@@ -31,6 +31,8 @@ import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.util.CKTime;
 
+import lombok.Data;
+
 @Controller
 @RequestMapping("/conventionmanagement/hallbooking")
 public class ConventionHallBookingController extends ASLAbstractController {
@@ -277,35 +279,12 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
 		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
 
-		
-
-		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
-
-		if ("new".equalsIgnoreCase(xrow)) {
-			Oporddetail oporddetail = new Oporddetail();
-			oporddetail.setXordernum(xordernum);
-			oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-			oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
-			model.addAttribute("oporddetail", oporddetail);
-		} else {
-			Oporddetail oporddetail = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
-			if (oporddetail == null) {
-				oporddetail = new Oporddetail();
-				oporddetail.setXordernum(xordernum);
-				oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-				oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-				oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
-			}
-			model.addAttribute("oporddetail", oporddetail);
-		}
-
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
 
 	@PostMapping("/oporddetails/save")
-	public @ResponseBody Map<String, Object> saveOporddetail(String xitems) {
-		if(xitems == null || StringUtils.isBlank(xitems)) {
+	public @ResponseBody Map<String, Object> saveOporddetail(Hallitems hallitems) {
+		if(hallitems == null) {
 			responseHelper.setErrorStatusAndMessage("Items not found to add");
 			return responseHelper.getResponse();
 		}
@@ -446,4 +425,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/opord::availableHalls";
 	}
 
+	
+	
+}
+
+@Data
+class Hallitems {
+	private List<String> items;
 }

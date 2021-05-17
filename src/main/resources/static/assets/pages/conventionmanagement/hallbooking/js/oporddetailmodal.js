@@ -60,12 +60,14 @@ $(document).ready(function(){
 
 		console.log({items});
 
+		hallitems.items = items;
+
 		loadingMask2.show();
 		$.ajax({
 			url : getBasepath() + '/conventionmanagement/hallbooking/oporddetails/save',
 			type : 'POST',
 			dataType: 'json',
-			data: JSON.stringify(items),
+			data: JSON.stringify(hallitems),
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("Accept", "application/json");
 				xhr.setRequestHeader("Content-Type", "application/json");
