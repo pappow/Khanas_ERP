@@ -41,67 +41,6 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-12">
-						<section id="data-maintenance" style="margin-top: 30px;">
-							<div class="section-header sectionbartoggle">
-								<h1>Filter Available Rooms</h1>
-							</div>
-							<div class="section-body section-border">
-								<div class="row" th:with="df=${'E, dd-MMM-yyyy'}">
-									<!-- <form id="mainform" class="form-horizontal" th:action="@{/roommanagement/roombooking/query}" method="post" > -->
-										<div class="col-md-4 col-md-offset-3">
-											<div class="form-group datepicker">
-												<label class="control-label col-md-4" for="searchDate">Check In Date : </label>
-												<div class="input-group date col-md-8 datepicker">
-													<input 	type="datepicker" 
-															class="form-control" 
-															id="searchDate"
-															name="searchDate"
-															th:value="${#dates.format(#dates.createNow(), df)}"/>
-													<div class="input-group-addon">
-														<span class="glyphicon glyphicon-calendar"></span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="">
-												<button class="btn btn-sm btn-success query-btn" type="button"><i class="fas fa-search"></i> Search</button>
-											</div>
-										</div>
-								</div>
-							</div>
-						</section>
-					</div>
-					
-					<div class="col-md-12" id="allRooms" th:fragment="allRooms">
-						<div class="room-card text-center add-room" th:each="room : ${availableRooms}" >
-							<div class="padding-5">
-								<span th:text="${room.xdesc}" class="fa-1x room-xdesc"></span>
-							</div>
-							<div>
-								Price - <span th:text="${room.xrate}" class="room-xrate"></span>
-							</div>
-							<div class="padding-5">
-								<span th:text="${room.xcatitem}" class="label label-info fa-sm">Delux</span>
-							</div>
-						</div>
-						
-						<div class="room-card-red text-center remove-room" th:each="room : ${bookedRooms}" >
-							<div class="padding-5">
-								<span th:text="${room.xrow}" class="hidden room-xrow"></span>
-								<span th:text="${room.xdesc}" class="fa-1x"></span>
-							</div>
-							<div>
-								Price - <span th:text="${room.xrate}"></span>
-							</div>
-							<div class="padding-5">
-								<span th:text="${room.xcatitem}" class="label label-info fa-sm">Delux</span>
-							</div>
-						</div>
-					</div>
-					
-					
 					<div class="col-md-12 content-area">
 						<div class="row">
 							<div class="col-md-6">
@@ -163,91 +102,131 @@
 														</div>
 													</div>
 													
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xdate">Booking Date : </label>
+														<div class="input-group date col-md-7 datepicker">
+															<input 	type="hidden" 
+																	class="form-control" 
+																	id="xdate" 
+																	name="xdate" 
+																	th:value="${opordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xdate, df)}"/>
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	required="required"
+																	disabled="disabled"
+																	th:value="${opordheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xdate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
 
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xbookdate">Booking Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<label class="control-label col-md-4" for="xstartdate">Start Date : </label>
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
-																	id="xbookdate"
-																	name="xbookdate"
-																	th:value="${opordheader.xbookdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xbookdate, df)}"/>
+																	id="xstartdate"
+																	name="xstartdate"
+																	required="required"
+																	th:value="${opordheader.xstartdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xstartdate, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-													
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xcheckindate">Check In Date : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xcheckindate"
-																	name="xcheckindate"
-																	th:value="${opordheader.xcheckindate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xcheckindate, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-													
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xcheckoutdate">Check Out Date : </label>
-														<div class="input-group date col-md-6 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xcheckoutdate"
-																	name="xcheckoutdate"
-																	th:value="${opordheader.xcheckoutdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xcheckoutdate, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-													
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xstarttime">Start Time : </label>
-														<div class="col-md-5">
-															<input type="time" class="form-control" th:field="*{xstarttime}">
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xendtime">End Time : </label>
-														<div class="col-md-5">
-															<input type="time" class="form-control" th:field="*{xendtime}">
+														<div class="input-group time col-md-4 date-time-wrapper timepicker">
+															<input class="form-control" data-type="timepicker" placeholder="Start" required="required" th:field="*{xstarttime}"/>
+															<span class="input-group-append input-group-addon">
+																<span class="input-group-text">
+																	<i class="fa fa-clock"></i>
+																</span>
+															</span>
 														</div>
 													</div>
 
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xenddate">End Date : </label>
+														<div class="input-group date col-md-7 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xenddate"
+																	name="xenddate"
+																	required="required"
+																	th:value="${opordheader.xenddate == null ? #dates.format(#dates.createNow(), df) : #dates.format(opordheader.xenddate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xendtime">End Time : </label>
+														<div class="input-group time col-md-4 date-time-wrapper timepicker">
+															<input class="form-control" data-type="timepicker" placeholder="Start" required="required" th:field="*{xendtime}"/>
+															<span class="input-group-append input-group-addon">
+																<span class="input-group-text">
+																	<i class="fa fa-clock"></i>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xnote">Note : </label>
+														<div class="col-md-8">
+															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														</div>
+													</div>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xfacamt">Facilities Charge : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xfacamt}" min="0" disabled="disabled">
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xfoodamt">Food Purpose : </label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xfoodamt}" min="0" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xroomamt">Room Charge : </label>
+														<label class="control-label col-md-4" for="xroomamt">Room charge : </label>
 														<div class="col-md-6">
 															<input type="text" class="form-control" th:field="*{xroomamt}" min="0" disabled="disabled">
 														</div>
 													</div>
-													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xfoodamt">Food : </label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xfoodamt}" min="0" disabled="disabled">
+														</div>
+													</div>
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
 														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xtotamt}" min="0" disabled="disabled">
+															<input type="hidden" class="form-control" th:field="*{xtotamt}">
+															<input type="text" class="form-control" th:value="*{xtotamt}" disabled="disabled">
 														</div>
 													</div>
-													
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
+														<div class="col-md-6">
+															<select class="form-control" th:field="*{xvatait}">
+																<option th:each="x : ${vataitList}" th:value="${x.xvatait}" th:text="${x.xvatait}"></option>
+															</select>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xvatamt">Vat : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xvatamt}">
+															<input type="text" class="form-control" th:value="*{xvatamt}" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xaitamt">Tax : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xaitamt}">
+															<input type="text" class="form-control" th:value="*{xaitamt}" disabled="disabled">
+														</div>
+													</div>
+
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xdiscamt">Discount : </label>
 														<div class="col-md-6">
@@ -256,9 +235,10 @@
 													</div>
 
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xnote">Note : </label>
-														<div class="col-md-8">
-															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														<label class="control-label col-md-4" for="xgrandtot">Grand Total : </label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xgrandtot}">
+															<input type="text" class="form-control" th:value="*{xgrandtot}" disabled="disabled">
 														</div>
 													</div>
 												</div>												
@@ -361,28 +341,6 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	<style>
-		.room-card{
-			width: 10%;
-			background-color: #17a261 ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-		
-		.room-card-red{
-			width: 10%;
-			background-color: #c9302c ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-		
-	</style>
 	
 	<script>
 	$(document).ready(function(){
