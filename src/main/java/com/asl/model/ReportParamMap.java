@@ -24,6 +24,7 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0310 = new HashMap<>();
 	public static final Map<String, String> RM0311 = new HashMap<>();
 	public static final Map<String, String> RM0312 = new HashMap<>();
+	public static final Map<String, String> RM0313 = new HashMap<>();
 
 	// Sales & Invoicing  -- M0400
 	public static final Map<String, String> RM0401 = new HashMap<>();
@@ -36,6 +37,7 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0408 = new HashMap<>();
 	public static final Map<String, String> RM0409 = new HashMap<>();
 	public static final Map<String, String> RM0410 = new HashMap<>();
+	public static final Map<String, String> RM0411 = new HashMap<>();
 
 	// Production  -- M0500
 	public static final Map<String, String> RM0501 = new HashMap<>();
@@ -82,8 +84,8 @@ public class ReportParamMap {
 		RM0305.put("param8", "Status|" + ReportParamDataType.STRING.name());
 		
 		RM0307.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0307.put("param2", "FromDate|" + ReportParamDataType.DATE.name());
-		RM0307.put("param3", "ToDate|" + ReportParamDataType.DATE.name());
+		RM0307.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		RM0307.put("param3", "TDATE|" + ReportParamDataType.DATE.name());
 		
 		RM0308.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0308.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
@@ -112,6 +114,9 @@ public class ReportParamMap {
 		RM0312.put("param6", "Item Code|" + ReportParamDataType.STRING.name());
 		RM0312.put("param7", "Item Group|" + ReportParamDataType.STRING.name());
 		RM0312.put("param8", "Item Name|" + ReportParamDataType.STRING.name());
+		
+		RM0313.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0313.put("param2", "ITEM|" + ReportParamDataType.STRING.name());
 		
 		RM0401.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0401.put("param2", "From Date|" + ReportParamDataType.DATE.name());
@@ -170,6 +175,9 @@ public class ReportParamMap {
 		RM0410.put("param7", "Item Name|" + ReportParamDataType.STRING.name());
 		RM0410.put("param8", "Item Group|" + ReportParamDataType.STRING.name());
 		
+		RM0411.put("param1", "zid|" + ReportParamDataType.STRING.name());
+		RM0411.put("param2", "Date|" + ReportParamDataType.DATE.name());
+		
 		RM0501.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0501.put("param2", "BOM|" + ReportParamDataType.STRING.name());
 		
@@ -185,6 +193,12 @@ public class ReportParamMap {
 		RM0503.put("param4", "XGITEM|" + ReportParamDataType.STRING.name());
 		RM0503.put("param5", "XCATITEM|" + ReportParamDataType.STRING.name());
 		RM0503.put("param6", "XITEM|" + ReportParamDataType.STRING.name());
+		
+		RM0504.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0504.put("param2", "RAWMET|" + ReportParamDataType.STRING.name());
+		
+		RM0313.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0313.put("param2", "ITEM|" + ReportParamDataType.STRING.name());
 		
 		RM0601.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0601.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
@@ -228,7 +242,8 @@ public class ReportParamMap {
 		RM0607.put("param3", "XGITEM|" + ReportParamDataType.STRING.name());
 		RM0607.put("param4", "XCATAGORY|" + ReportParamDataType.STRING.name());
 
-		
+		RM0608.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0608.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
