@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -161,6 +162,30 @@ public class RoomBookingController extends ASLAbstractController {
 					responseHelper.setErrorStatusAndMessage("Start date can't be after End date");
 					return responseHelper.getResponse();
 				}
+				
+				if(opordheader.getXhallamt() == null) opordheader.setXhallamt(BigDecimal.ZERO);
+				if(opordheader.getXfunctionamt() == null) opordheader.setXfunctionamt(BigDecimal.ZERO);
+				if(opordheader.getXfoodamt() == null) opordheader.setXfoodamt(BigDecimal.ZERO);
+				if(opordheader.getXfacamt() == null) opordheader.setXfacamt(BigDecimal.ZERO);
+				if(opordheader.getXtotamt() == null) {
+					BigDecimal tot = opordheader.getXhallamt().add(opordheader.getXfunctionamt()).add(opordheader.getXfoodamt()).add(opordheader.getXfacamt());
+					opordheader.setXtotamt(tot);
+				}
+				if(opordheader.getXdiscamt() == null) opordheader.setXdiscamt(BigDecimal.ZERO);
+				if(StringUtils.isBlank(opordheader.getXvatait())) opordheader.setXvatait("No Vat");
+
+				Vatait vatait = vataitService.findVataitByXvatait(opordheader.getXvatait());
+				if(vatait != null) {
+					if(opordheader.getXvatamt() == null) opordheader.setXvatamt((opordheader.getXtotamt().multiply(vatait.getXvat())).divide(BigDecimal.valueOf(100)));
+					if(opordheader.getXaitamt() == null) opordheader.setXaitamt((opordheader.getXtotamt().multiply(vatait.getXait())).divide(BigDecimal.valueOf(100)));
+				} else {
+					if(opordheader.getXvatamt() == null) opordheader.setXvatamt((opordheader.getXtotamt().multiply(BigDecimal.ZERO)).divide(BigDecimal.valueOf(100)));
+					if(opordheader.getXaitamt() == null) opordheader.setXaitamt((opordheader.getXtotamt().multiply(BigDecimal.ZERO)).divide(BigDecimal.valueOf(100)));
+				}
+
+				BigDecimal grandTotal = (opordheader.getXtotamt().add(opordheader.getXvatamt()).add(opordheader.getXaitamt())).subtract(opordheader.getXdiscamt());
+				if(opordheader.getXgrandtot() == null) opordheader.setXgrandtot(grandTotal);
+
 
 		
 		// if existing
