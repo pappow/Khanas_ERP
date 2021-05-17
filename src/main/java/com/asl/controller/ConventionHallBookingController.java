@@ -303,6 +303,18 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
 
+	@PostMapping("/oporddetails/save")
+	public @ResponseBody Map<String, Object> saveOporddetail(String xitems) {
+		if(xitems == null || StringUtils.isBlank(xitems)) {
+			responseHelper.setErrorStatusAndMessage("Items not found to add");
+			return responseHelper.getResponse();
+		}
+
+
+		responseHelper.setStatus(ResponseStatus.ERROR);
+		return responseHelper.getResponse();
+	}
+
 	@PostMapping("/oporddetail/save")
 	public @ResponseBody Map<String, Object> saveOporddetail(Oporddetail opordDetail) {
 		if (opordDetail == null || StringUtils.isBlank(opordDetail.getXordernum())) {
