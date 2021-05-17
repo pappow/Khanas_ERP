@@ -2,12 +2,12 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,9 +25,11 @@ import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
+import com.asl.util.CKTime;
 
 @Controller
 @RequestMapping("/conventionmanagement/hallbooking")
@@ -36,6 +38,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private VataitService vataitService;
+	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -50,7 +53,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		model.addAttribute("oporddetail", getDefaultOpordDetail());
 
-		model.addAttribute("opordheader", getDefaultOpordHeader());
 		model.addAttribute("availableHalls", opordService.findAvailableHallsByDate(new Date()));
 		model.addAttribute("soprefix",
 				xtrnService.findByXtypetrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode()));
@@ -132,6 +134,15 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// set default
+		if(StringUtils.isBlank(opordheader.getXordernum())) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			opordheader.setXdate(cal.getTime());
+		}
+
 		// Validation
 		if(StringUtils.isBlank(opordheader.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Customer name required");
@@ -141,15 +152,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Guest Quantity invalid");
 			return responseHelper.getResponse();
 		}
-		if(opordheader.getXdate() == null) {
-			responseHelper.setErrorStatusAndMessage("Booking date required");
-			return responseHelper.getResponse();
-		}
 		if(opordheader.getXstartdate() == null) {
 			responseHelper.setErrorStatusAndMessage("Start date required");
 			return responseHelper.getResponse();
 		}
-		if(StringUtils.isBlank(opordheader.getXstarttime())) {
+		if(opordheader.getXstarttime() == null) {
 			responseHelper.setErrorStatusAndMessage("Start time required");
 			return responseHelper.getResponse();
 		}
@@ -157,15 +164,32 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("End date required");
 			return responseHelper.getResponse();
 		}
-		if(StringUtils.isBlank(opordheader.getXendtime())) {
+		if(opordheader.getXendtime()== null) {
 			responseHelper.setErrorStatusAndMessage("End time required");
 			return responseHelper.getResponse();
 		}
-
 		if(opordheader.getXdate().after(opordheader.getXstartdate())) {
-			responseHelper.setErrorStatusAndMessage("Booking date can't be after start date");
+			responseHelper.setErrorStatusAndMessage("Booking date can't be after Start date");
 			return responseHelper.getResponse();
 		}
+
+		Calendar stdt  = Calendar.getInstance();
+		stdt.setTime(opordheader.getXstartdate());
+		stdt.set(Calendar.HOUR_OF_DAY, new CKTime(opordheader.getXstarttime()).getHour());
+		stdt.set(Calendar.MINUTE, new CKTime(opordheader.getXstarttime()).getMinute());
+		stdt.set(Calendar.SECOND, 0);
+
+		Calendar endt  = Calendar.getInstance();
+		endt.setTime(opordheader.getXenddate());
+		endt.set(Calendar.HOUR_OF_DAY, new CKTime(opordheader.getXendtime()).getHour());
+		endt.set(Calendar.MINUTE, new CKTime(opordheader.getXendtime()).getMinute());
+		endt.set(Calendar.SECOND, 0);
+
+		if(stdt.getTime().after(endt.getTime())) {
+			responseHelper.setErrorStatusAndMessage("Start date can't be after End date");
+			return responseHelper.getResponse();
+		}
+
 
 		if(opordheader.getXhallamt() == null) opordheader.setXhallamt(BigDecimal.ZERO);
 		if(opordheader.getXfunctionamt() == null) opordheader.setXfunctionamt(BigDecimal.ZERO);
@@ -250,6 +274,13 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 	@GetMapping("{xordernum}/oporddetail/{xrow}/show")
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
+
+		model.addAttribute("functions", caitemService.findByXcatitem("Function"));
+		model.addAttribute("halls", caitemService.findByXcatitem("Convention Hall"));
+		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
+		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
+
+		
 
 		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 

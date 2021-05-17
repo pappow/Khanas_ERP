@@ -470,8 +470,8 @@ public class ProductionBatchController extends ASLAbstractController {
 				fg.setDeviation(b.getDeviation() != null ? b.getDeviation() : BigDecimal.ZERO);
 				rm.getFinishedGoods().add(fg);
 
-				rm.setQty(rm.getQty().add(fg.getProductionRawQty()));
 				rm.setWastage(rm.getWastage().add(fg.getWastage()));
+				rm.setQty(rm.getQty().add(fg.getProductionRawQty()).add(rm.getWastage()));
 			} else {
 				RawMaterial rm = new RawMaterial();
 				rm.setCode(key);
@@ -487,8 +487,8 @@ public class ProductionBatchController extends ASLAbstractController {
 				fg.setDeviation(b.getDeviation() != null ? b.getDeviation() : BigDecimal.ZERO);
 				rm.getFinishedGoods().add(fg);
 
-				rm.setQty(fg.getProductionRawQty());
 				rm.setWastage(fg.getWastage());
+				rm.setQty(rm.getWastage().add(fg.getProductionRawQty()));
 
 				group.put(key, rm);
 			}

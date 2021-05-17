@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.model.BranchesRequisitions;
 
 @Mapper
 public interface OpdoMapper {
@@ -43,4 +44,6 @@ public interface OpdoMapper {
 
 	public Opdoheader findPoordHeaderByXordernum(String xordernum, String zid);
 	public Opdoheader findPoordHeaderByXordernumAndRequisitionnumber(String xordernum, String requisitionnumber, String zid);
+
+	public List<BranchesRequisitions> getSalesInvoiceMatrxi(String xdate, String zid);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.model.BranchesRequisitions;
 
 @Component
 public interface OpdoService {
@@ -44,9 +45,9 @@ public interface OpdoService {
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
 
 	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
-	
+
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum);
-	
+
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xstatusord, String xdornum);
 
 	public long createSalesFromChalan(String xordernum);
@@ -57,7 +58,9 @@ public interface OpdoService {
 	public void procIssuePricing(String xdocnum, String xwh, String p_seq);
 
 	public void procTransferOPtoAR(String xdornum, String p_screen, String p_seq);
-	
-	//Search menu
+
+	// Search menu
 	public List<Opdoheader> findOpdoXdornum(String xdornum);
+
+	public List<BranchesRequisitions> getSalesInvoiceMatrxi(Date xdate);
 }

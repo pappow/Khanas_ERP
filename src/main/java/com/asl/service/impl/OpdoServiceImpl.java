@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
 import com.asl.mapper.OpordMapper;
+import com.asl.model.BranchesRequisitions;
 import com.asl.service.CacusService;
 import com.asl.service.OpdoService;
 
@@ -299,6 +301,13 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		}
 
 		return salesSavedCount == salesOrdersOfProductionChalan.size() ? 1 : 0;
+	}
+
+	@Override
+	public List<BranchesRequisitions> getSalesInvoiceMatrxi(Date xdate) {
+		if(xdate == null) return Collections.emptyList();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return opdoMapper.getSalesInvoiceMatrxi(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
 }
