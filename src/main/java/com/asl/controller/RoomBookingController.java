@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,9 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.OpordService;
+import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
+import com.asl.util.CKTime;
 
 @Controller
 @RequestMapping("/roommanagement/roombooking")
@@ -34,19 +37,19 @@ public class RoomBookingController extends ASLAbstractController {
 	private OpordService opordService;
 	@Autowired
 	private XcodesService xcodeService;
+	@Autowired 
+	private VataitService vataitService;
 	
 	@GetMapping
 	public String loadBookingPage(Model model) {
 		Oporddetail oporddetail = new Oporddetail();
-		oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-		oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-		oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
+		
+		model.addAttribute("soprefix", xtrnService.findByXtypetrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(),Boolean.TRUE));
 		model.addAttribute("opordheader", getDefaultOpordHeader());
 		model.addAttribute("oporddetail", oporddetail);
-		
-		model.addAttribute("opordheader", getDefaultOpordHeader());
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+
 		model.addAttribute("availableRooms", opordService.findAvailableRoomsByDate(new Date()));
-		model.addAttribute("soprefix", xtrnService.findByXtypetrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode()));
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getdefaultCode()));
 		//model.addAttribute("")
 		
@@ -56,21 +59,15 @@ public class RoomBookingController extends ASLAbstractController {
 	@GetMapping("/{xordernum}")
 	public String loadBookingPage(@PathVariable String xordernum, Model model) {
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
-		if(oh == null)
-			oh = getDefaultOpordHeader();
-		Oporddetail oporddetail = new Oporddetail();
-		oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-		oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-		oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
-
+		if (oh == null) return "redirect:/roommanagement/roombooking";
 		model.addAttribute("opordheader", oh);
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+		
+		
+		Oporddetail oporddetail = new Oporddetail();
 		model.addAttribute("oporddetail", oporddetail);
 		
-		SimpleDateFormat dFormat = new SimpleDateFormat("dd-MMM-yyyy");
-		if(!oh.getXcheckoutdate().before(new Date()) || dFormat.format(oh.getXcheckoutdate()).equals(dFormat.format(new Date())))
-			model.addAttribute("availableRooms", opordService.findAvailableRoomsByDate(new Date()));
 		model.addAttribute("bookedRooms", opordService.findBookedRoomsByXordernum(xordernum));
-		//model.addAttribute("soprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("soprefix", xtrnService.findByXtypetrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode()));
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getdefaultCode()));
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
@@ -82,12 +79,19 @@ public class RoomBookingController extends ASLAbstractController {
 		Opordheader oh = new Opordheader();
 		
 		oh.setXtypetrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode());
+		
+		oh.setXstarttime("00:00");
+		oh.setXendtime("23:59");
+		oh.setXvatamt(BigDecimal.ZERO);
+		oh.setXaitamt(BigDecimal.ZERO);
+		
 		oh.setXtotamt(BigDecimal.ZERO);
 		oh.setXgrandtot(BigDecimal.ZERO);
 		oh.setXfacamt(BigDecimal.ZERO);
 		oh.setXfoodamt(BigDecimal.ZERO);
 		oh.setXroomamt(BigDecimal.ZERO);
 		oh.setXdiscamt(BigDecimal.ZERO);
+		
 		oh.setXtotguest(0);
 		
 		return oh;
@@ -97,10 +101,66 @@ public class RoomBookingController extends ASLAbstractController {
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Opordheader opordheader, BindingResult bindingResult, Model model){
 		
-		if(opordheader == null || StringUtils.isBlank(opordheader.getXtrn())) {
+		if(opordheader == null || StringUtils.isBlank(opordheader.getXtypetrn()) || StringUtils.isBlank(opordheader.getXtrn())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
+		// set default
+				if(StringUtils.isBlank(opordheader.getXordernum())) {
+					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					opordheader.setXdate(cal.getTime());
+				}
+//				
+				// Validation
+				if(StringUtils.isBlank(opordheader.getXcus())) {
+					responseHelper.setErrorStatusAndMessage("Customer name required");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXtotguest() <= 0) {
+					responseHelper.setErrorStatusAndMessage("Guest Quantity invalid");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXstartdate() == null) {
+					responseHelper.setErrorStatusAndMessage("Start date required");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXstarttime() == null) {
+					responseHelper.setErrorStatusAndMessage("Start time required");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXenddate() == null) {
+					responseHelper.setErrorStatusAndMessage("End date required");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXendtime()== null) {
+					responseHelper.setErrorStatusAndMessage("End time required");
+					return responseHelper.getResponse();
+				}
+				if(opordheader.getXdate().after(opordheader.getXstartdate())) {
+					responseHelper.setErrorStatusAndMessage("Booking date can't be after Start date");
+					return responseHelper.getResponse();
+				}
+
+				Calendar stdt  = Calendar.getInstance();
+				stdt.setTime(opordheader.getXstartdate());
+				stdt.set(Calendar.HOUR_OF_DAY, new CKTime(opordheader.getXstarttime()).getHour());
+				stdt.set(Calendar.MINUTE, new CKTime(opordheader.getXstarttime()).getMinute());
+				stdt.set(Calendar.SECOND, 0);
+
+				Calendar endt  = Calendar.getInstance();
+				endt.setTime(opordheader.getXenddate());
+				endt.set(Calendar.HOUR_OF_DAY, new CKTime(opordheader.getXendtime()).getHour());
+				endt.set(Calendar.MINUTE, new CKTime(opordheader.getXendtime()).getMinute());
+				endt.set(Calendar.SECOND, 0);
+
+				if(stdt.getTime().after(endt.getTime())) {
+					responseHelper.setErrorStatusAndMessage("Start date can't be after End date");
+					return responseHelper.getResponse();
+				}
 
 		
 		// if existing
