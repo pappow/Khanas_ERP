@@ -37,10 +37,6 @@ public class RM0406ServiceImpl extends AbstractReportService {
 		group.add(new DropdownOption("", "-- Select --"));
 		CusgroupList.stream().forEach(x -> group.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
-		List<Xcodes> paymentType = xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE);
-		List<DropdownOption> paytype = new ArrayList<>();
-		paytype.add(new DropdownOption("", "-- Select --"));
-		paymentType.stream().forEach(x -> paytype.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
@@ -56,7 +52,7 @@ public class RM0406ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Customer Group", group, "", false));
 
 		// Customer
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Customer", "search/report/cus", "", false));
 		
 		
 				
