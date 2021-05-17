@@ -202,6 +202,7 @@ public class ProfileServiceImpl extends AbstractGenericService implements Profil
 		if(StringUtils.isBlank(profilecode)) return getDefaultReportProfile();
 
 		Profile profile = findByProfilecode(profilecode);
+		if(profile == null) return  getDefaultReportProfile();
 
 		List<ProfileLine> profileLines = new ArrayList<>();
 
