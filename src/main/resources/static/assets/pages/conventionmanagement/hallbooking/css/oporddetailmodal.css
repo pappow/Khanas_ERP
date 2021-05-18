@@ -20,15 +20,15 @@
 
 
 .item-section h4{
-	text-align: center;
 	margin: 0;
 	padding: 0;
+	padding-left: 10px;
 }
 .item-container{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: start;
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
 }

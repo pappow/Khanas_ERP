@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Oporddetail;
@@ -283,8 +284,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	}
 
 	@PostMapping("/oporddetails/save")
-	public @ResponseBody Map<String, Object> saveOporddetail(Hallitems hallitems) {
-		if(hallitems == null) {
+	public @ResponseBody Map<String, Object> saveOporddetail(HallitemsWrapper hallitemsWrapper) {
+		if(hallitemsWrapper == null) {
 			responseHelper.setErrorStatusAndMessage("Items not found to add");
 			return responseHelper.getResponse();
 		}
@@ -430,6 +431,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 }
 
 @Data
-class Hallitems {
-	private List<String> items;
+class HallitemsWrapper {
+	private String[] items;
 }

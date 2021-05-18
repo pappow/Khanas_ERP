@@ -140,16 +140,16 @@ public class ProductionBatchController extends ASLAbstractController {
 		}
 
 		// Expload bom now
-		for(Moheader b : allBatches){
-
-			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			bmbomService.explodeBom(b.getXbatch(), "Explode", errorCode);
-			String em = getProcedureErrorMessages(errorCode);
-			if(StringUtils.isNotBlank(em)) continue;
-
-			b.setBomexploaded(true);
-			moService.updateMoHeader(b);
-		}
+//		for(Moheader b : allBatches){
+//
+//			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+//			bmbomService.explodeBom(b.getXbatch(), "Explode", errorCode);
+//			String em = getProcedureErrorMessages(errorCode);
+//			if(StringUtils.isNotBlank(em)) continue;
+//
+//			b.setBomexploaded(true);
+//			moService.updateMoHeader(b);
+//		}
 
 		allBatches.sort(Comparator.comparing(Moheader::getXbatch).reversed());
 		model.addAttribute("batchList", allBatches);

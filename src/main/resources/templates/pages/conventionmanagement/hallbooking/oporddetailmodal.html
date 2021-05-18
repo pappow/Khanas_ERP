@@ -21,7 +21,6 @@
 										th:classappend="${f.xitem}"
 										class="item-box btn btn-default" 
 										th:each="f : ${functions}">
-									<p th:text="${f.xitem}"></p>
 									<p th:text="${f.xdesc}"></p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</button>
@@ -37,23 +36,6 @@
 										th:classappend="${f.xitem}"
 										class="item-box btn btn-default" 
 										th:each="f : ${halls}">
-									<p th:text="${f.xitem}"></p>
-									<p th:text="${f.xdesc}"></p>
-									<p th:text="${f.xrate} + '/-'"></p>
-								</button>
-								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
-										th:classappend="${f.xitem}"
-										class="item-box btn btn-default" 
-										th:each="f : ${halls}">
-									<p th:text="${f.xitem}"></p>
-									<p th:text="${f.xdesc}"></p>
-									<p th:text="${f.xrate} + '/-'"></p>
-								</button>
-								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
-										th:classappend="${f.xitem}"
-										class="item-box btn btn-default" 
-										th:each="f : ${halls}">
-									<p th:text="${f.xitem}"></p>
 									<p th:text="${f.xdesc}"></p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</button>
@@ -69,7 +51,6 @@
 										th:classappend="${f.xitem}"
 										class="item-box btn btn-default" 
 										th:each="f : ${facilities}">
-									<p th:text="${f.xitem}"></p>
 									<p th:text="${f.xdesc}"></p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</button>
@@ -78,14 +59,13 @@
 					</div>
 
 					<div class="col-md-12 item-section">
-						<h4>Facilities</h4>
+						<h4>Foods</h4>
 						<div class="row">
 							<div class="col-md-12 item-container">
 								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
 										th:classappend="${f.xitem}"
 										class="item-box btn btn-default" 
 										th:each="f : ${foods}">
-									<p th:text="${f.xitem}"></p>
 									<p th:text="${f.xdesc}"></p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</button>
