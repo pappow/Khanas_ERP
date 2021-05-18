@@ -371,6 +371,9 @@ form.sign-in-form {
     top: 5%;
     transform: translate(-50%, 0);
   }
+  img.site-logo{
+  	width: 250px !important;
+  }
 }
 
 @media (max-width: 570px) {
@@ -397,4 +400,8 @@ form.sign-in-form {
     bottom: 28%;
     left: 50%;
   }
+  img.site-logo{
+  	width: 200px !important;
+  }
+  
 }
