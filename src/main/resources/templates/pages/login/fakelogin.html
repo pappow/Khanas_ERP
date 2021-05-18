@@ -36,8 +36,8 @@
 
 		<div class="panels-container">
 			<div class="panel left-panel">
-				<!-- <img th:src="@{/login-assets/img/khanas_logo.png}" style="width: 200px;"/> -->
-				<img th:src="@{/login-assets/img/} + ${logoName}" style="width: 100%"/>
+				<img th:if="${isKhanas}" class="site-logo" th:src="@{/login-assets/img/khanas_logo.png}" style="width: 400px;"/>
+				<img th:if="${isDev}" th:src="@{/login-assets/img/} + ${logoName}" style="width: 100%"/>
 			</div>
 		</div>
 	</div>

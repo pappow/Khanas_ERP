@@ -108,6 +108,21 @@ public class ASLAbstractController {
 		return Arrays.asList(env.getActiveProfiles()).contains("convention");
 	}
 
+	@ModelAttribute("isKhanas")
+	public boolean isKhanas() {
+		return Arrays.asList(env.getActiveProfiles()).contains("khanas");
+	}
+
+	@ModelAttribute("isTrishal")
+	public boolean isTrishal() {
+		return Arrays.asList(env.getActiveProfiles()).contains("trishal");
+	}
+
+	@ModelAttribute("isDev")
+	public boolean isDev() {
+		return Arrays.asList(env.getActiveProfiles()).contains("dev");
+	}
+
 	@ModelAttribute("logoName")
 	protected String defaultLogoName() {
 		return appConfig.getDefaultLogoFileName();

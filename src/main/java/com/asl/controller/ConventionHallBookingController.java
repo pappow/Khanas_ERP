@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Oporddetail;
@@ -30,6 +31,8 @@ import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.util.CKTime;
+
+import lombok.Data;
 
 @Controller
 @RequestMapping("/conventionmanagement/hallbooking")
@@ -277,30 +280,19 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
 		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
 
-		
+		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
+	}
 
-		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
-
-		if ("new".equalsIgnoreCase(xrow)) {
-			Oporddetail oporddetail = new Oporddetail();
-			oporddetail.setXordernum(xordernum);
-			oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-			oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
-			model.addAttribute("oporddetail", oporddetail);
-		} else {
-			Oporddetail oporddetail = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
-			if (oporddetail == null) {
-				oporddetail = new Oporddetail();
-				oporddetail.setXordernum(xordernum);
-				oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-				oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-				oporddetail.setXlineamt(oporddetail.getXqtyord().multiply(oporddetail.getXrate()));
-			}
-			model.addAttribute("oporddetail", oporddetail);
+	@PostMapping("/oporddetails/save")
+	public @ResponseBody Map<String, Object> saveOporddetail(HallitemsWrapper hallitemsWrapper) {
+		if(hallitemsWrapper == null) {
+			responseHelper.setErrorStatusAndMessage("Items not found to add");
+			return responseHelper.getResponse();
 		}
 
-		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
+
+		responseHelper.setStatus(ResponseStatus.ERROR);
+		return responseHelper.getResponse();
 	}
 
 	@PostMapping("/oporddetail/save")
@@ -434,4 +426,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/opord::availableHalls";
 	}
 
+	
+	
+}
+
+@Data
+class HallitemsWrapper {
+	private String[] items;
 }
