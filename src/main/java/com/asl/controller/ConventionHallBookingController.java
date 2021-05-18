@@ -47,9 +47,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 
 		
-		
-		
-		
 
 		model.addAttribute("oporddetail", getDefaultOpordDetail());
 
@@ -148,7 +145,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Customer name required");
 			return responseHelper.getResponse();
 		}
-		if(opordheader.getXtotguest() < 0) {
+		if(opordheader.getXtotguest() <= 0) {
 			responseHelper.setErrorStatusAndMessage("Guest Quantity invalid");
 			return responseHelper.getResponse();
 		}
