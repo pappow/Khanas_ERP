@@ -38,6 +38,7 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0409 = new HashMap<>();
 	public static final Map<String, String> RM0410 = new HashMap<>();
 	public static final Map<String, String> RM0411 = new HashMap<>();
+	public static final Map<String, String> RM0412 = new HashMap<>();
 
 	// Production  -- M0500
 	public static final Map<String, String> RM0501 = new HashMap<>();
@@ -177,6 +178,9 @@ public class ReportParamMap {
 		
 		RM0411.put("param1", "zid|" + ReportParamDataType.STRING.name());
 		RM0411.put("param2", "Date|" + ReportParamDataType.DATE.name());
+		
+		RM0412.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0412.put("param2", "DATE|" + ReportParamDataType.DATE.name());
 		
 		RM0501.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0501.put("param2", "BOM|" + ReportParamDataType.STRING.name());
