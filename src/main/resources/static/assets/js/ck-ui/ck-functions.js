@@ -659,31 +659,61 @@ function doSectionReloadWithNewData(rdata){
 	});
 
 	// 2nd reload url
-	if(rdata.secondreloadurl == undefined) return;
-	loadingMask2.show();
-	$.ajax({
-		url : getBasepath() + rdata.secondreloadurl,
-		type : 'GET',
-		success : function(data) {
-			loadingMask2.hide();
-			var wrapperelement = $('#' + rdata.secondreloadelementid + "_wrapper");
-			if($(wrapperelement).length > 0){
-				wrapperelement.html("");
-				wrapperelement.append(data);
-				dataTableInitSpecific(rdata.secondreloadelementid);
-			} else {
-				var target = $('#' + rdata.secondreloadelementid);
-				var parentElement = target.parent();
-				parentElement.html("");
-				parentElement.append(data);
-				bindTableButtonsEvent($('#' + rdata.secondreloadelementid));
+	if(rdata.secondreloadurl != undefined){
+		loadingMask2.show();
+		$.ajax({
+			url : getBasepath() + rdata.secondreloadurl,
+			type : 'GET',
+			success : function(data) {
+				loadingMask2.hide();
+				var wrapperelement = $('#' + rdata.secondreloadelementid + "_wrapper");
+				if($(wrapperelement).length > 0){
+					wrapperelement.html("");
+					wrapperelement.append(data);
+					dataTableInitSpecific(rdata.secondreloadelementid);
+				} else {
+					var target = $('#' + rdata.secondreloadelementid);
+					var parentElement = target.parent();
+					parentElement.html("");
+					parentElement.append(data);
+					bindTableButtonsEvent($('#' + rdata.secondreloadelementid));
+				}
+			}, 
+			error : function(jqXHR, status, errorThrown){
+				showMessage(status, "Something went wrong .... ");
+				loadingMask2.hide();
 			}
-		}, 
-		error : function(jqXHR, status, errorThrown){
-			showMessage(status, "Something went wrong .... ");
-			loadingMask2.hide();
-		}
-	});
+		});
+	}
+
+
+	// 3rd reload url
+	if(rdata.thirdreloadurl != undefined){
+		loadingMask2.show();
+		$.ajax({
+			url : getBasepath() + rdata.thirdreloadurl,
+			type : 'GET',
+			success : function(data) {
+				loadingMask2.hide();
+				var wrapperelement = $('#' + rdata.thirdreloadelementid + "_wrapper");
+				if($(wrapperelement).length > 0){
+					wrapperelement.html("");
+					wrapperelement.append(data);
+					dataTableInitSpecific(rdata.thirdreloadelementid);
+				} else {
+					var target = $('#' + rdata.thirdreloadelementid);
+					var parentElement = target.parent();
+					parentElement.html("");
+					parentElement.append(data);
+					bindTableButtonsEvent($('#' + rdata.thirdreloadelementid));
+				}
+			}, 
+			error : function(jqXHR, status, errorThrown){
+				showMessage(status, "Something went wrong .... ");
+				loadingMask2.hide();
+			}
+		});
+	}
 
 };
 

@@ -18,9 +18,9 @@ public class DailyProductionBatchDetail {
 	private String finishedgood;
 	private String xbomcomp;
 	private String rawmaterial;
+	private BigDecimal xproduction;
 	private BigDecimal xqtyprd;
 	private BigDecimal xqtycom;
-	private BigDecimal deflt;
 	private BigDecimal wastage;
 	private BigDecimal deviation;
 }

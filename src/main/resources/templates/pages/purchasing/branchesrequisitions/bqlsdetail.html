@@ -99,7 +99,9 @@
 												<br/>
 												Branch <i class="fas fa-arrow-down"></i>
 											</th>
-											<th th:each="col : ${distinctItems}" th:text="${col.xitem}" style="text-align: right;"></th>
+											<th th:each="col : ${distinctItems}" style="text-align: right;">
+												<a target="_blank" th:href="@{/mastersetup/caitem/} + ${col.xitem}" th:text="${col.xitem}"></a>
+											</th>
 										</tr>
 										<tr>
 											<th th:each="col : ${distinctItems}" th:text="${col.xdesc}" style="text-align: right;"></th>

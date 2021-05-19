@@ -22,8 +22,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="d : ${oporddetailsList}">
-									<td th:text="${d.xrow}"></td>
+								<tr th:each="d, n : ${oporddetailsList}">
+									<td th:text="${n.count}"></td>
 									<td>
 										<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
 									</td>

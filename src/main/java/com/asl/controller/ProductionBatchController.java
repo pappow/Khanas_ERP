@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Bmbomdetail;
 import com.asl.entity.Bmbomheader;
 import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
@@ -111,8 +112,12 @@ public class ProductionBatchController extends ASLAbstractController {
 				batch.setXdesc(item.getXdesc());
 				batch.setXbomkey(bom != null ? bom.getXbomkey() : "");
 				batch.setXdate(new Date());
-				batch.setXqtyprd(item.getXqtyord());
-				batch.setXqtycom(item.getXqtyord());
+				batch.setXqtyreq(item.getXqtyord());
+				if(StringUtils.isBlank(batch.getXbomkey())) {
+					batch.setXqtyprd(item.getXqtyord());
+					batch.setXqtycom(item.getXqtyord());
+				}
+				batch.setXproduction(BigDecimal.ZERO);
 				batch.setXstatusmor("Open");
 				batch.setXwh("Production Store");
 				batcList.add(batch);
@@ -139,18 +144,6 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 		}
 
-		// Expload bom now
-//		for(Moheader b : allBatches){
-//
-//			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-//			bmbomService.explodeBom(b.getXbatch(), "Explode", errorCode);
-//			String em = getProcedureErrorMessages(errorCode);
-//			if(StringUtils.isNotBlank(em)) continue;
-//
-//			b.setBomexploaded(true);
-//			moService.updateMoHeader(b);
-//		}
-
 		allBatches.sort(Comparator.comparing(Moheader::getXbatch).reversed());
 		model.addAttribute("batchList", allBatches);
 		model.addAttribute("chalan", chalan);
@@ -158,52 +151,121 @@ public class ProductionBatchController extends ASLAbstractController {
 		return "pages/production/batch/batch::batchdetailtable";
 	}
 
-	@PostMapping("/update/xqtycom/{xbatch}")
-	public @ResponseBody Map<String, Object> updateBatchCompletedQty(@PathVariable String xbatch, String xqtycom, Model model){
-		// Quantity validation
-		if(StringUtils.isBlank(xqtycom)) {
-			responseHelper.setErrorStatusAndMessage("Please enter valid completed quantity");
+	@PostMapping("/update/xqtyprd/{xbatch}")
+	public @ResponseBody Map<String, Object> updateBatchXqtyprd(@PathVariable String xbatch, BigDecimal xqtyprd, Model model){
+		if(xqtyprd == null || xqtyprd.compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid default production quantity");
 			return responseHelper.getResponse();
 		}
 
-		double qty = 0;
-		try {
-			qty = Double.parseDouble(xqtycom);
-		} catch (Exception e) {
-			log.error(ERROR, e.getMessage(), e);
-			responseHelper.setErrorStatusAndMessage("Please enter valid completed quantity");
-			return responseHelper.getResponse();
-		}
-
-		if(BigDecimal.valueOf(qty).compareTo(BigDecimal.ZERO) == -1) {
-			responseHelper.setErrorStatusAndMessage("Please enter valid completed quantity");
-			return responseHelper.getResponse();
-		}
-
-		// Now find batch first
 		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
 		if(batch == null) {
-			responseHelper.setErrorStatusAndMessage("Batch " + xbatch + " not found in this system");
+			responseHelper.setErrorStatusAndMessage("Batch not found");
 			return responseHelper.getResponse();
 		}
 
-		// set bom exploaded flag to batch
-		batch.setBomexploaded(true);
+		batch.setXqtyprd(xqtyprd);
+		long count = moService.updateMoHeader(batch);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update batch");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" + batch.getXchalan());
+		responseHelper.setStatus(ResponseStatus.SUCCESS);
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/update/xqtycom/{xbatch}")
+	public @ResponseBody Map<String, Object> updateBatchCompletedQty(@PathVariable String xbatch, BigDecimal xqtycom, Model model){
+		if(xqtycom == null || xqtycom.compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid final production quantity");
+			return responseHelper.getResponse();
+		}
+
+		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
+		if(batch == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found");
+			return responseHelper.getResponse();
+		}
+
 		// Update batch now
-		batch.setXqtycom(BigDecimal.valueOf(qty).setScale(2, RoundingMode.DOWN));
+		batch.setXqtycom(xqtycom.setScale(2, RoundingMode.DOWN));
 		long count = moService.updateMoHeader(batch);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't update batch : " + xbatch);
 			return responseHelper.getResponse();
 		}
 
-		// Expload bom now
-		String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-		bmbomService.explodeBom(batch.getXbatch(), "Explode", errorCode);
-		String em = getProcedureErrorMessages(errorCode);
-		if(StringUtils.isNotBlank(em)) {
-			responseHelper.setErrorStatusAndMessage("Can't expload bom for this Batch " + xbatch);
+		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" + batch.getXchalan());
+		responseHelper.setStatus(ResponseStatus.SUCCESS);
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/update/xproduction/{xbatch}")
+	public @ResponseBody Map<String, Object> updateBatchXproduction(@PathVariable String xbatch, BigDecimal xproduction, Model model){
+		if(xproduction == null || xproduction.compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid production quantity");
 			return responseHelper.getResponse();
+		}
+
+		//TODO: production stock availability validation of raw material
+
+		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
+		if(batch == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found");
+			return responseHelper.getResponse();
+		}
+
+		batch.setXproduction(xproduction);
+		if(StringUtils.isBlank(batch.getXbomkey())) batch.setBomexploaded(true);
+		long count = moService.updateMoHeader(batch);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update batch");
+			return responseHelper.getResponse();
+		}
+
+		// if has BOM setting, then create default
+		if(StringUtils.isNotBlank(batch.getXbomkey())) {
+			List<Bmbomdetail> bomdetails = bmbomService.findBmbomdetailByXbomkey(batch.getXbomkey());
+			Bmbomdetail bd = bomdetails.stream().findFirst().orElse(null);
+			if(bd != null) {
+				// update previous modetail if exist 
+				Modetail exisdet =  moService.findDefaultModetailByXbatch(batch.getXbatch());
+				if(exisdet != null) {
+					exisdet.setXitem(bd.getXbomcomp());
+					exisdet.setXqtyreq(xproduction.multiply(BigDecimal.valueOf(1000)));
+					long ucount = moService.updateMoDetail(exisdet);
+					if(ucount == 0) {
+						responseHelper.setErrorStatusAndMessage("Can't update batch default");
+						return responseHelper.getResponse();
+					}
+				} else {
+					Modetail modetail = new Modetail();
+					modetail.setXitem(bd.getXbomcomp());
+					modetail.setXqtyreq(xproduction.multiply(BigDecimal.valueOf(1000)));
+					modetail.setXwh("Production Store");
+					modetail.setXtype("Default");
+					modetail.setXbatch(batch.getXbatch());
+					modetail.setXunit("gm");
+					modetail.setXbomrow(1);
+
+					long scount = moService.saveMoDetail(modetail);
+					if(scount == 0) {
+						responseHelper.setErrorStatusAndMessage("Can't create batch default");
+						return responseHelper.getResponse();
+					}
+				}
+			}
+
+			// Now expload bom and get default production and complited production
+			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			bmbomService.explodeBom2(batch.getXbatch(), batch.getXbomkey(), "Explode", errorCode);
+			String em = getProcedureErrorMessages(errorCode);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage("BOM expload failed");
+				return responseHelper.getResponse();
+			}
 		}
 
 		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" + batch.getXchalan());
@@ -271,7 +333,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 		}
-		
+
 		modetail.setXwh("Production Store");
 
 		// if existing
@@ -463,7 +525,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				FinishedGood fg = new FinishedGood();
 				fg.setCode(b.getXitem());
 				fg.setNamee(b.getFinishedgood());
-				fg.setProductionRawQty(b.getDeflt() != null ? b.getDeflt() : BigDecimal.ZERO);
+				fg.setProductionRawQty(b.getXproduction() != null ? b.getXproduction() : BigDecimal.ZERO);
 				fg.setProductionQty(b.getXqtyprd() != null ? b.getXqtyprd() : BigDecimal.ZERO);
 				fg.setCompletedQuantity(b.getXqtycom() != null ? b.getXqtycom() : BigDecimal.ZERO);
 				fg.setWastage(b.getWastage() != null ? b.getWastage() : BigDecimal.ZERO);
@@ -471,7 +533,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				rm.getFinishedGoods().add(fg);
 
 				rm.setWastage(rm.getWastage().add(fg.getWastage()));
-				rm.setQty(rm.getQty().add(fg.getProductionRawQty()).add(rm.getWastage()));
+				rm.setQty(rm.getQty().add(fg.getProductionRawQty()));
 			} else {
 				RawMaterial rm = new RawMaterial();
 				rm.setCode(key);
@@ -480,7 +542,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				FinishedGood fg = new FinishedGood();
 				fg.setCode(b.getXitem());
 				fg.setNamee(b.getFinishedgood());
-				fg.setProductionRawQty(b.getDeflt() != null ? b.getDeflt() : BigDecimal.ZERO);
+				fg.setProductionRawQty(b.getXproduction() != null ? b.getXproduction() : BigDecimal.ZERO);
 				fg.setProductionQty(b.getXqtyprd() != null ? b.getXqtyprd() : BigDecimal.ZERO);
 				fg.setCompletedQuantity(b.getXqtycom() != null ? b.getXqtycom() : BigDecimal.ZERO);
 				fg.setWastage(b.getWastage() != null ? b.getWastage() : BigDecimal.ZERO);
@@ -488,7 +550,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				rm.getFinishedGoods().add(fg);
 
 				rm.setWastage(fg.getWastage());
-				rm.setQty(rm.getWastage().add(fg.getProductionRawQty()));
+				rm.setQty(fg.getProductionRawQty());
 
 				group.put(key, rm);
 			}

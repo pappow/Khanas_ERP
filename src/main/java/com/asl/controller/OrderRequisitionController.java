@@ -104,7 +104,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		// if existing record
 		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
 		if(existPoordHeader != null) {
-			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xdate", "xtotamt","xstatuspor");
+			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xtotamt","xstatuspor");
 			long count = poordService.update(existPoordHeader);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);

@@ -57,11 +57,23 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 	}
 
 	@Override
+	@Transactional
 	public long saveMoDetail(Modetail modetail) {
 		if(modetail == null || StringUtils.isBlank(modetail.getXbatch())) return 0;
 		modetail.setZid(sessionManager.getBusinessId());
 		modetail.setZauserid(getAuditUser());
 		return moMapper.saveMoDetail(modetail);
+	}
+
+	@Override
+	@Transactional
+	public long saveBatchMoDetail(List<Modetail> modetails) {
+		if(modetails == null || modetails.isEmpty()) return 0;
+		long finalCount = 0;
+		for(Modetail md : modetails) {
+			finalCount += saveMoDetail(md);
+		}
+		return finalCount;
 	}
 
 	@Override
@@ -186,5 +198,14 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		if(StringUtils.isBlank(xchalan)) return Collections.emptyList();
 		return moMapper.dailyProductionReport(xchalan, sessionManager.getBusinessId());
 	}
+
+	@Override
+	@Transactional
+	public long deleteModetailByXbatch(String xbatch) {
+		if(StringUtils.isBlank(xbatch)) return 0;
+		return moMapper.deleteModetailByXbatch(xbatch, sessionManager.getBusinessId());
+	}
+
+	
 
 }

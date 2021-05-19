@@ -96,6 +96,12 @@ public class Moheader extends AbstractModel<String> {
 	@Column(name = "xdesc")
 	private String xdesc;
 
+	@Column(name = "xproduction")
+	private BigDecimal xproduction;
+
+	@Column(name = "xqtyreq")
+	private BigDecimal xqtyreq;
+
 	@Transient
 	private String xqtyprdunit;
 

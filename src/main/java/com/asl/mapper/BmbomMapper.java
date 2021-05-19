@@ -31,6 +31,7 @@ public interface BmbomMapper {
 	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
 
 	public void explodeBom(String zid, String user, String batch, String action, String errseq);
+	public void explodeBom2(String zid, String user, String batch, String xbomkey, String action, String errseq);
 	
 	// Search
 	public List<Bmbomheader> searchXbom(String xbomkey, String zid);

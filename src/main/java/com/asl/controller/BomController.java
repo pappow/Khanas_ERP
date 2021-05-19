@@ -97,7 +97,7 @@ public class BomController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 
-			BeanUtils.copyProperties(bmbomheader, existBom, "xtypetrn","xtrn","xbomkey","xdate","xpreferbatchqty");
+			BeanUtils.copyProperties(bmbomheader, existBom, "xtypetrn","xtrn","xbomkey","xdate","xpreferbatchqty","xqtybase");
 			existBom.setXdesc(caitem.getXdesc());
 			long count = bmbomService.updateBmbomheader(existBom);
 			if(count == 0) {
@@ -120,6 +120,7 @@ public class BomController extends ASLAbstractController {
 		bmbomheader.setXdesc(caitem.getXdesc());
 		bmbomheader.setXdate(new Date());
 		bmbomheader.setXpreferbatchqty(1);
+		bmbomheader.setXqtybase(1);
 		long count = bmbomService.saveBmbomheader(bmbomheader);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't save BOM");

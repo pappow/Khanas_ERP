@@ -196,8 +196,12 @@
 	<select id = "explodeBom" statementType = "CALLABLE">
 		{call MO_ExplodeBOM(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-	
-		<select id="searchXbom" resultType="Bmbomheader">
+
+	<select id = "explodeBom2" statementType = "CALLABLE">
+		{call MO_ExplodeBOM2(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{xbomkey, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
+	</select>
+
+	<select id="searchXbom" resultType="Bmbomheader">
 		SELECT * FROM BMBOMHEADER WHERE (UPPER(xbomkey) LIKE '%' || #{xbomkey} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 	
