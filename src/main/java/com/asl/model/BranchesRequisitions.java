@@ -19,4 +19,5 @@ public class BranchesRequisitions {
 	private String branchzid;
 	private String xunitpur;
 	private String xordernum;
+	private String xcatitem;
 }

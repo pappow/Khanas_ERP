@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Bmbomdetail;
 import com.asl.entity.Bmbomheader;
 import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Modetail;
@@ -111,8 +112,12 @@ public class ProductionBatchController extends ASLAbstractController {
 				batch.setXdesc(item.getXdesc());
 				batch.setXbomkey(bom != null ? bom.getXbomkey() : "");
 				batch.setXdate(new Date());
-				batch.setXqtyprd(item.getXqtyord());
-				batch.setXqtycom(item.getXqtyord());
+				batch.setXqtyreq(item.getXqtyord());
+				if(StringUtils.isBlank(batch.getXbomkey())) {
+					batch.setXqtyprd(item.getXqtyord());
+					batch.setXqtycom(item.getXqtyord());
+				}
+				batch.setXproduction(BigDecimal.ZERO);
 				batch.setXstatusmor("Open");
 				batch.setXwh("Production Store");
 				batcList.add(batch);
@@ -157,6 +162,81 @@ public class ProductionBatchController extends ASLAbstractController {
 		model.addAttribute("productioncompleted", moService.isProductionProcessCompleted(chalan.getXordernum()));
 		return "pages/production/batch/batch::batchdetailtable";
 	}
+
+	@PostMapping("/update/xproduction/{xbatch}")
+	public @ResponseBody Map<String, Object> updateBatchXproduction(@PathVariable String xbatch, BigDecimal xproduction, Model model){
+		if(xproduction == null || xproduction.compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid production quantity");
+			return responseHelper.getResponse();
+		}
+		
+		
+		//TODO: production stock availability validation of raw material
+
+		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
+		if(batch == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found");
+			return responseHelper.getResponse();
+		}
+
+		batch.setXproduction(xproduction);
+		long count = moService.updateMoHeader(batch);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update batch");
+			return responseHelper.getResponse();
+		}
+
+		// if has BOM setting, then create default
+		if(StringUtils.isNotBlank(batch.getXbomkey())) {
+			List<Bmbomdetail> bomdetails = bmbomService.findBmbomdetailByXbomkey(batch.getXbomkey());
+			if(bomdetails != null && !bomdetails.isEmpty()) {
+				// Delete previous modetail first  //TODO; need to delete only default row
+				List<Modetail> exisdet =  moService.findModetailByXbatch(batch.getXbatch());
+				if(exisdet != null && !exisdet.isEmpty()) {
+					long dcount = moService.deleteModetailByXbatch(batch.getXbatch());
+					if(dcount == 0) {
+						responseHelper.setErrorStatusAndMessage("Can't remove previous batch default");
+						return responseHelper.getResponse();
+					}
+				}
+
+				List<Modetail> modetails = new ArrayList<>();
+				int xbomrow = 1;
+				for(Bmbomdetail bd : bomdetails) {
+					Modetail modetail = new Modetail();
+					modetail.setXitem(bd.getXbomcomp());
+					modetail.setXqtyreq(xproduction.multiply(BigDecimal.valueOf(1000)));
+					modetail.setXwh("Production Store");
+					modetail.setXtype("Default");
+					modetail.setXbatch(batch.getXbatch());
+					modetail.setXunit("gm");
+					modetail.setXbomrow(xbomrow);
+					modetails.add(modetail);
+					xbomrow++;
+				}
+
+				long modcount = moService.saveBatchMoDetail(modetails);
+				if(modcount == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't create batch default");
+					return responseHelper.getResponse();
+				}
+			}
+
+			// Now expload bom and get default production and complited production
+			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			bmbomService.explodeBom2(batch.getXbatch(), "Explode", errorCode);
+			String em = getProcedureErrorMessages(errorCode);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage("BOM expload failed");
+				return responseHelper.getResponse();
+			}
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("batchdetailtable", "/production/batch/chalantobatch/" + batch.getXchalan());
+		responseHelper.setStatus(ResponseStatus.SUCCESS);
+		return responseHelper.getResponse();
+	}
+	
 
 	@PostMapping("/update/xqtycom/{xbatch}")
 	public @ResponseBody Map<String, Object> updateBatchCompletedQty(@PathVariable String xbatch, String xqtycom, Model model){

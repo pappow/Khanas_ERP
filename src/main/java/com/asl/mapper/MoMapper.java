@@ -49,4 +49,6 @@ public interface MoMapper {
 	public List<Modetail> findModetailByXtype(String xtype, String zid);
 
 	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan, String zid);
+
+	public long deleteModetailByXbatch(String xbatch, String zid);
 }

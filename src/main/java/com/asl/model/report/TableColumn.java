@@ -20,4 +20,5 @@ public class TableColumn{
 	private String xdesc;
 	private BigDecimal totalQty;
 	private String xunitpur;
+	private String xcatitem;
 }

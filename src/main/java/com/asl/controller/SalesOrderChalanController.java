@@ -125,7 +125,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan");
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + opordheader.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Chalan created successfully");
 		return responseHelper.getResponse();
 	}
@@ -212,6 +212,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
 		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
+		responseHelper.setThirdReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
 		return responseHelper.getResponse();
 	}
@@ -261,8 +262,29 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
 		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
+		responseHelper.setThirdReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + chalan);
 		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/reloadchalanform/{xchalan}")
+	public String reloadChalanForm(@PathVariable String xchalan, Model model) {
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xchalan);
+		if(oh == null) return "redirect:/salesninvoice/salesorderchalan";
+
+		model.addAttribute("productioncompleted", moService.isProductionProcessCompleted(oh.getXordernum()));
+		model.addAttribute("salesorderchalan", oh);
+		model.addAttribute("salesorderchalanprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), Boolean.TRUE));
+
+		model.addAttribute("salesorderchalanList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode()));
+
+		List<Opordheader> allOpenAndConfirmesSalesOrders = new ArrayList<>();
+		if("Open".equalsIgnoreCase(oh.getXstatus())) allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrder(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open", new Date()));
+		allOpenAndConfirmesSalesOrders.addAll(opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xchalan));
+		model.addAttribute("opensalesorders", allOpenAndConfirmesSalesOrders);
+		model.addAttribute("chalandetails", opordService.findOporddetailByXordernum(xchalan));
+
+		return "pages/salesninvoice/salesorderchalan/salesorderchalan::chalanform";
 	}
 
 	@GetMapping("/chalandetail/{xordernum}")

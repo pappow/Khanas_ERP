@@ -51,6 +51,11 @@ public class ResponseHelper {
 		this.response.put("secondreloadurl", url);
 	}
 
+	public void setThirdReloadSectionIdWithUrl(String elementId, String url) {
+		this.response.put("thirdreloadelementid", elementId);
+		this.response.put("thirdreloadurl", url);
+	}
+
 	public void setTriggerModalUrl(String modalId, String url) {
 		this.response.put("modalid", modalId);
 		this.response.put("triggermodalurl", url);

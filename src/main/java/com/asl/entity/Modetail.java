@@ -66,6 +66,9 @@ public class Modetail extends AbstractModel<String> {
 	@Column(name = "xtype")
 	private String xtype;
 
+	@Column(name = "xbomrow")
+	private int xbomrow;
+
 	@Transient
 	private String xdesc;
 }

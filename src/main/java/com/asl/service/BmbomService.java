@@ -37,6 +37,7 @@ public interface BmbomService {
 	public long deleteBmbomdetailByXbomkeyAndXbomrow(Bmbomdetail bmbomdetail);
 
 	public void explodeBom(String batch, String action, String errseq);
+	public void explodeBom2(String batch, String action, String errseq);
 	
 	//Search
 	public List<Bmbomheader> searchXbom(String xbomkey);

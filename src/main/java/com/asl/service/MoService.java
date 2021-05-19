@@ -22,6 +22,7 @@ public interface MoService {
 	public long updateMoHeader(Moheader moheader);
 
 	public long saveMoDetail(Modetail modetail);
+	public long saveBatchMoDetail(List<Modetail> modetails);
 
 	public long updateMoDetail(Modetail modetail);
 
@@ -56,4 +57,6 @@ public interface MoService {
 	public List<Modetail> findModetailByXtype(String xtype);
 
 	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan);
+
+	public long deleteModetailByXbatch(String xbatch);
 }

@@ -277,7 +277,7 @@
 			AND oporddetail.zid=#{zid}
 			AND oporddetail.zactive='1'
 		ORDER BY
-			OPORDDETAIL.XROW DESC
+			caitem.xcatitem, oporddetail.xitem
 	</select>
 
 	<select id="getAllOpordheader" resultType="Opordheader">
@@ -384,6 +384,7 @@
 			OPORDDETAIL.XITEM,
 			OPORDDETAIL.XUNIT AS "XUNITPUR",
 			OPORDDETAIL.XQTYORD,
+			CAITEM.XCATITEM,
 			CAITEM.XDESC
 		FROM
 			OPORDHEADER

@@ -117,6 +117,7 @@ public class SalesOrderController extends ASLAbstractController {
 			} else {
 				TableColumn c = new TableColumn();
 				c.setXitem(item);
+				c.setXcatitem(bq.getXcatitem());
 				c.setXdesc(bq.getXdesc());
 				c.setTotalQty(bq.getXqtyord());
 				c.setXunitpur(bq.getXunitpur());
@@ -162,6 +163,8 @@ public class SalesOrderController extends ASLAbstractController {
 
 		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
 		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));
+
+		distinctItems.sort(Comparator.comparing(TableColumn::getXcatitem));
 
 		SimpleDateFormat pdate = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("datadate", pdate.format(date));

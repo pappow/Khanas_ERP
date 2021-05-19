@@ -41,7 +41,7 @@
 			AND ZBUSINESS.BRANCH='1'
 			AND POORDHEADER.ZACTIVE='1'
 		ORDER BY
-			POORDHEADER.XPORNUM DESC
+			POORDHEADER.ZID, POORDHEADER.XPORNUM DESC
 	</select>
 
 	<select id="getAllBranchesRequisitionDetails" resultType="com.asl.model.BranchesRequisitions">
@@ -50,6 +50,7 @@
 			ZBUSINESS.ZORG,
 			POORDDETAIL.XITEM,
 			CAITEM.XDESC,
+			CAITEM.XCATITEM,
 			POORDDETAIL.XQTYORD,
 			POORDDETAIL.XUNITPUR,
 			POORDHEADER.XSTATUSPOR,
@@ -89,6 +90,8 @@
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{branchzid}
 			AND poorddetail.zactive='1'
+		ORDER BY
+			caitem.xcatitem, caitem.xitem
 	</select> 
 
 </mapper>
