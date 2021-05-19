@@ -38,6 +38,7 @@ public enum ReportMenu {
 	RM0409(999, "400", "Sales & Invoicing", "Receivable and Collection Statement", ReportParamMap.RM0409, "Y", false, false, 1000),
 	RM0410(999, "400", "Sales & Invoicing", "Sales Return Listing", ReportParamMap.RM0410, "Y", false, false, 1000),
 	RM0411(999, "400", "Sales & Invoicing", "Branch Distribution Report", ReportParamMap.RM0411, "Y", false, false, 1000),
+	RM0412(999, "400", "Sales & Invoicing", "Distribution Deviation Report", ReportParamMap.RM0412, "Y", false, false, 1000),
 
 	// Production  -- M0500
 	RM0501(999, "500", "Production", "BOM List", ReportParamMap.RM0501, "Y", false, false, 1000),
