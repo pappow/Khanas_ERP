@@ -198,7 +198,7 @@
 	</select>
 
 	<select id = "explodeBom2" statementType = "CALLABLE">
-		{call MO_ExplodeBOM2(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
+		{call MO_ExplodeBOM2(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{batch, jdbcType = VARCHAR, mode = IN}, #{xbomkey, jdbcType = VARCHAR, mode = IN}, #{action, jdbcType = VARCHAR, mode = IN}, #{errseq, jdbcType = VARCHAR, mode = IN})}
 	</select>
 
 	<select id="searchXbom" resultType="Bmbomheader">

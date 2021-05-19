@@ -100,8 +100,8 @@ public class BmbomServiceImpl extends AbstractGenericService implements BmbomSer
 	}
 
 	@Override
-	public void explodeBom2(String batch, String action, String errseq) {
-		bmbomMapper.explodeBom2(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), batch, action, errseq);
+	public void explodeBom2(String batch, String xbomkey, String action, String errseq) {
+		bmbomMapper.explodeBom2(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), batch, xbomkey, action, errseq);
 	}
 
 	@Override
