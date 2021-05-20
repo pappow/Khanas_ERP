@@ -28,10 +28,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Bmbomdetail;
 import com.asl.entity.Bmbomheader;
 import com.asl.entity.DailyProductionBatchDetail;
+import com.asl.entity.Imstock;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PSV;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.DailyProductionBatchReport;
@@ -39,8 +41,10 @@ import com.asl.model.report.FinishedGood;
 import com.asl.model.report.ProductionBatchReport;
 import com.asl.model.report.RawMaterial;
 import com.asl.service.BmbomService;
+import com.asl.service.ImstockService;
 import com.asl.service.MoService;
 import com.asl.service.OpordService;
+import com.asl.service.PSVService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +60,8 @@ public class ProductionBatchController extends ASLAbstractController {
 	@Autowired private BmbomService bmbomService;
 	@Autowired private OpordService opordService;
 	@Autowired private MoService moService;
+	@Autowired private PSVService psvService;
+	@Autowired private ImstockService imstockService;
 
 	@GetMapping
 	public String loadChalanBatchPage(Model model) {
@@ -209,14 +215,57 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		//TODO: production stock availability validation of raw material
-
+		// find batch first
 		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
 		if(batch == null) {
 			responseHelper.setErrorStatusAndMessage("Batch not found");
 			return responseHelper.getResponse();
 		}
 
+		
+		// find bom detail
+		List<Bmbomdetail> bomdetails = bmbomService.findBmbomdetailByXbomkey(batch.getXbomkey());
+		Bmbomdetail bd = bomdetails.stream().findFirst().orElse(null);
+
+		// validate
+		// add or update validation table
+		if(StringUtils.isNotBlank(batch.getXbomkey()) && bd != null) {
+			Imstock imstock = imstockService.findByXitemAndXwh(bd.getXbomcomp(), "Production Store");
+			BigDecimal usedRaw = psvService.getTotalRawUsedExceptCurrentBatch(batch.getXchalan(), bd.getXbomcomp(), xbatch);
+
+			// Stock validation
+			if(imstock.getXavail().subtract(usedRaw).compareTo(xproduction) == -1) {
+				responseHelper.setErrorStatusAndMessage(bd.getXbomcomp() + " - stock not available. Already used : " + usedRaw + ", Available : " + imstock.getXavail().subtract(usedRaw));
+				return responseHelper.getResponse();
+			}
+
+			PSV psv = psvService.findByXchalanAndXbatchAndXrawitem(batch.getXchalan(), xbatch, bd.getXbomcomp());
+			if(psv == null) {
+				// save new
+				psv = new PSV();
+				psv.setXchalan(batch.getXchalan());
+				psv.setXbatch(xbatch);
+				psv.setXrawitem(bd.getXbomcomp());
+				psv.setXprod(xproduction);
+				long scount = psvService.savePSV(psv);
+				if(scount == 0) {
+					responseHelper.setErrorStatusAndMessage("Stock qty validation not saved");
+					return responseHelper.getResponse();
+				}
+			} else {
+				// update existing
+				psv.setXrawitem(bd.getXbomcomp());
+				psv.setXprod(xproduction);
+				long ucount = psvService.updatePSV(psv);
+				if(ucount == 0) {
+					responseHelper.setErrorStatusAndMessage("Stock qty validation not updated");
+					return responseHelper.getResponse();
+				}
+			}
+		}
+
+
+		// now update batch with xproduction qty
 		batch.setXproduction(xproduction);
 		if(StringUtils.isBlank(batch.getXbomkey())) batch.setBomexploaded(true);
 		long count = moService.updateMoHeader(batch);
@@ -225,10 +274,9 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+
 		// if has BOM setting, then create default
 		if(StringUtils.isNotBlank(batch.getXbomkey())) {
-			List<Bmbomdetail> bomdetails = bmbomService.findBmbomdetailByXbomkey(batch.getXbomkey());
-			Bmbomdetail bd = bomdetails.stream().findFirst().orElse(null);
 			if(bd != null) {
 				// update previous modetail if exist 
 				Modetail exisdet =  moService.findDefaultModetailByXbatch(batch.getXbatch());
