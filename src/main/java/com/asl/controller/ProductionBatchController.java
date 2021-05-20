@@ -150,7 +150,11 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 		}
 
-		allBatches.sort(Comparator.comparing(Moheader::getXbatch).reversed());
+		allBatches.stream().forEach(a -> {
+			if(StringUtils.isBlank(a.getXbomkey())) a.setXbomkey("");
+		});
+		allBatches.sort(Comparator.comparing(Moheader::getXbomkey).thenComparing(Moheader::getXbatch).reversed());
+
 		model.addAttribute("batchList", allBatches);
 		model.addAttribute("chalan", chalan);
 		model.addAttribute("productioncompleted", moService.isProductionProcessCompleted(chalan.getXordernum()));
