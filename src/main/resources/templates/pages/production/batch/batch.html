@@ -139,7 +139,7 @@
 														<span th:if="${b.xqtyprd ne null and not #strings.isEmpty(b.xbomkey)}" th:text="${b.xqtyprd} + ' ' + ${b.xqtyprdunit}"></span>
 													</td>
 													<td>
-														<form class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
+														<form th:if="${b.bomexploaded}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
 															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
 															<button th:if="${b.xstatusmor ne 'Completed'}" th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
 															<span style="line-height: 27px;"  th:text="${b.xqtyprdunit}"></span>
