@@ -109,7 +109,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Created Successfully");
-		responseHelper.setRedirectUrl("/inventory/transferorder/");
+		responseHelper.setRedirectUrl("/inventory/transferorder/" + imtorHeader.getXtornum());
 		return responseHelper.getResponse();
 	}
 

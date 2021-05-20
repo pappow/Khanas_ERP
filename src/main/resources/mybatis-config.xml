@@ -44,5 +44,6 @@
 		<mapper resource="mappers/ZusersMapper.xml"/>
 		<mapper resource="mappers/ASLProcErrorMapper.xml"/>
 		<mapper resource="mappers/DailyDistributionMapper.xml"/>
+		<mapper resource="mappers/PSVMapper.xml"/>
 	</mappers>
 </configuration>
