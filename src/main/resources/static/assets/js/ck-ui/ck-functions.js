@@ -209,6 +209,11 @@ function bindDataTableButtonsEvent(datatable){
 					doItemDelete(url);
 				}
 			});
+			$(row).find('button.btn-delete-noconfirm').off('click').on('click', function(e){
+				setTimeout(() => {
+					doItemDelete($(this).data('url'));
+				}, 500);
+			});
 
 			// Confirm Btn
 			$(row).find('button.btn-confirm').off('click').on('click', function(e){
@@ -241,7 +246,12 @@ function bindTableButtonsEvent(targetTable){
 			doItemDelete(url);
 		}
 	});
-	
+	$(targetTable).find('button.btn-delete-noconfirm').off('click').on('click', function(e){
+		setTimeout(() => {
+			doItemDelete($(this).data('url'));
+		}, 500);
+	});
+
 	// Confirm button
 	$(targetTable).find('button.btn-confirm').off('click').on('click', function(e){
 		var url = $(this).data('url');

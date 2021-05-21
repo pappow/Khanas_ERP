@@ -29,12 +29,22 @@ public class PSVServiceImpl extends AbstractGenericService implements PSVService
 		return psvMapper.savePSV(psv);
 	}
 
+	@Transactional
 	@Override
 	public long updatePSV(PSV psv) {
 		if(psv == null) return 0;
 		psv.setZid(sessionManager.getBusinessId());
 		psv.setZuuserid(getAuditUser());
 		return psvMapper.updatePSV(psv);
+	}
+
+	@Transactional
+	@Override
+	public long deletePSV(PSV psv) {
+		if(psv == null) return 0;
+		psv.setZid(sessionManager.getBusinessId());
+		psv.setZuuserid(getAuditUser());
+		return psvMapper.deletePSV(psv);
 	}
 
 	@Override

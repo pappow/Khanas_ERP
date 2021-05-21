@@ -341,7 +341,7 @@
 			NVL(moh.xproduction, 0) xproduction,
 			NVL(moh.xqtyprd, 0) xqtyprd,
 			NVL(moh.xqtycom, 0) xqtycom,
-			NVL(modw.xqtyreq, 0) wastage,
+			NVL(modw.xqtyactual, 0) wastage,
 			(moh.xqtycom - moh.xqtyprd) deviation 
 		from
 			moheader moh

@@ -78,5 +78,15 @@
 			AND xbatch != #{xbatch}
 	</select>
 
+	<delete id="deletePSV" parameterType="PSV">
+		DELETE
+		FROM
+			PSV
+		WHERE
+			zid=#{zid} 
+			AND xchalan=#{xchalan}
+			AND xrawitem=#{xrawitem}
+			AND xbatch=#{xbatch}
+	</delete>
 	
 </mapper>

@@ -76,10 +76,10 @@
 
 						if(olditem != '' && olditem == $('input[name="xitem"]').val()) return;
 
+						loadingMask2.show();
 						$.ajax({
 							url : getBasepath() + '/purchasing/requisition/centralitem/purunit/' + $('input[name="xitem"]').val(),
 							type : 'GET',
-							beforeSend : loadingMask2.show(),
 							success : function(data) {
 								loadingMask2.hide();
 								$('input[name="xunitpur"]').val(data.xunitpur);

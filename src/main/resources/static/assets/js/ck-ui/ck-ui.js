@@ -232,6 +232,7 @@ ck.ui.config.buttonevent = function(){
 		var modalid = $(this).data('target-modal');
 		modalLoader(url, modalid);
 	});
+
 };
 
 /**
