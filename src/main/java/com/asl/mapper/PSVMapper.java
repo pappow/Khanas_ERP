@@ -20,4 +20,6 @@ public interface PSVMapper {
 	public PSV findByXchalanAndXbatchAndXrawitem(String xchalan, String xbatch, String xrawitem, String zid);
 
 	public BigDecimal getTotalRawUsedExceptCurrentBatch(String xchalan, String xrawitem, String xbatch, String zid);
+
+	public long deletePSV(PSV psv);
 }

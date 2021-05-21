@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Bmbomdetail;
@@ -150,10 +151,24 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 		}
 
-		allBatches.sort(Comparator.comparing(Moheader::getXbatch).reversed());
+		allBatches.stream().forEach(a -> {
+			if(StringUtils.isBlank(a.getXbomkey())) a.setXbomkey("");
+		});
+		allBatches.sort(Comparator.comparing(Moheader::getXbomkey).thenComparing(Moheader::getXbatch).reversed());
+
 		model.addAttribute("batchList", allBatches);
 		model.addAttribute("chalan", chalan);
 		model.addAttribute("productioncompleted", moService.isProductionProcessCompleted(chalan.getXordernum()));
+
+		boolean allBatchBomExploaded = true;
+		List<Moheader> mhlist = moService.findMoheaderByXchalan(xordernum);
+		for(Moheader m : mhlist) {
+			if(!m.isBomexploaded()) {
+				allBatchBomExploaded = false;
+				break;
+			}
+		}
+		model.addAttribute("allBatchBomExploaded", allBatchBomExploaded);
 		return "pages/production/batch/batch::batchdetailtable";
 	}
 
@@ -197,6 +212,7 @@ public class ProductionBatchController extends ASLAbstractController {
 
 		// Update batch now
 		batch.setXqtycom(xqtycom.setScale(2, RoundingMode.DOWN));
+		batch.setBomexploaded(true);
 		long count = moService.updateMoHeader(batch);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't update batch : " + xbatch);
@@ -283,6 +299,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				if(exisdet != null) {
 					exisdet.setXitem(bd.getXbomcomp());
 					exisdet.setXqtyreq(xproduction.multiply(BigDecimal.valueOf(1000)));
+					exisdet.setXqtyactual(xproduction);
 					long ucount = moService.updateMoDetail(exisdet);
 					if(ucount == 0) {
 						responseHelper.setErrorStatusAndMessage("Can't update batch default");
@@ -297,6 +314,7 @@ public class ProductionBatchController extends ASLAbstractController {
 					modetail.setXbatch(batch.getXbatch());
 					modetail.setXunit("gm");
 					modetail.setXbomrow(1);
+					modetail.setXqtyactual(xproduction);
 
 					long scount = moService.saveMoDetail(modetail);
 					if(scount == 0) {
@@ -331,7 +349,7 @@ public class ProductionBatchController extends ASLAbstractController {
 	}
 
 	@GetMapping("/batchdetail/{xbatch}/others/show")
-	public String openOthersBatchDetailModal(@PathVariable String xbatch, Model model) {
+	public String openOthersBatchDetailModal(@PathVariable String xbatch, @RequestParam(required = false) boolean withoutbom, Model model) {
 		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
 		if(batch == null) return "redirect:/production/batch";
 
@@ -341,11 +359,12 @@ public class ProductionBatchController extends ASLAbstractController {
 		model.addAttribute("batch", batch);
 		model.addAttribute("xbatch", xbatch);
 		model.addAttribute("batchdetails", batchdetails);
+		model.addAttribute("withoutbom", withoutbom);
 		return "pages/production/batch/othersbatchdetailmodal::othersbatchdetailmodal";
 	}
 
 	@GetMapping("{xbatch}/batchdetail/{xrow}/show")
-	public String openBatchDetailModal(@PathVariable String xbatch, @PathVariable String xrow, Model model) {
+	public String openBatchDetailModal(@PathVariable String xbatch, @PathVariable String xrow, @RequestParam(required = false) boolean withoutbom, Model model) {
 
 		Modetail mod = null;
 
@@ -362,6 +381,7 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 		}
 
+		model.addAttribute("withoutbom", withoutbom);
 		model.addAttribute("batchdetail", mod);
 		return "pages/production/batch/batchdetailmodal::batchdetailmodal";
 	}
@@ -373,27 +393,93 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// qty input validation
+		if(modetail.getXqtyactual() == null || modetail.getXqtyactual().compareTo(BigDecimal.ONE) == -1) {
+			responseHelper.setErrorStatusAndMessage("Please enter valid quantity");
+			return responseHelper.getResponse();
+		}
+		
+
 		// check item already exist in detail list
+		boolean bomRawWastage = false;
 		if(modetail.getXrow() == 0) {
 			Modetail dupe = moService.findModetailByXbatchAndXitem(modetail.getXbatch(), modetail.getXitem());
 			if(dupe != null && !"Default".equalsIgnoreCase(dupe.getXtype())) {
 				responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 				return responseHelper.getResponse();
 			}
+			if(dupe != null && "Default".equalsIgnoreCase(dupe.getXtype())) {
+				bomRawWastage = true;
+			}
 		}
 
 		modetail.setXwh("Production Store");
+		modetail.setXqtyreq(modetail.getXqtyactual().multiply(BigDecimal.valueOf(1000)));
+		if(bomRawWastage) modetail.setXqtyreq(BigDecimal.ZERO);
+
+		// Stock validation
+		Moheader batch = moService.findMoHeaderByXbatch(modetail.getXbatch());
+		if(batch == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found in this system");
+			return responseHelper.getResponse();
+		}
+		Imstock imstock = imstockService.findByXitemAndXwh(modetail.getXitem(), "Production Store");
+		BigDecimal usedRaw = psvService.getTotalRawUsedExceptCurrentBatch(batch.getXchalan(), modetail.getXitem(), batch.getXbatch());
+		// Stock validation
+		if(imstock.getXavail().subtract(usedRaw).compareTo(modetail.getXqtyactual()) == -1) {
+			responseHelper.setErrorStatusAndMessage(modetail.getXitem() + " - stock not available. Already used : " + usedRaw + ", Available : " + imstock.getXavail().subtract(usedRaw));
+			return responseHelper.getResponse();
+		}
+
+		PSV psv = psvService.findByXchalanAndXbatchAndXrawitem(batch.getXchalan(), batch.getXbatch(), modetail.getXitem());
+		if(psv == null) {
+			// save new
+			psv = new PSV();
+			psv.setXchalan(batch.getXchalan());
+			psv.setXbatch(batch.getXbatch());
+			psv.setXrawitem(modetail.getXitem());
+			psv.setXprod(modetail.getXqtyactual());
+			long scount = psvService.savePSV(psv);
+			if(scount == 0) {
+				responseHelper.setErrorStatusAndMessage("Stock qty validation not saved");
+				return responseHelper.getResponse();
+			}
+		} else {
+			// update existing
+			psv.setXrawitem(modetail.getXitem());
+			psv.setXprod(modetail.getXqtyactual());
+			long ucount = psvService.updatePSV(psv);
+			if(ucount == 0) {
+				responseHelper.setErrorStatusAndMessage("Stock qty validation not updated");
+				return responseHelper.getResponse();
+			}
+		}
+
+
 
 		// if existing
 		Modetail md = moService.findModetailByXrowAndXbatch(modetail.getXrow(), modetail.getXbatch());
 		if(md != null) {
+			BigDecimal prvqty = md.getXqtyactual();
 			BeanUtils.copyProperties(modetail, md);
 			long count = moService.updateMoDetail(modetail);
 			if(count == 0) {
 				responseHelper.setErrorStatusAndMessage("Cant update item");
 				return responseHelper.getResponse();
 			}
-			responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ modetail.getXbatch() +"/others/show");
+
+			// update batch if it has no bom setting
+			if("Used".equalsIgnoreCase(md.getXtype())){
+				batch.setXproduction(batch.getXproduction().subtract(prvqty).add(md.getXqtyactual()));
+				batch.setBomexploaded(true);
+				long ubcount = moService.updateMoHeader(batch);
+				if(ubcount == 0) {
+					responseHelper.setErrorStatusAndMessage("Cant update batch production quantity");
+					return responseHelper.getResponse();
+				}
+			}
+
+			responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ modetail.getXbatch() +"/others/show?withoutbom=" + "Used".equalsIgnoreCase(md.getXtype()));
 			responseHelper.setSuccessStatusAndMessage("Saved successfully");
 			return responseHelper.getResponse();
 		}
@@ -403,19 +489,39 @@ public class ProductionBatchController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Cant save item");
 			return responseHelper.getResponse();
 		}
+		// update batch if it has no bom setting
+		if("Used".equalsIgnoreCase(modetail.getXtype())){
+			batch.setXproduction(batch.getXproduction().add(modetail.getXqtyactual()));
+			batch.setBomexploaded(true);
+			long ubcount = moService.updateMoHeader(batch);
+			if(ubcount == 0) {
+				responseHelper.setErrorStatusAndMessage("Cant update batch production quantity");
+				return responseHelper.getResponse();
+			}
+		}
 
-		responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ modetail.getXbatch() +"/others/show");
+		responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ modetail.getXbatch() +"/others/show?withoutbom=" + "Used".equalsIgnoreCase(modetail.getXtype()));
 		responseHelper.setSuccessStatusAndMessage("Saved successfully");
 		return responseHelper.getResponse();
 	}
 
 	@PostMapping("{xbatch}/batchdetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deleteBatchDetail(@PathVariable String xbatch, @PathVariable String xrow, Model model){
+	public @ResponseBody Map<String, Object> deleteBatchDetail(@PathVariable String xbatch, @PathVariable String xrow, @RequestParam(required = false) boolean withoutbom, Model model){
 		Modetail detail = moService.findModetailByXrowAndXbatch(Integer.parseInt(xrow), xbatch);
 		if(detail == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
+		Moheader batch = moService.findMoHeaderByXbatch(xbatch);
+		if(batch == null) {
+			responseHelper.setErrorStatusAndMessage("Batch not found");
+			return responseHelper.getResponse();
+		}
+
+		BigDecimal qty = detail.getXqtyactual();
+		String type = detail.getXtype();
+		String xitem = detail.getXitem();
 
 		long count = moService.deleteModetail(detail);
 		if(count == 0) {
@@ -423,7 +529,25 @@ public class ProductionBatchController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ detail.getXbatch() +"/others/show");
+		// remove production qty from batch
+		if(batch != null && StringUtils.isBlank(batch.getXbomkey()) && "Used".equalsIgnoreCase(type)) {
+			batch.setXproduction(batch.getXproduction().subtract(qty));
+			long ucount = moService.updateMoHeader(batch);
+			if(ucount == 0) {
+				responseHelper.setErrorStatusAndMessage("Batch production quantity not updated");
+				return responseHelper.getResponse();
+			}
+		}
+
+		// Clear psv data
+		PSV psv = psvService.findByXchalanAndXbatchAndXrawitem(batch.getXchalan(), batch.getXbatch(), xitem);
+		long dcount = psvService.deletePSV(psv);
+		if(dcount == 0) {
+			responseHelper.setErrorStatusAndMessage("Batch production quantity validation not deleted");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setTriggerModalUrl("othersbatchdetailmodal", "/production/batch/batchdetail/"+ detail.getXbatch() +"/others/show?withoutbom=" + withoutbom);
 		responseHelper.setSuccessStatusAndMessage("Saved successfully");
 		return responseHelper.getResponse();
 	}

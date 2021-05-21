@@ -116,7 +116,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/salesninvoice/deliveryorderchalan");
+		responseHelper.setRedirectUrl("/salesninvoice/deliveryorderchalan/" + opdoheader.getXdornum());
 		responseHelper.setSuccessStatusAndMessage("Chalan created successfully");
 		return responseHelper.getResponse();
 	}
@@ -296,6 +296,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("No Sales invoice assigned in this delivery chalan : " + xdornum);
 			return responseHelper.getResponse();
 		}
+
+		//TODO: stock validation
 
 		String p_seq;
 		for (Opdoheader order : invoiceList) {

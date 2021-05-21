@@ -94,6 +94,7 @@
 														<button title="Process Production" 
 																type="button" 
 																class="btn btn-warning btn-confirm editmode" 
+																th:if="${allBatchBomExploaded}"
 																th:attr="data-url=@{/production/batch/bulkprocessproduction/} + ${chalan.xordernum}">
 															<i class="fas fa-mortar-pestle"></i>
 														</button>
@@ -120,15 +121,16 @@
 														<a th:href="@{/mastersetup/caitem/} + ${b.xitem}" target="_blank" th:text="${b.xitem} + ' - ' +  ${b.xdesc}"></a>
 													</td>
 													<td>
-														<a th:href="@{/production/bom/} + ${b.xbomkey}" target="_blank" th:text="${b.xbomkey}"></a>
+														<a th:if="${not #strings.isEmpty(b.xbomkey)}" th:href="@{/production/bom/} + ${b.xbomkey}" target="_blank" th:text="${b.xbomkey}"></a>
 													</td>
 													<td th:text="${b.xqtyreq} + ' ' + ${b.xqtyprdunit}"></td>
 													<td>
-														<form class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xproduction/} + ${b.xbatch}" method="post">
+														<form th:if="${not #strings.isEmpty(b.xbomkey)}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xproduction/} + ${b.xbatch}" method="post">
 															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xproduction" th:value="${b.xproduction}" class="form-control"/>
 															<button th:if="${b.xstatusmor ne 'Completed'}" th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
 															<span style="line-height: 27px;">KG</span>
 														</form>
+														<span th:if="${#strings.isEmpty(b.xbomkey)}" th:text="${b.xproduction} + ' KG'"></span>
 													</td>
 													<td>
 														<form th:if="${#strings.isEmpty(b.xbomkey)}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtyprd/} + ${b.xbatch}" method="post">
@@ -139,14 +141,20 @@
 														<span th:if="${b.xqtyprd ne null and not #strings.isEmpty(b.xbomkey)}" th:text="${b.xqtyprd} + ' ' + ${b.xqtyprdunit}"></span>
 													</td>
 													<td>
-														<form th:if="${b.bomexploaded}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
+														<form th:if="${b.bomexploaded and not #strings.isEmpty(b.xbomkey)}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
+															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
+															<button th:if="${b.xstatusmor ne 'Completed'}" th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
+															<span style="line-height: 27px;"  th:text="${b.xqtyprdunit}"></span>
+														</form>
+														<form th:if="${#strings.isEmpty(b.xbomkey)}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xqtycom/} + ${b.xbatch}" method="post">
 															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xqtycom" th:value="${b.xqtycom}" class="form-control"/>
 															<button th:if="${b.xstatusmor ne 'Completed'}" th:id="${b.xbatch}" type="submit" class="btn btn-sm btn-success batch-submit" title="Submit"><i class="fas fa-paper-plane"></i></button>
 															<span style="line-height: 27px;"  th:text="${b.xqtyprdunit}"></span>
 														</form>
 													</td>
 													<td style="text-align: center">
-														<button title="Add/Edit items" th:if="${b.bomexploaded}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
+														<button title="Add/Edit items" th:if="${b.bomexploaded and not #strings.isEmpty(b.xbomkey)}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show?withoutbom=false', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
+														<button title="Add/Edit items" th:if="${#strings.isEmpty(b.xbomkey)}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show?withoutbom=true', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
 													</td>
 													<td style="text-align: center">
 														<button th:if="${b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-confirm editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
@@ -203,7 +211,8 @@
 					var form = $(this).parent('form');
 					submitMainForm($(form).attr('action'), $(form));
 				})
-				
+
+				$('.query-submit-btn').trigger('click');
 			})
 		</script>
 	</body>

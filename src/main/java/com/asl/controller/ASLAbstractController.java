@@ -113,9 +113,9 @@ public class ASLAbstractController {
 		return Arrays.asList(env.getActiveProfiles()).contains("khanas");
 	}
 
-	@ModelAttribute("isTrishal")
-	public boolean isTrishal() {
-		return Arrays.asList(env.getActiveProfiles()).contains("trishal");
+	@ModelAttribute("isTcc")
+	public boolean isTCC() {
+		return Arrays.asList(env.getActiveProfiles()).contains("tcc");
 	}
 
 	@ModelAttribute("isDev")
