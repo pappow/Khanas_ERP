@@ -54,6 +54,9 @@ public class Modetail extends AbstractModel<String> {
 	@Column(name = "xqtyreq")
 	private BigDecimal xqtyreq;
 
+	@Column(name = "xqtyactual")
+	private BigDecimal xqtyactual;
+
 	@Column(name = "xunit")
 	private String xunit;
 

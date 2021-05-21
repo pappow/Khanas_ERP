@@ -387,6 +387,8 @@ public class ProductionBatchController extends ASLAbstractController {
 		}
 
 		modetail.setXwh("Production Store");
+		modetail.setXqtyactual(modetail.getXqtyreq());
+		modetail.setXqtyreq(modetail.getXqtyreq().multiply(BigDecimal.valueOf(1000)));
 
 		// if existing
 		Modetail md = moService.findModetailByXrowAndXbatch(modetail.getXrow(), modetail.getXbatch());
