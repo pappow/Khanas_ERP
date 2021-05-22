@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Imstock;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.enums.ResponseStatus;
@@ -34,6 +36,7 @@ import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrder;
 import com.asl.model.report.SalesOrderChalanReport;
 import com.asl.service.CacusService;
+import com.asl.service.ImstockService;
 import com.asl.service.OpdoService;
 import com.asl.service.XtrnService;
 
@@ -44,6 +47,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	@Autowired private OpdoService opdoService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private CacusService cacusService;
+	@Autowired private ImstockService imstockService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -298,6 +302,41 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		}
 
 		//TODO: stock validation
+		Map<String, BigDecimal> itemMap = new HashMap<>();
+		for(Opdoheader inv : invoiceList) {
+			List<Opdodetail> dlist = opdoService.findOpdoDetailByXdornum(inv.getXdornum());
+			if(dlist != null && !dlist.isEmpty()) {
+				for(Opdodetail d : dlist) {
+					if(itemMap.get(d.getXitem() + '|' + inv.getXwh()) != null) {
+						itemMap.put(d.getXitem(), itemMap.get(d.getXitem() + '|' + inv.getXwh()).add(d.getXqtyord()));
+					} else {
+						itemMap.put(d.getXitem() + '|' + inv.getXwh(), d.getXqtyord());
+					}
+				}
+			}
+		}
+
+		boolean hasError = false;
+		StringBuilder ems = new StringBuilder("Stock Not available.");
+		for(Map.Entry<String, BigDecimal> m : itemMap.entrySet()) {
+			String[] key = m.getKey().split("\\|");
+			String xitem = key[0];
+			String xwh = key[1];
+			BigDecimal qty = m.getValue();
+
+			Imstock stock = imstockService.findByXitemAndXwh(xitem, xwh);
+			if(stock == null) continue;
+
+			if(stock.getXavail().compareTo(qty) == -1) {
+				hasError = true;
+				ems.append("<br/>Item [" + xitem + "] - " + xwh + ", Available : " + stock.getXavail() + ", Required : " + qty);
+			}
+		}
+		if(hasError) {
+			responseHelper.setErrorStatusAndMessage(ems.toString());
+			return responseHelper.getResponse();
+		}
+
 
 		String p_seq;
 		for (Opdoheader order : invoiceList) {
@@ -548,3 +587,4 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 }
+
