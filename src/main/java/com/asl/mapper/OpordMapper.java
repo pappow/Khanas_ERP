@@ -75,4 +75,6 @@ public interface OpordMapper {
 
 	public List<Oporddetail> findBookedHallsByXordernum(String xordernum, String zid);
 
+	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum, String zid);
+
 }

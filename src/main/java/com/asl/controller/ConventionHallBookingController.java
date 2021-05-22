@@ -2,10 +2,13 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
@@ -284,15 +288,78 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	}
 
 	@PostMapping("/oporddetails/save")
-	public @ResponseBody Map<String, Object> saveOporddetail(HallitemsWrapper hallitemsWrapper) {
-		if(hallitemsWrapper == null) {
+	public @ResponseBody Map<String, Object> saveOporddetail(@RequestParam(value="xitems[]") String[] xitems, @RequestParam(value="xordernum") String xordernum) {
+		if(xitems == null) {
 			responseHelper.setErrorStatusAndMessage("Items not found to add");
 			return responseHelper.getResponse();
 		}
 
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			responseHelper.setErrorStatusAndMessage("Booking header "+ xordernum +" not found");
+			return responseHelper.getResponse();
+		}
 
-		responseHelper.setStatus(ResponseStatus.ERROR);
+		List<Oporddetail> details = new ArrayList<>();
+		for(String item : Arrays.asList(xitems)) {
+			Caitem caitem = caitemService.findByXitem(item);
+			if(caitem == null) {
+				responseHelper.setErrorStatusAndMessage("Item " + item + " not found to add");
+				return responseHelper.getResponse();
+			}
+
+			Oporddetail detail = new Oporddetail();
+			detail.setXordernum(xordernum);
+			detail.setXunit(caitem.getXunitpur());
+			detail.setXitem(caitem.getXitem());
+			detail.setXgitem(caitem.getXgitem());
+			detail.setXcatitem(caitem.getXcatitem());
+			detail.setXdesc(caitem.getXdesc());
+			detail.setXqtyord(BigDecimal.ONE);
+			detail.setXrate(caitem.getXrate());
+			detail.setXlineamt(detail.getXqtyord().multiply(detail.getXrate()));
+			details.add(detail);
+		}
+
+		// validation
+		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
+		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
+		if(totalFunctions != 1) {
+			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
+			return responseHelper.getResponse();
+		}
+		if(totalHalls == 0) {
+			responseHelper.setErrorStatusAndMessage("Hall selection required");
+			return responseHelper.getResponse();
+		}
+
+		// save 
+		long count = opordService.saveBatchOpordDetail(details);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't save items");
+			return responseHelper.getResponse();
+		}
+
+
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + oh.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + oh.getXordernum());
+		responseHelper.setSuccessStatusAndMessage("Items saved successfully");
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/oporddetail/{xordernum}")
+	public String reloadOpdoDetailTable(@PathVariable String xordernum, Model model) {
+		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
+		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+		return "pages/conventionmanagement/hallbooking/opord::oporddetailtable";
+	}
+
+	@GetMapping("/opordheaderform/{xordernum}")
+	public String reloadOpdoheaderform(@PathVariable String xordernum, Model model) {
+		model.addAttribute("hallbookingpreffix", xtrnService.findByXtypetrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+		return "pages/conventionmanagement/hallbooking/opord::opordheaderform";
 	}
 
 	@PostMapping("/oporddetail/save")
@@ -386,19 +453,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return count;
 	}
 
-	@GetMapping("/oporddetail/{xordernum}")
-	public String reloadOpordDetailTabble(@PathVariable String xordernum, Model model) {
-		List<Oporddetail> detailList = opordService.findOporddetailByXordernum(xordernum);
-		model.addAttribute("oporddetailsList", detailList);
-		Opordheader header = new Opordheader();
-		header.setXordernum(xordernum);
-		model.addAttribute("opordheader", header);
-		return "pages/conventionmanagement/hallbooking/opord::oporddetailtable";
-	}
-
 	@PostMapping("{xordernum}/oporddetail/{xrow}/delete")
-	public @ResponseBody Map<String, Object> deleteOpordDetail(@PathVariable String xordernum,
-			@PathVariable String xrow, Model model) {
+	public @ResponseBody Map<String, Object> deleteOpordDetail(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 		Oporddetail od = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
 		if (od == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
@@ -412,7 +468,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + xordernum);
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + xordernum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + xordernum);
 		return responseHelper.getResponse();
 	}
 

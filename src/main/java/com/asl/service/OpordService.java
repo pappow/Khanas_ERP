@@ -23,6 +23,8 @@ public interface OpordService {
 
 	public long saveOpordDetail(Oporddetail oporddetail);
 
+	public long saveBatchOpordDetail(List<Oporddetail> opordDetails);
+
 	public long updateOpordDetail(Oporddetail oporddetail);
 
 	public long deleteOpordDetail(Oporddetail oporddetail);
@@ -73,4 +75,6 @@ public interface OpordService {
 	public List<Caitem> findBookedHallsByXfuncdate(Date xfuncdate);
 	
 	public List<Oporddetail> findBookedHallsByXordernum(String xordernum);
+
+	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum);
 }
