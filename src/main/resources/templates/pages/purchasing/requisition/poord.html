@@ -165,8 +165,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${#lists.size(poorddetailsList) - dStat.index}"></td>
+										<tr th:each="d, n : ${poorddetailsList}">
+											<td th:text="${n.count}"></td>
 											<td th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xunitpur}"></td>

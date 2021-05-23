@@ -1,17 +1,14 @@
 package com.asl.controller;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,316 +16,491 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
+import com.asl.entity.Opcrndetail;
+import com.asl.entity.Opcrnheader;
+import com.asl.entity.Opdodetail;
+import com.asl.entity.Opdoheader;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
+import com.asl.entity.Vatait;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.model.BranchesRequisitions;
-import com.asl.model.report.BranchItem;
-import com.asl.model.report.BranchRow;
-import com.asl.model.report.MatrixReport;
-import com.asl.model.report.MatrixReportData;
-import com.asl.model.report.TableColumn;
-import com.asl.model.report.Total;
+import com.asl.model.report.ItemDetails;
+import com.asl.model.report.SalesOrder;
+import com.asl.model.report.SalesOrderChalanReport;
+import com.asl.service.CacusService;
+import com.asl.service.OpcrnService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
+import com.asl.service.VataitService;
+import com.asl.service.XcodesService;
+import com.asl.service.XtrnService;
 
-import lombok.extern.slf4j.Slf4j;
-
-/**
- * @author Zubayer Ahamed
- * @since Mar 9, 2021
- */
-@Slf4j
 @Controller
-@RequestMapping("/salesninvoice/salesorder")
+@RequestMapping("/salesninvoice/opord")
 public class SalesOrderController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
+	
+	@Autowired private OpdoService opdoService;
+	@Autowired private OpcrnService opcrnService;
+	@Autowired private XcodesService xcodeService;
+	@Autowired private XtrnService xtrnService;
+	@Autowired private VataitService vataitService;
+	@Autowired private CacusService cacusService;
 
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
-		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), new Date()));
-		return "pages/salesninvoice/salesorders/salesorders";
+
+		model.addAttribute("opordheader", getDefaultOpordHeader());
+		model.addAttribute("allOpordHeader", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode()));
+
+		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+
+		return "pages/salesninvoice/salesorder/salesorder";
 	}
 
-	@GetMapping("/allopensalesorder")
-	public String loadAllOpenSalesOrderPage(Model model) {
-		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), "Open"));
-		return "pages/salesninvoice/salesorders/allopensalesorders";
+	@GetMapping("/{xordernum}")
+	public String loadSalesOrderPage(@PathVariable String xordernum, Model model) {
+		Opordheader data = opordService.findOpordHeaderByXordernum(xordernum);
+		if (data == null) return "redirect:/salesninvoice/opord";
+
+		model.addAttribute("opordheader", data);
+		model.addAttribute("allOpordHeader", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode()));
+
+		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+
+		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
+
+		return "pages/salesninvoice/salesorder/salesorder";
 	}
 
-	@GetMapping("/query")
-	public String reloadTableWithData(@RequestParam String date, Model model) throws ParseException {
-		model.addAttribute("salesOrders", opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), SDF.parse(date)));
-		return "pages/salesninvoice/salesorders/salesorders::salesordertable";
+	private Opordheader getDefaultOpordHeader() {
+		Opordheader opordheader = new Opordheader();
+		opordheader.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
+		opordheader.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
+		opordheader.setXstatus("Open");
+
+		opordheader.setXtotamt(BigDecimal.ZERO);
+		opordheader.setXgrandtot(BigDecimal.ZERO);
+		opordheader.setXvatait("No Vat");
+		opordheader.setXvatamt(BigDecimal.ZERO);
+		opordheader.setXaitamt(BigDecimal.ZERO);
+		opordheader.setXdiscamt(BigDecimal.ZERO);
+
+		return opordheader;
 	}
 
-	@PostMapping("/query")
-	public @ResponseBody Map<String, Object> queryForrequistionDetails(Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("salesordertable", "/salesninvoice/salesorder/query?date=" + SDF.format(xdate));
-		responseHelper.setStatus(ResponseStatus.SUCCESS);
+	@PostMapping("/save")
+	public @ResponseBody Map<String, Object> save(Opordheader opordHeader, BindingResult bindingResult) {
+		if (opordHeader == null || StringUtils.isBlank(opordHeader.getXtypetrn())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// Validate
+//		if (StringUtils.isBlank(opordHeader.getXcus())) {
+//			responseHelper.setErrorStatusAndMessage("Please select a customer to create Sales Order");
+//			return responseHelper.getResponse();
+//		}
+
+		Vatait vatait = vataitService.findVataitByXvatait(opordHeader.getXvatait());
+		if(opordHeader.getXtotamt() == null) opordHeader.setXtotamt(BigDecimal.ZERO);
+		if(StringUtils.isNotBlank(opordHeader.getXvatait()) && !"No Vat".equalsIgnoreCase(opordHeader.getXvatait()) && vatait != null) {
+			if(opordHeader.getXvatamt() == null) opordHeader.setXvatamt((opordHeader.getXtotamt().multiply(vatait.getXvat())).divide(BigDecimal.valueOf(100)));
+			if(opordHeader.getXaitamt() == null) opordHeader.setXaitamt((opordHeader.getXtotamt().multiply(vatait.getXait())).divide(BigDecimal.valueOf(100)));
+		} else {
+			if(opordHeader.getXvatamt() == null) opordHeader.setXvatamt(BigDecimal.ZERO);
+			if(opordHeader.getXaitamt() == null) opordHeader.setXaitamt(BigDecimal.ZERO);
+		}
+		if(opordHeader.getXdiscamt() == null) opordHeader.setXdiscamt(BigDecimal.ZERO);
+		BigDecimal grandTotal = (opordHeader.getXtotamt().add(opordHeader.getXvatamt()).add(opordHeader.getXaitamt())).subtract(opordHeader.getXdiscamt());
+		opordHeader.setXgrandtot(grandTotal);
+
+
+		// if existing record
+		Opordheader existOpordHeader = opordService.findOpordHeaderByXordernum(opordHeader.getXordernum());
+		if (existOpordHeader != null) {
+			BeanUtils.copyProperties(opordHeader, existOpordHeader, "xordernum", "xtypetrn", "xtrn");
+			long count = opordService.updateOpordHeader(existOpordHeader);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setSuccessStatusAndMessage("Sales Order updated successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/opord/" + opordHeader.getXordernum());
+			return responseHelper.getResponse();
+		}
+
+		// If new
+		long count = opordService.saveOpordHeader(opordHeader);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setSuccessStatusAndMessage("Sales Order created successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/opord/" + opordHeader.getXordernum());
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/detailmatrix")
-	public String loadRqlsDetails(Model model) {
-		generateMatrixData(new Date(), model);
-		return "pages/salesninvoice/salesorders/salesordersmatrix";
+	@GetMapping("/oporddetail/{xordernum}")
+	public String reloadOpordDetailTable(@PathVariable String xordernum, Model model) {
+		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
+		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+		return "pages/salesninvoice/salesorder/salesorder::oporddetailtable";
 	}
 
-	@GetMapping("/query/matrix")
-	public String reloadTableWithDataMatrix(@RequestParam String date, Model model) throws ParseException {
-		generateMatrixData(SDF.parse(date), model);
-		return "pages/salesninvoice/salesorders/salesordersmatrix::salesordersmatrixtable";
+	@GetMapping("/opordheaderform/{xordernum}")
+	public String reloadOpdoheaderform(@PathVariable String xordernum, Model model) {
+		Opordheader data = opordService.findOpordHeaderByXordernum(xordernum);
+		if (data == null) return "redirect:/salesninvoice/opord";
+
+		model.addAttribute("opordheader", data);
+		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+
+		return "pages/salesninvoice/salesorder/salesorder::opordheaderform";
 	}
 
-	@PostMapping("/query/matrix")
-	public @ResponseBody Map<String, Object> queryForrequistionDetailsMatrix(Date xdate, Model model){
-		responseHelper.setReloadSectionIdWithUrl("salesordersmatrixtable", "/salesninvoice/salesorder/query/matrix?date=" + SDF.format(xdate));
-		responseHelper.setStatus(ResponseStatus.SUCCESS);
+	@GetMapping("/{xordernum}/oporddetail/{xrow}/show")
+	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
+
+		if ("new".equalsIgnoreCase(xrow)) {
+			Oporddetail oporddetail = new Oporddetail();
+			oporddetail.setXordernum(xordernum);
+			oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			model.addAttribute("oporddetail", oporddetail);
+		} else {
+			Oporddetail oporddetail = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
+			if (oporddetail == null) {
+				oporddetail = new Oporddetail();
+				oporddetail.setXordernum(xordernum);
+				oporddetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+				oporddetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			}
+			model.addAttribute("oporddetail", oporddetail);
+		}
+		return "pages/salesninvoice/salesorder/oporddetailmodal::oporddetailmodal";
+	}
+
+	@PostMapping("/oporddetail/save")
+	public @ResponseBody Map<String, Object> saveOporddetail(Oporddetail opordDetail) {
+		if (opordDetail == null || StringUtils.isBlank(opordDetail.getXordernum())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(opordDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Item not selected! Please select an item");
+			return responseHelper.getResponse();
+		}
+		if(opordDetail.getXqtyord() == null || opordDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
+			responseHelper.setErrorStatusAndMessage("Item quantity can't be less then one");
+			return responseHelper.getResponse();
+		}
+		if(opordDetail.getXqtyord() == null || opordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Item Rate can't be negative");
+			return responseHelper.getResponse();
+		}
+
+		// Check item already exist in detail list
+		if (opordDetail.getXrow() == 0 && opordService.findOporddetailByXordernumAndXitem(opordDetail.getXordernum(), opordDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
+			return responseHelper.getResponse();
+		}
+
+		// modify line amount
+		opordDetail.setXlineamt(opordDetail.getXqtyord().multiply(opordDetail.getXrate()).setScale(2, RoundingMode.DOWN));
+
+		// if existing
+		Oporddetail existDetail = opordService.findOporddetailByXordernumAndXrow(opordDetail.getXordernum(), opordDetail.getXrow());
+		if (existDetail != null) {
+			BeanUtils.copyProperties(opordDetail, existDetail, "xordernum", "xrow");
+			long count = opordService.updateOpordDetail(existDetail);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/salesninvoice/opord/oporddetail/" + opordDetail.getXordernum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/salesninvoice/opord/opordheaderform/" + opordDetail.getXordernum());
+			responseHelper.setSuccessStatusAndMessage("Sales Order item updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		// if new detail
+		long count = opordService.saveOpordDetail(opordDetail);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/salesninvoice/opord/oporddetail/" + opordDetail.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/salesninvoice/opord/opordheaderform/" + opordDetail.getXordernum());
+		responseHelper.setSuccessStatusAndMessage("Sales Order item saved successfully");
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/ordreqdetails/{xordernum}/show")
-	public String displayItemDetailsOfOrderRequistion(@PathVariable String xordernum, Model model) {
-		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
-		return "pages/salesninvoice/salesorders/salesorderdetailmodal::salesorderdetailmodal";
+	@PostMapping("{xdornum}/opdodetail/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
+		Opdodetail pd = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
+		if (pd == null) {
+			responseHelper.setErrorStatusAndMessage("Detail item can't found to do delete");
+			return responseHelper.getResponse();
+		}
+
+		long count = opdoService.deleteDetail(pd);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + xdornum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + xdornum);
+		return responseHelper.getResponse();
 	}
 
-	private void generateMatrixData(Date date, Model model) {
-		List<TableColumn> distinctItems = new ArrayList<>();
-		List<BranchRow> distinctBranch = new ArrayList<>();
+	@GetMapping("/confirmopdo/{xdornum}")
+	public @ResponseBody Map<String, Object> confirmOpdo(@PathVariable String xdornum) {
+		if (StringUtils.isBlank(xdornum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
+		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
+				.intValue();
 
-		List<BranchesRequisitions> bqList = opordService.getSalesOrderMatrxi(date);
+		if (opdoDetailList.size() == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		if (!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
+					.intValue();
+			opdoHeader.setXpaid(BigDecimal.valueOf(paid));
+		}
+		Integer xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99)).intValue();
 
-		Map<String, TableColumn> columnRowMap = new HashMap<>();
-		Map<String, BranchRow> branchRowMap = new HashMap<>();
-		bqList.stream().forEach(bq -> {
-			String item = bq.getXitem();
-			if(columnRowMap.get(item) != null) {
-				TableColumn c = columnRowMap.get(item);
-				c.setTotalQty(c.getTotalQty().add(bq.getXqtyord()));
-				columnRowMap.put(item, c);
-			} else {
-				TableColumn c = new TableColumn();
-				c.setXitem(item);
-				c.setXcatitem(bq.getXcatitem());
-				c.setXdesc(bq.getXdesc());
-				c.setTotalQty(bq.getXqtyord());
-				c.setXunitpur(bq.getXunitpur());
-				columnRowMap.put(item, c);
+		if (grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
+			responseHelper.setErrorStatusAndMessage("Paid amount not to be less than Receivable!");
+			return responseHelper.getResponse();
+		}
+
+		// Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		// PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+
+		String p_seq;
+		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procConfirmDO(xdornum, p_seq);
+			// Error check here for procConfrimDo
+			String em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
 			}
 
-			String zorg = bq.getZorg();
-			if(branchRowMap.get(zorg) != null) {
-				BranchRow br = branchRowMap.get(zorg);
-
-				boolean found = false;
-				BigDecimal val = BigDecimal.ZERO;
-				for(BranchItem bi : br.getItems()) {
-					if(bi.getXitem().equalsIgnoreCase(bq.getXitem())) {
-						bi.setXqtyord(bi.getXqtyord().add(bq.getXqtyord()));
-						val = val.add(bi.getXqtyord());
-						found = true;
-						break;
-					}
-				}
-
-				if(!found) {
-					BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord());
-					br.getItems().add(bi);
-					val = val.add(bi.getXqtyord());
-				}
-
-				br.setTotalItemOrdered(br.getTotalItemOrdered().add(val));
-
-				branchRowMap.put(zorg, br);
-			} else {
-				BranchRow br = new BranchRow();
-				br.setZorg(zorg);
-
-				BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord());
-				br.getItems().add(bi);
-
-				br.setTotalItemOrdered(bi.getXqtyord());
-
-				branchRowMap.put(zorg, br);
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procIssuePricing(opdoHeader.getXdocnum(), opdoHeader.getXwh(), p_seq);
+			// Error check here for procIssuePricing
+			em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
 			}
-		});
 
-		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
-		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));
+		}
+		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
+					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procTransferOPtoAR(xdornum, "opdoheader", p_seq);
+			// Error check here for procTransferOPtoAR
+			String em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
 
-		distinctItems.sort(Comparator.comparing(TableColumn::getXcatitem));
+		}
 
-		SimpleDateFormat pdate = new SimpleDateFormat("yyyy-MM-dd");
-		model.addAttribute("datadate", pdate.format(date));
-		model.addAttribute("distinctBranch", distinctBranch);
-		model.addAttribute("distinctItems", distinctItems);
-		model.addAttribute("bqlsDetailsList", bqList);
+		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
+
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
+		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/details/{date}/print")
-	public ResponseEntity<byte[]> printMatrix(@PathVariable String date, Model model) {
+	@GetMapping("/returnsales/{xdornum}")
+	public @ResponseBody Map<String, Object> retrunsales(@PathVariable String xdornum) {
+		if (StringUtils.isBlank(xdornum)) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		// Validate
+
+		// Get OpdoHeader record by xdornum
+		Opdoheader opdoheader = opdoService.findOpdoHeaderByXdornum(xdornum);
+
+		if (opdoheader != null) {
+			Opcrnheader opcrnheader = new Opcrnheader();
+			BeanUtils.copyProperties(opdoheader, opcrnheader, "xdate", "xtype", "xtypetrn", "xtrn");
+			opcrnheader.setXdornum(opdoheader.getXdornum());
+			opcrnheader.setXstatuscrn("Open");
+			opcrnheader.setXdate(new Date());
+			opcrnheader.setXcus(opdoheader.getXcus());
+			opcrnheader.setXtype(TransactionCodeType.SRN_RETURN.getCode());
+			opcrnheader.setXtypetrn("CRN Number");
+			opcrnheader.setXtrncrn(TransactionCodeType.SRN_RETURN.getCode());
+			opcrnheader.setXtrn(TransactionCodeType.SRN_RETURN.getdefaultCode());
+
+			long count = opcrnService.save(opcrnheader);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			opcrnheader = opcrnService.findOpcrnHeaderByXdornum(xdornum);
+
+			// Get Sales Order details to Copy them in CRN
+			List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
+			Opcrndetail opcrnDetail;
+
+			for (int i = 0; i < opdoDetailList.size(); i++) {
+				opcrnDetail = new Opcrndetail();
+				BeanUtils.copyProperties(opdoDetailList.get(i), opcrnDetail, "xrow", "xnote");
+				opcrnDetail.setXcrnnum(opcrnheader.getXcrnnum());
+				opcrnDetail.setXunit(opdoDetailList.get(i).getXunitsel());
+				// opcrnDetail.setXqtyord(opdoDetailList.get(i).getXqtyord());
+
+				long nCount = opcrnService.saveDetail(opcrnDetail);
+
+				// Update Inventory
+				if (nCount == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+			}
+
+			// Update PoordHeader Status
+			/*
+			 * opdoheader.setXstatusord("Returned"); long pCount =
+			 * opdoService.update(opdoheader); if(pCount == 0) {
+			 * responseHelper.setStatus(ResponseStatus.ERROR); return
+			 * responseHelper.getResponse(); }
+			 */
+
+			responseHelper.setSuccessStatusAndMessage("Sales Returned successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/salesreturn/" + opcrnheader.getXcrnnum());
+			return responseHelper.getResponse();
+		}
+		responseHelper.setStatus(ResponseStatus.ERROR);
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/print/{pType}/{xdornum}")
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
+			@PathVariable String xdornum) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
 		headers.add("X-Content-Type-Options", "nosniff");
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = null;
-		try {
-			d = sdf.parse(date);
-		} catch (ParseException e) {
-			log.error(ERROR, e.getMessage(), e);
-			message = "Chalan not parse date";
+		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+
+		if (oh == null) {
+			message = "Invoice not found to print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cacus cacus = cacusService.findByXcus(oh.getXcus());
+		Opdoheader chalan = opdoService.findOpdoHeaderByXdornum(oh.getXdocnum());
+		if (chalan == null) {
+			message = "Invoice is not assigned to a chalan";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		MatrixReport mr = new MatrixReport();
-		mr.setBusinessName(sessionManager.getZbusiness().getZorg());
-		mr.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-		mr.setReportName("Branch Wise Item Sales Orders");
-		mr.setFromDate(SDF2.format(d));
-		mr.setPrintDate(SDF2.format(new Date()));
-		generateMatrixData2(d, mr, model);
+		// SalesOrderChalanReport orderReport = new SalesOrderChalanReport();
 
-		byte[] byt = getPDFByte(mr, "matrixreport.xsl");
-		if(byt == null) {
-			message = "Can't generate pdf";
+		// for(Opdoheader so : salesOrders) {
+
+		SalesOrderChalanReport report = new SalesOrderChalanReport();
+		report.setBusinessName(sessionManager.getZbusiness().getZorg());
+		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
+		report.setReportName("Delivery Chalan");
+		report.setFromDate(sdf.format(chalan.getXdate()));
+		report.setToDate(sdf.format(chalan.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+		report.setCopyrightText("Copyright © 2021 - ASL");
+
+		report.setChalanNumber(chalan.getXdornum());
+		report.setChalanDate(sdf.format(chalan.getXdate()));
+		report.setChalanStatus(chalan.getXstatusar());
+
+		SalesOrder salesOrder = new SalesOrder();
+		salesOrder.setOrderNumber(oh.getXdornum());
+		salesOrder.setReqBranch(oh.getXcus());
+		salesOrder.setCustomer(cacus.getXorg());
+		salesOrder.setCustomerAddress(cacus.getXmadd());
+		salesOrder.setDate(sdf.format(oh.getXdate()));
+		if ("invoice".equalsIgnoreCase(pType)) {
+			report.setReportName("Invoice Order");
+
+			salesOrder
+					.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setVatAmount(oh.getXvatamt() != null ? oh.getXvatamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setDiscountAmount(
+					oh.getXdiscamt() != null ? oh.getXdiscamt().toString() : BigDecimal.ZERO.toString());
+			salesOrder.setGrandTotalAmount(
+					oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
+		}
+
+		List<Opdodetail> items = opdoService.findOpdoDetailByXdornum(oh.getXdornum());
+		if (items != null && !items.isEmpty()) {
+			items.stream().forEach(it -> {
+				ItemDetails item = new ItemDetails();
+				item.setItemCode(it.getXitem());
+				item.setItemName(it.getXdesc());
+				item.setItemQty(it.getXqtyord().toString());
+				item.setItemUnit(it.getXunitsel());
+				item.setItemCategory(it.getXcatitem());
+				item.setItemGroup(it.getXgitem());
+
+				if ("invoice".equalsIgnoreCase(pType)) {
+					item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
+					item.setItemTotalAmount(
+							it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
+				}
+
+				salesOrder.getItems().add(item);
+			});
+		}
+
+		report.getSalesorders().add(salesOrder);
+
+		byte[] byt;
+		if ("invoice".equalsIgnoreCase(pType))
+			byt = getPDFByte(report, "invoicereport.xsl");
+		else
+			byt = getPDFByte(report, "deliveryorderreport.xsl");
+		if (byt == null) {
+			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		headers.setContentType(new MediaType("application", "pdf"));
 		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
-	}
-
-	private void generateMatrixData2(Date date, MatrixReport mr, Model model) {
-		List<BranchesRequisitions> bqList = opordService.getSalesOrderMatrxi(date);
-
-		List<String> items = new ArrayList<>();
-		List<String> branches = new ArrayList<>();
-		List<TableColumn> columns = new ArrayList<>();
-		for(BranchesRequisitions b : bqList) {
-			if(!items.contains(b.getXitem())) {
-				items.add(b.getXitem());
-				TableColumn tc = new TableColumn();
-				tc.setXitem(b.getXitem());
-				tc.setXdesc(b.getXdesc());
-				tc.setXunitpur(b.getXunitpur());
-				columns.add(tc);
-			}
-			if(!branches.contains(b.getZorg())) {
-				branches.add(b.getZorg());
-			}
-		}
-		Collections.sort(items);
-		columns.sort(Comparator.comparing(TableColumn::getXitem));
-
-		Map<String, BranchItem> browMap = new TreeMap<>();
-		for(BranchesRequisitions br : bqList) {
-			if(browMap.get(br.getZorg() + "|" + br.getXitem()) != null) {
-				BranchItem brow = browMap.get(br.getZorg() + "|" + br.getXitem());
-				brow.setXqtyord(brow.getXqtyord().add(br.getXqtyord()));
-			} else {
-				BranchItem brow = new BranchItem();
-				brow.setZorg(br.getZorg());
-				brow.setXitem(br.getXitem());
-				brow.setXqtyord(br.getXqtyord() != null ? br.getXqtyord() : BigDecimal.ZERO);
-				browMap.put(br.getZorg() + "|" + br.getXitem(), brow);
-			}
-		}
-
-		for(String item : items) {
-			for(String branch : branches) {
-				if(browMap.get(branch + "|" + item) == null) {
-					BranchItem brow = new BranchItem();
-					brow.setZorg(branch);
-					brow.setXitem(item);
-					brow.setXqtyord(BigDecimal.ZERO);
-					browMap.put(branch + "|" + item, brow);
-				}
-			}
-		}
-
-		Map<String, Total> totalmap = new TreeMap<>();
-		for(Map.Entry<String, BranchItem> m : browMap.entrySet()) {
-			if(totalmap.get(m.getValue().getXitem()) != null) {
-				Total total = totalmap.get(m.getValue().getXitem());
-				total.setXqtyord(total.getXqtyord().add(m.getValue().getXqtyord()));
-			} else {
-				Total total = new Total();
-				total.setXitem(m.getValue().getXitem());
-				total.setXqtyord(m.getValue().getXqtyord());
-				totalmap.put(m.getValue().getXitem(), total);
-			}
-		}
-
-		Map<String, List<BranchItem>> branchWiseItems = new TreeMap<>();
-		for(Map.Entry<String, BranchItem> m : browMap.entrySet()) {
-			if(branchWiseItems.get(m.getValue().getZorg()) != null) {
-				branchWiseItems.get(m.getValue().getZorg()).add(m.getValue());
-			} else {
-				List<BranchItem> list = new ArrayList<>();
-				list.add(m.getValue());
-				branchWiseItems.put(m.getValue().getZorg(), list);
-			}
-		}
-
-		List<Total> totals = new ArrayList<>();
-		totalmap.entrySet().stream().forEach(m -> totals.add(m.getValue()));
-		totals.sort(Comparator.comparing(Total::getXitem));
-
-		Map<String, BranchRow> browtracker = new HashMap<>();
-		int chunk = 0;
-		List<MatrixReportData> dataList = new ArrayList<>();
-		MatrixReportData mrd = null;
-		for(int i = 0; i < columns.size(); i++) {
-			if(chunk == 9) {
-				for(Map.Entry<String, BranchRow> m : browtracker.entrySet()) {
-					mrd.getRows().add(m.getValue());
-				}
-				browtracker = new HashMap<>();
-				chunk = 0;
-			}
-			if(chunk == 0) {
-				mrd = new MatrixReportData();
-				dataList.add(mrd);
-			}
-			mrd.getColumns().add(columns.get(i));
-			mrd.getTotals().add(totals.get(i));
-
-			for(int m = 0; m < branchWiseItems.size(); m++) {
-				BranchItem item = branchWiseItems.get(branches.get(m)).get(i);
-				BranchRow brow = null;
-				if(browtracker.get(item.getZorg()) != null) {
-					brow = browtracker.get(item.getZorg());
-					brow.getItems().add(item);
-					browtracker.put(item.getZorg(), brow);
-				} else {
-					brow = new BranchRow();
-					brow.setZorg(item.getZorg());
-					brow.getItems().add(item);
-					browtracker.put(item.getZorg(), brow);
-				}
-			}
-
-			chunk++;
-
-			if(i == columns.size() - 1) {
-				for(Map.Entry<String, BranchRow> m : browtracker.entrySet()) {
-					mrd.getRows().add(m.getValue());
-				}
-				browtracker = new HashMap<>();
-			}
-		}
-
-		mr.getDatas().addAll(dataList);
 	}
 
 }

@@ -52,6 +52,12 @@
 									<tr>
 										<td colspan="2">Sales Order</td>
 									</tr>
+									<tr>
+										<td><a th:href="@{/salesninvoice/opord}">Sales Order</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/opord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 									<tr th:if="${menuProfile.M0401 ne null and menuProfile.M0401.display}">
 										<td><a th:href="@{/salesninvoice/salesorder}" th:text="${menuProfile.M0401.screenprompt}">Sales Orders (Branch)</a></td>
 										<td>

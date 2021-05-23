@@ -224,6 +224,9 @@ public class OrderRequisitionController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		poordDetail.setXrate(item.getXrate() != null ? item.getXrate() : BigDecimal.ZERO);
+		poordDetail.setXlineamt(poordDetail.getXrate().multiply(poordDetail.getXqtyord() != null ? poordDetail.getXqtyord() : BigDecimal.ZERO));
+
 		// if existing
 		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
 		if(existDetail != null) {

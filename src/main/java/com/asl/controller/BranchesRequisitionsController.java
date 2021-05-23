@@ -174,6 +174,9 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		oh.setXdate(new Date());
 		oh.setXcus(ph.getZid());
 		oh.setXstatus("Open");
+		oh.setXnote(ph.getXnote());
+		oh.setXdiscamt(BigDecimal.ZERO);
+		oh.setXvatait("No Vat");
 		long ohCount = opordService.saveOpordHeader(oh);
 		if(ohCount == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't crete sales order");
@@ -258,6 +261,9 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		oh.setXdate(new Date());
 		oh.setXcus(ph.getZid());
 		oh.setXstatus("Open");
+		oh.setXnote(ph.getXnote());
+		oh.setXdiscamt(BigDecimal.ZERO);
+		oh.setXvatait("No Vat");
 		long ohCount = opordService.saveOpordHeader(oh);
 		if(ohCount == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't crete sales order");
