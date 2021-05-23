@@ -54,8 +54,7 @@
 										<a th:href="@{/salesninvoice/opord}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(opordheader.xordernum)}" th:href="@{/salesninvoice/opord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus != 'Confirmed' and opordheader.zactive == true}" th:href="@{/salesninvoice/opord/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.zactive == false}" th:href="@{/salesninvoice/opord/restore/} + ${opordheader.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<!-- <a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus != 'Confirmed' and opordheader.zactive == true}" th:href="@{/salesninvoice/opord/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a> -->
 									</div>
 									<div class="section-body section-border">
 										<div id="opordheaderform" th:fragment="opordheaderform">
@@ -220,7 +219,7 @@
 											<th>Line Amount</th>
 											<th>Note</th>
 											<th th:if="${opordheader.xstatus != 'Confirmed'}" data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/opord/} + ${opordheader.xordernum} + '/oporddetail/new/show', data-target-modal='opdodetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/opord/} + ${opordheader.xordernum} + '/oporddetail/new/show', data-target-modal='oporddetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -236,7 +235,7 @@
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xlong}"></td>
 											<td th:if="${opordheader.xstatus != 'Confirmed'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/opord/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/show', data-target-modal='opdodetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/opord/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/show', data-target-modal='oporddetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/opord/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
@@ -250,7 +249,7 @@
 		</div>
 		
 	<!-- Modal -->
-	<div id="opdodetailmodal-section"></div>
+	<div id="oporddetailmodal-section"></div>
 
 	<!-- Footer section -->
 	<div class="footer-section" th:include="commons :: footer-section"></div>

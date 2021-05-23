@@ -37,6 +37,7 @@ import com.asl.entity.Opordheader;
 import com.asl.entity.PSV;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ProductionSuggestion;
 import com.asl.model.report.DailyProductionBatchReport;
 import com.asl.model.report.FinishedGood;
 import com.asl.model.report.ProductionBatchReport;
@@ -46,6 +47,7 @@ import com.asl.service.ImstockService;
 import com.asl.service.MoService;
 import com.asl.service.OpordService;
 import com.asl.service.PSVService;
+import com.asl.service.ProductionSuggestionService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,6 +65,7 @@ public class ProductionBatchController extends ASLAbstractController {
 	@Autowired private MoService moService;
 	@Autowired private PSVService psvService;
 	@Autowired private ImstockService imstockService;
+	@Autowired private ProductionSuggestionService productionSuggestionService;
 
 	@GetMapping
 	public String loadChalanBatchPage(Model model) {
@@ -124,7 +127,13 @@ public class ProductionBatchController extends ASLAbstractController {
 					batch.setXqtyprd(item.getXqtyord());
 					batch.setXqtycom(item.getXqtyord());
 				}
+
 				batch.setXproduction(BigDecimal.ZERO);
+				ProductionSuggestion ps = productionSuggestionService.getProductionSuggestionByXitemAndChalan(chalan.getXordernum(), item.getXitem());
+				if(ps != null) {
+					batch.setXproduction(ps.getXrawqty() != null ? ps.getXrawqty() : BigDecimal.ZERO);
+				}
+
 				batch.setXstatusmor("Open");
 				batch.setXwh("Production Store");
 				batcList.add(batch);

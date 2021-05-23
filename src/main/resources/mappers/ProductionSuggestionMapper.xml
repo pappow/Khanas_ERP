@@ -14,6 +14,17 @@
 			AND zid=#{zid}
 	</select>
 
+	<select id="getProductionSuggestionByXitemAndChalan" resultType="com.asl.model.ProductionSuggestion">
+		SELECT
+			*
+		FROM
+			PRO_SUGG
+		WHERE
+			chalan=#{chalan}
+			AND xitem=#{xitem}
+			AND zid=#{zid}
+	</select>
+
 	<select id = "createSuggestion" statementType = "CALLABLE">
 		{call proc_suggesstion(#{xordernum, jdbcType = VARCHAR, mode = IN}, #{zid, jdbcType = VARCHAR, mode = IN})}
 	</select>

@@ -570,4 +570,15 @@
 			AND oph.zactive='1'
 	</update>
 
+	<update id="archiveAllOporddetailByXordernum">
+		UPDATE
+			oporddetail
+		SET
+			zactive='0'
+		WHERE
+			xordernum=#{xordernum} 
+			AND zid=#{zid} 
+			AND zactive='1'
+	</update>
+
 </mapper>

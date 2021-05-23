@@ -230,5 +230,11 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return totalCount;
 	}
 
-	
+	@Transactional
+	@Override
+	public long archiveAllOporddetailByXordernum(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return 0;
+		return opordMapper.archiveAllOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+
 }

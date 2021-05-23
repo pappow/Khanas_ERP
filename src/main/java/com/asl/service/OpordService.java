@@ -77,4 +77,6 @@ public interface OpordService {
 	public List<Oporddetail> findBookedHallsByXordernum(String xordernum);
 
 	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum);
+
+	public long archiveAllOporddetailByXordernum(String xordernum);
 }

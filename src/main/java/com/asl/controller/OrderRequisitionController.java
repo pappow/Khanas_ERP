@@ -144,13 +144,6 @@ public class OrderRequisitionController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = poordService.update(poordHeader);
-		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
 		// archive all details
 		if(archive && poordService.countOfRequisitionDetailsByXpornum(xpornum) > 0) {
 			long count2 = poordService.archiveAllPoordDetailByXpornum(xpornum);
@@ -158,6 +151,13 @@ public class OrderRequisitionController extends ASLAbstractController {
 				responseHelper.setErrorStatusAndMessage("Can't archive details");
 				return responseHelper.getResponse();
 			}
+		}
+
+		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
+		long count = poordService.update(poordHeader);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Requisition order updated successfully");

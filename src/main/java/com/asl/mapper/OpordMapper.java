@@ -77,4 +77,5 @@ public interface OpordMapper {
 
 	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum, String zid);
 
+	public long archiveAllOporddetailByXordernum(String xordernum, String zid);
 }

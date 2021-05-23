@@ -89,7 +89,7 @@
 											</h1>
 											<thead th:if="${not #lists.isEmpty(batchList)}">
 												<tr th:if="${not productioncompleted}" style="background: #ddd; border: 1px solid #000;">
-													<th style="text-align: right; border: 1px solid #000;" colspan="9">Bulk Process</th>
+													<th style="text-align: right; border: 1px solid #000;" colspan="7">Bulk Process</th>
 													<th style="text-align: center; border: 1px solid #000;">
 														<button title="Process Production" 
 																type="button" 
@@ -104,8 +104,8 @@
 													<th>SN.</th>
 													<th>Batch</th>
 													<th>Item</th>
-													<th>BOM</th>
-													<th>Req. Qty</th>
+													<!-- <th>BOM</th>
+													<th>Req. Qty</th> -->
 													<th>Production (KG)</th>
 													<th>Default production</th>
 													<th>Final production</th>
@@ -120,10 +120,10 @@
 													<td>
 														<a th:href="@{/mastersetup/caitem/} + ${b.xitem}" target="_blank" th:text="${b.xitem} + ' - ' +  ${b.xdesc}"></a>
 													</td>
-													<td>
+													<!-- <td>
 														<a th:if="${not #strings.isEmpty(b.xbomkey)}" th:href="@{/production/bom/} + ${b.xbomkey}" target="_blank" th:text="${b.xbomkey}"></a>
 													</td>
-													<td th:text="${b.xqtyreq} + ' ' + ${b.xqtyprdunit}"></td>
+													<td th:text="${b.xqtyreq} + ' ' + ${b.xqtyprdunit}"></td> -->
 													<td>
 														<form th:if="${not #strings.isEmpty(b.xbomkey)}" class="form-horizontal" th:id="${b.xbatch}" th:action="@{/production/batch/update/xproduction/} + ${b.xbatch}" method="post">
 															<input th:disabled="${b.xstatusmor eq 'Completed'}" style="width:100px; float: left; margin-right: 10px;" type="text" name="xproduction" th:value="${b.xproduction}" class="form-control"/>
