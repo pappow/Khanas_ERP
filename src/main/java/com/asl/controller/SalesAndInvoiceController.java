@@ -113,6 +113,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		opdoheader.setXpaid(BigDecimal.ZERO);
 		opdoheader.setXchange(BigDecimal.ZERO);
 		opdoheader.setXpaystatus("Due");
+		opdoheader.setXwh("Central Store");
 		return opdoheader;
 	}
 
@@ -205,15 +206,16 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			Opdodetail opdodetail = new Opdodetail();
 			opdodetail.setXdornum(xdornum);
 			opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			opdodetail.setXqtyord(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			opdodetail.setXqtycrn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			model.addAttribute("opdodetail", opdodetail);
 		} else {
 			Opdodetail opdodetail = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
 			if (opdodetail == null) {
 				opdodetail = new Opdodetail();
 				opdodetail.setXdornum(xdornum);
-				opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 				opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+				opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
 				opdodetail.setXqtycrn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			}
 			model.addAttribute("opdodetail", opdodetail);

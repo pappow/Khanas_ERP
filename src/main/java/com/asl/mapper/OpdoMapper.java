@@ -14,7 +14,7 @@ public interface OpdoMapper {
 	public long updateOpdoHeader(Opdoheader opdoheader);
 	public long updateOpdoHeaderTotalAmt(String xdornum, String zid);
 	public long updateOpdoHeaderGrandTotalAmt(String xdornum, String zid);
-	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum, String zid);	
+	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum, String zid);
 
 	public long saveOpdoDetail(Opdodetail opdodetail);
 	public long updateOpdoDetail(Opdodetail opdodetail);

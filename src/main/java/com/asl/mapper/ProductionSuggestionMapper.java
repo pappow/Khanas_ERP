@@ -18,4 +18,6 @@ public interface ProductionSuggestionMapper {
 	public long deleteSuggestion(String chalan, String xdate, String zid);
 
 	public List<String> searchClananNumbers(String chalan, String zid);
+
+	public ProductionSuggestion getProductionSuggestionByXitemAndChalan(String chalan, String xitem, String zid);
 }

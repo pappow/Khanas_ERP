@@ -177,6 +177,9 @@
 			xqtydel,
 			xlong,
 			xlineamt,
+			xdesc,
+			xgitem,
+			xcatitem,
 			zid,
 			zauserid,
 			zuuserid,
@@ -198,6 +201,9 @@
 			#{xqtydel, jdbcType=DECIMAL},
 			#{xlong, jdbcType=VARCHAR},
 			#{xlineamt, jdbcType=DECIMAL},
+			#{xdesc, jdbcType=VARCHAR},
+			#{xgitem, jdbcType=VARCHAR},
+			#{xcatitem, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -221,6 +227,9 @@
 			xqtydel=#{xqtydel, jdbcType=DECIMAL},
 			xlong=#{xlong, jdbcType=VARCHAR},
 			xlineamt=#{xlineamt, jdbcType=DECIMAL},
+			xdesc=#{xdesc, jdbcType=VARCHAR},
+			xgitem=#{xgitem, jdbcType=VARCHAR},
+			xcatitem=#{xcatitem, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -543,6 +552,33 @@
 						WHERE oph.xfuncdate = CAST(#{xfuncdate} AS DATE) and oph.zid=#{zid})
 			AND item.zid=#{zid}
 	</select>
-	
-	
+
+	<update id="updateOpordHeaderTotalAmtAndGrandTotalAmt">
+		UPDATE 
+			opordheader oph
+		SET
+			oph.xtotamt=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid), 0),
+			oph.xvatamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
+			oph.xaitamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
+			oph.xgrandtot=  NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) 
+							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							- oph.xdiscamt, 0)
+		WHERE
+			oph.xordernum=#{xordernum} 
+			AND oph.zid=#{zid} 
+			AND oph.zactive='1'
+	</update>
+
+	<update id="archiveAllOporddetailByXordernum">
+		UPDATE
+			oporddetail
+		SET
+			zactive='0'
+		WHERE
+			xordernum=#{xordernum} 
+			AND zid=#{zid} 
+			AND zactive='1'
+	</update>
+
 </mapper>

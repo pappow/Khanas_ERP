@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
@@ -42,28 +43,43 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.updateOpordHeader(opordheader);
 	}
 
+	@Transactional
 	@Override
 	public long saveOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
 		oporddetail.setZid(sessionManager.getBusinessId());
 		oporddetail.setZauserid(getAuditUser());
-		System.out.println(">>>>> " + oporddetail.getXitem());
-		return opordMapper.saveOpordDetail(oporddetail);
+		long count = opordMapper.saveOpordDetail(oporddetail);
+		if(count != 0) {
+			updateOpordHeaderTotalAmtAndGrandTotalAmt(oporddetail.getXordernum());
+		}
+		return count;
 	}
 
+	@Transactional
 	@Override
 	public long updateOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
 		oporddetail.setZid(sessionManager.getBusinessId());
 		oporddetail.setZuuserid(getAuditUser());
-		return opordMapper.updateOpordDetail(oporddetail);
+		long count = opordMapper.updateOpordDetail(oporddetail);
+		if(count != 0) {
+			updateOpordHeaderTotalAmtAndGrandTotalAmt(oporddetail.getXordernum());
+		}
+		return count;
 	}
 
+	@Transactional
 	@Override
 	public long deleteOpordDetail(Oporddetail oporddetail) {
 		if(oporddetail == null) return 0;
+		String xordernum = oporddetail.getXordernum();
 		oporddetail.setZid(sessionManager.getBusinessId());
-		return opordMapper.deleteOpordDetail(oporddetail);
+		long count = opordMapper.deleteOpordDetail(oporddetail);
+		if(count != 0) {
+			updateOpordHeaderTotalAmtAndGrandTotalAmt(xordernum);
+		}
+		return count;
 	}
 
 	@Override
@@ -193,5 +209,32 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public List<Oporddetail> findBookedHallsByXordernum(String xordernum) {
 		return opordMapper.findBookedHallsByXordernum(xordernum, sessionManager.getBusinessId());
 	}
-	
+
+	@Transactional
+	@Override
+	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return 0;
+		return opordMapper.updateOpordHeaderTotalAmtAndGrandTotalAmt(xordernum, sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
+	public long saveBatchOpordDetail(List<Oporddetail> opordDetails) {
+		if(opordDetails == null || opordDetails.isEmpty()) return 0;
+		long totalCount = 0;
+		for(Oporddetail detail : opordDetails) {
+			long scount = saveOpordDetail(detail);
+			if(scount != 0) updateOpordHeaderTotalAmtAndGrandTotalAmt(detail.getXordernum());
+			totalCount += scount;
+		}
+		return totalCount;
+	}
+
+	@Transactional
+	@Override
+	public long archiveAllOporddetailByXordernum(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return 0;
+		return opordMapper.archiveAllOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+
 }

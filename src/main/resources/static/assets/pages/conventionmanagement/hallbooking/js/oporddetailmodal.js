@@ -65,17 +65,32 @@ $(document).ready(function(){
 			url : getBasepath() + '/conventionmanagement/hallbooking/oporddetails/save',
 			type : 'POST',
 			data: {
-				hallitemsWrapper : {
-					"items" : items
-				}
+				xitems: items,
+				xordernum : $('#xordernum').val()
 			},
 			success : function(data) {
-				loadingMask2.hide();	
-				console.log({data});
+				loadingMask2.hide();
+				if(data.status == 'SUCCESS'){
+					$('div.modal').modal('hide');
+					showMessage(data.status.toLowerCase(), data.message);
+					if(data.triggermodalurl){
+						modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+					} else {
+						if(data.redirecturl){
+							setTimeout(() => {
+								window.location.replace(getBasepath() + data.redirecturl);
+							}, 1000);
+						} else if(data.reloadurl){
+							doSectionReloadWithNewData(data);
+						}
+					}
+				} else {
+					showMessage(data.status.toLowerCase(), data.message);
+				}
 			},
 			error : function(jqXHR, status, errorThrown){
 				showMessage(status, "Something went wrong .... ");
-				loadingMask2.hide();
+				loadingMask2.hide()
 			}
 		});
 		

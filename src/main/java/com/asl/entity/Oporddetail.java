@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -62,14 +61,15 @@ public class Oporddetail extends AbstractModel<String> {
 	@Column(name = "xlong")
 	private String xlong;
 
-	@Transient
+	@Column(name = "xdesc")
 	private String xdesc;
-	@Transient
+
+	@Column(name = "xgitem")
 	private String xgitem;
-	@Transient
+
+	@Column(name = "xcatitem")
 	private String xcatitem;
-	
-	//Added for Convention Management
+
 	@Column(name = "xlineamt")
 	private BigDecimal xlineamt;
 

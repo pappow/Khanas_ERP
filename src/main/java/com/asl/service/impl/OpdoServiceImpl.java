@@ -127,6 +127,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	}
 	
 
+	@Transactional
 	@Override
 	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum) {
 		if(StringUtils.isBlank(xdornum)) return 0;

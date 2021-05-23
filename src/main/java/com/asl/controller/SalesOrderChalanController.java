@@ -180,7 +180,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			// check chalan detail already exist using item
 			Oporddetail existChalanDetail = opordService.findOporddetailByXordernumAndXitem(chalan, pd.getXitem());
 			if(existChalanDetail != null) {  // update existing with qty
-				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
+				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord()));
 				long countChalanDetail = opordService.updateOpordDetail(existChalanDetail);
 				if(countChalanDetail == 0) {
 					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
@@ -191,8 +191,12 @@ public class SalesOrderChalanController extends ASLAbstractController {
 				chalanDetail.setXordernum(chalan);
 				chalanDetail.setXitem(pd.getXitem());
 				chalanDetail.setXunit(pd.getXunit());
-				chalanDetail.setXqtyord(pd.getXqtyord());
-				chalanDetail.setXrate(pd.getXrate());
+				chalanDetail.setXqtyord(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				chalanDetail.setXrate(pd.getXrate() == null ? BigDecimal.ZERO : pd.getXrate());
+				chalanDetail.setXlineamt(chalanDetail.getXrate().multiply(chalanDetail.getXqtyord()));
+				chalanDetail.setXdesc(pd.getXdesc());
+				chalanDetail.setXcatitem(pd.getXcatitem());
+				chalanDetail.setXgitem(pd.getXgitem());
 				long countChalanDetail = opordService.saveOpordDetail(chalanDetail);
 				if(countChalanDetail == 0) {
 					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");

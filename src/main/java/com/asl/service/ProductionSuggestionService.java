@@ -19,4 +19,6 @@ public interface ProductionSuggestionService {
 	long deleteSuggestion(String chalan, Date xdate);
 
 	public List<String> searchClananNumbers(String chalan);
+
+	public ProductionSuggestion getProductionSuggestionByXitemAndChalan(String chalan, String xitem);
 }

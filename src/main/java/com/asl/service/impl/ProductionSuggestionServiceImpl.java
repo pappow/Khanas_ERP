@@ -47,5 +47,11 @@ public class ProductionSuggestionServiceImpl extends AbstractGenericService impl
 		return productionSuggestionMapper.searchClananNumbers(chalan.toUpperCase(), sessionManager.getBusinessId());
 	}
 
+	@Override
+	public ProductionSuggestion getProductionSuggestionByXitemAndChalan(String chalan, String xitem) {
+		if(StringUtils.isBlank(chalan) || StringUtils.isBlank(xitem)) return null;
+		return productionSuggestionMapper.getProductionSuggestionByXitemAndChalan(chalan, xitem, sessionManager.getBusinessId());
+	}
+
 	
 }
