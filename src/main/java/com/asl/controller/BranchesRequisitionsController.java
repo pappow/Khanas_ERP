@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.PoordDetail;
@@ -39,6 +40,7 @@ import com.asl.model.report.MatrixReport;
 import com.asl.model.report.MatrixReportData;
 import com.asl.model.report.TableColumn;
 import com.asl.model.report.Total;
+import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.PoordService;
 import com.asl.service.RequisitionListService;
@@ -53,6 +55,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 	@Autowired private RequisitionListService requisitionListService;
 	@Autowired private PoordService poordService;
 	@Autowired private OpordService opordService;
+	@Autowired private CaitemService caitemService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -149,6 +152,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 	@PostMapping("/ordreqconfirm/allopen/{branchzid}/{xpornum}")
 	public @ResponseBody Map<String, Object> confirmReqOrderAndCreateSOAndChalanFromAllOpen(@PathVariable String branchzid, @PathVariable String xpornum, Model model){
+		// Change requisition order status
 		PoordHeader ph = poordService.findBranchPoordHeaderByXpornumForCentral(xpornum, branchzid);
 		if(ph == null) {
 			responseHelper.setErrorStatusAndMessage("Can't find any requisition in the system");
@@ -159,13 +163,6 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		List<PoordDetail> poordDetailsList = poordService.findPoordDetailsByXpornumAndBranchZid(xpornum, branchzid);
 		if(poordDetailsList == null || poordDetailsList.isEmpty()) {  // if no detail exist
 			responseHelper.setErrorStatusAndMessage("Requisition has no item added");
-			return responseHelper.getResponse();
-		}
-
-		ph.setXstatuspor("Confirmed");
-		long count = poordService.update(ph);
-		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 
@@ -192,20 +189,43 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		}
 
 		// if detail data exist
+		List<Oporddetail> detailsList = new ArrayList<>();
 		for(PoordDetail pd : poordDetailsList) {
 			// create all sales details from requisition details
+			Caitem c = caitemService.findByXitem(pd.getXitem());
+			if(c == null) {
+				responseHelper.setErrorStatusAndMessage("Item "+ pd.getXitem() +" not found");
+				return responseHelper.getResponse();
+			}
+
 			Oporddetail od = new Oporddetail();
 			od.setXordernum(savedoh.getXordernum());
 			od.setXitem(pd.getXitem());
 			od.setXunit(pd.getXunitpur());
-			od.setXqtyord(pd.getXqtyord());
-			od.setXrate(pd.getXrate());
-			long countOD = opordService.saveOpordDetail(od);
-			if(countOD == 0) {
-				//TODO: need to revoke all previous transaction from database
-				responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
-				return responseHelper.getResponse();
-			}
+			od.setXqtyord(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			od.setXrate(pd.getXrate() == null ? BigDecimal.ZERO : pd.getXrate());
+			od.setXdesc(c.getXdesc());
+			od.setXcatitem(c.getXcatitem());
+			od.setXgitem(c.getXgitem());
+			od.setXlineamt(od.getXqtyord().multiply(od.getXrate()));
+
+			detailsList.add(od);
+		}
+
+		// now save all details
+		long countOD = opordService.saveBatchOpordDetail(detailsList);
+		if(countOD == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
+			return responseHelper.getResponse();
+		}
+
+		// Update status and order reference
+		ph.setXstatuspor("Confirmed");
+		ph.setXordernum(savedoh.getXordernum());
+		long count = poordService.update(ph);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
 		}
 
 		// reload page
@@ -253,20 +273,34 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		}
 
 		// if detail data exist
+		List<Oporddetail> detailsList = new ArrayList<>();
 		for(PoordDetail pd : poordDetailsList) {
 			// create all sales details from requisition details
+			Caitem c = caitemService.findByXitem(pd.getXitem());
+			if(c == null) {
+				responseHelper.setErrorStatusAndMessage("Item "+ pd.getXitem() +" not found");
+				return responseHelper.getResponse();
+			}
+
 			Oporddetail od = new Oporddetail();
 			od.setXordernum(savedoh.getXordernum());
 			od.setXitem(pd.getXitem());
 			od.setXunit(pd.getXunitpur());
-			od.setXqtyord(pd.getXqtyord());
-			od.setXrate(pd.getXrate());
-			long countOD = opordService.saveOpordDetail(od);
-			if(countOD == 0) {
-				//TODO: need to revoke all previous transaction from database
-				responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
-				return responseHelper.getResponse();
-			}
+			od.setXqtyord(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			od.setXrate(pd.getXrate() == null ? BigDecimal.ZERO : pd.getXrate());
+			od.setXdesc(c.getXdesc());
+			od.setXcatitem(c.getXcatitem());
+			od.setXgitem(c.getXgitem());
+			od.setXlineamt(od.getXqtyord().multiply(od.getXrate()));
+
+			detailsList.add(od);
+		}
+
+		// now save all details
+		long countOD = opordService.saveBatchOpordDetail(detailsList);
+		if(countOD == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
+			return responseHelper.getResponse();
 		}
 
 		// Update status and order reference
