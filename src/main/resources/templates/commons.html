@@ -21,7 +21,8 @@
 
 	<link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
 
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/ck-ui.css}"/>
+	<link th:if="${!isKhanas}" rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/ck-ui.css}"/>
+	<link th:if="${isKhanas}" rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/khanas-ui.css}"/> 
 </head>
 
 <!-- COMMON-JS -->
@@ -93,7 +94,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<h1 class="brand-name" style="display: inline-block; float: left;">
-					<a th:href="@{/}" th:utext="${brandName}" style="color: #29af70; font-weight: bold; text-decoration: none;">BOOK-POINT</a>
+					<a th:if="${!isKhanas}" th:href="@{/}" th:utext="${brandName}" style="color: #29af70; font-weight: bold; text-decoration: none;">BOOK-POINT</a>
+					<a th:if="${isKhanas}" th:href="@{/}" th:utext="${brandName}" style="color: #961b39; font-weight: bold; text-decoration: none;">BOOK-POINT</a>
 					<span th:if="${zbusiness != null}" style="display: block; font-size: 12px; font-weight: bold; color: #961b39;" th:text="${zbusiness.zorg} + ' - ' + ${loggedInUser.fullName}"></span>
 				</h1>
 				<img th:if="${isKhanas}" class="org-logo" th:src="@{/assets/img/khanas_logo.png}" style="max-width: 100px; float: right; padding: 10px;"/>
