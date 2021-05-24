@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.XRolesMapper">
+	<insert id="saveXroles" parameterType="Xroles">
+	
+		INSERT INTO Xroles
+		(
+			xrole,
+			xaccess,
+			xdesc,
+			xmaxdisc,
+			xmaxdiscf,
+			xshopno,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xrole , jdbcType=VARCHAR},
+			#{xaccess, jdbcType=VARCHAR},
+			#{xdesc, jdbcType=VARCHAR},
+			#{xmaxdisc, jdbcType=NUMBER},
+			#{xmaxdiscf, jdbcType=NUMBER},
+			#{xshopno, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+			
+		)
+	</insert>
+	
+	<select id="getAllXroles" resultType="Xroles">
+		SELECT * FROM Xroles WHERE zid=#{zid} AND zactive='1'
+	</select>
+	
+	
+</mapper>
