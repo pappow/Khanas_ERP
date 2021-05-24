@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.AcMapper">
+	<insert id="saveAcheader" parameterType="Acheader">
+	
+		INSERT INTO Acheader
+		(
+			xvoucher,
+			xref,
+			xdate,
+			xlong,
+			xstatusjv,
+			xyear,
+			xper,
+			xwh,
+			xsub,
+			xtrn,
+			xlcno,
+			xgrnno,
+			xstatus,
+			xdatechq,
+			xchequeno,
+			xbank,
+			xinvnum,
+			xpornum,
+			xdornum,
+			xporeqnum,
+			xnote,
+			xpreparer,
+			xsignatory1,
+			xsigndate1,
+			xfileref,
+			xexch,
+			xcur,
+			xtype,
+			xordernum,
+			zid,
+			ztime,
+			zutime,
+			zauserid,
+			zuuserid
+
+		)
+		VALUES
+		(
+			#{xvoucher, jdbcType=VARCHAR},
+			#{xref, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xlong, jdbcType=VARCHAR},
+			#{xstatusjv, jdbcType=VARCHAR},
+			#{xyear, jdbcType=INTEGER},
+			#{xper, jdbcType=INTEGER},
+			#{xwh, jdbcType=VARCHAR},
+			#{xsub, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{xlcno, jdbcType=VARCHAR},
+			#{xgrnno, jdbcType=VARCHAR},
+			#{xstatus, jdbcType=VARCHAR},
+			#{xdatechq, jdbcType=DATE},
+			#{xchequeno, jdbcType=VARCHAR},
+			#{xbank, jdbcType=VARCHAR},
+			#{xinvnum, jdbcType=VARCHAR},
+			#{xpornum, jdbcType=VARCHAR},
+			#{xdornum, jdbcType=VARCHAR},
+			#{xporeqnum, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xpreparer, jdbcType=VARCHAR},
+			#{xsignatory1, jdbcType=VARCHAR},
+			#{xsigndate1, jdbcType=DATE},
+			#{xfileref, jdbcType=VARCHAR},
+			#{xexch, jdbcType=VARCHAR},
+			#{xcur, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xordernum, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR}
+			
+		)
+	</insert>
+
+	<update id="updateAcheader" parameterType="Acheader">
+		UPDATE 
+			Acheader 
+		SET
+			xvoucher=#{xvoucher, jdbcType=VARCHAR},
+			xref=#{xref, jdbcType=VARCHAR},
+			xdate=#{xdate, jdbcType=DATE},
+			xlong=#{xlong, jdbcType=VARCHAR},
+			xstatusjv=#{xstatusjv, jdbcType=VARCHAR},
+			xyear=#{xyear, jdbcType=INTEGER},
+			xper=#{xper, jdbcType=INTEGER},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xsub=#{xsub, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			xlcno=#{xlcno, jdbcType=VARCHAR},
+			xgrnno=#{xgrnno, jdbcType=VARCHAR},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xdatechq=#{xdatechq, jdbcType=DATE},
+			xchequeno=#{xchequeno, jdbcType=VARCHAR},
+			xbank=#{xbank, jdbcType=VARCHAR},
+			xinvnum=#{xinvnum, jdbcType=VARCHAR},
+			xpornum=#{xpornum, jdbcType=VARCHAR},
+			xdornum=#{xdornum, jdbcType=VARCHAR},
+			xporeqnum=#{xporeqnum, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xpreparer=#{xpreparer, jdbcType=VARCHAR},
+			xsignatory1=#{xsignatory1, jdbcType=VARCHAR},
+			xsigndate1=#{xsigndate1, jdbcType=DATE},
+			xfileref=#{xfileref, jdbcType=VARCHAR},
+			xexch=#{xexch, jdbcType=VARCHAR},
+			xcur=#{xcur, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xordernum=#{xordernum, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	
+	<insert id="saveAcdetail" parameterType="Acdetail">
+	
+		INSERT INTO Acdetail
+		(
+			xvoucher,
+			xrow,
+			xacc,
+			xprime,
+			xlong,
+			xsub,
+			xwh,
+			xdebit,
+			xcredit,
+			xcountry,
+			xstaff,
+			xregi,
+			xlcno,
+			xinvnum,
+			xdeptname,
+			xbase,
+			zid,
+			ztime,
+			zutime,
+			zauserid,
+			zuuserid
+
+		)
+		VALUES
+		(
+			#{xvoucher, jdbcType=VARCHAR},
+			#{xrow, jdbcType=INTEGER},
+			#{xacc, jdbcType=VARCHAR},
+			#{xprime, jdbcType=INTEGER},
+			#{xlong, jdbcType=VARCHAR},
+			#{xsub, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xdebit, jdbcType=INTEGER},
+			#{xcredit, jdbcType=INTEGER},
+			#{xcountry, jdbcType=VARCHAR},
+			#{xstaff, jdbcType=VARCHAR},
+			#{xregi, jdbcType=VARCHAR},
+			#{xlcno, jdbcType=VARCHAR},
+			#{xinvnum, jdbcType=VARCHAR},
+			#{xdeptname, jdbcType=VARCHAR},
+			#{xbase, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR}		
+		)
+	</insert>
+
+	<update id="updateAcdetail" parameterType="Acdetail">
+		UPDATE 
+			Acdetail 
+		SET
+			xvoucher=#{xvoucher, jdbcType=VARCHAR},
+			xrow=#{xrow, jdbcType=INTEGER},
+			xacc=#{xacc, jdbcType=VARCHAR},
+			xprime=#{xprime, jdbcType=INTEGER},
+			xlong=#{xlong, jdbcType=VARCHAR},
+			xsub=#{xsub, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xdebit=#{xdebit, jdbcType=INTEGER},
+			xcredit=#{xcredit, jdbcType=INTEGER},
+			xcountry=#{xcountry, jdbcType=VARCHAR},
+			xstaff=#{xstaff, jdbcType=VARCHAR},
+			xregi=#{xregi, jdbcType=VARCHAR},
+			xlcno=#{xlcno, jdbcType=VARCHAR},
+			xinvnum=#{xinvnum, jdbcType=VARCHAR},
+			xdeptname=#{xdeptname, jdbcType=VARCHAR},
+			xbase=#{xbase, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+</mapper>

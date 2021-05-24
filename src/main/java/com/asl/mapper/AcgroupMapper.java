@@ -2,13 +2,13 @@ package com.asl.mapper;
 
 import java.util.List;
 
-import com.asl.entity.Acdetail;
+import com.asl.entity.Acgroup;
 
 public interface AcgroupMapper {
 	
-	public long saveAcdetail(Acdetail acdetail);
-	public long updateAcdetail(Acdetail acdetail);
+	public long saveAcgroup(Acgroup acgroup);
+	public long updateAcgroup(Acgroup acgroup);
 	
-	public List<Acdetail> getAllAcdetail(String zid);
+	public List<Acgroup> getAllAcgroup(String zid);
 
 }

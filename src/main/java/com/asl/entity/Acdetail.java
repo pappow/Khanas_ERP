@@ -57,24 +57,24 @@ public class Acdetail extends AbstractModel<String>{
 	private Integer xcredit;
 	
 	@Column(name = "xcountry")
-	private Integer xcountry;
+	private String xcountry;
 	
 	@Column(name = "xstaff")
-	private Integer xstaff;
+	private String xstaff;
 	
 	@Column(name = "xregi")
-	private Integer xregi;
+	private String xregi;
 	
 	@Column(name = "xlcno")
-	private Integer xlcno;
+	private String xlcno;
 	
 	@Column(name = "xinvnum")
-	private Integer xinvnum;
+	private String xinvnum;
 	
 	@Column(name = "xdeptname")
-	private Integer xdeptname;
+	private String xdeptname;
 	
 	@Column(name = "xbase")
-	private Integer xbase;
+	private String xbase;
 
 }

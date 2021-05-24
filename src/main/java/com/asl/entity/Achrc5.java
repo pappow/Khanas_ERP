@@ -1,6 +1,5 @@
 package com.asl.entity;
 
-import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
