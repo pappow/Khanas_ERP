@@ -320,7 +320,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		//boolean func
+		boolean functionExist = false;
+		boolean hallExist = false;
 		List<Oporddetail> deletableDL = new ArrayList<>();
 		List<Oporddetail> existDetails = opordService.findOporddetailByXordernum(xordernum);
 		if(existDetails != null && !existDetails.isEmpty()) {
@@ -328,6 +329,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 				// if already added in db then remove from list
 				if(xitemsL.contains(d.getXitem())) {
 					xitemsL.remove(xitemsL.indexOf(d.getXitem()));
+					if("Function".equalsIgnoreCase(d.getXcatitem())) functionExist = true;
+					if("Convention Hall".equalsIgnoreCase(d.getXcatitem())) hallExist = true;
 				} else { // if d is not in list, then delete from db
 					deletableDL.add(d);
 				}
@@ -359,11 +362,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		// validation
 		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
 		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-		if(totalFunctions != 1) {
+		if(totalFunctions != 1 && !functionExist) {
 			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
 			return responseHelper.getResponse();
 		}
-		if(totalHalls == 0) {
+		if(totalHalls == 0 && !hallExist) {
 			responseHelper.setErrorStatusAndMessage("Hall selection required");
 			return responseHelper.getResponse();
 		}
