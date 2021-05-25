@@ -82,6 +82,17 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return count;
 	}
 
+	@Transactional
+	@Override
+	public long batchDeleteOpordDetail(List<Oporddetail> oporddetails) {
+		if(oporddetails == null || oporddetails.isEmpty()) return 0;
+		int fcount = 0;
+		for(Oporddetail d : oporddetails) {
+			fcount += deleteOpordDetail(d);
+		}
+		return fcount;
+	}
+
 	@Override
 	public Opordheader findOpordHeaderByXordernum(String xordernum) {
 		if(StringUtils.isBlank(xordernum)) return null;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,13 +28,11 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
-import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
-import com.asl.service.XcodesService;
 import com.asl.util.CKTime;
 
 import lombok.Data;
@@ -43,7 +42,6 @@ import lombok.Data;
 public class ConventionHallBookingController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
-	@Autowired private XcodesService xcodeService;
 	@Autowired private VataitService vataitService;
 	@Autowired private CaitemService caitemService;
 
@@ -53,9 +51,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("opordheader", getDefaultOpordHeader());
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 
-		
 
-		model.addAttribute("oporddetail", getDefaultOpordDetail());
 
 		model.addAttribute("availableHalls", opordService.findAvailableHallsByDate(new Date()));
 		model.addAttribute("soprefix",
@@ -74,10 +70,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("opordheader", oh);
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		
-		
-		
-		
-		model.addAttribute("oporddetail", getDefaultOpordDetail());
+
 
 		// model.addAttribute("soprefix",
 		// xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(),
@@ -120,16 +113,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return oh;
 	}
 
-	public Oporddetail getDefaultOpordDetail() {
-		Oporddetail od = new Oporddetail();
 
-		od.setXrow(0);
-		od.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-		od.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-		od.setXlineamt(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-
-		return od;
-	}
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Opordheader opordheader, BindingResult bindingResult, Model model) {
@@ -264,6 +248,15 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// Remove all detail first
+		if(!opordService.findOporddetailByXordernum(xordernum).isEmpty()) {
+			long count = opordService.archiveAllOporddetailByXordernum(xordernum);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't archive booking details");
+				return responseHelper.getResponse();
+			}
+		}
+
 		opordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
 		long count = opordService.updateOpordHeader(opordHeader);
 		if (count == 0) {
@@ -279,10 +272,34 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@GetMapping("{xordernum}/oporddetail/{xrow}/show")
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
-		model.addAttribute("functions", caitemService.findByXcatitem("Function"));
-		model.addAttribute("halls", caitemService.findByXcatitem("Convention Hall"));
-		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
-		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
+		Map<String, List<Caitem>> map = new HashMap<>();
+		map.put("Function", caitemService.findByXcatitem("Function"));
+		map.put("Convention Hall", caitemService.findByXcatitem("Convention Hall"));
+		map.put("Hall Facility", caitemService.findByXcatitem("Hall Facility"));
+		map.put("Convention Hall Food", caitemService.findByXcatitem("Convention Hall Food"));
+		model.addAttribute("itemMap", map);
+
+//		model.addAttribute("functions", caitemService.findByXcatitem("Function"));
+//		model.addAttribute("halls", caitemService.findByXcatitem("Convention Hall"));
+//		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
+//		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
+
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details != null || !details.isEmpty()) {
+			for(Oporddetail d : details) {
+				
+				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
+					for(Caitem c : m.getValue()) {
+						if(c.getXitem().equalsIgnoreCase(d.getXitem())) {
+							c.setSelected(true);
+						}
+					}
+				}
+				
+			}
+		}
+		
 
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
@@ -294,14 +311,32 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		List<String> xitemsL = new ArrayList<>(Arrays.asList(xitems));
+
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
 		if(oh == null) {
 			responseHelper.setErrorStatusAndMessage("Booking header "+ xordernum +" not found");
 			return responseHelper.getResponse();
 		}
 
+		// validation
+		//boolean func
+		List<Oporddetail> deletableDL = new ArrayList<>();
+		List<Oporddetail> existDetails = opordService.findOporddetailByXordernum(xordernum);
+		if(existDetails != null && !existDetails.isEmpty()) {
+			for(Oporddetail d :  existDetails) {
+				// if already added in db then remove from list
+				if(xitemsL.contains(d.getXitem())) {
+					xitemsL.remove(xitemsL.indexOf(d.getXitem()));
+				} else { // if d is not in list, then delete from db
+					deletableDL.add(d);
+				}
+			}
+		}
+
+
 		List<Oporddetail> details = new ArrayList<>();
-		for(String item : Arrays.asList(xitems)) {
+		for(String item : xitemsL) {
 			Caitem caitem = caitemService.findByXitem(item);
 			if(caitem == null) {
 				responseHelper.setErrorStatusAndMessage("Item " + item + " not found to add");
@@ -330,6 +365,13 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 		if(totalHalls == 0) {
 			responseHelper.setErrorStatusAndMessage("Hall selection required");
+			return responseHelper.getResponse();
+		}
+
+		// delete first
+		long dcount = opordService.batchDeleteOpordDetail(deletableDL);
+		if(dcount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete previous selected items which is not not selected now");
 			return responseHelper.getResponse();
 		}
 
@@ -362,6 +404,16 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/opord::opordheaderform";
 	}
 
+	@GetMapping("{xordernum}/oporddetail2/{xrow}/show")
+	public String openOpordDetailModal2(@PathVariable String xordernum, @PathVariable int xrow, Model model) {
+		Oporddetail detail = opordService.findOporddetailByXordernumAndXrow(xordernum, xrow);
+		if(detail == null) return "redirect:/conventionmanagement/hallbooking/" + xordernum;
+
+		model.addAttribute("oporddetail", detail);
+
+		return "pages/conventionmanagement/hallbooking/oporddetailmodal2::oporddetailmodal2";
+	}
+
 	@PostMapping("/oporddetail/save")
 	public @ResponseBody Map<String, Object> saveOporddetail(Oporddetail opordDetail) {
 		if (opordDetail == null || StringUtils.isBlank(opordDetail.getXordernum())) {
@@ -370,34 +422,30 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// Check item already exist in detail list
-		if (opordDetail.getXrow() == 0 && opordService.findOporddetailByXordernumAndXitem(opordDetail.getXordernum(),
-				opordDetail.getXitem()) != null) {
-			responseHelper.setErrorStatusAndMessage(
-					"Item already added into detail list. Please add another one or update existing");
+		if (opordDetail.getXrow() == 0 && opordService.findOporddetailByXordernumAndXitem(opordDetail.getXordernum(), opordDetail.getXitem()) != null) {
+			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
 			return responseHelper.getResponse();
 		}
 
 		// modify line amount
-		opordDetail
-				.setXlineamt(opordDetail.getXqtyord().multiply(opordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		if(opordDetail.getXqtyord() == null) opordDetail.setXqtyord(BigDecimal.ZERO);
+		if(opordDetail.getXrate() == null) opordDetail.setXrate(BigDecimal.ZERO);
+		opordDetail.setXlineamt(opordDetail.getXqtyord().multiply(opordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		Oporddetail existDetail = opordService.findOporddetailByXordernumAndXrow(opordDetail.getXordernum(),
-				opordDetail.getXrow());
+		Oporddetail existDetail = opordService.findOporddetailByXordernumAndXrow(opordDetail.getXordernum(), opordDetail.getXrow());
 		if (existDetail != null) {
-			BeanUtils.copyProperties(opordDetail, existDetail, "xordernum", "xrow");
+			BeanUtils.copyProperties(opordDetail, existDetail, "xordernum", "xrow", "xitem");
 			long count = opordService.updateOpordDetail(existDetail);
 			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update Booking detail");
 				return responseHelper.getResponse();
 			}
-			long uCount = updateAdditionalCharges(existDetail, opordDetail);
-			if (uCount == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-			responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + opordDetail.getXordernum());
+
 			responseHelper.setSuccessStatusAndMessage("Booking detail updated successfully");
+			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + opordDetail.getXordernum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + opordDetail.getXordernum());
+
 			return responseHelper.getResponse();
 		}
 
@@ -407,13 +455,10 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		long uCount = updateAdditionalCharges(null, opordDetail);
-		if (uCount == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + opordDetail.getXordernum());
+
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + opordDetail.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + opordDetail.getXordernum());
 		return responseHelper.getResponse();
 	}
 

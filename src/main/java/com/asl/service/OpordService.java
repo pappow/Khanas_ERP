@@ -28,6 +28,8 @@ public interface OpordService {
 	public long updateOpordDetail(Oporddetail oporddetail);
 
 	public long deleteOpordDetail(Oporddetail oporddetail);
+	
+	public long batchDeleteOpordDetail(List<Oporddetail> oporddetail);
 
 	public Opordheader findOpordHeaderByXordernum(String xordernum);
 

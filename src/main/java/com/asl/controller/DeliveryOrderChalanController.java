@@ -308,7 +308,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			if(dlist != null && !dlist.isEmpty()) {
 				for(Opdodetail d : dlist) {
 					if(itemMap.get(d.getXitem() + '|' + inv.getXwh()) != null) {
-						itemMap.put(d.getXitem(), itemMap.get(d.getXitem() + '|' + inv.getXwh()).add(d.getXqtyord()));
+						itemMap.put(d.getXitem() + '|' + inv.getXwh(), itemMap.get(d.getXitem() + '|' + inv.getXwh()).add(d.getXqtyord()));
 					} else {
 						itemMap.put(d.getXitem() + '|' + inv.getXwh(), d.getXqtyord());
 					}

@@ -13,7 +13,26 @@
 				<div class="row">
 					<input type="hidden" th:field="*{xordernum}"/>
 
-					<div class="col-md-12 item-section">
+
+					<div class="col-md-12 item-section" th:each="map : ${itemMap}">
+						<div class="row">
+							<h4 th:text="${map.key}">Functions</h4>
+						</div>
+						<div class="row">
+							<div class="item-container">
+								<a th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:id="${f.xitem}"
+										class="item-box btn"
+										th:classappend="${f.selected ? 'btn-success' : 'btn-default'}"
+										th:each="f : ${map.value}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="col-md-12 item-section">
 						<h4>Functions</h4>
 						<div class="row">
 							<div class="col-md-12 item-container">
@@ -71,7 +90,7 @@
 								</button>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 				</div>
 			</div>
