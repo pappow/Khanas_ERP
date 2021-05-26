@@ -112,14 +112,14 @@ public class AllSalesOrderController extends ASLAbstractController {
 			String item = bq.getXitem();
 			if(columnRowMap.get(item) != null) {
 				TableColumn c = columnRowMap.get(item);
-				c.setTotalQty(c.getTotalQty().add(bq.getXqtyord()));
+				c.setTotalQty(c.getTotalQty().add(bq.getXqtyord() != null ? bq.getXqtyord() : BigDecimal.ZERO));
 				columnRowMap.put(item, c);
 			} else {
 				TableColumn c = new TableColumn();
 				c.setXitem(item);
 				c.setXcatitem(bq.getXcatitem());
 				c.setXdesc(bq.getXdesc());
-				c.setTotalQty(bq.getXqtyord());
+				c.setTotalQty(bq.getXqtyord() != null ? bq.getXqtyord() : BigDecimal.ZERO);
 				c.setXunitpur(bq.getXunitpur());
 				columnRowMap.put(item, c);
 			}
@@ -132,7 +132,8 @@ public class AllSalesOrderController extends ASLAbstractController {
 				BigDecimal val = BigDecimal.ZERO;
 				for(BranchItem bi : br.getItems()) {
 					if(bi.getXitem().equalsIgnoreCase(bq.getXitem())) {
-						bi.setXqtyord(bi.getXqtyord().add(bq.getXqtyord()));
+						if(bi.getXqtyord() == null) bi.setXqtyord(BigDecimal.ZERO);
+						bi.setXqtyord(bi.getXqtyord().add(bq.getXqtyord() != null ? bq.getXqtyord() : BigDecimal.ZERO));
 						val = val.add(bi.getXqtyord());
 						found = true;
 						break;
@@ -140,9 +141,9 @@ public class AllSalesOrderController extends ASLAbstractController {
 				}
 
 				if(!found) {
-					BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord());
+					BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord() != null ? bq.getXqtyord() : BigDecimal.ZERO);
 					br.getItems().add(bi);
-					val = val.add(bi.getXqtyord());
+					val = val.add(bi.getXqtyord() != null ? bi.getXqtyord() : BigDecimal.ZERO);
 				}
 
 				br.setTotalItemOrdered(br.getTotalItemOrdered().add(val));
@@ -152,10 +153,10 @@ public class AllSalesOrderController extends ASLAbstractController {
 				BranchRow br = new BranchRow();
 				br.setZorg(zorg);
 
-				BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord());
+				BranchItem bi = new BranchItem(bq.getZorg(), bq.getXitem(), bq.getXqtyord() != null ? bq.getXqtyord() : BigDecimal.ZERO);
 				br.getItems().add(bi);
 
-				br.setTotalItemOrdered(bi.getXqtyord());
+				br.setTotalItemOrdered(bi.getXqtyord() != null ? bi.getXqtyord() : BigDecimal.ZERO);
 
 				branchRowMap.put(zorg, br);
 			}
