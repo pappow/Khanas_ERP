@@ -163,7 +163,7 @@
 
 	<insert id="saveOpordDetail" parameterType="Oporddetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM Oporddetail WHERE xordernum=#{xordernum} AND zactive='1' AND zid=#{zid}
+			SELECT COUNT(*) + 1 FROM Oporddetail WHERE xordernum=#{xordernum} AND zid=#{zid}
 		</selectKey>
 		INSERT INTO Oporddetail
 		(
@@ -242,15 +242,17 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<delete id="deleteOpordDetail" parameterType="Oporddetail">
-		DELETE
-		FROM
+	<update id="deleteOpordDetail" parameterType="Oporddetail">
+		UPDATE
 			OPORDDETAIL
+		SET
+			zactive='0'
 		WHERE
 			xordernum=#{xordernum, jdbcType=VARCHAR}
 			AND xrow=#{xrow, jdbcType=INTEGER}
 			AND zid=#{zid, jdbcType=VARCHAR}
-	</delete>
+			AND zactive='1'
+	</update>
 
 	<select id="findOpordHeaderByXordernum" resultType="Opordheader">
 		SELECT * FROM Opordheader WHERE xordernum=#{xordernum} AND zid=#{zid} AND zactive='1'
