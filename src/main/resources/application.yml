@@ -1,3 +1,3 @@
 spring:
   profiles:
-    active: khanas
+    active: dev,convention
