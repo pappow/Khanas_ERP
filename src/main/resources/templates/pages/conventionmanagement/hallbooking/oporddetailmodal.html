@@ -24,7 +24,8 @@
 										th:id="${f.xitem}"
 										class="item-box btn"
 										th:classappend="${f.selected ? 'btn-success' : 'btn-default'}"
-										th:each="f : ${map.value}">
+										th:each="f : ${map.value}"
+										th:disabled="${f.booked}">
 									<p th:text="${f.xdesc}"></p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</a>

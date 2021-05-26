@@ -78,4 +78,6 @@ public interface OpordMapper {
 	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum, String zid);
 
 	public long archiveAllOporddetailByXordernum(String xordernum, String zid);
+
+	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String zid);
 }

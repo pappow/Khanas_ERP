@@ -98,4 +98,7 @@ public class Caitem extends AbstractModel<String> {
 
 	@Transient
 	private boolean selected;
+
+	@Transient
+	private boolean booked;
 }

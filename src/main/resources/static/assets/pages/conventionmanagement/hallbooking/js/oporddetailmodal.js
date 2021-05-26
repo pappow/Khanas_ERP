@@ -47,6 +47,7 @@ $(document).ready(function(){
 	prepareItem();
 
 	$('a.item-box').off('click').on('click', function(e){
+		if($(this))
 		var xitem = $(this).data('xitem');
 		var xcatitem = $(this).data('xcatitem');
 

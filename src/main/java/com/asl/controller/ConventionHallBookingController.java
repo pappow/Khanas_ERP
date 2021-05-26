@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -31,6 +32,7 @@ import com.asl.entity.Vatait;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
+import com.asl.service.HallBookingService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.util.CKTime;
@@ -44,6 +46,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private VataitService vataitService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private HallBookingService hallBookingService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -70,9 +73,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("opordheader", oh);
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 
-		
-		
-		
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 
 
@@ -278,16 +278,23 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		Map<String, List<Caitem>> map = new HashMap<>();
 		map.put("Function", caitemService.findByXcatitem("Function"));
-		map.put("Convention Hall", caitemService.findByXcatitem("Convention Hall"));
 		map.put("Hall Facility", caitemService.findByXcatitem("Hall Facility"));
 		map.put("Convention Hall Food", caitemService.findByXcatitem("Convention Hall Food"));
 		model.addAttribute("itemMap", map);
 
-//		model.addAttribute("functions", caitemService.findByXcatitem("Function"));
-//		model.addAttribute("halls", caitemService.findByXcatitem("Convention Hall"));
-//		model.addAttribute("facilities", caitemService.findByXcatitem("Hall Facility"));
-//		model.addAttribute("foods", caitemService.findByXcatitem("Convention Hall Food"));
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
+		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
+		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate);
 
+		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
+		for(Caitem c : halls) {
+			for(String s : bookedHalls) {
+				if(c.getXitem().equalsIgnoreCase(s)) c.setBooked(true);
+			}
+		}
+		map.put("Convention Hall", halls);
 
 		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
 		if(details != null || !details.isEmpty()) {

@@ -581,4 +581,20 @@
 			AND zactive='1'
 	</update>
 
+	<select id="allBookedHallsInDateRange" resultType="String">
+		select
+			distinct opd.xitem
+		from 
+			oporddetail opd
+			join opordheader oh on oh.xordernum = opd.xordernum and oh.zid = opd.zid and oh.zactive='1'
+		where
+			opd.zid=#{zid}
+			and opd.zactive='1'
+			and opd.xcatitem=#{xcatitem}
+			and 
+				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xstartdate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate})
+				OR
+				((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xenddate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xenddate}))
+	</select>
+
 </mapper>
