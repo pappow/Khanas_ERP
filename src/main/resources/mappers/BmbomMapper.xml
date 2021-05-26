@@ -113,7 +113,7 @@
 
 	<insert id="saveBmBomDetail" parameterType="Bmbomdetail">
 		<selectKey keyProperty="xbomrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM bmbomdetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xbomrow), 0) + 1 FROM bmbomdetail WHERE xbomkey=#{xbomkey} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO bmbomdetail
 		(

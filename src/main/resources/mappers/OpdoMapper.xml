@@ -145,7 +145,7 @@
 
 	<insert id="saveOpdoDetail" parameterType="Opdodetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM Opdodetail WHERE xdornum=#{xdornum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM Opdodetail WHERE xdornum=#{xdornum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO Opdodetail
 		(
