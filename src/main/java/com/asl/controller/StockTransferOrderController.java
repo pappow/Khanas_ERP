@@ -189,7 +189,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		if(imtorDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
+		if(imtorDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1) {
 			responseHelper.setErrorStatusAndMessage("Please enter valid quantity");
 			return responseHelper.getResponse();
 		}

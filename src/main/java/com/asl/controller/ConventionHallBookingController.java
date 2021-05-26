@@ -69,7 +69,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		if (oh == null) return "redirect:/conventionmanagement/hallbooking";
 		model.addAttribute("opordheader", oh);
 		model.addAttribute("vataitList", vataitService.getAllVatait());
+
 		
+		
+		
+		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 
 
 		// model.addAttribute("soprefix",
@@ -81,7 +85,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("bookingOrderList",
 				opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(),
 						TransactionCodeType.HALL_BOOKING_SALES_ORDER.getdefaultCode()));
-		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
+		
 
 		return "pages/conventionmanagement/hallbooking/opord";
 	}
@@ -372,10 +376,12 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// delete first
-		long dcount = opordService.batchDeleteOpordDetail(deletableDL);
-		if(dcount == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't delete previous selected items which is not not selected now");
-			return responseHelper.getResponse();
+		if(!deletableDL.isEmpty()) {
+			long dcount = opordService.batchDeleteOpordDetail(deletableDL);
+			if(dcount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't delete previous selected items which is not selected now");
+				return responseHelper.getResponse();
+			}
 		}
 
 		// save 
