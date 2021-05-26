@@ -235,7 +235,7 @@ public class AllSalesOrderController extends ASLAbstractController {
 		for(BranchesRequisitions br : bqList) {
 			if(browMap.get(br.getZorg() + "|" + br.getXitem()) != null) {
 				BranchItem brow = browMap.get(br.getZorg() + "|" + br.getXitem());
-				brow.setXqtyord(brow.getXqtyord().add(br.getXqtyord()));
+				brow.setXqtyord(brow.getXqtyord().add(br.getXqtyord() != null ? br.getXqtyord() : BigDecimal.ZERO));
 			} else {
 				BranchItem brow = new BranchItem();
 				brow.setZorg(br.getZorg());
