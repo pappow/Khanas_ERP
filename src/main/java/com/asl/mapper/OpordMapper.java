@@ -79,5 +79,5 @@ public interface OpordMapper {
 
 	public long archiveAllOporddetailByXordernum(String xordernum, String zid);
 
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String zid);
+	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum, String zid);
 }

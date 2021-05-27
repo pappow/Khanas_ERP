@@ -11,5 +11,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface HallBookingService {
 
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate);
+	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum);
 }

@@ -20,9 +20,9 @@ public class HallBookingServiceImpl extends AbstractGenericService implements Ha
 	@Autowired private OpordMapper opordMapper;
 
 	@Override
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate) {
-		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
-		return opordMapper.allBookedHallsInDateRange(xcatitem, xstartdate, xenddate, sessionManager.getBusinessId());
+	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum) {
+		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate) || StringUtils.isBlank(xordernum)) return Collections.emptyList();
+		return opordMapper.allBookedHallsInDateRange(xcatitem, xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
 	}
 
 }

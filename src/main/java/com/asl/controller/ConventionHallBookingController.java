@@ -160,10 +160,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("End time required");
 			return responseHelper.getResponse();
 		}
-		if(opordheader.getXdate().after(opordheader.getXstartdate())) {
-			responseHelper.setErrorStatusAndMessage("Booking date can't be after Start date");
-			return responseHelper.getResponse();
-		}
 
 		Calendar stdt  = Calendar.getInstance();
 		stdt.setTime(opordheader.getXstartdate());
@@ -179,6 +175,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		if(stdt.getTime().after(endt.getTime())) {
 			responseHelper.setErrorStatusAndMessage("Start date can't be after End date");
+			return responseHelper.getResponse();
+		}
+
+		if(opordheader.getXdate().after(stdt.getTime())) {
+			responseHelper.setErrorStatusAndMessage("Booking date can't be after Start date");
 			return responseHelper.getResponse();
 		}
 
@@ -230,7 +231,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking");
+		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + opordheader.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Booking Order created successfully");
 		return responseHelper.getResponse();
 	}
@@ -286,7 +287,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
 		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
-		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate);
+		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, xordernum);
 
 		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
 		for(Caitem c : halls) {
@@ -297,7 +298,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		map.put("Convention Hall", halls);
 
 		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
-		if(details != null || !details.isEmpty()) {
+		if(details != null && !details.isEmpty()) {
 			for(Oporddetail d : details) {
 				
 				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
@@ -310,7 +311,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 				
 			}
 		}
-		
 
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
@@ -392,12 +392,13 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// save 
-		long count = opordService.saveBatchOpordDetail(details);
-		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't save items");
-			return responseHelper.getResponse();
+		if(!details.isEmpty()) {
+			long count = opordService.saveBatchOpordDetail(details);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't save items");
+				return responseHelper.getResponse();
+			}
 		}
-
 
 		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + oh.getXordernum());
 		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + oh.getXordernum());

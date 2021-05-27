@@ -5,6 +5,7 @@ $(document).ready(function(){
 
 	function prepareItem(){
 		//console.log($('a.selected').length)
+		items = [];
 
 		$.each($('a.btn-success'), function(bi, b){
 			var xitem = $(b).data('xitem');
@@ -91,6 +92,7 @@ $(document).ready(function(){
 	})
 
 	function calculateRate(){
+		console.log("%cCalculating",'color:green');
 		var total = 0;
 		items.forEach(function(item, index){
 			total += $('#' + item).data('xrate');

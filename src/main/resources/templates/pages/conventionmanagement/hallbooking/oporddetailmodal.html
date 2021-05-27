@@ -2,6 +2,8 @@
 <div id="oporddetailmodal" th:fragment="oporddetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
 	<div class="modal-dialog modal-lg">
 		<link rel="stylesheet" type="text/css" th:href="@{/assets/pages/conventionmanagement/hallbooking/css/oporddetailmodal.css}"/>
+		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/pages/conventionmanagement/hallbooking/js/oporddetailmodal.js}"></script>
 
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -20,13 +22,21 @@
 						</div>
 						<div class="row">
 							<div class="item-container">
-								<a th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+								<a th:if="${not f.booked}" th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
 										th:id="${f.xitem}"
 										class="item-box btn"
 										th:classappend="${f.selected ? 'btn-success' : 'btn-default'}"
-										th:each="f : ${map.value}"
-										th:disabled="${f.booked}">
+										th:each="f : ${map.value}">
 									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</a>
+								<a th:if="${f.booked}" th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:id="${f.xitem}"
+										class="item-box2 btn btn-danger"
+										th:each="f : ${map.value}">
+									<p>
+										<span th:text="${f.xdesc}"></span> <span>[Booked]</span>
+									</p>
 									<p th:text="${f.xrate} + '/-'"></p>
 								</a>
 							</div>
@@ -100,7 +110,5 @@
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
 			</div>
 		</div>
-		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
-		<script type="text/javascript" th:src="@{/assets/pages/conventionmanagement/hallbooking/js/oporddetailmodal.js}"></script>
 	</div>
 </div>

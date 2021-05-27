@@ -591,6 +591,7 @@
 			opd.zid=#{zid}
 			and opd.zactive='1'
 			and opd.xcatitem=#{xcatitem}
+			and oh.xordernum != #{xordernum}
 			and 
 				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xstartdate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate})
 				OR
