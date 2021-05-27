@@ -52,77 +52,79 @@
 									<h1>Business</h1>
 								</div>
 								<div class="form-action-button">
+									<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+									<a th:href="@{/posbusiness}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Reset</a>
 									<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 								</div>
 									
 								<div class="section-body section-border">
-									<form id="mainform" class="form-horizontal" method="post">
+									<form id="mainform" class="form-horizontal" method="post" th:action="@{/posbusiness/save}" th:object="${business}">
 										<div class="row">
 											<div class="col-md-6">
 												<div class="row">
 													<div class="col-md-8">
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Business Name</label>
+															<label class="control-label col-md-4" for="zorg">Business Name</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{zorg}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Business ID</label>
+															<label class="control-label col-md-4" for="zid">Business ID</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{zid}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Outlet No.</label>
+															<label class="control-label col-md-4" for="xoutlet">Outlet No.</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{xoutlet}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Terminal No.</label>
+															<label class="control-label col-md-4" for="xshopno">Shop No.</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{xshopno}" maxlength="100"/>
+															</div>
+															
+														</div>
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xterminalno">Terminal No.</label>
+															<div class="col-md-8">
+																<input type="text" class="form-control" th:field="*{xterminalno}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Address</label>
+															<label class="control-label col-md-4" for="xmadd">Address</label>
 															<div class="col-md-8">
-																<textarea class="form-control" rows="3" placeholder="Your Address here.."></textarea>
+																<textarea class="form-control" rows="3" th:field="*{xmadd}" placeholder="Your Address here.."></textarea>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Phone No.</label>
+															<label class="control-label col-md-4" for="xcontact">Contact No.</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{xcontact}" maxlength="100"/>
 															</div>
 															
 														</div>
 														
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">VAT Reg. No.</label>
+															<label class="control-label col-md-4" for="xvatregno">VAT Reg. No.</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{xvatregno}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Musak No.</label>
+															<label class="control-label col-md-4" for="xmusakno">Musak No.</label>
 															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
+																<input type="text" class="form-control" th:field="*{xmusakno}" maxlength="100"/>
 															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xitem">Business Name</label>
-															<div class="col-md-8">
-																<input type="text" class="form-control" maxlength="100"/>
-															</div>
-															
 														</div>
 														<div class="form-group">
 															<div class="col-sm-8 col-sm-offset-4">
-																<div class="radio">
-																	<label><input type="radio" class="form-control-input2" required="required"/>Casual Dine</label>
-																	<label><input type="radio" class="form-control-input2" required="required"/>Fine Dine</label>
+																<div class="radio" for="xdine">
+																	<label><input type="radio" class="form-control-input2" th:field="*{xdine}" th:value="${T(com.asl.enums.ProfileType).C}"  required="required"/>Casual Dine</label>
+																	<label><input type="radio" class="form-control-input2" th:field="*{xdine}" th:value="${T(com.asl.enums.ProfileType).F}"  required="required"/>Fine Dine</label>
 																</div>
 															</div>
 														</div>

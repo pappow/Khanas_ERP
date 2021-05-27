@@ -9,9 +9,7 @@
 	<body>
 
 		<!-- Header section -->
-		<div class="header-section" ></div>
-		
-
+		<div class="header-section" th:include="commons :: header-section"></div>
 
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
@@ -29,9 +27,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/role}">Role</a></li>
-									
 									</div>
-								
 								</div>
 							</div>
 						</div>
@@ -53,11 +49,13 @@
 										<h1>Role</h1>
 									</div>
 									<div class="form-action-button">
-										<a class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-										<a class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Reset</a>
+										<a th:href="@{/role}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:if="${roles.newdata}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+										<a th:if="${not roles.newdata}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" method="post" th:action="@{/role/save}" th:object="${roles}">
+											<input type="hidden" th:field="*{newdata}">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="row">
@@ -72,7 +70,7 @@
 																<label class="control-label col-sm-4" for="zactive">Active ?</label>
 																<div class="col-sm-8">
 																	<div class="checkbox">
-																		<label><input type="checkbox" th:field="*{zactive}" class="form-control-input2" value="1"/></label>
+																		<label><input type="checkbox" th:field="*{zactive}" class="form-control-input2"/></label>
 																	</div>
 																</div>
 															</div>
@@ -107,10 +105,20 @@
 										<div style="overflow-x: auto;">
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
-													
+													<tr>
+														<th>Name</th>
+														<th>Discount Limit</th>
+														<th>Sp Discount Limit</th>
+														<th>Active Status</th>
+													</tr>
 												</thead>
 												<tbody>
-													
+													<tr th:each="ar : ${allRole}">
+														<td><a th:href="@{/role/} + ${ar.xrole}" th:text="${ar.xrole}"></a></td>
+														<td th:text="${ar.xmaxdisc}"></td>
+														<td th:text="${ar.xmaxdiscf}"></td>
+														<td th:text="${ar.zactive}"></td>
+													</tr>
 												</tbody>
 											</table>
 										</div>

@@ -3,8 +3,12 @@ package com.asl.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.asl.enums.ProfileType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -101,5 +105,22 @@ public class Zbusiness extends AbstractModel<String> {
 
 	@Column(name = "centralzid")
 	private String centralzid;
+
+	@Column(name = "xoutlet")
+	private String xoutlet;
+
+	@Column(name = "xshopno")
+	private String xshopno;
+
+	@Column(name = "xterminalno")
+	private String xterminalno;
+
+	@Column(name = "xmusakno")
+	private String xmusakno;
+
+	@Column(name = "xdine")
+	@Enumerated(EnumType.STRING)
+	private ProfileType xdine;
+	
 
 }

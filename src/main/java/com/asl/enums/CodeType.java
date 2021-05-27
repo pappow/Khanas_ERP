@@ -15,6 +15,8 @@ public enum CodeType {
 	CUSTOMER_STATUS("Customer Status"),
 	CHEQUE_STATUS("Cheque Status"),
 
+	DISCOUNT_TYPE("Discount Type"),
+
 	EMPLOYEE_CATEGORY("Employee Category"),
 	EMPLOYEE_DEPARTMENT("Employee Department"),
 	EMPLOYEE_DESIGNATION("Employee Designation"),

@@ -1,6 +1,5 @@
 package com.asl.service.impl;
 
-
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,21 +11,38 @@ import com.asl.mapper.XRolesMapper;
 import com.asl.service.XRolesService;
 
 @Service
-public class XrolesServiceImpl extends AbstractGenericService implements XRolesService{
+public class XrolesServiceImpl extends AbstractGenericService implements XRolesService {
 
 	@Autowired
 	private XRolesMapper xRolesMapper;
-	
+
 	@Override
 	public long save(Xroles xroles) {
-		if (xroles == null ) return 0;
+		if (xroles == null) return 0;
 		xroles.setZid(sessionManager.getBusinessId());
+		xroles.setZauserid(getAuditUser());
 		return xRolesMapper.saveXroles(xroles);
 	}
 
 	@Override
+	public long update(Xroles xroles) {
+		if (xroles == null) return 0;
+		xroles.setZid(sessionManager.getBusinessId());
+		xroles.setZuuserid(getAuditUser());
+		return xRolesMapper.updateXroles(xroles);
+	}
+
+
+
+	@Override
 	public List<Xroles> getAllXroles() {
 		return xRolesMapper.getAllXroles(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Xroles findByXrole(String xrole) {
+		if(StringUtils.isBlank(xrole)) return null;
+		return xRolesMapper.findByXrole(xrole, sessionManager.getBusinessId());
 	}
 
 }

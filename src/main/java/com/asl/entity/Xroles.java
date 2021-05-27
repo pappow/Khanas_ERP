@@ -1,11 +1,14 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,21 +31,22 @@ public class Xroles extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xrole")
 	private String xrole;
-	
+
 	@Column(name = "xaccess")
 	private String xaccess;
-	
+
 	@Column(name = "xdesc")
 	private String xdesc;
-	
+
 	@Column(name = "xmaxdisc")
-	private Integer xmaxdisc;
-	
+	private BigDecimal xmaxdisc;
+
 	@Column(name = "xmaxdiscf")
-	private Integer xmaxdiscf;
-	
+	private BigDecimal xmaxdiscf;
+
 	@Column(name = "xshopno")
 	private String xshopno;
-	
 
+	@Transient
+	private boolean newdata;
 }

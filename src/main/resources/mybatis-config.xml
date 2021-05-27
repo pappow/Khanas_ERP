@@ -46,5 +46,6 @@
 		<mapper resource="mappers/DailyDistributionMapper.xml"/>
 		<mapper resource="mappers/PSVMapper.xml"/>
 		<mapper resource="mappers/XRolesMapper.xml"/>
+		<mapper resource="mappers/POSPromotionMapper.xml"/>
 	</mappers>
 </configuration>
