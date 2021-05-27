@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.asl.entity.ConventionBookedDetails;
+
 /**
  * @author Zubayer Ahamed
  * @since Mar 8, 2021
@@ -12,4 +14,6 @@ import org.springframework.stereotype.Component;
 public interface HallBookingService {
 
 	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum);
+
+	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate);
 }

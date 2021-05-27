@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.ConventionBookedDetails;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;

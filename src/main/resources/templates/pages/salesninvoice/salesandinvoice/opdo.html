@@ -278,7 +278,7 @@
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
 															<div class="col-md-6">
-																<input type="hidden" class="form-control hidden" th:field="*{xait}"/>
+																<input type="hidden" class="form-control" th:field="*{xait}"/>
 																<input type="text" class="form-control" th:value="*{xait}" disabled="disabled"/>
 															</div>
 														</div>
@@ -475,7 +475,7 @@
 						var vatPercent = parseFloat(data.xvat);
 						var aitPercent = parseFloat(data.xait);
 						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;						
+						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
 						
 						$('input[name="xvatamt"]').val(vatAmount);
 						$('input.xvatamt-show').val(vatAmount);

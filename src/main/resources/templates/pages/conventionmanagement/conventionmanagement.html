@@ -63,11 +63,11 @@
 							</div>
 						</section>
 					</div>
-					
+
 					<div class="col-md-8">
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Available Hall Rooms</h1>
+								<h1>Hall Status (Today)</h1>
 							</div>
 							<div class="section-body">
 								<div class="row">
@@ -75,17 +75,17 @@
 										<div class="padding-5">
 											<span th:text="${hall.xdesc}" class="fa-1x hall-xdesc"></span>
 										</div>
-										<div>
+										<!-- <div>
 											Price - <span th:text="${hall.xrate}" class="hall-xrate"></span>
-										</div>
+										</div> -->
 									</div>
 									<div class="hall-card-red text-center add-hall" th:each="hall : ${bookedHalls}" >
 										<div class="padding-5">
 											<span th:text="${hall.xdesc}" class="fa-1x hall-xdesc"></span>
 										</div>
-										<div>
+										<!-- <div>
 											Price - <span th:text="${hall.xrate}" class="hall-xrate"></span>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -98,27 +98,4 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	
-	<style>
-		.hall-card{
-			width: 20%;
-			background-color: #17a261 ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-		
-		.hall-card-red{
-			width: 20%;
-			background-color: #c9302c ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-		
-	</style>
 </html>

@@ -27,6 +27,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 
 	@Autowired private OpordMapper opordMapper;
 
+	@Transactional
 	@Override
 	public long saveOpordHeader(Opordheader opordheader) {
 		if(opordheader == null) return 0;
@@ -35,12 +36,15 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.saveOpordHeader(opordheader);
 	}
 
+	@Transactional
 	@Override
 	public long updateOpordHeader(Opordheader opordheader) {
 		if(opordheader == null) return 0;
 		opordheader.setZid(sessionManager.getBusinessId());
 		opordheader.setZuuserid(getAuditUser());
-		return opordMapper.updateOpordHeader(opordheader);
+		long count = opordMapper.updateOpordHeader(opordheader);
+		updateOpordHeaderTotalAmtAndGrandTotalAmt(opordheader.getXordernum());
+		return count;
 	}
 
 	@Transactional

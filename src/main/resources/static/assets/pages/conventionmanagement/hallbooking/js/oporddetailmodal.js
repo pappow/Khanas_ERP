@@ -95,7 +95,10 @@ $(document).ready(function(){
 		console.log("%cCalculating",'color:green');
 		var total = 0;
 		items.forEach(function(item, index){
-			total += $('#' + item).data('xrate');
+			if(item != undefined){
+				total += $('#' + item).data('xrate');
+			}
+			
 		});
 		$('.rate-btn').html("Total : " + total + "/-");
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.ConventionBookedDetails;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;
@@ -80,4 +81,6 @@ public interface OpordMapper {
 	public long archiveAllOporddetailByXordernum(String xordernum, String zid);
 
 	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum, String zid);
+	
+	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate, String zid);
 }
