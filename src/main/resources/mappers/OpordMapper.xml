@@ -622,9 +622,9 @@
 			and opd.zactive='1'
 			and opd.xcatitem=#{xcatitem}
 			and 
-				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &gt;= #{xstartdate} OR (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &lt;= #{xstartdate})
-				AND
-				((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &gt;= #{xenddate} OR (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &lt;= #{xenddate}))
+				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &gt;= #{xstartdate} AND (to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xenddate})
+				OR
+				((to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate} AND (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &lt;= #{xenddate}))
 	</select>
 
 </mapper>

@@ -31,16 +31,9 @@ public class ConventionManagementController extends ASLAbstractController {
 	@GetMapping
 	public String loadConventionManagementMenuPage(Model model) {
 
-		model.addAttribute("availableHalls", opordService.findAvailableHallsByDate(new Date()));
-		model.addAttribute("bookedHalls", opordService.findBookedHallsByXfuncdate(new Date()));
-
-
-		Map<String, List<Caitem>> map = new HashMap<>();
-		model.addAttribute("itemMap", map);
-
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
@@ -55,17 +48,15 @@ public class ConventionManagementController extends ASLAbstractController {
 		String xenddate = sdf.format(cal2.getTime()).toUpperCase();
 		List<ConventionBookedDetails> bookedHalls = hallBookingService.allBookedHallsInDateRange2("Convention Hall", xstartdate, xenddate);
 		bookedHalls.stream().forEach(b -> b.setBooked(true));
+		List<String> bhList = new ArrayList<String>();
+		bookedHalls.stream().forEach(b -> bhList.add(b.getXitem()));
 
 		model.addAttribute("bookedHalls", bookedHalls);
 
 		List<Caitem> availHalls = new ArrayList<>();
 		List<Caitem> items = caitemService.findByXcatitem("Convention Hall");
 		for(Caitem c : items) {
-			for(ConventionBookedDetails booked : bookedHalls) {
-				if(!c.getXitem().equals(booked.getXitem())) {
-					availHalls.add(c);
-				}
-			}
+			if(!bhList.contains(c.getXitem())) availHalls.add(c);
 		}
 
 		model.addAttribute("availableHalls", availHalls);

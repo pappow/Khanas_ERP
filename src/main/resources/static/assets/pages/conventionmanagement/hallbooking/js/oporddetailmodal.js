@@ -7,7 +7,7 @@ $(document).ready(function(){
 		//console.log($('a.selected').length)
 		items = [];
 
-		$.each($('a.btn-success'), function(bi, b){
+		$.each($('a.item-box.btn-success'), function(bi, b){
 			var xitem = $(b).data('xitem');
 			var xcatitem = $(b).data('xcatitem');
 
@@ -64,7 +64,6 @@ $(document).ready(function(){
 				items.splice(index, 1);
 			}
 			$(this).toggleClass("btn-success btn-default");
-			console.log({items});
 			calculateRate();
 			return;
 		}
