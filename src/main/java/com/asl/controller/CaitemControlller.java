@@ -98,7 +98,7 @@ public class CaitemControlller extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Item Master saved successfully");
-		responseHelper.setRedirectUrl("/mastersetup/caitem/");
+		responseHelper.setRedirectUrl("/mastersetup/caitem/" + caitem.getXitem());
 		return responseHelper.getResponse();
 	}
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Hall Booking</title>
+		<title>Room Booking</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -26,7 +26,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/roommanagement}">Room Management</a></li>
-										<li class="active"><a th:href="@{/roommanagement/roombooking}">Hall Booking</a></li>
+										<li class="active"><a th:href="@{/roommanagement/roombooking}">Room Booking</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -49,7 +49,7 @@
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div id="opordheaderform" th:fragment="opordheaderform">
 										<div class="section-header sectionbartoggle">
-											<h1>Hall Booking</h1>
+											<h1>Room Booking</h1>
 										</div>
 										<div class="form-action-button">
 											<a th:href="@{/roommanagement/roombooking}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
@@ -183,6 +183,24 @@
 														</div>
 
 														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatus">Payment Type : </label>
+															<div class="col-md-6">
+																<select class="form-control">
+																	<option th:each="p : ${paymentType}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatus">Payment Mode : </label>
+															<div class="col-md-6">
+																<select class="form-control">
+																	<option th:each="p : ${paymentMode}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group">
 															<label class="control-label col-md-4" for="xstatus">Status : </label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xstatus}">
@@ -193,18 +211,10 @@
 													</div>
 													<div class="col-md-6">
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xhallamt">Hall : </label>
+															<label class="control-label col-md-4" for="xroomamt">Room : </label>
 															<div class="col-md-6">
-																<input type="hidden" class="form-control" th:field="*{xhallamt}">
-																<input type="text" class="form-control" th:value="*{xhallamt}" disabled="disabled">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xfunctionamt">Function : </label>
-															<div class="col-md-6">
-																<input type="hidden" class="form-control" th:field="*{xfunctionamt}">
-																<input type="text" class="form-control" th:value="*{xfunctionamt}" disabled="disabled">
+																<input type="hidden" class="form-control" th:field="*{xroomamt}">
+																<input type="text" class="form-control" th:value="*{xroomamt}" disabled="disabled">
 															</div>
 														</div>
 
@@ -271,6 +281,20 @@
 															</div>
 														</div>
 
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xpaid">Paid : </label>
+															<div class="col-md-6">
+																<input type="number" min="0" class="form-control xpaid" th:field="*{xpaid}">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xdue">Due : </label>
+															<div class="col-md-6">
+																<input type="number" min="0" class="form-control xdue" th:value="*{xdue}" disabled="disabled">
+															</div>
+														</div>
+
 													</div>
 												</div>
 											</form>
@@ -281,6 +305,88 @@
 												ck.ui.config.editmode();
 												ck.ui.config.dateAndTimepicker();
 											})
+										</script>
+										<script>
+											$(document).ready(function(){
+												$("input[name='xdiscamt']").off('blur').on('blur', function(e){
+
+													var xtotamt = parseFloat($("input[name='xtotamt']").val());
+													var vatAmount = parseFloat($("input[name='xvatamt']").val());
+													var aitAmount = parseFloat($("input[name='xaitamt']").val());
+													var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
+													if(isNaN(xdiscamt)){
+														xdiscamt = 0;
+														$("input[name='xdiscamt']").val(0);
+													}
+													var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
+													$('input.xgrandtot').val(grandTotal);
+									
+													
+													if(isNaN($('input.xpaid').val())){
+														$(this).val(0);
+													}
+													var xpaid =  parseFloat($('input.xpaid').val());
+													var xdue = grandTotal - xpaid;
+													$('input.xdue').val(xdue);
+												});
+									
+												$("input[name='xpaid']").off('blur').on('blur', function(e){
+													var grandTotal = parseFloat($('input.xgrandtot').val());
+									
+													if(isNaN($(this).val())){
+														$(this).val(0);
+													}
+													var xpaid =  parseFloat($(this).val());
+													var xdue = grandTotal - xpaid;
+													$('input.xdue').val(xdue);
+												});
+									
+									
+												$(".vatait-select").on("change", function(){
+													var vataitId = $(".vatait-select").val();
+									
+													loadingMask2.show(),
+													$.ajax({
+														url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
+														type : 'GET',
+														success: function(data){
+															loadingMask2.hide();
+															var vatPercent = parseFloat(data.xvat);
+															var aitPercent = parseFloat(data.xait);
+															var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
+															var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
+									
+															$('input[name="xvatamt"]').val(vatAmount);
+															$('input.xvatamt-show').val(vatAmount);
+															$('input[name="xaitamt"]').val(aitAmount);
+															$('input.xaitamt-show').val(aitAmount);
+									
+															var xtotamt = parseFloat($("input[name='xtotamt']").val());
+															var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
+															if(isNaN(xdiscamt)){
+																xdiscamt = 0;
+																$("input[name='xdiscamt']").val(0);
+															}
+															var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
+															$('input.xgrandtot').val(grandTotal);
+															
+															if(isNaN($('input.xpaid').val())){
+																$(this).val(0);
+															}
+															var xpaid =  parseFloat($('input.xpaid').val());
+															var xdue = grandTotal - xpaid;
+															$('input.xdue').val(xdue);
+															
+														},
+														error : function(jqXHR, status, errorThrown){
+															showMessage(status, "Something went wrong .... ");
+															loadingMask2.hide();
+														}
+													});
+												});
+									
+											})
+											
 										</script>
 
 									</div>
@@ -373,62 +479,5 @@
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-
-	<script>
-		$(document).ready(function(){
-			$("input[name='xdiscamt']").off('blur').on('blur', function(e){
-
-				var xtotamt = parseFloat($("input[name='xtotamt']").val());
-				var vatAmount = parseFloat($("input[name='xvatamt']").val());
-				var aitAmount = parseFloat($("input[name='xaitamt']").val());
-				var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
-				if(isNaN(xdiscamt)){
-					xdiscamt = 0;
-					$("input[name='xdiscamt']").val(0);
-				}
-				var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
-				$('input.xgrandtot').val(grandTotal);
-
-			})
-
-
-			$(".vatait-select").on("change", function(){
-				var vataitId = $(".vatait-select").val();
-
-				loadingMask2.show(),
-				$.ajax({
-					url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
-					type : 'GET',
-					success: function(data){
-						loadingMask2.hide();
-						var vatPercent = parseFloat(data.xvat);
-						var aitPercent = parseFloat(data.xait);
-						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
-
-						$('input[name="xvatamt"]').val(vatAmount);
-						$('input.xvatamt-show').val(vatAmount);
-						$('input[name="xaitamt"]').val(aitAmount);
-						$('input.xaitamt-show').val(aitAmount);
-
-						var xtotamt = parseFloat($("input[name='xtotamt']").val());
-						var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
-						if(isNaN(xdiscamt)){
-							xdiscamt = 0;
-							$("input[name='xdiscamt']").val(0);
-						}
-						var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
-						$('input.xgrandtot').val(grandTotal);
-					},
-					error : function(jqXHR, status, errorThrown){
-						showMessage(status, "Something went wrong .... ");
-						loadingMask2.hide();
-					}
-				});
-			});
-
-		})
-		
-	</script>
 	
 </html>

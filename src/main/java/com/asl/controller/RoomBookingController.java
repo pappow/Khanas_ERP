@@ -28,6 +28,7 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
@@ -51,6 +52,8 @@ public class RoomBookingController extends ASLAbstractController {
 		model.addAttribute("opordheader", getDefaultOpordHeader());
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getdefaultCode()));
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		return "pages/roommanagement/roombooking/opord";
 	}
 
@@ -63,6 +66,8 @@ public class RoomBookingController extends ASLAbstractController {
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getdefaultCode()));
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		return "pages/roommanagement/roombooking/opord";
 	}
 
@@ -72,8 +77,7 @@ public class RoomBookingController extends ASLAbstractController {
 		oh.setXtotguest(0);
 		oh.setXstarttime("00:00");
 		oh.setXendtime("23:59");
-		oh.setXhallamt(BigDecimal.ZERO);
-		oh.setXfunctionamt(BigDecimal.ZERO);
+		oh.setXroomamt(BigDecimal.ZERO);
 		oh.setXfoodamt(BigDecimal.ZERO);
 		oh.setXfacamt(BigDecimal.ZERO);
 		oh.setXtotamt(BigDecimal.ZERO);
@@ -82,6 +86,8 @@ public class RoomBookingController extends ASLAbstractController {
 		oh.setXaitamt(BigDecimal.ZERO);
 		oh.setXdiscamt(BigDecimal.ZERO);
 		oh.setXgrandtot(BigDecimal.ZERO);
+		oh.setXpaid(BigDecimal.ZERO);
+		oh.setXdue(BigDecimal.ZERO);
 		oh.setXstatus("Open");
 		return oh;
 	}
@@ -174,6 +180,8 @@ public class RoomBookingController extends ASLAbstractController {
 		BigDecimal grandTotal = (opordheader.getXtotamt().add(opordheader.getXvatamt()).add(opordheader.getXaitamt())).subtract(opordheader.getXdiscamt());
 		if(opordheader.getXgrandtot() == null) opordheader.setXgrandtot(grandTotal);
 
+		if(opordheader.getXpaid() == null) opordheader.setXpaid(BigDecimal.ZERO);
+		opordheader.setXdue(opordheader.getXgrandtot().subtract(opordheader.getXpaid()));
 
 		// if existing then update
 		Opordheader existOh = opordService.findOpordHeaderByXordernum(opordheader.getXordernum());
@@ -202,7 +210,7 @@ public class RoomBookingController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 
-			responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + existOh.getXordernum());
+			responseHelper.setRedirectUrl("/roommanagement/roombooking" + existOh.getXordernum());
 			responseHelper.setSuccessStatusAndMessage("Booking order updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -214,7 +222,7 @@ public class RoomBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + opordheader.getXordernum());
+		responseHelper.setRedirectUrl("/roommanagement/roombooking" + opordheader.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Booking Order created successfully");
 		return responseHelper.getResponse();
 	}
@@ -248,7 +256,7 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Booking updated successfully");
-		responseHelper.setRedirectUrl("/conventionmanagement/hallbooking/" + opordHeader.getXordernum());
+		responseHelper.setRedirectUrl("/roommanagement/roombooking" + opordHeader.getXordernum());
 		return responseHelper.getResponse();
 	}
 
@@ -290,7 +298,7 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 		}
 
-		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
+		return "pages/roommanagement/oporddetailmodal::oporddetailmodal";
 	}
 
 	@PostMapping("/oporddetails/save")
@@ -378,8 +386,8 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + oh.getXordernum());
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + oh.getXordernum());
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + oh.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + oh.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Items saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -388,7 +396,7 @@ public class RoomBookingController extends ASLAbstractController {
 	public String reloadOpdoDetailTable(@PathVariable String xordernum, Model model) {
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
-		return "pages/conventionmanagement/hallbooking/opord::oporddetailtable";
+		return "pages/roommanagement/roombookingopord::oporddetailtable";
 	}
 
 	@GetMapping("/opordheaderform/{xordernum}")
@@ -396,16 +404,18 @@ public class RoomBookingController extends ASLAbstractController {
 		model.addAttribute("hallbookingpreffix", xtrnService.findByXtypetrn(TransactionCodeType.ROOM_BOOKING_SALES_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
-		return "pages/conventionmanagement/hallbooking/opord::opordheaderform";
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+		return "pages/roommanagement/roombookingopord::opordheaderform";
 	}
 
 	@GetMapping("{xordernum}/oporddetail2/{xrow}/show")
 	public String openOpordDetailModal2(@PathVariable String xordernum, @PathVariable int xrow, Model model) {
 		Oporddetail detail = opordService.findOporddetailByXordernumAndXrow(xordernum, xrow);
-		if(detail == null) return "redirect:/conventionmanagement/hallbooking/" + xordernum;
+		if(detail == null) return "redirect:/roommanagement/roombooking" + xordernum;
 
 		model.addAttribute("oporddetail", detail);
-		return "pages/conventionmanagement/hallbooking/oporddetailmodal2::oporddetailmodal2";
+		return "pages/roommanagement/oporddetailmodal2::oporddetailmodal2";
 	}
 
 	@PostMapping("/oporddetail/save")
@@ -437,8 +447,8 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 
 			responseHelper.setSuccessStatusAndMessage("Booking detail updated successfully");
-			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + opordDetail.getXordernum());
-			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + opordDetail.getXordernum());
+			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + opordDetail.getXordernum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + opordDetail.getXordernum());
 
 			return responseHelper.getResponse();
 		}
@@ -451,8 +461,8 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + opordDetail.getXordernum());
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + opordDetail.getXordernum());
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + opordDetail.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + opordDetail.getXordernum());
 		return responseHelper.getResponse();
 	}
 
@@ -471,8 +481,8 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + xordernum);
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + xordernum);
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + xordernum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + xordernum);
 		return responseHelper.getResponse();
 	}
 

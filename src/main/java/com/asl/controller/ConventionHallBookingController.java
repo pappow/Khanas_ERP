@@ -28,6 +28,7 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
@@ -51,6 +52,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("opordheader", getDefaultOpordHeader());
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.HALL_BOOKING_SALES_ORDER.getdefaultCode()));
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		return "pages/conventionmanagement/hallbooking/opord";
 	}
 
@@ -63,6 +66,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.HALL_BOOKING_SALES_ORDER.getdefaultCode()));
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		return "pages/conventionmanagement/hallbooking/opord";
 	}
 
@@ -83,6 +88,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		oh.setXdiscamt(BigDecimal.ZERO);
 		oh.setXgrandtot(BigDecimal.ZERO);
 		oh.setXstatus("Open");
+		oh.setXpaid(BigDecimal.ZERO);
+		oh.setXdue(BigDecimal.ZERO);
 		return oh;
 	}
 
@@ -173,6 +180,9 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		BigDecimal grandTotal = (opordheader.getXtotamt().add(opordheader.getXvatamt()).add(opordheader.getXaitamt())).subtract(opordheader.getXdiscamt());
 		if(opordheader.getXgrandtot() == null) opordheader.setXgrandtot(grandTotal);
+
+		if(opordheader.getXpaid() == null) opordheader.setXpaid(BigDecimal.ZERO);
+		opordheader.setXdue(opordheader.getXgrandtot().subtract(opordheader.getXpaid()));
 
 
 		// if existing then update
@@ -396,6 +406,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		model.addAttribute("hallbookingpreffix", xtrnService.findByXtypetrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
+		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		return "pages/conventionmanagement/hallbooking/opord::opordheaderform";
 	}
 
