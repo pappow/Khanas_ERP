@@ -26,38 +26,72 @@
 					<span class="ckbigmenu-text">Logout</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li" th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
-				<a th:href="@{/purchasing}">
-					<span class="ckbigmenu-icon" style="background:  #961b39;">
-						<i class="fas fa-shopping-basket"></i>
-					</span>
-					<span class="ckbigmenu-text" th:text="${menuProfile.M0300.screenprompt}">Procurements</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display}">
-				<a th:href="@{/salesninvoice}">
-					<span class="ckbigmenu-icon" style="background:  #961b39;">
-						<i class="fas fa-file-invoice-dollar"></i>
-					</span>
-					<span class="ckbigmenu-text" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoice</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0500 ne null and menuProfile.M0500.display}">
-				<a th:href="@{/production}">
-					<span class="ckbigmenu-icon" style="background:  #961b39;">
-						<i class="fas fa-industry"></i>
-					</span>
-					<span class="ckbigmenu-text" th:text="${menuProfile.M0500.screenprompt}">Production</span>
-				</a>
-			</li>
-			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0600 ne null and menuProfile.M0600.display}">
-				<a th:href="@{/inventory}">
-					<span class="ckbigmenu-icon" style="background:  #961b39;">
-						<i class="fas fa-warehouse"></i>
-					</span>
-					<span class="ckbigmenu-text" th:text="${menuProfile.M0600.screenprompt}">Inventory Management</span>
-				</a>
-			</li>
+			<span th:if="${isDev or isKhanas}">
+				<li class="ckbigmenu-li" th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
+					<a th:href="@{/purchasing}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-shopping-basket"></i>
+						</span>
+						<span class="ckbigmenu-text" th:text="${menuProfile.M0300.screenprompt}">Procurements</span>
+					</a>
+				</li>
+			</span>
+			<span th:if="${isDev or isKhanas}">
+				<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display}">
+					<a th:href="@{/salesninvoice}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-file-invoice-dollar"></i>
+						</span>
+						<span class="ckbigmenu-text" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoice</span>
+					</a>
+				</li>
+			</span>
+			<span th:if="${isDev or isKhanas}">
+				<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0500 ne null and menuProfile.M0500.display}">
+					<a th:href="@{/production}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-industry"></i>
+						</span>
+						<span class="ckbigmenu-text" th:text="${menuProfile.M0500.screenprompt}">Production</span>
+					</a>
+				</li>
+			</span>
+			<span th:if="${isDev or isKhanas}">
+				<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0600 ne null and menuProfile.M0600.display}">
+					<a th:href="@{/inventory}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-warehouse"></i>
+						</span>
+						<span class="ckbigmenu-text" th:text="${menuProfile.M0600.screenprompt}">Inventory Management</span>
+					</a>
+				</li>
+			</span>
+			<span th:if="${isDev or isTcc}">
+				<li class="ckbigmenu-li">
+					<a th:href="@{/conventionmanagement}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-hotel"></i>
+						</span>
+						<span class="ckbigmenu-text">Convention Management</span>
+					</a>
+				</li>
+				<li class="ckbigmenu-li">
+					<a th:href="@{/roommanagement}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-person-booth"></i>
+						</span>
+						<span class="ckbigmenu-text">Room Management</span>
+					</a>
+				</li>
+				<li class="ckbigmenu-li">
+					<a th:href="@{/pos}">
+						<span class="ckbigmenu-icon" style="background:  #961b39;">
+							<i class="fas fa-desktop"></i>
+						</span>
+						<span class="ckbigmenu-text">POS</span>
+					</a>
+				</li>
+			</span>
 
 			<li class="ckbigmenu-showall">Show all</li>
 

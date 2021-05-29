@@ -22,7 +22,7 @@
 	<link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
 
 	<link th:if="${!isKhanas}" rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/ck-ui.css}"/>
-	<link th:if="${isKhanas}" rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/khanas-ui.css}"/> 
+	<link th:if="${isKhanas}" rel="stylesheet" type="text/css" th:href="@{/assets/css/ck-ui/khanas-ui.css}"/>
 </head>
 
 <!-- COMMON-JS -->
@@ -30,12 +30,12 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+	<script type="text/javascript" th:src="@{/assets/js/jquery.mousewheel.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/moment.js}"></script>
+
 	<!-- Data table -->
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js"></script>
-	<!-- <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap.min.js"></script> -->
 
 	<!-- Alert message -->
 	<script type="text/javascript" th:src="@{/assets/js/lobibox/lobibox.min.js}"></script>
