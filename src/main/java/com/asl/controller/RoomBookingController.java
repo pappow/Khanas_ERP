@@ -157,12 +157,11 @@ public class RoomBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		if(opordheader.getXhallamt() == null) opordheader.setXhallamt(BigDecimal.ZERO);
-		if(opordheader.getXfunctionamt() == null) opordheader.setXfunctionamt(BigDecimal.ZERO);
+		if(opordheader.getXroomamt() == null) opordheader.setXroomamt(BigDecimal.ZERO);
 		if(opordheader.getXfoodamt() == null) opordheader.setXfoodamt(BigDecimal.ZERO);
 		if(opordheader.getXfacamt() == null) opordheader.setXfacamt(BigDecimal.ZERO);
 		if(opordheader.getXtotamt() == null) {
-			BigDecimal tot = opordheader.getXhallamt().add(opordheader.getXfunctionamt()).add(opordheader.getXfoodamt()).add(opordheader.getXfacamt());
+			BigDecimal tot = opordheader.getXroomamt().add(opordheader.getXfoodamt()).add(opordheader.getXfacamt());
 			opordheader.setXtotamt(tot);
 		}
 		if(opordheader.getXdiscamt() == null) opordheader.setXdiscamt(BigDecimal.ZERO);
@@ -210,7 +209,7 @@ public class RoomBookingController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 
-			responseHelper.setRedirectUrl("/roommanagement/roombooking" + existOh.getXordernum());
+			responseHelper.setRedirectUrl("/roommanagement/roombooking/" + existOh.getXordernum());
 			responseHelper.setSuccessStatusAndMessage("Booking order updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -222,7 +221,7 @@ public class RoomBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setRedirectUrl("/roommanagement/roombooking" + opordheader.getXordernum());
+		responseHelper.setRedirectUrl("/roommanagement/roombooking/" + opordheader.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Booking Order created successfully");
 		return responseHelper.getResponse();
 	}
@@ -256,7 +255,7 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Booking updated successfully");
-		responseHelper.setRedirectUrl("/roommanagement/roombooking" + opordHeader.getXordernum());
+		responseHelper.setRedirectUrl("/roommanagement/roombooking/" + opordHeader.getXordernum());
 		return responseHelper.getResponse();
 	}
 
@@ -264,9 +263,9 @@ public class RoomBookingController extends ASLAbstractController {
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
 		Map<String, List<Caitem>> map = new HashMap<>();
-		map.put("Function", caitemService.findByXcatitem("Function"));
-		map.put("Hall Facility", caitemService.findByXcatitem("Hall Facility"));
-		map.put("Convention Hall Food", caitemService.findByXcatitem("Convention Hall Food"));
+		map.put("Room", caitemService.findByXcatitem("Room"));
+		map.put("Room Facility", caitemService.findByXcatitem("Room Facility"));
+		map.put("Food", caitemService.findByXcatitem("Room Food"));
 		model.addAttribute("itemMap", map);
 
 		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
@@ -298,7 +297,7 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 		}
 
-		return "pages/roommanagement/oporddetailmodal::oporddetailmodal";
+		return "pages/roommanagement/roombooking/oporddetailmodal::oporddetailmodal";
 	}
 
 	@PostMapping("/oporddetails/save")
@@ -386,8 +385,8 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + oh.getXordernum());
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + oh.getXordernum());
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombooking/oporddetail/" + oh.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombooking/opordheaderform/" + oh.getXordernum());
 		responseHelper.setSuccessStatusAndMessage("Items saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -396,7 +395,7 @@ public class RoomBookingController extends ASLAbstractController {
 	public String reloadOpdoDetailTable(@PathVariable String xordernum, Model model) {
 		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
-		return "pages/roommanagement/roombookingopord::oporddetailtable";
+		return "pages/roommanagement/roombooking/opord::oporddetailtable";
 	}
 
 	@GetMapping("/opordheaderform/{xordernum}")
@@ -406,7 +405,7 @@ public class RoomBookingController extends ASLAbstractController {
 		model.addAttribute("vataitList", vataitService.getAllVatait());
 		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
-		return "pages/roommanagement/roombookingopord::opordheaderform";
+		return "pages/roommanagement/roombooking/opord::opordheaderform";
 	}
 
 	@GetMapping("{xordernum}/oporddetail2/{xrow}/show")
@@ -415,7 +414,7 @@ public class RoomBookingController extends ASLAbstractController {
 		if(detail == null) return "redirect:/roommanagement/roombooking" + xordernum;
 
 		model.addAttribute("oporddetail", detail);
-		return "pages/roommanagement/oporddetailmodal2::oporddetailmodal2";
+		return "pages/roommanagement/roombooking/oporddetailmodal2::oporddetailmodal2";
 	}
 
 	@PostMapping("/oporddetail/save")
@@ -447,8 +446,8 @@ public class RoomBookingController extends ASLAbstractController {
 			}
 
 			responseHelper.setSuccessStatusAndMessage("Booking detail updated successfully");
-			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + opordDetail.getXordernum());
-			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + opordDetail.getXordernum());
+			responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombooking/oporddetail/" + opordDetail.getXordernum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombooking/opordheaderform/" + opordDetail.getXordernum());
 
 			return responseHelper.getResponse();
 		}
@@ -461,8 +460,8 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + opordDetail.getXordernum());
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + opordDetail.getXordernum());
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombooking/oporddetail/" + opordDetail.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombooking/opordheaderform/" + opordDetail.getXordernum());
 		return responseHelper.getResponse();
 	}
 
@@ -481,8 +480,8 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombookingoporddetail/" + xordernum);
-		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombookingopordheaderform/" + xordernum);
+		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/roommanagement/roombooking/oporddetail/" + xordernum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/roommanagement/roombooking/opordheaderform/" + xordernum);
 		return responseHelper.getResponse();
 	}
 

@@ -570,6 +570,7 @@
 			opordheader oph
 		SET
 			oph.xtotamt=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid), 0),
+			oph.xroomamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Room', oph.zid), 0),
 			oph.xhallamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Convention Hall', oph.zid), 0),
 			oph.xfunctionamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Function', oph.zid), 0),
 			oph.xfacamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Hall Facility', oph.zid), 0),
