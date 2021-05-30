@@ -78,7 +78,7 @@
 										</tr>
 									</span>
 
-									<span th:if="${isDev or isKhanas}">
+									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
 											<tr>
 												<td colspan="2" th:text="${menuProfile.M0300.screenprompt}">Procurements</td>
@@ -92,7 +92,7 @@
 										</span>
 									</span>
 
-									<span th:if="${isDev or isKhanas}">
+									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display}">
 											<tr>
 												<td colspan="2" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoicing</td>
@@ -120,7 +120,7 @@
 										</span>
 									</span>
 
-									<span th:if="${isDev or isKhanas}">
+									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${isCentral and menuProfile.M0600 ne null and menuProfile.M0600.display}">
 											<tr>
 												<td colspan="2" th:text="${menuProfile.M0600.screenprompt}">Inventory</td>
