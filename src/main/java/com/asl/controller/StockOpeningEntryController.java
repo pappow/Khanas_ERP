@@ -77,7 +77,7 @@ public class StockOpeningEntryController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		if(imtrn.getXqty().compareTo(BigDecimal.ONE) == -1) {
+		if(imtrn.getXqty().compareTo(BigDecimal.ZERO) == -1) {
 			responseHelper.setErrorStatusAndMessage("Please insert valid item quantity");
 			return responseHelper.getResponse();
 		}

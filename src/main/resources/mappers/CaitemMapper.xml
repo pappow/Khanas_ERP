@@ -110,7 +110,7 @@
 	</select>
 
 	<select id="findByXcatitem" resultType="Caitem">
-		SELECT * FROM Caitem WHERE xcatitem=#{xcatitem} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM caitem WHERE xcatitem=#{xcatitem} AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="findByXitem" resultType="Caitem">

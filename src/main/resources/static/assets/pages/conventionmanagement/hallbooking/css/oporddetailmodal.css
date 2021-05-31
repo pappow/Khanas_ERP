@@ -32,7 +32,7 @@
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
 }
-.item-box{
+.item-box, .item-box2{
 	text-align: center;
 	padding: 5px !important;
 	width: 150px;
@@ -40,7 +40,7 @@
 	border-radius: 5px;
 	cursor: pointer;
 }
-.item-box p{
+.item-box p, .item-box2 p{
 	margin: 0;
 	padding: 0;
 }

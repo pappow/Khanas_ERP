@@ -171,4 +171,16 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "xaitamt")
 	private BigDecimal xaitamt;
+
+	@Column(name = "xpaymenttype")
+	private String xpaymenttype;
+
+	@Column(name = "xpaystatus")
+	private String xpaystatus;
+
+	@Column(name = "xpaid")
+	private BigDecimal xpaid;
+
+	@Column(name = "xdue")
+	private BigDecimal xdue;
 }

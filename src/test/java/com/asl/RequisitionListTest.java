@@ -1,21 +1,20 @@
 package com.asl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import com.asl.service.RequisitionListService;
-
-@SpringBootTest
 public class RequisitionListTest {
 
-	@Autowired private RequisitionListService requisitionListService;
+	
 
 	@Test
 	void testZbusinessSave() {
-//		requisitionListService.getAllBranchesRequisitions().stream().forEach(i -> {
-//			System.out.println(i.toString());
-//		});
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+		System.out.println(sdf.format(new Date()));
+		
 	}
 
 	

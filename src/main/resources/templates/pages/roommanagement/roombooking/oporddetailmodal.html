@@ -1,58 +1,108 @@
 <!-- Modal -->
-<div id="oporddetailmodal" th:fragment="oporddetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+<div id="oporddetailmodal" th:fragment="oporddetailmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
 	<div class="modal-dialog modal-lg">
+		<link rel="stylesheet" type="text/css" th:href="@{/assets/pages/conventionmanagement/hallbooking/css/oporddetailmodal.css}"/>
+		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/pages/conventionmanagement/hallbooking/js/oporddetailmodal.js}"></script>
+
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="btn btn-primary pull-right btn-sm rate-btn">Total : 0/-</button>
 				<h4 class="modal-title">Add/Update Item</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<form id="mainform-modal" th:action="@{/roommanagement/roombooking/oporddetail/save}" method="post" class="form-horizontal" th:object="${oporddetail}">
-						<input type="hidden" th:field="*{xordernum}"/>
-						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="control-label col-sm-4" for="xitem">Item Code : </label>
-								<div class="col-sm-8">
-									<input 	type="text" 
-											class="form-control searchsuggest xitemsearch" 
-											placeholder="Search..." 
-											th:value="${oporddetail.xitem}" 
-											th:attr="search-url='search/caitem'"/>
-									<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
-									<input type="hidden" id="search-des" value=""/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-4" for="xrate">Rate : </label>
-								<div class="col-sm-8">
-									<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}" min="0"/>
-								</div>
-							</div>							
-							<div class="form-group">
-								<label class="control-label col-sm-4" for="xqtyord">Qty : </label>
-								<div class="col-sm-8">
-									<input type="number" class="form-control qty" th:field="*{xqtyord}" min="1"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-4" for="xlineamt">Price Amount : </label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" th:field="*{xlineamt}" disabled="disabled"/>
-								</div>
+					<input type="hidden" th:field="*{xordernum}"/>
+
+
+					<div class="col-md-12 item-section" th:each="map : ${itemMap}">
+						<div class="row">
+							<h4 th:text="${map.key}">Functions</h4>
+						</div>
+						<div class="row">
+							<div class="item-container">
+								<a th:if="${not f.booked}" th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:id="${f.xitem}"
+										class="item-box btn"
+										th:classappend="${f.selected ? 'btn-success' : 'btn-default'}"
+										th:each="f : ${map.value}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</a>
+								<a th:if="${f.booked}" th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:id="${f.xitem}"
+										class="item-box2 btn btn-danger"
+										th:each="f : ${map.value}">
+									<p>
+										<span th:text="${f.xdesc}"></span> <span>[Booked]</span>
+									</p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</a>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="control-label col-sm-4" for="xlong">Note : </label>
-								<div class="col-sm-8">
-									<textarea rows="4" cols="" class="form-control" th:field="*{xlong}"></textarea>
-								</div>
+					</div>
+
+					<!-- <div class="col-md-12 item-section">
+						<h4>Functions</h4>
+						<div class="row">
+							<div class="col-md-12 item-container">
+								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:classappend="${f.xitem}"
+										class="item-box btn btn-default" 
+										th:each="f : ${functions}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</button>
 							</div>
 						</div>
-					</form>
+					</div>
+
+					<div class="col-md-12 item-section">
+						<h4>Halls</h4>
+						<div class="row">
+							<div class="col-md-12 item-container">
+								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:classappend="${f.xitem}"
+										class="item-box btn btn-default" 
+										th:each="f : ${halls}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 item-section">
+						<h4>Facilities</h4>
+						<div class="row">
+							<div class="col-md-12 item-container">
+								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:classappend="${f.xitem}"
+										class="item-box btn btn-default" 
+										th:each="f : ${facilities}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 item-section">
+						<h4>Foods</h4>
+						<div class="row">
+							<div class="col-md-12 item-container">
+								<button th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
+										th:classappend="${f.xitem}"
+										class="item-box btn btn-default" 
+										th:each="f : ${foods}">
+									<p th:text="${f.xdesc}"></p>
+									<p th:text="${f.xrate} + '/-'"></p>
+								</button>
+							</div>
+						</div>
+					</div> -->
+
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -60,54 +110,5 @@
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
 			</div>
 		</div>
-		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				// Init ui for modal
-				ck.ui.config.buttonevent();
-				$(".xitemsearch").click();
-
-				$('#xqtyord').on('blur', function(e){
-					e.preventDefault();
-					calculateRateAmount();
-				});
-
-				$('#xrate').on('blur', function(e){
-					e.preventDefault();
-					calculateRateAmount();
-				});
-			
-				function calculateRateAmount(){
-					var qty = $('#xqtyord').val();
-					var rate = $('#xrate').val();
-					$('#xlineamt').val(qty * rate);
-				}				
-				
-				// Get item purchase unit
-				$('.xitemsearch').on('blur', function(){
-					if($(this).val() == '')
-						return;
-					setTimeout(() => {
-						$.ajax({
-							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
-							type : 'GET',
-							beforeSend : loadingMask2.show(),
-							success : function(data) {
-								loadingMask2.hide();	
-								$('input[name="xrate"]').val(data.xrate);
-								$(".qty").val('1');
-								$(".qty").focus();
-								$('input[name="xlineamt"]').val(parseFloat($('input[name="xrate"]').val()) * parseInt($('input[name="xqtyord"]').val()));
-							},							
-							error : function(jqXHR, status, errorThrown){
-								showMessage(status, "Something went wrong .... ");
-								loadingMask2.hide();
-							}
-						})
-					}, 1000);
-				});
-
-			});
-		</script>
 	</div>
 </div>

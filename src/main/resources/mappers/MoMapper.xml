@@ -106,7 +106,7 @@
 
 	<insert id="saveMoDetail" parameterType="Modetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM modetail WHERE xbatch=#{xbatch} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM modetail WHERE xbatch=#{xbatch} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO modetail
 		(

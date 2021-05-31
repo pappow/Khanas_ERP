@@ -1,10 +1,54 @@
 $(document).ready(function(){
 	// Get item purchase unit
-	var hallitems = {};
 	var items = [];
 	var functionsUK = [];
 
-	$('button.item-box').off('click').on('click', function(e){
+	function prepareItem(){
+		//console.log($('a.selected').length)
+		items = [];
+
+		$.each($('a.item-box.btn-success'), function(bi, b){
+			var xitem = $(b).data('xitem');
+			var xcatitem = $(b).data('xcatitem');
+
+			if(items.includes(xitem)){
+				if(xcatitem == 'Function'){
+					if(functionsUK.includes(xitem)){
+						functionsUK.pop(xitem);
+					}
+				}
+
+				const index = items.indexOf(xitem);
+				if (index > -1) {
+					items.splice(index, 1);
+				}
+				$(this).toggleClass("btn-success btn-default");
+				calculateRate();
+				return;
+			}
+
+
+			if(xcatitem == 'Function'){
+				if(functionsUK.length > 0){
+					var rxitem = functionsUK[0];
+					const index = items.indexOf(rxitem);
+					if (index > -1) {
+						items.splice(index, 1);
+					}
+					functionsUK.pop();
+					$('#' + rxitem).toggleClass("btn-success btn-default");
+				}
+				functionsUK.push(xitem);
+			}
+			items.push(xitem);
+		});
+
+		calculateRate();
+	}
+	prepareItem();
+
+	$('a.item-box').off('click').on('click', function(e){
+		if($(this))
 		var xitem = $(this).data('xitem');
 		var xcatitem = $(this).data('xcatitem');
 
@@ -19,8 +63,7 @@ $(document).ready(function(){
 			if (index > -1) {
 				items.splice(index, 1);
 			}
-			$(this).toggleClass("btn-success btn-ddefault");
-			console.log({items});
+			$(this).toggleClass("btn-success btn-default");
 			calculateRate();
 			return;
 		}
@@ -34,23 +77,27 @@ $(document).ready(function(){
 					items.splice(index, 1);
 				}
 				functionsUK.pop();
-				$('.' + rxitem).toggleClass("btn-success btn-ddefault");
+				$('#' + rxitem).toggleClass("btn-success btn-default");
 			}
 			functionsUK.push(xitem);
 		}
 		items.push(xitem);
 
 
-		$(this).toggleClass("btn-success btn-ddefault");
+		$(this).toggleClass("btn-success btn-default");
 
 		console.log({items});
 		calculateRate();
 	})
 
 	function calculateRate(){
+		console.log("%cCalculating",'color:green');
 		var total = 0;
 		items.forEach(function(item, index){
-			total += $('.' + item).data('xrate');
+			if(item != undefined){
+				total += $('#' + item).data('xrate');
+			}
+			
 		});
 		$('.rate-btn').html("Total : " + total + "/-");
 	}

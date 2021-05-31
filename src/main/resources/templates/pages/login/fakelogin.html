@@ -6,7 +6,8 @@
 <link th:href="@{/login-assets/img/favicon.ico}" rel="icon" type="image/x-icon" />
 <script th:src="@{/login-assets/js/jquery.js}"></script>
 <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" th:href="@{/login-assets/css/style.css}" />
+<link th:if="${!isKhanas}" rel="stylesheet" th:href="@{/login-assets/css/style.css}" />
+<link th:if="${isKhanas}" rel="stylesheet" th:href="@{/login-assets/css/khanas-style.css}" />
 <title>Login</title>
 </head>
 <body>

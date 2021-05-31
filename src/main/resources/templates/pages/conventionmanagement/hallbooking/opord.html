@@ -47,17 +47,16 @@
 						<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Hall Booking</h1>
-									</div>
 									<div id="opordheaderform" th:fragment="opordheaderform">
+										<div class="section-header sectionbartoggle">
+											<h1>Hall Booking</h1>
+										</div>
 										<div class="form-action-button">
 											<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-											<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+											<a th:if="${#strings.isEmpty(opordheader.xordernum)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord == 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/booking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
-											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/booking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
-											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.zactive == false}" th:href="@{/conventionmanagement/booking/restore/} + ${opordheader.xordernum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord == 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
 										</div>
 										<div class="section-body section-border">
 											<form id="mainform" class="form-horizontal" th:action="@{/conventionmanagement/hallbooking/save}" th:object="${opordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -65,7 +64,7 @@
 												<input type="hidden" th:field="*{xtrn}" th:if="${not #strings.isEmpty(opordheader.xordernum)}"/>
 												<div class="row">
 													<div class="col-md-6">
-	
+
 														<div class="form-group" th:if="${#strings.isEmpty(opordheader.xordernum)}">
 															<label class="control-label col-md-4" for="xtrn">P.O. Prefix : </label>
 															<div class="col-md-4">
@@ -74,7 +73,7 @@
 																</select>
 															</div>
 														</div>
-	
+
 														<div class="form-group" th:if="${not #strings.isEmpty(opordheader.xordernum)}">
 															<label class="control-label col-md-4" for="xordernum">Booking NO. : </label>
 															<div class="col-md-8">
@@ -82,7 +81,7 @@
 																<input type="text" class="form-control" th:value="*{xordernum}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xcus">Customer : </label>
 															<div class="col-sm-8">
@@ -95,14 +94,14 @@
 																<input type="hidden" id="search-des" th:value="*{xcus}"/>
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xtotguest">Total Guests : </label>
 															<div class="col-md-5">
 																<input type="number" class="form-control" th:field="*{xtotguest}" min="0">
 															</div>
 														</div>
-	
+
 														<div class="form-group datepicker">
 															<label class="control-label col-md-4" for="xdate">Booking Date : </label>
 															<div class="input-group date col-md-7 datepicker">
@@ -121,7 +120,7 @@
 																</div>
 															</div>
 														</div>
-	
+
 														<div class="form-group datepicker">
 															<label class="control-label col-md-4" for="xstartdate">Start Date : </label>
 															<div class="input-group date col-md-7 datepicker">
@@ -136,7 +135,7 @@
 																</div>
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xstarttime">Start Time : </label>
 															<div class="input-group time col-md-4 date-time-wrapper timepicker">
@@ -148,7 +147,7 @@
 																</span>
 															</div>
 														</div>
-	
+
 														<div class="form-group datepicker">
 															<label class="control-label col-md-4" for="xenddate">End Date : </label>
 															<div class="input-group date col-md-7 datepicker">
@@ -163,7 +162,7 @@
 																</div>
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xendtime">End Time : </label>
 															<div class="input-group time col-md-4 date-time-wrapper timepicker">
@@ -175,14 +174,32 @@
 																</span>
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xnote">Note : </label>
 															<div class="col-md-8">
 																<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
 															</div>
 														</div>
-	
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatus">Payment Type : </label>
+															<div class="col-md-6">
+																<select class="form-control">
+																	<option th:each="p : ${paymentType}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
+																</select>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatus">Payment Mode : </label>
+															<div class="col-md-6">
+																<select class="form-control">
+																	<option th:each="p : ${paymentMode}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
+																</select>
+															</div>
+														</div>
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xstatus">Status : </label>
 															<div class="col-md-6">
@@ -190,7 +207,7 @@
 																<input type="text" class="form-control" th:value="*{xstatus}" disabled="disabled">
 															</div>
 														</div>
-	
+
 													</div>
 													<div class="col-md-6">
 														<div class="form-group">
@@ -200,7 +217,7 @@
 																<input type="text" class="form-control" th:value="*{xhallamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xfunctionamt">Function : </label>
 															<div class="col-md-6">
@@ -208,7 +225,7 @@
 																<input type="text" class="form-control" th:value="*{xfunctionamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xfoodamt">Food : </label>
 															<div class="col-md-6">
@@ -216,7 +233,7 @@
 																<input type="text" class="form-control" th:value="*{xfoodamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xfacamt">Facilities : </label>
 															<div class="col-md-6">
@@ -224,8 +241,7 @@
 																<input type="text" class="form-control" th:value="*{xfacamt}" disabled="disabled">
 															</div>
 														</div>
-	
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
 															<div class="col-md-6">
@@ -233,51 +249,154 @@
 																<input type="text" class="form-control" th:value="*{xtotamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
 															<div class="col-md-6">
-																<select class="form-control" th:field="*{xvatait}">
+																<select class="form-control vatait-select" th:field="*{xvatait}">
 																	<option th:each="x : ${vataitList}" th:value="${x.xvatait}" th:text="${x.xvatait}"></option>
 																</select>
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xvatamt">Vat : </label>
 															<div class="col-md-6">
-																<input type="hidden" class="form-control" th:field="*{xvatamt}">
-																<input type="text" class="form-control" th:value="*{xvatamt}" disabled="disabled">
+																<input type="hidden" class="form-control" th:field="*{xvatamt}"/>
+																<input type="text" class="form-control xvatamt-show" th:value="*{xvatamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xaitamt">Tax : </label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xaitamt}">
-																<input type="text" class="form-control" th:value="*{xaitamt}" disabled="disabled">
+																<input type="text" class="form-control xaitamt-show" th:value="*{xaitamt}" disabled="disabled">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xdiscamt">Discount : </label>
 															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xdiscamt}" min="0">
 															</div>
 														</div>
-	
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xgrandtot">Grand Total : </label>
 															<div class="col-md-6">
-																<input type="hidden" class="form-control" th:field="*{xgrandtot}">
-																<input type="text" class="form-control" th:value="*{xgrandtot}" disabled="disabled">
+																<input type="text" class="form-control xgrandtot" th:value="*{xgrandtot}" disabled="disabled">
 															</div>
 														</div>
-	
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xpaid">Paid : </label>
+															<div class="col-md-6">
+																<input type="number" min="0" class="form-control xpaid" th:field="*{xpaid}">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xdue">Due : </label>
+															<div class="col-md-6">
+																<input type="number" min="0" class="form-control xdue" th:value="*{xdue}" disabled="disabled">
+															</div>
+														</div>
+
 													</div>
 												</div>
 											</form>
 										</div>
+
+										<script type="text/javascript">
+											$(document).ready(function(){
+												ck.ui.config.editmode();
+												ck.ui.config.dateAndTimepicker();
+											})
+										</script>
+										<script>
+											$(document).ready(function(){
+												$("input[name='xdiscamt']").off('blur').on('blur', function(e){
+
+													var xtotamt = parseFloat($("input[name='xtotamt']").val());
+													var vatAmount = parseFloat($("input[name='xvatamt']").val());
+													var aitAmount = parseFloat($("input[name='xaitamt']").val());
+													var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
+													if(isNaN(xdiscamt)){
+														xdiscamt = 0;
+														$("input[name='xdiscamt']").val(0);
+													}
+													var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
+													$('input.xgrandtot').val(grandTotal);
+									
+													
+													if(isNaN($('input.xpaid').val())){
+														$(this).val(0);
+													}
+													var xpaid =  parseFloat($('input.xpaid').val());
+													var xdue = grandTotal - xpaid;
+													$('input.xdue').val(xdue);
+												});
+									
+												$("input[name='xpaid']").off('blur').on('blur', function(e){
+													var grandTotal = parseFloat($('input.xgrandtot').val());
+									
+													if(isNaN($(this).val())){
+														$(this).val(0);
+													}
+													var xpaid =  parseFloat($(this).val());
+													var xdue = grandTotal - xpaid;
+													$('input.xdue').val(xdue);
+												});
+									
+									
+												$(".vatait-select").on("change", function(){
+													var vataitId = $(".vatait-select").val();
+									
+													loadingMask2.show(),
+													$.ajax({
+														url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
+														type : 'GET',
+														success: function(data){
+															loadingMask2.hide();
+															var vatPercent = parseFloat(data.xvat);
+															var aitPercent = parseFloat(data.xait);
+															var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
+															var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
+									
+															$('input[name="xvatamt"]').val(vatAmount);
+															$('input.xvatamt-show').val(vatAmount);
+															$('input[name="xaitamt"]').val(aitAmount);
+															$('input.xaitamt-show').val(aitAmount);
+									
+															var xtotamt = parseFloat($("input[name='xtotamt']").val());
+															var xdiscamt = parseFloat($("input[name='xdiscamt']").val());
+															if(isNaN(xdiscamt)){
+																xdiscamt = 0;
+																$("input[name='xdiscamt']").val(0);
+															}
+															var grandTotal = xtotamt + vatAmount + aitAmount - xdiscamt;
+															$('input.xgrandtot').val(grandTotal);
+															
+															if(isNaN($('input.xpaid').val())){
+																$(this).val(0);
+															}
+															var xpaid =  parseFloat($('input.xpaid').val());
+															var xdue = grandTotal - xpaid;
+															$('input.xdue').val(xdue);
+															
+														},
+														error : function(jqXHR, status, errorThrown){
+															showMessage(status, "Something went wrong .... ");
+															loadingMask2.hide();
+														}
+													});
+												});
+									
+											})
+											
+										</script>
+
 									</div>
 								</section>
 							</div>
@@ -349,8 +468,7 @@
 											<td th:text="${d.xrate}"></td>
 											<td th:text="${d.xlineamt}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${opordheader.xstatusord != 'Confirmed'}">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/show', data-target-modal='oporddetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button th:if="${d.xcatitem ne 'Function' and d.xcatitem ne 'Convention Hall'}" type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/} + ${opordheader.xordernum} + '/oporddetail2/' + ${d.xrow} + '/show', data-target-modal='oporddetailmodal2'"><i class="fas fa-edit"></i></button>
 											</td>
 										</tr>
 									</tbody>
@@ -361,81 +479,13 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Modal -->
 		<div id="oporddetailmodal-section"></div>
+		<div id="oporddetailmodal2-section"></div>
 
-		
-		<a  class="btn btn-danger btn-delete hidden btn-remove-hall" href="#"></a>
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
-	
-	<style>
-		.hall-card{
-			width: 10%;
-			background-color: #17a261 ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-		
-		.hall-card-red{
-			width: 10%;
-			background-color: #c9302c ;
-			margin: 1%;
-			border-radius: 5px;
-			color: white;
-			padding: 10px;
-			display: inline-block;
-		}
-	</style>
-	
-	
-	
-	<script>
-	$(document).ready(function(){
-		$("#allHalls").delegate('.add-hall','click', function(){
-			console.log("Logged: >>>");
-			$("#hall-form").find("input[name='xordernum']").val($("#mainform").find("input[name='xordernum']").val());
-			$("#hall-form").find("input[name='xitem']").val($(this).find(".hall-xdesc").text());
-			$("#hall-form").find("input[name='xrate']").val($(this).find(".hall-xrate").text());
-			$("#hall-form").find("input[name='xlineamt']").val($(this).find(".hall-xrate").text());
-			//$("#hall-form").submit();
-			
-			submitMainForm(getBasepath() +"/conventionmanagement/hallbooking/oporddetail/save", $("#hall-form"));
-		});
-		
-		$("#allHalls").delegate('.remove-hall','click', function(){
-			console.log("Remove Logged: >>>" + $(this).find(".hall-xrow").text());
-			var url = getBasepath() + "/conventionmanagement/hallbooking/"+ $("#mainform").find("input[name='xordernum']").val() +"/oporddetail/"+ $(this).find(".hall-xrow").text() +"/delete";
-			$(".btn-remove-hall").attr("href", url);
-			doItemDelete(url);
-			//$(".btn-remove-hall").click();
-		});
-		
-		
-		$(".query-btn").on("click", function(){
-			$.ajax({
-				url : getBasepath() + '/conventionmanagement/hallbooking/availablehallbydate/' + $('input[name="searchDate"]').val(),
-				type : 'GET',
-				beforeSend : loadingMask2.show(),
-				success : function(data) {
-					loadingMask2.hide();					
-					var wrapperelement = $("#allHalls");
-					wrapperelement.html("");
-					wrapperelement.append(data);
-					dataTableInitSpecific("allHalls");					
-				},							
-				error : function(jqXHR, status, errorThrown){
-					showMessage(status, "Something went wrong .... ");
-					loadingMask2.hide();
-				}
-			});
-		});
-	});
-	</script>
 	
 </html>

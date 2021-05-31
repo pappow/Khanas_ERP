@@ -48,6 +48,10 @@
 			xvatait,
 			xvatamt,
 			xaitamt,
+			xpaymenttype,
+			xpaystatus,
+			xpaid,
+			xdue,
 			zid,
 			zauserid,
 			zuuserid,
@@ -98,6 +102,10 @@
 			#{xvatait, jdbcType=VARCHAR},
 			#{xvatamt, jdbcType=DECIMAL},
 			#{xaitamt, jdbcType=DECIMAL},
+			#{xpaymenttype, jdbcType=VARCHAR},
+			#{xpaystatus, jdbcType=VARCHAR},
+			#{xpaid, jdbcType=DECIMAL},
+			#{xdue, jdbcType=DECIMAL},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -150,6 +158,10 @@
 			xvatait=#{xvatait, jdbcType=VARCHAR},
 			xvatamt=#{xvatamt, jdbcType=DECIMAL},
 			xaitamt=#{xaitamt, jdbcType=DECIMAL},
+			xpaymenttype=#{xpaymenttype, jdbcType=VARCHAR},
+			xpaystatus=#{xpaystatus, jdbcType=VARCHAR},
+			xpaid=#{xpaid, jdbcType=DECIMAL},
+			xdue=#{xdue, jdbcType=DECIMAL},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -163,7 +175,7 @@
 
 	<insert id="saveOpordDetail" parameterType="Oporddetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM Oporddetail WHERE xordernum=#{xordernum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM Oporddetail WHERE xordernum=#{xordernum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO Oporddetail
 		(
@@ -558,6 +570,11 @@
 			opordheader oph
 		SET
 			oph.xtotamt=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid), 0),
+			oph.xroomamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Room', oph.zid), 0),
+			oph.xhallamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Convention Hall', oph.zid), 0),
+			oph.xfunctionamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Function', oph.zid), 0),
+			oph.xfacamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Hall Facility', oph.zid), 0),
+			oph.xfoodamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Convention Hall Food', oph.zid), 0),
 			oph.xvatamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
 			oph.xaitamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
 			oph.xgrandtot=  NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) 
@@ -580,5 +597,47 @@
 			AND zid=#{zid} 
 			AND zactive='1'
 	</update>
+
+	<select id="allBookedHallsInDateRange" resultType="String">
+		select
+			distinct opd.xitem
+		from 
+			oporddetail opd
+			join opordheader oh on oh.xordernum = opd.xordernum and oh.zid = opd.zid and oh.zactive='1'
+		where
+			opd.zid=#{zid}
+			and opd.zactive='1'
+			and opd.xcatitem=#{xcatitem}
+			<if test="xordernum != null || xordernum != ''">
+				and oh.xordernum != #{xordernum}
+			</if>
+			and 
+				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xstartdate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate})
+				OR
+				((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xenddate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xenddate}))
+	</select>
+
+	<select id="allBookedHallsInDateRange2" resultType="ConventionBookedDetails">
+		select
+			oh.xordernum,
+			oh.xstartdate,
+			oh.xstarttime,
+			oh.xenddate,
+			oh.xendtime,
+			oh.xstatus,
+			opd.xitem,
+			opd.xdesc
+		from 
+			oporddetail opd
+			join opordheader oh on oh.xordernum = opd.xordernum and oh.zid = opd.zid and oh.zactive='1'
+		where
+			opd.zid=#{zid}
+			and opd.zactive='1'
+			and opd.xcatitem=#{xcatitem}
+			and 
+				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &gt;= #{xstartdate} AND (to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xenddate})
+				OR
+				((to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate} AND (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &lt;= #{xenddate}))
+	</select>
 
 </mapper>

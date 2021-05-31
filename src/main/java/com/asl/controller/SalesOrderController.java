@@ -224,8 +224,8 @@ public class SalesOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		if(opordDetail.getXqtyord() == null || opordDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
-			responseHelper.setErrorStatusAndMessage("Item quantity can't be less then one");
+		if(opordDetail.getXqtyord() == null || opordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1) {
+			responseHelper.setErrorStatusAndMessage("Item quantity can't be less then zero");
 			return responseHelper.getResponse();
 		}
 

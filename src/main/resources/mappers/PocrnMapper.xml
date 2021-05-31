@@ -94,7 +94,7 @@
 
 	<insert id="savePocrnDetail" parameterType="Pocrndetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COUNT(*) + 1 FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM Pocrndetail WHERE xcrnnum=#{xcrnnum} AND zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO Pocrndetail
 		(

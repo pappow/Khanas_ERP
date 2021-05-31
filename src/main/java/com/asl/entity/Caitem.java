@@ -95,4 +95,10 @@ public class Caitem extends AbstractModel<String> {
 
 	@Column(name = "xseqn")
 	private Long xseqn = Long.valueOf(999999);
+
+	@Transient
+	private boolean selected;
+
+	@Transient
+	private boolean booked;
 }
