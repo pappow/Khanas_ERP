@@ -32,8 +32,8 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
-import com.asl.service.HallBookingService;
 import com.asl.service.OpordService;
+import com.asl.service.RoomBookingService;
 import com.asl.service.VataitService;
 import com.asl.util.CKTime;
 
@@ -44,7 +44,7 @@ public class RoomBookingController extends ASLAbstractController {
 	@Autowired private OpordService opordService;
 	@Autowired private VataitService vataitService;
 	@Autowired private CaitemService caitemService;
-	@Autowired private HallBookingService hallBookingService;
+	@Autowired private RoomBookingService roomBookingService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -191,10 +191,10 @@ public class RoomBookingController extends ASLAbstractController {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 			String xstartdate = sdf.format(existOh.getXstartdate()).toUpperCase().concat(" ").concat(existOh.getXstarttime());
 			String xenddate = sdf.format(existOh.getXenddate()).toUpperCase().concat(" ").concat(existOh.getXendtime());
-			List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, existOh.getXordernum());
-			Oporddetail od = opordService.findOporddetailByXordernum(existOh.getXordernum()).stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).stream().findFirst().orElse(null);
-			if(bookedHalls != null && !bookedHalls.isEmpty()) {
-				for(String b : bookedHalls) {
+			List<String> bookedRooms = roomBookingService.allBookedRoomsInDateRange("Room", xstartdate, xenddate, existOh.getXordernum());
+			Oporddetail od = opordService.findOporddetailByXordernum(existOh.getXordernum()).stream().filter(f -> "Room".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).stream().findFirst().orElse(null);
+			if(bookedRooms != null && !bookedRooms.isEmpty()) {
+				for(String b : bookedRooms) {
 					if(od != null && b.equalsIgnoreCase(od.getXitem())) {
 						responseHelper.setErrorStatusAndMessage(od.getXdesc() + " is Not available in this time");
 						return responseHelper.getResponse();
@@ -263,7 +263,6 @@ public class RoomBookingController extends ASLAbstractController {
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
 		Map<String, List<Caitem>> map = new HashMap<>();
-		map.put("Room", caitemService.findByXcatitem("Room"));
 		map.put("Room Facility", caitemService.findByXcatitem("Room Facility"));
 		map.put("Food", caitemService.findByXcatitem("Room Food"));
 		model.addAttribute("itemMap", map);
@@ -272,15 +271,15 @@ public class RoomBookingController extends ASLAbstractController {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
 		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
-		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, xordernum);
+		List<String> bookedRooms = roomBookingService.allBookedRoomsInDateRange("Room", xstartdate, xenddate, xordernum);
 
-		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
+		List<Caitem> halls = caitemService.findByXcatitem("Room");
 		for(Caitem c : halls) {
-			for(String s : bookedHalls) {
+			for(String s : bookedRooms) {
 				if(c.getXitem().equalsIgnoreCase(s)) c.setBooked(true);
 			}
 		}
-		map.put("Convention Hall", halls);
+		map.put("Room", halls);
 
 		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
 		if(details != null && !details.isEmpty()) {
@@ -316,8 +315,7 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		boolean functionExist = false;
-		boolean hallExist = false;
+		boolean roomExist = false;
 		List<Oporddetail> deletableDL = new ArrayList<>();
 		List<Oporddetail> existDetails = opordService.findOporddetailByXordernum(xordernum);
 		if(existDetails != null && !existDetails.isEmpty()) {
@@ -325,8 +323,7 @@ public class RoomBookingController extends ASLAbstractController {
 				// if already added in db then remove from list
 				if(xitemsL.contains(d.getXitem())) {
 					xitemsL.remove(xitemsL.indexOf(d.getXitem()));
-					if("Function".equalsIgnoreCase(d.getXcatitem())) functionExist = true;
-					if("Convention Hall".equalsIgnoreCase(d.getXcatitem())) hallExist = true;
+					if("Room".equalsIgnoreCase(d.getXcatitem())) roomExist = true;
 				} else { // if d is not in list, then delete from db
 					deletableDL.add(d);
 				}
@@ -356,13 +353,8 @@ public class RoomBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-		if(totalFunctions != 1 && !functionExist) {
-			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
-			return responseHelper.getResponse();
-		}
-		if(totalHalls == 0 && !hallExist) {
+		long totalRooms = details.stream().filter(f -> "Room".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
+		if(totalRooms == 0 && !roomExist) {
 			responseHelper.setErrorStatusAndMessage("Hall selection required");
 			return responseHelper.getResponse();
 		}

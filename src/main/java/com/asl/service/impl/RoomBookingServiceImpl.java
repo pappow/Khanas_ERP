@@ -1,10 +1,14 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.ConventionBookedDetails;
+import com.asl.mapper.OpordMapper;
 import com.asl.service.RoomBookingService;
 
 /**
@@ -14,18 +18,18 @@ import com.asl.service.RoomBookingService;
 @Service
 public class RoomBookingServiceImpl extends AbstractGenericService implements RoomBookingService {
 
+	@Autowired private OpordMapper opordMapper;
+
 	@Override
-	public List<String> allBookedRoomsInDateRange(String xcatitem, String xstartdate, String xenddate,
-			String xordernum) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> allBookedRoomsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum) {
+		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
+		return opordMapper.allBookedHallsInDateRange(xcatitem, xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<ConventionBookedDetails> allBookedRoomsInDateRange2(String xcatitem, String xstartdate,
-			String xenddate) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ConventionBookedDetails> allBookedRoomsInDateRange2(String xcatitem, String xstartdate, String xenddate) {
+		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
+		return opordMapper.allBookedHallsInDateRange2(xcatitem, xstartdate, xenddate, sessionManager.getBusinessId());
 	}
 
 }
