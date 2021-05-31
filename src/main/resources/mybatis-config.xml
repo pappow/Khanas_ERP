@@ -47,5 +47,8 @@
 		<mapper resource="mappers/PSVMapper.xml"/>
 		<mapper resource="mappers/XRolesMapper.xml"/>
 		<mapper resource="mappers/POSPromotionMapper.xml"/>
+		<mapper resource="mappers/POSSettingsMapper.xml"/>
+		<mapper resource="mappers/POSPermissionsMapper.xml"/>
+		
 	</mappers>
 </configuration>

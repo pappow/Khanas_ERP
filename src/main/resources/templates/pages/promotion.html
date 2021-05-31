@@ -58,7 +58,7 @@
 										<a th:if="${not promotions.newdata}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" method="post" th:action="@{/promotion/save}" th:object="${promotions}">
+										<form id="mainform" class="form-horizontal" method="post" th:action="@{/promotion/save}" th:object="${promotions}" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" th:field="*{newdata}">
 											<div class="row">
 												<div class="col-md-12">
@@ -67,19 +67,19 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xpromono">Promotion Name</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" th:field="*{xpromono}" maxlength="100" required="required"/>
+																	<input type="text" class="form-control" th:field="*{xpromono}" maxlength="100" required="required" th:disabled="${not #strings.isEmpty(promotions.xpromono) and not #strings.isEmpty(promotions.xpromono)}"/>
 																</div>
 															</div>
 															<div class="form-group datepicker">
 																<label class="control-label col-md-4" for="xstartdate">Start Date : </label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
-																	class="form-control" 
-																	th:field="*{xstartdate}"
-																	id="xstartdate"
-																	name="xstartdate"
-																	required="required"
-																	/>
+																		class="form-control" 
+																		id="xstartdate"
+																		name="xstartdate"
+																		required="required"
+																		th:value="${promotions.xstartdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(promotions.xstartdate, df)}"/>
+																
 																<div class="input-group-addon">
 																	<span class="glyphicon glyphicon-calendar"></span>
 																</div>
@@ -105,6 +105,7 @@
 																	id="xenddate"
 																	name="xenddate"
 																	required="required"
+																	th:value="${promotions.xenddate == null ? #dates.format(#dates.createNow(), df) : #dates.format(promotions.xenddate, df)}"
 																	/>
 																<div class="input-group-addon">
 																	<span class="glyphicon glyphicon-calendar"></span>
@@ -168,26 +169,16 @@
 												<thead>
 													<tr>
 														<th> Promotion Name</th>
-														<th>Start Date</th>
-														<th>Start Time</th>
-														<th>End Date</th>
-														<th>End Time</th>
 														<th>Discount Type</th>
 														<th>Discount</th>
-														<th>Particular Time</th>
 														<th>Active Status</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr th:each="ar : ${allPromotions}">
 														<td><a th:href="@{/promotion/} + ${ar.xpromono}" th:text="${ar.xpromono}"></a></td>
-														<td th:text="${ar.xstartdate}"></td>
-														<td th:text="${ar.xstarttime}"></td>
-														<td th:text="${ar.xenddate}"></td>
-														<td th:text="${ar.xendtime}"></td>
 														<td th:text="${ar.xdisctype}"></td>
 														<td th:text="${ar.xdisc}"></td>
-														<td th:text="${ar.xtype}"></td>
 														<td th:text="${ar.zactive}"></td>
 													</tr>
 												</tbody>

@@ -9,7 +9,7 @@
 	<body>
 
 		<!-- Header section -->
-		<div class="header-section" ></div>
+		<div class="header-section" th:include="commons :: header-section"></div>
 		
 
 
@@ -52,28 +52,29 @@
 									<h1>Table Settings</h1>
 								</div>
 								<div class="form-action-button">
-									<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+									<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 								</div>
 									
 								<div class="section-body section-border">
-									<form id="mainform" class="form-horizontal" method="post">
+									<form id="mainform" class="form-horizontal" method="post" th:action="@{/tablesettings/save}" th:object="${tables}">
+										<input type="hidden" th:field="*{xacc}"/>
 										<div class="row">
 											<div class="col-md-4">
 												<div class="row">
 													<div class="col-md-6">
-														<div class="form-group input2">
-															<label class="control-label col-sm-10" for="xproditem">Table Selection</label>
-															<div class="col-sm-2">
-																<div class="checkbox">
-																	<label><input type="checkbox" class="form-control-input2" value="Y"/></label>
+															<div class="form-group input2">
+																<label class="control-label col-sm-10" for="xacc">Table Selection</label>
+																<div class="col-sm-2">
+																	<div class="checkbox">
+																		<label><input type="checkbox" class="form-control-input2 tab" th:field="*{zactive}" value="Y"/></label>
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
 													<div class="col-md-6">
 														<div class="form-group">
 															<div class="col-md-9">
-																<input type="number" class="form-control" min="0" placeholder="Number of Tables"/>
+																<input type="number" class="form-control tab-input" min="0" readonly="readonly" th:field="*{xlength}" />
 															</div>
 														</div>
 													</div>
@@ -91,5 +92,27 @@
 
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				if($('.tab').prop("checked")){
+					$('.tab-input').removeAttr('readonly');
+				} else {
+					$('.tab-input').attr('readonly','readonly');
+				}
+
+				$('.tab').off('click').on('click', function(e){
+					
+					if($(this).prop("checked")){
+						$('.tab-input').removeAttr('readonly');
+					} else {
+						$('.tab-input').attr('readonly','readonly');
+					}
+					
+				})
+				
+			})
+		</script>
 	</body>
 </html>

@@ -41,6 +41,7 @@ public enum CodeType {
 
 	REQUISITION_ORDER_STATUS("Requisition Order Status"),
 	RELIGION("Religion"),
+	ROLE_TYPE("Role Type"),
 
 	SELLING_UNIT("Selling Unit"),
 	STOCK_TYPE("Stock Type"),

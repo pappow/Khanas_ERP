@@ -9,7 +9,7 @@
 	<body>
 
 		<!-- Header section -->
-		<div class="header-section" ></div>
+		<div class="header-section" th:include="commons :: header-section"></div>
 		
 
 
@@ -54,7 +54,6 @@
 								<div class="form-action-button">
 									<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 									<a th:href="@{/posbusiness}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Reset</a>
-									<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 								</div>
 									
 								<div class="section-body section-border">

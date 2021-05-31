@@ -9,8 +9,7 @@
 	<body>
 
 		<!-- Header section -->
-		<div class="header-section" ></div>
-		
+		<div class="header-section" th:include="commons :: header-section"></div>
 
 
 		<!-- Menu section -->
@@ -50,113 +49,158 @@
 						<div class="row">
 							<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Print Settings</h1>
-									</div>
-									<div class="form-action-button">
-										<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-									</div>
-									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" method="post">
-											<div class="row">
-												<div class="col-md-4">
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Item Image</label>
+									<div id="possettingform" th:fragment="possettingform">
+										<div class="section-header sectionbartoggle">
+											<h1>POS Settings</h1>
+										</div>
+										<div class="form-action-button">
+										</div>
+										<div class="section-body section-border">
+											<form id="mainform" class="form-horizontal" method="post" th:action="@{/possettings/save}" th:object="${settings}">
+												<div class="row">
+													<div class="col-md-4">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${imageView}" data-prompt="Image View"/>Item Image</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveItemSearch}" data-prompt="Live Item Search"/>Live Search</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${livePromotion}" data-prompt="Live Promotion"/>Promotion</label>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Live Search</label>
+													<div class="col-md-4">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveBackgroundColor}" data-prompt="Live Background Color"/>Show Background Color</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveManualToken}" data-prompt="Live Manual Token"/>Manual Token</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveKOTPrinter}" data-prompt="Live KOT Printer"/>KOT Printer</label>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
+													<div class="col-md-4">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveShortCode}" data-prompt="Live Short Code"/>Search by Short Code</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group input2">
+																	<div class="col-sm-8 col-sm-offset-4">
+																		<div class="checkbox">
+																			<label><input type="checkbox" class="form-control-input2 poscheck" th:checked="${liveHoldBill}" data-prompt="Live Hold Bill"/>Hold Bill</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+										<script type="text/javascript">
+											$(document).ready(function(){
+												
+												$('.poscheck').off('click').on('click', function(e){
 													
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Promotion</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-4">
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Show Background Color</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Manual Token</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
 													
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>KOT Printer</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-4">
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Search by Short Code</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-md-12">
-															<div class="form-group input2">
-																<div class="col-sm-8 col-sm-offset-4">
-																	<div class="checkbox">
-																		<label><input type="checkbox" class="form-control-input2" value="Y"/>Hold Bill</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
+													console.log($(this).data('prompt'));
+													console.log($(this).prop("checked"));
+													
+													loadingMask2.show();
+													$.ajax({
+														url : getBasepath() + '/possettings/save',
+														type : 'POST',
+														data : {
+															name : $(this).data('prompt'),
+															status : $(this).prop("checked") 
+														},
+														success : function(data) {
+															loadingMask2.hide();
+															if(data.status == 'SUCCESS'){
+																showMessage(data.status.toLowerCase(), data.message);
+																if(data.triggermodalurl){
+																	modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+																} else {
+																	if(data.reloadurl){
+																		doSectionReloadWithNewData(data);
+																	} else if(data.redirecturl){
+																		setTimeout(() => {
+																			window.location.replace(getBasepath() + data.redirecturl);
+																		}, 1000);
+																	}
+																}
+															} else {
+																showMessage(data.status.toLowerCase(), data.message);
+															}
+														}, 
+														error : function(jqXHR, status, errorThrown){
+															loadingMask2.hide();
+															showMessage(status, "Something went wrong .... ");
+														}
+													});
+												});
+											})
+										</script>
 									</div>
 								</section>
 						

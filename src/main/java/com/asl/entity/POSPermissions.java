@@ -17,12 +17,12 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "possettings")
-@IdClass(POSSettingsPK.class)
-@EqualsAndHashCode(of = { "zid", "xacc" }, callSuper = false)
-public class POSSettings extends AbstractModel<String>{
-
-	private static final long serialVersionUID = 7677507783477527309L;
+@Table(name = "pospermissions")
+@IdClass(POSPermissionsPK.class)
+@EqualsAndHashCode(of = { "zid", "xacc", "xrole" }, callSuper = false)
+public class POSPermissions extends AbstractModel<String>{
+	
+	private static final long serialVersionUID = -6851870028563283249L;
 
 	@Id
 	@Basic(optional = false)
@@ -33,6 +33,11 @@ public class POSSettings extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xacc")
 	private String xacc;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "xrole")
+	private String xrole;
 
 	@Column(name = "xcusserial")
 	private String xcusserial;
@@ -76,4 +81,5 @@ public class POSSettings extends AbstractModel<String>{
 
 	@Column(name = "xshopno")
 	private String xshopno;
+
 }
