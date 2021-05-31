@@ -2,13 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.ZbusinessMapper">
-
 	<insert id="save" parameterType="Zbusiness">
+	
 		INSERT INTO Zbusiness
 		(
-			zid,
-			zorg,
-			zemail,
 			xmadd,
 			xphone,
 			xpadd,
@@ -29,9 +26,17 @@
 			xcustom,
 			xtimage,
 			xbimage,
+			xoutlet,
+			xshopno,
+			xterminalno,
+			xmusakno,
+			xdine,
+			centralzid,
 			central,
 			branch,
-			centralzid,
+			zid,
+			zorg,
+			zemail,
 			zauserid,
 			zuuserid,
 			zaip,
@@ -42,9 +47,7 @@
 		)
 		VALUES
 		(
-			#{zid, jdbcType=VARCHAR},
-			#{zorg, jdbcType=VARCHAR},
-			#{zemail, jdbcType=VARCHAR},
+			
 			#{xmadd, jdbcType=VARCHAR},
 			#{xphone, jdbcType=VARCHAR},
 			#{xpadd, jdbcType=VARCHAR},
@@ -65,9 +68,17 @@
 			#{xcustom, jdbcType=VARCHAR},
 			#{xtimage, jdbcType=VARCHAR},
 			#{xbimage, jdbcType=VARCHAR},
+			#{xoutlet, jdbcType=VARCHAR},
+			#{xshopno, jdbcType=VARCHAR},
+			#{xterminalno, jdbcType=VARCHAR},
+			#{xmusakno, jdbcType=VARCHAR},
+			#{xdine, jdbcType=VARCHAR},
+			#{centralzid, jdbcType=VARCHAR},
 			#{central, jdbcType=BOOLEAN},
 			#{branch, jdbcType=BOOLEAN},
-			#{centralzid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{zorg, jdbcType=VARCHAR},
+			#{zemail, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
@@ -75,14 +86,13 @@
 			#{zactive, jdbcType=VARCHAR},
 			#{ztime, jdbcType=TIMESTAMP},
 			#{zutime, jdbcType=TIMESTAMP}
+			
 		) 
 	</insert>
 
 	<update id="update" parameterType="Zbusiness">
 		UPDATE Zbusiness
 		SET
-			zorg=#{zorg, jdbcType=VARCHAR},
-			zemail=#{zemail, jdbcType=VARCHAR},
 			xmadd=#{xmadd, jdbcType=VARCHAR},
 			xphone=#{xphone, jdbcType=VARCHAR},
 			xpadd=#{xpadd, jdbcType=VARCHAR},
@@ -103,15 +113,25 @@
 			xcustom=#{xcustom, jdbcType=VARCHAR},
 			xtimage=#{xtimage, jdbcType=VARCHAR},
 			xbimage=#{xbimage, jdbcType=VARCHAR},
+			xoutlet=#{xoutlet, jdbcType=VARCHAR},
+			xshopno=#{xshopno, jdbcType=VARCHAR},
+			xterminalno=#{xterminalno, jdbcType=VARCHAR},
+			xmusakno=#{xmusakno, jdbcType=VARCHAR},
+			xdine=#{xdine, jdbcType=VARCHAR},
+			centralzid=#{centralzid, jdbcType=VARCHAR},
 			central=#{central, jdbcType=BOOLEAN},
 			branch=#{branch, jdbcType=BOOLEAN},
-			centralzid=#{centralzid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			zorg=#{zorg, jdbcType=VARCHAR},
+			zemail=#{zemail, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
 			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
+			
 		WHERE
 			zid=#{zid, jdbcType=VARCHAR}
 	</update>

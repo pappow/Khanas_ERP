@@ -8,7 +8,11 @@ public enum ProfileType {
 
 	U("U", "User Profile"),
 	M("M", "Menu Profile"),
-	R("R", "Report Profile");
+	R("R", "Report Profile"),
+	
+	//for posbuziness
+	C("C", "Casual Dine"),
+	F("F", "Fine Dine");
 
 	private String code;
 	private String description;

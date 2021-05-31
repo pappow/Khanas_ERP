@@ -15,6 +15,8 @@ public enum CodeType {
 	CUSTOMER_STATUS("Customer Status"),
 	CHEQUE_STATUS("Cheque Status"),
 
+	DISCOUNT_TYPE("Discount Type"),
+
 	EMPLOYEE_CATEGORY("Employee Category"),
 	EMPLOYEE_DEPARTMENT("Employee Department"),
 	EMPLOYEE_DESIGNATION("Employee Designation"),
@@ -39,6 +41,7 @@ public enum CodeType {
 
 	REQUISITION_ORDER_STATUS("Requisition Order Status"),
 	RELIGION("Religion"),
+	ROLE_TYPE("Role Type"),
 
 	SELLING_UNIT("Selling Unit"),
 	STOCK_TYPE("Stock Type"),
