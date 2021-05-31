@@ -11,7 +11,7 @@ public interface ArhedService {
 	public long save(Arhed arhed);
 
 	public long update(Arhed arhed);
-
+		
 	public Arhed findArhedByXvoucher(String xvoucher);
 
 	public List<Arhed> getAllArheds();
