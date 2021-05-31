@@ -56,6 +56,7 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" method="post" th:action="@{/role/save}" th:object="${roles}">
 											<input type="hidden" th:field="*{newdata}">
+											<input th:if="${not #strings.isEmpty(roles.xrole)}" type="hidden" th:field="*{xrole}">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="row">
@@ -63,7 +64,7 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xrole">Name</label>
 																	<div class="col-md-8">
-																		<input type="text" class="form-control" th:field="*{xrole}" maxlength="100" th:disabled="${not #strings.isEmpty(roles.xrole) and not #strings.isEmpty(roles.xrole)}"/>
+																		<input type="text" class="form-control" th:field="*{xrole}" maxlength="100" th:disabled="${not #strings.isEmpty(roles.xrole)}"/>
 																	</div>
 															</div>
 															<div class="form-group input2">
@@ -117,7 +118,7 @@
 														<td><a th:href="@{/role/} + ${ar.xrole}" th:text="${ar.xrole}"></a></td>
 														<td th:text="${ar.xmaxdisc}"></td>
 														<td th:text="${ar.xmaxdiscf}"></td>
-														<td th:text="${ar.zactive}"></td>
+														<td th:text="${ar.zactive ? 'Y' : 'N'}"></td>
 													</tr>
 												</tbody>
 											</table>
