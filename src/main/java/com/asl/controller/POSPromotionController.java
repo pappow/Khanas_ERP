@@ -50,6 +50,7 @@ public class POSPromotionController extends ASLAbstractController{
 		pOSPromotion.setNewdata(false);
 		model.addAttribute("promotions", pOSPromotion);
 		model.addAttribute("allPromotions", pOSPromotionService.getAllPOSPromotion());
+		model.addAttribute("discountTypes", xcodesService.findByXtype(CodeType.DISCOUNT_TYPE.getCode(), Boolean.TRUE));
 		return "pages/promotion";
 	}
 	
