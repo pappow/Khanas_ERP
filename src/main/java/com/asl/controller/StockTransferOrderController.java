@@ -22,12 +22,14 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Imstock;
 import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
+import com.asl.entity.Opordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
 import com.asl.service.ImtorService;
+import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -37,9 +39,9 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	@Autowired private ImtorService imtorService;
 	@Autowired private XcodesService xcodeService;
-	@Autowired private XtrnService xtrnService;
 	@Autowired private ImstockService imstockService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private OpordService opordService;
 
 	@GetMapping
 	public String loadTransferOrderdPage(Model model) {
@@ -85,6 +87,16 @@ public class StockTransferOrderController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Stock can't be transfered to same warehouse !");
 			return responseHelper.getResponse();
 		}
+
+		// chalan reference validation
+		if(StringUtils.isNotBlank(imtorHeader.getXchalanref())) {
+			Opordheader chalan = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());
+			if(chalan == null) {
+				responseHelper.setErrorStatusAndMessage("Invalid chalan reference");
+				return responseHelper.getResponse();
+			}
+		}
+		//TODO: 
 
 		// If existing
 		ImtorHeader existImtorHeader = imtorService.findImtorHeaderByXtornum(imtorHeader.getXtornum());
