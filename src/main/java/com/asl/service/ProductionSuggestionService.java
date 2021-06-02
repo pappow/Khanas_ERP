@@ -15,8 +15,12 @@ import com.asl.model.ProductionSuggestion;
 public interface ProductionSuggestionService {
 
 	public void createSuggestion(String xordernum);
-	List<ProductionSuggestion> getProductionSuggestion(String chalan, Date xdate);
-	long deleteSuggestion(String chalan, Date xdate);
+
+	public List<ProductionSuggestion> getProductionSuggestionByChalan(String chalan);
+
+	public List<ProductionSuggestion> getProductionSuggestion(String chalan, Date xdate);
+
+	public long deleteSuggestion(String chalan, Date xdate);
 
 	public List<String> searchClananNumbers(String chalan);
 

@@ -31,7 +31,6 @@ import com.asl.service.ImstockService;
 import com.asl.service.ImtorService;
 import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
-import com.asl.service.XtrnService;
 
 @Controller
 @RequestMapping("/inventory/transferorder")

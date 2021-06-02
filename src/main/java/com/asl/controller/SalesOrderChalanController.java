@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,21 +28,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Caitem;
 import com.asl.entity.Immofgdetail;
+import com.asl.entity.ImtorDetail;
+import com.asl.entity.ImtorHeader;
+import com.asl.entity.Moheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Zbusiness;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ProductionSuggestion;
+import com.asl.model.ServiceException;
 import com.asl.model.report.AllSalesOrderChalanReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrderChalan;
 import com.asl.service.CaitemService;
 import com.asl.service.ImmofgdetailService;
+import com.asl.service.ImtorService;
 import com.asl.service.MoService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
-import com.asl.service.XtrnService;
+import com.asl.service.ProductionSuggestionService;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -54,11 +62,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SalesOrderChalanController extends ASLAbstractController {
 
 	@Autowired private OpordService opordService;
-	@Autowired private XtrnService xtrnService;
 	@Autowired private ImmofgdetailService immofgdetailService;
 	@Autowired private MoService moService;
 	@Autowired private OpdoService opdoService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private ImtorService imtorService;
+	@Autowired private ProductionSuggestionService productionSuggestionService;
 
 	@GetMapping
 	public String loadSalesOrderChalanPage(Model model) {
@@ -445,4 +454,156 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		return null;
 	}
 
+	@PostMapping("/torawforchalan/{xordernum}")
+	public @ResponseBody Map<String, Object> transferRawProductBeforProd(@PathVariable String xordernum, Model model) {
+
+		ImtorHeader imtorHeader = new ImtorHeader();
+		imtorHeader.setXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
+		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
+		imtorHeader.setXstatustor("Open");
+		imtorHeader.setXchalanref(xordernum);
+		imtorHeader.setXfwh("Central Store");
+		imtorHeader.setXtwh("Production Store");
+		imtorHeader.setXdate(new Date());
+
+		long count = imtorService.save(imtorHeader);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create transfer order");
+			return responseHelper.getResponse();
+		}
+
+		// insert raw materials for transfer from suggestion into imtordetail
+		List<ProductionSuggestion> suggestions = productionSuggestionService.getProductionSuggestionByChalan(xordernum);
+		List<ImtorDetail> details = new ArrayList<>();
+		Map<String, RawTO> rm = new HashMap<>();
+		suggestions.stream().forEach(s -> {
+			if(rm.get(s.getXrawitem()) != null) {
+				RawTO r = rm.get(s.getXrawitem());
+				r.setXqty(r.getXqty().add(s.getXrawqty()));
+			} else {
+				RawTO r = new RawTO();
+				r.setXitem(s.getXrawitem());
+				r.setXqty(s.getXrawqty() != null ? s.getXrawqty() : BigDecimal.ZERO);
+				r.setXunit(s.getXrawunit());
+				r.setXdesc(s.getXrawdes());
+				rm.put(s.getXrawitem(), r);
+			}
+		});
+
+		for(Map.Entry<String, RawTO> m : rm.entrySet()) {
+			ImtorDetail id = new ImtorDetail();
+			id.setXtornum(imtorHeader.getXtornum());
+			id.setXchalanref(imtorHeader.getXchalanref());
+			id.setXitem(m.getKey());
+			id.setXqtyord(m.getValue().getXqty());
+			id.setXunit(m.getValue().getXunit());
+			id.setXitemdesc(m.getValue().getXdesc());
+			id.setXrate(BigDecimal.ZERO);
+			details.add(id);
+		}
+
+		long dcount = 0;
+		try {
+			dcount = imtorService.saveDetail(details);
+		} catch (ServiceException e) {
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
+		if(dcount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create transfer order details");
+			return responseHelper.getResponse();
+		}
+
+		// now update chalan reference
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xordernum);
+		if(chalan != null) {
+			chalan.setRawxtornum(imtorHeader.getXtornum());
+			long ccount = opordService.updateOpordHeader(chalan);
+			if(ccount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update chalan with transfer order reference");
+				return responseHelper.getResponse();
+			}
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Transfer order created successfull");
+		responseHelper.setReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + xordernum);
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/tofinishedfromchalan/{xordernum}")
+	public @ResponseBody Map<String, Object> transferFrinsiedGoodAfterProd(@PathVariable String xordernum, Model model) {
+		ImtorHeader imtorHeader = new ImtorHeader();
+		imtorHeader.setXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode());
+		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
+		imtorHeader.setXstatustor("Open");
+		imtorHeader.setXchalanref(xordernum);
+		imtorHeader.setXfwh("Production Store");
+		imtorHeader.setXtwh("Central Store");
+		imtorHeader.setXdate(new Date());
+
+		long count = imtorService.save(imtorHeader);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create transfer order");
+			return responseHelper.getResponse();
+		}
+
+		// get finished goodes from batch and create transfer order details
+		List<Moheader> batches = moService.findMoheaderByXchalan(imtorHeader.getXchalanref());
+		if(batches == null || batches.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Batch not found in this system for chalan : " + imtorHeader.getXchalanref());
+			return responseHelper.getResponse();
+		}
+
+		// now crate transfer details from batch
+		List<ImtorDetail> toDetails = new ArrayList<>();
+		for(Moheader b : batches) {
+			ImtorDetail id = new ImtorDetail();
+			id.setXtornum(imtorHeader.getXtornum());
+			id.setXchalanref(imtorHeader.getXchalanref());
+			id.setXitem(b.getXitem());
+			id.setXqtyord(b.getXqtycom() != null ? b.getXqtycom() : BigDecimal.ZERO);
+			id.setXunit(b.getXqtyprdunit());
+			id.setXrate(BigDecimal.ZERO);
+			toDetails.add(id);
+		}
+
+		// save all details
+		try {
+			long c = imtorService.saveDetail(toDetails);
+			if(c == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't add transfer details");
+				return responseHelper.getResponse();
+			}
+		} catch (ServiceException e) {
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
+
+		// now update chalan reference
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xordernum);
+		if(chalan != null) {
+			chalan.setFinishedxtornum(imtorHeader.getXtornum());
+			long ccount = opordService.updateOpordHeader(chalan);
+			if(ccount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update chalan with transfer order reference");
+				return responseHelper.getResponse();
+			}
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Transfer order created successfull");
+		responseHelper.setReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + xordernum);
+		return responseHelper.getResponse();
+	}
+	
+
 }
+
+@Data
+class RawTO{
+	private String xitem;
+	private BigDecimal xqty;
+	private String xunit;
+	private String xdesc;
+	private BigDecimal xrate;
+}
+

@@ -181,6 +181,16 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "xpaid")
 	private BigDecimal xpaid;
 
+	@Column(name = "suggestioncreated")
+	private boolean suggestionCreated;
+
 	@Column(name = "xdue")
 	private BigDecimal xdue;
+
+	// FOR production calan transfer roder
+	@Column(name = "rawxtornum")
+	private String rawxtornum;
+
+	@Column(name = "finishedxtornum")
+	private String finishedxtornum;
 }

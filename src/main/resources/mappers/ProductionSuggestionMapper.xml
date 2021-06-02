@@ -14,6 +14,16 @@
 			AND zid=#{zid}
 	</select>
 
+	<select id="getProductionSuggestionByChalan" resultType="com.asl.model.ProductionSuggestion">
+		SELECT
+			*
+		FROM
+			PRO_SUGG
+		WHERE
+			chalan=#{chalan}
+			AND zid=#{zid}
+	</select>
+
 	<select id="getProductionSuggestionByXitemAndChalan" resultType="com.asl.model.ProductionSuggestion">
 		SELECT
 			*

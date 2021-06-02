@@ -23,6 +23,12 @@ public class ProductionSuggestionServiceImpl extends AbstractGenericService impl
 	@Autowired private ProductionSuggestionMapper productionSuggestionMapper;
 
 	@Override
+	public List<ProductionSuggestion> getProductionSuggestionByChalan(String chalan) {
+		if(StringUtils.isBlank(chalan)) return Collections.emptyList();
+		return productionSuggestionMapper.getProductionSuggestionByChalan(chalan, sessionManager.getBusinessId());
+	}
+
+	@Override
 	public List<ProductionSuggestion> getProductionSuggestion(String chalan, Date xdate) {
 		if(StringUtils.isBlank(chalan) || xdate == null) return Collections.emptyList();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
