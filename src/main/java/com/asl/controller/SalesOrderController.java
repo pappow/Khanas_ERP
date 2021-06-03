@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,12 +21,14 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.service.XtrnService;
+import com.asl.service.ZbusinessService;
 
 @Controller
 @RequestMapping("/salesninvoice/opord")
@@ -35,12 +38,21 @@ public class SalesOrderController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private VataitService vataitService;
+	@Autowired private ZbusinessService businessService;
 
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
 
 		model.addAttribute("opordheader", getDefaultOpordHeader());
-		model.addAttribute("allOpordHeader", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode()));
+
+		List<Opordheader> allHeaders = opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode());
+		allHeaders.stream().forEach(h -> {
+			Zbusiness zb = businessService.findBById(h.getXcus());
+			if(zb != null) {
+				h.setBranchname(zb.getZorg());
+			}
+		});
+		model.addAttribute("allOpordHeader", allHeaders);
 
 		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
