@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/account/chartaccount")
-public class ChartAccountController extends ASLAbstractController{
+@RequestMapping("/account/banknameentry")
+public class BankNameEntryController extends ASLAbstractController{
 	
 	@GetMapping
-	public String loadChartAccountrPage(Model model) {
-		return "pages/account/chartaccount/chartaccount";
+	public String LoadBankNameEntryPage(Model model) {
+		
+		return "pages/account/banknameentry/banknameentry";
 	}
+
 }

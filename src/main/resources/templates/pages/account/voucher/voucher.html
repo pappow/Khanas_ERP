@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Voucher</title>
+		<title>Voucher Entry</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -25,8 +25,8 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/account}">Accounts Management</a></li>
-										<li class="active"><a th:href="@{/account/voucher}">Voucher</a></li>
+										<li><a th:href="@{/account}">General Accounts</a></li>
+										<li class="active"><a th:href="@{/account/voucher}">Voucher Entry</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -48,7 +48,7 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Voucher</h1>
+										<h1>Voucher Entry</h1>
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/account/voucher}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>

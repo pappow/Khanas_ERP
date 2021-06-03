@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Account Hierarchy</title>
+		<title>Bank Name Entry</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -26,7 +26,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li><a th:href="@{/account}">General Accounts</a></li>
-										<li class="active"><a th:href="@{/account/accounthierarchy}">Account Hierarchy</a></li>
+										<li class="active"><a th:href="@{/account/banknameentry}">Bank Name Entry</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -49,10 +49,10 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Account Hierarchy</h1>
+										<h1>Bank Name Entry</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/account/accounthierarchy}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:href="@{/account/banknameentry}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a href="#" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
@@ -60,18 +60,62 @@
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" method="post">
 											<div class="row">
-												<div class="col-md-10">
+												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-md-4">Level-1 : </label>
+														<label class="control-label col-md-4">Bank: </label>
 														<div class="col-md-8">
 															<input type="text" class="form-control">
 														</div>
 													</div>
-
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xnote">Description : </label>
+														<label class="control-label col-md-4">Name : </label>
 														<div class="col-md-8">
-															<textarea class="form-control" rows="6" placeholder="Note"></textarea>
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Branch : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Bank Acc No. : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Mailing Address : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+												</div>
+												
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4">Account : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Swift Code : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Sub Account : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4">Account Type : </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control">
 														</div>
 													</div>
 												</div>
@@ -81,29 +125,7 @@
 								</section>
 							</div>
 														
-							
 							<div class="col-md-6">
-								<section id="list-manager" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Top Level Account Group</h1>
-									</div>
-									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
-											<thead>
-												<tr>
-													<th>Level #1</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														<a href="#">10.ASSETS</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</section>
 
 							</div>
 						</div>
