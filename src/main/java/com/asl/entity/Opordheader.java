@@ -193,4 +193,10 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "finishedxtornum")
 	private String finishedxtornum;
+
+	@Column(name = "rawtocomp")
+	private boolean rawtocomp;
+
+	@Column(name = "finishedtocomp")
+	private boolean finishedtocomp;
 }

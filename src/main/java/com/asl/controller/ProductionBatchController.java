@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Bmbomdetail;
 import com.asl.entity.Bmbomheader;
+import com.asl.entity.Caitem;
 import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Imstock;
+import com.asl.entity.ImtorDetail;
+import com.asl.entity.Imtrn;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Oporddetail;
@@ -43,7 +46,10 @@ import com.asl.model.report.FinishedGood;
 import com.asl.model.report.ProductionBatchReport;
 import com.asl.model.report.RawMaterial;
 import com.asl.service.BmbomService;
+import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
+import com.asl.service.ImtorService;
+import com.asl.service.ImtrnService;
 import com.asl.service.MoService;
 import com.asl.service.OpordService;
 import com.asl.service.PSVService;
@@ -66,6 +72,9 @@ public class ProductionBatchController extends ASLAbstractController {
 	@Autowired private PSVService psvService;
 	@Autowired private ImstockService imstockService;
 	@Autowired private ProductionSuggestionService productionSuggestionService;
+	@Autowired private ImtrnService imtrnService;
+	@Autowired private CaitemService caitemService;
+	@Autowired private ImtorService imtorService;
 
 	@GetMapping
 	public String loadChalanBatchPage(Model model) {
@@ -589,23 +598,133 @@ public class ProductionBatchController extends ASLAbstractController {
 
 	@PostMapping("/bulkprocessproduction/{xchalan}")
 	public @ResponseBody Map<String, Object> bulkProcessProduction(@PathVariable String xchalan, Model model){
+		Opordheader chalan = opordService.findOpordHeaderByXordernum(xchalan);
+		if(chalan == null) {
+			responseHelper.setErrorStatusAndMessage("Chalan not found");
+			return responseHelper.getResponse();
+		}
+
 		List<Moheader> mhList = moService.findMoheaderByXchalan(xchalan);
 		if(mhList == null || mhList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("No Batch information found to make bulk process");
 			return responseHelper.getResponse();
 		}
 
-		String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-		List<String> batchList = new ArrayList<>();
-		for(Moheader mh : mhList) {
-			if(!"Open".equalsIgnoreCase(mh.getXstatusmor())) continue;
-			batchList.add(mh.getXbatch());
-		}
-		moService.bulkProcessProduction(batchList, "Process", errorCode);
-		String em = getProcedureErrorMessages(errorCode);
-		if(StringUtils.isNotBlank(em)) {
-			responseHelper.setErrorStatusAndMessage(em);
-			return responseHelper.getResponse();
+		if(StringUtils.isBlank(chalan.getRawxtornum())) {
+			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			List<String> batchList = new ArrayList<>();
+			for(Moheader mh : mhList) {
+				if(!"Open".equalsIgnoreCase(mh.getXstatusmor())) continue;
+				batchList.add(mh.getXbatch());
+			}
+			moService.bulkProcessProduction(batchList, "Process", errorCode);
+			String em = getProcedureErrorMessages(errorCode);
+			if(StringUtils.isNotBlank(em)) {
+				responseHelper.setErrorStatusAndMessage(em);
+				return responseHelper.getResponse();
+			}
+		} else {
+			// check transfer order already confirmed
+			if("Open".equalsIgnoreCase(imtorService.findImtorHeaderByXtornum(chalan.getRawxtornum()).getXstatustor())) {
+				responseHelper.setErrorStatusAndMessage("Transfer order " + chalan.getRawxtornum() + " not confirmed yet, Please confirm this transfer order first");
+				return responseHelper.getResponse();
+			}
+
+			// Add finished goods to inventory first
+			List<Imtrn> finishedGoods = new ArrayList<>();
+			for(Moheader moh : mhList) {
+				Imtrn imtrn = new Imtrn();
+				imtrn.setXtype(TransactionCodeType.TRANSACTION_TRANSFER.getCode());
+				imtrn.setXtrn(TransactionCodeType.TRANSACTION_TRANSFER.getdefaultCode());
+				imtrn.setXitem(moh.getXitem());
+				imtrn.setXwh("Production Store");
+				imtrn.setXdate(new Date());
+				imtrn.setXqty(moh.getXqtycom() == null ? BigDecimal.ZERO : moh.getXqtycom());
+				imtrn.setXval(BigDecimal.ZERO);
+				imtrn.setXvalpost(BigDecimal.ZERO);
+				imtrn.setXdocnum(moh.getXbatch());
+				imtrn.setXdocrow(0);
+				imtrn.setXnote("Receive from Processing");
+				imtrn.setXsign(1);
+				Caitem c = caitemService.findByXitem(moh.getXitem());
+				imtrn.setXunit(c.getXunitpur());
+				imtrn.setXrate(c.getXrate() != null ? c.getXrate() : BigDecimal.ZERO);
+				imtrn.setXref("");
+				imtrn.setXstatusjv("Open");
+				finishedGoods.add(imtrn);
+			}
+
+			if(!chalan.isFinishedtocomp()) {
+				long count = imtrnService.save(finishedGoods);
+				if(count == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't add finished good into inventory");
+					return responseHelper.getResponse();
+				}
+
+				// update finished transfer status
+				chalan.setFinishedtocomp(true);
+				long countfmoh = opordService.updateOpordHeader(chalan);
+				if(countfmoh == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't Update Chalan status for finished goods trnasfer");
+					return responseHelper.getResponse();
+				}
+			}
+
+			// Remove raw transfered material from inventory
+			List<ImtorDetail> toDetails = imtorService.findImtorDetailByXtornum(chalan.getRawxtornum());
+			if(toDetails == null || toDetails.isEmpty()) {
+				responseHelper.setErrorStatusAndMessage("Can't find any transfer order details");
+				return responseHelper.getResponse();
+			}
+
+			List<Imtrn> rawItems = new ArrayList<>();
+			for(ImtorDetail detail : toDetails) {
+				Imtrn imtrn = new Imtrn();
+				imtrn.setXtype(TransactionCodeType.INVENTORY_TRANSACTION.getCode());
+				imtrn.setXtrn("IS--");
+				imtrn.setXitem(detail.getXitem());
+				imtrn.setXwh("Production Store");
+				imtrn.setXdate(new Date());
+				imtrn.setXqty(detail.getXqtyord() == null ? BigDecimal.ZERO : detail.getXqtyord());
+				imtrn.setXval(BigDecimal.ZERO);
+				imtrn.setXvalpost(BigDecimal.ZERO);
+				imtrn.setXdocnum(chalan.getXordernum());
+				imtrn.setXdocrow(detail.getXrow());
+				imtrn.setXnote("Transfer from Process");
+				imtrn.setXsign(-1);
+				imtrn.setXunit(detail.getXunit());
+				imtrn.setXrate(detail.getXrate() != null ? detail.getXrate() : BigDecimal.ZERO);
+				imtrn.setXref("");
+				imtrn.setXstatusjv("Open");
+				rawItems.add(imtrn);
+			}
+
+			if(!chalan.isRawtocomp()) {
+				long countr = imtrnService.save(rawItems);
+				if(countr == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't removed raw items of transfer order "+ chalan.getRawxtornum() +" from inventory");
+					return responseHelper.getResponse();
+				}
+
+				// update raw transfer status
+				chalan.setRawtocomp(true);
+				long countfmoh = opordService.updateOpordHeader(chalan);
+				if(countfmoh == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't Update Chalan status for finished goods trnasfer");
+					return responseHelper.getResponse();
+				}
+			}
+
+			// update batch status
+			if(chalan.isRawtocomp() && chalan.isFinishedtocomp()) {
+				for(Moheader moh : mhList) moh.setXstatusmor("Completed");
+				long countmoh = moService.updateMoHeader(mhList);
+				if(countmoh == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't Update Batch status");
+					return responseHelper.getResponse();
+				}
+			}
+
 		}
 
 		// Set production complete flag to chalan
