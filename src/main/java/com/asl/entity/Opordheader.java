@@ -82,9 +82,6 @@ public class Opordheader extends AbstractModel<String> {
 	@Column(name = "invoicecreated")
 	private boolean invoicecreated;
 
-	@Transient
-	private String branchname;
-
 	// Following variables are added for Convention Management
 
 	@Column(name = "xfunction")
@@ -106,8 +103,6 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "xfoodamt")
 	private BigDecimal xfoodamt;
-
-
 
 	@Column(name = "xdiscamt")
 	private BigDecimal xdiscamt;
@@ -136,9 +131,6 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "xdornum")
 	private String xdornum;
-
-	@Transient
-	private boolean isbooked;
 
 	@Column(name = "xtornum")
 	private String xtornum;
@@ -199,4 +191,11 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "finishedtocomp")
 	private boolean finishedtocomp;
+
+	@Transient
+	private boolean isbooked;
+
+	@Transient
+	private String branchname;
+
 }

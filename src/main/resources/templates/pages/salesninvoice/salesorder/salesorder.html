@@ -175,24 +175,30 @@
 										<h1>All Sales Order</h1>
 									</div>
 									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
-											<thead>
-												<tr>
-													<th>Sales Order</th>
-													<th>Date</th>
-													<th>Status</th>
-												</tr>
-											</thead>
-											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="opdo : ${allOpordHeader}">
-													<td>
-														<a th:href="@{/salesninvoice/opord/} + ${opdo.xordernum}" th:text="${opdo.xordernum}"></a>
-													</td>
-													<td  th:text="${#dates.format(opdo.xdate, df)}"></td>
-													<td th:text="${opdo.xstatus}"></td>
-												</tr>
-											</tbody>
-										</table>
+										<div style="overflow-x: auto;">
+											<table class="table table-striped table-bordered datatable nowrap">
+												<thead>
+													<tr>
+														<th>Sales Order</th>
+														<th>REQ No.</th>
+														<th>Branch</th>
+														<th>Date</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+													<tr th:each="opdo : ${allOpordHeader}">
+														<td>
+															<a th:href="@{/salesninvoice/opord/} + ${opdo.xordernum}" th:text="${opdo.xordernum}"></a>
+														</td>
+														<td th:text="${opdo.xpornum}"></td>
+														<td th:text="${opdo.branchname}"></td>
+														<td th:text="${#dates.format(opdo.xdate, df)}"></td>
+														<td th:text="${opdo.xstatus}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</section>
 
