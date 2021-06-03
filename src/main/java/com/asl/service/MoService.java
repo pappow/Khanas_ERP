@@ -21,7 +21,10 @@ public interface MoService {
 
 	public long updateMoHeader(Moheader moheader);
 
+	public long updateMoHeader(List<Moheader> moheader);
+
 	public long saveMoDetail(Modetail modetail);
+
 	public long saveBatchMoDetail(List<Modetail> modetails);
 
 	public long updateMoDetail(Modetail modetail);
@@ -49,11 +52,11 @@ public interface MoService {
 	public boolean isProductionProcessCompleted(String xchalan);
 
 	public List<Moheader> findMoheaderByXchalan(String xchalan);
-	
-	//search field
-	
+
+	// search field
+
 	public List<Moheader> findModetailXbatch(String xbatch);
-	
+
 	public List<Modetail> findModetailByXtype(String xtype);
 
 	public List<DailyProductionBatchDetail> dailyProductionReport(String xchalan);

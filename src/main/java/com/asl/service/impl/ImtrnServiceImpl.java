@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Imtrn;
 import com.asl.mapper.ImtrnMapper;
@@ -16,6 +17,7 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	@Autowired private ImtrnMapper imtrnMapper;
 
 	@Override
+	@Transactional
 	public long save(Imtrn imtrn) {
 		if (imtrn == null || StringUtils.isBlank(imtrn.getXtype()) || StringUtils.isBlank(imtrn.getXtrn())) return 0;
 		imtrn.setZid(sessionManager.getBusinessId());
@@ -24,6 +26,18 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	}
 
 	@Override
+	@Transactional
+	public long save(List<Imtrn> imtrns) {
+		if(imtrns == null || imtrns.isEmpty()) return 0;
+		long f_count = 0;
+		for(Imtrn imt : imtrns) {
+			f_count += save(imt);
+		}
+		return f_count;
+	}
+
+	@Override
+	@Transactional
 	public long update(Imtrn imtrn) {
 		if (imtrn == null || StringUtils.isBlank(imtrn.getXtrn())) return 0;
 		imtrn.setZid(sessionManager.getBusinessId());

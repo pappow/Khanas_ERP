@@ -91,6 +91,10 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		// create suggestion
 		productionSuggestionService.createSuggestion(xordernum);
 
+		// update chalan status
+		opordHeader.setSuggestionCreated(true);
+		opordService.updateOpordHeader(opordHeader);
+
 		return "redirect:/production/suggestion?xordernum=" + xordernum;
 	}
 

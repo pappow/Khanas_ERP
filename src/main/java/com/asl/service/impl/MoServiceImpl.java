@@ -46,14 +46,24 @@ public class MoServiceImpl extends AbstractGenericService implements MoService {
 		return count;
 	}
 
-
-
 	@Override
+	@Transactional
 	public long updateMoHeader(Moheader moheader) {
 		if(moheader == null || StringUtils.isBlank(moheader.getXbatch())) return 0;
 		moheader.setZid(sessionManager.getBusinessId());
 		moheader.setZuuserid(getAuditUser());
 		return moMapper.updateMoHeader(moheader);
+	}
+
+	@Override
+	@Transactional
+	public long updateMoHeader(List<Moheader> moheaders) {
+		if(moheaders == null || moheaders.isEmpty()) return 0;
+		long f_count = 0;
+		for(Moheader moh : moheaders) {
+			f_count += updateMoHeader(moh);
+		}
+		return f_count;
 	}
 
 	@Override

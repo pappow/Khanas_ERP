@@ -11,6 +11,8 @@ public interface ImtrnService {
 
 	public long save(Imtrn imtrn);
 
+	public long save(List<Imtrn> imtrn);
+
 	public long update(Imtrn imtrn);
 
 	public Imtrn findImtrnByXimtrnnum(String ximtrnnum);

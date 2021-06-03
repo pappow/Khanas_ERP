@@ -157,7 +157,7 @@
 														<button title="Add/Edit items" th:if="${#strings.isEmpty(b.xbomkey)}" type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/production/batch/batchdetail/} + ${b.xbatch} + '/others/show?withoutbom=true', data-target-modal='othersbatchdetailmodal'"><i class="fas fa-plus"></i></button>
 													</td>
 													<td style="text-align: center">
-														<button th:if="${b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-confirm editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
+														<button th:if="${#strings.isEmpty(chalan.rawxtornum) and b.bomexploaded and b.xstatusmor eq 'Open'}" title="Process Production" type="button" class="btn btn-warning btn-confirm editmode" th:attr="data-url=@{/production/batch/processproduction/} + ${b.xbatch}"><i class="fas fa-mortar-pestle"></i></button>
 														<span th:if="${b.xstatusmor eq 'Completed'}">Process completed</span>
 													</td>
 												</tr>
