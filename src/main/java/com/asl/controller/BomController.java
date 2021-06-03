@@ -127,7 +127,7 @@ public class BomController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("BOM saved successfully");
-		responseHelper.setRedirectUrl("/production/bom");
+		responseHelper.setRedirectUrl("/production/bom/" + bmbomheader.getXbomkey());
 		return responseHelper.getResponse();
 	}
 
