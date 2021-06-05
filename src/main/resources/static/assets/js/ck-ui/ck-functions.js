@@ -176,6 +176,38 @@ function modalLoader(url, modalid){
 	});
 }
 
+
+function normalTableButtonEvent(){
+	$('.normal-table').find('button.btn-edit').off('click').on('click', function(e){
+		e.preventDefault();
+		var url = $(this).data('url');
+		var modalid = $(this).data('target-modal');
+		modalLoader(url, modalid);
+	})
+
+	// Delete button
+	$('.normal-table').find('button.btn-delete').off('click').on('click', function(e){
+		var url = $(this).data('url');
+		if(confirm("Are you sure you want to delete this item?")){
+			doItemDelete(url);
+		}
+	});
+	$('.normal-table').find('button.btn-delete-noconfirm').off('click').on('click', function(e){
+		setTimeout(() => {
+			doItemDelete($(this).data('url'));
+		}, 500);
+	});
+
+	// Confirm Btn
+	$('.normal-table').find('button.btn-confirm').off('click').on('click', function(e){
+		var url = $(this).data('url');
+		if(confirm("Are you sure you want to make it confirm?")){
+			doItemConfirm(url);
+		}
+	});
+}
+
+
 /**
  * Data table buttons event binder
  * @returns
@@ -189,6 +221,7 @@ function bindDataTableButtonsEvent(datatable){
 		var modalid = $(this).data('target-modal');
 		modalLoader(url, modalid);
 	});
+
 
 	if(datatable){
 		datatable.rows().every(function(index, element) {

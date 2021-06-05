@@ -30,6 +30,7 @@ public class ListHead extends AbstractModel<String> {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "listHeadId", unique = true, nullable = false)
 	private Long listHeadId;
+
 	@Column(name = "listCode", nullable = false, length = 100)
 	private String listCode;
 	@Column(name = "description", length = 100)

@@ -240,6 +240,7 @@ ck.ui.config.buttonevent = function(){
  */
 ck.ui.config.datatable = function(){
 	dataTableInit();
+	normalTableButtonEvent();
 };
 
 /**
