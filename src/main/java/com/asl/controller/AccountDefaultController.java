@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/account/default")
+@RequestMapping("/account/accdefault")
 public class AccountDefaultController extends ASLAbstractController {
 	
 	@GetMapping

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>General Accounts</title>
+		<title>Account Group</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -27,6 +27,7 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Dashboard</a></li>
 										<li class="active"><a th:href="@{/account}">General Accounts</a></li>
+										<li class="active"><a th:href="@{/accgroup}">Account Group</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -50,60 +51,36 @@
 							<div class="section-body">
 								<table class="table dashboard-menu-table">
 									<tr>
-										<td colspan="2">General Accounts</td>
+										<td colspan="2">Account Group</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/account/chartaccount}">Chart of Account</a></td>
+										<td><a th:href="@{/accgroup/levela}">Level-1</a></td>
 										<td>
 											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/accgroup}">Account Group</a></td>
+										<td><a th:href="@{/accgroup/levelb}">Level-2</a></td>
 										<td>
 											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/account/banknameentry}">Bank Name Entry</a></td>
+										<td><a th:href="@{/accgroup/levelc}">Level-3</a></td>
 										<td>
 											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>
-										<td><a th:href="@{/account/accdefault}">Account Default</a></td>
+										<td><a th:href="@{/accgroup/leveld}">Level-4</a></td>
 										<td>
 											<a class="btn btn-sm btn-default pull-right"><i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 									<tr>
-										<td><a href="#">Year End Processing</a></td>
+										<td><a th:href="@{/accgroup/levele}">Level-5</a></td>
 										<td>
-											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a href="#">Inventory Consumption</a></td>
-										<td>
-											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/account/voucher}">Voucher Entry</a></td>
-										<td>
-											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/account/voucherdetails}">Voucher Details</a></td>
-										<td>
-											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr>
-										<td><a th:href="@{/account/accounthierarchy}">Account Hierarchy</a></td>
-										<td>
-											<a class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											<a class="btn btn-sm btn-default pull-right"><i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 								</table>
