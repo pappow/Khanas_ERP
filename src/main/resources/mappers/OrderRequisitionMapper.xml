@@ -86,12 +86,13 @@
 		FROM 
 			poorddetail 
 			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{zid}
+			LEFT JOIN xcodes xc ON xc.xcode = caitem.xcatitem and xc.zid = caitem.zid and xc.zactive='1'
 		WHERE 
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{branchzid}
 			AND poorddetail.zactive='1'
 		ORDER BY
-			caitem.xcatitem, caitem.xitem
+			xc.seqn, caitem.xcatitem, caitem.xitem
 	</select> 
 
 </mapper>

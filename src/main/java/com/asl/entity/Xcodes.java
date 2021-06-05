@@ -70,4 +70,7 @@ public class Xcodes extends AbstractModel<String> {
 
 	@Column(name = "xAccArdBank")
 	private String xAccArdBank; 
+
+	@Column(name = "seqn")
+	private Long seqn;
 }
