@@ -217,8 +217,11 @@
 		FROM 
 			ImtorDetail det
 			JOIN caitem on caitem.xitem=det.xitem AND caitem.zid=#{centralzid}
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
-			det.xtornum=#{xtornum} AND det.zid=#{zid} AND det.zactive='1' ORDER BY det.xrow ASC
+			det.xtornum=#{xtornum} AND det.zid=#{zid} AND det.zactive='1' 
+		ORDER BY 
+			xcodes.seqn, det.xrow 
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">

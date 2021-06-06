@@ -51,16 +51,15 @@ public class ProductionSuggestionController extends ASLAbstractController {
 			allChalans.addAll(opordService.findAllOpordHeaderByXtypetrnAndXtrnAndXdate(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), new Date()));
 		} else {
 			chalan = opordService.findOpordHeaderByXordernum(xordernum);
-			allChalans.add(chalan);
+			if(chalan != null) allChalans.add(chalan);
 		}
 
 		Map<String, List<ProductionSuggestion>> allSuggestions = new HashMap<>();
 		Map<String, Map<String, BigDecimal>> totalMap = new HashMap<>();
 		for(Opordheader c : allChalans) {
-			List<ProductionSuggestion> list = new ArrayList<>();
-			if(c != null) {
-				list = productionSuggestionService.getProductionSuggestion(c.getXordernum(), c.getXdate());
-			}
+			if(c == null) continue;
+			List<ProductionSuggestion> list = productionSuggestionService.getProductionSuggestion(c.getXordernum(), c.getXdate());
+
 			allSuggestions.put(c.getXordernum(), list);
 
 			Map<String, BigDecimal> m = new HashMap<>();

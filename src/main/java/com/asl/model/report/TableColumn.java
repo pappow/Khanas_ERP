@@ -21,4 +21,5 @@ public class TableColumn{
 	private BigDecimal totalQty;
 	private String xunitpur;
 	private String xcatitem;
+	private Long seqn;
 }

@@ -5,34 +5,49 @@
 
 	<select id="getProductionSuggestion" resultType="com.asl.model.ProductionSuggestion">
 		SELECT
-			*
+			PRO_SUGG.*,
+			xcodes.seqn 
 		FROM
 			PRO_SUGG
+			left join caitem on caitem.xitem = PRO_SUGG.xitem and caitem.zid = PRO_SUGG.zid and caitem.zactive='1'
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE
-			chalan=#{chalan}
-			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
-			AND zid=#{zid}
+			PRO_SUGG.chalan=#{chalan}
+			AND TO_CHAR(PRO_SUGG.xdate,'yyyy-MM-dd')=#{xdate}
+			AND PRO_SUGG.zid=#{zid}
+		order by
+			xcodes.seqn
 	</select>
 
 	<select id="getProductionSuggestionByChalan" resultType="com.asl.model.ProductionSuggestion">
 		SELECT
-			*
+			PRO_SUGG.*,
+			xcodes.seqn
 		FROM
 			PRO_SUGG
+			left join caitem on caitem.xitem = pro_sugg.xitem and caitem.zid = pro_sugg.zid and caitem.zactive='1'
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE
-			chalan=#{chalan}
-			AND zid=#{zid}
+			PRO_SUGG.chalan=#{chalan}
+			AND PRO_SUGG.zid=#{zid}
+		order by
+			xcodes.seqn
 	</select>
 
 	<select id="getProductionSuggestionByXitemAndChalan" resultType="com.asl.model.ProductionSuggestion">
 		SELECT
-			*
+			PRO_SUGG.*,
+			xcodes.seqn
 		FROM
 			PRO_SUGG
+			left join caitem on caitem.xitem = pro_sugg.xitem and caitem.zid = pro_sugg.zid and caitem.zactive='1'
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE
-			chalan=#{chalan}
-			AND xitem=#{xitem}
-			AND zid=#{zid}
+			PRO_SUGG.chalan=#{chalan}
+			AND PRO_SUGG.xitem=#{xitem}
+			AND PRO_SUGG.zid=#{zid}
+		order by
+			xcodes.seqn
 	</select>
 
 	<select id = "createSuggestion" statementType = "CALLABLE">

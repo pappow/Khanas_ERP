@@ -20,4 +20,5 @@ public class BranchesRequisitions {
 	private String xunitpur;
 	private String xordernum;
 	private String xcatitem;
+	private Long seqn;
 }

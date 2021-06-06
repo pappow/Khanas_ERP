@@ -292,11 +292,14 @@
 		FROM 
 			oporddetail od
 			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			od.xordernum=#{xordernum} 
 			AND od.xrow=#{xrow} 
 			AND od.zid=#{zid} 
 			AND od.zactive='1'
+		ORDER BY
+			xcodes.seqn
 	</select>
 
 	<select id="findOporddetailByXordernum" resultType="Oporddetail">
@@ -308,12 +311,13 @@
 		FROM
 			oporddetail 
 			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{zid}
+			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			oporddetail.xordernum=#{xordernum}
 			AND oporddetail.zid=#{zid}
 			AND oporddetail.zactive='1'
 		ORDER BY
-			caitem.xcatitem, oporddetail.xitem
+			xcodes.seqn, caitem.xcatitem, oporddetail.xitem
 	</select>
 
 	<select id="getAllOpordheader" resultType="Opordheader">
@@ -421,12 +425,14 @@
 			OPORDDETAIL.XUNIT AS "XUNITPUR",
 			OPORDDETAIL.XQTYORD,
 			CAITEM.XCATITEM,
-			CAITEM.XDESC
+			CAITEM.XDESC,
+			XCODES.SEQN
 		FROM
 			OPORDHEADER
 			JOIN OPORDDETAIL ON OPORDDETAIL.XORDERNUM = OPORDHEADER.XORDERNUM AND OPORDHEADER.zid=OPORDDETAIL.zid
 			JOIN CAITEM ON CAITEM.XITEM = OPORDDETAIL.XITEM AND CAITEM.ZID=#{zid}
 			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
+			LEFT JOIN XCODES ON XCODES.XCODE = CAITEM.XCATITEM AND XCODES.ZID = CAITEM.ZID AND XCODES.ZACTIVE='1'
 		WHERE
 			OPORDHEADER.ZID=#{zid}
 			AND OPORDHEADER.ZACTIVE='1'

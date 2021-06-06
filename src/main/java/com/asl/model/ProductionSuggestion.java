@@ -20,4 +20,6 @@ public class ProductionSuggestion {
 	private String xrawdes;
 	private BigDecimal xrawqty;
 	private String xrawunit;
+
+	private Long seqn;
 }
