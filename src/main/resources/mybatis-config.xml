@@ -49,6 +49,7 @@
 		<mapper resource="mappers/POSPromotionMapper.xml"/>
 		<mapper resource="mappers/POSSettingsMapper.xml"/>
 		<mapper resource="mappers/POSPermissionsMapper.xml"/>
+		<mapper resource="mappers/LandPersonMapper.xml"/>
 		
 	</mappers>
 </configuration>

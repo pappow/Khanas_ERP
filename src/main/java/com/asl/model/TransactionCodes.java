@@ -25,6 +25,7 @@ public class TransactionCodes {
 	public static final Map<String, String> AR_TRANSACTION = new HashMap<>();
 	public static final Map<String, String> INVENTORY_TRANSFER_ORDER = new HashMap<>();
 	public static final Map<String, String> BOM_NUMBER = new HashMap<>();
+	public static final Map<String, String> PERSON_ID = new HashMap<>();
 	static {
 		
 		//AP Transactional Codes

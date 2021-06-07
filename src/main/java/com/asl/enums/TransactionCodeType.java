@@ -31,6 +31,7 @@ public enum TransactionCodeType {
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 
+	PERSON_ID("Persone ID", "PRSN-", TransactionCodes.PERSON_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
