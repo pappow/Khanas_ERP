@@ -59,6 +59,7 @@
 									</div>
 									<div class="section-body">
 										<form id="mainform" class="form-horizontal" th:action="@{/procurement/requisition/save}"  method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<input type="hidden" th:field="${poordheader.xpornum}"/>
 											<table class="table table-stripped table-bordered requisition-table">
 												<thead>
 													<tr>
@@ -72,7 +73,7 @@
 														<td th:text="${n.count}"></td>
 														<td th:text="${item.xitem} + ' - ' + ${item.xdesc} + ' (' + ${item.xunitpur} + ')' "></td>
 														<td>
-															<input th:id="${item.xitem}" class="form-control item-qty" type="number" min="0" value="0"/>
+															<input th:attr="data-xunitpur=${item.xunitpur},data-xitemdesc=${item.xdesc},data-xcatitem=${item.xcatitem},data-xgitem=${item.xgitem},data-xrate=${item.xrate}" th:id="${item.xitem}" class="form-control item-qty" type="number" min="0" value="0"/>
 														</td>
 													</tr>
 												</tbody>
@@ -98,24 +99,42 @@
 		
 		<script type="text/javascript">
 			$(document).ready(function(){
+				$('.item-qty').off('blur').on('blur', function(){
+					if($(this).val() == '' || isNaN($(this).val() == '') || Number($(this).val()) < 0){
+						$(this).val(0);
+					}
+				})
 
 				$('.req-confirm-btn').off('click').on('click', function(e){
 					e.preventDefault();
+
+					var poordheader = {};
+					poordheader.xpornum = $('#xpornum').val();
+					
 					var items = [];
 					$('.requisition-table .item-qty').each(function(i, row){
-
 						items.push({
 							"xitem" : $(row).attr('id'),
-							"xqtyord" : $(row).val()
+							"xqtyord" : $(row).val(),
+							"xunitpur" : $(row).data('xunitpur'),
+							"xitemdesc" : $(row).data('xitemdesc'),
+							"xcatitem" : $(row).data('xcatitem'),
+							"xgitem" : $(row).data('xgitem'),
+							"xrate" : $(row).data('xrate')
 						});
-
 					});
+					
+					poordheader.items = items;
+					console.log({poordheader});
 
 					$.ajax({
 						url : getBasepath() + '/procurement/requisition/save',
 						type : 'POST',
-						data: {
-							details: items,
+						dataType : 'json', 
+						data: JSON.stringify(poordheader),
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("Accept", "application/json");
+							xhr.setRequestHeader("Content-Type", "application/json");
 						},
 						success : function(data) {
 							loadingMask2.hide();

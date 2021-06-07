@@ -18,6 +18,8 @@ public interface PoordService {
 
 	public long saveDetail(PoordDetail poordDetail);
 
+	public long saveDetail(List<PoordDetail> poordDetails);
+
 	public long updateDetail(PoordDetail poordDetail);
 
 	public long deleteDetail(PoordDetail poordDetail);

@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +20,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "poorddetail")
 @IdClass(PoordDetailPK.class)
 @EqualsAndHashCode(of = { "zid", "xpornum", "xrow" }, callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PoordDetail extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 4124498529281042988L;
@@ -63,11 +67,13 @@ public class PoordDetail extends AbstractModel<String> {
 	@Column(name = "xqtypur")
 	private BigDecimal xqtypur;
 
-	@Transient
+	@Column(name = "xitemdesc")
 	private String xitemdesc;
-	@Transient
+
+	@Column(name = "xcatitem")
 	private String xcatitem;
-	@Transient
+
+	@Column(name = "xgitem")
 	private String xgitem;
 
 }

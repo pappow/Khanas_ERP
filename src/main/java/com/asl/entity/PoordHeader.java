@@ -13,6 +13,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,6 +24,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "poordheader")
 @IdClass(PoordHeaderPK.class)
 @EqualsAndHashCode(of = { "zid", "xpornum" }, callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PoordHeader extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -5079810075388406733L;

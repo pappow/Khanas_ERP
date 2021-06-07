@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
@@ -21,6 +22,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	private PoordMapper poordMapper;
 
 	@Override
+	@Transactional
 	public long save(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())
 				|| StringUtils.isBlank(poordHeader.getXtrn()))
@@ -31,6 +33,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long update(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) return 0;
 		if(StringUtils.isBlank(poordHeader.getZid())) poordHeader.setZid(sessionManager.getBusinessId());
@@ -58,6 +61,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long saveDetail(PoordDetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
@@ -70,6 +74,18 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
+	public long saveDetail(List<PoordDetail> poordDetails) {
+		if(poordDetails == null || poordDetails.isEmpty()) return 0;
+		long f_count = 0;
+		for(PoordDetail pd : poordDetails) {
+			f_count += saveDetail(pd);
+		}
+		return f_count;
+	}
+
+	@Override
+	@Transactional
 	public long updatePoordHeaderTotalAmt(PoordDetail poordDetail) {
 		if(poordDetail == null) return 0;
 		return poordMapper.updatePoordHeaderTotalAmt(poordDetail);
