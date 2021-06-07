@@ -42,13 +42,10 @@ public class OrderRequisitionController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
-		sessionManager.getLoggedInUserDetails().getRoles().stream().forEach(s -> System.out.println(s.toString()));
-		
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 
 		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
-		//poordheadersList.sort(Comparator.comparing(PoordHeader::getXpornum).reversed());
 		model.addAttribute("allPoordHeader", poordheadersList);
 
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));

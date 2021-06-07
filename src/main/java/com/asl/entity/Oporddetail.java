@@ -9,8 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zubayer Ahamed
@@ -20,6 +22,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "oporddetail")
 @IdClass(OporddetailPK.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = { "zid", "xordernum", "xrow" }, callSuper = false)
 public class Oporddetail extends AbstractModel<String> {
 
@@ -72,5 +76,10 @@ public class Oporddetail extends AbstractModel<String> {
 
 	@Column(name = "xlineamt")
 	private BigDecimal xlineamt;
+
+	public Oporddetail(String xitem, BigDecimal xqtyord) {
+		this.xitem = xitem;
+		this.xqtyord = xqtyord;
+	}
 
 }

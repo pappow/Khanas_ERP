@@ -38,5 +38,6 @@ public interface CaitemService {
 	public List<Caitem> getWithoutProductionCaitems(String hint);
 	
 	public List<Caitem> searchItemName(String xdesc);
-	
+
+	public List<Caitem> getAllItemsWithoutRawMaterials();
 }

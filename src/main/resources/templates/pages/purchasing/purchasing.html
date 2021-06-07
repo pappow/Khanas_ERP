@@ -70,10 +70,16 @@
 											<a th:href="@{/purchasing/bqls/allopenreq}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									<tr th:if="${isBranch and menuProfile.M0311 ne null and menuProfile.M0311.display}">
+									<!-- <tr th:if="${isBranch and menuProfile.M0311 ne null and menuProfile.M0311.display}">
 										<td><a th:href="@{/purchasing/requisition}" th:text="${menuProfile.M0311.screenprompt}">Order Requisition</a></td>
 										<td>
 											<a th:href="@{/purchasing/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr> -->
+									<tr th:if="${isBranch and menuProfile.M0311 ne null and menuProfile.M0311.display}">
+										<td><a th:href="@{/procurement/requisition}" th:text="${menuProfile.M0311.screenprompt}">Order Requisition</a></td>
+										<td>
+											<a th:href="@{/procurement/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 
