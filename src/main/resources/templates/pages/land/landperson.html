@@ -223,7 +223,17 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<tr th:each="d, n : ${lpelist}">
+											<td th:text="${n.count}"></td>
+											<td th:text="${d.xyear}"></td>
+											<td th:text="${d.xexam}"></td>
+											<td th:text="${d.xinstitude}"></td>
+											<td th:text="${d.xmajor}"></td>
+											<td th:text="${d.xresult}"></td>
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+												<button type="button" class="btn btn-default btn-edit editmode" data-target-modal="educationmodal"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode"><i class="fas fa-trash"></i></button>
+											</td>
 										</tr>
 									</tbody>
 								</table>
