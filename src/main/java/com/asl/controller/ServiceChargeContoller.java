@@ -39,7 +39,8 @@ public class ServiceChargeContoller extends ASLAbstractController{
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-
+		
+		// If Exist?
 		POSSettings ps = posSettingsService.findByPOSSettings("Service");
 		if(ps != null) {
 			BeanUtils.copyProperties(serviceCharge, ps);
