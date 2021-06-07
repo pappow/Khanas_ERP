@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -339,6 +340,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 				tc.setXcatitem(b.getXcatitem());
 				tc.setXdesc(b.getXdesc());
 				tc.setXunitpur(b.getXunitpur());
+				tc.setSeqn(b.getSeqn());
 				columns.add(tc);
 			}
 			if(!branches.contains(b.getZorg())) {
@@ -347,6 +349,10 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		}
 		Collections.sort(items);
 		columns.sort(Comparator.comparing(TableColumn::getXitem));
+		List<TableColumn> sortedcolumns = columns.stream()
+											.sorted(Comparator.nullsLast(Comparator.comparing(TableColumn::getSeqn, Comparator.nullsLast(Comparator.naturalOrder()))))
+											.collect(Collectors.toList());
+		
 
 		Map<String, BranchItem> browMap = new TreeMap<>();
 		for(BranchesRequisitions br : bqList) {
@@ -406,7 +412,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		int chunk = 0;
 		List<MatrixReportData> dataList = new ArrayList<>();
 		MatrixReportData mrd = null;
-		for(int i = 0; i < columns.size(); i++) {
+		for(int i = 0; i < sortedcolumns.size(); i++) {
 			if(chunk == 9) {
 				for(Map.Entry<String, BranchRow> m : browtracker.entrySet()) {
 					mrd.getRows().add(m.getValue());
@@ -418,7 +424,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 				mrd = new MatrixReportData();
 				dataList.add(mrd);
 			}
-			mrd.getColumns().add(columns.get(i));
+			mrd.getColumns().add(sortedcolumns.get(i));
 			mrd.getTotals().add(totals.get(i));
 
 			for(int m = 0; m < branchWiseItems.size(); m++) {
@@ -438,7 +444,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 
 			chunk++;
 
-			if(i == columns.size() - 1) {
+			if(i == sortedcolumns.size() - 1) {
 				for(Map.Entry<String, BranchRow> m : browtracker.entrySet()) {
 					mrd.getRows().add(m.getValue());
 				}
@@ -471,6 +477,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 				c.setXdesc(bq.getXdesc());
 				c.setTotalQty(bq.getXqtyord());
 				c.setXunitpur(bq.getXunitpur());
+				c.setSeqn(bq.getSeqn());
 				columnRowMap.put(item, c);
 			}
 
@@ -514,12 +521,15 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		columnRowMap.entrySet().stream().forEach(c -> distinctItems.add(c.getValue()));
 		branchRowMap.entrySet().stream().forEach(b -> distinctBranch.add(b.getValue()));
 
-		distinctItems.sort(Comparator.comparing(TableColumn::getXcatitem));
+		distinctItems.sort(Comparator.comparing(TableColumn::getXitem));
+		List<TableColumn> list = distinctItems.stream()
+									.sorted(Comparator.nullsLast(Comparator.comparing(TableColumn::getSeqn, Comparator.nullsLast(Comparator.naturalOrder()))))
+									.collect(Collectors.toList());
 
 		SimpleDateFormat pdate = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("datadate", pdate.format(date));
 		model.addAttribute("distinctBranch", distinctBranch);
-		model.addAttribute("distinctItems", distinctItems);
+		model.addAttribute("distinctItems", list);
 		model.addAttribute("bqlsDetailsList", bqList);
 	}
 }
