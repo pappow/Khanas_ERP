@@ -29,6 +29,11 @@ public enum CodeType {
 	JOURNAL_VOUCHER_STATUS("Journal Voucher Status"),
 
 	ITEM_GROUP("Item Group"),
+	//Land Experience Person Start
+	EXPERIENCE_TRANSACTION_TYPE("Experience Transaction type"),
+	EXPERIENCE_TYPE("Experience type"),
+	//Land Experience Person Start End
+		
 	ITEM_CATEGORY("Item Category"),
 	ITEM_SUB_CATEGORY("Item Sub-Category"),
 

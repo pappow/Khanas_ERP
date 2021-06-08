@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Service;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,7 +32,7 @@ public class LandEducation extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
-	private String xrow;
+	private int xrow;
 
 	@Column(name = "xyear")
 	private String xyear;
@@ -50,7 +48,4 @@ public class LandEducation extends AbstractModel<String> {
 
 	@Column(name = "xresult")
 	private String xresult;
-	
-	
-
 }

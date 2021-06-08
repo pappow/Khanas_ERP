@@ -102,4 +102,88 @@
 			zid=#{zid} 
 			AND xperson=#{xperson}
 	</select>
+	
+	<insert id="savePersonEducation" parameterType="LandEducation">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM landeducation WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO landeducation
+		(
+			xperson,
+			xrow,
+			xyear,
+			xexam,
+			xinstitude,
+			xmajor,
+			xresult,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid,
+			zuip,
+			zaip
+		)
+		VALUES
+		(
+			#{xperson, jdbcType=VARCHAR},
+			#{xrow},
+			#{xyear, jdbcType=VARCHAR},
+			#{xexam, jdbcType=VARCHAR},
+			#{xinstitude, jdbcType=VARCHAR},
+			#{xmajor, jdbcType=VARCHAR},
+			#{xresult, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<update id="updatePersonEducation" parameterType="LandEducation">
+		UPDATE 
+			landeducation
+		SET
+			xyear=#{xyear, jdbcType=VARCHAR},
+			xexam=#{xexam, jdbcType=VARCHAR},
+			xinstitude=#{xinstitude, jdbcType=VARCHAR},
+			xmajor=#{xmajor, jdbcType=VARCHAR},
+			xresult=#{xresult, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR}
+		WHERE
+			xperson=#{xperson, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getAllPersonEducation" resultType="LandEducation">
+		SELECT * FROM landeducation WHERE zid=#{zid}  AND zactive='1' order by ztime desc
+	</select>
+
+	<select id="findByPersonEducation" resultType="LandEducation">
+		SELECT * FROM landeducation WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandEducationdetailByXpersonAndXrow" resultType="LandEducation">
+		SELECT * FROM landeducation WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandEducationByXpersonAndXexam" resultType="LandEducation">
+		SELECT * FROM landeducation WHERE xperson=#{xperson} AND xexam=#{xexam} AND zid=#{zid} AND zactive='1' ORDER BY xexam DESC
+	</select>
+	
+	<delete id="deleteDetail" parameterType="LandEducation">
+		DELETE FROM landeducation WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>
