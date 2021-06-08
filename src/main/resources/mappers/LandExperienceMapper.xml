@@ -4,9 +4,7 @@
 <mapper namespace="com.asl.mapper.LandExperienceMapper">
 
 <insert id="saveExPerson" parameterType="LandExperience">
-		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM landexperience WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}
-		</selectKey>
+		
 		INSERT INTO landexperience
 		(
 			xperson,
@@ -29,7 +27,7 @@
 		VALUES
 		(
 			#{xperson, jdbcType=VARCHAR},
-			#{xrow},
+			#{xrow, jdbcType=INTEGER},
 			#{xname, jdbcType=VARCHAR},
 			#{xduration, jdbcType=INTEGER},
 			#{xdesignation, jdbcType=VARCHAR},
