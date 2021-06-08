@@ -6,11 +6,13 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.mapper.PoordMapper;
+import com.asl.model.ServiceException;
 import com.asl.model.report.RM0301;
 import com.asl.service.PoordService;
 
@@ -21,6 +23,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	private PoordMapper poordMapper;
 
 	@Override
+	@Transactional
 	public long save(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())
 				|| StringUtils.isBlank(poordHeader.getXtrn()))
@@ -31,6 +34,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long update(PoordHeader poordHeader) {
 		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXpornum())) return 0;
 		if(StringUtils.isBlank(poordHeader.getZid())) poordHeader.setZid(sessionManager.getBusinessId());
@@ -58,6 +62,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long saveDetail(PoordDetail poordDetail) {
 		if(poordDetail == null || StringUtils.isBlank(poordDetail.getXpornum())) return 0;
 		poordDetail.setZid(sessionManager.getBusinessId());
@@ -70,6 +75,21 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
+	public long saveDetail(List<PoordDetail> poordDetails) throws ServiceException {
+		if(poordDetails == null || poordDetails.isEmpty()) return 0;
+		long f_count = 0;
+		for(PoordDetail pd : poordDetails) {
+			if(StringUtils.isBlank(pd.getXpornum())) throw new ServiceException("Requesition reference empty");
+			pd.setZid(sessionManager.getBusinessId());
+			pd.setZauserid(getAuditUser());
+			f_count += poordMapper.savePoordDetailWithRow(pd);
+		}
+		return f_count;
+	}
+
+	@Override
+	@Transactional
 	public long updatePoordHeaderTotalAmt(PoordDetail poordDetail) {
 		if(poordDetail == null) return 0;
 		return poordMapper.updatePoordHeaderTotalAmt(poordDetail);
@@ -88,6 +108,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long deleteDetail(PoordDetail poordDetail) {
 		if(poordDetail == null) return 0;
 		long count = poordMapper.deletePoordDetail(poordDetail);
@@ -95,6 +116,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			count = updatePoordHeaderTotalAmt(poordDetail);
 		}
 		return count;
+	}
+
+	@Override
+	@Transactional
+	public long deleteDetailByXpornum(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return 0;
+		return poordMapper.deleteDetailByXpornum(xpornum, sessionManager.getBusinessId());
 	}
 
 	@Override

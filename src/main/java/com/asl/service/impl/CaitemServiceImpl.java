@@ -98,5 +98,10 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return caitemMapper.searchItemName(hint.toUpperCase(), sessionManager.getBusinessId());
 	}
-	
+
+	@Override
+	public List<Caitem> getAllItemsWithoutRawMaterials() {
+		return caitemMapper.getAllItemsWithoutRawMaterials(sessionManager.getZbusiness().getCentralzid());
+	}
+
 }

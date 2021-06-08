@@ -195,4 +195,18 @@
 			AND xproditem!='1'
 			AND zactive='1'
 	</select>
+
+	<select id="getAllItemsWithoutRawMaterials" resultType="Caitem">
+		SELECT
+			caitem.*
+		FROM
+			caitem
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zactive='1' and xcodes.zid = #{zid} and xcodes.xtype='Item Category'
+		WHERE
+			caitem.zid=#{zid}
+			AND caitem.zactive='1'
+			AND caitem.xgitem!='Raw Materials'
+		ORDER BY
+			xcodes.seqn, caitem.xseqn
+	</select>
 </mapper>

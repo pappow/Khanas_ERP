@@ -101,4 +101,7 @@ public class Caitem extends AbstractModel<String> {
 
 	@Transient
 	private boolean booked;
+
+	@Transient
+	private BigDecimal xqtyord = BigDecimal.ZERO;
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.model.ServiceException;
 
 @Component
 public interface PoordService {
@@ -18,9 +19,13 @@ public interface PoordService {
 
 	public long saveDetail(PoordDetail poordDetail);
 
+	public long saveDetail(List<PoordDetail> poordDetails) throws ServiceException;
+
 	public long updateDetail(PoordDetail poordDetail);
 
 	public long deleteDetail(PoordDetail poordDetail);
+
+	public long deleteDetailByXpornum(String xpornum);
 
 	public long archiveAllPoordDetailByXpornum(String xpornum);
 
