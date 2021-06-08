@@ -168,11 +168,11 @@
 	</update>
 	
 	<select id="getAllPersonEducation" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE zid=#{zid} order by ztime desc
+		SELECT * FROM landeducation WHERE zid=#{zid}  AND zactive='1' order by ztime desc
 	</select>
 
 	<select id="findByPersonEducation" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE xperson=#{xperson} AND zid=#{zid}
+		SELECT * FROM landeducation WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandEducationdetailByXpersonAndXrow" resultType="LandEducation">
@@ -182,4 +182,8 @@
 	<select id="findLandEducationByXpersonAndXexam" resultType="LandEducation">
 		SELECT * FROM landeducation WHERE xperson=#{xperson} AND xexam=#{xexam} AND zid=#{zid} AND zactive='1' ORDER BY xexam DESC
 	</select>
+	
+	<delete id="deleteDetail" parameterType="LandEducation">
+		DELETE FROM landeducation WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>

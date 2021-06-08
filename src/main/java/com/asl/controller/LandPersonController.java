@@ -1,7 +1,5 @@
 package com.asl.controller;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.LandPerson;
-import com.asl.entity.PoordDetail;
 import com.asl.entity.LandEducation;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -53,6 +50,7 @@ public class LandPersonController extends ASLAbstractController {
 		//landPerson.setNewdata(false);
 		model.addAttribute("person", landPerson);
 		model.addAttribute("allPersons", landPersonService.getAllLandPerson());
+		model.addAttribute("lpelist", landPersonService.findByPersonEducation(xperson));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.PERSON_ID.getCode(), Boolean.TRUE));
 		return "pages/land/landperson";
 	}
@@ -88,14 +86,47 @@ public class LandPersonController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/landperson/" + landPerson.getXperson());
 		return responseHelper.getResponse();
 	}
+	
+	
+	@PostMapping("/archive/{xperson}")
+	public @ResponseBody Map<String, Object> archive(@PathVariable String xperson){
+		return doArchiveOrRestore(xperson, true);
+	}
+
+	@PostMapping("/restore/{xperson}")
+	public @ResponseBody Map<String, Object> restore(@PathVariable String xperson){
+		return doArchiveOrRestore(xperson, false);
+	}
+
+	public Map<String, Object> doArchiveOrRestore(String xperson, boolean archive){
+		LandPerson lp = landPersonService.findByLandPerson(xperson);
+		if(lp == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		lp.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
+		long count = landPersonService.update(lp);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Person Information updated successfully");
+		responseHelper.setRedirectUrl("/landperson/" + lp.getXperson());
+		return responseHelper.getResponse();
+	}
+
+	
+	
 
 	@GetMapping("/{xperson}/education/{xrow}/show")
 	public String loadEducationModal(@PathVariable String xperson, @PathVariable String xrow, Model model) {
 		if("new".equalsIgnoreCase(xrow)) {
 			LandEducation lpe = new LandEducation();
-			lpe.setXyear("2");
-			lpe.setXexam("HSC");
-			lpe.setXresult("4.00");
+			lpe.setXyear("");
+			lpe.setXexam("");
+			lpe.setXresult("");
 			lpe.setXperson(xperson);
 			model.addAttribute("lpe", lpe);
 		} 
@@ -103,9 +134,9 @@ public class LandPersonController extends ASLAbstractController {
 			LandEducation lpe = landPersonService.findLandEducationdetailByXpersonAndXrow(xperson, Integer.parseInt(xrow));
 			if(lpe==null) {
 				lpe = new LandEducation();
-				lpe.setXyear("2");
-				lpe.setXexam("HSC");
-				lpe.setXresult("4.00");
+				lpe.setXyear("");
+				lpe.setXexam("");
+				lpe.setXresult("");
 			}
 			model.addAttribute("lpe", lpe);
 		}
@@ -172,6 +203,25 @@ public class LandPersonController extends ASLAbstractController {
 		model.addAttribute("lpelist", educationList);
 		model.addAttribute("person", landPersonService.findByLandPerson(xperson));
 		return "pages/land/landperson::educationtable";
+	}
+	
+	@PostMapping("{xperson}/education/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deletePersonDetail(@PathVariable String xperson, @PathVariable String xrow, Model model) {
+		LandEducation lpe = landPersonService.findLandEducationdetailByXpersonAndXrow(xperson, Integer.parseInt(xrow));
+		if(lpe == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landPersonService.deleteDetail(lpe);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("educationtable", "/landperson/education/" + xperson);
+		return responseHelper.getResponse();
 	}
 
 }

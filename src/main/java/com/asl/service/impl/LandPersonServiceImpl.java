@@ -99,5 +99,10 @@ public class LandPersonServiceImpl extends AbstractGenericService implements Lan
 		return landpersonMapper.findLandEducationByXpersonAndXexam(xperson, xexam, sessionManager.getBusinessId());
 	}
 	
-
+	@Override
+	public long deleteDetail(LandEducation landEducation) {
+		if(landEducation == null) return 0;
+		long count = landpersonMapper.deleteDetail(landEducation);
+		return count;
+	}
 }

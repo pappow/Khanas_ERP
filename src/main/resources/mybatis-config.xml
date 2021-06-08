@@ -50,6 +50,7 @@
 		<mapper resource="mappers/POSSettingsMapper.xml"/>
 		<mapper resource="mappers/POSPermissionsMapper.xml"/>
 		<mapper resource="mappers/LandPersonMapper.xml"/>
+		<mapper resource="mappers/LandExperienceMapper.xml"/>
 		
 	</mappers>
 </configuration>

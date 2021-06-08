@@ -56,6 +56,8 @@
 														<a th:href="@{/landperson}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 														<a th:if="${#strings.isEmpty(person.xperson)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
+														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == true}" th:href="@{/landperson/archive/} + ${person.xperson}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == false}" th:href="@{/landperson/restore/} + ${person.xperson}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 													</div>
 												</div>
 											</div>
@@ -231,8 +233,8 @@
 											<td th:text="${d.xmajor}"></td>
 											<td th:text="${d.xresult}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" data-target-modal="educationmodal"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landperson/} + ${person.xperson} + '/education/' + ${d.xrow} + '/show', data-target-modal='educationmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landperson/} + ${person.xperson} + '/education/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

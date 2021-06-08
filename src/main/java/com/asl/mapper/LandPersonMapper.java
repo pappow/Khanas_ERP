@@ -24,6 +24,8 @@ public interface LandPersonMapper {
 	
 	public long updatePersonEducation(LandEducation landEducation);
 	
+	public long deleteDetail(LandEducation landEducation);
+	
 	public List<LandEducation> getAllPersonEducation(String zid);
 	
 	public List<LandEducation> findByPersonEducation(String xperson, String zid);

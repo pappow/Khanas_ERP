@@ -2,9 +2,12 @@ package com.asl.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.asl.entity.LandPerson;
 import com.asl.entity.LandEducation;
 
+@Component
 public interface LandPersonService {
 	
 	public long save(LandPerson landperson);
@@ -20,6 +23,8 @@ public interface LandPersonService {
 	public long save(LandEducation landEducation);
 	
 	public long update(LandEducation landEducation);
+	
+	public long deleteDetail(LandEducation landEducation);
 
 	public List<LandEducation> getAllPersonEducation();
 
