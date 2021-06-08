@@ -17,8 +17,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = { "zid", "xperson","xrow"}, callSuper = false)
 public class LandExperience extends AbstractModel<String>{
 	
-	private static final long serialVersionUID = 8535665397457746805L;
-	
+
+	private static final long serialVersionUID = -8985247501677946563L;
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
