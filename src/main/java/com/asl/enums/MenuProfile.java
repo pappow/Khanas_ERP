@@ -37,8 +37,9 @@ public enum MenuProfile {
 	M0308(9999, "M0308", "300", "M0300", "Supplier Adjustment", "Y","/procurement/supplieradjustment"),
 	M0309(9999, "M0309", "300", "M0300", "Supplier Opening Entry", "Y","/purchasing/supopenentry"),
 	M0310(9999, "M0310", "300", "M0300", "GRN Return", "Y","/procurement/grnreturn"),
-	M0311(9999, "M0311", "300", "M0300", "Order Requisition", "Y","/purchasing/requisition"),
+	M0311(9999, "M0311", "300", "M0300", "Order Requisition", "Y","/procurement/allrequisition"),
 	M0312(9999, "M0312", "300", "M0300", "PO to GRN", "Y","/procurement/potogrn"),
+	M0313(9999, "M0313", "300", "M0300", "All Order Requisitions", "Y","/procurement/requisition/allrequisition"),
 
 	M0400(9999, "M0400", "400", "MASTER", "Sales & Invoicing", "Y","/salesninvoice"),
 	M0401(9999, "M0401", "400", "M0400", "Sales Orders (Branch)", "Y","/salesninvoice/salesorder"),
@@ -64,6 +65,7 @@ public enum MenuProfile {
 	M0604(9999, "M0604", "600", "M0600", "Stock-Take Entry", "Y","/inventory/stocktake"),
 	M0605(9999, "M0605", "600", "M0600", "Transfer Order", "Y","/inventory/transferorder"),
 	M0606(9999, "M0606", "600", "M0600", "Production Chalan to Transfer Order", "Y","/inventory/pchtotrord"),
+	M0607(9999, "M0607", "600", "M0600", "Stock List", "Y","/inventory/stocklist"),
 
 	M0700(9999, "M0700", "700", "MASTER", "Report", "Y","/report");
 

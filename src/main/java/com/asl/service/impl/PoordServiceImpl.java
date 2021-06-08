@@ -12,6 +12,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.mapper.PoordMapper;
+import com.asl.model.ServiceException;
 import com.asl.model.report.RM0301;
 import com.asl.service.PoordService;
 
@@ -75,11 +76,14 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 
 	@Override
 	@Transactional
-	public long saveDetail(List<PoordDetail> poordDetails) {
+	public long saveDetail(List<PoordDetail> poordDetails) throws ServiceException {
 		if(poordDetails == null || poordDetails.isEmpty()) return 0;
 		long f_count = 0;
 		for(PoordDetail pd : poordDetails) {
-			f_count += saveDetail(pd);
+			if(StringUtils.isBlank(pd.getXpornum())) throw new ServiceException("Requesition reference empty");
+			pd.setZid(sessionManager.getBusinessId());
+			pd.setZauserid(getAuditUser());
+			f_count += poordMapper.savePoordDetailWithRow(pd);
 		}
 		return f_count;
 	}
@@ -104,6 +108,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	}
 
 	@Override
+	@Transactional
 	public long deleteDetail(PoordDetail poordDetail) {
 		if(poordDetail == null) return 0;
 		long count = poordMapper.deletePoordDetail(poordDetail);
@@ -111,6 +116,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			count = updatePoordHeaderTotalAmt(poordDetail);
 		}
 		return count;
+	}
+
+	@Override
+	@Transactional
+	public long deleteDetailByXpornum(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return 0;
+		return poordMapper.deleteDetailByXpornum(xpornum, sessionManager.getBusinessId());
 	}
 
 	@Override

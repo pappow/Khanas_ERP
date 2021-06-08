@@ -19,9 +19,13 @@ public interface PoordMapper {
 
 	public long savePoordDetail(PoordDetail poordDetail);
 
+	public long savePoordDetailWithRow(PoordDetail poordDetail);
+
 	public long updatePoordDetail(PoordDetail poordDetail);
 
 	public long deletePoordDetail(PoordDetail poordDetail);
+
+	public long deleteDetailByXpornum(String xpornum, String zid);
 
 	public long archiveAllPoordDetailByXpornum(String xpornum, String zid);
 

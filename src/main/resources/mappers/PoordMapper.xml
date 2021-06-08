@@ -100,6 +100,13 @@
 			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
 	</update>
 
+	<delete id="deleteDetailByXpornum">
+		DELETE 
+			poorddetail
+		WHERE
+			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+	</delete>
+
 	<select id="countOfRequisitionDetailsByXpornum" resultType="Long">
 		SELECT COUNT(*) FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
 	</select>
@@ -134,6 +141,53 @@
 		(
 			#{xpornum, jdbcType=VARCHAR},
 			#{xrow},
+			#{xitem, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xrate, jdbcType=DECIMAL},
+			#{xunitpur, jdbcType=VARCHAR},
+			#{xlineamt, jdbcType=DECIMAL},
+			#{xqtygrn, jdbcType=DECIMAL},
+			#{xcfpur, jdbcType=DECIMAL},
+			#{xqtypur, jdbcType=DECIMAL},
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<insert id="savePoordDetailWithRow" parameterType="PoordDetail">
+		INSERT INTO PoordDetail
+		(
+			xpornum,
+			xrow,
+			xitem,
+			xnote,
+			xqtyord,
+			xrate,
+			xunitpur,
+			xlineamt,
+			xqtygrn,
+			xcfpur,
+			xqtypur,
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xpornum, jdbcType=VARCHAR},
+			#{xrow, jdbcType=INTEGER},
 			#{xitem, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
 			#{xqtyord, jdbcType=DECIMAL},

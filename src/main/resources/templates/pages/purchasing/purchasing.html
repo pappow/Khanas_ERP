@@ -82,6 +82,12 @@
 											<a th:href="@{/procurement/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${isBranch and menuProfile.M0313 ne null and menuProfile.M0313.display}">
+										<td><a th:href="@{/procurement/requisition/allrequisition}" th:text="${menuProfile.M0313.screenprompt}">All Order Requisition</a></td>
+										<td>
+											<a th:href="@{/procurement/requisition/allrequisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 
 									<tr th:if="${isCentral}">
 										<td colspan="2">Purchasing</td>
