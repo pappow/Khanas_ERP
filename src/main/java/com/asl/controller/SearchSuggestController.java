@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
+import com.asl.entity.LandInfo;
+import com.asl.entity.LandPerson;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pdmst;
@@ -34,6 +36,7 @@ import com.asl.service.PogrnService;
 import com.asl.service.PocrnService;
 import com.asl.service.PoordService;
 import com.asl.service.MoService;
+import com.asl.service.LandOwnerService;
 import com.asl.service.ProductionSuggestionService;
 
 
@@ -57,6 +60,8 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private MoService MoService;
 	@Autowired private ArhedService arhedService;
 	@Autowired private PdmstService pdmstService;
+	@Autowired private LandOwnerService landOwnerService;
+	
 
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
@@ -94,7 +99,26 @@ public class SearchSuggestController extends ASLAbstractController {
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;
 	}
+	
+	@GetMapping("/landId/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getLandId(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandInfo> LandList = landOwnerService.searchLandId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXland(),c.getXland())));
+		return list;
+	}
 
+	@GetMapping("/personId/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getPersonId(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandPerson> LandList = landOwnerService.searchPersonId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXperson(),c.getXperson())));
+		return list;
+	}
 
 	@GetMapping("/caitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCaitems(@PathVariable String hint){
