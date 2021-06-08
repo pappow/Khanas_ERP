@@ -1,5 +1,6 @@
 package com.asl.entity;
 
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -11,28 +12,28 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "landperson")
-@IdClass(LandPersonPK.class)
-@EqualsAndHashCode(of = { "zid", "xperson" }, callSuper = false)
-public class LandPerson extends AbstractModel<String> {
+@Table(name = "landsurveyor")
+@IdClass(LandSurveyorPK.class)
+@EqualsAndHashCode(of = { "zid", "xsurveyor" }, callSuper = false)
+public class LandSurveyor extends AbstractModel<String> {
 
-	private static final long serialVersionUID = -1930128578223377808L;
-
+	
+	private static final long serialVersionUID = -7233867795317696070L;
+	
 	@Id
-	@Basic(optional = false)
-	@Column(name = "zid")
+	@Basic(optional=false)
+	@Column(name="zid")
 	private String zid;
 
 	@Id
-	@Basic(optional = false)
-	@Column(name = "xperson")
-	private String xperson;
+	@Basic(optional=false)
+	@Column(name="xsurveyor")
+	private String xsurveyor;
 
 	@Column(name = "xname")
 	private String xname;
@@ -73,4 +74,5 @@ public class LandPerson extends AbstractModel<String> {
 
 	@Column(name = "xtrn")
 	private String xtrn;
+
 }

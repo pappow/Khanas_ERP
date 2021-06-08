@@ -51,6 +51,9 @@
 		<mapper resource="mappers/POSPermissionsMapper.xml"/>
 		<mapper resource="mappers/LandPersonMapper.xml"/>
 		<mapper resource="mappers/LandExperienceMapper.xml"/>
+		<mapper resource="mappers/LandInfoMapper.xml"/>
+		<mapper resource="mappers/LandSurveyorMapper.xml"/>
+		<mapper resource="mappers/LandOwnerMapper.xml"/>
 		
 	</mappers>
 </configuration>

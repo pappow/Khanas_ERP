@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.LandInfoMapper">
+
+	<insert id="saveLandInfo" parameterType="LandInfo">
+		<selectKey keyProperty="xland" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO landinfo
+		(
+			xland,
+			xblock,
+			xroad,
+			xcslandqty, 
+			xcslandunit, 
+			xrslandqty, 
+			xrslandunit, 
+			xcitylandqty, 
+			xcitylandunit, 
+			xlandgrsqty, 
+			xlanggrsunit,
+			xlanddedroad, 
+			xlanddedother, 
+			xlandnetqty,
+			xlandnetunit, 
+			xriversideqty, 
+			xriversideunit, 
+			xnote, 
+			xlandparent,  
+			xstatus,
+			xdateborn,
+			xtypetrn,
+			xtrn,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xland},
+			#{xblock, jdbcType=VARCHAR},
+			#{xroad, jdbcType=VARCHAR},
+			#{xcslandqty, jdbcType=INTEGER},
+			#{xcslandunit, jdbcType=VARCHAR},
+			#{xrslandqty, jdbcType=INTEGER},
+			#{xrslandunit, jdbcType=VARCHAR},
+			#{xcitylandqty, jdbcType=INTEGER},
+			#{xcitylandunit, jdbcType=VARCHAR},
+			#{xlandgrsqty, jdbcType=INTEGER},
+			#{xlanggrsunit, jdbcType=VARCHAR},
+			#{xlanddedroad, jdbcType=DECIMAL},
+			#{xlanddedother, jdbcType=DECIMAL},
+			#{xlandnetqty, jdbcType=INTEGER},
+			#{xlandnetunit, jdbcType=VARCHAR},
+			#{xriversideqty, jdbcType=INTEGER},
+			#{xriversideunit, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xlandparent, jdbcType=VARCHAR},
+			#{xstatus, jdbcType=VARCHAR},
+			#{xdateborn,jdbcType=DATE},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandInfo" parameterType="LandInfo">
+		UPDATE 
+			landinfo
+		SET
+			xblock=#{xblock, jdbcType=VARCHAR},
+			xroad=#{xroad, jdbcType=VARCHAR},
+			xcslandqty=#{xcslandqty, jdbcType=INTEGER},
+			xcslandunit=#{xcslandunit, jdbcType=VARCHAR},
+			xrslandqty=#{xrslandqty, jdbcType=INTEGER},
+			xrslandunit=#{xrslandunit, jdbcType=VARCHAR},
+			xcitylandqty=#{xcitylandqty, jdbcType=INTEGER},
+			xcitylandunit=#{xcitylandunit, jdbcType=VARCHAR},
+			xlandgrsqty=#{xlandgrsqty, jdbcType=INTEGER},
+			xlanggrsunit=#{xlanggrsunit,jdbcType=VARCHAR},
+			xlanddedroad=#{xlanddedroad, jdbcType=DECIMAL},
+			xlanddedother=#{xlanddedother, jdbcType=DECIMAL},
+			xlandnetqty=#{xlandnetqty, jdbcType=INTEGER},
+			xlandnetunit=#{xlandnetunit, jdbcType=VARCHAR},
+			xriversideqty=#{xriversideqty, jdbcType=INTEGER},
+			xriversideunit=#{xriversideunit, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xlandparent=#{xlandparent, jdbcType=VARCHAR},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xdateborn=#{xdateborn,jdbcType=DATE},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xland=#{xland , jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandInfo" resultType="LandInfo">
+		SELECT 
+			* 
+		FROM 
+			landinfo 
+		WHERE 
+			zid=#{zid} 
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandInfo" resultType="LandInfo">
+		SELECT 
+			* 
+		FROM 
+			landinfo 
+		WHERE 
+			zid=#{zid} 
+			AND xland=#{xland}
+	</select>
+</mapper>

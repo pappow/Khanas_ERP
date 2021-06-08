@@ -30,8 +30,10 @@ public enum TransactionCodeType {
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
+	
+	LAND_ID("Land ID", "LND--", TransactionCodes.LAND_ID),
 
-	PERSON_ID("Persone ID", "PRSN-", TransactionCodes.PERSON_ID),
+	PERSON_ID("Persone ID", "PRSN--", TransactionCodes.PERSON_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
@@ -41,6 +43,7 @@ public enum TransactionCodeType {
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 
 	SUPPLIER_NUMBER("Supplier Number", "SU-", TransactionCodes.SUPPLIER_NUMBER),
+	SURVEYOR_ID("Surveyor ID", "SRVR--", TransactionCodes.LAND_ID),
 	STOCK_TAKE("Stock Take", "TAG-", null),
 	SALES_ORDER("Sales Order", "SO-", TransactionCodes.SALES_ORDER),
 	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),

@@ -36,8 +36,11 @@ public enum CodeType {
 		
 	ITEM_CATEGORY("Item Category"),
 	ITEM_SUB_CATEGORY("Item Sub-Category"),
+	
+	LAND_UNIT("Land Unit"),
 
 	OBJECT_TYPE("Object Type"),
+	OWNER_TYPE("Owner Type"),
 
 	PURCHASE_UNIT("Purchase Unit"),
 	PURCHASE_ORDER_STATUS("Purchase Order Status"),
@@ -54,6 +57,7 @@ public enum CodeType {
 	SUPPLIER_GROUP("Supplier Group"),
 	SUPPLIER_STATUS("Supplier Status"),
 	STATUS("Status"),
+	STATUS_TYPE("Status Type"),
 	SALES_AND_INVOICE_STATUS("Sales & Invoice Status"),
 	SEX("Sex"),
 
