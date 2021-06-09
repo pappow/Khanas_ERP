@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.LandExperience;
 
+
 @Mapper
 public interface LandExperienceMapper {
 	
@@ -16,5 +17,7 @@ public interface LandExperienceMapper {
 	public List<LandExperience> getAllLandExperience(String zid);
 
 	public LandExperience findByLandExperiencePerson(String xperson, String zid);
+	
+	public LandExperience findByXpersonAndXrow(String xperson, int xrow, String zid);
 
 }

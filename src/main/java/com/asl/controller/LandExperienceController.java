@@ -37,9 +37,9 @@ public class LandExperienceController extends ASLAbstractController{
 	
 	private LandExperience getDefaultLandExperience() {
 		LandExperience lpe  = new LandExperience();
-		lpe.setXdesignation("Developer");
-		lpe.setXduration(50);
-		lpe.setXname("Abu Bakkar Siddik");
+		lpe.setXdesignation("");
+		lpe.setXduration(0);
+		lpe.setXname("");
 		lpe.setXnote("");
 		return lpe;
 	}
@@ -58,7 +58,7 @@ public class LandExperienceController extends ASLAbstractController{
 	
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(LandExperience landExperience, BindingResult bindingResult) {
-		if (landExperience == null || StringUtils.isBlank(landExperience.getXperson())) {
+		if (landExperience == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -69,21 +69,26 @@ public class LandExperienceController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		
+		if(StringUtils.isBlank(landExperience.getXname())) {
+			responseHelper.setErrorStatusAndMessage("Please Enter Your Name");
+			return responseHelper.getResponse();
+		}
+		
+		LandExperience exist = landExperienceService.findByXpersonAndXrow(landExperience.getXperson(), landExperience.getXrow());
 
 		// if existing
-		if(StringUtils.isNotBlank(landExperience.getXperson())) {
-			LandExperience lpe = landExperienceService.findByLandExperiencePerson(landExperience.getXperson());
-			BeanUtils.copyProperties(landExperience, lpe);
-			long count = landExperienceService.update(lpe);
+		if(exist != null) {
+			BeanUtils.copyProperties(landExperience, exist, "xperson");
+			long count = landExperienceService.update(landExperience);
 			if(count == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't update person Experience info");
+				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Person Experience info updated successfully");
-			responseHelper.setRedirectUrl("/landexperience/" + lpe.getXperson());
+			responseHelper.setRedirectUrl("/landexperience/" + landExperience.getXperson());
 			return responseHelper.getResponse();
-		}
 
+		}
 		// if new
 		long count = landExperienceService.save(landExperience);
 		if(count == 0) {
@@ -95,4 +100,33 @@ public class LandExperienceController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 	
+	@PostMapping("/archive/{xperson}")
+	public @ResponseBody Map<String, Object> archive(@PathVariable String xperson){
+		return doArchiveOrRestore(xperson, true);
+	}
+
+	@PostMapping("/restore/{xperson}")
+	public @ResponseBody Map<String, Object> restore(@PathVariable String xperson){
+		return doArchiveOrRestore(xperson, false);
+	}
+
+	public Map<String, Object> doArchiveOrRestore(String xperson, boolean archive){
+		LandExperience lpe = landExperienceService.findByLandExperiencePerson(xperson);
+		if(lpe== null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		lpe.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
+		long count = landExperienceService.update(lpe);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Person Experience Information updated successfully");
+		responseHelper.setRedirectUrl("/landexperience/" + lpe.getXperson());
+		return responseHelper.getResponse();
+	}
+
 }

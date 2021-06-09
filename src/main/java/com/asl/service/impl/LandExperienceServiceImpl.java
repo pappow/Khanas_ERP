@@ -51,4 +51,10 @@ public class LandExperienceServiceImpl extends AbstractGenericService implements
 		return landExperienceMapper.findByLandExperiencePerson(xperson, sessionManager.getBusinessId());
 	}
 	
+	@Override
+	public LandExperience findByXpersonAndXrow(String xperson, int xrow) {
+		if(StringUtils.isBlank(xperson) || xrow == 0) return null;
+		return landExperienceMapper.findByXpersonAndXrow(xperson, xrow, sessionManager.getBusinessId());
+	}
+	
 }
