@@ -60,6 +60,8 @@
 														<a th:href="@{/landowner}"  class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 														<a th:if="${#strings.isEmpty(owner.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
+														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == true}" th:href="@{/landowner/archive/} + ${owner.xland} +'/'+ ${owner.xperson}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == false}" th:href="@{/landowner/restore/} + ${owner.xland} +'/'+ ${owner.xperson}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 													</div>
 												</div>
 											</div>
@@ -123,28 +125,33 @@
 																	</select>
 																</div>
 															</div>
+
 														</div>
+
 														<div class="col-md-6">
-															<div class="form-group">
-																<label class="control-label col-md-4" for="xnote">Note:</label>
-																<div class="col-md-8">
-																	<textarea class="form-control" rows="3" th:field="*{xnote}" placeholder="Note"></textarea>
-																</div>
-															</div>
+
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xqty">Quantity:</label>
 																<div class="col-md-8">
 																	<input type="number" class="form-control" th:field="*{xqty}" maxlength="100"/>
 																</div>
 															</div>
+
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xunit">Unit:</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" th:field="*{xunit}" maxlength="100"/>
+																	<select class="form-control" th:field="*{xunit}">
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
-															
-															
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xnote">Note:</label>
+																<div class="col-md-8">
+																	<textarea class="form-control" rows="3" th:field="*{xnote}" placeholder="Note"></textarea>
+																</div>
+															</div>
 														</div>
 														
 													</div>

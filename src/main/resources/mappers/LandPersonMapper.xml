@@ -89,6 +89,7 @@
 			landperson 
 		WHERE 
 			zid=#{zid} 
+			AND zactive ='1'
 		order by 
 			ztime desc
 	</select>

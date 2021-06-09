@@ -10,12 +10,16 @@
 		INSERT INTO landinfo
 		(
 			xland,
+			xlname,
 			xblock,
 			xroad,
+			xcslanddag,
 			xcslandqty, 
 			xcslandunit, 
+			xrslanddag,
 			xrslandqty, 
-			xrslandunit, 
+			xrslandunit,
+			xcitylanddag, 
 			xcitylandqty, 
 			xcitylandunit, 
 			xlandgrsqty, 
@@ -42,21 +46,25 @@
 		VALUES
 		(
 			#{xland},
+			#{xlname, jdbcType=VARCHAR},
 			#{xblock, jdbcType=VARCHAR},
 			#{xroad, jdbcType=VARCHAR},
-			#{xcslandqty, jdbcType=INTEGER},
+			#{xcslanddag, jdbcType=INTEGER},
+			#{xcslandqty, jdbcType=DECIMAL},
 			#{xcslandunit, jdbcType=VARCHAR},
-			#{xrslandqty, jdbcType=INTEGER},
+			#{xrslanddag, jdbcType=INTEGER},
+			#{xrslandqty, jdbcType=DECIMAL},
 			#{xrslandunit, jdbcType=VARCHAR},
-			#{xcitylandqty, jdbcType=INTEGER},
+			#{xcitylanddag, jdbcType=INTEGER},
+			#{xcitylandqty, jdbcType=DECIMAL},
 			#{xcitylandunit, jdbcType=VARCHAR},
-			#{xlandgrsqty, jdbcType=INTEGER},
+			#{xlandgrsqty, jdbcType=DECIMAL},
 			#{xlanggrsunit, jdbcType=VARCHAR},
-			#{xlanddedroad, jdbcType=DECIMAL},
-			#{xlanddedother, jdbcType=DECIMAL},
-			#{xlandnetqty, jdbcType=INTEGER},
+			#{xlanddedroad, jdbcType=INTEGER},
+			#{xlanddedother, jdbcType=INTEGER},
+			#{xlandnetqty, jdbcType=DECIMAL},
 			#{xlandnetunit, jdbcType=VARCHAR},
-			#{xriversideqty, jdbcType=INTEGER},
+			#{xriversideqty, jdbcType=DECIMAL},
 			#{xriversideunit, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
 			#{xlandparent, jdbcType=VARCHAR},
@@ -77,21 +85,25 @@
 		UPDATE 
 			landinfo
 		SET
+			xlname=#{xlname, jdbcType=VARCHAR},
 			xblock=#{xblock, jdbcType=VARCHAR},
 			xroad=#{xroad, jdbcType=VARCHAR},
-			xcslandqty=#{xcslandqty, jdbcType=INTEGER},
+			xcslanddag=#{xcslanddag, jdbcType=INTEGER},
+			xcslandqty=#{xcslandqty, jdbcType=DECIMAL},
 			xcslandunit=#{xcslandunit, jdbcType=VARCHAR},
-			xrslandqty=#{xrslandqty, jdbcType=INTEGER},
+			xrslanddag=#{xrslanddag, jdbcType=INTEGER},
+			xrslandqty=#{xrslandqty, jdbcType=DECIMAL},
 			xrslandunit=#{xrslandunit, jdbcType=VARCHAR},
-			xcitylandqty=#{xcitylandqty, jdbcType=INTEGER},
+			xcitylanddag=#{xcitylanddag, jdbcType=INTEGER},
+			xcitylandqty=#{xcitylandqty, jdbcType=DECIMAL},
 			xcitylandunit=#{xcitylandunit, jdbcType=VARCHAR},
-			xlandgrsqty=#{xlandgrsqty, jdbcType=INTEGER},
+			xlandgrsqty=#{xlandgrsqty, jdbcType=DECIMAL},
 			xlanggrsunit=#{xlanggrsunit,jdbcType=VARCHAR},
-			xlanddedroad=#{xlanddedroad, jdbcType=DECIMAL},
-			xlanddedother=#{xlanddedother, jdbcType=DECIMAL},
-			xlandnetqty=#{xlandnetqty, jdbcType=INTEGER},
+			xlanddedroad=#{xlanddedroad, jdbcType=INTEGER},
+			xlanddedother=#{xlanddedother, jdbcType=INTEGER},
+			xlandnetqty=#{xlandnetqty, jdbcType=DECIMAL},
 			xlandnetunit=#{xlandnetunit, jdbcType=VARCHAR},
-			xriversideqty=#{xriversideqty, jdbcType=INTEGER},
+			xriversideqty=#{xriversideqty, jdbcType=DECIMAL},
 			xriversideunit=#{xriversideunit, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xlandparent=#{xlandparent, jdbcType=VARCHAR},
@@ -116,6 +128,7 @@
 			landinfo 
 		WHERE 
 			zid=#{zid} 
+			AND zactive='1'
 		order by 
 			ztime desc
 	</select>
