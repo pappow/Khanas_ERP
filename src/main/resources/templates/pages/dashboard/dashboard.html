@@ -58,7 +58,7 @@
 												<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display}">
+										<tr th:if="${(isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
 											<td><a th:href="@{/mastersetup/itemmaster}" th:text="${menuProfile.M0202.screenprompt}">Item Master</a></td>
 											<td>
 												<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
@@ -139,9 +139,9 @@
 											<td colspan="2">Convention Hall Module</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/conventionmanagement}">Convention Management</a></td>
+											<td><a th:href="@{/conventionmanagement/hallbooking}">Convention Hall Booking</a></td>
 											<td>
-												<a th:href="@{/conventionmanagement}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>
