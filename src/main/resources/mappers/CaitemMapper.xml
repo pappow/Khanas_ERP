@@ -29,6 +29,7 @@
 			xtype,
 			xproditem,
 			xseqn,
+			allowreq,
 			zid,
 			zauserid,
 			zuuserid,
@@ -60,6 +61,7 @@
 			#{xtype, jdbcType=VARCHAR},
 			#{xproditem, jdbcType=BOOLEAN},
 			#{xseqn, jdbcType=INTEGER},
+			#{allowreq, jdbcType=BOOLEAN},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -94,6 +96,7 @@
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xproditem=#{xproditem, jdbcType=BOOLEAN},
 			xseqn=#{xseqn, jdbcType=INTEGER},
+			allowreq=#{allowreq, jdbcType=BOOLEAN},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -208,5 +211,20 @@
 			AND caitem.xgitem!='Raw Materials'
 		ORDER BY
 			xcodes.seqn, caitem.xseqn
+	</select>
+
+	<select id="getAllRequisitionItems" resultType="Caitem">
+		SELECT
+			caitem.*
+		FROM
+			caitem
+			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zactive='1' and xcodes.zid = #{zid} and xcodes.xtype='Item Category'
+		WHERE
+			caitem.zid=#{zid}
+			AND caitem.zactive='1'
+			AND caitem.xgitem!='Raw Materials'
+			AND caitem.allowreq='1'
+		ORDER BY
+			xcodes.seqn, caitem.xseqn, caitem.xitem
 	</select>
 </mapper>

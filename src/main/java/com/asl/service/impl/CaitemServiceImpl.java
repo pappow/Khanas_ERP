@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asl.entity.Caitem;
-import com.asl.entity.Zbusiness;
 import com.asl.mapper.CaitemMapper;
 import com.asl.service.CaitemService;
 
@@ -20,7 +19,7 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	@Override
 	public long save(Caitem caitem) {
 		if (caitem == null || StringUtils.isBlank(caitem.getXtype())) return 0;
-		caitem.setZid(sessionManager.getBusinessId());
+		caitem.setZid(getBusinessId());
 		caitem.setZauserid(getAuditUser());
 		return caitemMapper.saveCaitem(caitem);
 	}
@@ -28,80 +27,83 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	@Override
 	public long update(Caitem caitem) {
 		if (caitem == null || StringUtils.isBlank(caitem.getXitem())) return 0;
-		caitem.setZid(sessionManager.getBusinessId());
+		caitem.setZid(getBusinessId());
 		caitem.setZuuserid(getAuditUser());
 		return caitemMapper.updateCaitem(caitem);
 	}
 
 	@Override
 	public List<Caitem> getAllCaitems() {
-		return caitemMapper.getAllCaitems(sessionManager.getBusinessId());
+		return caitemMapper.getAllCaitems(getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> findByXcatitem(String xcatitem) {
 		if (StringUtils.isBlank(xcatitem)) return Collections.emptyList();
-		return caitemMapper.findByXcatitem(xcatitem, sessionManager.getBusinessId());
+		return caitemMapper.findByXcatitem(xcatitem, getBusinessId());
 	}
 
 	@Override
 	public Caitem findByXitem(String xitem) {
 		if (StringUtils.isBlank(xitem)) return null;
-		return caitemMapper.findByXitem(xitem, sessionManager.getBusinessId());
+		return caitemMapper.findByXitem(xitem, getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> searchCaitem(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return caitemMapper.searchCaitem(hint.toUpperCase(), sessionManager.getBusinessId());
+		return caitemMapper.searchCaitem(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> searchCentralCaitem(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		Zbusiness zb = sessionManager.getZbusiness();
-		return caitemMapper.searchCentralCaitem(hint.toUpperCase(), zb.getCentralzid());
+		return caitemMapper.searchCentralCaitem(hint.toUpperCase(), getBusinessId());
 	}
 
 	public List<Caitem> searchCentralCaitemForRequisition(String hint)  {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		Zbusiness zb = sessionManager.getZbusiness();
-		return caitemMapper.searchCentralCaitemForRequisition(hint.toUpperCase(), zb.getCentralzid());
+		return caitemMapper.searchCentralCaitemForRequisition(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public Caitem findCentralItemByXitem(String xitem) {
 		if(StringUtils.isBlank(xitem)) return null;
-		return caitemMapper.findCentralItemByXitem(xitem, sessionManager.getZbusiness().getCentralzid());
+		return caitemMapper.findCentralItemByXitem(xitem, getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> searchFinishedProductionCaitem(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return caitemMapper.searchFinishedProductionCaitem(hint.toUpperCase(), sessionManager.getBusinessId());
+		return caitemMapper.searchFinishedProductionCaitem(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> searchRawMaterialsCaitem(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return caitemMapper.searchRawMaterialsCaitem(hint.toUpperCase(), sessionManager.getBusinessId());
+		return caitemMapper.searchRawMaterialsCaitem(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> getWithoutProductionCaitems(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return caitemMapper.getWithoutProductionCaitems(hint.toUpperCase(), sessionManager.getBusinessId());
+		return caitemMapper.getWithoutProductionCaitems(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> searchItemName(String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return caitemMapper.searchItemName(hint.toUpperCase(), sessionManager.getBusinessId());
+		return caitemMapper.searchItemName(hint.toUpperCase(), getBusinessId());
 	}
 
 	@Override
 	public List<Caitem> getAllItemsWithoutRawMaterials() {
-		return caitemMapper.getAllItemsWithoutRawMaterials(sessionManager.getZbusiness().getCentralzid());
+		return caitemMapper.getAllItemsWithoutRawMaterials(getBusinessId());
+	}
+
+	@Override
+	public List<Caitem> getAllRequisitionItems() {
+		return caitemMapper.getAllRequisitionItems(getBusinessId());
 	}
 
 }

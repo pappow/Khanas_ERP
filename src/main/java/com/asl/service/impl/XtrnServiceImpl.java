@@ -12,10 +12,13 @@ import com.asl.mapper.XtrnMapper;
 import com.asl.model.ServiceException;
 import com.asl.service.XtrnService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Zubayer Ahamed
  * @since Feb 27, 2021
  */
+@Slf4j
 @Service
 public class XtrnServiceImpl extends AbstractGenericService implements XtrnService {
 
@@ -24,11 +27,12 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public long save(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
-		xtrn.setZid(sessionManager.getBusinessId());
+		xtrn.setZid(getBusinessId());
 		xtrn.setZauserid(getAuditUser());
 		try {
 			return xtrnMapper.save(xtrn);
 		} catch (Exception e) {
+			log.error(ERROR, e.getMessage(), e);
 			throw new ServiceException(e.getMessage());
 		}
 	}
@@ -36,11 +40,12 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public long update(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
-		xtrn.setZid(sessionManager.getBusinessId());
+		xtrn.setZid(getBusinessId());
 		xtrn.setZuuserid(getAuditUser());
 		try {
 			return xtrnMapper.update(xtrn);
 		} catch (Exception e) {
+			log.error(ERROR, e.getMessage(), e);
 			throw new ServiceException(e.getMessage());
 		}
 	}
@@ -52,7 +57,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 
 	@Override
 	public List<Xtrn> getAllXtrn(Boolean zactive) {
-		return xtrnMapper.getAllXtrn(sessionManager.getBusinessId(), zactive);
+		return xtrnMapper.getAllXtrn(getBusinessId(), zactive);
 	}
 
 	@Override
@@ -63,7 +68,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public List<Xtrn> findByXtypetrn(String xtypetrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
-		return xtrnMapper.findByXtypetrn(xtypetrn, sessionManager.getBusinessId(), zactive);
+		return xtrnMapper.findByXtypetrn(xtypetrn, getBusinessId(), zactive);
 	}
 
 	@Override
@@ -74,7 +79,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public List<Xtrn> findByXtrn(String xtrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtrn)) return Collections.emptyList();
-		return xtrnMapper.findByXtrn(xtrn, sessionManager.getBusinessId(), zactive);
+		return xtrnMapper.findByXtrn(xtrn, getBusinessId(), zactive);
 	}
 
 	@Override
@@ -85,13 +90,13 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return null;
-		return xtrnMapper.findByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId(), zactive);
+		return xtrnMapper.findByXtypetrnAndXtrn(xtypetrn, xtrn, getBusinessId(), zactive);
 	}
 
 	@Override
 	public String generateAndGetXtrnNumber(String xtypetrn, String xtrn, int leftpad) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return "";
 		if(leftpad < 6) leftpad = 6;
-		return xtrnMapper.generateXtrn(xtypetrn, xtrn, leftpad, sessionManager.getBusinessId());
+		return xtrnMapper.generateXtrn(xtypetrn, xtrn, leftpad, getBusinessId());
 	}
 }

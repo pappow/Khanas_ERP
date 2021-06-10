@@ -36,5 +36,7 @@ public interface CaitemMapper {
 	public List<Caitem> searchItemName(String xdesc, String zid);
 
 	public List<Caitem> getAllItemsWithoutRawMaterials(String zid);
+	
+	public List<Caitem> getAllRequisitionItems(String zid);
 
 }

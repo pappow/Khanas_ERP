@@ -52,7 +52,7 @@
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0200.screenprompt}">Master Setup</td>
 										</tr>
-										<tr th:if="${isCentral and menuProfile.M0201 ne null and menuProfile.M0201.display}">
+										<tr th:if="${(isCentral and menuProfile.M0201 ne null and menuProfile.M0201.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
 											<td><a th:href="@{/mastersetup/partymaster}" th:text="${menuProfile.M0201.screenprompt}">Party Master</a></td>
 											<td>
 												<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
