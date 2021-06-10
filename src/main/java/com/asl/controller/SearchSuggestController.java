@@ -23,12 +23,14 @@ import com.asl.entity.Pocrnheader;
 import com.asl.entity.Moheader;
 import com.asl.entity.Modetail;
 import com.asl.entity.Arhed;
+import com.asl.entity.LandSurveyor;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
+import com.asl.service.LandDocumentService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.PdmstService;
@@ -61,6 +63,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private ArhedService arhedService;
 	@Autowired private PdmstService pdmstService;
 	@Autowired private LandOwnerService landOwnerService;
+	@Autowired private LandDocumentService landDocumentService;
 	
 
 	@GetMapping("/staff/{hint}")
@@ -107,6 +110,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<LandInfo> LandList = landOwnerService.searchLandId(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXland(),c.getXland())));
+		return list;
+	}
+	
+	@GetMapping("/landSur/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getLandDoc(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandSurveyor> LandDocList = landDocumentService.searchServeyorId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		LandDocList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXsurveyor(),c.getXsurveyor())));
 		return list;
 	}
 

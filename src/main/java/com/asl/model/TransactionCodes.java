@@ -28,6 +28,7 @@ public class TransactionCodes {
 	public static final Map<String, String> PERSON_ID = new HashMap<>();
 	public static final Map<String, String> LAND_ID = new HashMap<>();
 	public static final Map<String, String> SURVEYOR_ID = new HashMap<>();
+	public static final Map<String, String> DOCUMENT_ID = new HashMap<>();
 	static {
 		
 		//AP Transactional Codes
