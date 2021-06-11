@@ -34,6 +34,7 @@ public enum TransactionCodeType {
 	LAND_ID("Land ID", "LND--", TransactionCodes.LAND_ID),
 
 	PERSON_ID("Persone ID", "PRSN--", TransactionCodes.PERSON_ID),
+	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),

@@ -32,7 +32,11 @@ public enum CodeType {
 	//Land Experience Person Start
 	EXPERIENCE_TRANSACTION_TYPE("Experience Transaction type"),
 	EXPERIENCE_TYPE("Experience type"),
-	//Land Experience Person Start End
+	//Land Experience Person End
+	
+	//Land Document Start
+	DOCUMENT_TYPE("Document type"),
+	//Land Document End
 		
 	ITEM_CATEGORY("Item Category"),
 	ITEM_SUB_CATEGORY("Item Sub-Category"),

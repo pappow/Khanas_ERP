@@ -3,9 +3,9 @@
 
 <mapper namespace="com.asl.mapper.LandExperienceMapper">
 
-<insert id="saveExPerson" parameterType="LandExperience">
+	<insert id="saveExPerson" parameterType="LandExperience">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM landexperience WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM landexperience WHERE zactive='1' AND zid=#{zid}
 		</selectKey>
 		INSERT INTO landexperience
 		(
@@ -103,4 +103,18 @@
 			AND xperson=#{xperson}
 			AND xrow=#{xrow}
 	</select>
+	<select id="findByXpersonAndXname" resultType="LandExperience">
+		SELECT 
+			* 
+		FROM 
+			landexperience 
+		WHERE 
+			zid=#{zid} 
+			AND xperson=#{xperson}
+			AND xname=#{xname}
+	</select>
+	
+	<delete id="deleteDetail" parameterType="LandExperience">
+		DELETE FROM landexperience WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>

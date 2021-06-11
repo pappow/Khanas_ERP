@@ -41,6 +41,7 @@ public class LandExperienceController extends ASLAbstractController{
 		lpe.setXduration(0);
 		lpe.setXname("");
 		lpe.setXnote("");
+		lpe.setNewData(true);
 		return lpe;
 	}
 	
@@ -69,26 +70,21 @@ public class LandExperienceController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		
-		if(StringUtils.isBlank(landExperience.getXname())) {
-			responseHelper.setErrorStatusAndMessage("Please Enter Your Name");
-			return responseHelper.getResponse();
-		}
-		
-		LandExperience exist = landExperienceService.findByXpersonAndXrow(landExperience.getXperson(), landExperience.getXrow());
+		LandExperience exist = landExperienceService.findByLandExperiencePerson(landExperience.getXperson());
 
 		// if existing
 		if(exist != null) {
 			BeanUtils.copyProperties(landExperience, exist, "xperson");
 			long count = landExperienceService.update(landExperience);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Person " +landExperience.getXperson()+" Data alredy Exit");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Person Experience info updated successfully");
 			responseHelper.setRedirectUrl("/landexperience/" + landExperience.getXperson());
 			return responseHelper.getResponse();
-
 		}
+		
 		// if new
 		long count = landExperienceService.save(landExperience);
 		if(count == 0) {
@@ -99,6 +95,7 @@ public class LandExperienceController extends ASLAbstractController{
 		responseHelper.setRedirectUrl("/landexperience/" + landExperience.getXperson());
 		return responseHelper.getResponse();
 	}
+	
 	
 	@PostMapping("/archive/{xperson}")
 	public @ResponseBody Map<String, Object> archive(@PathVariable String xperson){
@@ -125,6 +122,25 @@ public class LandExperienceController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Person Experience Information updated successfully");
+		responseHelper.setRedirectUrl("/landexperience/" + lpe.getXperson());
+		return responseHelper.getResponse();
+	}
+	
+	@PostMapping("{xperson}/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deletePersonDetail(@PathVariable String xperson, @PathVariable String xrow, Model model) {
+		LandExperience lpe = landExperienceService.findByXpersonAndXrow(xperson, Integer.parseInt(xrow));
+		if(lpe == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landExperienceService.deleteDetail(lpe);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setRedirectUrl("/landexperience/" + lpe.getXperson());
 		return responseHelper.getResponse();
 	}
