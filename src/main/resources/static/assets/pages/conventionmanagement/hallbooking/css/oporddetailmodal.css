@@ -18,7 +18,6 @@
 	background-color: #29af70;
 }
 
-
 .item-section h4{
 	margin: 0;
 	padding: 0;
@@ -31,6 +30,7 @@
 	justify-content: start;
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
+	white-space: nowrap;
 }
 .item-box, .item-box2{
 	text-align: center;

@@ -76,6 +76,7 @@ public class CaitemControlller extends ASLAbstractController {
 		}
 
 		// Validate caitem
+		caitem.setXunitsel(caitem.getXunitpur());
 
 		// if existing record
 		Caitem existCaitem = caitemService.findByXitem(caitem.getXitem());

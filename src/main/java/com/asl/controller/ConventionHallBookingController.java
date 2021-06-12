@@ -115,6 +115,10 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Customer name required");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(opordheader.getXfunction())) {
+			responseHelper.setErrorStatusAndMessage("Function selection required");
+			return responseHelper.getResponse();
+		}
 		if(opordheader.getXtotguest() <= 0) {
 			responseHelper.setErrorStatusAndMessage("Guest Quantity invalid");
 			return responseHelper.getResponse();
@@ -266,39 +270,38 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
 		Map<String, List<Caitem>> map = new HashMap<>();
-		map.put("Function", caitemService.findByXcatitem("Function"));
-		map.put("Hall Facility", caitemService.findByXcatitem("Hall Facility"));
-		map.put("Convention Hall Food", caitemService.findByXcatitem("Convention Hall Food"));
+		map.put("Facilities", caitemService.findByXcatitem("Facilities"));
+		map.put("Food", caitemService.findByXcatitem("Food"));
 		model.addAttribute("itemMap", map);
 
-		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
-		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
-		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, xordernum);
-
-		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
-		for(Caitem c : halls) {
-			for(String s : bookedHalls) {
-				if(c.getXitem().equalsIgnoreCase(s)) c.setBooked(true);
-			}
-		}
-		map.put("Convention Hall", halls);
-
-		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
-		if(details != null && !details.isEmpty()) {
-			for(Oporddetail d : details) {
-				
-				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
-					for(Caitem c : m.getValue()) {
-						if(c.getXitem().equalsIgnoreCase(d.getXitem())) {
-							c.setSelected(true);
-						}
-					}
-				}
-				
-			}
-		}
+//		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+//		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
+//		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
+//		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, xordernum);
+//
+//		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
+//		for(Caitem c : halls) {
+//			for(String s : bookedHalls) {
+//				if(c.getXitem().equalsIgnoreCase(s)) c.setBooked(true);
+//			}
+//		}
+//		map.put("Convention Hall", halls);
+//
+//		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+//		if(details != null && !details.isEmpty()) {
+//			for(Oporddetail d : details) {
+//				
+//				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
+//					for(Caitem c : m.getValue()) {
+//						if(c.getXitem().equalsIgnoreCase(d.getXitem())) {
+//							c.setSelected(true);
+//						}
+//					}
+//				}
+//				
+//			}
+//		}
 
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
@@ -359,16 +362,16 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-		if(totalFunctions != 1 && !functionExist) {
-			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
-			return responseHelper.getResponse();
-		}
-		if(totalHalls == 0 && !hallExist) {
-			responseHelper.setErrorStatusAndMessage("Hall selection required");
-			return responseHelper.getResponse();
-		}
+//		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
+//		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
+//		if(totalFunctions != 1 && !functionExist) {
+//			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
+//			return responseHelper.getResponse();
+//		}
+//		if(totalHalls == 0 && !hallExist) {
+//			responseHelper.setErrorStatusAndMessage("Hall selection required");
+//			return responseHelper.getResponse();
+//		}
 
 		// delete first
 		if(!deletableDL.isEmpty()) {

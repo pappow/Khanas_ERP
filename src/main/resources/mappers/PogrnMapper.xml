@@ -282,10 +282,10 @@
 		SELECT 
 			ph.*, c.xorg 
 		FROM
-			PogrnHeader ph, Cacus c
-		WHERE 
-			ph.xcus=c.xcus 
-			AND ph.zid=#{zid} 
+			PogrnHeader ph
+			left join cacus c on c.xcus = ph.xcus AND c.zid = ph.zid and c.zactive='1'
+		WHERE  
+			ph.zid=#{zid} 
 			AND ph.zactive='1'
 		ORDER BY 
 			ph.xgrnnum DESC

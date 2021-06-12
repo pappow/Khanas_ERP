@@ -237,10 +237,13 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long saveBatchOpordDetail(List<Oporddetail> opordDetails) {
 		if(opordDetails == null || opordDetails.isEmpty()) return 0;
 		long totalCount = 0;
+		int i = 1;
 		for(Oporddetail detail : opordDetails) {
+			detail.setXrow(i);
 			long scount = saveOpordDetail(detail);
 			if(scount != 0) updateOpordHeaderTotalAmtAndGrandTotalAmt(detail.getXordernum());
 			totalCount += scount;
+			i++;
 		}
 		return totalCount;
 	}
