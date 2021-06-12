@@ -26,6 +26,8 @@ public interface CaitemMapper {
 	public List<Caitem> searchRawMaterialsCaitem(String xitem, String zid);
 
 	public List<Caitem> getWithoutProductionCaitems(String xitem, String zid);
+	
+	public List<Caitem> getFunctionItems(String xitem, String zid);
 
 	public List<Caitem> searchCentralCaitem(String xitem, String centralzid);
 

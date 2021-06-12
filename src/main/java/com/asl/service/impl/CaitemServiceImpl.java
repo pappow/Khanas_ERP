@@ -91,6 +91,12 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 	}
 
 	@Override
+	public List<Caitem> getFunctionItems(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return caitemMapper.getFunctionItems(hint.toUpperCase(), getBusinessId());
+	}
+
+	@Override
 	public List<Caitem> searchItemName(String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return caitemMapper.searchItemName(hint.toUpperCase(), getBusinessId());
