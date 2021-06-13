@@ -2,6 +2,7 @@ package com.asl.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.LandEducation;
 import com.asl.entity.LandInfo;
-import com.asl.entity.LandPerson;
-import com.asl.entity.LandSurveyor;
+import com.asl.entity.LandOwner;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -44,6 +45,7 @@ public class LandInfoController extends ASLAbstractController {
 	
 	private LandInfo getDefaultLandinfo() {
 		LandInfo lf  = new LandInfo();
+		
 		lf.setXtypetrn(TransactionCodeType.LAND_ID.getCode());
 		lf.setXtrn(TransactionCodeType.LAND_ID.getdefaultCode());
 		lf.setXcitylanddag(0);
@@ -51,6 +53,9 @@ public class LandInfoController extends ASLAbstractController {
 		lf.setXcslanddag(0);
 		lf.setXcslandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXlanddedother(0);
+		lf.setXroadred(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+		lf.setXotherred(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+		lf.setXlandnetqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXlanddedroad(0);
 		lf.setXrslanddag(0);
 		lf.setXrslandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
@@ -65,9 +70,10 @@ public class LandInfoController extends ASLAbstractController {
 		LandInfo landInfo = landInfoService.findByLandInfo(xland);
 		if (landInfo == null) return "redirect:/landinfo";
 
-
+		
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
+		model.addAttribute("lpelist", landInfoService.findByLandOwner(xland));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LAND_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("statusTypes", xcodesService.findByXtype(CodeType.STATUS_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
@@ -134,6 +140,93 @@ public class LandInfoController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/landinfo/" + lp.getXland());
 		return responseHelper.getResponse();
 	}
+	
+	@GetMapping("/{xland}/owner/{xrow}/show")
+	public String loadOwnerModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		if("new".equalsIgnoreCase(xrow)) {
+			LandOwner lpe = new LandOwner();
+			lpe.setXnote("");
+			lpe.setXperson("");
+			lpe.setXqty(0);
+			lpe.setXland(xland);
+			lpe.setXtype("");
+			lpe.setXunit("");
+			model.addAttribute("lpe", lpe);
+			model.addAttribute("ownerTypes", xcodesService.findByXtype(CodeType.OWNER_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
+		}
+		else {
+			LandOwner lpe = landInfoService.findLandOwnerByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if(lpe==null) {
+				lpe = new LandOwner();
+				
+			}
+			model.addAttribute("lpe", lpe);
+			model.addAttribute("ownerTypes", xcodesService.findByXtype(CodeType.OWNER_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
+		}
+		
+		return "pages/land/ownermodal::ownermodal";
+	}
+	
+	@PostMapping("/owner/save")
+	public @ResponseBody Map<String, Object> saveLandOwner(LandOwner landOwner){
+		if(landOwner == null || StringUtils.isBlank(landOwner.getXland())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		
+		
+		// if existing
+		LandOwner existOwner = landInfoService.findLandOwnerByXlandAndXrow(landOwner.getXland(), landOwner.getXrow());
+		if(existOwner != null) {
+			BeanUtils.copyProperties(landOwner, existOwner);
+			long count = landInfoService.update(existOwner);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setRedirectUrl("/landinfo/owner/" + landOwner.getXland());
+			responseHelper.setSuccessStatusAndMessage("Owner Detaails updated successfully");
+			return responseHelper.getResponse();
+		}
 
+		// if new detail
+		long count = landInfoService.save(landOwner);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("ownertable", "/landinfo/owner/" + landOwner.getXland());
+		responseHelper.setSuccessStatusAndMessage("Owner Details saved successfully");
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/owner/{xland}")
+	public String reloadOwnerTable(@PathVariable String xland, Model model) {
+		List<LandOwner> ownerList = landInfoService.findByLandOwner(xland);
+		model.addAttribute("lpelist", ownerList);
+		model.addAttribute("info", landInfoService.findByLandInfo(xland));
+		return "pages/land/landinfo::ownertable";
+	}
+
+	@PostMapping("{xland}/owner/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteOwnerDetails(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		LandOwner lpe = landInfoService.findLandOwnerByXlandAndXrow(xland, Integer.parseInt(xrow));
+		if(lpe == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landInfoService.deleteLandOwner(lpe);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("ownertable", "/landinfo/owner/" + xland);
+		return responseHelper.getResponse();
+	}
 }
 	

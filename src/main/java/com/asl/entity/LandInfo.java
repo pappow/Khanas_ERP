@@ -105,10 +105,10 @@ public class LandInfo extends AbstractModel<String>{
 	private String xstatus;
 	
 	@Column(name="xroadred")
-	private String xroadred;
+	private BigDecimal xroadred;
 
 	@Column(name="xotherred")
-	private String xotherred;
+	private BigDecimal xotherred;
 
 	@Column(name="xdateborn")
 	@Temporal(TemporalType.DATE)

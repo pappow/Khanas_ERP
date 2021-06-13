@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.LandInfo;
+import com.asl.entity.LandOwner;
+import com.asl.entity.LandPerson;
 import com.asl.mapper.LandInfoMapper;
 import com.asl.service.LandInfoService;
 
@@ -47,6 +50,58 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 		if (StringUtils.isBlank(xland))
 			return null;
 		return landinfoMapper.findByLandInfo(xland, sessionManager.getBusinessId());
+	}
+//for owner
+	
+	@Transactional
+	@Override
+	public long save(LandOwner landOwner) {
+		if (landOwner == null)
+			return 0;
+		landOwner.setZid(sessionManager.getBusinessId());
+		landOwner.setZauserid(getAuditUser());
+		return landinfoMapper.saveLandOwner(landOwner);
+	}
+	@Transactional
+	@Override
+	public long update(LandOwner landOwner) {
+		if (landOwner == null)
+			return 0;
+		landOwner.setZid(sessionManager.getBusinessId());
+		landOwner.setZauserid(getAuditUser());
+		return landinfoMapper.updateLandOwner(landOwner);
+	}
+
+
+	@Override
+	public List<LandOwner> getAllLandOwner(String zid) {
+		return landinfoMapper.getAllLandOwner(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<LandOwner> findByLandOwner(String xland) {
+		if (StringUtils.isBlank(xland))
+			return null;
+		return landinfoMapper.findByLandOwner(xland, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow) {
+		if(StringUtils.isBlank(xland) || xrow == 0) return null;
+		return landinfoMapper.findLandOwnerByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<LandPerson> searchPersonId(String xperson) {
+		if(StringUtils.isBlank(xperson)) return Collections.emptyList();
+		return landinfoMapper.searchPersonId(xperson.toUpperCase(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long deleteLandOwner(LandOwner landOwner) {
+		if(landOwner == null) return 0;
+		long count = landinfoMapper.deleteLandOwner(landOwner);
+		return count;
 	}
 
 }

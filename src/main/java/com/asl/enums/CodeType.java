@@ -14,6 +14,8 @@ public enum CodeType {
 	CUSTOMER_GROUP("Customer Group"),
 	CUSTOMER_STATUS("Customer Status"),
 	CHEQUE_STATUS("Cheque Status"),
+	COMMITEECONTRIBUTION_TYPE("Committtee Contribution Type"),
+	COMMITEEMEMBER_TYPE("Committtee Member Unit"),
 
 	DISCOUNT_TYPE("Discount Type"),
 

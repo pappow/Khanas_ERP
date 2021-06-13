@@ -33,6 +33,8 @@
 			xnote, 
 			xlandparent,  
 			xstatus,
+			xroadred,
+			xotherred,
 			xdateborn,
 			xtypetrn,
 			xtrn,
@@ -69,6 +71,8 @@
 			#{xnote, jdbcType=VARCHAR},
 			#{xlandparent, jdbcType=VARCHAR},
 			#{xstatus, jdbcType=VARCHAR},
+			#{xroadred, jdbcType=DECIMAL},
+			#{xotherred, jdbcType=DECIMAL},
 			#{xdateborn,jdbcType=DATE},
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
@@ -108,6 +112,8 @@
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xlandparent=#{xlandparent, jdbcType=VARCHAR},
 			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xroadred=#{xroadred, jdbcType=DECIMAL},
+			xotherred=#{xotherred, jdbcType=DECIMAL},
 			xdateborn=#{xdateborn,jdbcType=DATE},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
@@ -142,4 +148,93 @@
 			zid=#{zid} 
 			AND xland=#{xland}
 	</select>
+	
+	
+	<insert id="saveLandOwner" parameterType="LandOwner">
+	
+	    <selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM calandowner WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO calandowner
+		(
+			xland,
+			xrow,
+			xperson,
+			xtype,
+			xnote,
+			xqty, 
+			xunit, 
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xland, jdbcType=VARCHAR},
+			#{xrow},
+			#{xperson, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xqty, jdbcType=INTEGER},
+			#{xunit, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandOwner" parameterType="LandOwner">
+		UPDATE 
+			calandowner
+		SET
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xqty=#{xqty, jdbcType=INTEGER},
+			xunit=#{xunit, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xland=#{xland, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandOwner" resultType="LandOwner">
+		SELECT 
+			* 
+		FROM 
+			calandowner 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandOwner" resultType="LandOwner">
+		SELECT * FROM calandowner WHERE xland=#{xland} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findLandOwnerByXlandAndXrow" resultType="LandOwner">
+		SELECT * FROM calandowner WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="searchPersonId" resultType="LandPerson">
+		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<delete id="deleteLandOwner" parameterType="LandOwner">
+		DELETE FROM calandowner WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>
