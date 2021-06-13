@@ -29,9 +29,9 @@ public interface OpordMapper {
 
 	public Opordheader findOpordHeaderByXordernum(String xordernum, String zid);
 
-	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow, String zid);
+	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow, String zid, String centralzid);
 
-	public List<Oporddetail> findOporddetailByXordernum(String xordernum, String zid);
+	public List<Oporddetail> findOporddetailByXordernum(String xordernum, String zid, String centralzid);
 
 	public List<Opordheader> getAllOpordheader(String zid);
 

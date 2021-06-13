@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Caitemdetail;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -56,6 +58,7 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
+		model.addAttribute("caitemdetails", caitemService.findCaitemdetailByXitem(xitem));
 		return "pages/mastersetup/caitem/caitem";
 	}
 
@@ -129,6 +132,75 @@ public class CaitemControlller extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Item Master updated successfully");
 		responseHelper.setRedirectUrl("/mastersetup/caitem/" + xitem);
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/{xitem}/caitemdetail/{xsubitem}/show")
+	public String openCaitemDetailModal(@PathVariable String xitem, @PathVariable String xsubitem, Model model) {
+		Caitemdetail caitemDetail = new Caitemdetail();
+		caitemDetail.setXitem(xitem);
+
+		if(!"new".equalsIgnoreCase(xsubitem)) {
+			caitemDetail = caitemService.findCaitemdetailByXitemAndXsubitem(xitem, xsubitem);
+		}
+
+		model.addAttribute("caitemDetail", caitemDetail);
+		return "pages/mastersetup/caitem/caitemdetailmodal::caitemdetailmodal";
+	}
+
+	@PostMapping("/caitemdetail/save")
+	public @ResponseBody Map<String, Object> saveCaitemdetail(Caitemdetail caitemdetail){
+		if(caitemdetail == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find details");
+			return responseHelper.getResponse();
+		}
+
+		// validation
+		if(StringUtils.isBlank(caitemdetail.getXsubitem())) {
+			responseHelper.setErrorStatusAndMessage("Please select an sub item");
+			return responseHelper.getResponse();
+		}
+
+		Caitemdetail exist = caitemService.findCaitemdetailByXitemAndXsubitem(caitemdetail.getXitem(), caitemdetail.getXsubitem());
+		if(exist != null) {
+			responseHelper.setErrorStatusAndMessage("Sub Item already exist");
+			return responseHelper.getResponse();
+		}
+
+		long count = caitemService.saveCaitemdetail(caitemdetail);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't save subitem");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Subitem saved successfully");
+		responseHelper.setReloadSectionIdWithUrl("caitemdetailtable", "/mastersetup/caitem/caitemdetail/" + caitemdetail.getXitem());
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/caitemdetail/{xitem}")
+	public String loadItemDetailTable(@PathVariable String xitem, Model model) {
+		model.addAttribute("caitem", caitemService.findByXitem(xitem));
+		model.addAttribute("caitemdetails", caitemService.findCaitemdetailByXitem(xitem));
+		return "pages/mastersetup/caitem/caitem::caitemdetailtable";
+	}
+
+	@PostMapping("{xitem}/caitemdetail/{xsubitem}/delete")
+	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xitem, @PathVariable String xsubitem, Model model) {
+		Caitemdetail caitemdetail = caitemService.findCaitemdetailByXitemAndXsubitem(xitem, xsubitem);
+		if(caitemdetail == null) {
+			responseHelper.setErrorStatusAndMessage("Item detail not found");
+			return responseHelper.getResponse();
+		}
+
+		long count = caitemService.deleteCaitemDetail(caitemdetail);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete subitem");
+			return responseHelper.getResponse(); 
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Subitem deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("caitemdetailtable", "/mastersetup/caitem/caitemdetail/" + xitem);
 		return responseHelper.getResponse();
 	}
 

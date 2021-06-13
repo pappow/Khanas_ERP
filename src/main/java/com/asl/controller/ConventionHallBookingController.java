@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Caitemdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
@@ -270,41 +273,36 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	public String openOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
 		Map<String, List<Caitem>> map = new HashMap<>();
-		map.put("Facilities", caitemService.findByXcatitem("Facilities"));
-		map.put("Food", caitemService.findByXcatitem("Food"));
+		List<Caitem> facList = caitemService.findByXcatitem("Facilities");
+		facList.sort(Comparator.comparing(Caitem::getXdesc));
+		map.put("Facilities", facList);
+//		List<Caitem> foodList = caitemService.findByXcatitem("Food");
+//		foodList.sort(Comparator.comparing(Caitem::getXdesc));
+//		map.put("Food", foodList);
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details != null && !details.isEmpty()) {
+			for(Oporddetail d : details) {
+				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
+					for(Caitem c : m.getValue()) {
+						if(c.getXitem().equalsIgnoreCase(d.getXitem())) {
+							c.setSelected(true);
+						}
+					}
+				}
+			}
+		}
+
+		
+
 		model.addAttribute("itemMap", map);
-
-//		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-//		String xstartdate = sdf.format(oh.getXstartdate()).toUpperCase().concat(" ").concat(oh.getXstarttime());
-//		String xenddate = sdf.format(oh.getXenddate()).toUpperCase().concat(" ").concat(oh.getXendtime());
-//		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, xordernum);
-//
-//		List<Caitem> halls = caitemService.findByXcatitem("Convention Hall");
-//		for(Caitem c : halls) {
-//			for(String s : bookedHalls) {
-//				if(c.getXitem().equalsIgnoreCase(s)) c.setBooked(true);
-//			}
-//		}
-//		map.put("Convention Hall", halls);
-//
-//		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
-//		if(details != null && !details.isEmpty()) {
-//			for(Oporddetail d : details) {
-//				
-//				for(Map.Entry<String, List<Caitem>> m : map.entrySet()) {
-//					for(Caitem c : m.getValue()) {
-//						if(c.getXitem().equalsIgnoreCase(d.getXitem())) {
-//							c.setSelected(true);
-//						}
-//					}
-//				}
-//				
-//			}
-//		}
-
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
+
+	
+
+	
+
 
 	@PostMapping("/oporddetails/save")
 	public @ResponseBody Map<String, Object> saveOporddetail(@RequestParam(value="xitems[]") String[] xitems, @RequestParam(value="xordernum") String xordernum) {
@@ -489,6 +487,42 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		responseHelper.setReloadSectionIdWithUrl("oporddetailtable", "/conventionmanagement/hallbooking/oporddetail/" + xordernum);
 		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + xordernum);
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/itemdetail/{xitem}")
+	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
+		return caitemService.findByXitem(xitem);
+	}
+
+	@GetMapping("/food/{xordernum}/oporddetail/{xrow}/show")
+	public String openFoodOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
+
+		Oporddetail detail = new Oporddetail();
+		detail.setXordernum(xordernum);
+
+		if(!"new".equalsIgnoreCase(xrow)) {
+			
+		}
+
+		model.addAttribute("oporddetail", detail);
+		model.addAttribute("subitems", Collections.emptyList());
+		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodal";
+	}
+
+	//TODO: 
+	@PostMapping("/oporddetails/food/save")
+	public @ResponseBody Map<String, Object> saveOpordFooddetail(@RequestParam(value="xitems[]") String[] xitems, @RequestParam(value="xordernum") String xordernum) {
+		
+		
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/subitemdetails/{xitem}")
+	public String loadSubitemTable(@PathVariable String xitem, Model model) {
+		List<Caitemdetail> cdetails = caitemService.findCaitemdetailByXitem(xitem);
+		model.addAttribute("subitems", cdetails != null ? cdetails : Collections.emptyList());
+		model.addAttribute("oporddetail", caitemService.findByXitem(xitem));
+		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodaltable";
 	}
 
 }

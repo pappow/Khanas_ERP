@@ -6,8 +6,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Caitemdetail;
 import com.asl.mapper.CaitemMapper;
 import com.asl.service.CaitemService;
 
@@ -112,4 +114,33 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		return caitemMapper.getAllRequisitionItems(getBusinessId());
 	}
 
+	@Override
+	@Transactional
+	public long saveCaitemdetail(Caitemdetail caitemDetail) {
+		if(caitemDetail == null) return 0;
+		caitemDetail.setZid(getBusinessId());
+		caitemDetail.setZauserid(getAuditUser());
+		return caitemMapper.saveCaitemdetail(caitemDetail);
+	}
+
+	@Override
+	public Caitemdetail findCaitemdetailByXitemAndXsubitem(String xitem, String xsubitem) {
+		if(StringUtils.isBlank(xitem) || StringUtils.isBlank(xsubitem)) return null;
+		return caitemMapper.findCaitemdetailByXitemAndXsubitem(xitem, xsubitem, getBusinessId());
+	}
+
+	@Override
+	public List<Caitemdetail> findCaitemdetailByXitem(String xitem) {
+		if(StringUtils.isBlank(xitem)) return Collections.emptyList();
+		return caitemMapper.findCaitemdetailByXitem(xitem, getBusinessId());
+	}
+
+	@Override
+	@Transactional
+	public long deleteCaitemDetail(Caitemdetail caitemdetail) {
+		if(caitemdetail == null) return 0;
+		return caitemMapper.deleteCaitemDetail(caitemdetail);
+	}
+
+	
 }

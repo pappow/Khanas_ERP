@@ -99,6 +99,12 @@ public class Caitem extends AbstractModel<String> {
 	@Column(name = "allowreq")
 	private boolean allowreq;
 
+	@Column(name = "xvatrate")
+	private BigDecimal xvatrate;
+
+	@Column(name = "xsetmenu")
+	private boolean xsetmenu;
+
 	@Transient
 	private boolean selected;
 

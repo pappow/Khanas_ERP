@@ -207,6 +207,8 @@
 			xdesc,
 			xgitem,
 			xcatitem,
+			xparentrow,
+			xtype,
 			zid,
 			zauserid,
 			zuuserid,
@@ -231,6 +233,8 @@
 			#{xdesc, jdbcType=VARCHAR},
 			#{xgitem, jdbcType=VARCHAR},
 			#{xcatitem, jdbcType=VARCHAR},
+			#{xparentrow, jdbcType=INTEGER},
+			#{xtype, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -257,6 +261,8 @@
 			xdesc=#{xdesc, jdbcType=VARCHAR},
 			xgitem=#{xgitem, jdbcType=VARCHAR},
 			xcatitem=#{xcatitem, jdbcType=VARCHAR},
+			xparentrow=#{xparentrow, jdbcType=INTEGER},
+			xtype=#{xtype, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -291,7 +297,7 @@
 			caitem.xcatitem 
 		FROM 
 			oporddetail od
-			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{centralzid}
 			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			od.xordernum=#{xordernum} 
@@ -310,7 +316,7 @@
 			caitem.xcatitem
 		FROM
 			oporddetail 
-			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{zid}
+			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{centralzid}
 			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			oporddetail.xordernum=#{xordernum}
@@ -592,16 +598,18 @@
 		SET
 			oph.xtotamt=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid), 0),
 			oph.xroomamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Room', oph.zid), 0),
-			oph.xhallamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Convention Hall', oph.zid), 0),
-			oph.xfunctionamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Function', oph.zid), 0),
-			oph.xfacamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Hall Facility', oph.zid), 0),
-			oph.xfoodamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Convention Hall Food', oph.zid), 0),
+			oph.xfacamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Facilities', oph.zid), 0),
+			oph.xfoodamt=NVL(Func_GetTotalOpordDetailsXcat(oph.xordernum, 'Food', oph.zid), 0),
 			oph.xvatamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
 			oph.xaitamt=NVL((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100, 0),
-			oph.xgrandtot=  NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) 
+			oph.xgrandtot=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) 
 							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
 							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
-							- oph.xdiscamt, 0)
+							- oph.xdiscamt, 0),
+			oph.xdue=NVL(Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) 
+							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							+ ((Func_GetTotalAmtOpordDetails(oph.xordernum, oph.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=oph.xvatait AND v.zid=oph.zid AND v.zactive='1'))/100)
+							- oph.xdiscamt, 0) - NVL(oph.xpaid, 0)
 		WHERE
 			oph.xordernum=#{xordernum} 
 			AND oph.zid=#{zid} 

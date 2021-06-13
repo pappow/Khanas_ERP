@@ -61,7 +61,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@GetMapping("/{xpornum}")
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
-		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum); 
+		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum);
 		if(data == null) data = getDefaultPoordHeader();
 		data.setXtypetrn(data.getXtype());
 

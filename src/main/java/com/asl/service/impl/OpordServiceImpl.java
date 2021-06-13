@@ -106,13 +106,13 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow) {
 		if(StringUtils.isBlank(xordernum) || xrow == 0) return null;
-		return opordMapper.findOporddetailByXordernumAndXrow(xordernum, xrow, sessionManager.getBusinessId());
+		return opordMapper.findOporddetailByXordernumAndXrow(xordernum, xrow, sessionManager.getBusinessId(), getBusinessId());
 	}
 
 	@Override
 	public List<Oporddetail> findOporddetailByXordernum(String xordernum) {
-		if(StringUtils.isBlank(xordernum)) return null;
-		return opordMapper.findOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
+		if(StringUtils.isBlank(xordernum)) return Collections.emptyList();
+		return opordMapper.findOporddetailByXordernum(xordernum, sessionManager.getBusinessId(), getBusinessId());
 	}
 
 	@Override
@@ -237,13 +237,10 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long saveBatchOpordDetail(List<Oporddetail> opordDetails) {
 		if(opordDetails == null || opordDetails.isEmpty()) return 0;
 		long totalCount = 0;
-		int i = 1;
 		for(Oporddetail detail : opordDetails) {
-			detail.setXrow(i);
 			long scount = saveOpordDetail(detail);
 			if(scount != 0) updateOpordHeaderTotalAmtAndGrandTotalAmt(detail.getXordernum());
 			totalCount += scount;
-			i++;
 		}
 		return totalCount;
 	}

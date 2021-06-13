@@ -41,15 +41,14 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-12 content-area">
+					<h1 class="text-center">Purchase Order</h1>
 
+					<div class="col-md-6 content-area">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Create Purchase Order</h1>
-									</div>
+									<div class="section-header sectionbartoggle"></div>
 									<div class="form-action-button">
 										<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 										<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
@@ -67,7 +66,7 @@
 												<div class="row">
 													<div class="col-md-6">
 														<div class="form-group" th:if="${#strings.isEmpty(poordheader.xpornum)}">
-															<label class="control-label col-md-4" for="xtrn">P.O. Prefix : </label>
+															<label class="control-label col-md-4" for="xtrn">P.O. Code : </label>
 															<div class="col-md-4">
 																<select class="form-control" th:field="*{xtrn}">
 																	<option th:each="prefix : ${poprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -93,7 +92,7 @@
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xref">Supplier Ref : </label>
+															<label class="control-label col-md-4" for="xref">Reference : </label>
 															<div class="col-md-8">
 																<input type="text" class="form-control" th:field="*{xref}">
 															</div>
@@ -115,6 +114,7 @@
 															<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 															<div class="col-md-8">
 																<select class="form-control" th:field="*{xwh}">
+																	<option value=""> -- Select -- </option>
 																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
 																</select>
 															</div>
@@ -147,7 +147,13 @@
 									</div>
 								</section>
 							</div>
-							<div class="col-md-6">
+						</div>
+						
+					</div>
+
+					<div class="col-md-6 content-area">
+						<div class="row">
+							<div class="col-md-12">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
 										<h1>All Purchase Orders</h1>
@@ -179,10 +185,8 @@
 										</table>
 									</div>
 								</section>
-
 							</div>
 						</div>
-						
 					</div>
 
 					<div class="col-md-12">

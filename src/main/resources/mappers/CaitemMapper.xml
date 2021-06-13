@@ -30,6 +30,8 @@
 			xproditem,
 			xseqn,
 			allowreq,
+			xvatrate,
+			xsetmenu,
 			zid,
 			zauserid,
 			zuuserid,
@@ -62,6 +64,8 @@
 			#{xproditem, jdbcType=BOOLEAN},
 			#{xseqn, jdbcType=INTEGER},
 			#{allowreq, jdbcType=BOOLEAN},
+			#{xvatrate, jdbcType=DECIMAL},
+			#{xsetmenu, jdbcType=BOOLEAN},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -97,6 +101,8 @@
 			xproditem=#{xproditem, jdbcType=BOOLEAN},
 			xseqn=#{xseqn, jdbcType=INTEGER},
 			allowreq=#{allowreq, jdbcType=BOOLEAN},
+			xvatrate=#{xvatrate, jdbcType=DECIMAL},
+			xsetmenu=#{xsetmenu, jdbcType=BOOLEAN},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -107,6 +113,35 @@
 			xitem=#{xitem}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+
+	<insert id="saveCaitemdetail" parameterType="Caitemdetail">
+		INSERT INTO caitemdetail
+		(
+			xitem,
+			xsubitem,
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xitem, jdbcType=VARCHAR},
+			#{xsubitem, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
 
 	<select id="getAllCaitems" resultType="Caitem">
 		SELECT * FROM Caitem WHERE zid=#{zid} AND zactive='1' ORDER BY xitem DESC
@@ -239,4 +274,41 @@
 		ORDER BY
 			xcodes.seqn, caitem.xseqn, caitem.xitem
 	</select>
+
+	<select id="findCaitemdetailByXitemAndXsubitem" resultType="Caitemdetail">
+		SELECT
+			CAITEMDETAIL.*,
+			CAITEM.XDESC AS xdesc
+		FROM
+			CAITEMDETAIL
+			LEFT JOIN CAITEM ON CAITEM.XITEM = CAITEMDETAIL.XSUBITEM AND CAITEM.ZID = CAITEMDETAIL.ZID AND CAITEM.ZACTIVE='1'
+		WHERE
+			CAITEMDETAIL.ZID=#{zid}
+			AND CAITEMDETAIL.ZACTIVE='1'
+			AND CAITEMDETAIL.XITEM=#{xitem}
+			AND CAITEMDETAIL.XSUBITEM=#{xsubitem}
+	</select>
+
+	<select id="findCaitemdetailByXitem" resultType="Caitemdetail">
+		SELECT
+			CAITEMDETAIL.*,
+			CAITEM.XDESC AS xdesc
+		FROM
+			CAITEMDETAIL
+			LEFT JOIN CAITEM ON CAITEM.XITEM = CAITEMDETAIL.XSUBITEM AND CAITEM.ZID = CAITEMDETAIL.ZID AND CAITEM.ZACTIVE='1'
+		WHERE
+			CAITEMDETAIL.ZID=#{zid}
+			AND CAITEMDETAIL.ZACTIVE='1'
+			AND CAITEMDETAIL.XITEM=#{xitem}
+	</select>
+
+	<delete id="deleteCaitemDetail">
+		DELETE
+		FROM
+			CAITEMDETAIL
+		WHERE
+			ZID=#{zid}
+			AND XITEM=#{xitem}
+			AND XSUBITEM=#{xsubitem}
+	</delete>
 </mapper>

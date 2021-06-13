@@ -260,7 +260,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			opordMapper.updateOpordHeader(salesOrder); // updated sales order with sales reference
 
 			// now prepare item details from sales order to sales
-			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(salesOrder.getXordernum(), sessionManager.getBusinessId());
+			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(salesOrder.getXordernum(), sessionManager.getBusinessId(), getBusinessId());
 			if(salesOrdeItems == null || salesOrdeItems.isEmpty()) continue;
 
 			for(Oporddetail salesOrderItem : salesOrdeItems) {

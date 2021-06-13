@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Caitemdetail;
 
 @Component
 public interface CaitemService {
@@ -40,4 +41,12 @@ public interface CaitemService {
 	public List<Caitem> getAllItemsWithoutRawMaterials();
 
 	public List<Caitem> getAllRequisitionItems();
+
+	public long saveCaitemdetail(Caitemdetail caitemDetail);
+
+	public Caitemdetail findCaitemdetailByXitemAndXsubitem(String xitem, String xsubitem);
+
+	public List<Caitemdetail> findCaitemdetailByXitem(String xitem);
+
+	public long deleteCaitemDetail(Caitemdetail caitemdetail);
 }

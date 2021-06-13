@@ -82,4 +82,9 @@ public class Oporddetail extends AbstractModel<String> {
 		this.xqtyord = xqtyord;
 	}
 
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Column(name = "xparentrow")
+	private int xparentrow;
 }
