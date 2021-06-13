@@ -66,6 +66,7 @@ public class ReportParamMap {
 		
 		RM0302.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0302.put("param2", "CHALAN|" + ReportParamDataType.STRING.name());
+		RM0302.put("param3", "NAME|" + ReportParamDataType.STRING.name());
 		
 		RM0303.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0303.put("param2", "XPORNUM|" + ReportParamDataType.STRING.name());

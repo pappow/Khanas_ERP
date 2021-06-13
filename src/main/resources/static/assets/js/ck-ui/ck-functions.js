@@ -465,7 +465,7 @@ function submitMainForm(customurl, customform){
 	var formData = $(targettedForm).serializeArray();
 	var enctype = targettedForm.attr('enctype');
 	if(enctype == 'multipart/form-data'){
-		submitMultipartForm(submitUrl, submitType);
+		submitMultipartForm(submitUrl, submitType, targettedForm);
 		return;
 	}
 
@@ -506,7 +506,7 @@ function submitMainForm(customurl, customform){
  * @param submitType
  * @returns
  */
-function submitMultipartForm(submitUrl, submitType){
+function submitMultipartForm(submitUrl, submitType, targettedForm){
 	var files = $('#fileuploader').get(0).files;
 	if (files.length == 0){
 		alert("No files selected to upload");
@@ -517,6 +517,11 @@ function submitMultipartForm(submitUrl, submitType){
 	for (var x = 0; x < files.length; x++) {
 		formData.append("files[]", files[x]);
 	}
+
+	// Other input fields value
+	$.each($(targettedForm).serializeArray(), function(i, b){
+		formData.append(b.name, b.value);
+	})
 
 	loadingMask2.show();
 	$.ajax({

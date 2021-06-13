@@ -20,4 +20,6 @@ public interface LandOwnerService {
 	public List<LandInfo> searchLandId(String xland);
 
 	public List<LandPerson> searchPersonId(String xperson);
+	
+	public List<LandPerson> searchPersonName(String xname);
 }
