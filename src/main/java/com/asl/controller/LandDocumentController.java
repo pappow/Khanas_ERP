@@ -1,6 +1,11 @@
 package com.asl.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -12,14 +17,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDocument;
+import com.asl.entity.Xtrn;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandDocumentService;
 
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/landdocument")
 public class LandDocumentController extends ASLAbstractController{
@@ -56,23 +68,53 @@ public class LandDocumentController extends ASLAbstractController{
 	}
 	
 	@PostMapping("/save")
-	public @ResponseBody Map<String, Object> save(LandDocument landDocument, BindingResult bindingResult) {
-		if (landDocument == null) {
+	public @ResponseBody Map<String, Object> save(LandDocument obj, @RequestParam("files[]") MultipartFile[] files, BindingResult bindingResult) {
+		if (obj == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
 		
+		if(files != null && files.length > 0) {
+//			System.out.println(files[0].getOriginalFilename());
+			
+			//Rename the file 
+			String extension = null;
+			int j = files[0].getOriginalFilename().lastIndexOf('.');
+			if (j > 0) {
+				extension = files[0].getOriginalFilename().substring(j + 1);
+			}
+			/* String OriginalFileName = files[0].getOriginalFilename(); */
+//			String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+			String fileName = UUID.randomUUID()+ "." + extension;
+			log.debug("File name is now: {}", fileName);
+
+			try {
+				//create a directory if not exist
+				String uploadPath = "D://Bosila//Document";
+				File dir = new File(uploadPath);
+				if(!dir.exists()) {
+					dir.mkdirs();
+				}
+				//Upload file into server
+				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
+				obj.setXdocument(uploadPath+"/"+fileName);
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+			}
+		
 		// Validation
-		if(StringUtils.isBlank(landDocument.getXdocument())) {
-			responseHelper.setErrorStatusAndMessage("Please Insert Your Document");
+		if(StringUtils.isBlank(obj.getXname())) {
+			responseHelper.setErrorStatusAndMessage("Please Enter Your Document Name");
 			return responseHelper.getResponse();
 		}
 
+	
 		// if existing
-		if(StringUtils.isNotBlank(landDocument.getXdoc())) {
-			LandDocument exist = landDocumentService.findByLandDocument(landDocument.getXdoc());
+		if(StringUtils.isNotBlank(obj.getXdoc())) {
+			LandDocument exist = landDocumentService.findByLandDocument(obj.getXdoc());
 			
-			BeanUtils.copyProperties(landDocument, exist, "xtypetrn","xtrn");
+			BeanUtils.copyProperties(obj, exist, "xtypetrn","xtrn");
 			long count = landDocumentService.update(exist);
 			if(count == 0) {
 				responseHelper.setErrorStatusAndMessage("Can't update land info");
@@ -82,15 +124,17 @@ public class LandDocumentController extends ASLAbstractController{
 			responseHelper.setRedirectUrl("/landdocument/" + exist.getXdoc());
 			return responseHelper.getResponse();
 		}
+	
+		String xtrn =  xtrnService.generateAndGetXtrnNumber(obj.getXtypetrn(), obj.getXtrn(), 6);
+		obj.setXdoc(xtrn);
 		
-		// if new
-		long count = landDocumentService.save(landDocument);
+		long count = landDocumentService.save(obj);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't save Document info");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Document info saved successfully");
-		responseHelper.setRedirectUrl("/landdocument/" + landDocument.getXdoc());
+		responseHelper.setRedirectUrl("/landdocument/" + obj.getXdoc());
 		return responseHelper.getResponse();
 	}
 	

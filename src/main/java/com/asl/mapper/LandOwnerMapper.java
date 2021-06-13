@@ -23,5 +23,7 @@ public interface LandOwnerMapper {
 	public List<LandInfo> searchLandId(String xland, String zid);
 
 	public List<LandPerson> searchPersonId(String xperson, String zid);
+	
+	public List<LandPerson> searchPersonName(String xname, String zid);
 
 }

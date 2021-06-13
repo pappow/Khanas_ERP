@@ -11,6 +11,7 @@ public class LandDocumentPK implements Serializable{
 
 	private String zid;
 	private String xdoc;
+	private int xrow;
 	private String xperson;
 	private String xsurveyor;
 	private String xland;

@@ -85,4 +85,8 @@
 	<select id="searchPersonId" resultType="LandPerson">
 		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<select id="searchPersonName" resultType="LandPerson">
+		SELECT xname FROM landperson WHERE (UPPER(xname) LIKE '%' || #{xname} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
 </mapper>

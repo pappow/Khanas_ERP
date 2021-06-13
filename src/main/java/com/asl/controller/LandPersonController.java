@@ -118,7 +118,6 @@ public class LandPersonController extends ASLAbstractController {
 	}
 
 	
-	
 
 	@GetMapping("/{xperson}/education/{xrow}/show")
 	public String loadEducationModal(@PathVariable String xperson, @PathVariable String xrow, Model model) {

@@ -132,6 +132,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXperson(),c.getXperson())));
 		return list;
 	}
+	
+	@GetMapping("/personName/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getPersonName(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandPerson> PersonName = landOwnerService.searchPersonName(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		PersonName.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXname(),c.getXname())));
+		return list;
+	}
 
 	@GetMapping("/caitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCaitems(@PathVariable String hint){

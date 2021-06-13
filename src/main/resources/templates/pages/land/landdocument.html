@@ -50,28 +50,30 @@
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" method="post" th:action="@{/landdocument/save}" th:object="${document}">
-											<input type="hidden" th:field="*{xtypetrn}"/>
-											<input type="hidden" th:field="*{xdoc}"/>
-											<div class="row">
-												<div class="col-md-12">
-													<div class="row">
-														<div class="col-md-12">
-															<div class="section-header sectionbartoggle">
-																<h1>Land Document</h1>
-															</div>
-															<div class="form-action-button">
-																<a th:href="@{/landdocument}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-																<a class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-																<a th:if="${not #strings.isEmpty(document.xdoc)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
-															</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="section-header sectionbartoggle">
+															<h1>Land Document</h1>
+														</div>
+														<div class="form-action-button">
+															<a th:href="@{/landdocument}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+															<a class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+															<a th:if="${not #strings.isEmpty(document.xdoc)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														</div>
 													</div>
 												</div>
-											</div><br>
-											<div class="row">
-												<div class="col-md-12">
-													<div class="row">
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="row">
+													<form id="mainform" class="form-horizontal" method="POST" th:action="@{/landdocument/save}" th:object="${document}" enctype="multipart/form-data">
+														<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
+														<input type="hidden" th:field="*{xtypetrn}"/>
+														<input type="hidden" th:field="*{xdoc}"/>
 														<div class="col-md-6">
 															<div class="form-group" th:if="${#strings.isEmpty(document.xdoc)}">
 																<label class="control-label col-md-4" for="xtrn">Prefix: </label>
@@ -161,9 +163,14 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xdocument">Add Document</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" th:field="*{xdocument}" maxlength="100"/>
+																<label class="control-label col-sm-4" for="selectPhoto">Add Document</label>
+																<div class="input-group col-sm-8">
+																	<label class="input-group-btn">
+																		<span class="btn btn-default brows-btn">
+																			Brows &hellip; <input type="file" name="file" id="fileuploader" style="display: none;">
+																		</span>
+																	</label>
+																	<input type="text" class="form-control filepath-input" readonly="readonly">
 																</div>
 															</div>
 															<div class="form-group">
@@ -173,10 +180,10 @@
 																</div>
 															</div>
 														</div>
-													</div>
+													</form>
 												</div>
 											</div>
-										</form>
+										</div>
 									</div>
 								</section>
 							</div>
@@ -223,5 +230,33 @@
 
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$(function () {
+					// We can attach the `fileselect` event to all file inputs on the page
+					$(document).on('change', ':file', function () {
+						var input = $(this),
+						numFiles = input.get(0).files ? input.get(0).files.length : 1,
+						label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+						input.trigger('fileselect', [numFiles, label]);
+					});
+					// We can watch for our custom `fileselect` event like this
+					$(document).ready(function () {
+						$(':file').on('fileselect', function (event, numFiles, label) {
+							var input = $(this).parents('.input-group').find(':text'),
+							log = numFiles > 1 ? numFiles + ' files selected' : label;
+							if (input.length) {
+								input.val(log);
+							} else {
+								if (log)
+								alert(log);
+							}
+						});
+					});
+				});
+			});
+			
+		</script>
 	</body>
 </html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.LandSurveyMapper">
+	
+	<insert id="saveLandSurvey" parameterType="LandSurvey">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM landsurvey WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO landsurvey
+		(
+			xland,
+			xrow,
+			xperson,
+			xdate,
+			xtype,
+			xnote,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid,
+			zuip,
+			zaip
+		)
+		VALUES
+		(
+			#{xland, jdbcType=VARCHAR},
+			#{xrow},
+			#{xperson, jdbcType=VARCHAR},
+			#{xdate, jdbcType=DATE},
+			#{xtype, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<update id="updateLandSurvey" parameterType="LandSurvey">
+		UPDATE 
+			landsurvey
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR}
+		WHERE
+			xland=#{xland, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND xperson=#{xperson, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getAllLandSurvey" resultType="LandSurvey">
+		SELECT * FROM landsurvey WHERE zid=#{zid}  AND zactive='1' order by ztime desc
+	</select>
+
+	<select id="findByXlandSurvey" resultType="LandSurvey">
+		SELECT * FROM landsurvey WHERE xland=#{xland} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandSurveydetailByXlandAndXrow" resultType="LandSurvey">
+		SELECT * FROM landsurvey WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandSurveyByXlandAndXperson" resultType="LandSurvey">
+		SELECT * FROM landsurvey WHERE xland=#{xland} AND xperson=#{xperson} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<delete id="deleteDetail" parameterType="LandSurvey">
+		DELETE FROM landsurvey WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
+	</delete>
+</mapper>

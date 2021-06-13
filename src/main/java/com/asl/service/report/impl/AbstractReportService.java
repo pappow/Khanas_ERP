@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -29,8 +30,10 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -48,6 +51,28 @@ public abstract class AbstractReportService implements ReportFieldService {
 
 	@Autowired protected ASLSessionManager sessionManager;
 	@Autowired protected PrintingService printingService;
+	@Autowired protected Environment env;
+	
+
+	public boolean isConventionCenter() {
+		return Arrays.asList(env.getActiveProfiles()).contains("convention");
+	}
+
+	public boolean isKhanas() {
+		return Arrays.asList(env.getActiveProfiles()).contains("khanas");
+	}
+
+	public boolean isTCC() {
+		return Arrays.asList(env.getActiveProfiles()).contains("tcc");
+	}
+
+	public boolean isBoshila() {
+		return Arrays.asList(env.getActiveProfiles()).contains("BOSHILA");
+	}
+
+	public boolean isDev() {
+		return Arrays.asList(env.getActiveProfiles()).contains("dev");
+	}
 
 	protected static final SimpleDateFormat SDF = new SimpleDateFormat("E, dd-MMM-yyyy");
 

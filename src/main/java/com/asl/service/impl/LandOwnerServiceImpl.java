@@ -63,5 +63,11 @@ public class LandOwnerServiceImpl extends AbstractGenericService implements Land
 		if(StringUtils.isBlank(xperson)) return Collections.emptyList();
 		return landownerMapper.searchPersonId(xperson.toUpperCase(), sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public List<LandPerson> searchPersonName(String xname){
+		if(StringUtils.isBlank(xname)) return Collections.emptyList();
+		return landownerMapper.searchPersonName(xname.toUpperCase(), sessionManager.getBusinessId());
+	}
 
 }
