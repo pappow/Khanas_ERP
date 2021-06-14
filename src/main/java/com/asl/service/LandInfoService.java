@@ -29,6 +29,10 @@ public long save(LandInfo landinfo);
 		
 		public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow);
 		
+		
+		
+		public LandOwner findByXlandAndXperson(String xland, String xperson);
+		
 		public List<LandPerson> searchPersonId(String xperson);
 
 }

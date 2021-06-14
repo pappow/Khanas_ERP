@@ -44,6 +44,8 @@ public enum CodeType {
 	ITEM_SUB_CATEGORY("Item Sub-Category"),
 	
 	LAND_UNIT("Land Unit"),
+	
+	MEMBER_DESIGNATION("Member Designation Type"),
 
 	OBJECT_TYPE("Object Type"),
 	OWNER_TYPE("Owner Type"),

@@ -32,6 +32,10 @@ public interface LandInfoMapper {
 	
 	public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow, String zid);
 	
+
+	
+	public LandOwner findByXlandAndXperson(String xland, String xperson, String zid);
+	
 	public List<LandPerson> searchPersonId(String xperson, String zid);
 	
 

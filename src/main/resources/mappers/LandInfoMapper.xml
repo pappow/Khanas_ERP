@@ -229,6 +229,12 @@
 	<select id="findLandOwnerByXlandAndXrow" resultType="LandOwner">
 		SELECT * FROM calandowner WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	
+	
+	<select id="findByXlandAndXperson" resultType="LandOwner">
+		SELECT * FROM calandowner WHERE zid=#{zid}  AND xland=#{xland} AND xperson=#{xperson}
+	</select>
 
 	<select id="searchPersonId" resultType="LandPerson">
 		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'

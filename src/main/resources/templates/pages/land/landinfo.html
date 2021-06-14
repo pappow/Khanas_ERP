@@ -354,17 +354,18 @@
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
-					<h1>Owner Details</h1>
+					<h1>Owner Details of <lebel th:text="${info.xland}"></lebel> </h1>
+					
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
 						<thead>
 							<tr>
 								<th>Row</th>
-								<th>Land ID</th>
 								<th>Person ID</th>
-								<th>Quantity</th>
-								<th>Unit</th>
+								<th>Land Type</th>
+								<th>Land Amount</th>
+								<th>Land Unit</th>
 								<th>Note </th>
 								<th data-nosort="Y" style="text-align: right;">
 									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/new/show', data-target-modal='ownermodal'"><i class="fas fa-plus"></i></button>
@@ -374,8 +375,8 @@
 						<tbody>
 							<tr th:each="d, n : ${lpelist}">
 								<td th:text="${n.count}"></td>
-								<td th:text="${d.xland}"></td>
 								<td th:text="${d.xperson}"></td>
+								<td th:text="${d.xtype}"></td>
 								<td th:text="${d.xqty}"></td>
 								<td th:text="${d.xunit}"></td>
 								<td th:text="${d.xnote}"></td>
@@ -385,6 +386,12 @@
 								</td>
 							</tr>
 						</tbody>
+						<tfoot>
+						<tr>
+						<th>Total</th>
+						
+						</tr>
+						</tfoot>
 					</table>
 				</div>
 			</section>

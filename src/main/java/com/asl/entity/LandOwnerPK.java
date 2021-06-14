@@ -11,5 +11,5 @@ public class LandOwnerPK implements Serializable {
 	private String zid;
 	private String xland;
 	private int xrow;
-	private String xperson;
+	
 }

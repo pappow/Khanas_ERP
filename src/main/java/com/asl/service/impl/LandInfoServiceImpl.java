@@ -85,11 +85,7 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 		return landinfoMapper.findByLandOwner(xland, sessionManager.getBusinessId());
 	}
 
-	@Override
-	public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow) {
-		if(StringUtils.isBlank(xland) || xrow == 0) return null;
-		return landinfoMapper.findLandOwnerByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
-	}
+	
 
 	@Override
 	public List<LandPerson> searchPersonId(String xperson) {
@@ -103,5 +99,23 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 		long count = landinfoMapper.deleteLandOwner(landOwner);
 		return count;
 	}
+
+	@Override
+	public LandOwner findByXlandAndXperson(String xland, String xperson) {
+		if (StringUtils.isBlank(xland) || StringUtils.isBlank(xperson))
+			return null;
+		return landinfoMapper.findByXlandAndXperson(xland, xperson, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow) {
+		if(StringUtils.isBlank(xland) || xrow == 0) return null;
+		return landinfoMapper.findLandOwnerByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
+	}
+
+	
+
+	
+
 
 }

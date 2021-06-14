@@ -32,9 +32,10 @@ public enum TransactionCodeType {
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 	
-	LAND_ID("Land ID", "LND--", TransactionCodes.LAND_ID),
+	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
+	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
 
-	PERSON_ID("Persone ID", "PRSN--", TransactionCodes.PERSON_ID),
+	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
 	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),

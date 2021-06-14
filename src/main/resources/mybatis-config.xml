@@ -58,5 +58,6 @@
 		<mapper resource="mappers/LandCommitteeMembersMapper.xml"/>
 		<mapper resource="mappers/LandDocumentMapper.xml"/>
 		<mapper resource="mappers/LandSurveyMapper.xml"/>
+		<mapper resource="mappers/LandMemberInfoMapper.xml"/>
 	</mappers>
 </configuration>

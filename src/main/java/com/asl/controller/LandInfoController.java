@@ -141,6 +141,8 @@ public class LandInfoController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 	
+	//start of landowner
+	
 	@GetMapping("/{xland}/owner/{xrow}/show")
 	public String loadOwnerModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
 		if("new".equalsIgnoreCase(xrow)) {
@@ -175,18 +177,24 @@ public class LandInfoController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		
+
+		LandOwner exist = landInfoService.findByXlandAndXperson(landOwner.getXland(), landOwner.getXperson());
+
+		// if new data
+		if(landOwner.getXrow() == 0 && exist != null) {
+			responseHelper.setErrorStatusAndMessage("Land " + landOwner.getXland() + " with person " + landOwner.getXperson() + " data already exist in this system");
+			return responseHelper.getResponse();
+		}
 		
 		// if existing
-		LandOwner existOwner = landInfoService.findLandOwnerByXlandAndXrow(landOwner.getXland(), landOwner.getXrow());
-		if(existOwner != null) {
-			BeanUtils.copyProperties(landOwner, existOwner);
-			long count = landInfoService.update(existOwner);
+		if(landOwner.getXrow() != 0 && exist != null) {
+			BeanUtils.copyProperties(landOwner, exist);
+			long count = landInfoService.update(exist);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setRedirectUrl("/landinfo/owner/" + landOwner.getXland());
+			responseHelper.setReloadSectionIdWithUrl("ownertable","/landinfo/owner/" + landOwner.getXland());
 			responseHelper.setSuccessStatusAndMessage("Owner Detaails updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -210,6 +218,7 @@ public class LandInfoController extends ASLAbstractController {
 		return "pages/land/landinfo::ownertable";
 	}
 
+	//delete
 	@PostMapping("{xland}/owner/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteOwnerDetails(@PathVariable String xland, @PathVariable String xrow, Model model) {
 		LandOwner lpe = landInfoService.findLandOwnerByXlandAndXrow(xland, Integer.parseInt(xrow));
@@ -228,5 +237,6 @@ public class LandInfoController extends ASLAbstractController {
 		responseHelper.setReloadSectionIdWithUrl("ownertable", "/landinfo/owner/" + xland);
 		return responseHelper.getResponse();
 	}
+	////end of landowner
 }
 	
