@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.asl.mapper.LandOwnerMapper">
+<mapper namespace="com.asl.mapper.LandCommitteeMembersMapper">
 
-	<insert id="saveLandOwner" parameterType="LandOwner">
-		INSERT INTO landowner
+	<insert id="saveLandCommitteeMembers" parameterType="LandCommitteeMembers">
+		INSERT INTO landcommitteemembers
 		(
-			xland,
+			xcommittee,
 			xperson,
-			xtype,
+			xmembertype,
+			xcontribution,
 			xnote,
-			xqty, 
-			xunit, 
 			zactive,
 			zauserid,
 			zid,
@@ -21,12 +20,11 @@
 		)
 		VALUES
 		(
-			#{xland, jdbcType=VARCHAR},
+			#{xcommittee, jdbcType=VARCHAR},
 			#{xperson, jdbcType=VARCHAR},
-			#{xtype, jdbcType=VARCHAR},
+			#{xmembertype, jdbcType=VARCHAR},
+			#{xcontribution, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
-			#{xqty, jdbcType=INTEGER},
-			#{xunit, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
@@ -36,14 +34,13 @@
 		)
 	</insert>
 
-	<update id="updateLandOwner" parameterType="LandOwner">
+	<update id="updateLandCommitteeMembers" parameterType="LandCommitteeMembers">
 		UPDATE 
-			landowner
+			landcommitteemembers
 		SET
-			xtype=#{xtype, jdbcType=VARCHAR},
+			xmembertype=#{xmembertype, jdbcType=VARCHAR},
+			xcontribution=#{xcontribution, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
-			xqty=#{xqty, jdbcType=INTEGER},
-			xunit=#{xunit, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zid=#{zid, jdbcType=VARCHAR},
@@ -51,16 +48,16 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR}
 		WHERE
-			xland=#{xland, jdbcType=VARCHAR}
+			xcommittee=#{xcommittee, jdbcType=VARCHAR}
 			AND xperson=#{xperson, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<select id="getAllLandOwner" resultType="LandOwner">
+	<select id="getAllLandCommitteeMembers" resultType="LandCommitteeMembers">
 		SELECT 
 			* 
 		FROM 
-			landowner 
+			landcommitteemembers 
 		WHERE 
 			zid=#{zid} 
 			AND zactive='1'
@@ -68,26 +65,27 @@
 			ztime desc
 	</select>
 
-	<select id="findByXlandAndXperson" resultType="LandOwner">
+	<select id="findByXcommitteeAndXperson" resultType="LandCommitteeMembers">
 		SELECT 
 			* 
 		FROM 
-			landowner 
+			landcommitteemembers 
 		WHERE 
 			zid=#{zid} 
-			AND xland=#{xland} 
+			AND xcommittee=#{xcommittee} 
 			AND xperson=#{xperson}
 	</select>
 
-	<select id="searchLandId" resultType="LandInfo">
-		SELECT xland FROM landinfo WHERE (UPPER(xland) LIKE '%' || #{xland} || '%') AND zid=#{zid} AND zactive='1'
+	<select id="searchCommitteeId" resultType="LandCommitteeInfo">
+		SELECT xcommittee FROM landcommitteeinfo WHERE (UPPER(xcommittee) LIKE '%' || #{xcommittee} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="searchPersonId" resultType="LandPerson">
 		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 	
-	<select id="searchPersonName" resultType="LandPerson">
-		SELECT xname FROM landperson WHERE (UPPER(xname) LIKE '%' || #{xname} || '%') AND zid=#{zid} AND zactive='1'
-	</select>
+	<delete id="deleteLandCommitteeMembers" parameterType="LandCommitteeMembers">
+		DELETE FROM landcommitteemembers WHERE xcommittee=#{xcommittee} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 </mapper>

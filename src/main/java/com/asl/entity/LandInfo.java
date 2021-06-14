@@ -35,50 +35,62 @@ public class LandInfo extends AbstractModel<String>{
 	@Column(name="xland")
 	private String xland;
 
+	@Column(name="xlname")
+	private String xlname;
+	
 	@Column(name="xblock")
 	private String xblock;
 
 	@Column(name="xroad")
 	private String xroad;
 
+	@Column(name="xcslanddag")
+	private Integer xcslanddag;
+
 	@Column(name="xcslandqty")
-	private Integer xcslandqty;
+	private BigDecimal xcslandqty;
 
 	@Column(name="xcslandunit")
 	private String xcslandunit;
 
+	@Column(name="xrslanddag")
+	private Integer xrslanddag;
+
 	@Column(name="xrslandqty")
-	private Integer xrslandqty;
+	private BigDecimal xrslandqty;
 
 	@Column(name="xrslandunit")
 	private String xrslandunit;
 
+	@Column(name="xcitylanddag")
+	private Integer xcitylanddag;
+
 	@Column(name="xcitylandqty")
-	private Integer xcitylandqty;
+	private BigDecimal xcitylandqty;
 
 	@Column(name="xcitylandunit")
 	private String xcitylandunit;
 
 	@Column(name="xlandgrsqty")
-	private Integer xlandgrsqty;
+	private BigDecimal xlandgrsqty;
 
 	@Column(name="xlanggrsunit")
 	private String xlanggrsunit;
 
 	@Column(name="xlanddedroad")
-	private BigDecimal xlanddedroad;
+	private Integer xlanddedroad;
 
 	@Column(name="xlanddedother")
-	private BigDecimal xlanddedother;
+	private Integer xlanddedother;
 
 	@Column(name="xlandnetqty")
-	private Integer xlandnetqty;
+	private BigDecimal xlandnetqty;
 
 	@Column(name="xlandnetunit")
 	private String xlandnetunit;
 
 	@Column(name="xriversideqty")
-	private String xriversideqty;
+	private BigDecimal xriversideqty;
 
 	@Column(name="xriversideunit")
 	private String xriversideunit;
@@ -91,6 +103,12 @@ public class LandInfo extends AbstractModel<String>{
 
 	@Column(name="xstatus")
 	private String xstatus;
+	
+	@Column(name="xroadred")
+	private BigDecimal xroadred;
+
+	@Column(name="xotherred")
+	private BigDecimal xotherred;
 
 	@Column(name="xdateborn")
 	@Temporal(TemporalType.DATE)

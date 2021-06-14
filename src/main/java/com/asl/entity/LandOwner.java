@@ -13,9 +13,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "landowner")
+@Table(name = "calandowner")
 @IdClass(LandOwnerPK.class)
-@EqualsAndHashCode(of = { "zid", "xland", "xperson" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid", "xland","xrow", "xperson" }, callSuper = false)
 public class LandOwner extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 8511409160374470441L;
@@ -29,6 +29,11 @@ public class LandOwner extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xland")
 	private String xland;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "xrow")
+	private int xrow;
 
 	@Id
 	@Basic(optional = false)

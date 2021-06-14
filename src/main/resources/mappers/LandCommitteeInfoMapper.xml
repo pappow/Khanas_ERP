@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.LandCommitteeInfoMapper">
+
+	<insert id="saveLandCommitteeInfo" parameterType="LandCommitteeInfo">
+		<selectKey keyProperty="xcommittee" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO landcommitteeinfo
+		(
+			xcommittee,
+			xdate,
+			xstartdate,
+			xenddate,
+			xstatus,
+			xnote,
+			xtypetrn,
+			xtrn,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xcommittee},
+			#{xdate,jdbcType=DATE},
+			#{xstartdate,jdbcType=DATE},
+			#{xenddate,jdbcType=DATE},
+			#{xstatus, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandCommitteeInfo" parameterType="LandCommitteeInfo">
+		UPDATE 
+			landcommitteeinfo
+		SET
+			xdate=#{xdate,jdbcType=DATE},
+			xstartdate=#{xstartdate,jdbcType=DATE},
+			xenddate=#{xenddate,jdbcType=DATE},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xcommittee=#{xcommittee , jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandCommitteeInfo" resultType="LandCommitteeInfo">
+		SELECT 
+			* 
+		FROM 
+			landcommitteeinfo 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandCommitteeInfo" resultType="LandCommitteeInfo">
+		SELECT 
+			* 
+		FROM 
+			landcommitteeinfo 
+		WHERE 
+			zid=#{zid} 
+			AND xcommittee=#{xcommittee}
+	</select>
+</mapper>

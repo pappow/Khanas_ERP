@@ -60,6 +60,8 @@
 														<a th:href="@{/landsurveyor}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 														<a th:if="${#strings.isEmpty(surveyor.xsurveyor)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(surveyor.xsurveyor) and surveyor.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
+														<a th:if="${not #strings.isEmpty(surveyor.xsurveyor) and surveyor.zactive == true}" th:href="@{/landsurveyor/archive/} + ${surveyor.xsurveyor}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+														<a th:if="${not #strings.isEmpty(surveyor.xsurveyor) and surveyor.zactive == false}" th:href="@{/landsurveyor/restore/} + ${surveyor.xsurveyor}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 													</div>
 												</div>
 											</div>
@@ -105,6 +107,7 @@
 																	<input type="text" class="form-control" th:field="*{xmname}" maxlength="100"/>
 																</div>
 															</div>
+															
 															<div class="form-group datepicker">
 																<label class="control-label col-md-4" for="xdob">Date of Birth: </label>
 																<div class="input-group date col-md-7 datepicker">
@@ -119,18 +122,21 @@
 																	</div>
 																</div>
 															</div>
+															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xoccupation">Occupation: </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xoccupation}" maxlength="100"/>
 																</div>
 															</div>
+															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xcontact">Contact No: </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xcontact}" maxlength="100"/>
 																</div>
 															</div>
+															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xemail">Email: </label>
 																<div class="col-md-8">
@@ -177,7 +183,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Items</h1>
+										<h1>All Land Surveyors</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">

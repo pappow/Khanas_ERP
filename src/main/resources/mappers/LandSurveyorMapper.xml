@@ -89,8 +89,10 @@
 			landsurveyor 
 		WHERE 
 			zid=#{zid} 
+			AND zactive ='1'
 		order by 
 			ztime desc
+			
 	</select>
 
 	<select id="findByLandSurveyor" resultType="LandSurveyor">
