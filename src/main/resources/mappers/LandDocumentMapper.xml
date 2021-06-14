@@ -2,15 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.LandDocumentMapper">
-
 	<insert id="saveLandDocument" parameterType="LandDocument">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM landdocument WHERE zactive='1' AND zid=#{zid}
 		</selectKey>
-		<!-- 
-		<selectKey keyProperty="xdoc" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
-		</selectKey> -->
 		
 		INSERT INTO landdocument
 		(
@@ -60,6 +55,9 @@
 		UPDATE 
 			landdocument
 		SET
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xsurveyor=#{xsurveyor, jdbcType=VARCHAR},
+			xland=#{xland, jdbcType=VARCHAR},
 			xdoctype=#{xdoctype, jdbcType=VARCHAR},
 			xname=#{xname, jdbcType=VARCHAR},
 			xdocument=#{xdocument, jdbcType=VARCHAR},
@@ -74,10 +72,7 @@
 			zuuserid=#{zuuserid, jdbcType=VARCHAR}
 		WHERE
 			xdoc=#{xdoc, jdbcType=VARCHAR}
-			AND xrow=#{xrow, jdbcType=INTEGER},
-			AND xperson=#{xperson, jdbcType=VARCHAR}
-			AND xsurveyor=#{xsurveyor, jdbcType=VARCHAR}
-			AND xland=#{xland, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
@@ -101,6 +96,20 @@
 		WHERE 
 			zid=#{zid} 
 			AND xdoc=#{xdoc}
+	</select>
+	
+	<select id="findByLandPersonDocument" resultType="LandDocument">
+		SELECT 
+			* 
+		FROM 
+			landdocument 
+		WHERE 
+			zid=#{zid} 
+			AND xperson=#{xperson}
+	</select>
+	
+	<select id="findLandPersonDocumentByXpersonAndXrow" resultType="LandDocument">
+		SELECT * FROM landdocument WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="searchServeyorId" resultType="LandSurveyor">

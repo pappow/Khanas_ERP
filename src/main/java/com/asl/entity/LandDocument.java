@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "landdocument")
 @IdClass(LandDocumentPK.class)
-@EqualsAndHashCode(of = { "zid","xdoc","xrow","xperson","xsurveyor","xland" }, callSuper = false)
+@EqualsAndHashCode(of = { "zid","xdoc","xrow"}, callSuper = false)
 public class LandDocument extends AbstractModel<String>{
 	
 	private static final long serialVersionUID = -1482216443995609989L;
@@ -33,19 +34,13 @@ public class LandDocument extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xrow")
 	private int xrow;
-	
-	@Id
-	@Basic(optional = false)
+
 	@Column(name = "xperson")
 	private String xperson;
 
-	@Id
-	@Basic(optional = false)
 	@Column(name = "xsurveyor")
 	private String xsurveyor;
-	
-	@Id
-	@Basic(optional = false)
+
 	@Column(name = "xland")
 	private String xland;
 	
@@ -69,5 +64,8 @@ public class LandDocument extends AbstractModel<String>{
 	
 	@Column(name="xnameold")
 	private String xnameold;
+	
+	@Transient
+	private boolean newData;
 	
 }

@@ -22,13 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDocument;
-import com.asl.entity.Xtrn;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandDocumentService;
 
-import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -117,10 +116,10 @@ public class LandDocumentController extends ASLAbstractController{
 			BeanUtils.copyProperties(obj, exist, "xtypetrn","xtrn");
 			long count = landDocumentService.update(exist);
 			if(count == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't update land info");
+				responseHelper.setErrorStatusAndMessage("Can't update Document info");
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Person Experience info updated successfully");
+			responseHelper.setSuccessStatusAndMessage("Document info updated successfully");
 			responseHelper.setRedirectUrl("/landdocument/" + exist.getXdoc());
 			return responseHelper.getResponse();
 		}

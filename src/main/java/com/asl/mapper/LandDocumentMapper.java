@@ -18,6 +18,10 @@ public interface LandDocumentMapper {
 
 	public LandDocument findByLandDocument(String xdoc, String zid);
 	
+	public List<LandDocument> findByLandPersonDocument(String xperson, String zid); 
+	
+	public LandDocument findLandPersonDocumentByXpersonAndXrow(String xperson, int xrow, String zid);
+	
 	public long deleteDetail(LandDocument LandDocument);
 	
 	//Search
