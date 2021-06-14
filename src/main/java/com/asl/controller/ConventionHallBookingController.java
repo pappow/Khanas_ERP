@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +32,8 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Caitemdetail;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordDetail;
+import com.asl.entity.PoordHeader;
 import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -39,7 +43,15 @@ import com.asl.service.HallBookingService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.util.CKTime;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/conventionmanagement/hallbooking")
 public class ConventionHallBookingController extends ASLAbstractController {
@@ -67,10 +79,23 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		model.addAttribute("opordheader", oh);
 		model.addAttribute("vataitList", vataitService.getAllVatait());
-		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
 		model.addAttribute("bookingOrderList", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode(), TransactionCodeType.HALL_BOOKING_SALES_ORDER.getdefaultCode()));
 		model.addAttribute("paymentType", xcodesService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("paymentMode", xcodesService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+
+		List<Oporddetail> detail = opordService.findOporddetailByXordernum(xordernum);
+		model.addAttribute("facilities", detail.stream().filter(d -> "Facilities".equalsIgnoreCase(d.getXcatitem())).collect(Collectors.toList()));
+
+		List<Oporddetail> mainfoodList = detail.stream().filter(d -> "Food".equalsIgnoreCase(d.getXcatitem()) && !"Set Item".equalsIgnoreCase(d.getXtype())).collect(Collectors.toList());
+		List<Oporddetail> subfoodList = detail.stream().filter(d -> "Food".equalsIgnoreCase(d.getXcatitem()) && "Set Item".equalsIgnoreCase(d.getXtype())).collect(Collectors.toList());
+		for(Oporddetail m : mainfoodList) {
+			for(Oporddetail s : subfoodList) {
+				if(m.getXrow() == s.getXparentrow()) {
+					m.getSubitems().add(s);
+				}
+			}
+		}
+		model.addAttribute("foods", mainfoodList);
 		return "pages/conventionmanagement/hallbooking/opord";
 	}
 
@@ -497,12 +522,21 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@GetMapping("/food/{xordernum}/oporddetail/{xrow}/show")
 	public String openFoodOpordDetailModal(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 
-		Oporddetail detail = new Oporddetail();
-		detail.setXordernum(xordernum);
+		Oporddetail detail = null;
 
 		if(!"new".equalsIgnoreCase(xrow)) {
-			
+			detail = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
+			if(detail != null) {
+				// find sub items too
+				List<Oporddetail> list = opordService.findAllSubitemDetail(xordernum, detail.getXrow(), "Set Item");
+				model.addAttribute("oporddetail", detail);
+				model.addAttribute("subitems", list != null ? list : Collections.emptyList());
+				return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodal";
+			}
 		}
+
+		detail = new Oporddetail();
+		detail.setXordernum(xordernum);
 
 		model.addAttribute("oporddetail", detail);
 		model.addAttribute("subitems", Collections.emptyList());
@@ -520,7 +554,17 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@GetMapping("/subitemdetails/{xitem}")
 	public String loadSubitemTable(@PathVariable String xitem, Model model) {
 		List<Caitemdetail> cdetails = caitemService.findCaitemdetailByXitem(xitem);
-		model.addAttribute("subitems", cdetails != null ? cdetails : Collections.emptyList());
+		List<Oporddetail> subitems = new ArrayList<>();
+		for(Caitemdetail c : cdetails) {
+			Oporddetail o = new Oporddetail();
+			o.setXitem(c.getXitem());
+			o.setXdesc(c.getXdesc());
+			o.setXqtyord(c.getXqtyord());
+			o.setXunit(c.getXunit());
+			subitems.add(o);
+		}
+
+		model.addAttribute("subitems", subitems != null ? subitems : Collections.emptyList());
 		model.addAttribute("oporddetail", caitemService.findByXitem(xitem));
 		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodaltable";
 	}
@@ -529,6 +573,104 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	public String loadExtraItemModal(@PathVariable String xitem, @PathVariable String xrow, Model model) {
 		
 		return "";
+	}
+
+
+	@PostMapping(value = "/foodoporddetail/save", headers="Accept=application/json")
+	public @ResponseBody Map<String, Object> saveFoodOporddetail(@RequestBody String json){
+
+		Oporddetail oporddetail = new Oporddetail();
+		List<Oporddetail> subdetails = new ArrayList<>();
+		ObjectMapper obm = new ObjectMapper();
+		try {
+			oporddetail = obm.readValue(json, Oporddetail.class);
+			JsonNode rootNode = obm.readTree(json);
+
+			JsonNode itemsNode = rootNode.get("subitems");
+			TypeFactory typeFactory = obm.getTypeFactory();
+			CollectionType cType = typeFactory.constructCollectionType(List.class, Oporddetail.class);
+			subdetails = obm.readValue(itemsNode.toString(), cType);
+		} catch (JsonProcessingException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
+
+		System.out.println(oporddetail.toString());
+		subdetails.stream().forEach(s -> System.out.println(s.toString()));
+
+		// validation
+		Oporddetail exist = opordService.findOporddetailByXordernumAndXitem(oporddetail.getXordernum(), oporddetail.getXitem());
+
+		// if new but exist
+		if(oporddetail.getXrow() == 0 && exist != null) {
+			responseHelper.setErrorStatusAndMessage("Item detail already added");
+			return responseHelper.getResponse();
+		}
+
+		if(oporddetail.getXrow() != 0 && exist == null) {
+			responseHelper.setErrorStatusAndMessage("Item detail not found in this system");
+			return responseHelper.getResponse();
+		}
+
+		// if new
+		if(oporddetail.getXrow() == 0 && exist == null) {
+			// save main item first
+			Caitem caitem = caitemService.findByXitem(oporddetail.getXitem());
+			if(caitem == null) {
+				responseHelper.setErrorStatusAndMessage("Item not found in this system");
+				return responseHelper.getResponse();
+			}
+
+			oporddetail.setXdesc(caitem.getXdesc());
+			oporddetail.setXcatitem(caitem.getXcatitem());
+			oporddetail.setXgitem(caitem.getXgitem());
+			if(oporddetail.getXrate() == null) oporddetail.setXrate(BigDecimal.ZERO);
+			if(oporddetail.getXqtyord() == null) oporddetail.setXqtyord(BigDecimal.ONE);
+			oporddetail.setXlineamt(oporddetail.getXrate().multiply(oporddetail.getXqtyord()));
+			long count = opordService.saveOpordDetail(oporddetail);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't add item detail");
+				return responseHelper.getResponse();
+			}
+
+			// prepare sub item and save it
+			List<Oporddetail> subitems = new ArrayList<>();
+			for(Oporddetail o : subdetails) {
+				Caitem c = caitemService.findByXitem(o.getXitem());
+				if(c == null) continue;
+
+				o.setXdesc(c.getXdesc());
+				o.setXcatitem(c.getXcatitem());
+				o.setXgitem(c.getXgitem());
+				if(o.getXqtyord() == null) o.setXqtyord(BigDecimal.ONE);
+				o.setXrate(BigDecimal.ZERO);
+				o.setXlineamt(o.getXqtyord().multiply(o.getXrate()));
+				o.setXparentrow(oporddetail.getXrow());
+				o.setXtype("Set Item");
+				subitems.add(o);
+			}
+			if(!subitems.isEmpty()) {
+				long count2 = opordService.saveBatchOpordDetail(subitems);
+				if(count2 == 0) {
+					responseHelper.setErrorStatusAndMessage("Can't save set items");
+					return responseHelper.getResponse();
+				}
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Item detail added successfully");
+			responseHelper.setReloadSectionIdWithUrl("oporddetailfoodtable", "/conventionmanagement/hallbooking/oporddetail/" + oporddetail.getXordernum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + oporddetail.getXordernum());
+			return responseHelper.getResponse();
+		}
+
+		
+		
+		
+		
+
+		responseHelper.setErrorStatusAndMessage("Working....");
+		return responseHelper.getResponse();
 	}
 
 }

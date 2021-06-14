@@ -15,7 +15,7 @@
 							<input type="hidden" th:field="*{xordernum}"/>
 							<input type="hidden" th:field="*{xrow}"/>
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="form-group" th:if="${oporddetail.xrow == 0}">
 									<label class="control-label col-sm-4" for="xitem">Item : </label>
 									<div class="col-sm-8 sub-item-fragment">
 										<input 	type="text" 
@@ -28,10 +28,11 @@
 										<input type="hidden" id="search-des" th:value="*{xitem}"/>
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="control-label col-sm-4" for="xqtyord">Qty : </label>
+								<div class="form-group" th:if="${oporddetail.xrow != 0}">
+									<label class="control-label col-sm-4" for="xitem">Item : </label>
 									<div class="col-sm-8">
-										<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xqtyord}" min="0"/>
+										<input type="hidden" th:field="*{xitem}"/>
+										<input type="text" th:value="${oporddetail.xitem} + ' - ' + ${oporddetail.xdesc}" class="form-control xunitpur-display" disabled="disabled"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -41,14 +42,25 @@
 										<input type="text" th:value="${oporddetail.xunit}" class="form-control xunitpur-display" disabled="disabled"/>
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-4" for="xqtyord">Qty : </label>
+									<div class="col-sm-8">
+										<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xqtyord}" min="0"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-4" for="xrate">Rate : </label>
+									<div class="col-sm-8">
+										<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xrate}" min="0"/>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-6">
 							</div>
 						</form>
-	
 					</div>
-					
-					<div class="row ingtable nodisplay">
+
+					<div class="row ingtable nodisplay" th:classappend="${#lists.isEmpty(subitems) ? 'nodisplay' : ''}">
 						<h4 class="text-center">Ingredients</h4>
 						<div class="col-md-12">
 							<div id="oporddetailfoodmodaltable" th:fragment="oporddetailfoodmodaltable">
@@ -70,9 +82,12 @@
 												<span th:text="${s.xitem} + ' - ' + ${s.xdesc}"></span>
 											</td>
 											<td>
-												<input type="number" class="form-control" style="width: 100px;" th:value="${s.xqtyord}" min="0"/>
+												<input type="number" class="form-control itemqty" style="width: 100px;" th:value="${s.xqtyord}" min="0"/>
 											</td>
-											<td th:text="${s.xunit}"></td>
+											<td>
+												<input type="hidden" class="itemunit" th:value="${s.xunit}"/>
+												<span th:text="${s.xunit}"></span>
+											</td>
 											<td style="text-align: right;">
 												<button type="button" class="btn btn-danger item-remove-btn"><i class="fas fa-trash"></i></button>
 											</td>
@@ -81,6 +96,15 @@
 								</table>
 								<script type="text/javascript">
 									$(document).ready(function(){
+										var itemsList = [];
+
+										function loadItemsList(){
+											itemsList = [];
+											$.each($('.itemcode'), function(i, item){
+												itemsList.push($(item).val());
+											})
+										}
+
 										function bindButtonEvent(){
 											$('.back-btn').off('click').on('click', function(e){
 												displayMain();
@@ -88,6 +112,13 @@
 
 											$('.subitem-submit').off('click').on('click', function(e){
 												if($('input[name="xsubitem"]').val() == '' || $('input[name="xsubqtyord"]') == '' || $('input[name="xsubunit"]') == '') return;
+
+												// validate item exist
+												loadItemsList();
+												if(itemsList.includes($('input[name="xsubitem"]').val())) {
+													showMessage("error", "Item already added");
+													return;
+												}
 
 												var subdata = {
 													xitem : $('input[name="xsubitem"]').val(),
@@ -100,7 +131,7 @@
 												var row = 	'<tr>'+
 																'<td><input type="hidden" class="itemcode" value="'+ subdata.xitem +'"/>'+ subdata.xitemdes +'</td>' +
 																'<td><input type="number" value="'+ subdata.xqtyord +'" class="form-control" style="width: 100px;"/></td>' + 
-																'<td>'+ subdata.xunit +'</td>' + 
+																'<td><input type="hidden" class="itemunit" value="'+ subdata.xunit +'"/>'+ subdata.xunit +'</td>' + 
 																'<td style="text-align: right;"><button type="button" class="btn btn-danger item-remove-btn"><i class="fas fa-trash"></i></button></td>' + 
 															'</tr>';
 
@@ -110,16 +141,18 @@
 												$('input[name="xsubitem"]').val('');
 												$('input[name="xsubitemfulldes"]').val('');
 												bindButtonEvent();
+
+												loadItemsList();
 											});
 
 
 											$('.item-remove-btn').off('click').on('click', function(e){
 												e.preventDefault();
-												console.log($($(this).parent()).parent());
 												$($(this).parent()).parent().remove();
+
+												loadItemsList();
 											})
 
-											
 										}
 
 										function displaySub(){
@@ -146,8 +179,6 @@
 
 										$('.item-add-btn').off('click').on('click', function(e){
 											e.preventDefault();
-											console.log("Hi there");
-
 											displaySub();
 										});
 
@@ -158,7 +189,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- sub item search -->
 				<div class="sub-item-box2 nodisplay" style="min-height: 100px;">
 					<form id="subitemform" method="post" action="" class="form-horizontal">
@@ -204,22 +235,23 @@
 					// Init ui for modal
 					ck.ui.config.buttonevent();
 					modalDataTableInit();
-	
+
 					var olditem = $('input[name="xitem"]').val();
-	
+
 					// Get item purchase unit
 					$('.xitemsearch').on('blur', function(){
-	
+
 						setTimeout(() => {
 							if($('input[name="xitem"]').val() == ''){
 								$('input[name="xunit"]').val("");
 								$('input.xunitpur-display').val("");
-								$('input#xqtyord').val("0.00");
+								$('input#xqtyord').val("0");
+								$('input#xrate').val("0");
 								return;
 							}
-	
+
 							if(olditem != '' && olditem == $('input[name="xitem"]').val()) return;
-	
+
 							loadingMask2.show();
 							$.ajax({
 								url : getBasepath() + '/conventionmanagement/hallbooking/itemdetail/' + $('input[name="xitem"]').val(),
@@ -229,6 +261,7 @@
 									$('input[name="xunit"]').val(data.xunitpur);
 									$('input.xunitpur-display').val(data.xunitpur);
 									$('input#xqtyord').val(data.xminqty);
+									$('input#xrate').val(data.xrate);
 
 									if(data.xsetmenu){
 										$('.ingtable').removeClass('nodisplay');
@@ -270,25 +303,23 @@
 						}, 1000);
 					});
 
-					
-					
-					
+
+
 					// Sub item search
 					$('.xsubitemsearch').on('blur', function(){
-	
+
 						setTimeout(() => {
 							if($('input[name="xsubitem"]').val() == ''){
 								$('input[name="xsubunit"]').val("");
 								$('input#xsubqtyord').val("0.00");
 								return;
 							}
-	
+
 							loadingMask2.show();
 							$.ajax({
 								url : getBasepath() + '/conventionmanagement/hallbooking/itemdetail/' + $('input[name="xsubitem"]').val(),
 								type : 'GET',
 								success : function(data) {
-									console.log({data});
 									loadingMask2.hide();
 									$('input[name="xsubunit"]').val(data.xunitpur);
 									$('input#xsubqtyord').val(data.xminqty);
@@ -299,8 +330,74 @@
 								}
 							})
 						}, 1000);
+					});
+
+					// Submit modal form
+					$('.submit-mainitem').off('click').on('click', function(e){
+						e.preventDefault();
+						console.log("form submitted");
+
+						var oporddetail = {};
+						oporddetail.xitem = $('input[name="xitem"]').val();
+						oporddetail.xqtyord = $('input[name="xqtyord"]').val();
+						oporddetail.xunit = $('input[name="xunit"]').val();
+						oporddetail.xordernum = $('input[name="xordernum"]').val();
+						oporddetail.xrow = $('input[name="xrow"]').val();
+						oporddetail.xrate = $('input[name="xrate"]').val();
+
+						var subitems = [];
+						$.each($('.subitemtable tbody').find('tr'), function(i, item){
+							var itemcode = $(item).find('input.itemcode');
+							var itemqty = $(item).find('input.itemqty');
+							var itemunit = $(item).find('input.itemunit');
+
+							subitems.push({
+								xitem : $(itemcode).val(),
+								xqtyord : $(itemqty).val(),
+								xunit : $(itemunit).val(),
+								xordernum : $('input[name="xordernum"]').val()
+							});
+						})
+
+						oporddetail.subitems = subitems;
+						console.log({oporddetail});
+
+						$.ajax({
+							url : getBasepath() + '/conventionmanagement/hallbooking/foodoporddetail/save',
+							type : 'POST',
+							dataType : 'json', 
+							data: JSON.stringify(oporddetail),
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader("Accept", "application/json");
+								xhr.setRequestHeader("Content-Type", "application/json");
+							},
+							success : function(data) {
+								loadingMask2.hide();
+								if(data.status == 'SUCCESS'){
+									$('div.modal').modal('hide');
+									showMessage(data.status.toLowerCase(), data.message);
+									if(data.triggermodalurl){
+										modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+									} else {
+										if(data.redirecturl){
+											setTimeout(() => {
+												window.location.replace(getBasepath() + data.redirecturl);
+											}, 1000);
+										} else if(data.reloadurl){
+											doSectionReloadWithNewData(data);
+										}
+									}
+								} else {
+									showMessage(data.status.toLowerCase(), data.message);
+								}
+							},
+							error : function(jqXHR, status, errorThrown){
+								showMessage(status, "Something went wrong .... ");
+								loadingMask2.hide()
+							}
+						});
+						
 					})
-	
 				})
 			</script>
 		</div>

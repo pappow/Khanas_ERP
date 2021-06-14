@@ -669,4 +669,15 @@
 				((to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate} AND (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &lt;= #{xenddate}))
 	</select>
 
+	<select id="findAllSubitemDetail" resultType="Oporddetail">
+		SELECT
+			*
+		FROM
+			oporddetail
+		WHERE
+			zid=#{zid}
+			AND xordernum=#{xordernum}
+			AND xtype=#{xtype}
+			AND xparentrow=#{xparentrow}
+	</select>
 </mapper>

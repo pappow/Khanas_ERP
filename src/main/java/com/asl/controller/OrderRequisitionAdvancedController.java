@@ -95,6 +95,8 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			itemdetails = obm.readValue(itemsNode.toString(), cType);
 		} catch (JsonProcessingException e) {
 			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
 		}
 
 		if(itemdetails == null || itemdetails.isEmpty()) {

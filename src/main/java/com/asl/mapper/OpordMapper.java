@@ -83,4 +83,6 @@ public interface OpordMapper {
 	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum, String zid);
 	
 	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate, String zid);
+
+	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype, String zid);
 }

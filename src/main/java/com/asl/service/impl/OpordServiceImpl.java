@@ -252,4 +252,10 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.archiveAllOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype) {
+		if(StringUtils.isBlank(xordernum) || xparentrow == 0 || StringUtils.isBlank(xtype)) return Collections.emptyList();
+		return opordMapper.findAllSubitemDetail(xordernum, xparentrow, xtype, sessionManager.getBusinessId());
+	}
+
 }
