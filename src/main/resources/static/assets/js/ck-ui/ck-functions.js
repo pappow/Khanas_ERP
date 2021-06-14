@@ -642,6 +642,11 @@ function submitModalForm(customurl){
 	var submitUrl = (customurl != undefined) ? customurl : targettedForm.attr('action');
 	var submitType = targettedForm.attr('method');
 	var formData = $(targettedForm).serializeArray();
+	var enctype = targettedForm.attr('enctype');
+	if(enctype == 'multipart/form-data'){
+		submitMultipartForm(submitUrl, submitType, targettedForm);
+		return;
+	}
 
 	loadingMask2.show();
 	$.ajax({

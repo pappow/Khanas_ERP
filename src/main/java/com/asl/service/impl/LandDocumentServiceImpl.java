@@ -51,6 +51,12 @@ public class LandDocumentServiceImpl extends AbstractGenericService implements L
 	}
 	
 	@Override
+	public List<LandDocument> findByLandPersonDocument(String xperson) {
+		if (StringUtils.isBlank(xperson)) return null;
+		return landDocumentMapper.findByLandPersonDocument(xperson, sessionManager.getBusinessId());
+	}
+	
+	@Override
 	public long deleteDetail(LandDocument landDocument){
 		if(landDocument==null) return 0;
 		long count = landDocumentMapper.deleteDetail(landDocument);
@@ -58,8 +64,16 @@ public class LandDocumentServiceImpl extends AbstractGenericService implements L
 	}
 	
 	@Override
+	public LandDocument findLandPersonDocumentByXpersonAndXrow(String xperson, int xrow) {
+		if(StringUtils.isBlank(xperson) || xrow == 0) return null;
+		return landDocumentMapper.findLandPersonDocumentByXpersonAndXrow(xperson,xrow,sessionManager.getBusinessId());
+		
+	}
+	
+	@Override
 	public List<LandSurveyor> searchServeyorId(String xsurveyor){
 		if(StringUtils.isBlank(xsurveyor)) return Collections.emptyList();
 		return landDocumentMapper.searchServeyorId(xsurveyor.toUpperCase(), sessionManager.getBusinessId());
 	}
+	
 }
