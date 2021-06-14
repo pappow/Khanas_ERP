@@ -119,6 +119,8 @@
 		(
 			xitem,
 			xsubitem,
+			xqtyord,
+			xunit,
 			zid,
 			zauserid,
 			zuuserid,
@@ -132,6 +134,8 @@
 		(
 			#{xitem, jdbcType=VARCHAR},
 			#{xsubitem, jdbcType=VARCHAR},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xunit, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},

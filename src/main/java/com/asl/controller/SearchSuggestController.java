@@ -222,6 +222,14 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 
+	@GetMapping("/caitem/withoutset/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getNonSetItem(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().filter(c -> !c.isXsetmenu()).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
 	@GetMapping("/salesorderchalan/confirmed/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getOnlyConfirmedSalesOrderChalan(@PathVariable String hint){
 		List<Opordheader> chalans = opordService.searchOpordheaderByXtypetrnAndXtrnAndXordernum(TransactionCodeType.CHALAN_NUMBER.getCode(), TransactionCodeType.CHALAN_NUMBER.getdefaultCode(), hint, "Confirmed");

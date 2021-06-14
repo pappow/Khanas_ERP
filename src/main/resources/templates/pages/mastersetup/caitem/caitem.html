@@ -296,6 +296,8 @@
 										<tr>
 											<th>SN.</th>
 											<th>Item</th>
+											<th>Quantity</th>
+											<th>Unit</th>
 											<th data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/mastersetup/caitem/} + ${caitem.xitem} + '/caitemdetail/new/show', data-target-modal='caitemdetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
@@ -307,6 +309,8 @@
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xsubitem}" target="_blank" th:text="${d.xsubitem} + ' - ' + ${d.xdesc}"></a>
 											</td>
+											<td th:text="${d.xqtyord}"></td>
+											<td th:text="${d.xunit}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/mastersetup/caitem/} + ${d.xitem} + '/caitemdetail/' + ${d.xsubitem} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>

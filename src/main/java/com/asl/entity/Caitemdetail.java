@@ -1,5 +1,7 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +40,12 @@ public class Caitemdetail extends AbstractModel<String> {
 	@Basic(optional = false)
 	@Column(name = "xsubitem")
 	private String xsubitem;
+
+	@Column(name = "xqtyord")
+	private BigDecimal xqtyord;
+
+	@Column(name = "xunit")
+	private String xunit;
 
 	@Transient
 	private String xdesc;
