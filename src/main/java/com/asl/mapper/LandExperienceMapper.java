@@ -19,5 +19,9 @@ public interface LandExperienceMapper {
 	public LandExperience findByLandExperiencePerson(String xperson, String zid);
 	
 	public LandExperience findByXpersonAndXrow(String xperson, int xrow, String zid);
+	
+	public LandExperience findByXpersonAndXname(String xperson, String xname, String zid);
+	
+	public long deleteDetail(LandExperience landExperience);
 
 }

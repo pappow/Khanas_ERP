@@ -19,4 +19,8 @@ public interface LandExperienceService {
 	
 	public LandExperience findByXpersonAndXrow(String xperson, int xrow);
 	
+	public LandExperience findByXpersonAndXname(String xperson, String xname);
+	
+	public long deleteDetail(LandExperience landExperience);
+	
 }

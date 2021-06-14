@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.LandDocumentMapper">
+
+	<insert id="saveLandDocument" parameterType="LandDocument">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM landdocument WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		<!-- 
+		<selectKey keyProperty="xdoc" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey> -->
+		
+		INSERT INTO landdocument
+		(
+			xdoc,
+			xrow,
+			xperson,
+			xsurveyor,
+			xland,
+			xdoctype,
+			xname,
+			xdocument,
+			xnote,
+			xnameold,
+			xtypetrn,
+			xtrn,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xdoc, jdbcType=VARCHAR},
+			#{xrow, jdbcType=INTEGER},
+			#{xperson, jdbcType=VARCHAR},
+			#{xsurveyor, jdbcType=VARCHAR},
+			#{xland, jdbcType=VARCHAR},
+			#{xdoctype, jdbcType=VARCHAR},
+			#{xname, jdbcType=VARCHAR},
+			#{xdocument, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xnameold, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandDocument" parameterType="LandDocument">
+		UPDATE 
+			landdocument
+		SET
+			xdoctype=#{xdoctype, jdbcType=VARCHAR},
+			xname=#{xname, jdbcType=VARCHAR},
+			xdocument=#{xdocument, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xnameold=#{xnameold, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xdoc=#{xdoc, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER},
+			AND xperson=#{xperson, jdbcType=VARCHAR}
+			AND xsurveyor=#{xsurveyor, jdbcType=VARCHAR}
+			AND xland=#{xland, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandDocument" resultType="LandDocument">
+		SELECT 
+			* 
+		FROM 
+			landdocument 
+		WHERE 
+			zid=#{zid}
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandDocument" resultType="LandDocument">
+		SELECT 
+			* 
+		FROM 
+			landdocument 
+		WHERE 
+			zid=#{zid} 
+			AND xdoc=#{xdoc}
+	</select>
+	
+	<select id="searchServeyorId" resultType="LandSurveyor">
+		SELECT xsurveyor FROM landsurveyor WHERE (UPPER(xsurveyor) LIKE '%' || #{xsurveyor} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<delete id="deleteDetail" parameterType="LandDocument">
+		DELETE FROM landdocument WHERE xrow=#{xrow} AND xdoc=#{xdoc} AND zactive='1' AND zid=#{zid}
+	</delete>
+</mapper>

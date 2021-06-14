@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Arhed;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.LandCommitteeInfo;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandPerson;
+import com.asl.entity.LandSurveyor;
+import com.asl.entity.Modetail;
+import com.asl.entity.Moheader;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
-import com.asl.entity.Moheader;
-import com.asl.entity.Modetail;
-import com.asl.entity.Arhed;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.ArhedService;
@@ -31,15 +32,15 @@ import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.LandCommitteeMembersService;
-import com.asl.service.LandInfoService;
+import com.asl.service.LandDocumentService;
+import com.asl.service.LandOwnerService;
+import com.asl.service.MoService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.PdmstService;
-import com.asl.service.PogrnService;
 import com.asl.service.PocrnService;
+import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
-import com.asl.service.MoService;
-import com.asl.service.LandOwnerService;
 import com.asl.service.ProductionSuggestionService;
 
 
@@ -65,7 +66,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private PdmstService pdmstService;
 	@Autowired private LandOwnerService landOwnerService;
 	@Autowired private LandCommitteeMembersService landCommitteeMembersService;
-	@Autowired private LandInfoService landInfoService;
+	@Autowired private LandDocumentService landDocumentService;
 	
 
 	@GetMapping("/staff/{hint}")
@@ -114,6 +115,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXland(),c.getXland())));
 		return list;
 	}
+	
+	@GetMapping("/landSur/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getLandDoc(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandSurveyor> LandDocList = landDocumentService.searchServeyorId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		LandDocList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXsurveyor(),c.getXsurveyor())));
+		return list;
+	}
 
 	@GetMapping("/personId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonId(@PathVariable String hint){
@@ -125,6 +136,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 	
+
 	@GetMapping("/committeeId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCommitteeId(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
@@ -132,6 +144,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<LandCommitteeInfo> LandList = landCommitteeMembersService.searchCommitteeId(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcommittee(),c.getXcommittee())));
+		return list;
+	}
+
+	@GetMapping("/personName/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getPersonName(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandPerson> PersonName = landOwnerService.searchPersonName(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		PersonName.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXname(),c.getXname())));
 		return list;
 	}
 
