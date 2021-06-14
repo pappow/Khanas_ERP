@@ -105,11 +105,21 @@
 															'</tr>';
 
 												$('.subitemtable tr:last').after(row);
+
+												$('#subitemform').trigger('reset');
+												$('input[name="xsubitem"]').val('');
+												$('input[name="xsubitemfulldes"]').val('');
+												bindButtonEvent();
 											});
 
-											$('#subitemform').trigger('reset');
-											$('input[name="xsubitem"]').val('');
-											$('input[name="xsubitemfulldes"]').val('');
+
+											$('.item-remove-btn').off('click').on('click', function(e){
+												e.preventDefault();
+												console.log($($(this).parent()).parent());
+												$($(this).parent()).parent().remove();
+											})
+
+											
 										}
 
 										function displaySub(){
@@ -141,7 +151,7 @@
 											displaySub();
 										});
 
-										
+										bindButtonEvent();
 									})
 								</script>
 							</div>

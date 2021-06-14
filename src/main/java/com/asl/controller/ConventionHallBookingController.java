@@ -525,4 +525,10 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodaltable";
 	}
 
+	@GetMapping("/{xitem}/extraoporddetail/{xrow}/show")
+	public String loadExtraItemModal(@PathVariable String xitem, @PathVariable String xrow, Model model) {
+		
+		return "";
+	}
+
 }
