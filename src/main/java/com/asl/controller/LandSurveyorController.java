@@ -156,10 +156,10 @@ public class LandSurveyorController extends ASLAbstractController{
 					lsd.setXland("");
 					lsd.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
 					lsd.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
-					model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
-					model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
 				}
 				model.addAttribute("lsd", lsd);
+				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+				model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
 			}
 
 			return "pages/land/Surveyordocumentmodal::Surveyordocumentmodal";
@@ -181,12 +181,12 @@ public class LandSurveyorController extends ASLAbstractController{
 					extension = files[0].getOriginalFilename().substring(j + 1);
 				}
 
-				String fileName = UUID.randomUUID() + "." + extension;
+				String fileName = UUID.randomUUID() + files[0].getOriginalFilename() + "." + extension;
 				log.debug("File name is now: {}", fileName);
 
 				try {
 					// create a directory if not exist
-					String uploadPath = "D://Bosila//Document//Surveyor";
+					String uploadPath = "D://Bosila//BosilaDocuments";
 					File dir = new File(uploadPath);
 					if (!dir.exists()) {
 						dir.mkdirs();
@@ -194,6 +194,7 @@ public class LandSurveyorController extends ASLAbstractController{
 					// Upload file into server
 					Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
 					landDocument.setXdocument(uploadPath + "/" + fileName);
+					landDocument.setXnameold(files[0].getOriginalFilename());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

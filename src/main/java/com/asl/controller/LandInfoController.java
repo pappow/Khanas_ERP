@@ -367,10 +367,11 @@ public class LandInfoController extends ASLAbstractController {
 				lld.setXsurveyor("");
 				lld.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
 				lld.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
-				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
-				model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+				
 			}
 			model.addAttribute("lld", lld);
+			model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
 		}
 
 		return "pages/land/landdocumentmodal::landdocumentmodal";
@@ -392,12 +393,12 @@ public class LandInfoController extends ASLAbstractController {
 				extension = files[0].getOriginalFilename().substring(j + 1);
 			}
 
-			String fileName = UUID.randomUUID() + "." + extension;
+			String fileName = UUID.randomUUID() + files[0].getOriginalFilename()+"." + extension;
 			log.debug("File name is now: {}", fileName);
 
 			try {
 				// create a directory if not exist
-				String uploadPath = "D://Bosila//Document//Land";
+				String uploadPath = "D://Bosila//BosilaDocuments";
 				File dir = new File(uploadPath);
 				if (!dir.exists()) {
 					dir.mkdirs();
@@ -405,6 +406,7 @@ public class LandInfoController extends ASLAbstractController {
 				// Upload file into server
 				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
 				landDocument.setXdocument(uploadPath + "/" + fileName);
+				landDocument.setXnameold(files[0].getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

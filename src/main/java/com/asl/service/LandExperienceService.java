@@ -17,6 +17,8 @@ public interface LandExperienceService {
 
 	public LandExperience  findByLandExperiencePerson(String xperson);
 	
+	public List<LandExperience> findByPersonExperience(String xperson);
+	
 	public LandExperience findByXpersonAndXrow(String xperson, int xrow);
 	
 	public LandExperience findByXpersonAndXname(String xperson, String xname);
