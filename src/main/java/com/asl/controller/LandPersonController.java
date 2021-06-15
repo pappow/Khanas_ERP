@@ -184,15 +184,6 @@ public class LandPersonController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		/*
-		 * // Check person already exist in detail list if (landEducation.getXrow() == 0
-		 * &&
-		 * landPersonService.findLandEducationByXpersonAndXexam(landEducation.getXperson
-		 * (), landEducation.getXexam()) != null) { responseHelper.
-		 * setErrorStatusAndMessage("Person already added into detail list. Please add another one or update existing"
-		 * ); return responseHelper.getResponse(); }
-		 */
-
 		// if existing
 		LandEducation existPerson = landPersonService.findLandEducationdetailByXpersonAndXrow(landEducation.getXperson(), landEducation.getXrow());
 		if (existPerson != null) {

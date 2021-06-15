@@ -25,8 +25,8 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li class="active"><a th:href="@{/landperson}">Land Person</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/landperson}">Personal Information</a></li>
 									</div>
 								</div>
 							</div>
@@ -50,11 +50,11 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Person</h1>
+														<h1>Personal Information</h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/landperson}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-														<a th:if="${#strings.isEmpty(person.xperson)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+														<a th:if="${#strings.isEmpty(person.xperson)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Clear</a>
 														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == true}" th:href="@{/landperson/archive/} + ${person.xperson}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 														<a th:if="${not #strings.isEmpty(person.xperson) and person.zactive == false}" th:href="@{/landperson/restore/} + ${person.xperson}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
@@ -174,7 +174,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Land Persons</h1>
+										<h1>Personal Information Details</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
@@ -207,7 +207,7 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(person.xperson)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Education Details</h1>
+								<h1>Education Details for (<span th:text="${person.xperson}"></span>)</h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table" id="educationtable" th:fragment="educationtable">
@@ -246,7 +246,7 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(person.xperson)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Person Document Details</h1>
+								<h1>Document Details for (<span th:text="${person.xperson}"></span>)</h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table" id="persondocumenttable" th:fragment="persondocumenttable">
@@ -254,7 +254,6 @@
 										<tr>
 											<th>S/N</th>
 											<th>Document ID</th>
-											<th>Person ID</th>
 											<th>Document Type</th>
 											<th>Name</th>
 											<th>Document </th>
@@ -268,7 +267,6 @@
 										<tr th:each="pd, n : ${lpdlist}">
 											<td th:text="${n.count}"></td>
 											<td th:text="${pd.xdoc}"></td>
-											<td th:text="${pd.xperson}"></td>
 											<td th:text="${pd.xdoctype}"></td>
 											<td th:text="${pd.xname}"></td>
 											<td th:text="${pd.xdocument}"></td>

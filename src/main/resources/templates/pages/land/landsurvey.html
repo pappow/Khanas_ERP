@@ -25,7 +25,7 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>">Dashboard</a></li>
 										<li class="active"><a th:href="@{/landsurvey}">Land survey</a></li>
 									</div>
 								</div>
@@ -53,7 +53,7 @@
 														<h1>Land Survey</h1>
 													</div>
 													<div class="form-action-button">
-														<a th:href="@{/landsurvey}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+														<a th:href="@{/landsurvey}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a th:if="${#strings.isEmpty(survey.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(survey.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a th:if="${not #strings.isEmpty(survey.xland)}" th:href="@{/landsurvey/} + ${survey.xland} + '/' + ${survey.xrow} + '/delete'" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>

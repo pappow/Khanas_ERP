@@ -1,9 +1,14 @@
 package com.asl.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -15,23 +20,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDagDetails;
+import com.asl.entity.LandDocument;
 import com.asl.entity.LandEducation;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/landinfo")
 public class LandInfoController extends ASLAbstractController {
 	
 	@Autowired private LandInfoService landInfoService;
+	@Autowired private LandDocumentService landDocumentService;
 	
 	@GetMapping
 	public String loadLandInfoPage(Model model) {
@@ -69,6 +81,7 @@ public class LandInfoController extends ASLAbstractController {
 		
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
+		model.addAttribute("lldlist", landDocumentService.findByAllLandDocument(xland));
 		model.addAttribute("lpelist", landInfoService.findByLandOwner(xland));
 		model.addAttribute("lddlist", landInfoService.findByLandDagDetails(xland));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LAND_ID.getCode(), Boolean.TRUE));
@@ -237,10 +250,8 @@ public class LandInfoController extends ASLAbstractController {
 	////end of landowner
 	
 	
-	
 	//start of dag details
 	
-
 	@GetMapping("/{xland}/landdag/{xrow}/show")
 	public String loadLandDagModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
 		if("new".equalsIgnoreCase(xrow)) {
@@ -331,7 +342,131 @@ public class LandInfoController extends ASLAbstractController {
 			responseHelper.setReloadSectionIdWithUrl("landdagtable", "/landinfo/landdag/" + xland);
 			return responseHelper.getResponse();
 		}
-
 	
+	
+	// For Land Land Document
+
+	@GetMapping("/{xland}/land/{xrow}/show")
+	public String loadLandDocModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		if ("new".equalsIgnoreCase(xrow)) {
+			LandDocument lld = new LandDocument();
+			lld.setXname("");
+			lld.setXperson("");
+			lld.setXland(xland);
+			lld.setXsurveyor("");
+			model.addAttribute("lld", lld);
+			lld.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
+			lld.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
+			model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("prefixes",xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+		} else {
+			LandDocument lld = landDocumentService.findLandLandDocumentByLandAndXrow(xland,Integer.parseInt(xrow));
+			if (lld == null) {
+				lld = new LandDocument();
+				lld.setXperson("");
+				lld.setXsurveyor("");
+				lld.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
+				lld.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
+				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+				model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+			}
+			model.addAttribute("lld", lld);
+		}
+
+		return "pages/land/landdocumentmodal::landdocumentmodal";
+	}
+
+	@PostMapping("/landdoc/save")
+	public @ResponseBody Map<String, Object> saveLandDoc(LandDocument landDocument, @RequestParam("files[]") MultipartFile[] files) {
+		if (landDocument == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		if (files != null && files.length > 0) {
+
+			// Rename the file
+			String extension = null;
+			int j = files[0].getOriginalFilename().lastIndexOf('.');
+			if (j > 0) {
+				extension = files[0].getOriginalFilename().substring(j + 1);
+			}
+
+			String fileName = UUID.randomUUID() + "." + extension;
+			log.debug("File name is now: {}", fileName);
+
+			try {
+				// create a directory if not exist
+				String uploadPath = "D://Bosila//Document//Land";
+				File dir = new File(uploadPath);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				// Upload file into server
+				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
+				landDocument.setXdocument(uploadPath + "/" + fileName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// if existing
+		LandDocument existLand = landDocumentService.findLandLandDocumentByLandAndXrow(landDocument.getXland(), landDocument.getXrow());
+		if (existLand != null) {
+			BeanUtils.copyProperties(landDocument, existLand, "xdoc");
+			long count = landDocumentService.update(existLand);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("landdocumenttable", "/landinfo/land/" + existLand.getXland());
+			responseHelper.setSuccessStatusAndMessage("Land Document updated successfully");
+			return responseHelper.getResponse();
+		}
+		
+		
+		String xtrn =  xtrnService.generateAndGetXtrnNumber(landDocument.getXtypetrn(), landDocument.getXtrn(), 6);
+		landDocument.setXdoc(xtrn);
+		System.out.println("The Value Of Xtrn Is Now: "+xtrn);
+
+		// if new detail
+		long count = landDocumentService.save(landDocument);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("landdocumenttable","/landinfo/land/" + landDocument.getXland());
+		responseHelper.setSuccessStatusAndMessage("land Document saved successfully");
+		return responseHelper.getResponse();
+
+	}
+
+	@GetMapping("/land/{xland}")
+	public String reloadLandDocTable(@PathVariable String xland, Model model) {
+		List<LandDocument> LandDocList = landDocumentService.findByAllLandDocument(xland);
+		model.addAttribute("lldlist", LandDocList);
+		model.addAttribute("info", landInfoService.findByLandInfo(xland));
+		return "pages/land/landinfo::landdocumenttable";
+	}
+	
+	@PostMapping("{xland}/land/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteLandDocDetail(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		LandDocument lpe = landDocumentService.findLandLandDocumentByLandAndXrow(xland, Integer.parseInt(xrow));
+		if (lpe == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landDocumentService.deleteDetail(lpe);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Document Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("landdocumenttable", "/landinfo/land/" + xland);
+		return responseHelper.getResponse();
+	}
+
 }
 	

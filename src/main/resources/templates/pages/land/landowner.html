@@ -27,7 +27,7 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
 										<li class="active"><a th:href="@{/landowner}">Land Owner</a></li>
 									
 									</div>
@@ -59,7 +59,7 @@
 													<div class="form-action-button">
 														<a th:href="@{/landowner}"  class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
 														<a th:if="${#strings.isEmpty(owner.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
+														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Clear</a>
 														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == true}" th:href="@{/landowner/archive/} + ${owner.xland} +'/'+ ${owner.xperson}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
 														<a th:if="${not #strings.isEmpty(owner.xland) and owner.zactive == false}" th:href="@{/landowner/restore/} + ${owner.xland} +'/'+ ${owner.xperson}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 													</div>

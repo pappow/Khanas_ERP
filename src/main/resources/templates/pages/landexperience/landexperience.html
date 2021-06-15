@@ -55,7 +55,7 @@
 													<div class="row">
 														<div class="col-md-12">
 															<div class="form-action-button">
-																<a th:href="@{/landexperience}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+																<a th:href="@{/landexperience}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 																<a th:if="${#strings.isEmpty(education.xperson)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 																<a th:if="${not #strings.isEmpty(education.xperson) and education.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 																<a th:if="${not #strings.isEmpty(education.xperson) and education.zactive == true}" th:href="@{/landexperience/} + ${education.xperson} + '/' + ${education.xrow} + '/delete'" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash"></i>Delete</a>
