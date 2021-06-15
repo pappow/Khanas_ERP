@@ -96,6 +96,15 @@ public class Caitem extends AbstractModel<String> {
 	@Column(name = "xseqn")
 	private Long xseqn = Long.valueOf(999999);
 
+	@Column(name = "allowreq")
+	private boolean allowreq;
+
+	@Column(name = "xvatrate")
+	private BigDecimal xvatrate;
+
+	@Column(name = "xsetmenu")
+	private boolean xsetmenu;
+
 	@Transient
 	private boolean selected;
 

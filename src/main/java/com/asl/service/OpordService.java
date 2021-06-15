@@ -82,4 +82,6 @@ public interface OpordService {
 	public long updateOpordHeaderTotalAmtAndGrandTotalAmt(String xordernum);
 
 	public long archiveAllOporddetailByXordernum(String xordernum);
+
+	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype);
 }

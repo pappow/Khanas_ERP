@@ -29,9 +29,9 @@ public interface OpordMapper {
 
 	public Opordheader findOpordHeaderByXordernum(String xordernum, String zid);
 
-	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow, String zid);
+	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow, String zid, String centralzid);
 
-	public List<Oporddetail> findOporddetailByXordernum(String xordernum, String zid);
+	public List<Oporddetail> findOporddetailByXordernum(String xordernum, String zid, String centralzid);
 
 	public List<Opordheader> getAllOpordheader(String zid);
 
@@ -83,4 +83,6 @@ public interface OpordMapper {
 	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum, String zid);
 	
 	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate, String zid);
+
+	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype, String zid);
 }

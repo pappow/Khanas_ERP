@@ -51,7 +51,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 		PoordHeader poordheader = new PoordHeader();
 		poordheader.setXpornum("NEW");
 		model.addAttribute("poordheader", poordheader);
-		model.addAttribute("items", caitemService.getAllItemsWithoutRawMaterials());
+		model.addAttribute("items", caitemService.getAllRequisitionItems());
 		return "pages/procurement/requisition/requisition";
 	}
 
@@ -63,7 +63,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 		model.addAttribute("poordheader", ph);
 
 		List<PoordDetail> details = poordService.findPoorddetailByXpornum(xpornum);
-		List<Caitem> caitems = caitemService.getAllItemsWithoutRawMaterials();
+		List<Caitem> caitems = caitemService.getAllRequisitionItems();
 		if(details != null && !details.isEmpty()) {
 			for(Caitem c : caitems) {
 				for(PoordDetail d : details) {
@@ -95,6 +95,8 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			itemdetails = obm.readValue(itemsNode.toString(), cType);
 		} catch (JsonProcessingException e) {
 			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
 		}
 
 		if(itemdetails == null || itemdetails.isEmpty()) {

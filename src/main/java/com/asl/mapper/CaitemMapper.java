@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Caitemdetail;
 
 @Mapper
 public interface CaitemMapper {
@@ -27,6 +28,8 @@ public interface CaitemMapper {
 
 	public List<Caitem> getWithoutProductionCaitems(String xitem, String zid);
 
+	public List<Caitem> getFunctionItems(String xitem, String zid);
+
 	public List<Caitem> searchCentralCaitem(String xitem, String centralzid);
 
 	public List<Caitem> searchCentralCaitemForRequisition(String xitem, String centralzid);
@@ -37,4 +40,13 @@ public interface CaitemMapper {
 
 	public List<Caitem> getAllItemsWithoutRawMaterials(String zid);
 
+	public List<Caitem> getAllRequisitionItems(String zid);
+
+	public long saveCaitemdetail(Caitemdetail caitemDetail);
+
+	public Caitemdetail findCaitemdetailByXitemAndXsubitem(String xitem, String xsubitem, String zid);
+
+	public List<Caitemdetail> findCaitemdetailByXitem(String xitem, String zid);
+
+	public long deleteCaitemDetail(Caitemdetail caitemdetail);
 }

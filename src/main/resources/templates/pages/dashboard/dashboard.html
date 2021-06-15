@@ -25,7 +25,7 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li class="active"><a th:href="@{/}">Dashboard</a></li>
+										<li class="active"><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -52,16 +52,16 @@
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0200.screenprompt}">Master Setup</td>
 										</tr>
-										<tr th:if="${isCentral and menuProfile.M0201 ne null and menuProfile.M0201.display}">
+										<tr th:if="${(isCentral and menuProfile.M0201 ne null and menuProfile.M0201.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
 											<td><a th:href="@{/mastersetup/partymaster}" th:text="${menuProfile.M0201.screenprompt}">Party Master</a></td>
 											<td>
 												<a th:href="@{/mastersetup/partymaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display}">
-											<td><a th:href="@{/mastersetup/itemmaster}" th:text="${menuProfile.M0202.screenprompt}">Item Master</a></td>
+										<tr th:if="${(isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
+											<td><a th:href="@{/mastersetup/caitem}" th:text="${menuProfile.M0202.screenprompt}">Item Master</a></td>
 											<td>
-												<a th:href="@{/mastersetup/itemmaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr th:if="${menuProfile.M0203 ne null and menuProfile.M0203.display}">
@@ -78,6 +78,30 @@
 										</tr>
 									</span>
 
+									<span th:if="${isDev}">
+										<tr>
+											<td colspan="2">Financial Accounts</td>
+										</tr>
+										<tr>
+											<td><a href="#">General Account</a></td>
+											<td>
+												<a href="#" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a href="#">Account Receivable</a></td>
+											<td>
+												<a href="#" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a href="#">Account Payable</a></td>
+											<td>
+												<a href="#" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
 									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
 											<tr>
@@ -89,6 +113,12 @@
 													<a th:href="@{/purchasing}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
+											<!-- <tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
+												<td><a th:href="@{/purchasing/poord}" th:text="${menuProfile.M0304.screenprompt}">Purchase Order</a></td>
+												<td>
+													<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												</td>
+											</tr> -->
 										</span>
 									</span>
 
@@ -139,9 +169,9 @@
 											<td colspan="2">Convention Hall Module</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/conventionmanagement}">Convention Management</a></td>
+											<td><a th:href="@{/conventionmanagement/hallbooking}">Convention Hall Booking</a></td>
 											<td>
-												<a th:href="@{/conventionmanagement}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>

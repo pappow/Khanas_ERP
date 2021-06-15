@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.asl.config.AppConfig;
+import com.asl.entity.Zbusiness;
 import com.asl.service.ASLSessionManager;
 
 /**
@@ -31,6 +32,12 @@ public abstract class AbstractGenericService  {
 		name = name.trim().toLowerCase();
 		name = name.replace(" ", "-");
 		return name;
+	}
+
+	protected String getBusinessId() {
+		Zbusiness z = sessionManager.getZbusiness();
+		if(Boolean.TRUE.equals(z.getCentral())) return z.getZid();
+		return z.getCentralzid();
 	}
 
 	protected String getAuditUser() {

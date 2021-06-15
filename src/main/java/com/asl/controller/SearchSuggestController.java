@@ -67,7 +67,6 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandOwnerService landOwnerService;
 	@Autowired private LandCommitteeMembersService landCommitteeMembersService;
 	@Autowired private LandDocumentService landDocumentService;
-	
 
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
@@ -204,6 +203,30 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<Caitem> caitemList = caitemService.getWithoutProductionCaitems(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/function/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getConventionFunctions(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.getFunctionItems(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/{xitem}/subitem/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getItemAsSubitem(@PathVariable String xitem, @PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().filter(c -> !xitem.equalsIgnoreCase(c.getXitem())).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/withoutset/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getNonSetItem(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.searchCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().filter(c -> !c.isXsetmenu()).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
 

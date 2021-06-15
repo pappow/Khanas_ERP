@@ -67,15 +67,17 @@
 														<th>SN.</th>
 														<th>Item</th>
 														<th>Quantity</th>
+														<th>Unit</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr th:each="item, n : ${items}">
 														<td th:text="${n.count}"></td>
-														<td th:text="${item.xitem} + ' - ' + ${item.xdesc} + ' (' + ${item.xunitpur} + ')' "></td>
+														<td th:text="${item.xitem} + ' - ' + ${item.xdesc}"></td>
 														<td>
 															<input th:value="${item.xqtyord}" th:attr="data-xunitpur=${item.xunitpur},data-xitemdesc=${item.xdesc},data-xcatitem=${item.xcatitem},data-xgitem=${item.xgitem},data-xrate=${item.xrate}" th:id="${item.xitem}" class="form-control item-qty" type="number" min="0"/>
 														</td>
+														<td th:text="${item.xunitpur}"></td>
 													</tr>
 												</tbody>
 											</table>

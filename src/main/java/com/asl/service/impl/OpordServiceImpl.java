@@ -106,13 +106,13 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public Oporddetail findOporddetailByXordernumAndXrow(String xordernum, int xrow) {
 		if(StringUtils.isBlank(xordernum) || xrow == 0) return null;
-		return opordMapper.findOporddetailByXordernumAndXrow(xordernum, xrow, sessionManager.getBusinessId());
+		return opordMapper.findOporddetailByXordernumAndXrow(xordernum, xrow, sessionManager.getBusinessId(), getBusinessId());
 	}
 
 	@Override
 	public List<Oporddetail> findOporddetailByXordernum(String xordernum) {
-		if(StringUtils.isBlank(xordernum)) return null;
-		return opordMapper.findOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
+		if(StringUtils.isBlank(xordernum)) return Collections.emptyList();
+		return opordMapper.findOporddetailByXordernum(xordernum, sessionManager.getBusinessId(), getBusinessId());
 	}
 
 	@Override
@@ -250,6 +250,12 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	public long archiveAllOporddetailByXordernum(String xordernum) {
 		if(StringUtils.isBlank(xordernum)) return 0;
 		return opordMapper.archiveAllOporddetailByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype) {
+		if(StringUtils.isBlank(xordernum) || xparentrow == 0 || StringUtils.isBlank(xtype)) return Collections.emptyList();
+		return opordMapper.findAllSubitemDetail(xordernum, xparentrow, xtype, sessionManager.getBusinessId());
 	}
 
 }

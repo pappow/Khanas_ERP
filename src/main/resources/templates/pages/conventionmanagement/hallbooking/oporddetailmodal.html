@@ -27,17 +27,15 @@
 										class="item-box btn"
 										th:classappend="${f.selected ? 'btn-success' : 'btn-default'}"
 										th:each="f : ${map.value}">
-									<p th:text="${f.xdesc}"></p>
-									<p th:text="${f.xrate} + '/-'"></p>
+									<p th:text="${f.xdesc} + ' ' + ${f.xrate} + '/-'"></p>
 								</a>
 								<a th:if="${f.booked}" th:attr="data-xitem=${f.xitem},data-xcatitem=${f.xcatitem},data-xrate=${f.xrate}" 
 										th:id="${f.xitem}"
 										class="item-box2 btn btn-danger"
 										th:each="f : ${map.value}">
 									<p>
-										<span th:text="${f.xdesc}"></span> <span>[Booked]</span>
+										<span th:text="${f.xdesc} + ' ' + ${f.xrate} + '/-'"></span> <span>[Booked]</span>
 									</p>
-									<p th:text="${f.xrate} + '/-'"></p>
 								</a>
 							</div>
 						</div>

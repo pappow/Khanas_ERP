@@ -1,6 +1,8 @@
 package com.asl.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -8,6 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +31,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "zid", "xordernum", "xrow" }, callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Oporddetail extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -8200619366025104933L;
@@ -82,4 +90,12 @@ public class Oporddetail extends AbstractModel<String> {
 		this.xqtyord = xqtyord;
 	}
 
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Column(name = "xparentrow")
+	private int xparentrow;
+
+	@Transient
+	private List<Oporddetail> subitems = new ArrayList<>();
 }
