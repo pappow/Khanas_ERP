@@ -104,6 +104,10 @@
 			AND xperson=#{xperson}
 	</select>
 	
+	<select id="searchPersonId" resultType="LandPerson">
+		SELECT * FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%' OR UPPER(xname) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	<insert id="savePersonEducation" parameterType="LandEducation">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM landeducation WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}

@@ -48,17 +48,12 @@ public class LandInfoController extends ASLAbstractController {
 		
 		lf.setXtypetrn(TransactionCodeType.LAND_ID.getCode());
 		lf.setXtrn(TransactionCodeType.LAND_ID.getdefaultCode());
-		lf.setXcitylanddag(0);
-		lf.setXcitylandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-		lf.setXcslanddag(0);
-		lf.setXcslandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+		lf.setXlandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXlanddedother(0);
 		lf.setXroadred(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXotherred(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXlandnetqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXlanddedroad(0);
-		lf.setXrslanddag(0);
-		lf.setXrslandqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		lf.setXriversideqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		
 		

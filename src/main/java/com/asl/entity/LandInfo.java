@@ -11,13 +11,14 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "landinfo")
+@Table(name = "calandinfo")
 @IdClass(LandInfoPK.class)
 @EqualsAndHashCode(of = { "zid", "xland" }, callSuper = false)
 public class LandInfo extends AbstractModel<String>{
@@ -43,33 +44,12 @@ public class LandInfo extends AbstractModel<String>{
 
 	@Column(name="xroad")
 	private String xroad;
+	
+	@Column(name="xlandqty")
+	private BigDecimal xlandqty;
 
-	@Column(name="xcslanddag")
-	private Integer xcslanddag;
-
-	@Column(name="xcslandqty")
-	private BigDecimal xcslandqty;
-
-	@Column(name="xcslandunit")
-	private String xcslandunit;
-
-	@Column(name="xrslanddag")
-	private Integer xrslanddag;
-
-	@Column(name="xrslandqty")
-	private BigDecimal xrslandqty;
-
-	@Column(name="xrslandunit")
-	private String xrslandunit;
-
-	@Column(name="xcitylanddag")
-	private Integer xcitylanddag;
-
-	@Column(name="xcitylandqty")
-	private BigDecimal xcitylandqty;
-
-	@Column(name="xcitylandunit")
-	private String xcitylandunit;
+	@Column(name="xlandunit")
+	private String xlandunit;
 
 	@Column(name="xlandgrsqty")
 	private BigDecimal xlandgrsqty;
@@ -119,4 +99,7 @@ public class LandInfo extends AbstractModel<String>{
 
 	@Column(name = "xtrn")
 	private String xtrn;
+	
+	@Transient
+	private String xname;
 }

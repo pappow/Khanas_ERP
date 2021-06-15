@@ -1,14 +1,23 @@
 package com.asl.controller;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.LandMemberInfo;
+import com.asl.entity.LandSurveyor;
 import com.asl.enums.CodeType;
+import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandMemberInfoService;
 
@@ -45,8 +54,39 @@ public class LandMemberInfoController extends ASLAbstractController{
 		model.addAttribute("allLandMembers", landMemberInfoService.getAllLandMemberInfo());
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LANDMEMBER_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("designationTypes", xcodesService.findByXtype(CodeType.MEMBER_DESIGNATION.getCode(), Boolean.TRUE));;
-		return "pages/land/landsurveyor";
+		return "pages/land/landmemberinfo";
 	}
 	
+	@PostMapping("/save")
+	public @ResponseBody Map<String, Object> save(LandMemberInfo landMemberInfo, BindingResult bindingResult) {
+		if (landMemberInfo == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		
+		// if existing
+		if(StringUtils.isNotBlank(landMemberInfo.getXmember())) {
+			LandMemberInfo xlp = landMemberInfoService.findByLandMemberInfo(landMemberInfo.getXmember());
+			BeanUtils.copyProperties(landMemberInfo, xlp,"xtypetrn","xtrn");
+			long count = landMemberInfoService.update(xlp);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update member info");
+				return responseHelper.getResponse();
+			}
+			responseHelper.setSuccessStatusAndMessage("Member info updated successfully");
+			responseHelper.setRedirectUrl("/landmemberinfo/" + xlp.getXmember());
+			return responseHelper.getResponse();
+		}
+		// if new
+		long count = landMemberInfoService.save(landMemberInfo);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't save surveyor info");
+			return responseHelper.getResponse();
+		}
+		responseHelper.setSuccessStatusAndMessage("Member info saved successfully");
+		responseHelper.setRedirectUrl("/landmemberinfo/" + landMemberInfo.getXmember());
+			return responseHelper.getResponse();
+		}
 
 }

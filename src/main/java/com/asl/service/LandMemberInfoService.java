@@ -15,5 +15,5 @@ public interface LandMemberInfoService {
 
 	public LandMemberInfo findByLandMemberInfo(String xmember);
 	
-	public List<LandPerson> searchPersonId(String xperson);
+	
 }

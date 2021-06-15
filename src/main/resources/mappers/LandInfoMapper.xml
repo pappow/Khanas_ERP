@@ -7,21 +7,14 @@
 		<selectKey keyProperty="xland" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO landinfo
+		INSERT INTO calandinfo
 		(
 			xland,
 			xlname,
 			xblock,
 			xroad,
-			xcslanddag,
-			xcslandqty, 
-			xcslandunit, 
-			xrslanddag,
-			xrslandqty, 
-			xrslandunit,
-			xcitylanddag, 
-			xcitylandqty, 
-			xcitylandunit, 
+			xlandqty, 
+			xlandunit, 
 			xlandgrsqty, 
 			xlanggrsunit,
 			xlanddedroad, 
@@ -51,15 +44,8 @@
 			#{xlname, jdbcType=VARCHAR},
 			#{xblock, jdbcType=VARCHAR},
 			#{xroad, jdbcType=VARCHAR},
-			#{xcslanddag, jdbcType=INTEGER},
-			#{xcslandqty, jdbcType=DECIMAL},
-			#{xcslandunit, jdbcType=VARCHAR},
-			#{xrslanddag, jdbcType=INTEGER},
-			#{xrslandqty, jdbcType=DECIMAL},
-			#{xrslandunit, jdbcType=VARCHAR},
-			#{xcitylanddag, jdbcType=INTEGER},
-			#{xcitylandqty, jdbcType=DECIMAL},
-			#{xcitylandunit, jdbcType=VARCHAR},
+			#{xlandqty, jdbcType=DECIMAL},
+			#{xlandunit, jdbcType=VARCHAR},
 			#{xlandgrsqty, jdbcType=DECIMAL},
 			#{xlanggrsunit, jdbcType=VARCHAR},
 			#{xlanddedroad, jdbcType=INTEGER},
@@ -87,20 +73,13 @@
 
 	<update id="updateLandInfo" parameterType="LandInfo">
 		UPDATE 
-			landinfo
+			calandinfo
 		SET
 			xlname=#{xlname, jdbcType=VARCHAR},
 			xblock=#{xblock, jdbcType=VARCHAR},
 			xroad=#{xroad, jdbcType=VARCHAR},
-			xcslanddag=#{xcslanddag, jdbcType=INTEGER},
-			xcslandqty=#{xcslandqty, jdbcType=DECIMAL},
-			xcslandunit=#{xcslandunit, jdbcType=VARCHAR},
-			xrslanddag=#{xrslanddag, jdbcType=INTEGER},
-			xrslandqty=#{xrslandqty, jdbcType=DECIMAL},
-			xrslandunit=#{xrslandunit, jdbcType=VARCHAR},
-			xcitylanddag=#{xcitylanddag, jdbcType=INTEGER},
-			xcitylandqty=#{xcitylandqty, jdbcType=DECIMAL},
-			xcitylandunit=#{xcitylandunit, jdbcType=VARCHAR},
+			xlandqty=#{xlandqty, jdbcType=DECIMAL},
+			xlandunit=#{xlandunit, jdbcType=VARCHAR},
 			xlandgrsqty=#{xlandgrsqty, jdbcType=DECIMAL},
 			xlanggrsunit=#{xlanggrsunit,jdbcType=VARCHAR},
 			xlanddedroad=#{xlanddedroad, jdbcType=INTEGER},
@@ -131,7 +110,7 @@
 		SELECT 
 			* 
 		FROM 
-			landinfo 
+			calandinfo 
 		WHERE 
 			zid=#{zid} 
 			AND zactive='1'
@@ -143,7 +122,7 @@
 		SELECT 
 			* 
 		FROM 
-			landinfo 
+			calandinfo 
 		WHERE 
 			zid=#{zid} 
 			AND xland=#{xland}
@@ -236,10 +215,6 @@
 		SELECT * FROM calandowner WHERE zid=#{zid}  AND xland=#{xland} AND xperson=#{xperson}
 	</select>
 
-	<select id="searchPersonId" resultType="LandPerson">
-		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
-	</select>
-	
 	<delete id="deleteLandOwner" parameterType="LandOwner">
 		DELETE FROM calandowner WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
 	</delete>

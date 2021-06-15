@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.Caitem;
 import com.asl.entity.LandMemberInfo;
 import com.asl.entity.LandPerson;
 import com.asl.mapper.LandMemberInfoMapper;
@@ -52,10 +53,7 @@ public class LandMemberInfoServiceImpl extends AbstractGenericService implements
 		return landMemberInfoMapper.findByLandMemberInfo(xmember, sessionManager.getBusinessId());
 	}
 
-	@Override
-	public List<LandPerson> searchPersonId(String xperson) {
-		if(StringUtils.isBlank(xperson)) return Collections.emptyList();
-		return landMemberInfoMapper.searchPersonId(xperson.toUpperCase(), sessionManager.getBusinessId());
-	}
+	
+
 
 }

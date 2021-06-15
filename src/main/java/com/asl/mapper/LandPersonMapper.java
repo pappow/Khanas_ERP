@@ -19,6 +19,8 @@ public interface LandPersonMapper {
 
 	public LandPerson findByLandPerson(String xperson, String zid);
 	
+	public List<LandPerson> searchPersonId(String xperson, String zid);
+	
 	//For education
 	public long savePersonEducation(LandEducation landEducation);
 	
@@ -34,4 +36,5 @@ public interface LandPersonMapper {
 	
 	public LandEducation findLandEducationByXpersonAndXexam(String xperson, String xexam,  String zid);
 
+	
 }

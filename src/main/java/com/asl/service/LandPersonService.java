@@ -18,6 +18,8 @@ public interface LandPersonService {
 
 	public LandPerson findByLandPerson(String xperson);
 	
+	public List<LandPerson> searchPersonId(String xperson);
+	
 	
 	//For Education
 	public long save(LandEducation landEducation);

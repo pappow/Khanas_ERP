@@ -87,11 +87,7 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 
 	
 
-	@Override
-	public List<LandPerson> searchPersonId(String xperson) {
-		if(StringUtils.isBlank(xperson)) return Collections.emptyList();
-		return landinfoMapper.searchPersonId(xperson.toUpperCase(), sessionManager.getBusinessId());
-	}
+	
 
 	@Override
 	public long deleteLandOwner(LandOwner landOwner) {

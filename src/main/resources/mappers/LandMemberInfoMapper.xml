@@ -24,7 +24,7 @@
 		)
 		VALUES
 		(
-			#{xmember},
+			#{xmember, jdbcType=VARCHAR},
 			#{xperson, jdbcType=VARCHAR},
 			#{xdesignation, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
@@ -72,6 +72,7 @@
 			
 	</select>
 
+
 	<select id="findByLandMemberInfo" resultType="LandMemberInfo">
 		SELECT 
 			* 
@@ -83,7 +84,7 @@
 	</select>
 	
 	<select id="searchPersonId" resultType="LandPerson">
-		SELECT xperson FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
+		SELECT * FROM landperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%' OR UPPER(xname) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 	
 </mapper>

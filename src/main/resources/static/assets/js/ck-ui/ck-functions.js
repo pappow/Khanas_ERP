@@ -465,7 +465,7 @@ function submitMainForm(customurl, customform){
 	var formData = $(targettedForm).serializeArray();
 	var enctype = targettedForm.attr('enctype');
 	if(enctype == 'multipart/form-data'){
-		submitMultipartForm(submitUrl, submitType, targettedForm);
+		submitMultipartForm(submitUrl, submitType, targettedForm, false);
 		return;
 	}
 
@@ -506,7 +506,7 @@ function submitMainForm(customurl, customform){
  * @param submitType
  * @returns
  */
-function submitMultipartForm(submitUrl, submitType, targettedForm){
+function submitMultipartForm(submitUrl, submitType, targettedForm, frommodal){
 	var files = $('#fileuploader').get(0).files;
 	if (files.length == 0){
 		alert("No files selected to upload");
@@ -533,23 +533,49 @@ function submitMultipartForm(submitUrl, submitType, targettedForm){
 		processData: false,
 		contentType: false,
 		success : function(data) {
-			loadingMask2.hide();
-			if(data.status == 'SUCCESS'){
-				showMessage(data.status.toLowerCase(), data.message);
-				if(data.triggermodalurl){
-					modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
-				} else {
-					if(data.redirecturl){
-						setTimeout(() => {
-							window.location.replace(getBasepath() + data.redirecturl);
-						}, 1000);
-					} else if(data.reloadurl){
-						doSectionReloadWithNewData(data);
+			if(frommodal){
+
+				loadingMask2.hide();
+				if(data.status == 'SUCCESS'){
+					$('div.modal').modal('hide');
+					showMessage(data.status.toLowerCase(), data.message);
+					if(data.triggermodalurl){
+						modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+					} else {
+						if(data.redirecturl){
+							setTimeout(() => {
+								window.location.replace(getBasepath() + data.redirecturl);
+							}, 1000);
+						} else if(data.reloadurl){
+							doSectionReloadWithNewData(data);
+						}
 					}
+				} else {
+					showMessage(data.status.toLowerCase(), data.message);
 				}
+
 			} else {
-				showMessage(data.status.toLowerCase(), data.message);
+
+				loadingMask2.hide();
+				if(data.status == 'SUCCESS'){
+					showMessage(data.status.toLowerCase(), data.message);
+					if(data.triggermodalurl){
+						modalLoader(getBasepath() + data.triggermodalurl, data.modalid);
+					} else {
+						if(data.redirecturl){
+							setTimeout(() => {
+								window.location.replace(getBasepath() + data.redirecturl);
+							}, 1000);
+						} else if(data.reloadurl){
+							doSectionReloadWithNewData(data);
+						}
+					}
+				} else {
+					showMessage(data.status.toLowerCase(), data.message);
+				}
+
 			}
+
 		}, 
 		error : function(jqXHR, status, errorThrown){
 			showMessage(status, "Something went wrong .... ");
@@ -644,7 +670,7 @@ function submitModalForm(customurl){
 	var formData = $(targettedForm).serializeArray();
 	var enctype = targettedForm.attr('enctype');
 	if(enctype == 'multipart/form-data'){
-		submitMultipartForm(submitUrl, submitType, targettedForm);
+		submitMultipartForm(submitUrl, submitType, targettedForm, true);
 		return;
 	}
 
