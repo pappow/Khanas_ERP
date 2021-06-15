@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +27,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "opordheader")
 @IdClass(OpordheaderPK.class)
+@XmlRootElement(name = "opordheader")
+@XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(of = { "zid", "xordernum" }, callSuper = false)
 public class Opordheader extends AbstractModel<String> {
 

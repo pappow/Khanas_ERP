@@ -30,6 +30,8 @@ public interface CaitemMapper {
 
 	public List<Caitem> getFunctionItems(String xitem, String zid);
 
+	public List<Caitem> getFoodItems(String xitem, String zid);
+
 	public List<Caitem> searchCentralCaitem(String xitem, String centralzid);
 
 	public List<Caitem> searchCentralCaitemForRequisition(String xitem, String centralzid);

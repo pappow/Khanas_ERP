@@ -52,6 +52,8 @@ public interface OpordService {
 
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem);
 
+	public List<Oporddetail> findAllOporddetailByXordernumAndXitem(String xordernum, String xitem);
+
 	public List<BranchesRequisitions> getSalesOrderMatrxi(Date xdate);
 
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
@@ -84,4 +86,6 @@ public interface OpordService {
 	public long archiveAllOporddetailByXordernum(String xordernum);
 
 	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype);
+
+	public long deleteSubItems(String xordernum, int xparentrow, String xtype);
 }

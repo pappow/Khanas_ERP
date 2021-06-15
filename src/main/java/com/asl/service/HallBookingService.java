@@ -13,7 +13,7 @@ import com.asl.entity.ConventionBookedDetails;
 @Component
 public interface HallBookingService {
 
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum);
+	public List<String> allBookedHallsInDateRange(String xstartdate, String xenddate, String xordernum);
 
-	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate);
+	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xstartdate, String xenddate);
 }

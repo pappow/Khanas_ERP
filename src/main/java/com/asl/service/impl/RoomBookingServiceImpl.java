@@ -23,13 +23,13 @@ public class RoomBookingServiceImpl extends AbstractGenericService implements Ro
 	@Override
 	public List<String> allBookedRoomsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum) {
 		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
-		return opordMapper.allBookedHallsInDateRange(xcatitem, xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
+		return opordMapper.allBookedHallsInDateRange(xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
 	}
 
 	@Override
 	public List<ConventionBookedDetails> allBookedRoomsInDateRange2(String xcatitem, String xstartdate, String xenddate) {
 		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
-		return opordMapper.allBookedHallsInDateRange2(xcatitem, xstartdate, xenddate, sessionManager.getBusinessId());
+		return opordMapper.allBookedHallsInDateRange2(xstartdate, xenddate, sessionManager.getBusinessId());
 	}
 
 }

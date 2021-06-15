@@ -25,7 +25,6 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li><a th:href="@{/conventionmanagement}">Convention Management</a></li>
 										<li class="active"><a th:href="@{/conventionmanagement/hallbooking}">Hall Booking</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -52,11 +51,11 @@
 											<h1>Hall Booking</h1>
 										</div>
 										<div class="form-action-button">
-											<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+											<a th:href="@{/conventionmanagement/hallbooking}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 											<a th:if="${#strings.isEmpty(opordheader.xordernum)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord == 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
+											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus == 'Open' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
 										</div>
 										<div class="section-body section-border">
 											<form id="mainform" class="form-horizontal" th:action="@{/conventionmanagement/hallbooking/save}" th:object="${opordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -96,7 +95,7 @@
 														</div>
 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xcus">Function : </label>
+															<label class="control-label col-md-4" for="xfunction">Function : </label>
 															<div class="col-sm-8">
 																<input 	type="text" 
 																		class="form-control searchsuggest" 
@@ -196,19 +195,10 @@
 														</div>
 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xstatus">Payment Type : </label>
+															<label class="control-label col-md-4" for="xpaymenttype">Payment Type : </label>
 															<div class="col-md-6">
-																<select class="form-control">
+																<select class="form-control" th:field="*{xpaymenttype}">
 																	<option th:each="p : ${paymentType}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
-																</select>
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xstatus">Payment Mode : </label>
-															<div class="col-md-6">
-																<select class="form-control">
-																	<option th:each="p : ${paymentMode}" th:value="${p.xcode}" th:text="${p.xcode}"></option>
 																</select>
 															</div>
 														</div>
@@ -223,6 +213,7 @@
 
 													</div>
 													<div class="col-md-6">
+
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xfoodamt">Food : </label>
 															<div class="col-md-6">
@@ -533,8 +524,7 @@
 											<td th:text="${d.xlineamt}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${opordheader.xstatusord != 'Confirmed'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/food/} + ${opordheader.xordernum} + '/oporddetail/'+ ${d.xrow} +'/show', data-target-modal='oporddetailfoodmodal'"><i class="fas fa-edit"></i></button>
-
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/conventionmanagement/hallbooking/food/} + ${opordheader.xordernum} + '/oporddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

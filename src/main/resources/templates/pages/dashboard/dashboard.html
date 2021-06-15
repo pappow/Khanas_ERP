@@ -123,7 +123,7 @@
 									</span>
 
 									<span th:if="${isDev or isKhanas or isTcc}">
-										<span th:if="${isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display}">
+										<span th:if="${(isTcc and menuProfile.M0400 ne null and menuProfile.M0400.display) OR (isCentral and menuProfile.M0400 ne null and menuProfile.M0400.display)}">
 											<tr>
 												<td colspan="2" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoicing</td>
 											</tr>

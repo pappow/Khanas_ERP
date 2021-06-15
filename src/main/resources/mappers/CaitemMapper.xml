@@ -253,6 +253,18 @@
 			AND xcatitem='Function'
 	</select>
 
+	<select id="getFoodItems" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE 
+			(UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') 
+			AND zid=#{zid} 
+			AND zactive='1'
+			AND xcatitem='Food'
+	</select>
+
 	<select id="getAllItemsWithoutRawMaterials" resultType="Caitem">
 		SELECT
 			caitem.*

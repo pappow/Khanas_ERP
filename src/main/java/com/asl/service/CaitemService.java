@@ -36,6 +36,8 @@ public interface CaitemService {
 
 	public List<Caitem> getFunctionItems(String hint);
 
+	public List<Caitem> getFoodItems(String hint);
+
 	public List<Caitem> searchItemName(String xdesc);
 
 	public List<Caitem> getAllItemsWithoutRawMaterials();

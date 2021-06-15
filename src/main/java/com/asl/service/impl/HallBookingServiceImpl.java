@@ -21,15 +21,15 @@ public class HallBookingServiceImpl extends AbstractGenericService implements Ha
 	@Autowired private OpordMapper opordMapper;
 
 	@Override
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum) {
-		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
-		return opordMapper.allBookedHallsInDateRange(xcatitem, xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
+	public List<String> allBookedHallsInDateRange(String xstartdate, String xenddate, String xordernum) {
+		if(StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
+		return opordMapper.allBookedHallsInDateRange(xstartdate, xenddate, xordernum, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate) {
-		if(StringUtils.isBlank(xcatitem) || StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
-		return opordMapper.allBookedHallsInDateRange2(xcatitem, xstartdate, xenddate, sessionManager.getBusinessId());
+	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xstartdate, String xenddate) {
+		if(StringUtils.isBlank(xstartdate) || StringUtils.isBlank(xenddate)) return Collections.emptyList();
+		return opordMapper.allBookedHallsInDateRange2(xstartdate, xenddate, sessionManager.getBusinessId());
 	}
 
 	
