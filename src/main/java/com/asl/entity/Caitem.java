@@ -38,6 +38,9 @@ public class Caitem extends AbstractModel<String> {
 
 	@Column(name = "xcatitem")
 	private String xcatitem;
+	
+	@Column(name = "xmember")
+	private String xmember;
 
 	@Column(name = "xgitem")
 	private String xgitem;

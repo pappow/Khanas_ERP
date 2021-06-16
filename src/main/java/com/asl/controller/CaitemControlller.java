@@ -43,6 +43,10 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
+		
+		if(isBoshila()) {
+			return "pages/mastersetup/caitem/caitem";
+		}
 		return "pages/mastersetup/caitem/caitem";
 	}
 
