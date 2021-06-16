@@ -22,7 +22,7 @@ public class HallBookingHeader implements Serializable {
 	private static final long serialVersionUID = -388738192249709943L;
 
 	private String xordernum;
-	private Date xdate;
+	private String xdate;
 	private String xcus;
 	private String xref;
 	private String xstatusord;
@@ -49,8 +49,8 @@ public class HallBookingHeader implements Serializable {
 	private BigDecimal xroomamt;
 	private String xdornum;
 	private String xtornum;
-	private Date xstartdate;
-	private Date xenddate;
+	private String xstartdate;
+	private String xenddate;
 	private String xstarttime;
 	private String xendtime;
 	private BigDecimal xhallamt;
@@ -67,4 +67,8 @@ public class HallBookingHeader implements Serializable {
 	private String finishedxtornum;
 	private boolean rawtocomp;
 	private boolean finishedtocomp;
+	
+	private String clientaddress;
+	private String clientphone;
+	private String refby;
 }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Caitemdetail;
 import com.asl.entity.Oporddetail;
@@ -46,6 +48,7 @@ import com.asl.model.report.HallBookingFacilitiesDetail;
 import com.asl.model.report.HallBookingFoodDetail;
 import com.asl.model.report.HallBookingHeader;
 import com.asl.model.report.HallBookingSubItems;
+import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.HallBookingService;
 import com.asl.service.OpordService;
@@ -68,6 +71,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@Autowired private VataitService vataitService;
 	@Autowired private CaitemService caitemService;
 	@Autowired private HallBookingService hallBookingService;
+	@Autowired private CacusService cacusService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -759,6 +763,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			message = "Booking Details is empty";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		for(Oporddetail o : details) {
+			Caitem ca = caitemService.findByXitem(o.getXitem());
+			if(ca == null) continue;
+			o.setXitem(ca.getXitem() + " - " + ca.getXdesc());
+		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
 
@@ -775,6 +784,14 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		HallBookingHeader header = new HallBookingHeader();
 		BeanUtils.copyProperties(oh, header);
+		header.setXdate(sdf.format(oh.getXdate()));
+		header.setXfunction(caitemService.findByXitem(oh.getXfunction()).getXdesc());
+		header.setXstartdate(sdf.format(oh.getXstartdate()));
+		header.setXenddate(sdf.format(oh.getXenddate()));
+		Cacus c = cacusService.findByXcus(oh.getXcus());
+		header.setXcus(c.getXorg());
+		header.setClientaddress(c.getXmadd());
+		header.setClientphone(c.getXphone());
 		report.setHeader(header);
 
 		List<HallBookingFoodDetail> foodbookingdetails = new ArrayList<>();
