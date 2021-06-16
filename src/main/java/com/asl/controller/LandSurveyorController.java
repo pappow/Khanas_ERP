@@ -1,6 +1,12 @@
 package com.asl.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -12,20 +18,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.asl.entity.LandDocument;
 import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-
+import com.asl.service.LandDocumentService;
 import com.asl.service.LandSurveyorService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/landsurveyor")
 public class LandSurveyorController extends ASLAbstractController{
 
-	@Autowired private LandSurveyorService landSurveyorService;
+	@Autowired 
+	private LandSurveyorService landSurveyorService;
+	@Autowired
+	private LandDocumentService landDocumentService;
 	
 	@GetMapping
 	public String loadLandSurveyorPage(Model model) {
@@ -50,6 +66,7 @@ public class LandSurveyorController extends ASLAbstractController{
 		
 		model.addAttribute("surveyor", landSurveyor);
 		model.addAttribute("allSurveyors", landSurveyorService.getAllLandSurveyor());
+		model.addAttribute("lsdlist", landDocumentService.findByLandSurveyorDocument(xsurveyor));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.SURVEYOR_ID.getCode(), Boolean.TRUE));
 		return "pages/land/landsurveyor";
 	}
@@ -115,5 +132,132 @@ public class LandSurveyorController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 
+	
+	// For Surveyor Land Document
+
+		@GetMapping("/{xsurveyor}/surveyor/{xrow}/show")
+		public String loadSurveyorDocModal(@PathVariable String xsurveyor, @PathVariable String xrow, Model model) {
+			if ("new".equalsIgnoreCase(xrow)) {
+				LandDocument lsd = new LandDocument();
+				lsd.setXname("");
+				lsd.setXperson("");
+				lsd.setXland("");
+				lsd.setXsurveyor(xsurveyor);
+				model.addAttribute("lsd", lsd);
+				lsd.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
+				lsd.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
+				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+				model.addAttribute("prefixes",xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+			} else {
+				LandDocument lsd = landDocumentService.findLandSurveyorDocumentBySurveyorAndXrow(xsurveyor,Integer.parseInt(xrow));
+				if (lsd == null) {
+					lsd = new LandDocument();
+					lsd.setXperson("");
+					lsd.setXland("");
+					lsd.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
+					lsd.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
+				}
+				model.addAttribute("lsd", lsd);
+				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+				model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+			}
+
+			return "pages/land/Surveyordocumentmodal::Surveyordocumentmodal";
+		}
+
+		@PostMapping("/surveyordoc/save")
+		public @ResponseBody Map<String, Object> saveSurveyorDoc(LandDocument landDocument, @RequestParam("files[]") MultipartFile[] files) {
+			if (landDocument == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			if (files != null && files.length > 0) {
+
+				// Rename the file
+				String extension = null;
+				int j = files[0].getOriginalFilename().lastIndexOf('.');
+				if (j > 0) {
+					extension = files[0].getOriginalFilename().substring(j + 1);
+				}
+
+				String fileName = UUID.randomUUID() + files[0].getOriginalFilename() + "." + extension;
+				log.debug("File name is now: {}", fileName);
+
+				try {
+					// create a directory if not exist
+					String uploadPath = "D://Bosila//BosilaDocuments";
+					File dir = new File(uploadPath);
+					if (!dir.exists()) {
+						dir.mkdirs();
+					}
+					// Upload file into server
+					Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
+					landDocument.setXdocument(uploadPath + "/" + fileName);
+					landDocument.setXnameold(files[0].getOriginalFilename());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// if existing
+			LandDocument existSurveyor = landDocumentService.findLandSurveyorDocumentBySurveyorAndXrow(landDocument.getXsurveyor(), landDocument.getXrow());
+			if (existSurveyor != null) {
+				BeanUtils.copyProperties(landDocument, existSurveyor, "xdoc");
+				long count = landDocumentService.update(existSurveyor);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("surveyordocumenttable", "/landsurveyor/surveyor/" + existSurveyor.getXsurveyor());
+				responseHelper.setSuccessStatusAndMessage("Surveyor Document updated successfully");
+				return responseHelper.getResponse();
+			}
+			
+			
+			String xtrn =  xtrnService.generateAndGetXtrnNumber(landDocument.getXtypetrn(), landDocument.getXtrn(), 6);
+			landDocument.setXdoc(xtrn);
+			System.out.println("The Value Of Xtrn Is Now: "+xtrn);
+
+			// if new detail
+			long count = landDocumentService.save(landDocument);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("surveyordocumenttable","/landsurveyor/surveyor/" + landDocument.getXsurveyor());
+			responseHelper.setSuccessStatusAndMessage("Surveyor Document saved successfully");
+			return responseHelper.getResponse();
+
+		}
+
+		@GetMapping("/surveyor/{xsurveyor}")
+		public String reloadSurveyorDocTable(@PathVariable String xsurveyor, Model model) {
+			List<LandDocument> LandSurveyorDocList = landDocumentService.findByLandSurveyorDocument(xsurveyor);
+			model.addAttribute("lsdlist", LandSurveyorDocList);
+			model.addAttribute("surveyor", landSurveyorService.findByLandSurveyor(xsurveyor));
+			model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("prefixes",xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
+			return "pages/land/landsurveyor::surveyordocumenttable";
+		}
+		
+		@PostMapping("{xsurveyor}/surveyor/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteSurveyorDocDetail(@PathVariable String xsurveyor, @PathVariable String xrow, Model model) {
+			LandDocument lpe = landDocumentService.findLandSurveyorDocumentBySurveyorAndXrow(xsurveyor, Integer.parseInt(xrow));
+			if (lpe == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = landDocumentService.deleteDetail(lpe);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Document Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("surveyordocumenttable", "/landsurveyor/surveyor/" + xsurveyor);
+			return responseHelper.getResponse();
+		}
 	
 }

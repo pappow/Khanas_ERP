@@ -25,10 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.asl.entity.LandPerson;
 import com.asl.entity.LandDocument;
 import com.asl.entity.LandEducation;
+import com.asl.entity.LandExperience;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandDocumentService;
+import com.asl.service.LandExperienceService;
 import com.asl.service.LandPersonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,8 @@ public class LandPersonController extends ASLAbstractController {
 
 	@Autowired
 	private LandPersonService landPersonService;
+	@Autowired
+	private LandExperienceService landExperienceService;
 	@Autowired
 	private LandDocumentService landDocumentService;
 
@@ -54,7 +58,6 @@ public class LandPersonController extends ASLAbstractController {
 
 	private LandPerson getDefaultLandperson() {
 		LandPerson lp = new LandPerson();
-
 		lp.setXtypetrn(TransactionCodeType.PERSON_ID.getCode());
 		lp.setXtrn(TransactionCodeType.PERSON_ID.getdefaultCode());
 		return lp;
@@ -69,10 +72,10 @@ public class LandPersonController extends ASLAbstractController {
 		model.addAttribute("person", landPerson);
 		model.addAttribute("allPersons", landPersonService.getAllLandPerson());
 		model.addAttribute("lpelist", landPersonService.findByPersonEducation(xperson));
+		model.addAttribute("lpexlist", landExperienceService.findByPersonExperience(xperson));
 		model.addAttribute("lpdlist", landDocumentService.findByLandPersonDocument(xperson));
 		model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
-		model.addAttribute("prefixes",
-				xtrnService.findByXtypetrn(TransactionCodeType.PERSON_ID.getCode(), Boolean.TRUE));
+		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.PERSON_ID.getCode(), Boolean.TRUE));
 		return "pages/land/landperson";
 	}
 
@@ -184,15 +187,6 @@ public class LandPersonController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		/*
-		 * // Check person already exist in detail list if (landEducation.getXrow() == 0
-		 * &&
-		 * landPersonService.findLandEducationByXpersonAndXexam(landEducation.getXperson
-		 * (), landEducation.getXexam()) != null) { responseHelper.
-		 * setErrorStatusAndMessage("Person already added into detail list. Please add another one or update existing"
-		 * ); return responseHelper.getResponse(); }
-		 */
-
 		// if existing
 		LandEducation existPerson = landPersonService.findLandEducationdetailByXpersonAndXrow(landEducation.getXperson(), landEducation.getXrow());
 		if (existPerson != null) {
@@ -202,8 +196,7 @@ public class LandPersonController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setReloadSectionIdWithUrl("educationtable",
-					"/landperson/education/" + landEducation.getXperson());
+			responseHelper.setReloadSectionIdWithUrl("educationtable","/landperson/education/" + landEducation.getXperson());
 			responseHelper.setSuccessStatusAndMessage("Person Education updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -214,8 +207,7 @@ public class LandPersonController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setReloadSectionIdWithUrl("educationtable",
-				"/landperson/education/" + landEducation.getXperson());
+		responseHelper.setReloadSectionIdWithUrl("educationtable","/landperson/education/" + landEducation.getXperson());
 		responseHelper.setSuccessStatusAndMessage("Person Education saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -248,8 +240,102 @@ public class LandPersonController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	// For Person Land Document
+	
+	// For Person Experience
 
+	@GetMapping("/{xperson}/experience/{xrow}/show")
+	public String loadExperienceModal(@PathVariable String xperson, @PathVariable String xrow, Model model) {
+		if ("new".equalsIgnoreCase(xrow)) {
+			LandExperience lpex = new LandExperience();
+			lpex.setXdesignation("");
+			lpex.setXnote("");
+			lpex.setXperson(xperson);
+			model.addAttribute("lpex", lpex);
+			model.addAttribute("ett", xcodesService.findByXtype(CodeType.EXPERIENCE_TRANSACTION_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("et", xcodesService.findByXtype(CodeType.EXPERIENCE_TYPE.getCode(), Boolean.TRUE));
+		} else {
+			LandExperience lpex = landExperienceService.findByXpersonAndXrow(xperson,Integer.parseInt(xrow));
+			if (lpex == null) {
+				lpex = new LandExperience();
+				lpex.setXdesignation("");
+				lpex.setXnote("");
+			}
+			model.addAttribute("lpex", lpex);
+			model.addAttribute("ett", xcodesService.findByXtype(CodeType.EXPERIENCE_TRANSACTION_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("et", xcodesService.findByXtype(CodeType.EXPERIENCE_TYPE.getCode(), Boolean.TRUE));
+		}
+
+		return "pages/land/experiencemodal::experiencemodal";
+	}
+	
+	@PostMapping("/experience/save")
+	public @ResponseBody Map<String, Object> savePersonExperience(LandExperience landExperience) {
+		if (landExperience == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		
+		// Validation
+		if(StringUtils.isBlank(landExperience.getXdesignation())) {
+			responseHelper.setErrorStatusAndMessage("Please Enter Your Designation");
+			return responseHelper.getResponse();
+		}
+		
+		LandExperience exist = landExperienceService.findByXpersonAndXrow(landExperience.getXperson(),landExperience.getXrow());
+
+		// if existing
+		if(exist != null) {
+			BeanUtils.copyProperties(landExperience, exist, "xperson");
+			long count = landExperienceService.update(exist);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Person " +landExperience.getXperson()+" Data alredy Exit");
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("experiencetable","/landperson/experience/" + exist.getXperson());
+			responseHelper.setSuccessStatusAndMessage("Person Experience info updated successfully");
+			return responseHelper.getResponse();
+		}
+		
+		// if new
+		long count = landExperienceService.save(landExperience);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't save person Experience info");
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("experiencetable","/landperson/experience/" + landExperience.getXperson());
+		responseHelper.setSuccessStatusAndMessage("Person Experience info saved successfully");
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/experience/{xperson}")
+	public String reloadExperienceTable(@PathVariable String xperson, Model model) {
+		List<LandExperience> experienceList = landExperienceService.findByPersonExperience(xperson);
+		model.addAttribute("lpexlist", experienceList);
+		model.addAttribute("person", landPersonService.findByLandPerson(xperson));
+		return "pages/land/landperson::experiencetable";
+	}
+	
+	@PostMapping("{xperson}/experience/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteExperienceDetail(@PathVariable String xperson, @PathVariable String xrow, Model model) {
+		LandExperience lpe = landExperienceService.findByXpersonAndXrow(xperson, Integer.parseInt(xrow));
+		if (lpe == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landExperienceService.deleteDetail(lpe);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("experiencetable", "/landperson/experience/" + xperson);
+		return responseHelper.getResponse();
+	}
+
+	
+	// For Person Land Document
 	@GetMapping("/{xperson}/person/{xrow}/show")
 	public String loadPersonDocModal(@PathVariable String xperson, @PathVariable String xrow, Model model) {
 		if ("new".equalsIgnoreCase(xrow)) {
@@ -273,10 +359,10 @@ public class LandPersonController extends ASLAbstractController {
 				lpd.setXland("");
 				lpd.setXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode());
 				lpd.setXtrn(TransactionCodeType.DOCUMENT_NAME.getdefaultCode());
-				model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
-				model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
 			}
 			model.addAttribute("lpd", lpd);
+			model.addAttribute("dt", xcodesService.findByXtype(CodeType.DOCUMENT_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.DOCUMENT_NAME.getCode(), Boolean.TRUE));
 		}
 
 		return "pages/land/persondocumentmodal::persondocumentmodal";
@@ -298,12 +384,12 @@ public class LandPersonController extends ASLAbstractController {
 				extension = files[0].getOriginalFilename().substring(j + 1);
 			}
 
-			String fileName = UUID.randomUUID() + "." + extension;
+			String fileName = UUID.randomUUID() + files[0].getOriginalFilename()+ "." + extension;
 			log.debug("File name is now: {}", fileName);
 
 			try {
 				// create a directory if not exist
-				String uploadPath = "D://Bosila//Document";
+				String uploadPath = "D://Bosila//BosilaDocuments";
 				File dir = new File(uploadPath);
 				if (!dir.exists()) {
 					dir.mkdirs();
@@ -311,6 +397,7 @@ public class LandPersonController extends ASLAbstractController {
 				// Upload file into server
 				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
 				landDocument.setXdocument(uploadPath + "/" + fileName);
+				landDocument.setXnameold(files[0].getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

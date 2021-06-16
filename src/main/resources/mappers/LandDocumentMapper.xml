@@ -108,8 +108,36 @@
 			AND xperson=#{xperson}
 	</select>
 	
+	<select id="findByLandSurveyorDocument" resultType="LandDocument">
+		SELECT 
+			* 
+		FROM 
+			landdocument 
+		WHERE 
+			zid=#{zid} 
+			AND xsurveyor=#{xsurveyor}
+	</select>
+	
+	<select id="findByAllLandDocument" resultType="LandDocument">
+		SELECT 
+			* 
+		FROM 
+			landdocument 
+		WHERE 
+			zid=#{zid} 
+			AND xland=#{xland}
+	</select>
+	
 	<select id="findLandPersonDocumentByXpersonAndXrow" resultType="LandDocument">
 		SELECT * FROM landdocument WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandSurveyorDocumentBySurveyorAndXrow" resultType="LandDocument">
+		SELECT * FROM landdocument WHERE xsurveyor=#{xsurveyor} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findLandLandDocumentByLandAndXrow" resultType="LandDocument">
+		SELECT * FROM landdocument WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="searchServeyorId" resultType="LandSurveyor">

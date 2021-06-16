@@ -27,7 +27,7 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
 										<li class="active"><a th:href="@{/landinfo}">Land Info</a></li>
 									
 									</div>
@@ -54,10 +54,10 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Land Info</h1>
+														<h1>Land Information</h1>
 													</div>
 													<div class="form-action-button">
-														<a th:href="@{/landinfo}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+														<a th:href="@{/landinfo}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a th:if="${#strings.isEmpty(info.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == true}" th:href="@{/landinfo/archive/} + ${info.xland}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
@@ -314,7 +314,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Land Info</h1>
+										<h1>All Land Details</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
@@ -346,18 +346,12 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		
-
-
-		<div class="col-md-12">
-			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
-				<div class="section-header sectionbartoggle">
-					<h1>Owner Details of <lebel th:text="${info.xland}"></lebel> </h1>
-					
-				</div>
+					<div class="col-md-12">
+					<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+					<div class="section-header sectionbartoggle">
+						<h1>Owner Details of <lebel th:text="${info.xland}"></lebel> </h1>
+						
+					</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
 						<thead>
@@ -443,12 +437,54 @@
 				</div>
 			</section>
 		</div>
-				
-				
+
+		<div class="col-md-12">
+			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+				<div class="section-header sectionbartoggle">
+					<h1>Document Details For (<span th:text="${info.xland}"></span>)</h1>
+				</div>
+				<div class="section-body">
+					<table class="table table-striped table-bordered normal-table" id="landdocumenttable" th:fragment="landdocumenttable">
+						<thead>
+							<tr>
+								<th>S/N</th>
+								<th>Document ID</th>
+								<th>Document Type</th>
+								<th>Name</th>
+								<th>Document </th>
+								<th>Note</th>
+								<th data-nosort="Y" style="text-align: right;">
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/new/show', data-target-modal='landdocumentmodal'"><i class="fas fa-plus"></i></button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="ld, n : ${lldlist}">
+								<td th:text="${n.count}"></td>
+								<td th:text="${ld.xdoc}"></td>
+								<td th:text="${ld.xdoctype}"></td>
+								<td th:text="${ld.xname}"></td>
+								<td th:text="${ld.xdocument}"></td>
+								<td th:text="${ld.xnote}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/show', data-target-modal='landdocumentmodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</div>		
+				</div>
+			</div>
+		</div>
+		
 
 		<!-- Modal -->
 		<div id="ownermodal-section"></div>
 		<div id="landdagmodal-section"></div>
+		<div id="landdocumentmodal-section"></div>
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 		

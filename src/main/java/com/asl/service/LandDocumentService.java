@@ -20,7 +20,15 @@ public interface LandDocumentService {
 	
 	public List<LandDocument> findByLandPersonDocument(String xperson);
 	
+	public List<LandDocument> findByLandSurveyorDocument(String xsurveyor);
+	
+	public List<LandDocument> findByAllLandDocument(String xland);
+	
 	public LandDocument findLandPersonDocumentByXpersonAndXrow(String xperson, int xrow);
+	
+	public LandDocument findLandSurveyorDocumentBySurveyorAndXrow(String xsurveyor, int xrow);
+	
+	public LandDocument findLandLandDocumentByLandAndXrow(String xland, int xrow);
 	
 	public long deleteDetail(LandDocument LandDocument);
 	

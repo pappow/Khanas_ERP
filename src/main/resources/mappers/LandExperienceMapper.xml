@@ -93,7 +93,11 @@
 			AND xperson=#{xperson}
 	</select>
 	
-		<select id="findByXpersonAndXrow" resultType="LandExperience">
+	<select id="findByPersonExperience" resultType="LandExperience">
+		SELECT * FROM landexperience WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findByXpersonAndXrow" resultType="LandExperience">
 		SELECT 
 			* 
 		FROM 
