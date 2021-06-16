@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandEducation;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
@@ -69,6 +70,7 @@ public class LandInfoController extends ASLAbstractController {
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
 		model.addAttribute("lpelist", landInfoService.findByLandOwner(xland));
+		model.addAttribute("lddlist", landInfoService.findByLandDagDetails(xland));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LAND_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("statusTypes", xcodesService.findByXtype(CodeType.STATUS_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
@@ -233,5 +235,103 @@ public class LandInfoController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 	////end of landowner
+	
+	
+	
+	//start of dag details
+	
+
+	@GetMapping("/{xland}/landdag/{xrow}/show")
+	public String loadLandDagModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		if("new".equalsIgnoreCase(xrow)) {
+			LandDagDetails ldd = new LandDagDetails();
+			ldd.setXdagnum(0);
+			ldd.setXdagtype("");
+			ldd.setXland(xland);
+			ldd.setXqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			ldd.setXtype("");
+			ldd.setXunit("");
+			model.addAttribute("ldd", ldd);
+			model.addAttribute("dagTypes", xcodesService.findByXtype(CodeType.DAG_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landTypes", xcodesService.findByXtype(CodeType.LAND_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
+		}
+		else {
+			LandDagDetails ldd = landInfoService.findlandDagDetailsByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if(ldd==null) {
+				ldd = new LandDagDetails();
+				
+			}
+			model.addAttribute("ldd", ldd);
+			model.addAttribute("dagTypes", xcodesService.findByXtype(CodeType.DAG_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landTypes", xcodesService.findByXtype(CodeType.LAND_TYPE.getCode(), Boolean.TRUE));
+			model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
+		}
+		
+		return "pages/land/landdagmodal::landdagmodal";
+	}
+	
+	@PostMapping("/landdag/save")
+	public @ResponseBody Map<String, Object> saveLandDagDetails(LandDagDetails landDagDetails) {
+		if (landDagDetails == null || StringUtils.isBlank(landDagDetails.getXland())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// if existing
+		LandDagDetails exist = landInfoService.findlandDagDetailsByXlandAndXrow(landDagDetails.getXland(), landDagDetails.getXrow());
+		if (exist != null) {
+			BeanUtils.copyProperties(landDagDetails, exist,"xland");
+			long count = landInfoService.update(exist);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("landdagtable","/landinfo/landdag/" + landDagDetails.getXland());
+			responseHelper.setSuccessStatusAndMessage("Land Dag Details updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		
+		// if new detail
+		long count = landInfoService.save(landDagDetails);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("landdagtable","/landinfo/landdag/" + landDagDetails.getXland());
+		responseHelper.setSuccessStatusAndMessage("Land Dag Details saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/landdag/{xland}")
+	public String reloadLandDagTable(@PathVariable String xland, Model model) {
+		List<LandDagDetails> dagList = landInfoService.findByLandDagDetails(xland);
+		model.addAttribute("lddlist", dagList);
+		model.addAttribute("info", landInfoService.findByLandInfo(xland));
+		return "pages/land/landinfo::landdagtable";
+	}
+	
+	//delete
+		@PostMapping("{xland}/landdag/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteLandDagDetails(@PathVariable String xland, @PathVariable String xrow, Model model) {
+			LandDagDetails ldd = landInfoService.findlandDagDetailsByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if(ldd == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = landInfoService.deleteLandDagDetails(ldd);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("landdagtable", "/landinfo/landdag/" + xland);
+			return responseHelper.getResponse();
+		}
+
+	
 }
 	

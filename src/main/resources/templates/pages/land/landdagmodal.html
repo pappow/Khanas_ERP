@@ -1,0 +1,105 @@
+<!-- Modal -->
+<div id="landdagmodal" th:fragment="landdagmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add/Update dag details</h4>
+			</div>
+			
+			<div class="modal-body">
+				<div class="row">
+				<form id="mainform-modal" class="form-horizontal"  method="post" th:action="@{/landinfo/landdag/save}" th:object="${ldd}">
+				<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="section-header sectionbartoggle">
+										<h1>Land Dag Details</h1>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div><br>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-6">
+
+										<div class="form-group" >
+											<label class="control-label col-md-4" for="xland">Land:</label>
+											<div class="col-md-7">
+												<input type="hidden" class="form-control" th:field="*{xland}"/>
+												<input type="text" class="form-control" th:value="*{xland}" disabled="disabled" />
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-4" for="xdagtype">Type:</label>
+											<div class="col-md-7">
+												<select class="form-control" th:field="*{xdagtype}">
+													<option th:each="d : ${dagTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+												</select>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="col-md-6">
+
+										<div class="form-group">
+											<label class="control-label col-md-3" for="xdagnum">Dag No:</label>
+											<div class="col-md-7">
+												<input type="number" class="form-control" th:field="*{xdagnum}" maxlength="100"/>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-3" for="xtype">Land Type:</label>
+											<div class="col-md-7">
+												<select class="form-control" th:field="*{xtype}">
+													<option th:value="None"></option>
+													<option th:each="d : ${landTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-3" for="xqty">Land Amt:</label>
+											<div class="col-md-7">
+												<input type="text" class="form-control" th:field="*{xqty}" maxlength="100"/>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-3" for="xunit">Unit:</label>
+											<div class="col-md-7">
+												<select class="form-control" th:field="*{xunit}">
+													<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-sm confirm-btn-modal">Submit</button>
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
+	<script type="text/javascript">
+			$(document).ready(function(){
+				// Init ui for modal
+				ck.ui.config.buttonevent();
+			});
+		</script>
+</div>

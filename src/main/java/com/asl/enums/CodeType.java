@@ -17,6 +17,7 @@ public enum CodeType {
 	COMMITEECONTRIBUTION_TYPE("Committtee Contribution Type"),
 	COMMITEEMEMBER_TYPE("Committtee Member Unit"),
 
+	DAG_TYPE("Dag Type"),
 	DISCOUNT_TYPE("Discount Type"),
 
 	EMPLOYEE_CATEGORY("Employee Category"),
@@ -44,8 +45,9 @@ public enum CodeType {
 	ITEM_SUB_CATEGORY("Item Sub-Category"),
 	
 	LAND_UNIT("Land Unit"),
+	LAND_TYPE("Land Type"),
 	
-	MEMBER_DESIGNATION("Member Designation Type"),
+	MEMBER_DESIGNATION("Member Designation"),
 
 	OBJECT_TYPE("Object Type"),
 	OWNER_TYPE("Owner Type"),

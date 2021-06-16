@@ -170,7 +170,7 @@
 															</div> -->
 
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xlandqty"> Land Amount:</label>
+																<label class="control-label col-md-4" for="xlandqty"> Land Amt:</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xlandqty}" maxlength="100"/>
 																</div>
@@ -234,7 +234,7 @@
 
 														<div class="col-md-6">
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xlandnetqty">Land Net Qty:</label>
+																<label class="control-label col-md-4" for="xlandnetqty">Land Net Amt:</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xlandnetqty}" maxlength="100"/>
 																</div>
@@ -250,7 +250,7 @@
 															</div>
 
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xriversideqty">River Side Qty:</label>
+																<label class="control-label col-md-4" for="xriversideqty">River Side Amt:</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xriversideqty}" maxlength="100"/>
 																</div>
@@ -322,10 +322,10 @@
 												<thead>
 													<tr>
 														<th>Land ID</th>
-														<th>Name</th>
+														<th>Land Name</th>
 														<th>LD(Road)</th>
 														<th>LD(Others)</th>
-														<th>Net Land</th>
+														<th>Net Land Amount</th>
 													</tr>
 													
 												</thead>
@@ -409,18 +409,29 @@
 						<thead>
 							<tr>
 								<th>Row</th>
-								<th>Person ID</th>
+								<th>Dag Type</th>
+								<th>Dag No.</th>
 								<th>Land Type</th>
-								<th>Land Amount</th>
-								<th>Land Unit</th>
-								<th>Note </th>
+								<th>Land Amt </th>
+								<th>Land Unit </th>
 								<th data-nosort="Y" style="text-align: right;">
-									<button type="button" class="btn btn-success btn-add" ><i class="fas fa-plus"></i></button>
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landdag/new/show', data-target-modal='landdagmodal'"><i class="fas fa-plus"></i></button>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							
+							<tr th:each="d, n : ${lddlist}">
+								<td th:text="${n.count}"></td>
+								<td th:text="${d.xdagtype}"></td>
+								<td th:text="${d.xdagnum}"></td>
+								<td th:text="${d.xtype}"></td>
+								<td th:text="${d.xqty}"></td>
+								<td th:text="${d.xunit}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landdag/' + ${d.xrow} + '/show', data-target-modal='landdagmodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landdag/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
 						</tbody>
 						<tfoot>
 						<tr>
