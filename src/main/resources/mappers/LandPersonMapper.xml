@@ -7,7 +7,7 @@
 		<selectKey keyProperty="xperson" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO landperson
+		INSERT INTO caperson
 		(
 			xperson,
 			xname,
@@ -57,7 +57,7 @@
 
 	<update id="updateLandPerson" parameterType="LandPerson">
 		UPDATE 
-			landperson
+			caperson
 		SET
 			xname=#{xname, jdbcType=VARCHAR},
 			xfname=#{xfname, jdbcType=VARCHAR},
@@ -86,7 +86,7 @@
 		SELECT 
 			* 
 		FROM 
-			landperson 
+			caperson 
 		WHERE 
 			zid=#{zid} 
 			AND zactive ='1'
@@ -98,10 +98,14 @@
 		SELECT 
 			* 
 		FROM 
-			landperson 
+			caperson 
 		WHERE 
 			zid=#{zid} 
 			AND xperson=#{xperson}
+	</select>
+	
+	<select id="searchPersonId" resultType="LandPerson">
+		SELECT * FROM caperson WHERE (UPPER(xperson) LIKE '%' || #{xperson} || '%' OR UPPER(xname) LIKE '%' || #{xperson} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<insert id="savePersonEducation" parameterType="LandEducation">

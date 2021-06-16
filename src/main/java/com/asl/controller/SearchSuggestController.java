@@ -34,6 +34,7 @@ import com.asl.service.CaitemService;
 import com.asl.service.LandCommitteeMembersService;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandOwnerService;
+import com.asl.service.LandPersonService;
 import com.asl.service.MoService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
@@ -67,6 +68,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandOwnerService landOwnerService;
 	@Autowired private LandCommitteeMembersService landCommitteeMembersService;
 	@Autowired private LandDocumentService landDocumentService;
+	@Autowired private LandPersonService landPersonService;
 
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
@@ -127,15 +129,15 @@ public class SearchSuggestController extends ASLAbstractController {
 
 	@GetMapping("/personId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonId(@PathVariable String hint){
-		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		
-		List<LandPerson> LandList = landOwnerService.searchPersonId(hint);
+		
+		List<LandPerson> LandList = landPersonService.searchPersonId(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
-		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXperson(),c.getXperson())));
+		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXperson(),c.getXperson()+ " - " +c.getXname())));
 		return list;
 	}
 	
-
+	
 	@GetMapping("/committeeId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCommitteeId(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.LandMemberInfoMapper">
+
+	<insert id="saveLandMemberInfo" parameterType="LandMemberInfo">
+		<selectKey keyProperty="xmember" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO camember
+		(
+			xmember,
+			xperson,
+			xdesignation,
+			xnote,
+			xtypetrn,
+			xtrn,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xmember, jdbcType=VARCHAR},
+			#{xperson, jdbcType=VARCHAR},
+			#{xdesignation, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandMemberInfo" parameterType="LandMemberInfo">
+		UPDATE 
+			camember
+		SET
+			
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xdesignation=#{xdesignation, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xmember=#{xmember , jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandMemberInfo" resultType="LandMemberInfo">
+		SELECT 
+			* 
+		FROM 
+			camember 
+		WHERE 
+			zid=#{zid} 
+			AND zactive ='1'
+		order by 
+			ztime desc
+			
+	</select>
+
+
+	<select id="findByLandMemberInfo" resultType="LandMemberInfo">
+		SELECT 
+			* 
+		FROM 
+			camember 
+		WHERE 
+			zid=#{zid} 
+			AND xmember=#{xmember}
+	</select>
+	
+	
+	
+</mapper>

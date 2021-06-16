@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandEducation;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
@@ -32,7 +33,21 @@ public interface LandInfoMapper {
 	
 	public LandOwner findLandOwnerByXlandAndXrow(String xland, int xrow, String zid);
 	
-	public List<LandPerson> searchPersonId(String xperson, String zid);
+	public LandOwner findByXlandAndXperson(String xland, String xperson, String zid);
+	
+	//for dag details
+	
+	public long saveLandDagDetails(LandDagDetails landDagDetails);
+	
+	public long updateLandDagDetails(LandDagDetails landDagDetails);
+	
+	public long deleteLandDagDetails(LandDagDetails landDagDetails);
+	
+	public List<LandDagDetails> getAllLandDagDetails(String zid);
+	
+	public List<LandDagDetails> findByLandDagDetails(String xland, String zid);
+	
+	public LandDagDetails findlandDagDetailsByXlandAndXrow(String xland, int xrow, String zid);
 	
 
 
