@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Caitemdetail;
+import com.asl.entity.Opdodetail;
+import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
@@ -43,6 +45,7 @@ import com.asl.entity.Zbusiness;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.mapper.OpdoMapper;
 import com.asl.model.report.ConventionHallBookingReport;
 import com.asl.model.report.HallBookingFacilitiesDetail;
 import com.asl.model.report.HallBookingFoodDetail;
@@ -51,6 +54,7 @@ import com.asl.model.report.HallBookingSubItems;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.HallBookingService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.util.CKTime;
@@ -72,6 +76,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private HallBookingService hallBookingService;
 	@Autowired private CacusService cacusService;
+	@Autowired private OpdoService opdoService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -835,6 +840,75 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 		headers.setContentType(new MediaType("application", "pdf"));
 		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+
+	@PostMapping("/createinvoice/{xordernum}")
+	public @ResponseBody Map<String, Object> createInvoice(@PathVariable String xordernum, Model model) {
+		Opordheader  booking = opordService.findOpordHeaderByXordernum(xordernum);
+		if(booking == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Booking in this system");
+			return responseHelper.getResponse();
+		}
+
+		// validation
+		Opdoheader existInvoice = opdoService.findOpordheaderByXordernum(xordernum);
+		if(existInvoice != null) {
+			responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + existInvoice.getXdornum());
+			return responseHelper.getResponse();
+		}
+
+		// Create invoice first
+		Opdoheader sales = new Opdoheader();
+		sales.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		sales.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		sales.setXdate(new Date());
+		sales.setXstatusord("Open");
+		sales.setXstatusjv("Open");
+		sales.setXstatusar("Open");
+		sales.setXordernum(booking.getXordernum());
+		sales.setXvatait(booking.getXvatait());
+		sales.setXtotamt(booking.getXtotamt() == null ? BigDecimal.ZERO : booking.getXtotamt());
+		sales.setXait(booking.getXaitamt() == null ? BigDecimal.ZERO : booking.getXaitamt());
+		sales.setXvatamt(booking.getXvatamt() == null ? BigDecimal.ZERO : booking.getXvatamt());
+		sales.setXdiscamt(booking.getXdiscamt() == null ? BigDecimal.ZERO : booking.getXdiscamt());
+		sales.setXgrandtot(booking.getXgrandtot() == null ? BigDecimal.ZERO : booking.getXgrandtot());
+		sales.setXcus(booking.getXcus());
+		sales.setXpaid(booking.getXpaid() == null ? BigDecimal.ZERO : booking.getXpaid());
+
+		long count = opdoService.save(sales);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create invoice from booking order");
+			return responseHelper.getResponse();
+		}
+
+		// create invoice details
+		// find booking details first
+		List<Opdodetail> salesDetails = new ArrayList<>();
+		List<Oporddetail> bookingDetails = opordService.findOporddetailByXordernum(xordernum);
+		if(bookingDetails != null && bookingDetails.isEmpty()) {
+			for(Oporddetail bd :  bookingDetails) {
+				// create invoice details first
+				Opdodetail salesDetaiil = new Opdodetail();
+				salesDetaiil.setXdornum(sales.getXdornum());
+				salesDetaiil.setXitem(bd.getXitem());
+				salesDetaiil.setXqtyord(bd.getXqtyord() == null ? BigDecimal.ZERO : bd.getXqtyord());
+				salesDetaiil.setXunitsel(bd.getXunit());
+				salesDetaiil.setXrate(bd.getXrate() == null ? BigDecimal.ZERO : bd.getXrate());
+				salesDetaiil.setXlineamt(bd.getXlineamt() == null ? BigDecimal.ZERO : bd.getXlineamt());
+				salesDetaiil.setXcatitem(bd.getXcatitem());
+				salesDetaiil.setXgitem(bd.getXgitem());
+				salesDetaiil.setXtype(bd.getXtype());
+				salesDetails.add(salesDetaiil);
+			}
+			
+			
+			
+		}
+		
+		
+		responseHelper.setStatus(ResponseStatus.ERROR);
+		return responseHelper.getResponse();
 	}
 
 }

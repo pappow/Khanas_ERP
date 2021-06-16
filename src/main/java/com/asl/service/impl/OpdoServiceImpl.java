@@ -311,4 +311,12 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		return opdoMapper.getSalesInvoiceMatrxi(sdf.format(xdate), sessionManager.getBusinessId());
 	}
 
+	@Override
+	public Opdoheader findOpordheaderByXordernum(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return null;
+		return opdoMapper.findOpordheaderByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+
+	
+
 }

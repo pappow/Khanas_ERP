@@ -67,6 +67,12 @@ public class Opdodetail extends AbstractModel<String> {
 	@Column(name = "xqtycrn")
 	private BigDecimal xqtycrn;
 
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Column(name = "xparentrow")
+	private int xparentrow;
+
 	@Transient
 	private String xdesc;
 	@Transient

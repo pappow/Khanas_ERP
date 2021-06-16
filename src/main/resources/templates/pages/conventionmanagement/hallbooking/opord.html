@@ -56,6 +56,7 @@
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatusord != 'Confirmed' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/archive/} + ${opordheader.xordernum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Cancel Booking</a>
 											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus == 'Open' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/print/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+											<a th:if="${not #strings.isEmpty(opordheader.xordernum) and opordheader.xstatus == 'Open' and opordheader.zactive == true}" th:href="@{/conventionmanagement/hallbooking/createinvoice/} + ${opordheader.xordernum}" class="btn btn-sm btn-primary archive-btn-link"><i class="fas fa-file-invoice"></i> Create Invoice </a>
 										</div>
 										<div class="section-body section-border">
 											<form id="mainform" class="form-horizontal" th:action="@{/conventionmanagement/hallbooking/save}" th:object="${opordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">

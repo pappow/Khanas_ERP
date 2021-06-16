@@ -429,4 +429,15 @@
 		ORDER BY
 			ZBUSINESS.ZORG, CAITEM.XSEQN, OPDODETAIL.XITEM ASC
 	</select>
+
+	<select id="findOpordheaderByXordernum" resultType="Opdoheader">
+		SELECT 
+			* 
+		FROM
+			opdoheader
+		WHERE
+			zid=#{zid}
+			AND xordernum=#{xordernum}
+			AND zactive='1'
+	</select>
 </mapper>

@@ -46,4 +46,6 @@ public interface OpdoMapper {
 	public Opdoheader findPoordHeaderByXordernumAndRequisitionnumber(String xordernum, String requisitionnumber, String zid);
 
 	public List<BranchesRequisitions> getSalesInvoiceMatrxi(String xdate, String zid);
+
+	public Opdoheader findOpordheaderByXordernum(String xordernum, String zid);
 }
