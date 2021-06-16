@@ -26,7 +26,11 @@ public class ConventionHallBookingReport extends AbstractReportModel {
 
 	private HallBookingHeader header;
 
-	@XmlElementWrapper(name = "details")
-	@XmlElement(name = "detail")
-	private List<HallBookingDetail> details = new ArrayList<>();
+	@XmlElementWrapper(name = "fooddetails")
+	@XmlElement(name = "fooddetail")
+	private List<HallBookingFoodDetail> fooddetails = new ArrayList<>();
+
+	@XmlElementWrapper(name = "facilitiesdetails")
+	@XmlElement(name = "facilitiesdetail")
+	private List<HallBookingFacilitiesDetail> facilitiesdetails = new ArrayList<>();
 }

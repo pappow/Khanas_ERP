@@ -42,7 +42,8 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.ConventionHallBookingReport;
-import com.asl.model.report.HallBookingDetail;
+import com.asl.model.report.HallBookingFacilitiesDetail;
+import com.asl.model.report.HallBookingFoodDetail;
 import com.asl.model.report.HallBookingHeader;
 import com.asl.model.report.HallBookingSubItems;
 import com.asl.service.CaitemService;
@@ -776,16 +777,24 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		BeanUtils.copyProperties(oh, header);
 		report.setHeader(header);
 
-		List<HallBookingDetail> bookingdetails = new ArrayList<>();
+		List<HallBookingFoodDetail> foodbookingdetails = new ArrayList<>();
+		List<HallBookingFacilitiesDetail> facilitiesbookingdetails = new ArrayList<>();
 
 		for(Oporddetail detail : details) {
-			if("Set Item".equalsIgnoreCase(detail.getXtype())) continue;
-			HallBookingDetail hb = new HallBookingDetail();
+			if("Set Item".equalsIgnoreCase(detail.getXtype()) || "Facilities".equalsIgnoreCase(detail.getXcatitem())) continue;
+			HallBookingFoodDetail hb = new HallBookingFoodDetail();
 			BeanUtils.copyProperties(detail, hb);
-			bookingdetails.add(hb);
+			foodbookingdetails.add(hb);
 		}
 
-		for(HallBookingDetail hb : bookingdetails) {
+		for(Oporddetail detail : details) {
+			if(!"Facilities".equalsIgnoreCase(detail.getXcatitem())) continue;
+			HallBookingFacilitiesDetail hb = new HallBookingFacilitiesDetail();
+			BeanUtils.copyProperties(detail, hb);
+			facilitiesbookingdetails.add(hb);
+		}
+
+		for(HallBookingFoodDetail hb : foodbookingdetails) {
 			for(Oporddetail detail : details) {
 				if(!"Set Item".equalsIgnoreCase(detail.getXtype())) continue;
 
@@ -797,7 +806,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			}
 		}
 
-		report.setDetails(bookingdetails);
+		report.setFooddetails(foodbookingdetails);
+		report.setFacilitiesdetails(facilitiesbookingdetails);
 		// report end
 
 		byte[] byt = getPDFByte(report, "hallbookingreport.xsl");

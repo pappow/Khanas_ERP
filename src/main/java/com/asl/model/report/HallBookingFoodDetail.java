@@ -18,9 +18,9 @@ import lombok.Data;
  * @since Jun 15, 2021
  */
 @Data
-@XmlRootElement(name = "detail")
+@XmlRootElement(name = "fooddetail")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HallBookingDetail implements Serializable {
+public class HallBookingFoodDetail implements Serializable {
 
 	private static final long serialVersionUID = 4055808531681377614L;
 
