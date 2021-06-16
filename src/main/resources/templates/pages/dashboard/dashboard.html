@@ -292,38 +292,39 @@
 										
 									</span>
 
-									<span th:if="${isDev}">
+									<span th:if="${isBoshila or isDev}">
 										<tr>
-											<td colspan="2">Bosila Land Management</td>
+											<td colspan="2">Boshila Land Management</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/mastersetup/caitem}">Item Master</a></td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/mastersetup/cacus}">Customer Entry</a></td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales And Invoice</a></td>
 										</tr>
 										<tr>
 											<td><a th:href="@{/landperson}">Land Person</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landsurveyor}">Land Surveyor</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landinfo}">Land Info</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landdocument}">Land Document</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landcommitteeinfo}">Land Committee Info</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landcommitteemembers}">Land Committee Members</a></td>
-											
 										</tr>
-										
 										<tr>
 											<td><a th:href="@{/landmemberinfo}">Land Member Info</a></td>
-											
 										</tr>
 										<tr>
 											<td><a th:href="@{/landevents}">Land Events</a></td>
@@ -337,9 +338,7 @@
 										<tr>
 											<td><a th:href="@{/landsurvey}">Land Survey</a></td>
 										</tr>
-										
 									</span>
-									
 									<tr>
 										<td><a th:href="@{/logout}" >Logout</a></td>
 										<td>

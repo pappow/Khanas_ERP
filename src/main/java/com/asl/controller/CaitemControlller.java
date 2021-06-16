@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Caitem;
 import com.asl.entity.Caitemdetail;
-import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -45,7 +44,7 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		
 		if(isBoshila()) {
-			return "pages/mastersetup/caitem/caitem";
+			return "pages/land/mastersetup/caitem";
 		}
 		return "pages/mastersetup/caitem/caitem";
 	}
@@ -63,6 +62,10 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		model.addAttribute("caitemdetails", caitemService.findCaitemdetailByXitem(xitem));
+		if(isBoshila()) {
+			data.setXmember("");
+			return "pages/land/mastersetup/caitem";
+		}
 		return "pages/mastersetup/caitem/caitem";
 	}
 
@@ -84,7 +87,7 @@ public class CaitemControlller extends ASLAbstractController {
 
 		// Validate caitem
 		caitem.setXunitsel(caitem.getXunitpur());
-
+		caitem.setXmember(caitem.getXmember());
 		// if existing record
 		Caitem existCaitem = caitemService.findByXitem(caitem.getXitem());
 		if(existCaitem != null) {
@@ -94,6 +97,7 @@ public class CaitemControlller extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
+
 			responseHelper.setSuccessStatusAndMessage("Item Master updated successfully");
 			responseHelper.setRedirectUrl("/mastersetup/caitem/" + caitem.getXitem());
 			return responseHelper.getResponse();

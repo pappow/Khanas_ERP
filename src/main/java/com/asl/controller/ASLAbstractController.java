@@ -120,7 +120,7 @@ public class ASLAbstractController {
 
 	@ModelAttribute("isBoshila")
 	public boolean isBoshila() {
-		return Arrays.asList(env.getActiveProfiles()).contains("BOSHILA");
+		return Arrays.asList(env.getActiveProfiles()).contains("boshila");
 	}
 
 

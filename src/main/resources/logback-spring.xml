@@ -43,7 +43,7 @@
 	</springProfile>
 
 	<!-- BOSHILA PROFILE -->
-	<springProfile name="BOSHILA">
+	<springProfile name="boshila">
 		<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
 			<file>${LOGS}/BOSHILA.log</file>
 			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

@@ -53,7 +53,10 @@ public class LandMemberInfoServiceImpl extends AbstractGenericService implements
 		return landMemberInfoMapper.findByLandMemberInfo(xmember, sessionManager.getBusinessId());
 	}
 
-	
-
+	@Override
+	public List<LandMemberInfo> searchMemberId(String xmember){
+		if(StringUtils.isBlank(xmember)) return Collections.emptyList();
+		return landMemberInfoMapper.searchMemberId(xmember, sessionManager.getBusinessId());
+	}
 
 }

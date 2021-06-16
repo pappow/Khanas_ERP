@@ -17,6 +17,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.LandCommitteeInfo;
 import com.asl.entity.LandInfo;
+import com.asl.entity.LandMemberInfo;
 import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
 import com.asl.entity.Modetail;
@@ -33,6 +34,7 @@ import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.LandCommitteeMembersService;
 import com.asl.service.LandDocumentService;
+import com.asl.service.LandMemberInfoService;
 import com.asl.service.LandOwnerService;
 import com.asl.service.LandPersonService;
 import com.asl.service.MoService;
@@ -69,6 +71,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandCommitteeMembersService landCommitteeMembersService;
 	@Autowired private LandDocumentService landDocumentService;
 	@Autowired private LandPersonService landPersonService;
+	@Autowired private LandMemberInfoService landMemberInfoService;
 
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
@@ -114,6 +117,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<LandInfo> LandList = landOwnerService.searchLandId(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXland(),c.getXland())));
+		return list;
+	}
+	
+	@GetMapping("/memberId/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getMemnerId(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandMemberInfo> MemberList = landMemberInfoService.searchMemberId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		MemberList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXmember(),c.getXmember())));
 		return list;
 	}
 	

@@ -50,6 +50,9 @@ public class CacusController extends ASLAbstractController {
 		model.addAttribute("cacusType", cacusType);
 		model.addAttribute("cacus", getDefaultCacus(cacusType));
 		setOtherDefaultData(cacusType, model);
+		if(isBoshila()) {
+			return "pages/land/mastersetup/cacus";
+		}
 		return "pages/mastersetup/cacus/cacus";
 	}
 
@@ -63,6 +66,9 @@ public class CacusController extends ASLAbstractController {
 		model.addAttribute("cacusType", cacusType);
 		model.addAttribute("cacus", cacus);
 		setOtherDefaultData(cacusType, model);
+		if(isBoshila()) {
+			return "pages/land/mastersetup/cacus";
+		}
 		return "pages/mastersetup/cacus/cacus";
 	}
 

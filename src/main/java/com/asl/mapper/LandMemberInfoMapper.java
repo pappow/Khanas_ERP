@@ -18,5 +18,8 @@ public interface LandMemberInfoMapper {
 
 	public LandMemberInfo findByLandMemberInfo(String xmember, String zid);
 	
+	//search
+	public List<LandMemberInfo> searchMemberId(String xmember, String zid);
+	
 	
 }
