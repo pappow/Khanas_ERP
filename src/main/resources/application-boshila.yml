@@ -62,7 +62,7 @@ default:
   allow-system-admin: Y
   site-title: BOSHILA <span class="title-divider">ERP</span>
   logo-name: asl.png
-  copyright-text: Powered by <a href="http://www.automationservicesbd.com">ASL</a> &copy; Copyright
+  copyright-text: Powered by <a href="http://www.automationservicesbd.com" target="_blank">ASL</a> &copy; Copyright
   im-ex-path: D:/BOSHILA/importexport
   logging-path: D:/BOSHILA/logs 
   report: 
