@@ -48,4 +48,7 @@ public class LandEducation extends AbstractModel<String> {
 
 	@Column(name = "xresult")
 	private String xresult;
+	
+	@Column(name = "xsession")
+	private String xsession;
 }

@@ -25,6 +25,9 @@ public class MasterSetupController extends ASLAbstractController {
 
 	@GetMapping("/cap")
 	public String loadCodeAndParametersPage(Model model) {
+		if(isBoshila()) {
+			return "pages/land/xcodes/cap";
+		}
 		return "pages/mastersetup/cap";
 	}
 	

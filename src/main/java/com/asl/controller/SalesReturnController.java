@@ -48,7 +48,9 @@ public class SalesReturnController extends ASLAbstractController {
 		//model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-
+		if(isBoshila()) {
+			return "pages/land/salesninvoice/salesreturn/opcrn";
+		}
 		return "pages/salesninvoice/salesreturn/opcrn";
 	}
 
@@ -68,7 +70,9 @@ public class SalesReturnController extends ASLAbstractController {
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("opcrnDetailsList", opcrnService.findOpcrnDetailByXcrnnum(xcrnnum));
-
+		if(isBoshila()) {
+			return "pages/land/salesninvoice/salesreturn/opcrn";
+		}
 		return "pages/salesninvoice/salesreturn/opcrn";
 	}
 

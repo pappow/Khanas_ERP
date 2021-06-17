@@ -56,6 +56,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		if(isBoshila()) {
+			return "pages/land/purchasing/poord";
+		}
 		return "pages/purchasing/poord/poord";
 	}
 
@@ -71,6 +74,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
+		if(isBoshila()) {
+			return "pages/land/purchasing/poord";
+		}
 		return "pages/purchasing/poord/poord";
 	}
 

@@ -31,11 +31,11 @@
 										<div class="form-group">
 											<label class="control-label col-md-4" for="xyear">Year</label>
 											<div class="col-md-7">
-												<input type="text" th:field="*{xyear}" class="form-control" maxlength="100" placeholder="Required"/>
+												<input type="number" min="1950" max="2021" th:field="*{xyear}" class="form-control" maxlength="100" placeholder="2020"/>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xexam">Exam</label>
+											<label class="control-label col-md-4" for="xexam">Exam Title</label>
 											<div class="col-md-7">
 												<input type="text" th:field="*{xexam}" class="form-control" maxlength="100" placeholder="Required"/>
 											</div>
@@ -49,7 +49,13 @@
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-2" for="xmajor">Major</label>
+											<label class="control-label col-md-2" for="xsession">Session</label>
+											<div class="col-md-7">
+												<input type="text" th:field="*{xsession}" class="form-control" maxlength="100" placeholder="Required"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-2" for="xmajor">Major/Subject</label>
 											<div class="col-md-7">
 												<input type="text" th:field="*{xmajor}" class="form-control" maxlength="100" placeholder="Required"/>
 											</div>
@@ -57,7 +63,7 @@
 										<div class="form-group">
 											<label class="control-label col-md-2" for="xresult" placeholder="Required">Result</label>
 											<div class="col-md-7">
-												<input type="text" th:field="*{xresult}" class="form-control" maxlength="100"/>
+												<input type="text" th:field="*{xresult}" class="form-control" maxlength="100" placeholder="Required"/>
 											</div>
 										</div>
 									</div>

@@ -46,7 +46,9 @@ public class CustomerAdjustmentController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		
+		if(isBoshila()) {
+			return "pages/land/customeradjustment/arhed";
+		}
 		return "pages/salesninvoice/customeradjustment/arhed";
 	}
 	
@@ -65,7 +67,9 @@ public class CustomerAdjustmentController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		
+		if(isBoshila()) {
+			return "pages/land/customeradjustment/arhed";
+		}
 		return "pages/salesninvoice/customeradjustment/arhed";
 	}
 	
