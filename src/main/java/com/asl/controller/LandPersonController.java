@@ -186,6 +186,18 @@ public class LandPersonController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please Enter Your Result");
 			return responseHelper.getResponse();
 		}
+		
+		if (StringUtils.isBlank(landEducation.getXinstitude())) {
+			responseHelper.setErrorStatusAndMessage("Please Enter Your Institution name");
+			return responseHelper.getResponse();
+		}
+		
+		if (StringUtils.isBlank(landEducation.getXexam())) {
+			responseHelper.setErrorStatusAndMessage("Please Enter Your Exam Title");
+			return responseHelper.getResponse();
+		}
+		
+		
 
 		// if existing
 		LandEducation existPerson = landPersonService.findLandEducationdetailByXpersonAndXrow(landEducation.getXperson(), landEducation.getXrow());

@@ -49,7 +49,9 @@ public class MoneyReceiptController extends ASLAbstractController{
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
-		
+		if(isBoshila()) {
+			return "pages/land/moneyreceipt/arhed";
+		}
 		return "pages/salesninvoice/moneyreceipt/arhed";
 	}
 	
@@ -68,7 +70,9 @@ public class MoneyReceiptController extends ASLAbstractController{
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
 		model.addAttribute("vataitList", vataitService.getAllVatait());
-		
+		if(isBoshila()) {
+			return "pages/land/moneyreceipt/arhed";
+		}
 		return "pages/salesninvoice/moneyreceipt/arhed";
 	}
 	
