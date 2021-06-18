@@ -1,6 +1,8 @@
 package com.asl.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -79,4 +81,7 @@ public class Opdodetail extends AbstractModel<String> {
 	private String xgitem;
 	@Transient
 	private String xcatitem;
+
+	@Transient
+	private List<Opdodetail> subitems = new ArrayList<>();
 }

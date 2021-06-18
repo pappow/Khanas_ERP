@@ -886,28 +886,78 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		// find booking details first
 		List<Opdodetail> salesDetails = new ArrayList<>();
 		List<Oporddetail> bookingDetails = opordService.findOporddetailByXordernum(xordernum);
-		if(bookingDetails != null && bookingDetails.isEmpty()) {
-			for(Oporddetail bd :  bookingDetails) {
-				// create invoice details first
-				Opdodetail salesDetaiil = new Opdodetail();
-				salesDetaiil.setXdornum(sales.getXdornum());
-				salesDetaiil.setXitem(bd.getXitem());
-				salesDetaiil.setXqtyord(bd.getXqtyord() == null ? BigDecimal.ZERO : bd.getXqtyord());
-				salesDetaiil.setXunitsel(bd.getXunit());
-				salesDetaiil.setXrate(bd.getXrate() == null ? BigDecimal.ZERO : bd.getXrate());
-				salesDetaiil.setXlineamt(bd.getXlineamt() == null ? BigDecimal.ZERO : bd.getXlineamt());
-				salesDetaiil.setXcatitem(bd.getXcatitem());
-				salesDetaiil.setXgitem(bd.getXgitem());
-				salesDetaiil.setXtype(bd.getXtype());
-				salesDetails.add(salesDetaiil);
+		if(bookingDetails != null && !bookingDetails.isEmpty()) {
+			List<Oporddetail> subitems = bookingDetails.stream().filter(f -> "Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+			List<Oporddetail> mainitems = bookingDetails.stream().filter(f -> !"Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+			for(Oporddetail m : mainitems) {
+				for(Oporddetail s : subitems) {
+					if(s.getXparentrow() == m.getXrow()) {
+						m.getSubitems().add(s);
+					}
+				}
 			}
-			
-			
-			
+
+			for(Oporddetail bd : mainitems) {
+				// create invoice details first
+				Opdodetail salesDetail = new Opdodetail();
+				salesDetail.setXdornum(sales.getXdornum());
+				salesDetail.setXitem(bd.getXitem());
+				salesDetail.setXqtyord(bd.getXqtyord() == null ? BigDecimal.ZERO : bd.getXqtyord());
+				salesDetail.setXunitsel(bd.getXunit());
+				salesDetail.setXrate(bd.getXrate() == null ? BigDecimal.ZERO : bd.getXrate());
+				salesDetail.setXlineamt(bd.getXlineamt() == null ? BigDecimal.ZERO : bd.getXlineamt());
+				salesDetail.setXcatitem(bd.getXcatitem());
+				salesDetail.setXgitem(bd.getXgitem());
+				salesDetail.setXtype(bd.getXtype());
+				salesDetail.setXparentrow(0);
+
+				if(bd.getSubitems() != null && !bd.getSubitems().isEmpty()) {
+					// create subitems
+					for(Oporddetail sub : bd.getSubitems()) {
+						Opdodetail subitem = new Opdodetail();
+						subitem.setXdornum(sales.getXdornum());
+						subitem.setXitem(sub.getXitem());
+						subitem.setXqtyord(sub.getXqtyord() == null ? BigDecimal.ZERO : sub.getXqtyord());
+						subitem.setXunitsel(sub.getXunit());
+						subitem.setXrate(sub.getXrate() == null ? BigDecimal.ZERO : sub.getXrate());
+						subitem.setXlineamt(sub.getXlineamt() == null ? BigDecimal.ZERO : sub.getXlineamt());
+						subitem.setXcatitem(sub.getXcatitem());
+						subitem.setXgitem(sub.getXgitem());
+						subitem.setXtype(sub.getXtype());
+						salesDetail.getSubitems().add(subitem);
+					}
+
+				}
+
+				salesDetails.add(salesDetail);
+
+			}
+
+			// Now save sales details
+			if(salesDetails != null && !salesDetails.isEmpty()) {
+				for(Opdodetail detail : salesDetails) {
+					long countd = opdoService.saveDetail(detail);
+					if(countd == 0) {
+						responseHelper.setErrorStatusAndMessage("Can't save detail");
+						return responseHelper.getResponse();
+					}
+
+					if(detail.getSubitems() != null && !detail.getSubitems().isEmpty()) {
+						for(Opdodetail subdetail : detail.getSubitems()) {
+							subdetail.setXparentrow(detail.getXrow());
+							long subcount = opdoService.saveDetail(subdetail);
+							if(subcount == 0) {
+								responseHelper.setErrorStatusAndMessage("Can't save detail");
+								return responseHelper.getResponse();
+							}
+						}
+					}
+				}
+			}
 		}
-		
-		
-		responseHelper.setStatus(ResponseStatus.ERROR);
+
+		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + sales.getXdornum());
 		return responseHelper.getResponse();
 	}
 

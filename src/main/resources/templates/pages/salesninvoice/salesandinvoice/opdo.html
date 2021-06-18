@@ -56,8 +56,6 @@
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord eq 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/print/delivery/} + ${opdoheader.xdornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-truck"></i></a>
 										<a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord eq 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/print/invoice/} + ${opdoheader.xdornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-file-invoice-dollar"></i></a>
-										<!-- <a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.xstatusord != 'Confirmed' and opdoheader.zactive == true}" th:href="@{/salesninvoice/salesandinvoice/archive/} + ${opdoheader.xdornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a> -->
-										<!-- <a th:if="${not #strings.isEmpty(opdoheader.xdornum) and opdoheader.zactive == false}" th:href="@{/salesninvoice/salesandinvoice/restore/} + ${opdoheader.xdornum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a> -->
 									</div>
 									<div class="section-body section-border">
 										<div id="opdoheaderform" th:fragment="opdoheaderform">
@@ -371,7 +369,7 @@
 								<h1>Invoice Details</h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="opdodetailtable" th:fragment="opdodetailtable">
+								<table class="table table-striped table-bordered normal-table nowrap" id="opdodetailtable" th:fragment="opdodetailtable">
 									<thead>
 										<tr>
 											<th>Row</th>
