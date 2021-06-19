@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandDocument;
 import com.asl.entity.LandEducation;
+import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.enums.CodeType;
@@ -81,6 +82,7 @@ public class LandInfoController extends ASLAbstractController {
 		
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
+		model.addAttribute("lelist", landInfoService.findByLandEvents(xland));
 		model.addAttribute("lldlist", landDocumentService.findByAllLandDocument(xland));
 		model.addAttribute("lpelist", landInfoService.findByLandOwner(xland));
 		model.addAttribute("lddlist", landInfoService.findByLandDagDetails(xland));
@@ -159,7 +161,7 @@ public class LandInfoController extends ASLAbstractController {
 			LandOwner lpe = new LandOwner();
 			lpe.setXnote("");
 			lpe.setXperson("");
-			lpe.setXqty(0);
+			lpe.setXqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			lpe.setXland(xland);
 			lpe.setXtype("");
 			lpe.setXunit("");
@@ -450,7 +452,7 @@ public class LandInfoController extends ASLAbstractController {
 		model.addAttribute("info", landInfoService.findByLandInfo(xland));
 		return "pages/land/landinfo::landdocumenttable";
 	}
-	
+	//Delete
 	@PostMapping("{xland}/land/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteLandDocDetail(@PathVariable String xland, @PathVariable String xrow, Model model) {
 		LandDocument lpe = landDocumentService.findLandLandDocumentByLandAndXrow(xland, Integer.parseInt(xrow));
@@ -469,6 +471,94 @@ public class LandInfoController extends ASLAbstractController {
 		responseHelper.setReloadSectionIdWithUrl("landdocumenttable", "/landinfo/land/" + xland);
 		return responseHelper.getResponse();
 	}
+	
+	//start of Land Events
+	
+		@GetMapping("/{xland}/landevents/{xrow}/show")
+		public String loadLandEventsModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
+			if("new".equalsIgnoreCase(xrow)) {
+				LandEvents le = new LandEvents();
+				le.setXland(xland);
+				le.setXnote("");
+				le.setXperson("");
+				le.setXplace("");
+				model.addAttribute("le", le);
+				model.addAttribute("priorityTypes", xcodesService.findByXtype(CodeType.PRIORITY_TYPE.getCode(), Boolean.TRUE));
+				
+			}
+			else {
+				LandEvents le = landInfoService.findLandEventsByXlandAndXrow(xland, Integer.parseInt(xrow));
+				if(le==null) {
+					le = new LandEvents();
+					
+				}
+				model.addAttribute("le", le);
+				model.addAttribute("priorityTypes", xcodesService.findByXtype(CodeType.PRIORITY_TYPE.getCode(), Boolean.TRUE));
+			}
+			
+			return "pages/land/landeventsmodal::landeventsmodal";
+		}
 
+		@PostMapping("/landevents/save")
+		public @ResponseBody Map<String, Object> saveLandEvents(LandEvents landEvents) {
+			if (landEvents == null || StringUtils.isBlank(landEvents.getXland())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			// if existing
+			LandEvents exist = landInfoService.findLandEventsByXlandAndXrow(landEvents.getXland(), landEvents.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(landEvents, exist,"xland");
+				long count = landInfoService.update(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
+				responseHelper.setSuccessStatusAndMessage("Activity Details updated successfully");
+				return responseHelper.getResponse();
+			}
+
+			
+			// if new detail
+			long count = landInfoService.save(landEvents);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
+			responseHelper.setSuccessStatusAndMessage("Activity Details saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		@GetMapping("/landevents/{xland}")
+		public String reloadLandEventsTable(@PathVariable String xland, Model model) {
+			List<LandEvents> activityList = landInfoService.findByLandEvents(xland);
+			model.addAttribute("lelist", activityList);
+			model.addAttribute("info", landInfoService.findByLandInfo(xland));
+			return "pages/land/landinfo::landeventstable";
+		}
+		
+		//Delete
+		@PostMapping("{xland}/landevents/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteLandEvents(@PathVariable String xland, @PathVariable String xrow, Model model) {
+			LandEvents le = landInfoService.findLandEventsByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if (le == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = landInfoService.deleteLandEvents(le);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("landeventstable", "/landinfo/landevents/" + xland);
+			return responseHelper.getResponse();
+		}
+		
 }
 	

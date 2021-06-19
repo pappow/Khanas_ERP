@@ -217,10 +217,23 @@
 								<th>Member Type</th>
 								<th>Contribution Type</th>
 								<th>Note </th>
+								<th data-nosort="Y" style="text-align: right;">
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landcommitteeinfo/} + ${committee.xcommittee} + '/commembers/new/show', data-target-modal='commembersmodal'"><i class="fas fa-plus"></i></button>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
-							
+							<tr th:each="d, n : ${lcmlist}">
+								<td th:text="${n.count}"></td>
+								<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
+								<td th:text="${d.xmembertype}"></td>
+								<td th:text="${d.xcontribution}"></td>
+								<td th:text="${d.xnote}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landcommitteeinfo/} + ${committee.xcommittee} + '/commembers/' + ${d.xrow} + '/show', data-target-modal='commembersmodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landcommitteeinfo/} + ${committee.xcommittee} + '/commembers/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
 						</tbody>
 						<tfoot>
 						<tr>

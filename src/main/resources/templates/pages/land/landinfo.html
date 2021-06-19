@@ -79,7 +79,7 @@
 														<div class="col-md-6">
 														
 															<div class="form-group" th:if="${#strings.isEmpty(info.xland)}">
-																<label class="control-label col-md-4" for="xtrn">Code: </label>
+																<label class="control-label col-md-4" for="xtrn">Land Id: </label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xtrn}">
 																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
@@ -88,7 +88,7 @@
 															</div>
 
 															<div class="form-group" th:if="${not #strings.isEmpty(info.xland)}" >
-																<label class="control-label col-md-4" for="xland">Land Name:</label>
+																<label class="control-label col-md-4" for="xland">Land Id:</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:value="*{xland}" disabled="disabled"/>
 																</div>
@@ -192,12 +192,12 @@
 																</div>
 															</div>
 															
-															<div class="form-group">
+															<!-- <div class="form-group">
 																<label class="control-label col-md-4" for="xroadred"></label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xroadred}" maxlength="100" disabled="disabled"/>
 																</div>
-															</div>
+															</div> -->
 
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xlanddedother">Land Deduction for Others:</label>
@@ -206,12 +206,12 @@
 																</div>
 															</div>
 
-															<div class="form-group">
+															<!-- <div class="form-group">
 																<label class="control-label col-md-4" for="xotherred"></label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xotherred}" maxlength="100" disabled="disabled"/>
 																</div>
-															</div>
+															</div> -->
 
 															
 															<!-- <div class="form-group">
@@ -233,7 +233,7 @@
 														</div>
 
 														<div class="col-md-6">
-															<div class="form-group">
+														<!-- 	<div class="form-group">
 																<label class="control-label col-md-4" for="xlandnetqty">Land Net Amt:</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xlandnetqty}" maxlength="100"/>
@@ -247,7 +247,7 @@
 																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
-															</div>
+															</div> -->
 
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xriversideqty">River Side Amt:</label>
@@ -266,7 +266,7 @@
 															</div>
 
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xlandparent">Parent Land Id: </label>
+																<label class="control-label col-md-4" for="xlandparent">Land Ref: </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xlandparent}" maxlength="100"/>
 																</div>
@@ -275,11 +275,15 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xstatus">Status:</label>
 																<div class="col-md-8">
+																	
 																	<select class="form-control" th:field="*{xstatus}">
-																		<option th:each="d : ${statusTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																		
+																		<option th:each="d : ${statusTypes}" th:value="${d.xcode}" th:text="${d.xcode}" /></option>
 																	</select>
 																</div>
 															</div>
+															
+															
 															
 															<div class="form-group datepicker">
 																<label class="control-label col-md-4" for="xdateborn">Date: </label>
@@ -321,11 +325,11 @@
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>Land ID</th>
+														<th>Land Id</th>
 														<th>Land Name</th>
 														<th>LD(Road)</th>
 														<th>LD(Others)</th>
-														<th>Net Land Amount</th>
+														<th>Land Amt.</th>
 													</tr>
 													
 												</thead>
@@ -333,9 +337,9 @@
 													<tr th:each="ar : ${allInfos}">
 														<td><a th:href="@{/landinfo/} + ${ar.xland}" th:text="${ar.xland}"></a></td>
 														<td th:text="${ar.xlname}"></td>
-														<td th:text="${ar.xroadred}"></td>
-														<td th:text="${ar.xotherred}"></td>
-														<td th:text="${ar.xlandnetqty}"></td>
+														<td th:text="${ar.xlanddedroad}"></td>
+														<td th:text="${ar.xlanddedother}"></td>
+														<td th:text="${ar.xlandqty}"></td>
 													</tr>
 													
 												</tbody>
@@ -349,17 +353,24 @@
 					<div class="col-md-12">
 					<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 					<div class="section-header sectionbartoggle">
-						<h1>Owner Details of <lebel th:text="${info.xland}"></lebel> </h1>
+						<h1>Owner Details of <span th:text="${info.xland}"></span> </h1>
 						
 					</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
 						<thead>
 							<tr>
+<<<<<<< Upstream, based on upstream/develop
 								<th>S/N</th>
 								<th>Person ID</th>
 								<th>Land Type</th>
 								<th>Land Amount</th>
+=======
+								<th>SL#</th>
+								<th>Person Id</th>
+								<th>Owner Type</th>
+								<th>Land Amt</th>
+>>>>>>> afc2d27 Lia(19 June)
 								<th>Land Unit</th>
 								<th>Note </th>
 								<th data-nosort="Y" style="text-align: right;">
@@ -383,7 +394,7 @@
 						</tbody>
 						<tfoot>
 						<tr>
-						<th>Total</th>
+					
 						
 						</tr>
 						</tfoot>
@@ -395,17 +406,17 @@
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
-					<h1> Dag Details of <lebel th:text="${info.xland}"></lebel> </h1>
+					<h1> Dag Details of <span th:text="${info.xland}"></span> </h1>
 					
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="landdagtable" th:fragment="landdagtable">
 						<thead>
 							<tr>
-								<th>S/N</th>
+								<th>SL#</th>
 								<th>Dag Type</th>
 								<th>Dag No.</th>
-								<th>Land Type</th>
+								<th>In/Out</th>
 								<th>Land Amt </th>
 								<th>Land Unit </th>
 								<th data-nosort="Y" style="text-align: right;">
@@ -429,7 +440,7 @@
 						</tbody>
 						<tfoot>
 						<tr>
-						<th>Total</th>
+						
 						
 						</tr>
 						</tfoot>
@@ -441,13 +452,13 @@
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
-					<h1>Document Details For (<span th:text="${info.xland}"></span>)</h1>
+					<h1>Document Details of <span th:text="${info.xland}"></span></h1>
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="landdocumenttable" th:fragment="landdocumenttable">
 						<thead>
 							<tr>
-								<th>S/N</th>
+								<th>SL#</th>
 								<th>Document ID</th>
 								<th>Document Type</th>
 								<th>Name</th>
@@ -475,7 +486,53 @@
 					</table>
 				</div>
 			</section>
-		</div>		
+		</div>
+
+		<div class="col-md-12">
+			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+				<div class="section-header sectionbartoggle">
+					<h1> Activities of <span th:text="${info.xland}"></span> </h1>
+					
+				</div>
+				<div class="section-body">
+					<table class="table table-striped table-bordered normal-table" id="landeventstable" th:fragment="landeventstable">
+						<thead>
+							<tr>
+								<th>SL#</th>
+								<th>Person Id</th>
+								<th>Date</th>
+								<th>Place</th>
+								<th>Priority</th>
+								<th>Note</th>
+								<th data-nosort="Y" style="text-align: right;">
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landevents/new/show', data-target-modal='landeventsmodal'"><i class="fas fa-plus"></i></button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="d, n : ${lelist}">
+								<td th:text="${n.count}"></td>
+								<td th:text="${d.xperson}"></td>
+								<td th:text="${d.xdate}"></td>
+								<td th:text="${d.xplace}"></td>
+								<td th:text="${d.xtype}"></td>
+								<td th:text="${d.xnote}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landevents/' + ${d.xrow} + '/show', data-target-modal='landeventsmodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/landevents/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+						<tr>
+						
+						
+						</tr>
+						</tfoot>
+					</table>
+				</div>
+			</section>
+		</div>
 				</div>
 			</div>
 		</div>
@@ -485,6 +542,7 @@
 		<div id="ownermodal-section"></div>
 		<div id="landdagmodal-section"></div>
 		<div id="landdocumentmodal-section"></div>
+		<div id="landeventsmodal-section"></div>
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 		

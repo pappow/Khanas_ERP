@@ -3,6 +3,7 @@ package com.asl.service;
 import java.util.List;
 
 import com.asl.entity.LandDagDetails;
+import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandPerson;
@@ -45,6 +46,20 @@ public long save(LandInfo landinfo);
 	public List<LandDagDetails> findByLandDagDetails(String xland);
 	
 	public LandDagDetails findlandDagDetailsByXlandAndXrow(String xland, int xrow);
+
+	//for Land Events
+	
+	public long save(LandEvents landEvents);
+	
+	public long update(LandEvents landEvents);
+	
+	public long deleteLandEvents(LandEvents landEvents);
+	
+	public List<LandEvents> getAllLandEvents();
+	
+	public List<LandEvents> findByLandEvents(String xland);
+	
+	public LandEvents findLandEventsByXlandAndXrow(String xland, int xrow);
 		
 
 }
