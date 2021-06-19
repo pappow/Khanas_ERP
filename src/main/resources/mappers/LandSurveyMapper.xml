@@ -5,9 +5,9 @@
 	
 	<insert id="saveLandSurvey" parameterType="LandSurvey">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM landsurvey WHERE zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM calanservey WHERE zactive='1' AND zid=#{zid}
 		</selectKey>
-		INSERT INTO landsurvey
+		INSERT INTO calanservey
 		(
 			xland,
 			xrow,
@@ -45,7 +45,7 @@
 	
 	<update id="updateLandSurvey" parameterType="LandSurvey">
 		UPDATE 
-			landsurvey
+			calanservey
 		SET
 			xsurveyor=#{xsurveyor, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
@@ -65,22 +65,27 @@
 	</update>
 	
 	<select id="getAllLandSurvey" resultType="LandSurvey">
-		SELECT * FROM landsurvey WHERE zid=#{zid}  AND zactive='1' order by ztime desc
+		SELECT * FROM calanservey WHERE zid=#{zid}  AND zactive='1' order by ztime desc
 	</select>
 
 	<select id="findByXlandSurvey" resultType="LandSurvey">
-		SELECT * FROM landsurvey WHERE xland=#{xland} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM calanservey WHERE xland=#{xland} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandSurveydetailByXlandAndXrow" resultType="LandSurvey">
-		SELECT * FROM landsurvey WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM calanservey WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+
 	<select id="findLandSurveyByXlandAndXsurveyor" resultType="LandSurvey">
-		SELECT * FROM landsurvey WHERE xland=#{xland} AND xsurveyor=#{xsurveyor} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM calanservey WHERE xland=#{xland} AND xsurveyor=#{xsurveyor} AND zid=#{zid} AND zactive='1
+	</select>
+	
+	<select id="findLandSurveyByXlandAndXperson" resultType="LandSurvey">
+		SELECT * FROM calanservey WHERE xland=#{xland} AND xperson=#{xperson} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<delete id="deleteDetail" parameterType="LandSurvey">
-		DELETE FROM landsurvey WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
+		DELETE FROM calanservey WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

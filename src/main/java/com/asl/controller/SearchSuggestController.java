@@ -32,11 +32,12 @@ import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
-import com.asl.service.LandCommitteeMembersService;
+
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandMemberInfoService;
 import com.asl.service.LandOwnerService;
 import com.asl.service.LandPersonService;
+import com.asl.service.LandCommitteeInfoService;
 import com.asl.service.MoService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
@@ -68,10 +69,14 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private ArhedService arhedService;
 	@Autowired private PdmstService pdmstService;
 	@Autowired private LandOwnerService landOwnerService;
-	@Autowired private LandCommitteeMembersService landCommitteeMembersService;
+	
 	@Autowired private LandDocumentService landDocumentService;
 	@Autowired private LandPersonService landPersonService;
+
 	@Autowired private LandMemberInfoService landMemberInfoService;
+
+	@Autowired private LandCommitteeInfoService landCommitteeInfoService;
+
 
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
@@ -140,6 +145,15 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 
+	@GetMapping("/committeeId/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getCommitteeId(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		
+		List<LandCommitteeInfo> CommitteeList = landCommitteeInfoService.searchCommitteeId(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		CommitteeList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcommittee(),c.getXcommittee())));
+		return list;
+	}
 	@GetMapping("/personId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonId(@PathVariable String hint){
 		
@@ -151,15 +165,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	}
 	
 	
-	@GetMapping("/committeeId/{hint}")
-	public @ResponseBody List<SearchSuggestResult> getCommitteeId(@PathVariable String hint){
-		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		
-		List<LandCommitteeInfo> LandList = landCommitteeMembersService.searchCommitteeId(hint);
-		List<SearchSuggestResult> list = new ArrayList<>();
-		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcommittee(),c.getXcommittee())));
-		return list;
-	}
+
 
 	@GetMapping("/personName/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonName(@PathVariable String hint){

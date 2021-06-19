@@ -7,7 +7,7 @@
 		<selectKey keyProperty="xcommittee" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO landcommitteeinfo
+		INSERT INTO cacommittee
 		(
 			xcommittee,
 			xdate,
@@ -45,7 +45,7 @@
 
 	<update id="updateLandCommitteeInfo" parameterType="LandCommitteeInfo">
 		UPDATE 
-			landcommitteeinfo
+			cacommittee
 		SET
 			xdate=#{xdate,jdbcType=DATE},
 			xstartdate=#{xstartdate,jdbcType=DATE},
@@ -68,7 +68,7 @@
 		SELECT 
 			* 
 		FROM 
-			landcommitteeinfo 
+			cacommittee 
 		WHERE 
 			zid=#{zid} 
 			AND zactive='1'
@@ -80,9 +80,98 @@
 		SELECT 
 			* 
 		FROM 
-			landcommitteeinfo 
+			cacommittee 
 		WHERE 
 			zid=#{zid} 
 			AND xcommittee=#{xcommittee}
 	</select>
+	
+	<select id="searchCommitteeId" resultType="LandCommitteeInfo">
+		SELECT * FROM cacommittee WHERE (UPPER(xcommittee) LIKE '%' || #{xcommittee} || '%' ) AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<insert id="saveLandCommitteeMembers" parameterType="LandCommitteeMembers">
+	
+	    <selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM cacommitteemember WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO cacommitteemember
+		(
+			xcommittee,
+			xrow,
+			xperson,
+			xmembertype,
+			xcontribution,
+			xnote, 
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xcommittee, jdbcType=VARCHAR},
+			#{xrow},
+			#{xperson, jdbcType=VARCHAR},
+			#{xmembertype, jdbcType=VARCHAR},
+			#{xcontribution, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandCommitteeMembers" parameterType="LandCommitteeMembers">
+		UPDATE 
+			cacommitteemember
+		SET
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xmembertype=#{xmembertype, jdbcType=VARCHAR},
+			xcontribution=#{xcontribution, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xcommittee=#{xcommittee, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandCommitteeMembers" resultType="LandCommitteeMembers">
+		SELECT 
+			* 
+		FROM 
+			cacommitteemember 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandCommitteeMembers" resultType="LandCommitteeMembers">
+		SELECT * FROM cacommitteemember WHERE xcommittee=#{xcommittee} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findComMembersByXcommitteeAndXrow" resultType="LandCommitteeMembers">
+		SELECT * FROM cacommitteemember WHERE xcommittee=#{xcommittee} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findByXcommitteeAndXperson" resultType="LandCommitteeMembers">
+		SELECT * FROM cacommitteemember WHERE zid=#{zid}  AND xcommittee=#{xcommittee} AND xperson=#{xperson}
+	</select>
+
+	<delete id="deleteLandCommitteeMembers" parameterType="LandCommitteeMembers">
+		DELETE FROM cacommitteemember WHERE xrow=#{xrow} AND xcommittee=#{xcommittee} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>

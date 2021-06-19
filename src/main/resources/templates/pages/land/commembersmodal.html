@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div id="ownermodal" th:fragment="ownermodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
+<div id="commembersmodal" th:fragment="commembersmodal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" xmlns:th="http://www.thymeleaf.org">
 	<div class="modal-dialog modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -10,7 +10,7 @@
 			
 			<div class="modal-body">
 				<div class="row">
-				<form id="mainform-modal" class="form-horizontal"  method="post" th:action="@{/landinfo/owner/save}" th:object="${lpe}">
+				<form id="mainform-modal" class="form-horizontal"  method="post" th:action="@{/landcommitteeinfo/commembers/save}" th:object="${lcm}">
 				<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
 					<div class="row">
 						<div class="col-md-12">
@@ -29,20 +29,20 @@
 									<div class="col-md-6">
 
 										<div class="form-group" >
-											<label class="control-label col-md-4" for="xland">Land Id:</label>
+											<label class="control-label col-md-4" for="xcommittee">Land:</label>
 											<div class="col-md-7">
-												<input type="hidden" class="form-control" th:field="*{xland}"/>
-												<input type="text" class="form-control" th:value="*{xland}" disabled="disabled" />
+												<input type="hidden" class="form-control" th:field="*{xcommittee}"/>
+												<input type="text" class="form-control" th:value="*{xcommittee}" disabled="disabled" />
 											</div>
 										</div>
 										
 										<div class="form-group" >
-											<label class="control-label col-md-4" for="xperson">Person Id:</label>
+											<label class="control-label col-md-4" for="xperson">Person:</label>
 											<div class="col-sm-7">
 												<input 	type="text" 
 														class="form-control searchsuggest" 
 														placeholder="Search..." 
-														th:value="${lpe.xperson}" 
+														th:value="${lcm.xperson}" 
 														th:attr="search-url='search/personId'"/>
 												<input type="hidden" id="search-val" th:field="*{xperson}"/>
 												<input type="hidden" id="search-des" th:value="*{xperson}"/>
@@ -50,10 +50,10 @@
 										</div>
 
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xtype">Owner Type:</label>
+											<label class="control-label col-md-4" for="xmembertype">Member Type:</label>
 											<div class="col-md-7">
-												<select class="form-control" th:field="*{xtype}">
-													<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+												<select class="form-control" th:field="*{xmembertype}">
+													<option th:each="d : ${memberTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 												</select>
 											</div>
 										</div>
@@ -63,17 +63,10 @@
 									<div class="col-md-6">
 
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xqty">Land Amt:</label>
+											<label class="control-label col-md-3" for="xcontribution">Contribution:</label>
 											<div class="col-md-7">
-												<input type="text" class="form-control" th:field="*{xqty}" maxlength="100"/>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<label class="control-label col-md-3" for="xunit">Land Unit:</label>
-											<div class="col-md-7">
-												<select class="form-control" th:field="*{xunit}">
-													<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+												<select class="form-control" th:field="*{xcontribution}">
+													<option th:each="d : ${contyributionTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 												</select>
 											</div>
 										</div>
