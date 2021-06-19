@@ -1,7 +1,5 @@
 package com.asl.entity;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,13 +30,12 @@ public class LandOwner extends AbstractModel<String> {
 	@Column(name = "xland")
 	private String xland;
 
-	
+	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
 	private int xrow;
+
 	
-	@Id
-	@Basic(optional = false)
 	@Column(name = "xperson")
 	private String xperson;
 
@@ -49,7 +46,7 @@ public class LandOwner extends AbstractModel<String> {
 	private String xnote;
 
 	@Column(name = "xqty")
-	private BigDecimal xqty;
+	private Integer xqty;
 
 	@Column(name = "xunit")
 	private String xunit;

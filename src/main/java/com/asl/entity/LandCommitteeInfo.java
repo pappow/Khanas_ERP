@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name="cacommittee")
+@Table(name="landcommitteeinfo")
 @IdClass(LandCommitteeInfoPK.class)
 @EqualsAndHashCode(of= {"zid", "xcommittee"}, callSuper = false)
 

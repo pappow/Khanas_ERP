@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandEducation;
-import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandPerson;
@@ -49,20 +48,7 @@ public interface LandInfoMapper {
 	public List<LandDagDetails> findByLandDagDetails(String xland, String zid);
 	
 	public LandDagDetails findlandDagDetailsByXlandAndXrow(String xland, int xrow, String zid);
-
-	//for Land Events
 	
-	public long saveLandEvents(LandEvents landEvents);
-	
-	public long updateLandEvents(LandEvents landEvents);
-	
-	public long deleteLandEvents(LandEvents landEvents);
-	
-	public List<LandEvents> getAllLandEvents(String zid);
-	
-	public List<LandEvents> findByLandEvents(String xland, String zid);
-	
-	public LandEvents findLandEventsByXlandAndXrow(String xland, int xrow, String zid);
 
 
 

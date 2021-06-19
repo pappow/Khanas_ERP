@@ -34,8 +34,6 @@ public enum TransactionCodeType {
 	
 	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
-	LANDCOMEVENT_ID("Land Com Event", "EVCM", TransactionCodes.LANDCOMEVENT_ID),
-	LANDOTHEREVENT_ID("Land Other Event", "EVOH", TransactionCodes.LANDOTHEREVENT_ID),
 
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
 	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
@@ -44,7 +42,6 @@ public enum TransactionCodeType {
 	PROC_ERROR("PROC Error", "ERROR", null),
 	PROFILE_LINE("Profile Line", "PRL-", null),
 	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null),
-	
 
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 

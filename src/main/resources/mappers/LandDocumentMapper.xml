@@ -4,10 +4,10 @@
 <mapper namespace="com.asl.mapper.LandDocumentMapper">
 	<insert id="saveLandDocument" parameterType="LandDocument">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM cadocument WHERE zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM landdocument WHERE zactive='1' AND zid=#{zid}
 		</selectKey>
 		
-		INSERT INTO cadocument
+		INSERT INTO landdocument
 		(
 			xdoc,
 			xrow,
@@ -53,7 +53,7 @@
 
 	<update id="updateLandDocument" parameterType="LandDocument">
 		UPDATE 
-			cadocument
+			landdocument
 		SET
 			xperson=#{xperson, jdbcType=VARCHAR},
 			xsurveyor=#{xsurveyor, jdbcType=VARCHAR},
@@ -80,7 +80,7 @@
 		SELECT 
 			* 
 		FROM 
-			cadocument 
+			landdocument 
 		WHERE 
 			zid=#{zid}
 			AND zactive='1'
@@ -92,7 +92,7 @@
 		SELECT 
 			* 
 		FROM 
-			cadocument 
+			landdocument 
 		WHERE 
 			zid=#{zid} 
 			AND xdoc=#{xdoc}
@@ -102,7 +102,7 @@
 		SELECT 
 			* 
 		FROM 
-			cadocument 
+			landdocument 
 		WHERE 
 			zid=#{zid} 
 			AND xperson=#{xperson}
@@ -112,7 +112,7 @@
 		SELECT 
 			* 
 		FROM 
-			cadocument 
+			landdocument 
 		WHERE 
 			zid=#{zid} 
 			AND xsurveyor=#{xsurveyor}
@@ -122,29 +122,29 @@
 		SELECT 
 			* 
 		FROM 
-			cadocument 
+			landdocument 
 		WHERE 
 			zid=#{zid} 
 			AND xland=#{xland}
 	</select>
 	
 	<select id="findLandPersonDocumentByXpersonAndXrow" resultType="LandDocument">
-		SELECT * FROM cadocument WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM landdocument WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandSurveyorDocumentBySurveyorAndXrow" resultType="LandDocument">
-		SELECT * FROM cadocument WHERE xsurveyor=#{xsurveyor} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM landdocument WHERE xsurveyor=#{xsurveyor} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandLandDocumentByLandAndXrow" resultType="LandDocument">
-		SELECT * FROM cadocument WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM landdocument WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="searchServeyorId" resultType="LandSurveyor">
-		SELECT xsurveyor FROM casurveyor WHERE (UPPER(xsurveyor) LIKE '%' || #{xsurveyor} || '%') AND zid=#{zid} AND zactive='1'
+		SELECT xsurveyor FROM landsurveyor WHERE (UPPER(xsurveyor) LIKE '%' || #{xsurveyor} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<delete id="deleteDetail" parameterType="LandDocument">
-		DELETE FROM cadocument WHERE xrow=#{xrow} AND xdoc=#{xdoc} AND zactive='1' AND zid=#{zid}
+		DELETE FROM landdocument WHERE xrow=#{xrow} AND xdoc=#{xdoc} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

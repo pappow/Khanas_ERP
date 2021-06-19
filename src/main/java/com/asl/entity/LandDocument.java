@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "cadocument")
+@Table(name = "landdocument")
 @IdClass(LandDocumentPK.class)
 @EqualsAndHashCode(of = { "zid","xdoc","xrow"}, callSuper = false)
 public class LandDocument extends AbstractModel<String>{

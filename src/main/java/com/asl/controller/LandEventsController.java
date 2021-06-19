@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/landcomevent")
-public class ComEventController extends ASLAbstractController{
-
+@RequestMapping("/landevents")
+public class LandEventsController extends ASLAbstractController{
+	
 	@GetMapping
-	public String loadLandComEvet() {
+	public String loadLandEventsPage() {
 		
-		return "pages/land/landcomevent";
+		
+		return "pages/land/landevents";
 	}
+
 }

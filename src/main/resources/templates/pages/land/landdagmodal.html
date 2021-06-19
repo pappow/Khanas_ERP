@@ -29,7 +29,7 @@
 									<div class="col-md-6">
 
 										<div class="form-group" >
-											<label class="control-label col-md-4" for="xland">Land Id:</label>
+											<label class="control-label col-md-4" for="xland">Land:</label>
 											<div class="col-md-7">
 												<input type="hidden" class="form-control" th:field="*{xland}"/>
 												<input type="text" class="form-control" th:value="*{xland}" disabled="disabled" />
@@ -37,7 +37,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xdagtype"> Dag Type:</label>
+											<label class="control-label col-md-4" for="xdagtype">Type:</label>
 											<div class="col-md-7">
 												<select class="form-control" th:field="*{xdagtype}">
 													<option th:each="d : ${dagTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
@@ -57,7 +57,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xtype">In/Out:</label>
+											<label class="control-label col-md-3" for="xtype">Land Type:</label>
 											<div class="col-md-7">
 												<select class="form-control" th:field="*{xtype}">
 													<option th:value="None"></option>
@@ -74,7 +74,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xunit">Land Unit:</label>
+											<label class="control-label col-md-3" for="xunit">Unit:</label>
 											<div class="col-md-7">
 												<select class="form-control" th:field="*{xunit}">
 													<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>

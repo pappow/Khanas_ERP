@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "casurveyor")
+@Table(name = "landsurveyor")
 @IdClass(LandSurveyorPK.class)
 @EqualsAndHashCode(of = { "zid", "xsurveyor" }, callSuper = false)
 public class LandSurveyor extends AbstractModel<String> {
