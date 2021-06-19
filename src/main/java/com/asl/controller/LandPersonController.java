@@ -396,7 +396,13 @@ public class LandPersonController extends ASLAbstractController {
 				extension = files[0].getOriginalFilename().substring(j + 1);
 			}
 
-			String fileName = UUID.randomUUID() + files[0].getOriginalFilename()+ "." + extension;
+			//Split Text
+			 String[] a = files[0].getOriginalFilename().split("\\.");
+			 String part1 = a[0];
+			 System.out.println("The File Name Is: "+part1);
+			 //End split
+			
+			String fileName = UUID.randomUUID() + "_" + part1 + "." + extension;
 			log.debug("File name is now: {}", fileName);
 
 			try {

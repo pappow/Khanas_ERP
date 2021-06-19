@@ -91,22 +91,22 @@
 															</div>
 															
 															<div class="form-group" th:if="${#strings.isEmpty(survey.xland)}">
-																<label class="control-label col-md-4" for="xperson">Surveyor ID </label>
+																<label class="control-label col-md-4" for="xsurveyor">Surveyor ID </label>
 																<div class="col-sm-8">
 																	<input 	type="text" 
 																			class="form-control searchsuggest" 
 																			placeholder="Search..." 
-																			th:value="${survey.xperson}" 
+																			th:value="${survey.xsurveyor}" 
 																			th:attr="search-url='search/landSur'"/>
-																	<input type="hidden" id="search-val" th:field="*{xperson}"/>
-																	<input type="hidden" id="search-des" th:value="*{xperson}"/>
+																	<input type="hidden" id="search-val" th:field="*{xsurveyor}"/>
+																	<input type="hidden" id="search-des" th:value="*{xsurveyor}"/>
 																</div>
 															</div>
 															<div class="form-group" th:if="${not #strings.isEmpty(survey.xland)}">
 																<label class="control-label col-md-4" for="xsurveyor">Surveyor ID </label>
 																<div class="col-md-8">
-																	<input type="hidden" class="form-control" th:field="*{xperson}"/>
-																	<input type="text" class="form-control" th:value="*{xperson}" disabled="disabled"/>
+																	<input type="hidden" class="form-control" th:field="*{xsurveyor}"/>
+																	<input type="text" class="form-control" th:value="*{xsurveyor}" disabled="disabled"/>
 																</div>
 															</div>
 															<div class="form-group datepicker">

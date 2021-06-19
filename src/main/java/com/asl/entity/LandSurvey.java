@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "landsurvey")
 @IdClass(LandSurveyPK.class)
-@EqualsAndHashCode(of = { "zid", "xland","xrow","xperson"}, callSuper = false)
+@EqualsAndHashCode(of = { "zid", "xland","xrow"}, callSuper = false)
 public class LandSurvey extends AbstractModel<String>{
 	
 	private static final long serialVersionUID = -3036589229579591189L;
@@ -39,10 +39,8 @@ public class LandSurvey extends AbstractModel<String>{
 	@Column(name = "xrow")
 	private int xrow;
 
-	@Id
-	@Basic(optional = false)
-	@Column(name = "xperson")
-	private String xperson;
+	@Column(name = "xsurveyor")
+	private String xsurveyor;
 	
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)

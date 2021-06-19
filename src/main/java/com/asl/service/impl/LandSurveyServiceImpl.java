@@ -56,9 +56,9 @@ public class LandSurveyServiceImpl extends AbstractGenericService implements Lan
 	}
 	
 	@Override
-	public LandSurvey findLandSurveyByXlandAndXperson(String xland, String xperson) {
-		if(StringUtils.isBlank(xland) || StringUtils.isBlank(xperson)) return null;
-		return landSurveyMapper.findLandSurveyByXlandAndXperson(xland, xperson, sessionManager.getBusinessId());
+	public LandSurvey findLandSurveyByXlandAndXsurveyor(String xland, String xsurveyor) {
+		if(StringUtils.isBlank(xland) || StringUtils.isBlank(xsurveyor)) return null;
+		return landSurveyMapper.findLandSurveyByXlandAndXsurveyor(xland, xsurveyor, sessionManager.getBusinessId());
 	}
 	
 	@Override
