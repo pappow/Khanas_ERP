@@ -110,9 +110,9 @@
 	
 	<insert id="savePersonEducation" parameterType="LandEducation">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM landeducation WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM caeducation WHERE xperson=#{xperson} AND zactive='1' AND zid=#{zid}
 		</selectKey>
-		INSERT INTO landeducation
+		INSERT INTO caeducation
 		(
 			xperson,
 			xrow,
@@ -154,7 +154,7 @@
 	
 	<update id="updatePersonEducation" parameterType="LandEducation">
 		UPDATE 
-			landeducation
+			caeducation
 		SET
 			xyear=#{xyear, jdbcType=VARCHAR},
 			xexam=#{xexam, jdbcType=VARCHAR},
@@ -176,22 +176,22 @@
 	</update>
 	
 	<select id="getAllPersonEducation" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE zid=#{zid}  AND zactive='1' order by ztime desc
+		SELECT * FROM caeducation WHERE zid=#{zid}  AND zactive='1' order by ztime desc
 	</select>
 
 	<select id="findByPersonEducation" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM caeducation WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandEducationdetailByXpersonAndXrow" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM caeducation WHERE xperson=#{xperson} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findLandEducationByXpersonAndXexam" resultType="LandEducation">
-		SELECT * FROM landeducation WHERE xperson=#{xperson} AND xexam=#{xexam} AND zid=#{zid} AND zactive='1' ORDER BY xexam DESC
+		SELECT * FROM caeducation WHERE xperson=#{xperson} AND xexam=#{xexam} AND zid=#{zid} AND zactive='1' ORDER BY xexam DESC
 	</select>
 	
 	<delete id="deleteDetail" parameterType="LandEducation">
-		DELETE FROM landeducation WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+		DELETE FROM caeducation WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

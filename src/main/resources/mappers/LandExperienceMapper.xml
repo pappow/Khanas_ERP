@@ -5,9 +5,9 @@
 
 	<insert id="saveExPerson" parameterType="LandExperience">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM landexperience WHERE zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM caexperience WHERE zactive='1' AND zid=#{zid}
 		</selectKey>
-		INSERT INTO landexperience
+		INSERT INTO caexperience
 		(
 			xperson,
 			xrow,
@@ -49,7 +49,7 @@
 	
 	<update id="updateExPerson" parameterType="LandExperience">
 		UPDATE 
-			landexperience
+			caexperience
 		SET
 			xname=#{xname, jdbcType=VARCHAR},
 			xduration=#{xduration, jdbcType=INTEGER},
@@ -75,7 +75,7 @@
 		SELECT 
 			* 
 		FROM 
-			landexperience 
+			caexperience 
 		WHERE 
 			zid=#{zid} 
 			AND zactive='1'
@@ -87,21 +87,21 @@
 		SELECT 
 			* 
 		FROM 
-			landexperience 
+			caexperience 
 		WHERE 
 			zid=#{zid} 
 			AND xperson=#{xperson}
 	</select>
 	
 	<select id="findByPersonExperience" resultType="LandExperience">
-		SELECT * FROM landexperience WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM caexperience WHERE xperson=#{xperson} AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="findByXpersonAndXrow" resultType="LandExperience">
 		SELECT 
 			* 
 		FROM 
-			landexperience 
+			caexperience 
 		WHERE 
 			zid=#{zid} 
 			AND xperson=#{xperson}
@@ -111,7 +111,7 @@
 		SELECT 
 			* 
 		FROM 
-			landexperience 
+			caexperience 
 		WHERE 
 			zid=#{zid} 
 			AND xperson=#{xperson}
@@ -119,6 +119,6 @@
 	</select>
 	
 	<delete id="deleteDetail" parameterType="LandExperience">
-		DELETE FROM landexperience WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
+		DELETE FROM caexperience WHERE xrow=#{xrow} AND xperson=#{xperson} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

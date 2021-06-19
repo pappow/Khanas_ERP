@@ -10,22 +10,20 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name="cacommittee")
-@IdClass(LandCommitteeInfoPK.class)
-@EqualsAndHashCode(of= {"zid", "xcommittee"}, callSuper = false)
+@Table(name = "caeventheader")
+@IdClass(LandComEventPK.class)
+@EqualsAndHashCode(of = { "zid", "xevent" }, callSuper = false)
+public class LandComEvent extends AbstractModel<String>{
 
-public class LandCommitteeInfo extends AbstractModel<String>{
-
-
-	private static final long serialVersionUID = 4109623688511970299L;
 	
+	private static final long serialVersionUID = -3121918395069610188L;
+
 	@Id
 	@Basic(optional=false)
 	@Column(name="zid")
@@ -33,33 +31,49 @@ public class LandCommitteeInfo extends AbstractModel<String>{
 
 	@Id
 	@Basic(optional=false)
-	@Column(name="xcommittee")
+	@Column(name="xevent")
+	private String xevent;
+
+	@Column(name = "xcommittee")
 	private String xcommittee;
 
-	@Column(name="xdate")
+	@Column(name = "xtype")
+	private String xtype;
+
+	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
 
-	@Column(name="xstartdate")
+	@Column(name = "xstartdate")
 	@Temporal(TemporalType.DATE)
 	private Date xstartdate;
 
-	@Column(name="xenddate")
+	@Column(name = "xenddate")
 	@Temporal(TemporalType.DATE)
 	private Date xenddate;
 
-	@Column(name="xstatus")
-	private String xstatus;
-
-	@Column(name="xnote ")
-	private String xnote;
+	@Column(name = "xstarttime")
+	private String xstarttime;
 	
-	@Transient
-	private boolean newData;
+	@Column(name = "xendtime")
+	private String xendtime;
+
+	@Column(name = "xagenda")
+	private String xagenda;
+
+	@Column(name = "xplace")
+	private String xplace;
+
+	@Column(name = "xlong")
+	private String xlong;
+
+	@Column(name = "xnote")
+	private String xnote;
 
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 
 	@Column(name = "xtrn")
 	private String xtrn;
+
 }

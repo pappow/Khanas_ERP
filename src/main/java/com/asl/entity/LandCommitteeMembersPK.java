@@ -12,6 +12,7 @@ public class LandCommitteeMembersPK implements Serializable{
 	
 	private String zid;
 	private String xcommittee;
-	private String xperson;
+	private int xrow;
+	
 
 }

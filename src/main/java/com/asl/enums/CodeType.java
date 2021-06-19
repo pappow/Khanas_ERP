@@ -1,3 +1,4 @@
+
 package com.asl.enums;
 
 /**
@@ -16,6 +17,8 @@ public enum CodeType {
 	CHEQUE_STATUS("Cheque Status"),
 	COMMITEECONTRIBUTION_TYPE("Committtee Contribution Type"),
 	COMMITEEMEMBER_TYPE("Committtee Member Unit"),
+	EVENTCOMMITEE_TYPE("Event Committtee Type"),
+	OTHEREVENT_TYPE("Other Event Type"),
 
 	DAG_TYPE("Dag Type"),
 	DISCOUNT_TYPE("Discount Type"),
@@ -56,6 +59,7 @@ public enum CodeType {
 	PURCHASE_ORDER_STATUS("Purchase Order Status"),
 	PAYMENT_TYPE("Payment Type"),
 	PAYMENT_MODE("Payment Mode"),
+	PRIORITY_TYPE("Priority Type"),
 
 	REQUISITION_ORDER_STATUS("Requisition Order Status"),
 	RELIGION("Religion"),

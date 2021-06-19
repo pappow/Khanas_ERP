@@ -7,7 +7,7 @@
 		<selectKey keyProperty="xsurveyor" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO landsurveyor
+		INSERT INTO casurveyor
 		(
 			xsurveyor,
 			xname,
@@ -57,7 +57,7 @@
 
 	<update id="updateLandSurveyor" parameterType="LandSurveyor">
 		UPDATE 
-			landsurveyor
+			casurveyor
 		SET
 			xname=#{xname, jdbcType=VARCHAR},
 			xfname=#{xfname, jdbcType=VARCHAR},
@@ -86,7 +86,7 @@
 		SELECT 
 			* 
 		FROM 
-			landsurveyor 
+			casurveyor 
 		WHERE 
 			zid=#{zid} 
 			AND zactive ='1'
@@ -99,7 +99,7 @@
 		SELECT 
 			* 
 		FROM 
-			landsurveyor 
+			casurveyor 
 		WHERE 
 			zid=#{zid} 
 			AND xsurveyor=#{xsurveyor}

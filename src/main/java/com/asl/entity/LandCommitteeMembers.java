@@ -15,9 +15,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name="landcommitteemembers")
+@Table(name="cacommitteemember")
 @IdClass(LandCommitteeMembersPK.class)
-@EqualsAndHashCode(of= {"zid", "xcommittee", "xperson"}, callSuper = false)
+@EqualsAndHashCode(of= {"zid", "xcommittee", "xrow"}, callSuper = false)
 public class LandCommitteeMembers extends AbstractModel<String>{
 
 	
@@ -35,8 +35,12 @@ public class LandCommitteeMembers extends AbstractModel<String>{
 	private String xcommittee;
 	
 	@Id
-	@Basic(optional=false)
-	@Column(name="xperson")
+	@Basic(optional = false)
+	@Column(name = "xrow")
+	private int xrow;
+
+	
+	@Column(name = "xperson")
 	private String xperson;
 	
 	@Column(name="xmembertype")

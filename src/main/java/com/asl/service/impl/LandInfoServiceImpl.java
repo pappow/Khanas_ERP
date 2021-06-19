@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.LandDagDetails;
+import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandPerson;
@@ -156,6 +157,51 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 	public LandDagDetails findlandDagDetailsByXlandAndXrow(String xland, int xrow) {
 		if(StringUtils.isBlank(xland) || xrow == 0) return null;
 		return landinfoMapper.findlandDagDetailsByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
+	public long save(LandEvents landEvents) {
+		if (landEvents == null)
+			return 0;
+		landEvents.setZid(sessionManager.getBusinessId());
+		landEvents.setZauserid(getAuditUser());
+		return landinfoMapper.saveLandEvents(landEvents);
+	}
+
+	@Transactional
+	@Override
+	public long update(LandEvents landEvents) {
+		if (landEvents == null)
+			return 0;
+		landEvents.setZid(sessionManager.getBusinessId());
+		landEvents.setZauserid(getAuditUser());
+		return landinfoMapper.updateLandEvents(landEvents);
+	}
+
+	@Override
+	public long deleteLandEvents(LandEvents landEvents) {
+		if(landEvents == null) return 0;
+		long count = landinfoMapper.deleteLandEvents(landEvents);
+		return count;
+	}
+
+	@Override
+	public List<LandEvents> getAllLandEvents() {
+		return landinfoMapper.getAllLandEvents(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<LandEvents> findByLandEvents(String xland) {
+		if (StringUtils.isBlank(xland))
+			return null;
+		return landinfoMapper.findByLandEvents(xland, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public LandEvents findLandEventsByXlandAndXrow(String xland, int xrow) {
+		if(StringUtils.isBlank(xland) || xrow == 0) return null;
+		return landinfoMapper.findLandEventsByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
 	}
 
 	
