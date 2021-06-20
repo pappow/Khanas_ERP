@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asl.mapper.OpreqMapper">
+
+	<insert id="saveOpreqheader" parameterType="Opreqheader">
+		<selectKey keyProperty="xdoreqnum" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO opreqheader
+		(
+			xdoreqnum,
+			xdate,
+			xstatusreq,
+			xnote,
+			xwh,
+			xqotnum,
+			xtornum,
+			xtype,
+			xtypetrn,
+			xtrn,
+			xstatus,
+			xtwh,
+			xcus,
+			xfwh,
+			xsignreject,
+			xdatereject,
+			xreqtype,
+			xpreparer,
+			xpreparertime,
+			xapreparer,
+			xapreparertime,
+
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xdoreqnum},
+			#{xdate, jdbcType=DATE},
+			#{xstatusreq, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xwh, jdbcType=VARCHAR},
+			#{xqotnum, jdbcType=VARCHAR},
+			#{xtornum, jdbcType=VARCHAR},
+			#{xtype, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+			#{xstatus, jdbcType=VARCHAR},
+			#{xtwh, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
+			#{xfwh, jdbcType=VARCHAR},
+			#{xsignreject, jdbcType=VARCHAR},
+			#{xdatereject, jdbcType=VARCHAR},
+			#{xreqtype, jdbcType=VARCHAR},
+			#{xpreparer, jdbcType=VARCHAR},
+			#{xpreparertime, jdbcType=TIMESTAMP},
+			#{xapreparer, jdbcType=VARCHAR},
+			#{xapreparertime, jdbcType=TIMESTAMP},
+
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updateOpreqheader" parameterType="Opreqheader">
+		UPDATE
+			opreqheader
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xstatusreq=#{xstatusreq, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xwh=#{xwh, jdbcType=VARCHAR},
+			xqotnum=#{xqotnum, jdbcType=VARCHAR},
+			xtornum=#{xtornum, jdbcType=VARCHAR},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xtwh=#{xtwh, jdbcType=VARCHAR},
+			xcus=#{xcus, jdbcType=VARCHAR},
+			xfwh=#{xfwh, jdbcType=VARCHAR},
+			xsignreject=#{xsignreject, jdbcType=VARCHAR},
+			xdatereject=#{xdatereject, jdbcType=VARCHAR},
+			xreqtype=#{xreqtype, jdbcType=VARCHAR},
+			xpreparer=#{xpreparer, jdbcType=VARCHAR},
+			xpreparertime=#{xpreparertime, jdbcType=TIMESTAMP},
+			xapreparer=#{xapreparer, jdbcType=VARCHAR},
+			xapreparertime=#{xapreparertime, jdbcType=TIMESTAMP},
+
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xdoreqnum=#{xdoreqnum, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="saveOpreqdetail" parameterType="Opreqdetail">
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM opreqdetail WHERE xdoreqnum=#{xdoreqnum} AND zid=#{zid}
+		</selectKey>
+		INSERT INTO opreqdetail
+		(
+			xdoreqnum,
+			xrow,
+			xitem,
+			xnote,
+			xqtyord,
+			xrate,
+			xunitpur,
+			xlineamt,
+			xitemdesc,
+			xcatitem,
+			xgitem,
+
+			zid,
+			zauserid,
+			zuuserid,
+			zaip,
+			zuip,
+			zactive,
+			ztime,
+			zutime
+		)
+		VALUES
+		(
+			#{xdoreqnum, jdbcType=VARCHAR},
+			#{xrow, jdbcType=INTEGER},
+			#{xitem, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xqtyord, jdbcType=DECIMAL},
+			#{xrate, jdbcType=DECIMAL},
+			#{xunitpur, jdbcType=VARCHAR},
+			#{xlineamt, jdbcType=DECIMAL},
+			#{xitemdesc, jdbcType=VARCHAR},
+			#{xcatitem, jdbcType=VARCHAR},
+			#{xgitem, jdbcType=VARCHAR},
+
+			#{zid, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zuuserid, jdbcType=VARCHAR},
+			#{zaip, jdbcType=VARCHAR},
+			#{zuip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP}
+		) 
+	</insert>
+
+	<update id="updateOpreqdetail" parameterType="Opreqdetail">
+		UPDATE 
+			opreqdetail
+		SET
+			xitem=#{xitem, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xqtyord=#{xqtyord, jdbcType=DECIMAL},
+			xrate=#{xrate, jdbcType=DECIMAL},
+			xunitpur=#{xunitpur, jdbcType=VARCHAR},
+			xlineamt=#{xlineamt, jdbcType=DECIMAL},
+			xitemdesc=#{xitemdesc, jdbcType=VARCHAR},
+			xcatitem=#{xcatitem, jdbcType=VARCHAR},
+			xgitem=#{xgitem, jdbcType=VARCHAR},
+
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zaip=#{zaip, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
+		WHERE
+			xdoreqnum=#{xdoreqnum, jdbcType=VARCHAR},
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+</mapper>
