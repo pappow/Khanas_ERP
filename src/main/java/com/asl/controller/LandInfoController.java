@@ -26,12 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandDocument;
-<<<<<<< Upstream, based on origin/develop
 import com.asl.entity.LandSurvey;
-=======
-import com.asl.entity.LandEducation;
 import com.asl.entity.LandEvents;
->>>>>>> d4b4a2a Lia(19 June)
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.enums.CodeType;

@@ -350,55 +350,45 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
-					<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
-					<div class="section-header sectionbartoggle">
-						<h1>Owner Details of <span th:text="${info.xland}"></span> </h1>
-						
-					</div>
-				<div class="section-body">
-					<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
-						<thead>
-							<tr>
-								<th>S/N</th>
-								<th>Person ID</th>
-								<th>Land Type</th>
-								<th>Land Amount</th>
-								<th>SL#</th>
-								<th>Person Id</th>
-								<th>Owner Type</th>
-								<th>Land Amt</th>
-								<th>Land Unit</th>
-								<th>Note </th>
-								<th data-nosort="Y" style="text-align: right;">
-									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/new/show', data-target-modal='ownermodal'"><i class="fas fa-plus"></i></button>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="d, n : ${lpelist}">
-								<td th:text="${n.count}"></td>
-								<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
-								<td th:text="${d.xtype}"></td>
-								<td th:text="${d.xqty}"></td>
-								<td th:text="${d.xunit}"></td>
-								<td th:text="${d.xnote}"></td>
-								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/show', data-target-modal='ownermodal'"><i class="fas fa-edit"></i></button>
-									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-						<tr>
+				<div class="col-md-12">
+				<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+				<div class="section-header sectionbartoggle">
+					<h1>Owner Details of <span th:text="${info.xland}"></span> </h1>
 					
-						
-						</tr>
-						</tfoot>
-					</table>
 				</div>
-			</section>
-		</div>
+			<div class="section-body">
+				<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Person Id</th>
+							<th>Owner Type</th>
+							<th>Land Amt</th>
+							<th>Land Unit</th>
+							<th>Note </th>
+							<th data-nosort="Y" style="text-align: right;">
+								<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/new/show', data-target-modal='ownermodal'"><i class="fas fa-plus"></i></button>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="d, n : ${lpelist}">
+							<td th:text="${n.count}"></td>
+							<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
+							<td th:text="${d.xtype}"></td>
+							<td th:text="${d.xqty}"></td>
+							<td th:text="${d.xunit}"></td>
+							<td th:text="${d.xnote}"></td>
+							<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+								<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/show', data-target-modal='ownermodal'"><i class="fas fa-edit"></i></button>
+								<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
 		
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
@@ -435,12 +425,6 @@
 								</td>
 							</tr>
 						</tbody>
-						<tfoot>
-						<tr>
-						
-						
-						</tr>
-						</tfoot>
 					</table>
 				</div>
 			</section>
@@ -484,17 +468,11 @@
 				</div>
 			</section>
 		</div>		
-			<div class="col-md-12">
-			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
-				<div class="section-header sectionbartoggle">
-					<h1>Survey Details For (<span th:text="${info.xland}"></span>)</h1>
-		</div>
 
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
 					<h1> Activities of <span th:text="${info.xland}"></span> </h1>
-					
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="landeventstable" th:fragment="landeventstable">
@@ -525,16 +503,15 @@
 								</td>
 							</tr>
 						</tbody>
-						<tfoot>
-						<tr>
-						
-						
-						</tr>
-						</tfoot>
 					</table>
 				</div>
 			</section>
 		</div>
+
+			<div class="col-md-12">
+				<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+				<div class="section-header sectionbartoggle">
+					<h1>Survey Details For (<span th:text="${info.xland}"></span>)</h1>
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="surveytable" th:fragment="surveytable">
@@ -566,10 +543,11 @@
 					</table>
 				</div>
 			</section>
-		</div>		
+			</div>		
 		</div>
 	</div>
 </div>
+
 
 
 		<!-- Modal -->
