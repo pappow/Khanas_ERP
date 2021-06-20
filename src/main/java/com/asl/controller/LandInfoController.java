@@ -194,10 +194,10 @@ public class LandInfoController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		LandOwner exist = landInfoService.findByXlandAndXperson(landOwner.getXland(), landOwner.getXperson());
-
+		LandOwner exist = landInfoService.findLandOwnerByXlandAndXrow(landOwner.getXland(), landOwner.getXrow());
+		LandOwner existing = landInfoService.findByXlandAndXperson(landOwner.getXland(), landOwner.getXperson());
 		// if new data
-		if(landOwner.getXrow() == 0 && exist != null) {
+		if(landOwner.getXrow() == 0 && existing != null) {
 			responseHelper.setErrorStatusAndMessage("Land " + landOwner.getXland() + " with person " + landOwner.getXperson() + " data already exist in this system");
 			return responseHelper.getResponse();
 		}

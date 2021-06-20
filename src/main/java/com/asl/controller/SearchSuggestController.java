@@ -34,6 +34,7 @@ import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 
 import com.asl.service.LandDocumentService;
+import com.asl.service.LandInfoService;
 import com.asl.service.LandMemberInfoService;
 import com.asl.service.LandOwnerService;
 import com.asl.service.LandPersonService;
@@ -76,6 +77,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandMemberInfoService landMemberInfoService;
 
 	@Autowired private LandCommitteeInfoService landCommitteeInfoService;
+	@Autowired private LandInfoService  landInfoService;
 
 
 	@GetMapping("/staff/{hint}")
@@ -119,7 +121,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	public @ResponseBody List<SearchSuggestResult> getLandId(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		
-		List<LandInfo> LandList = landOwnerService.searchLandId(hint);
+		List<LandInfo> LandList = landInfoService.searchLandId(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXland(),c.getXland())));
 		return list;

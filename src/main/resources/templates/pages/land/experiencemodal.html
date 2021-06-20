@@ -29,26 +29,26 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xperson">Personal ID: </label>
+											<label class="control-label col-md-4" for="xperson">Person ID </label>
 											<div class="col-md-7">
 												<input type="text" class="form-control" th:value="*{xperson}" disabled="disabled"/>
 											</div>
 										</div>
 
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xname">Title: </label>
+											<label class="control-label col-md-4" for="xname">Title </label>
 											<div class="col-md-7">
 												<input type="text" class="form-control" th:field="*{xname}"/>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xduration">Duration: </label>
+											<label class="control-label col-md-4" for="xduration">Duration </label>
 											<div class="col-md-7">
 												<input type="number" min="0" max="30" title="Select Experience Duration" class="form-control" th:field="*{xduration}" maxlength="100"/>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="control-label col-md-4" for="xdesignation">Designation: </label>
+											<label class="control-label col-md-4" for="xdesignation">Designation </label>
 											<div class="col-md-7">
 												<input type="text" title="Write Your Designation" class="form-control" th:field="*{xdesignation}" maxlength="100"/>
 											</div>
@@ -56,7 +56,7 @@
 										</div>
 										<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xtypetrn">Transaction Type: </label>
+											<label class="control-label col-md-3" for="xtypetrn">Transaction Type</label>
 											<div class="col-md-7">
 												<select class="form-control" th:field="*{xtypetrn}">
 													<option th:each="d : ${ett}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
@@ -65,7 +65,7 @@
 										</div>
 										
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xtype">Type: </label>
+											<label class="control-label col-md-3" for="xtype">Type </label>
 											<div class="col-md-7">
 												<select class="form-control" th:field="*{xtype}">
 													<option th:each="t : ${et}" th:value="${t.xcode}" th:text="${t.xcode}"></option>
@@ -74,7 +74,7 @@
 										</div>
 										
 										<div class="form-group">
-											<label class="control-label col-md-3" for="xnote">Note: </label>
+											<label class="control-label col-md-3" for="xnote">Note</label>
 											<div class="col-md-7">
 												<textarea class="form-control" title="Write Something About You"  th:field="*{xnote}" rows="3" placeholder="Note"></textarea>
 											</div>

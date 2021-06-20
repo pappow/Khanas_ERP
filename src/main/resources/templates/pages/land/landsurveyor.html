@@ -76,7 +76,7 @@
 													<div class="row">
 														<div class="col-md-6">
 															<div class="form-group" th:if="${#strings.isEmpty(surveyor.xsurveyor)}">
-																<label class="control-label col-md-4" for="xtrn">Prefix: </label>
+																<label class="control-label col-md-4" for="xtrn">Surveyor ID</label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xtrn}">
 																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
@@ -90,26 +90,26 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xname">Name: </label>
+																<label class="control-label col-md-4" for="xname">Surveyor Name </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xname}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xfname">Father's Name: </label>
+																<label class="control-label col-md-4" for="xfname">Father's Name </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xfname}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xmname">Mother's Name: </label>
+																<label class="control-label col-md-4" for="xmname">Mother's Name </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xmname}" maxlength="100"/>
 																</div>
 															</div>
 															
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="xdob">Date of Birth: </label>
+																<label class="control-label col-md-4" for="xdob">Date of Birth</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -124,21 +124,21 @@
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xoccupation">Occupation: </label>
+																<label class="control-label col-md-4" for="xoccupation">Occupation </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xoccupation}" maxlength="100"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xcontact">Contact No: </label>
+																<label class="control-label col-md-4" for="xcontact">Contact No. </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xcontact}" maxlength="100"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xemail">Email: </label>
+																<label class="control-label col-md-4" for="xemail">Email </label>
 																<div class="col-md-8">
 																	<input type="email" class="form-control" th:field="*{xemail}" maxlength="100" />
 																</div>
@@ -146,25 +146,25 @@
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xphone">Phone No: </label>
+																<label class="control-label col-md-4" for="xphone">Phone No.</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xphone}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xmadd">Mailing Address: </label>
+																<label class="control-label col-md-4" for="xmadd">Mailing Address </label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xmadd}" placeholder="Mailing Address here.."></textarea>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xpadd">Permanent Address: </label>
+																<label class="control-label col-md-4" for="xpadd">Permanent Address </label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xpadd}" placeholder="Permanent Address here.."></textarea>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xnote">Note: </label>
+																<label class="control-label col-md-4" for="xnote">Note </label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xnote}" placeholder="Note here.."></textarea>
 																</div>
@@ -183,15 +183,15 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1> All Surveyors</h1>
+										<h1> All Surveyor Info</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>ID</th>
-														<th>Name</th>
+														<th>Surveyor ID</th>
+														<th>Surveyor Name</th>
 														<th>Occupation</th>
 														<th>Email</th>
 													</tr>
@@ -214,13 +214,13 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(surveyor.xsurveyor)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Document Details for (<span th:text="${surveyor.xsurveyor}"></span>)</h1>
+								<h1>Document Details of<span th:text="${surveyor.xsurveyor}"></span></h1>
 							</div>
 							<div class="section-body" style="overflow-y:scroll;height:200px;">
 								<table class="table table-striped table-bordered normal-table" id="surveyordocumenttable" th:fragment="surveyordocumenttable">
 									<thead>
 										<tr>
-											<th>S/N</th>
+											<th>SN#</th>
 											<th>Document ID</th>
 											<th>Document Type</th>
 											<th>Title</th>

@@ -28,6 +28,7 @@ public enum CodeType {
 	EMPLOYEE_DESIGNATION("Employee Designation"),
 	EMPLOYEE_STATUS("Employee Status"),
 	EMPLOYEE_TYPE("Employment Type"),
+	EVENTMEMBER_TYPE("Event Member Type"),
 
 	GRN_STATUS("GRN Status"),
 	GRN_RETURN_STATUS("GRN Return Status"),

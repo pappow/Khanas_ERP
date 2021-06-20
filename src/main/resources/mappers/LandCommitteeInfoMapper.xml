@@ -11,8 +11,10 @@
 		(
 			xcommittee,
 			xdate,
+			xelecdate,
 			xstartdate,
 			xenddate,
+			xexpdate,
 			xstatus,
 			xnote,
 			xtypetrn,
@@ -28,8 +30,10 @@
 		(
 			#{xcommittee},
 			#{xdate,jdbcType=DATE},
+			#{xelecdate,jdbcType=DATE},
 			#{xstartdate,jdbcType=DATE},
 			#{xenddate,jdbcType=DATE},
+			#{xexpdate,jdbcType=DATE},
 			#{xstatus, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
@@ -48,8 +52,10 @@
 			cacommittee
 		SET
 			xdate=#{xdate,jdbcType=DATE},
+			xelecdate=#{xelecdate,jdbcType=DATE},
 			xstartdate=#{xstartdate,jdbcType=DATE},
 			xenddate=#{xenddate,jdbcType=DATE},
+			xexpdate#{xexpdate,jdbcType=DATE},
 			xstatus=#{xstatus, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},

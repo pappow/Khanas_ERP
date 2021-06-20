@@ -128,6 +128,10 @@
 			AND xland=#{xland}
 	</select>
 	
+	<select id="searchLandId" resultType="LandInfo">
+		SELECT xland FROM calandinfo WHERE (UPPER(xland) LIKE '%' || #{xland} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+	
 	
 	<insert id="saveLandOwner" parameterType="LandOwner">
 	

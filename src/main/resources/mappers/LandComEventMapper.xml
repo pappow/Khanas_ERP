@@ -119,4 +119,91 @@
 			zid=#{zid} 
 			AND xevent=#{xevent}
 	</select>
+	
+	<!-- for event members -->
+	<insert id="saveLandEventsMember" parameterType="LandEventsMember">
+	
+	    <selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM caeventmember WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO caeventmember
+		(
+			xrow,
+			xevent,
+			xperson,
+			xmembertype,
+			xname,
+			xnote, 
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			
+			#{xrow},
+			#{xevent, jdbcType=VARCHAR},
+			#{xperson, jdbcType=VARCHAR},
+			#{xmembertype, jdbcType=VARCHAR},
+			#{xname, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLandEventsMember" parameterType="LandEventsMember">
+		UPDATE 
+			caeventmember
+		SET
+			xperson=#{xperson, jdbcType=VARCHAR},
+			xmembertype=#{xmembertype, jdbcType=VARCHAR},
+			xname=#{xname, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xevent=#{xevent, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllLandEventsMember" resultType="LandEventsMember">
+		SELECT 
+			* 
+		FROM 
+			caeventmember 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByLandEventsMember" resultType="LandEventsMember">
+		SELECT * FROM caeventmember WHERE xevent=#{xevent} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findlandLandEventsMemberByXeventAndXrow" resultType="LandEventsMember">
+		SELECT * FROM caeventmember WHERE xevent=#{xevent} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findByXeventAndXperson" resultType="LandEventsMember">
+		SELECT * FROM caeventmember WHERE zid=#{zid}  AND xevent=#{xevent} AND xperson=#{xperson}
+	</select>
+	
+	<delete id="deleteLandEventsMember" parameterType="LandEventsMember">
+		DELETE FROM caeventmember WHERE xrow=#{xrow} AND xevent=#{xevent} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>	
