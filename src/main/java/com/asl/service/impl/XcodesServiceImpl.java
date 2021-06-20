@@ -25,7 +25,7 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public long save(Xcodes xcodes) {
 		if (xcodes == null || StringUtils.isBlank(xcodes.getXtype()) || StringUtils.isBlank(xcodes.getXcode())) return 0;
-		xcodes.setZid(getBusinessId());
+		xcodes.setZid(sessionManager.getBusinessId());
 		xcodes.setZauserid(getAuditUser());
 		return xcodesMapper.saveXcodes(xcodes);
 	}
@@ -33,7 +33,7 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public long update(Xcodes xcodes) {
 		if (xcodes == null || StringUtils.isBlank(xcodes.getXtype()) || StringUtils.isBlank(xcodes.getXcode())) return 0;
-		xcodes.setZid(getBusinessId());
+		xcodes.setZid(sessionManager.getBusinessId());
 		xcodes.setZuuserid(getAuditUser());
 		return xcodesMapper.updateXcodes(xcodes);
 	}
@@ -45,7 +45,7 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 
 	@Override
 	public List<Xcodes> getAllXcodes(Boolean zactive) {
-		return xcodesMapper.getAllXcodes(getBusinessId(), zactive);
+		return xcodesMapper.getAllXcodes(sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public List<Xcodes> findByXtype(String xType, Boolean zactive) {
 		if (StringUtils.isBlank(xType)) return Collections.emptyList();
-		return xcodesMapper.findByXtype(xType, getBusinessId(), zactive);
+		return xcodesMapper.findByXtype(xType, sessionManager.getBusinessId(), zactive);
 	}
 
 
@@ -68,7 +68,7 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public List<Xcodes> findByXcode(String xCode, Boolean zactive) {
 		if (StringUtils.isBlank(xCode)) return Collections.emptyList();
-		return xcodesMapper.findByXcode(xCode, getBusinessId(), zactive);
+		return xcodesMapper.findByXcode(xCode, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
@@ -79,12 +79,12 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	@Override
 	public Xcodes findByXtypesAndXcodes(String xType, String xCodes, Boolean zactive) {
 		if (StringUtils.isBlank(xType) || StringUtils.isBlank(xCodes)) return null;
-		return xcodesMapper.findByXtypesAndXcodes(xType, xCodes, getBusinessId(), zactive);
+		return xcodesMapper.findByXtypesAndXcodes(xType, xCodes, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
 	public Xcodes getSeilingRecord(String direction) {
-		return xcodesMapper.getSeilingRecord(direction, getBusinessId());
+		return xcodesMapper.getSeilingRecord(direction, sessionManager.getBusinessId());
 	}
 
 	@Transactional

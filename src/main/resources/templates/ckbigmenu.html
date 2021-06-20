@@ -5,9 +5,9 @@
 			<li class="ckbigmenu-li">
 				<a th:href="@{/}">
 					<span class="ckbigmenu-icon" style="background: blue;">
-						<i class="fas fa-tachometer-alt"></i>
+						<i class="fas fa-home"></i>
 					</span>
-					<span class="ckbigmenu-text">Dashboard</span>
+					<span class="ckbigmenu-text">Home</span>
 				</a>
 			</li>
 			<li class="ckbigmenu-li" th:if="${isCentral and menuProfile.M0700 ne null and menuProfile.M0700.display}">
@@ -26,7 +26,7 @@
 					<span class="ckbigmenu-text">Logout</span>
 				</a>
 			</li>
-			<span th:if="${isDev or isKhanas or isTcc}">
+			<span th:if="${(isDev or isKhanas or isTcc) and not isBranch}">
 				<li class="ckbigmenu-li" th:if="${menuProfile.M0607 ne null and menuProfile.M0607.display}">
 					<a th:href="@{/inventory/stocklist}">
 						<span class="ckbigmenu-icon" style="background:  green;">
@@ -147,14 +147,14 @@
 					<span class="ckbigmenu-text" th:text="${menuProfile.M0101.screenprompt}">User & Profile</span>
 				</a>
 			</li>
-			<li class="ckbigmenu-li hidable-menu nodisplay">
+			<!-- <li class="ckbigmenu-li hidable-menu nodisplay">
 				<a th:href="@{/system/aslprocerror}">
 					<span class="ckbigmenu-icon" style="background: green;">
 						<i class="fas fa-bug"></i>
 					</span>
 					<span class="ckbigmenu-text">PROC Errors</span>
 				</a>
-			</li>
+			</li> -->
 		</ul>
 	</li>
 </ul>
