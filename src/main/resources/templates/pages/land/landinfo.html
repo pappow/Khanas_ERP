@@ -350,43 +350,44 @@
 							</div>
 						</div>
 					</div>
-				<div class="col-md-12">
-				<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
-				<div class="section-header sectionbartoggle">
-					<h1>Owner Details of <span th:text="${info.xland}"></span> </h1>
-					
-				</div>
-			<div class="section-body">
-				<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
-					<thead>
-						<tr>
-							<th>SL#</th>
-							<th>Person Id</th>
-							<th>Owner Type</th>
-							<th>Land Amt</th>
-							<th>Land Unit</th>
-							<th>Note </th>
-							<th data-nosort="Y" style="text-align: right;">
-								<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/new/show', data-target-modal='ownermodal'"><i class="fas fa-plus"></i></button>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="d, n : ${lpelist}">
-							<td th:text="${n.count}"></td>
-							<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
-							<td th:text="${d.xtype}"></td>
-							<td th:text="${d.xqty}"></td>
-							<td th:text="${d.xunit}"></td>
-							<td th:text="${d.xnote}"></td>
-							<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-								<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/show', data-target-modal='ownermodal'"><i class="fas fa-edit"></i></button>
-								<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+
+		<div class="col-md-12">
+			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
+			<div class="section-header sectionbartoggle">
+				<h1>Owner Details of <span th:text="${info.xland}"></span> </h1>
+						
 			</div>
+				<div class="section-body">
+					<table class="table table-striped table-bordered normal-table" id="ownertable" th:fragment="ownertable">
+						<thead>
+							<tr>
+								<th>SL#</th>
+								<th>Person Id</th>
+								<th>Owner Type</th>
+								<th>Land Amt</th>
+								<th>Land Unit</th>
+								<th>Note </th>
+								<th data-nosort="Y" style="text-align: right;">
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/new/show', data-target-modal='ownermodal'"><i class="fas fa-plus"></i></button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="d, n : ${lpelist}">
+								<td th:text="${n.count}"></td>
+								<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
+								<td th:text="${d.xtype}"></td>
+								<td th:text="${d.xqty}"></td>
+								<td th:text="${d.xunit}"></td>
+								<td th:text="${d.xnote}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/show', data-target-modal='ownermodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/owner/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 		</section>
 	</div>
 		
@@ -468,11 +469,12 @@
 				</div>
 			</section>
 		</div>		
-
+		
 		<div class="col-md-12">
 			<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
 					<h1> Activities of <span th:text="${info.xland}"></span> </h1>
+					
 				</div>
 				<div class="section-body">
 					<table class="table table-striped table-bordered normal-table" id="landeventstable" th:fragment="landeventstable">
@@ -548,15 +550,13 @@
 	</div>
 </div>
 
-
-
 		<!-- Modal -->
 		<div id="ownermodal-section"></div>
 		<div id="landdagmodal-section"></div>
 		<div id="landdocumentmodal-section"></div>
 		<div id="surveymodal-section"></div>
 		<div id="landeventsmodal-section"></div>
-
+		<div id="landeventsmodal-section"></div>
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 		

@@ -79,6 +79,7 @@
 
 	<select id="findLandSurveyByXlandAndXsurveyor" resultType="LandSurvey">
 		SELECT * FROM calanservey WHERE xland=#{xland} AND xsurveyor=#{xsurveyor} AND zid=#{zid} AND zactive='1
+
 	</select>
 	
 	<select id="findLandSurveyByXlandAndXperson" resultType="LandSurvey">

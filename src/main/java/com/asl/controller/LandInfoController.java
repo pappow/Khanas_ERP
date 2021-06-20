@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandDocument;
 import com.asl.entity.LandSurvey;
+import com.asl.entity.LandEducation;
 import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
@@ -509,6 +510,67 @@ public class LandInfoController extends ASLAbstractController {
 		}
 
 
+		@PostMapping("/landevents/save")
+		public @ResponseBody Map<String, Object> saveLandEvents(LandEvents landEvents) {
+			if (landEvents == null || StringUtils.isBlank(landEvents.getXland())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			// if existing
+			LandEvents exist = landInfoService.findLandEventsByXlandAndXrow(landEvents.getXland(), landEvents.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(landEvents, exist,"xland");
+				long count = landInfoService.update(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
+				responseHelper.setSuccessStatusAndMessage("Activity Details updated successfully");
+				return responseHelper.getResponse();
+			}
+
+			
+			// if new detail
+			long count = landInfoService.save(landEvents);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
+			responseHelper.setSuccessStatusAndMessage("Activity Details saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		@GetMapping("/landevents/{xland}")
+		public String reloadLandEventsTable(@PathVariable String xland, Model model) {
+			List<LandEvents> activityList = landInfoService.findByLandEvents(xland);
+			model.addAttribute("lelist", activityList);
+			model.addAttribute("info", landInfoService.findByLandInfo(xland));
+			return "pages/land/landinfo::landeventstable";
+		}
+		
+		//Delete
+		@PostMapping("{xland}/landevents/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteLandEvents(@PathVariable String xland, @PathVariable String xrow, Model model) {
+			LandEvents le = landInfoService.findLandEventsByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if (le == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = landInfoService.deleteLandEvents(le);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("landeventstable", "/landinfo/landevents/" + xland);
+			return responseHelper.getResponse();
+		}
+		
 	@GetMapping("/{xland}/survey/{xrow}/show")
 	public String loadLandSurveyModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
 		if("new".equalsIgnoreCase(xrow)) {
@@ -594,67 +656,6 @@ public class LandInfoController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 	
-
-		@PostMapping("/landevents/save")
-		public @ResponseBody Map<String, Object> saveLandEvents(LandEvents landEvents) {
-			if (landEvents == null || StringUtils.isBlank(landEvents.getXland())) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-			// if existing
-			LandEvents exist = landInfoService.findLandEventsByXlandAndXrow(landEvents.getXland(), landEvents.getXrow());
-			if (exist != null) {
-				BeanUtils.copyProperties(landEvents, exist,"xland");
-				long count = landInfoService.update(exist);
-				if (count == 0) {
-					responseHelper.setStatus(ResponseStatus.ERROR);
-					return responseHelper.getResponse();
-				}
-				responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
-				responseHelper.setSuccessStatusAndMessage("Activity Details updated successfully");
-				return responseHelper.getResponse();
-			}
-
-			
-			// if new detail
-			long count = landInfoService.save(landEvents);
-			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-			responseHelper.setReloadSectionIdWithUrl("landeventstable","/landinfo/landevents/" + landEvents.getXland());
-			responseHelper.setSuccessStatusAndMessage("Activity Details saved successfully");
-			return responseHelper.getResponse();
-		}
-
-		@GetMapping("/landevents/{xland}")
-		public String reloadLandEventsTable(@PathVariable String xland, Model model) {
-			List<LandEvents> activityList = landInfoService.findByLandEvents(xland);
-			model.addAttribute("lelist", activityList);
-			model.addAttribute("info", landInfoService.findByLandInfo(xland));
-			return "pages/land/landinfo::landeventstable";
-		}
-		
-		//Delete
-		@PostMapping("{xland}/landevents/{xrow}/delete")
-		public @ResponseBody Map<String, Object> deleteLandEvents(@PathVariable String xland, @PathVariable String xrow, Model model) {
-			LandEvents le = landInfoService.findLandEventsByXlandAndXrow(xland, Integer.parseInt(xrow));
-			if (le == null) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-			long count = landInfoService.deleteLandEvents(le);
-			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-			responseHelper.setReloadSectionIdWithUrl("landeventstable", "/landinfo/landevents/" + xland);
-			return responseHelper.getResponse();
-		}
 		
 }
 	
