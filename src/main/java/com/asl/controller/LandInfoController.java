@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandDocument;
+import com.asl.entity.LandSurvey;
 import com.asl.entity.LandEducation;
 import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
@@ -35,6 +36,7 @@ import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
+import com.asl.service.LandSurveyService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +47,7 @@ public class LandInfoController extends ASLAbstractController {
 	
 	@Autowired private LandInfoService landInfoService;
 	@Autowired private LandDocumentService landDocumentService;
+	@Autowired private LandSurveyService landSurveyService;
 	
 	@GetMapping
 	public String loadLandInfoPage(Model model) {
@@ -86,6 +89,7 @@ public class LandInfoController extends ASLAbstractController {
 		model.addAttribute("lldlist", landDocumentService.findByAllLandDocument(xland));
 		model.addAttribute("lpelist", landInfoService.findByLandOwner(xland));
 		model.addAttribute("lddlist", landInfoService.findByLandDagDetails(xland));
+		model.addAttribute("llslist", landSurveyService.findByXlandSurvey(xland));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LAND_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("statusTypes", xcodesService.findByXtype(CodeType.STATUS_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("landUnitTypes", xcodesService.findByXtype(CodeType.LAND_UNIT.getCode(), Boolean.TRUE));
@@ -385,7 +389,7 @@ public class LandInfoController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-
+		 
 		if (files != null && files.length > 0) {
 
 			// Rename the file
@@ -394,8 +398,14 @@ public class LandInfoController extends ASLAbstractController {
 			if (j > 0) {
 				extension = files[0].getOriginalFilename().substring(j + 1);
 			}
-
-			String fileName = UUID.randomUUID() + files[0].getOriginalFilename()+"." + extension;
+			
+			//Split Text
+			 String[] a = files[0].getOriginalFilename().split("\\.");
+			 String part1 = a[0];
+			 System.out.println("The File Name Is: "+part1);
+			 //End split
+			
+			String fileName = UUID.randomUUID() + "_" + part1 + "." + extension;
 			log.debug("File name is now: {}", fileName);
 
 			try {
@@ -499,6 +509,7 @@ public class LandInfoController extends ASLAbstractController {
 			return "pages/land/landeventsmodal::landeventsmodal";
 		}
 
+
 		@PostMapping("/landevents/save")
 		public @ResponseBody Map<String, Object> saveLandEvents(LandEvents landEvents) {
 			if (landEvents == null || StringUtils.isBlank(landEvents.getXland())) {
@@ -559,6 +570,92 @@ public class LandInfoController extends ASLAbstractController {
 			responseHelper.setReloadSectionIdWithUrl("landeventstable", "/landinfo/landevents/" + xland);
 			return responseHelper.getResponse();
 		}
+		
+	@GetMapping("/{xland}/survey/{xrow}/show")
+	public String loadLandSurveyModal(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		if("new".equalsIgnoreCase(xrow)) {
+			LandSurvey lls = new LandSurvey();
+			lls.setXland(xland);
+			lls.setXsurveyor("");
+			lls.setXnote("");
+			model.addAttribute("lls", lls);
+		}
+		else {
+			LandSurvey lls = landSurveyService.findLandSurveydetailByXlandAndXrow(xland, Integer.parseInt(xrow));
+			if(lls==null) {
+				lls = new LandSurvey();
+			}
+			model.addAttribute("lls", lls);
+		}
+		
+		return "pages/land/surveymodal::surveymodal";
+	}
+	
+	@PostMapping("/survey/save")
+	public @ResponseBody Map<String, Object> saveLandSurveyDetails(LandSurvey landSurvey) {
+		if (landSurvey == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		
+		if(StringUtils.isEmpty(landSurvey.getXsurveyor())) {
+			responseHelper.setErrorStatusAndMessage("Please Select your Surveyor ID");
+			return responseHelper.getResponse();
+		}
+
+		// if existing
+		LandSurvey exist = landSurveyService.findLandSurveydetailByXlandAndXrow(landSurvey.getXland(), landSurvey.getXrow());
+		if (exist != null) {
+			BeanUtils.copyProperties(landSurvey, exist);
+			long count = landSurveyService.update(landSurvey);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("surveytable","/landinfo/survey/" + exist.getXland());
+			responseHelper.setSuccessStatusAndMessage("Survey Details updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		
+		// if new detail
+		long count = landSurveyService.save(landSurvey);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("surveytable","/landinfo/survey/" + landSurvey.getXland());
+		responseHelper.setSuccessStatusAndMessage("Survey Details saved successfully");
+		return responseHelper.getResponse();
+	}
+	
+	@GetMapping("/survey/{xland}")
+	public String reloadLandSurveyTable(@PathVariable String xland, Model model) {
+		List<LandSurvey> LandSurveyList = landSurveyService.findByXlandSurvey(xland);
+		model.addAttribute("llslist", LandSurveyList);
+		model.addAttribute("info", landInfoService.findByLandInfo(xland));
+		return "pages/land/landinfo::surveytable";
+	}
+	
+	@PostMapping("{xland}/survey/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteLandSurveyDetail(@PathVariable String xland, @PathVariable String xrow, Model model) {
+		LandSurvey lls = landSurveyService.findLandSurveydetailByXlandAndXrow(xland, Integer.parseInt(xrow));
+		if (lls == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landSurveyService.deleteDetail(lls);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Survey Deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("surveytable", "/landinfo/survey/" + xland);
+		return responseHelper.getResponse();
+	}
+	
 		
 }
 	

@@ -21,5 +21,5 @@ public interface LandSurveyService {
 	
 	public LandSurvey findLandSurveydetailByXlandAndXrow(String xland, int xrow);
 	
-	public LandSurvey findLandSurveyByXlandAndXperson(String xland, String xperson);
+	public LandSurvey findLandSurveyByXlandAndXsurveyor(String xland, String xsurveyor);
 }

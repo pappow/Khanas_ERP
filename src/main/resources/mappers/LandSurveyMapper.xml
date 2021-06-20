@@ -11,7 +11,7 @@
 		(
 			xland,
 			xrow,
-			xperson,
+			xsurveyor,
 			xdate,
 			xtype,
 			xnote,
@@ -28,7 +28,7 @@
 		(
 			#{xland, jdbcType=VARCHAR},
 			#{xrow},
-			#{xperson, jdbcType=VARCHAR},
+			#{xsurveyor, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xtype, jdbcType=VARCHAR},
 			#{xnote, jdbcType=VARCHAR},
@@ -47,6 +47,7 @@
 		UPDATE 
 			calanservey
 		SET
+			xsurveyor=#{xsurveyor, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
@@ -60,7 +61,6 @@
 		WHERE
 			xland=#{xland, jdbcType=VARCHAR}
 			AND xrow=#{xrow, jdbcType=INTEGER}
-			AND xperson=#{xperson, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 	
@@ -74,6 +74,12 @@
 	
 	<select id="findLandSurveydetailByXlandAndXrow" resultType="LandSurvey">
 		SELECT * FROM calanservey WHERE xland=#{xland} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+
+	<select id="findLandSurveyByXlandAndXsurveyor" resultType="LandSurvey">
+		SELECT * FROM calanservey WHERE xland=#{xland} AND xsurveyor=#{xsurveyor} AND zid=#{zid} AND zactive='1
+
 	</select>
 	
 	<select id="findLandSurveyByXlandAndXperson" resultType="LandSurvey">

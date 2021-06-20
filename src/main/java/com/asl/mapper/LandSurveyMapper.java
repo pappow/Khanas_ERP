@@ -22,5 +22,5 @@ public interface LandSurveyMapper {
 	
 	public LandSurvey findLandSurveydetailByXlandAndXrow(String xland, int xrow, String zid);
 	
-	public LandSurvey findLandSurveyByXlandAndXperson(String xland, String xperson,  String zid);
+	public LandSurvey findLandSurveyByXlandAndXsurveyor(String xland, String xsurveyor,  String zid);
 }
