@@ -54,7 +54,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Land Committee Info</h1>
+														<h1> Committee Info</h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/landcommitteeinfo}"  class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
@@ -77,7 +77,7 @@
 														<div class="col-md-6">
 
 															<div class="form-group" th:if="${#strings.isEmpty(committee.xcommittee)}">
-																<label class="control-label col-md-4" for="xtrn">Prefix: </label>
+																<label class="control-label col-md-4" for="xtrn">Committee ID </label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xtrn}">
 																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
@@ -86,14 +86,14 @@
 															</div>
 
 															<div class="form-group" th:if="${not #strings.isEmpty(committee.xcommittee)}" >
-																<label class="control-label col-md-4" for="xcommittee">Committee:</label>
+																<label class="control-label col-md-4" for="xcommittee">Committee ID</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:value="*{xcommittee}" disabled="disabled"/>
 																</div>
 															</div>
 
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="xdate">Cmt. Selection Date: </label>
+																<label class="control-label col-md-4" for="xdate">Formation Date </label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -106,9 +106,24 @@
 																	</div>
 																</div>
 															</div>
+															
+															<div class="form-group datepicker">
+																<label class="control-label col-md-4" for="xelecdate">Election Date </label>
+																<div class="input-group date col-md-7 datepicker">
+																	<input 	type="datepicker" 
+																			class="form-control" 
+																			id="xelecdate"
+																			name="xelecdate"
+																			required="required"
+																			th:value="${committee.xelecdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(committee.xelecdate, df)}"/>
+																	<div class="input-group-addon">
+																		<span class="glyphicon glyphicon-calendar"></span>
+																	</div>
+																</div>
+															</div>
 
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="xstartdate">Cmt. Start Date: </label>
+																<label class="control-label col-md-4" for="xstartdate">Start Date </label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -122,8 +137,13 @@
 																</div>
 															</div>
 
+															
+														</div>
+
+														<div class="col-md-6">
+
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="xenddate">Cmt. End Date: </label>
+																<label class="control-label col-md-4" for="xenddate">End Date</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -136,15 +156,19 @@
 																	</div>
 																</div>
 															</div>
-
-														</div>
-
-														<div class="col-md-6">
-
-															<div class="form-group">
-																<label class="control-label col-md-4" for="xstatus"> Committee Status: </label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" th:field="*{xstatus}" maxlength="100"/>
+															
+															<div class="form-group datepicker">
+																<label class="control-label col-md-4" for="xexpdate">Expiry Date</label>
+																<div class="input-group date col-md-7 datepicker">
+																	<input 	type="datepicker" 
+																			class="form-control" 
+																			id="xexpdate"
+																			name="xexpdate"
+																			required="required"
+																			th:value="${committee.xexpdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(committee.xexpdate, df)}"/>
+																	<div class="input-group-addon">
+																		<span class="glyphicon glyphicon-calendar"></span>
+																	</div>
 																</div>
 															</div>
 
@@ -167,26 +191,26 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Land Committee Info</h1>
+										<h1>All Committee Info</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>Commitee</th>
-														<th>Cmt. Start Date</th>
-														<th>Cmt. End Date</th>
-														<th>Status</th>
+														<th>Commitee ID</th>
+														<th>Formation Date</th>
+														<th>Start Date</th>
+														<th>End Date</th>
 													</tr>
 													
 												</thead>
 												<tbody>
 													<tr th:each="ar : ${allCommitteeInfos}">
 														<td><a th:href="@{/landcommitteeinfo/} + ${ar.xcommittee}" th:text="${ar.xcommittee}"></a></td>
+														<td th:text="${ar.xdate}"></td>
 														<td th:text="${ar.xstartdate}"></td>
 														<td th:text="${ar.xenddate}"></td>
-														<td th:text="${ar.xstatus}"></td>
 													</tr>
 													
 												</tbody>
@@ -215,7 +239,6 @@
 								<th>Row</th>
 								<th>Person Id</th>
 								<th>Member Type</th>
-								<th>Contribution Type</th>
 								<th>Note </th>
 								<th data-nosort="Y" style="text-align: right;">
 									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landcommitteeinfo/} + ${committee.xcommittee} + '/commembers/new/show', data-target-modal='commembersmodal'"><i class="fas fa-plus"></i></button>
@@ -227,7 +250,6 @@
 								<td th:text="${n.count}"></td>
 								<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
 								<td th:text="${d.xmembertype}"></td>
-								<td th:text="${d.xcontribution}"></td>
 								<td th:text="${d.xnote}"></td>
 								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landcommitteeinfo/} + ${committee.xcommittee} + '/commembers/' + ${d.xrow} + '/show', data-target-modal='commembersmodal'"><i class="fas fa-edit"></i></button>

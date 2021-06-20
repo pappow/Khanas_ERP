@@ -18,6 +18,8 @@ public long save(LandInfo landinfo);
 
 	public LandInfo findByLandInfo(String xland);
 	
+	public List<LandInfo> searchLandId(String xland);
+	
 	//for owner
 	public long save(LandOwner landOwner);
 	

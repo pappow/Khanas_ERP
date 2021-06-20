@@ -21,6 +21,8 @@ public interface LandInfoMapper {
 
 	public LandInfo findByLandInfo(String xland, String zid);
 	
+	public List<LandInfo> searchLandId(String xland, String zid);
+	
 	//for owner
 	public long saveLandOwner(LandOwner landOwner);
 	

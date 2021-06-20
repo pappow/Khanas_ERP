@@ -40,6 +40,10 @@ public class LandCommitteeInfo extends AbstractModel<String>{
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
 
+	@Column(name="xelecdate")
+	@Temporal(TemporalType.DATE)
+	private Date xelecdate;
+	
 	@Column(name="xstartdate")
 	@Temporal(TemporalType.DATE)
 	private Date xstartdate;
@@ -47,6 +51,10 @@ public class LandCommitteeInfo extends AbstractModel<String>{
 	@Column(name="xenddate")
 	@Temporal(TemporalType.DATE)
 	private Date xenddate;
+
+	@Column(name="xexpdate")
+	@Temporal(TemporalType.DATE)
+	private Date xexpdate;
 
 	@Column(name="xstatus")
 	private String xstatus;

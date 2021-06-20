@@ -33,7 +33,7 @@
 								<div class="row">
 									<div class="col-md-6">
 									<div class="form-group" th:if="${#strings.isEmpty(lld.xdoc)}" style="display:none">
-										<label class="control-label col-md-4" for="xtrn">Code: </label>
+										<label class="control-label col-md-4" for="xtrn">Document ID </label>
 										<div class="col-md-8">
 											<select class="form-control" th:field="*{xtrn}">
 												<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
@@ -47,7 +47,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-4" for="xland">Land ID: </label>
+										<label class="control-label col-md-4" for="xland">Land ID </label>
 										<div class="col-md-7">
 											<input type="text" class="form-control" th:value="*{xland}" disabled="disabled"/>
 										</div>

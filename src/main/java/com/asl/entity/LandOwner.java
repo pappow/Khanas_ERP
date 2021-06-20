@@ -32,13 +32,12 @@ public class LandOwner extends AbstractModel<String> {
 	@Column(name = "xland")
 	private String xland;
 
-	
+	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
 	private int xrow;
 	
-	@Id
-	@Basic(optional = false)
+	
 	@Column(name = "xperson")
 	private String xperson;
 

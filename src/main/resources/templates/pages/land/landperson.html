@@ -72,7 +72,7 @@
 													<div class="row">
 														<div class="col-md-6">
 															<div class="form-group" th:if="${#strings.isEmpty(person.xperson)}">
-																<label class="control-label col-md-4" for="xtrn">Prefix: </label>
+																<label class="control-label col-md-4" for="xtrn">Person ID </label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xtrn}">
 																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
@@ -80,31 +80,31 @@
 																</div>
 															</div>
 															<div class="form-group" th:if="${not #strings.isEmpty(person.xperson)}">
-																<label class="control-label col-md-4" for="xperson">Person ID: </label>
+																<label class="control-label col-md-4" for="xperson">Person ID </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:value="*{xperson}" disabled="disabled"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xname">Name: </label>
+																<label class="control-label col-md-4" for="xname">Name </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xname}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xfname">Father's Name: </label>
+																<label class="control-label col-md-4" for="xfname">Father's Name</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xfname}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xmname">Mother's Name: </label>
+																<label class="control-label col-md-4" for="xmname">Mother's Name</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xmname}" maxlength="100"/>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="xdob">Date of Birth: </label>
+																<label class="control-label col-md-4" for="xdob">Date of Birth </label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -118,19 +118,19 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xoccupation">Occupation: </label>
+																<label class="control-label col-md-4" for="xoccupation">Occupation </label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xoccupation}" maxlength="100"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xcontact">Contact No: </label>
+																<label class="control-label col-md-4" for="xcontact">Contact No.</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xcontact}" maxlength="100"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xemail">Email: </label>
+																<label class="control-label col-md-4" for="xemail">Email</label>
 																<div class="col-md-8">
 																	<input type="email" class="form-control" th:field="*{xemail}" maxlength="100" />
 																</div>
@@ -138,25 +138,25 @@
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xphone">Phone No: </label>
+																<label class="control-label col-md-4" for="xphone">Phone No.</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" th:field="*{xphone}" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xmadd">Mailing Address: </label>
+																<label class="control-label col-md-4" for="xmadd">Mailing Address</label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xmadd}" placeholder="Mailing Address here.."></textarea>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xpadd">Permanent Address: </label>
+																<label class="control-label col-md-4" for="xpadd">Permanent Address </label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xpadd}" placeholder="Permanent Address here.."></textarea>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="xnote">Note: </label>
+																<label class="control-label col-md-4" for="xnote">Note</label>
 																<div class="col-md-8">
 																	<textarea class="form-control" rows="3" th:field="*{xnote}" placeholder="Note here.."></textarea>
 																</div>
@@ -181,7 +181,7 @@
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>ID</th>
+														<th>Person ID</th>
 														<th>Name</th>
 														<th>Occupation</th>
 														<th>Email</th>

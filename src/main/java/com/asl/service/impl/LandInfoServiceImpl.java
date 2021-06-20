@@ -204,8 +204,14 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 		return landinfoMapper.findLandEventsByXlandAndXrow(xland,xrow,sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<LandInfo> searchLandId(String xland) {
+		if(StringUtils.isBlank(xland)) return Collections.emptyList();
+		return landinfoMapper.searchLandId(xland.toUpperCase(), sessionManager.getBusinessId());
+	}
 
+	
+	
 	
 
 
