@@ -14,13 +14,18 @@ import com.asl.entity.Xcodes;
 public interface XcodesMapper {
 
 	public long saveXcodes(Xcodes xcodes);
+
 	public long updateXcodes(Xcodes xcodes);
 
 	public List<Xcodes> getAllXcodes(String zid, Boolean zactive);
+
 	public List<Xcodes> findByXtype(String xtype, String zid, Boolean zactive);
+
 	public List<Xcodes> findByXcode(String xcode, String zid, Boolean zactive);
+
 	public Xcodes findByXtypesAndXcodes(String xtype, String xcode, String zid, Boolean zactive);
 
 	public Xcodes getSeilingRecord(String direction, String zid);
-}
 
+	public long deleteXcodes(String xcodes, String xtype, String zid);
+}

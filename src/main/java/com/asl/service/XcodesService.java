@@ -34,4 +34,6 @@ public interface XcodesService {
 	public Xcodes findByXtypesAndXcodes(String xType, String xCodes, Boolean zactive);
 
 	public Xcodes getSeilingRecord(String direction);
+
+	public long deleteXcodes(String xcodes, String xtype);
 }

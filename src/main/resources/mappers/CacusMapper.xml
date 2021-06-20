@@ -148,4 +148,13 @@
 			AND ZID=#{zid}
 			AND ZACTIVE='1'
 	</select>
+
+	<delete id="deleteCacus">
+		DELETE 
+		FROM
+			cacus
+		WHERE
+			xcus=#{xcus}
+			AND ZID=#{zid}
+	</delete>
 </mapper>

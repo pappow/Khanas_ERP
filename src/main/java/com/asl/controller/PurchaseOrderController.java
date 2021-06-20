@@ -132,12 +132,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return doArchiveOrRestore(xpornum, true);
 	}
 
-	@PostMapping("/restore/{xpornum}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xpornum){
-		return doArchiveOrRestore(xpornum, false);
-	}
-
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
+		// todo: need to delete actually from db
+		
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
 		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor()) || "Confirmed".equalsIgnoreCase(poordHeader.getXstatuspor())) {
 			responseHelper.setErrorStatusAndMessage("Confirmed Purchase Order can't be archived");

@@ -25,9 +25,8 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/mastersetup/vataitmaster}">Vat and Tax Master</a></li>
-										<li class="active"><a th:href="@{/mastersetup/vatait}">Vat and Tax</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/mastersetup/vatait}">VAT & TAX</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -43,16 +42,19 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
+						<div class="row">
+							<h1 class="text-center">VAT & TAX</h1>
+						</div>
 
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Vat and Tax</h1>
+										
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(vatait.xvatait)}" th:href="@{/mastersetup/vatait}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(vatait.xvatait) and vatait.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(vatait.xvatait) and vatait.zactive == true}" th:href="@{/mastersetup/vatait/archive/} + ${vatait.xvatait}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
@@ -64,9 +66,9 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(vatait.xvatait)}">
-														<label class="control-label col-md-4" for="xvatait">VAT and Tax Identifier : </label>
+														<label class="control-label col-md-4" for="xvatait">Name : </label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xvatait}" required="required">
+								 							<input type="text" class="form-control" th:field="*{xvatait}" required="required">
 														</div>
 													</div>
 
@@ -128,7 +130,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Lists</h1>
+										<h1>VAT & TAX Lists</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">

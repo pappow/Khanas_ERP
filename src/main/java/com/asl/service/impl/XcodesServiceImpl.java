@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Xcodes;
 import com.asl.mapper.XcodesMapper;
@@ -85,4 +86,13 @@ public class XcodesServiceImpl extends AbstractGenericService implements XcodesS
 	public Xcodes getSeilingRecord(String direction) {
 		return xcodesMapper.getSeilingRecord(direction, getBusinessId());
 	}
+
+	@Transactional
+	@Override
+	public long deleteXcodes(String xcodes, String xtype) {
+		if(StringUtils.isBlank(xcodes) || StringUtils.isBlank(xtype)) return 0;
+		return xcodesMapper.deleteXcodes(xcodes, xtype, sessionManager.getBusinessId());
+	}
+
+	
 }

@@ -87,27 +87,23 @@ public class XcodesController extends ASLAbstractController {
 		return doArchiveOrRestore(xtype, xcode, true);
 	}
 
-	@PostMapping("/restore/{xtype}/{xcode}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xtype, @PathVariable String xcode){
-		return doArchiveOrRestore(xtype, xcode, false);
-	}
-
 	public Map<String, Object> doArchiveOrRestore(String xtype, String xcode, boolean archive){
-		Xcodes xc = xcodesService.findByXtypesAndXcodes(xtype, xcode);
-		if(xc == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+
+		Xcodes xcodes = xcodesService.findByXtypesAndXcodes(xtype, xcode);
+		if(xcodes == null) {
+			responseHelper.setErrorStatusAndMessage("Code not found in this system");
 			return responseHelper.getResponse();
 		}
 
-		xc.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = xcodesService.update(xc);
+		// delete
+		long count = xcodesService.deleteXcodes(xcode, xtype);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't delete this code");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Item code updated successfully");
-		responseHelper.setRedirectUrl("/mastersetup/xcodes/" + xtype + "/" + xcode);
+		responseHelper.setSuccessStatusAndMessage("Item code deleted successfully");
+		responseHelper.setRedirectUrl("/mastersetup/xcodes/");
 		return responseHelper.getResponse();
 	}
 }
