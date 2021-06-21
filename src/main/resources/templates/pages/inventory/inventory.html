@@ -52,48 +52,7 @@
 									<tr>
 										<td colspan="2">Inventory Management</td>
 									</tr>
-									<tr th:if="${menuProfile.M0601 ne null and menuProfile.M0601.display}">
-										<td><a th:href="@{/inventory/openingentry}" th:text="${menuProfile.M0601.screenprompt}">Stock Opening Entry</a></td>
-										<td>
-											<a th:href="@{/inventory/openingentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0602 ne null and menuProfile.M0602.display}">
-										<td><a th:href="@{/inventory/productissue}" th:text="${menuProfile.M0602.screenprompt}">Product Issue Entry</a></td>
-										<td>
-											<a th:href="@{/inventory/productissue}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0603 ne null and menuProfile.M0603.display}">
-										<td><a th:href="@{/inventory/imtrn}" th:text="${menuProfile.M0603.screenprompt}">Inventory</a></td>
-										<td>
-											<a th:href="@{/inventory/imtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0604 ne null and menuProfile.M0604.display}">
-										<td><a th:href="@{/inventory/stocktake}" th:text="${menuProfile.M0604.screenprompt}">Stock-Take Entry</a></td>
-										<td>
-											<a th:href="@{/inventory/stocktake}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0605 ne null and menuProfile.M0605.display}">
-										<td><a th:href="@{/inventory/transferorder}" th:text="${menuProfile.M0605.screenprompt}">Transfer Order</a></td>
-										<td>
-											<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0606 ne null and menuProfile.M0606.display}">
-										<td><a th:href="@{/inventory/pchtotrord}" th:text="${menuProfile.M0606.screenprompt}">Production Chalan to Transfer Order</a></td>
-										<td>
-											<a th:href="@{/inventory/pchtotrord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0607 ne null and menuProfile.M0607.display}">
-										<td><a th:href="@{/inventory/stocklist}" th:text="${menuProfile.M0607.screenprompt}">Stock List</a></td>
-										<td>
-											<a th:href="@{/inventory/stocklist}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 
 								</table>
 							</div>

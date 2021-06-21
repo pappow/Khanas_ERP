@@ -2,7 +2,8 @@
 	<li class="dropdown ckbigmenucontainer">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fas fa-th"></i></a>
 		<ul class="dropdown-menu ckbigmenu">
-			<li class="ckbigmenu-li">
+			<meta th:remove="tag" th:include="pages/dashboard/dashboard :: mainmenu"/>
+			<!-- <li class="ckbigmenu-li">
 				<a th:href="@{/}">
 					<span class="ckbigmenu-icon" style="background: blue;">
 						<i class="fas fa-home"></i>
@@ -172,7 +173,7 @@
 					</span>
 					<span class="ckbigmenu-text" th:text="${menuProfile.M0101.screenprompt}">User & Profile</span>
 				</a>
-			</li>
+			</li> -->
 			<!-- <li class="ckbigmenu-li hidable-menu nodisplay">
 				<a th:href="@{/system/aslprocerror}">
 					<span class="ckbigmenu-icon" style="background: green;">

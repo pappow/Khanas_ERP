@@ -52,24 +52,6 @@
 									<tr>
 										<td colspan="2">Production</td>
 									</tr>
-									<tr th:if="${menuProfile.M0501 ne null and menuProfile.M0501.display}">
-										<td><a th:href="@{/production/bom}" th:text="${menuProfile.M0501.screenprompt}">BOM Entry/Receipe Setting</a></td>
-										<td>
-											<a th:href="@{/production/bom}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0502 ne null and menuProfile.M0502.display}">
-										<td><a th:href="@{/production/suggestion}" th:text="${menuProfile.M0502.screenprompt}">Production Planning against sales order (Requisition)</a></td>
-										<td>
-											<a th:href="@{/production/suggestion}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${menuProfile.M0503 ne null and menuProfile.M0503.display}">
-										<td><a th:href="@{/production/batch}" th:text="${menuProfile.M0503.screenprompt}">Production Process / Batch</a></td>
-										<td>
-											<a th:href="@{/production/batch}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
 								</table>
 							</div>
 						</section>

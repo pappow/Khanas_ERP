@@ -52,24 +52,7 @@
 									<tr>
 										<td colspan="2">Requisition</td>
 									</tr>
-									<tr th:if="${isCentral and menuProfile.M0301 ne null and menuProfile.M0301.display}">
-										<td><a th:href="@{/purchasing/bqls}" th:text="${menuProfile.M0301.screenprompt}">Branches Requisition</a></td>
-										<td>
-											<a th:href="@{/purchasing/bqls}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0302 ne null and menuProfile.M0302.display}">
-										<td><a th:href="@{/purchasing/bqls/details}" th:text="${menuProfile.M0302.screenprompt}">Branches Requisition Details</a></td>
-										<td>
-											<a th:href="@{/purchasing/bqls/details}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0303 ne null and menuProfile.M0303.display}">
-										<td><a th:href="@{/purchasing/bqls/allopenreq}" th:text="${menuProfile.M0303.screenprompt}">All Open Requisitions of Branches</a></td>
-										<td>
-											<a th:href="@{/purchasing/bqls/allopenreq}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 									<!-- <tr th:if="${isBranch and menuProfile.M0311 ne null and menuProfile.M0311.display}">
 										<td><a th:href="@{/purchasing/requisition}" th:text="${menuProfile.M0311.screenprompt}">Order Requisition</a></td>
 										<td>
@@ -81,36 +64,14 @@
 									<tr th:if="${isCentral}">
 										<td colspan="2">Purchasing</td>
 									</tr>
-									<tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
-										<td><a th:href="@{/purchasing/poord}" th:text="${menuProfile.M0304.screenprompt}">Purchase Order</a></td>
-										<td>
-											<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 									<!-- <tr th:if="${isCentral and menuProfile.M0312 ne null and menuProfile.M0312.display}">
 										<td><a th:href="@{/procurement/potogrn}" th:text="${menuProfile.M0312.screenprompt}">PO to GRN</a></td>
 										<td>
 											<a th:href="@{/procurement/potogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr> -->
-									<tr th:if="${isCentral and menuProfile.M0305 ne null and menuProfile.M0305.display}">
-										<td><a th:href="@{/purchasing/grn}" th:text="${menuProfile.M0305.screenprompt}">Direct GRN</a></td>
-										<td>
-											<a th:href="@{/purchasing/grn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0306 ne null and menuProfile.M0306.display}">
-										<td><a th:href="@{/purchasing/pogrn}" th:text="${menuProfile.M0306.screenprompt}">Purchase Order GRN</a></td>
-										<td>
-											<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
-										<td><a th:href="@{/procurement/grnreturn}" th:text="${menuProfile.M0310.screenprompt}">GRN Return</a></td>
-										<td>
-											<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 
 								</table>
 							</div>

@@ -420,6 +420,7 @@ ul.ckbigmenu {
 	width: 402px;
 	padding: 5px 5px;
 	max-height: 600px;
+	overflow-y: scroll;
 }
 
 ul.ckbigmenu::before {
@@ -519,6 +520,16 @@ li.ckbigmenu-li a:hover .ckbigmenu-icon{
 	margin-left: 10px;
 }
 
+ul.ckbigmenu{
+	bacckground: #fff;
+}
+ul.ckbigmenu td{
+	color: #333 !important;
+}
+
+.navbar-inverse ul.dropdown-menu a {
+    color: #337ab7  !important;
+}
 
 
 
@@ -887,14 +898,16 @@ image using the content attribute.
 * =============================
 */
 
+@media (max-width: 767px){
+	.ckbigmenu {
+		background-color: #fff !important;
+	}
+}
+
 @media only screen and (max-width: 600px) {
-	/* li.ckbigmenucontainer{
-		display: none !important;
-	} */
 	h1.brand-name {
 		font-size: 45px;
 	}
-	
 	.org-logo{
 		display: none;
 	}
