@@ -10,11 +10,11 @@ import com.asl.model.TransactionCodes;
 public enum TransactionCodeType {
 
 	ACCOUNT_PAYABLE("Account Payable", "AP-", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_PAYMENT("Account Payment", "PM-", TransactionCodes.AP_TRANSACTION),
+	ACCOUNT_PAYMENT("Account Payment", "PM--", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAR("Customer Adjustment", "ADAR-", TransactionCodes.AR_TRANSACTION),
-	ACCOUNT_MR("Money Receipt", "MR-", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_MR("Money Receipt", "MR--", TransactionCodes.AR_TRANSACTION),
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
@@ -22,6 +22,8 @@ public enum TransactionCodeType {
 	COMMITTEEINFO_ID("Committee ID", "CMT-", TransactionCodes.COMMITTEEINFO_ID),
 	CUSTOMER_NUMBER("Customer Number", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
 	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER),
+
+	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
 
 	EMPLOYEE_ID("Employee ID", "EID-", TransactionCodes.EMPLOYEE_ID),
 
@@ -31,20 +33,18 @@ public enum TransactionCodeType {
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
-	
+
 	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
 	LANDCOMEVENT_ID("Land Com Event", "EVCM", TransactionCodes.LANDCOMEVENT_ID),
 	LANDOTHEREVENT_ID("Land Other Event", "EVOH", TransactionCodes.LANDOTHEREVENT_ID),
 
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
-	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
 	PROFILE_LINE("Profile Line", "PRL-", null),
 	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null),
-	
 
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 

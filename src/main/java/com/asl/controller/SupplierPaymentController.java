@@ -1,5 +1,7 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,24 +22,37 @@ import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
 import com.asl.service.XcodesService;
-import com.asl.service.XtrnService;
 
 @Controller
 @RequestMapping("/purchasing/supplierpayment")
 public class SupplierPaymentController extends ASLAbstractController {
-	
-	@Autowired
-	private ArhedService arhedService;
-	@Autowired
-	private XtrnService xtrnService;
-	@Autowired
-	private XcodesService xcodeService;
-	
-	
+
+	@Autowired private ArhedService arhedService;
+	@Autowired private XcodesService xcodeService;
+
 	@GetMapping
 	public String loadSupplierPaymentPage(Model model) {
-		
-		model.addAttribute("arhed", getDefaultArhed());		
+
+		model.addAttribute("arhed", getDefaultArhed());
+		model.addAttribute("allArhed", arhedService.getAllArheds());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
+		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
+		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
+		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
+		if(isBoshila()) {
+			return "pages/land/supplierpayment/arhed";
+		}
+		return "pages/supplierpayment/arhed/arhed";
+	}
+
+	@GetMapping("/{xvoucher}")
+	public String loadSupplierPaymentPage(@PathVariable String xvoucher, Model model) {
+		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
+		if(data == null) data = getDefaultArhed();
+
+		model.addAttribute("arhed", data);
 		model.addAttribute("allArhed", arhedService.getAllArheds());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
@@ -51,41 +66,42 @@ public class SupplierPaymentController extends ASLAbstractController {
 		return "pages/supplierpayment/arhed/arhed";
 	}
 	
-	@GetMapping("/{xvoucher}")
-	public String loadSupplierPaymentPage(@PathVariable String xvoucher, Model model) {
-		
-		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
-		if(data == null) data = getDefaultArhed();
-
-		model.addAttribute("arhed", data);
-		model.addAttribute("allArhed", arhedService.getAllArheds());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
-		model.addAttribute("paymenttypeLiist", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
-		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
-		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		if(isBoshila()) {
-			return "pages/land/supplierpayment/arhed";
-		}
-		return "pages/supplierpayment/arhed/arhed";
-	}
-	
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
-		//arhed.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-		//arhed.setXtotamt(BigDecimal.ZERO);
+		arhed.setXdate(new Date());
+		arhed.setXprime(BigDecimal.ZERO);
+		arhed.setXbalprime(BigDecimal.ZERO);
+		arhed.setXvatamt(BigDecimal.ZERO);
+		arhed.setXaitamt(BigDecimal.ZERO);
+		arhed.setXdiscprime(BigDecimal.ZERO);
+		arhed.setXbase(BigDecimal.ZERO);
+		arhed.setXvatait("No Vat");
+		arhed.setXpaymentterm("Credit");
+
+		arhed.setXtypetrn("Account Payment");
+		arhed.setXstatus("Open");
+		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
+		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
 		return arhed;
 	}
-	
+
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
 		if((arhed == null || StringUtils.isBlank(arhed.getXtrnarhed())) && StringUtils.isBlank(arhed.getXvoucher())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		// Validate
-		
+		if(StringUtils.isBlank(arhed.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Supplier required!");
+			return responseHelper.getResponse();
+		}
+		if(arhed.getXprime().compareTo(BigDecimal.ZERO) == -1 || arhed.getXprime().equals(BigDecimal.ZERO)) {
+			responseHelper.setErrorStatusAndMessage("Invalid amount");
+			return responseHelper.getResponse();
+		}
+
 		//Modify transaction codes for arhed
 		arhed.setXsign(+1);
 		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
@@ -94,13 +110,13 @@ public class SupplierPaymentController extends ASLAbstractController {
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
 		if(existArhed != null) {
-			BeanUtils.copyProperties(arhed, existArhed, "xvoucher", "xtype", "xdate");
+			BeanUtils.copyProperties(arhed, existArhed, "xvoucher", "xtype", "xdate","xtrnarhed");
 			long count = arhedService.update(existArhed);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Payment updated successfully");
+			responseHelper.setSuccessStatusAndMessage("Supplier payment updated successfully");
 			responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
 		}
@@ -111,24 +127,32 @@ public class SupplierPaymentController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Voucher created successfully");
+		responseHelper.setSuccessStatusAndMessage("Supplier payment created successfully");
 		responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + arhed.getXvoucher());
 		return responseHelper.getResponse();
 	}
-	
+
 	@PostMapping("/archive/{xvoucher}")
 	public @ResponseBody Map<String, Object> archive(@PathVariable String xvoucher){
 		return doArchiveOrRestore(xvoucher, true);
 	}
 
-	@PostMapping("/restore/{xvoucher}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xvoucher){
-		return doArchiveOrRestore(xvoucher, false);
-	}
-
 	public Map<String, Object> doArchiveOrRestore(String xvoucher, boolean archive){
-		
-		return null;
+		Arhed voucher = arhedService.findArhedByXvoucher(xvoucher);
+		if(voucher == null) {
+			responseHelper.setErrorStatusAndMessage("Voucher not found in this system");
+			return responseHelper.getResponse();
+		}
+
+		long count = arhedService.deleteVoucher(xvoucher);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete voucher");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Voucher deleted successfully");
+		responseHelper.setRedirectUrl("/purchasing/supplierpayment");
+		return responseHelper.getResponse();
 	}
 
 

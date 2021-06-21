@@ -169,6 +169,44 @@
 											</tr>
 										</span>
 									</span>
+								
+									<tr>
+										<td colspan="2">Accounts Receivable</td>
+									</tr>
+									<tr th:if="${menuProfile.M0408 ne null and menuProfile.M0408.display}">
+										<td><a th:href="@{/salesninvoice/moneyreceipt}" th:text="${menuProfile.M0408.screenprompt}">Money Receipt</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0410 ne null and menuProfile.M0410.display}">
+										<td><a th:href="@{/salesninvoice/customeradjustment}" th:text="${menuProfile.M0410.screenprompt}">Customer Adjustment</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/customeradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
+									<tr>
+										<td colspan="2">Accounts Payable</td>
+									</tr>
+									<tr th:if="${isCentral and menuProfile.M0307 ne null and menuProfile.M0307.display}">
+										<td><a th:href="@{/purchasing/supplierpayment}" th:text="${menuProfile.M0307.screenprompt}">Supplier Payment</a></td>
+										<td>
+											<a th:href="@{/purchasing/supplierpayment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${isCentral and menuProfile.M0308 ne null and menuProfile.M0308.display}">
+										<td><a th:href="@{/procurement/supplieradjustment}" th:text="${menuProfile.M0308.screenprompt}">Supplier Adjustment</a></td>
+										<td>
+											<a th:href="@{/procurement/supplieradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${isCentral and menuProfile.M0309 ne null and menuProfile.M0309.display}">
+										<td><a th:href="@{/purchasing/supopenentry}" th:text="${menuProfile.M0309.screenprompt}">Supplier Opening Entry</a></td>
+										<td>
+											<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 
 									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${isCentral and menuProfile.M0600 ne null and menuProfile.M0600.display}">

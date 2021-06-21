@@ -76,18 +76,7 @@
 											<a th:href="@{/purchasing/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr> -->
-									<tr th:if="${isBranch and menuProfile.M0311 ne null and menuProfile.M0311.display}">
-										<td><a th:href="@{/procurement/requisition}" th:text="${menuProfile.M0311.screenprompt}">Order Requisition</a></td>
-										<td>
-											<a th:href="@{/procurement/requisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isBranch and menuProfile.M0313 ne null and menuProfile.M0313.display}">
-										<td><a th:href="@{/procurement/requisition/allrequisition}" th:text="${menuProfile.M0313.screenprompt}">All Order Requisition</a></td>
-										<td>
-											<a th:href="@{/procurement/requisition/allrequisition}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
+									
 
 									<tr th:if="${isCentral}">
 										<td colspan="2">Purchasing</td>
@@ -122,26 +111,6 @@
 											<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-
-									<tr th:if="${isCentral and menuProfile.M0307 ne null and menuProfile.M0307.display}">
-										<td><a th:href="@{/purchasing/supplierpayment}" th:text="${menuProfile.M0307.screenprompt}">Supplier Payment</a></td>
-										<td>
-											<a th:href="@{/purchasing/supplierpayment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0308 ne null and menuProfile.M0308.display}">
-										<td><a th:href="@{/procurement/supplieradjustment}" th:text="${menuProfile.M0308.screenprompt}">Supplier Adjustment</a></td>
-										<td>
-											<a th:href="@{/procurement/supplieradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									<tr th:if="${isCentral and menuProfile.M0309 ne null and menuProfile.M0309.display}">
-										<td><a th:href="@{/purchasing/supopenentry}" th:text="${menuProfile.M0309.screenprompt}">Supplier Opening Entry</a></td>
-										<td>
-											<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									
 
 								</table>
 							</div>

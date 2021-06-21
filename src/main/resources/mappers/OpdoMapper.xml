@@ -354,7 +354,7 @@
 			AND XTYPETRN=#{xtypetrn}
 			AND XTRN=#{xtrn}
 		ORDER BY
-			xdornum DESC
+			xstatusord, xdornum  DESC
 	</select>
 
 	<select id="findAllInvoiceOrder" resultType="Opdoheader">

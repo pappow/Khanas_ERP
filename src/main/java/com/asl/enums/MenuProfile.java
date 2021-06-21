@@ -35,7 +35,7 @@ public enum MenuProfile {
 	M0306(9999, "M0306", "300", "M0300", "GRN", "Y","/purchasing/pogrn"),
 	M0307(9999, "M0307", "300", "M0300", "Supplier Payment", "Y","/purchasing/supplierpayment"),
 	M0308(9999, "M0308", "300", "M0300", "Supplier Adjustment", "Y","/procurement/supplieradjustment"),
-	M0309(9999, "M0309", "300", "M0300", "Supplier Opening Entry", "Y","/purchasing/supopenentry"),
+	M0309(9999, "M0309", "300", "M0300", "Supplier Opening", "Y","/purchasing/supopenentry"),
 	M0310(9999, "M0310", "300", "M0300", "GRN Return", "Y","/procurement/grnreturn"),
 	M0311(9999, "M0311", "300", "M0300", "Order Requisition", "Y","/procurement/allrequisition"),
 	M0312(9999, "M0312", "300", "M0300", "PO to GRN", "Y","/procurement/potogrn"),

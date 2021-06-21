@@ -11,7 +11,7 @@ public interface ArhedService {
 	public long save(Arhed arhed);
 
 	public long update(Arhed arhed);
-		
+
 	public Arhed findArhedByXvoucher(String xvoucher);
 
 	public List<Arhed> getAllArheds();
@@ -32,7 +32,9 @@ public interface ArhedService {
 	public Arhed findAdarByXcus(String xcus);
 
 	public List<Arhed> getAllAdars();
-	
-	//Search Field
+
+	// Search Field
 	public List<Arhed> findByXstaff(String xstaff);
+
+	public long deleteVoucher(String xvoucher);
 }
