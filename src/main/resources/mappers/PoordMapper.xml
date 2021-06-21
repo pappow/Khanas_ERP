@@ -5,7 +5,7 @@
 
 	<insert id="savePoordHeader" parameterType="PoordHeader">
 		<selectKey keyProperty="xpornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO PoordHeader
 		(
@@ -23,6 +23,8 @@
 			xnote,
 			xgrnnum,
 			xordernum,
+			xreqtype,
+
 			zid,
 			zauserid,
 			zuuserid,
@@ -48,6 +50,8 @@
 			#{xnote, jdbcType=VARCHAR},
 			#{xgrnnum, jdbcType=VARCHAR},
 			#{xordernum, jdbcType=VARCHAR},
+			#{xreqtype, jdbcType=VARCHAR},
+			
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -76,6 +80,8 @@
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xgrnnum=#{xgrnnum, jdbcType=VARCHAR},
 			xordernum=#{xordernum, jdbcType=VARCHAR},
+			xreqtype=#{xreqtype, jdbcType=VARCHAR},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -104,7 +110,7 @@
 		DELETE 
 			poorddetail
 		WHERE
-			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+			xpornum=#{xpornum} AND zid=#{zid}
 	</delete>
 
 	<select id="countOfRequisitionDetailsByXpornum" resultType="Long">
@@ -375,15 +381,22 @@
 			</if>
 	</select>
 
-	<delete id="deletePoordheader">
-	
+	<delete id="deletePoordheaderByXpornum">
+		DELETE
+		FROM
+			poordheader
+		WHERE
+			xpornum=#{xpornum}
+			AND zid=#{zid}
 	</delete>
+
 	<delete id="deletePoorddetail">
 		DELETE
 		FROM
 			poorddetail
 		WHERE
 			xpornum=#{xpornum}
+			AND zid=#{zid}
 	</delete>
 
 </mapper>

@@ -55,4 +55,6 @@ public interface PoordService {
 
 	// REPORT
 	public List<com.asl.model.report.RM0301> getRM0301(String fdate, String tdate, String xcus, String xstatuspor, String xitem);
+
+	public long deletePoordheaderByXpornum(String xpornum);
 }

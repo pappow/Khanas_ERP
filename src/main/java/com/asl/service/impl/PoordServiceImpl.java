@@ -25,9 +25,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 	@Override
 	@Transactional
 	public long save(PoordHeader poordHeader) {
-		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())
-				|| StringUtils.isBlank(poordHeader.getXtrn()))
-			return 0;
+		if (poordHeader == null || StringUtils.isBlank(poordHeader.getXtrn())) return 0;
 		poordHeader.setZid(sessionManager.getBusinessId());
 		poordHeader.setZauserid(getAuditUser());
 		return poordMapper.savePoordHeader(poordHeader);
@@ -199,5 +197,10 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		return poordMapper.getRM0301(fdate, tdate, xcus, xstatuspor, xitem, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	@Transactional
+	public long deletePoordheaderByXpornum(String xpornum) {
+		if(StringUtils.isBlank(xpornum)) return 0;
+		return poordMapper.deletePoordheaderByXpornum(xpornum, sessionManager.getBusinessId());
+	}
 }

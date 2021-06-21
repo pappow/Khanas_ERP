@@ -1,4 +1,4 @@
-package com.asl.controller;
+ package com.asl.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Caitem;
@@ -47,23 +48,37 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 	@Autowired private PoordService poordService;
 
 	@GetMapping
-	public String loadOrderRequisitionAdvancedpage(Model model) {
+	public String loadOrderRequisitionAdvancedpage(@RequestParam(required = false) String reqtype, Model model) {
 		PoordHeader poordheader = new PoordHeader();
 		poordheader.setXpornum("NEW");
+		poordheader.setXreqtype(reqtype);
 		model.addAttribute("poordheader", poordheader);
-		model.addAttribute("items", caitemService.getAllRequisitionItems());
+
+		List<Caitem> items = caitemService.getAllRequisitionItems();
+		if("Packaging Item".equalsIgnoreCase(reqtype)) {
+			model.addAttribute("items",items.stream().filter(i -> "Packaging Item".equalsIgnoreCase(i.getXgitem())).collect(Collectors.toList()));
+		} else {
+			model.addAttribute("items",items.stream().filter(i -> !"Packaging Item".equalsIgnoreCase(i.getXgitem())).collect(Collectors.toList()));
+		}
+
 		return "pages/procurement/requisition/requisition";
 	}
 
 	@GetMapping("/{xpornum}")
-	public String loadOrderRequisitionAdvancedpage(@PathVariable String xpornum, Model model) {
+	public String loadOrderRequisitionAdvancedpage(@PathVariable String xpornum, @RequestParam(required = false) String reqtype, Model model) {
 		PoordHeader ph = poordService.findPoordHeaderByXpornum(xpornum);
-		if(ph == null) return "redirect:/procurement/requisition";
+		if(ph == null) return "redirect:/procurement/requisition?reqtype=" + reqtype;
 
 		model.addAttribute("poordheader", ph);
 
-		List<PoordDetail> details = poordService.findPoorddetailByXpornum(xpornum);
 		List<Caitem> caitems = caitemService.getAllRequisitionItems();
+		if("Packaging Item".equalsIgnoreCase(ph.getXreqtype())) {
+			caitems = caitems.stream().filter(i -> "Packaging Item".equalsIgnoreCase(i.getXgitem())).collect(Collectors.toList());
+		} else {
+			caitems = caitems.stream().filter(i -> !"Packaging Item".equalsIgnoreCase(i.getXgitem())).collect(Collectors.toList());
+		}
+
+		List<PoordDetail> details = poordService.findPoorddetailByXpornum(xpornum);
 		if(details != null && !details.isEmpty()) {
 			for(Caitem c : caitems) {
 				for(PoordDetail d : details) {
@@ -117,6 +132,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			poordHeader.setXtrn(TransactionCodeType.REQUISITION_ORDER.getdefaultCode());
 			poordHeader.setXdate(new Date());
 			poordHeader.setXstatuspor("Open");
+			poordHeader.setXreqtype(poh.getXreqtype());
 
 			long count = poordService.save(poordHeader);
 			if(count == 0) {
@@ -201,11 +217,6 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 		return doArchiveOrRestore(xpornum, true);
 	}
 
-	@PostMapping("/restore/{xpornum}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xpornum){
-		return doArchiveOrRestore(xpornum, false);
-	}
-
 	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
 		if(poordHeader == null) {
@@ -213,24 +224,25 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// archive all details
-		if(archive && poordService.countOfRequisitionDetailsByXpornum(xpornum) > 0) {
-			long count2 = poordService.archiveAllPoordDetailByXpornum(xpornum);
-			if(count2 == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't archive details");
+		// Delete all detail first
+		List<PoordDetail> detaillist = poordService.findPoorddetailByXpornum(xpornum);
+		if(detaillist != null && !detaillist.isEmpty()) {
+			long count = poordService.deleteDetailByXpornum(xpornum);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't delete requisition details");
 				return responseHelper.getResponse();
 			}
 		}
 
-		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = poordService.update(poordHeader);
+		// delete order req
+		long count = poordService.deletePoordheaderByXpornum(xpornum);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't delete requisition");
 			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Requisition order deleted successfully");
-		responseHelper.setRedirectUrl("/procurement/requisition/" + poordHeader.getXpornum());
+		responseHelper.setRedirectUrl("/procurement/requisition/" + poordHeader.getXpornum() + "?reqtype=" + poordHeader.getXreqtype());
 		return responseHelper.getResponse();
 	}
 }
