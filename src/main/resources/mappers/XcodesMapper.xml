@@ -89,6 +89,7 @@
 		<if test="zactive != null">
 			AND zactive=#{zactive}
 		</if>
+		order by xtype
 	</select>
 
 	<select id="findByXtype" resultType="Xcodes">
@@ -112,5 +113,15 @@
 			AND zactive=#{zactive}
 		</if>
 	</select>
+
+	<delete id="deleteXcodes">
+		DELETE
+		FROM
+			xcodes
+		WHERE
+			xcode=#{xcode}
+			AND xtype=#{xtype}
+			AND zid=#{zid}
+	</delete>
 
 </mapper>

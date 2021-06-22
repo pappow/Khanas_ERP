@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Xtrn;
 import com.asl.mapper.XtrnMapper;
@@ -24,10 +25,11 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 
 	@Autowired private XtrnMapper xtrnMapper;
 
+	@Transactional
 	@Override
 	public long save(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
-		xtrn.setZid(getBusinessId());
+		xtrn.setZid(sessionManager.getBusinessId());
 		xtrn.setZauserid(getAuditUser());
 		try {
 			return xtrnMapper.save(xtrn);
@@ -37,10 +39,11 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 		}
 	}
 
+	@Transactional
 	@Override
 	public long update(Xtrn xtrn) throws ServiceException {
 		if(xtrn == null || StringUtils.isBlank(xtrn.getXtypetrn()) || StringUtils.isBlank(xtrn.getXtrn())) return 0;
-		xtrn.setZid(getBusinessId());
+		xtrn.setZid(sessionManager.getBusinessId());
 		xtrn.setZuuserid(getAuditUser());
 		try {
 			return xtrnMapper.update(xtrn);
@@ -57,7 +60,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 
 	@Override
 	public List<Xtrn> getAllXtrn(Boolean zactive) {
-		return xtrnMapper.getAllXtrn(getBusinessId(), zactive);
+		return xtrnMapper.getAllXtrn(sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public List<Xtrn> findByXtypetrn(String xtypetrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
-		return xtrnMapper.findByXtypetrn(xtypetrn, getBusinessId(), zactive);
+		return xtrnMapper.findByXtypetrn(xtypetrn, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public List<Xtrn> findByXtrn(String xtrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtrn)) return Collections.emptyList();
-		return xtrnMapper.findByXtrn(xtrn, getBusinessId(), zactive);
+		return xtrnMapper.findByXtrn(xtrn, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
@@ -90,13 +93,13 @@ public class XtrnServiceImpl extends AbstractGenericService implements XtrnServi
 	@Override
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, Boolean zactive) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return null;
-		return xtrnMapper.findByXtypetrnAndXtrn(xtypetrn, xtrn, getBusinessId(), zactive);
+		return xtrnMapper.findByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId(), zactive);
 	}
 
 	@Override
 	public String generateAndGetXtrnNumber(String xtypetrn, String xtrn, int leftpad) {
 		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return "";
 		if(leftpad < 6) leftpad = 6;
-		return xtrnMapper.generateXtrn(xtypetrn, xtrn, leftpad, getBusinessId());
+		return xtrnMapper.generateXtrn(xtypetrn, xtrn, leftpad, sessionManager.getBusinessId());
 	}
 }

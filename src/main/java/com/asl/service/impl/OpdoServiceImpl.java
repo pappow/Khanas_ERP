@@ -36,16 +36,19 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	@Autowired private CaitemMapper caitemMapper;
 	@Autowired private CacusService cacusService;
 
+	@Transactional
 	@Override
 	public long save(Opdoheader opdoHeader) {
 		if (opdoHeader == null)
 			return 0;
 		opdoHeader.setZid(sessionManager.getBusinessId());
 		opdoHeader.setZauserid(getAuditUser());
+		opdoHeader.setCentralzid(getBusinessId());
 		return opdoMapper.saveOpdoHeader(opdoHeader);
 	}
 
 	@Override
+	@Transactional
 	public long update(Opdoheader opdoHeader) {
 		if (opdoHeader == null || StringUtils.isBlank(opdoHeader.getXdornum())) 
 			return 0;
@@ -115,9 +118,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 	@Override
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum) {
-		if(StringUtils.isBlank(xdornum))
-			return Collections.emptyList();
-		return opdoMapper.findOpdoDetailByXdornum(xdornum, sessionManager.getBusinessId());
+		if(StringUtils.isBlank(xdornum)) return Collections.emptyList();
+		return opdoMapper.findOpdoDetailByXdornum(xdornum, sessionManager.getBusinessId(), getBusinessId());
 	}
 
 	@Override
@@ -310,5 +312,13 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return opdoMapper.getSalesInvoiceMatrxi(sdf.format(xdate), sessionManager.getBusinessId());
 	}
+
+	@Override
+	public Opdoheader findOpordheaderByXordernum(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return null;
+		return opdoMapper.findOpordheaderByXordernum(xordernum, sessionManager.getBusinessId());
+	}
+
+	
 
 }

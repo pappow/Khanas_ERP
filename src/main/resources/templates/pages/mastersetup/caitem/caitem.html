@@ -53,7 +53,7 @@
 									<div class="section-header sectionbartoggle">
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(caitem.xitem)}" th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(caitem.xitem) and caitem.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(caitem.xitem) and caitem.zactive == true}" th:href="@{/mastersetup/caitem/archive/} + ${caitem.xitem}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
@@ -99,7 +99,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xgitem">Item group</label>
+														<label class="control-label col-md-4" for="xgitem">Item Group</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xgitem}">
 																<option value="">-- Select --</option>
@@ -118,7 +118,7 @@
 													</div>
 
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xunitpur">Unit of Measurement</label>
+														<label class="control-label col-md-4" for="xunitpur">UOM</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xunitpur}">
 																<option th:each="unit : ${xunitPurs}" th:value="${unit.xcode}" th:text="${unit.xcode}"></option>
@@ -133,12 +133,12 @@
 															</select>
 														</div>
 													</div> -->
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcodeold">Old Code</label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcodeold}">
 														</div>
-													</div>
+													</div> -->
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xrate">Sales Rate</label>
 														<div class="col-md-8">
@@ -146,7 +146,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xminqty">Minimum Qty</label>
+														<label class="control-label col-md-4" for="xminqty">Reorder Qty.</label>
 														<div class="col-md-8">
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xminqty}" required="required">
 														</div>
@@ -203,21 +203,12 @@
 														</div>
 													</div> -->
 
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xseqn">Sequence</label>
 														<div class="col-md-8">
 															<input type="number" class="form-control" th:field="*{xseqn}">
 														</div>
-													</div>
-
-													<div class="form-group input2">
-														<label class="control-label col-sm-4" for="allowreq">Allow Req. ?</label>
-														<div class="col-sm-8">
-															<div class="checkbox">
-																<label><input type="checkbox" class="form-control-input2" th:field="*{allowreq}" value="Y"/></label>
-															</div>
-														</div>
-													</div>
+													</div> -->
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvatrate">Vat Rate (%)</label>
@@ -227,6 +218,16 @@
 													</div>
 
 													<div class="form-group input2">
+														<label class="control-label col-sm-4" for="allowreq">Is Salable ?</label>
+														<div class="col-sm-8">
+															<div class="checkbox">
+																<label><input type="checkbox" class="form-control-input2" th:field="*{allowreq}" value="Y"/></label>
+															</div>
+														</div>
+													</div>
+													
+													
+													<div th:if="${isTcc}" class="form-group input2">
 														<label class="control-label col-sm-4" for="xsetmenu">Is Set Menu ?</label>
 														<div class="col-sm-8">
 															<div class="checkbox">
@@ -252,13 +253,11 @@
 												<thead>
 													<tr>
 														<th>Item Code</th>
-														<th>Seqn</th>
 														<th>Item Name</th>
 														<th>Item Category</th>
 														<th>Item Group</th>
-														<th>Type</th>
-														<th>Purchase Unit</th>
-														<th>Selling Unit</th>
+														<!-- <th>Prod. Item?</th> -->
+														<th>UOM</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -266,13 +265,11 @@
 														<td>
 															<a th:href="@{/mastersetup/caitem/} + ${caitem.xitem}" th:text="${caitem.xitem}"></a>
 														</td>
-														<td th:text="${caitem.xseqn}"></td>
 														<td th:text="${caitem.xdesc}"></td>
 														<td th:text="${caitem.xcatitem}"></td>
 														<td th:text="${caitem.xgitem}"></td>
-														<td th:text="${caitem.xproditem ? 'Production' : ''}"></td>
+														<!-- <td th:text="${caitem.xproditem ? 'Y' : 'N'}"></td> -->
 														<td th:text="${caitem.xunitpur}"></td>
-														<td th:text="${caitem.xunitsel}"></td>
 													</tr>
 												</tbody>
 											</table>

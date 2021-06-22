@@ -26,7 +26,7 @@ public interface OpdoMapper {
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);
-	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid);
+	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum, String zid, String centralzid);
 	public List<Opdoheader> findOpdoXdornum(String xdornum, String zid);
 	
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum, String zid);
@@ -46,4 +46,6 @@ public interface OpdoMapper {
 	public Opdoheader findPoordHeaderByXordernumAndRequisitionnumber(String xordernum, String requisitionnumber, String zid);
 
 	public List<BranchesRequisitions> getSalesInvoiceMatrxi(String xdate, String zid);
+
+	public Opdoheader findOpordheaderByXordernum(String xordernum, String zid);
 }

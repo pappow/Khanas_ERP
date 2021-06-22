@@ -23,7 +23,7 @@
 												placeholder="Search..." 
 												required="required"
 												th:value="${oporddetail.xitem}" 
-												th:attr="search-url='search/caitem'"/>
+												th:attr="search-url='search/caitem/food'"/>
 										<input type="hidden" id="search-val" th:field="*{xitem}" value=""/>
 										<input type="hidden" id="search-des" th:value="*{xitem}"/>
 									</div>
@@ -60,7 +60,7 @@
 						</form>
 					</div>
 
-					<div class="row ingtable nodisplay" th:classappend="${#lists.isEmpty(subitems) ? 'nodisplay' : ''}">
+					<div class="row ingtable" th:classappend="${#lists.isEmpty(subitems) ? 'nodisplay' : ''}">
 						<h4 class="text-center">Ingredients</h4>
 						<div class="col-md-12">
 							<div id="oporddetailfoodmodaltable" th:fragment="oporddetailfoodmodaltable">
@@ -130,7 +130,7 @@
 
 												var row = 	'<tr>'+
 																'<td><input type="hidden" class="itemcode" value="'+ subdata.xitem +'"/>'+ subdata.xitemdes +'</td>' +
-																'<td><input type="number" value="'+ subdata.xqtyord +'" class="form-control" style="width: 100px;"/></td>' + 
+																'<td><input type="number" value="'+ subdata.xqtyord +'" class="form-control itemqty" style="width: 100px;" min="0"/></td>' + 
 																'<td><input type="hidden" class="itemunit" value="'+ subdata.xunit +'"/>'+ subdata.xunit +'</td>' + 
 																'<td style="text-align: right;"><button type="button" class="btn btn-danger item-remove-btn"><i class="fas fa-trash"></i></button></td>' + 
 															'</tr>';
@@ -201,7 +201,7 @@
 											class="form-control searchsuggest xsubitemsearch" 
 											placeholder="Search..." 
 											required="required" 
-											th:attr="search-url='search/caitem/withoutset'"/>
+											th:attr="search-url='search/caitem/food/withoutset'"/>
 									<input type="hidden" id="search-val" name="xsubitem" value=""/>
 									<input type="hidden" id="search-des" value="" name="xsubitemfulldes"/>
 								</div>

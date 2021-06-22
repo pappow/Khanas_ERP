@@ -46,7 +46,7 @@ public interface OpordMapper {
 	public List<Opordheader> findAllOpordHeaderByXtypetrnAndXtrnAndXdateAndXstatus(String xtypetrn, String xtrn,
 			String xstatus, String zid);
 
-	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem, String zid);
+	public List<Oporddetail> findOporddetailByXordernumAndXitem(String xordernum, String xitem, String zid);
 
 	public List<BranchesRequisitions> getSalesOrderMatrxi(String xdate, String zid);
 
@@ -80,9 +80,11 @@ public interface OpordMapper {
 
 	public long archiveAllOporddetailByXordernum(String xordernum, String zid);
 
-	public List<String> allBookedHallsInDateRange(String xcatitem, String xstartdate, String xenddate, String xordernum, String zid);
+	public List<String> allBookedHallsInDateRange(String xstartdate, String xenddate, String xordernum, String zid);
 	
-	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xcatitem, String xstartdate, String xenddate, String zid);
+	public List<ConventionBookedDetails> allBookedHallsInDateRange2(String xstartdate, String xenddate, String zid);
 
 	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype, String zid);
+
+	public long deleteSubItems(String xordernum, int xparentrow, String xtype, String zid);
 }

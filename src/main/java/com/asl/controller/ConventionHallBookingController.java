@@ -1,6 +1,5 @@
 package com.asl.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -9,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,18 +33,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Caitemdetail;
+import com.asl.entity.Opdodetail;
+import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
 import com.asl.entity.Vatait;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.mapper.OpdoMapper;
+import com.asl.model.report.ConventionHallBookingReport;
+import com.asl.model.report.HallBookingFacilitiesDetail;
+import com.asl.model.report.HallBookingFoodDetail;
+import com.asl.model.report.HallBookingHeader;
+import com.asl.model.report.HallBookingSubItems;
+import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.HallBookingService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.util.CKTime;
@@ -60,6 +75,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	@Autowired private VataitService vataitService;
 	@Autowired private CaitemService caitemService;
 	@Autowired private HallBookingService hallBookingService;
+	@Autowired private CacusService cacusService;
+	@Autowired private OpdoService opdoService;
 
 	@GetMapping
 	public String loadBookingPage(Model model) {
@@ -103,7 +120,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		Opordheader oh = new Opordheader();
 		oh.setXtypetrn(TransactionCodeType.HALL_BOOKING_SALES_ORDER.getCode());
 		oh.setXtotguest(0);
-		oh.setXstarttime("00:00");
+		oh.setXstarttime("00:01");
 		oh.setXendtime("23:59");
 		oh.setXhallamt(BigDecimal.ZERO);
 		oh.setXfunctionamt(BigDecimal.ZERO);
@@ -216,7 +233,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		if(opordheader.getXpaid() == null) opordheader.setXpaid(BigDecimal.ZERO);
 		opordheader.setXdue(opordheader.getXgrandtot().subtract(opordheader.getXpaid()));
 
-
 		// if existing then update
 		Opordheader existOh = opordService.findOpordHeaderByXordernum(opordheader.getXordernum());
 		if (existOh != null) {
@@ -226,12 +242,11 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 			String xstartdate = sdf.format(existOh.getXstartdate()).toUpperCase().concat(" ").concat(existOh.getXstarttime());
 			String xenddate = sdf.format(existOh.getXenddate()).toUpperCase().concat(" ").concat(existOh.getXendtime());
-			List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange("Convention Hall", xstartdate, xenddate, existOh.getXordernum());
-			Oporddetail od = opordService.findOporddetailByXordernum(existOh.getXordernum()).stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).stream().findFirst().orElse(null);
+			List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange(xstartdate, xenddate, null);
 			if(bookedHalls != null && !bookedHalls.isEmpty()) {
-				for(String b : bookedHalls) {
-					if(od != null && b.equalsIgnoreCase(od.getXitem())) {
-						responseHelper.setErrorStatusAndMessage(od.getXdesc() + " is Not available in this time");
+				for(String book : bookedHalls) {
+					if(!book.equalsIgnoreCase(existOh.getXordernum())) {
+						responseHelper.setErrorStatusAndMessage("Booking time not available");
 						return responseHelper.getResponse();
 					}
 				}
@@ -250,6 +265,16 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// if new record
+		// before save validate hall availability
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+		String xstartdate = sdf.format(opordheader.getXstartdate()).toUpperCase().concat(" ").concat(opordheader.getXstarttime());
+		String xenddate = sdf.format(opordheader.getXenddate()).toUpperCase().concat(" ").concat(opordheader.getXendtime());
+		List<String> bookedHalls = hallBookingService.allBookedHallsInDateRange(xstartdate, xenddate, null);
+		if(bookedHalls != null && !bookedHalls.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Booking time not available");
+			return responseHelper.getResponse();
+		}
+
 		long count = opordService.saveOpordHeader(opordheader);
 		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Booking order not created");
@@ -301,9 +326,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		List<Caitem> facList = caitemService.findByXcatitem("Facilities");
 		facList.sort(Comparator.comparing(Caitem::getXdesc));
 		map.put("Facilities", facList);
-//		List<Caitem> foodList = caitemService.findByXcatitem("Food");
-//		foodList.sort(Comparator.comparing(Caitem::getXdesc));
-//		map.put("Food", foodList);
 
 		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
 		if(details != null && !details.isEmpty()) {
@@ -318,15 +340,9 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			}
 		}
 
-		
-
 		model.addAttribute("itemMap", map);
 		return "pages/conventionmanagement/hallbooking/oporddetailmodal::oporddetailmodal";
 	}
-
-	
-
-	
 
 
 	@PostMapping("/oporddetails/save")
@@ -345,23 +361,18 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		boolean functionExist = false;
-		boolean hallExist = false;
 		List<Oporddetail> deletableDL = new ArrayList<>();
-		List<Oporddetail> existDetails = opordService.findOporddetailByXordernum(xordernum);
+		List<Oporddetail> existDetails = opordService.findOporddetailByXordernum(xordernum).stream().filter(f -> "Facilities".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList());
 		if(existDetails != null && !existDetails.isEmpty()) {
 			for(Oporddetail d :  existDetails) {
 				// if already added in db then remove from list
 				if(xitemsL.contains(d.getXitem())) {
 					xitemsL.remove(xitemsL.indexOf(d.getXitem()));
-					if("Function".equalsIgnoreCase(d.getXcatitem())) functionExist = true;
-					if("Convention Hall".equalsIgnoreCase(d.getXcatitem())) hallExist = true;
 				} else { // if d is not in list, then delete from db
 					deletableDL.add(d);
 				}
 			}
 		}
-
 
 		List<Oporddetail> details = new ArrayList<>();
 		for(String item : xitemsL) {
@@ -383,18 +394,6 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			detail.setXlineamt(detail.getXqtyord().multiply(detail.getXrate()));
 			details.add(detail);
 		}
-
-		// validation
-//		long totalFunctions = details.stream().filter(f -> "Function".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-//		long totalHalls = details.stream().filter(f -> "Convention Hall".equalsIgnoreCase(f.getXcatitem())).collect(Collectors.toList()).size();
-//		if(totalFunctions != 1 && !functionExist) {
-//			responseHelper.setErrorStatusAndMessage("Function selection required. You must select one function");
-//			return responseHelper.getResponse();
-//		}
-//		if(totalHalls == 0 && !hallExist) {
-//			responseHelper.setErrorStatusAndMessage("Hall selection required");
-//			return responseHelper.getResponse();
-//		}
 
 		// delete first
 		if(!deletableDL.isEmpty()) {
@@ -422,7 +421,8 @@ public class ConventionHallBookingController extends ASLAbstractController {
 
 	@GetMapping("/oporddetail/{xordernum}")
 	public String reloadOpdoDetailTable(@PathVariable String xordernum, Model model) {
-		model.addAttribute("oporddetailsList", opordService.findOporddetailByXordernum(xordernum));
+		List<Oporddetail> detail = opordService.findOporddetailByXordernum(xordernum);
+		model.addAttribute("facilities", detail.stream().filter(d -> "Facilities".equalsIgnoreCase(d.getXcatitem())).collect(Collectors.toList()));
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
 		return "pages/conventionmanagement/hallbooking/opord::oporddetailtable";
 	}
@@ -543,36 +543,22 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodal";
 	}
 
-	//TODO: 
-	@PostMapping("/oporddetails/food/save")
-	public @ResponseBody Map<String, Object> saveOpordFooddetail(@RequestParam(value="xitems[]") String[] xitems, @RequestParam(value="xordernum") String xordernum) {
-		
-		
-		return responseHelper.getResponse();
-	}
-
 	@GetMapping("/subitemdetails/{xitem}")
 	public String loadSubitemTable(@PathVariable String xitem, Model model) {
 		List<Caitemdetail> cdetails = caitemService.findCaitemdetailByXitem(xitem);
 		List<Oporddetail> subitems = new ArrayList<>();
 		for(Caitemdetail c : cdetails) {
 			Oporddetail o = new Oporddetail();
-			o.setXitem(c.getXitem());
+			o.setXitem(c.getXsubitem());
 			o.setXdesc(c.getXdesc());
 			o.setXqtyord(c.getXqtyord());
 			o.setXunit(c.getXunit());
 			subitems.add(o);
 		}
 
-		model.addAttribute("subitems", subitems != null ? subitems : Collections.emptyList());
+		model.addAttribute("subitems", subitems);
 		model.addAttribute("oporddetail", caitemService.findByXitem(xitem));
 		return "pages/conventionmanagement/hallbooking/oporddetailfoodmodal::oporddetailfoodmodaltable";
-	}
-
-	@GetMapping("/{xitem}/extraoporddetail/{xrow}/show")
-	public String loadExtraItemModal(@PathVariable String xitem, @PathVariable String xrow, Model model) {
-		
-		return "";
 	}
 
 
@@ -596,11 +582,9 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		System.out.println(oporddetail.toString());
-		subdetails.stream().forEach(s -> System.out.println(s.toString()));
-
 		// validation
-		Oporddetail exist = opordService.findOporddetailByXordernumAndXitem(oporddetail.getXordernum(), oporddetail.getXitem());
+		List<Oporddetail> exists = opordService.findAllOporddetailByXordernumAndXitem(oporddetail.getXordernum(), oporddetail.getXitem());
+		Oporddetail exist = exists.stream().filter(f -> !"Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
 		// if new but exist
 		if(oporddetail.getXrow() == 0 && exist != null) {
@@ -659,17 +643,321 @@ public class ConventionHallBookingController extends ASLAbstractController {
 			}
 
 			responseHelper.setSuccessStatusAndMessage("Item detail added successfully");
-			responseHelper.setReloadSectionIdWithUrl("oporddetailfoodtable", "/conventionmanagement/hallbooking/oporddetail/" + oporddetail.getXordernum());
+			responseHelper.setReloadSectionIdWithUrl("oporddetailfoodtable", "/conventionmanagement/hallbooking/food/oporddetail/" + oporddetail.getXordernum());
 			responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + oporddetail.getXordernum());
 			return responseHelper.getResponse();
 		}
 
-		
-		
-		
-		
 
-		responseHelper.setErrorStatusAndMessage("Working....");
+		// update main item first
+		if(oporddetail.getXrate() == null) oporddetail.setXrate(BigDecimal.ZERO);
+		if(oporddetail.getXqtyord() == null) oporddetail.setXqtyord(BigDecimal.ONE);
+		oporddetail.setXlineamt(oporddetail.getXrate().multiply(oporddetail.getXqtyord()));
+		BeanUtils.copyProperties(oporddetail, exist, "xitem", "xrow","xordernum","xunit","xcatitem","xdesc","xgitem");
+		long count = opordService.updateOpordDetail(exist);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update item");
+			return responseHelper.getResponse();
+		}
+
+		// Now archive previous details of sub items
+		if(!opordService.findAllSubitemDetail(exist.getXordernum(), exist.getXrow(), "Set Item").isEmpty()) {
+			long countd = opordService.deleteSubItems(exist.getXordernum(), exist.getXrow(), "Set Item");
+			if(countd == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update sub items");
+				return responseHelper.getResponse();
+			}
+		}
+
+		// Now add new sub items if available
+		List<Oporddetail> subitems = new ArrayList<>();
+		for(Oporddetail o : subdetails) {
+			Caitem c = caitemService.findByXitem(o.getXitem());
+			if(c == null) continue;
+
+			o.setXdesc(c.getXdesc());
+			o.setXcatitem(c.getXcatitem());
+			o.setXgitem(c.getXgitem());
+			if(o.getXqtyord() == null) o.setXqtyord(BigDecimal.ONE);
+			o.setXrate(BigDecimal.ZERO);
+			o.setXlineamt(o.getXqtyord().multiply(o.getXrate()));
+			o.setXparentrow(exist.getXrow());
+			o.setXtype("Set Item");
+			subitems.add(o);
+		}
+		if(!subitems.isEmpty()) {
+			long count2 = opordService.saveBatchOpordDetail(subitems);
+			if(count2 == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update set items");
+				return responseHelper.getResponse();
+			}
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Item detail updated successfully");
+		responseHelper.setReloadSectionIdWithUrl("oporddetailfoodtable", "/conventionmanagement/hallbooking/food/oporddetail/" + exist.getXordernum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + exist.getXordernum());
+		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/food/{xordernum}/oporddetail/{xrow}/delete")
+	public @ResponseBody Map<String, Object> deleteFoodOpordDetail(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
+
+		Oporddetail mainitem = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
+		if(mainitem == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find item detail in this system");
+			return responseHelper.getResponse();
+		}
+
+		// archive set item first if available
+		if(!opordService.findAllSubitemDetail(mainitem.getXordernum(), mainitem.getXrow(), "Set Item").isEmpty()) {
+			long count = opordService.deleteSubItems(mainitem.getXordernum(), mainitem.getXrow(), "Set Item");
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't delete items");
+				return responseHelper.getResponse();
+			}
+		}
+
+		// now delete main item
+		long count = opordService.deleteOpordDetail(mainitem);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete item detail");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Item detail updated successfully");
+		responseHelper.setReloadSectionIdWithUrl("oporddetailfoodtable", "/conventionmanagement/hallbooking/food/oporddetail/" + xordernum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opordheaderform", "/conventionmanagement/hallbooking/opordheaderform/" + xordernum);
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/food/oporddetail/{xordernum}")
+	public String loadFoodOporddetailTable(@PathVariable String xordernum, Model model) {
+		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+
+		List<Oporddetail> detail = opordService.findOporddetailByXordernum(xordernum);
+
+		List<Oporddetail> mainfoodList = detail.stream().filter(d -> "Food".equalsIgnoreCase(d.getXcatitem()) && !"Set Item".equalsIgnoreCase(d.getXtype())).collect(Collectors.toList());
+		List<Oporddetail> subfoodList = detail.stream().filter(d -> "Food".equalsIgnoreCase(d.getXcatitem()) && "Set Item".equalsIgnoreCase(d.getXtype())).collect(Collectors.toList());
+		for(Oporddetail m : mainfoodList) {
+			for(Oporddetail s : subfoodList) {
+				if(m.getXrow() == s.getXparentrow()) {
+					m.getSubitems().add(s);
+				}
+			}
+		}
+		model.addAttribute("foods", mainfoodList);
+
+		return "pages/conventionmanagement/hallbooking/opord::oporddetailfoodtable";
+	}
+
+	@GetMapping("/print/{xordernum}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			message = "Booking not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			message = "Booking Details is empty";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		for(Oporddetail o : details) {
+			Caitem ca = caitemService.findByXitem(o.getXitem());
+			if(ca == null) continue;
+			o.setXitem(ca.getXitem() + " - " + ca.getXdesc());
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+
+		Zbusiness zb = sessionManager.getZbusiness();
+
+		// report start
+		ConventionHallBookingReport report = new ConventionHallBookingReport();
+		report.setBusinessName(zb.getZorg());
+		report.setBusinessAddress(zb.getXmadd());
+		report.setReportName("Event Contract : " + oh.getXordernum());
+		report.setFromDate(sdf.format(oh.getXdate()));
+		report.setToDate(sdf.format(oh.getXdate()));
+		report.setPrintDate(sdf.format(new Date()));
+
+		HallBookingHeader header = new HallBookingHeader();
+		BeanUtils.copyProperties(oh, header);
+		header.setXdate(sdf.format(oh.getXdate()));
+		header.setXfunction(caitemService.findByXitem(oh.getXfunction()).getXdesc());
+		header.setXstartdate(sdf.format(oh.getXstartdate()));
+		header.setXenddate(sdf.format(oh.getXenddate()));
+		Cacus c = cacusService.findByXcus(oh.getXcus());
+		header.setXcus(c.getXorg());
+		header.setClientaddress(c.getXmadd());
+		header.setClientphone(c.getXphone());
+		report.setHeader(header);
+
+		List<HallBookingFoodDetail> foodbookingdetails = new ArrayList<>();
+		List<HallBookingFacilitiesDetail> facilitiesbookingdetails = new ArrayList<>();
+
+		for(Oporddetail detail : details) {
+			if("Set Item".equalsIgnoreCase(detail.getXtype()) || "Facilities".equalsIgnoreCase(detail.getXcatitem())) continue;
+			HallBookingFoodDetail hb = new HallBookingFoodDetail();
+			BeanUtils.copyProperties(detail, hb);
+			foodbookingdetails.add(hb);
+		}
+
+		for(Oporddetail detail : details) {
+			if(!"Facilities".equalsIgnoreCase(detail.getXcatitem())) continue;
+			HallBookingFacilitiesDetail hb = new HallBookingFacilitiesDetail();
+			BeanUtils.copyProperties(detail, hb);
+			facilitiesbookingdetails.add(hb);
+		}
+
+		for(HallBookingFoodDetail hb : foodbookingdetails) {
+			for(Oporddetail detail : details) {
+				if(!"Set Item".equalsIgnoreCase(detail.getXtype())) continue;
+
+				if(hb.getXrow() == detail.getXparentrow()) {
+					HallBookingSubItems sub = new HallBookingSubItems();
+					BeanUtils.copyProperties(detail, sub);
+					hb.getSubitems().add(sub);
+				}
+			}
+		}
+
+		report.setFooddetails(foodbookingdetails);
+		report.setFacilitiesdetails(facilitiesbookingdetails);
+		// report end
+
+		byte[] byt = getPDFByte(report, "hallbookingreport.xsl");
+		if(byt == null) {
+			message = "Can't generate pdf for chalan : " + xordernum;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+
+	@PostMapping("/createinvoice/{xordernum}")
+	public @ResponseBody Map<String, Object> createInvoice(@PathVariable String xordernum, Model model) {
+		Opordheader  booking = opordService.findOpordHeaderByXordernum(xordernum);
+		if(booking == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Booking in this system");
+			return responseHelper.getResponse();
+		}
+
+		// validation
+		Opdoheader existInvoice = opdoService.findOpordheaderByXordernum(xordernum);
+		if(existInvoice != null) {
+			responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + existInvoice.getXdornum());
+			return responseHelper.getResponse();
+		}
+
+		// Create invoice first
+		Opdoheader sales = new Opdoheader();
+		sales.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		sales.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		sales.setXdate(new Date());
+		sales.setXstatusord("Open");
+		sales.setXstatusjv("Open");
+		sales.setXstatusar("Open");
+		sales.setXordernum(booking.getXordernum());
+		sales.setXvatait(booking.getXvatait());
+		sales.setXtotamt(booking.getXtotamt() == null ? BigDecimal.ZERO : booking.getXtotamt());
+		sales.setXait(booking.getXaitamt() == null ? BigDecimal.ZERO : booking.getXaitamt());
+		sales.setXvatamt(booking.getXvatamt() == null ? BigDecimal.ZERO : booking.getXvatamt());
+		sales.setXdiscamt(booking.getXdiscamt() == null ? BigDecimal.ZERO : booking.getXdiscamt());
+		sales.setXgrandtot(booking.getXgrandtot() == null ? BigDecimal.ZERO : booking.getXgrandtot());
+		sales.setXcus(booking.getXcus());
+		sales.setXpaid(booking.getXpaid() == null ? BigDecimal.ZERO : booking.getXpaid());
+
+		long count = opdoService.save(sales);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create invoice from booking order");
+			return responseHelper.getResponse();
+		}
+
+		// create invoice details
+		// find booking details first
+		List<Opdodetail> salesDetails = new ArrayList<>();
+		List<Oporddetail> bookingDetails = opordService.findOporddetailByXordernum(xordernum);
+		if(bookingDetails != null && !bookingDetails.isEmpty()) {
+			List<Oporddetail> subitems = bookingDetails.stream().filter(f -> "Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+			List<Oporddetail> mainitems = bookingDetails.stream().filter(f -> !"Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+			for(Oporddetail m : mainitems) {
+				for(Oporddetail s : subitems) {
+					if(s.getXparentrow() == m.getXrow()) {
+						m.getSubitems().add(s);
+					}
+				}
+			}
+
+			for(Oporddetail bd : mainitems) {
+				// create invoice details first
+				Opdodetail salesDetail = new Opdodetail();
+				salesDetail.setXdornum(sales.getXdornum());
+				salesDetail.setXitem(bd.getXitem());
+				salesDetail.setXqtyord(bd.getXqtyord() == null ? BigDecimal.ZERO : bd.getXqtyord());
+				salesDetail.setXunitsel(bd.getXunit());
+				salesDetail.setXrate(bd.getXrate() == null ? BigDecimal.ZERO : bd.getXrate());
+				salesDetail.setXlineamt(bd.getXlineamt() == null ? BigDecimal.ZERO : bd.getXlineamt());
+				salesDetail.setXcatitem(bd.getXcatitem());
+				salesDetail.setXgitem(bd.getXgitem());
+				salesDetail.setXtype(bd.getXtype());
+				salesDetail.setXparentrow(0);
+
+				if(bd.getSubitems() != null && !bd.getSubitems().isEmpty()) {
+					// create subitems
+					for(Oporddetail sub : bd.getSubitems()) {
+						Opdodetail subitem = new Opdodetail();
+						subitem.setXdornum(sales.getXdornum());
+						subitem.setXitem(sub.getXitem());
+						subitem.setXqtyord(sub.getXqtyord() == null ? BigDecimal.ZERO : sub.getXqtyord());
+						subitem.setXunitsel(sub.getXunit());
+						subitem.setXrate(sub.getXrate() == null ? BigDecimal.ZERO : sub.getXrate());
+						subitem.setXlineamt(sub.getXlineamt() == null ? BigDecimal.ZERO : sub.getXlineamt());
+						subitem.setXcatitem(sub.getXcatitem());
+						subitem.setXgitem(sub.getXgitem());
+						subitem.setXtype(sub.getXtype());
+						salesDetail.getSubitems().add(subitem);
+					}
+
+				}
+
+				salesDetails.add(salesDetail);
+
+			}
+
+			// Now save sales details
+			if(salesDetails != null && !salesDetails.isEmpty()) {
+				for(Opdodetail detail : salesDetails) {
+					long countd = opdoService.saveDetail(detail);
+					if(countd == 0) {
+						responseHelper.setErrorStatusAndMessage("Can't save detail");
+						return responseHelper.getResponse();
+					}
+
+					if(detail.getSubitems() != null && !detail.getSubitems().isEmpty()) {
+						for(Opdodetail subdetail : detail.getSubitems()) {
+							subdetail.setXparentrow(detail.getXrow());
+							long subcount = opdoService.saveDetail(subdetail);
+							if(subcount == 0) {
+								responseHelper.setErrorStatusAndMessage("Can't save detail");
+								return responseHelper.getResponse();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + sales.getXdornum());
 		return responseHelper.getResponse();
 	}
 

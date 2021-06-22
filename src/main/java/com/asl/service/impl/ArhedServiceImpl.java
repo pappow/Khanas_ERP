@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Arhed;
-import com.asl.entity.Modetail;
 import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.ArhedMapper;
 import com.asl.service.ArhedService;
@@ -19,6 +19,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	@Autowired
 	private ArhedMapper arhedMapper;
 
+	@Transactional
 	@Override
 	public long save(Arhed arhed) {
 		if (arhed == null || StringUtils.isBlank(arhed.getXtype()) || StringUtils.isBlank(arhed.getXtrnarhed())) return 0;
@@ -28,6 +29,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 		return arhedMapper.saveArhed(arhed);
 	}
 
+	@Transactional
 	@Override
 	public long update(Arhed arhed) {
 		if (arhed == null || StringUtils.isBlank(arhed.getXvoucher())) return 0;
@@ -39,28 +41,24 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 
 	@Override
 	public Arhed findArhedByXvoucher(String xvoucher) {
-		if (StringUtils.isBlank(xvoucher))
-			return null;
+		if (StringUtils.isBlank(xvoucher)) return null;
 		return arhedMapper.findArhedByXvoucher(xvoucher, sessionManager.getBusinessId());
 	}
 
 	@Override
 	public List<Arhed> getAllArheds() {
-		
 		return arhedMapper.getAllArhed(sessionManager.getBusinessId());
 	}
 
 	@Override
 	public List<Arhed> getAllArhedByXtrn(String xtrn) {
-		if(StringUtils.isBlank(xtrn))
-			return null;
+		if(StringUtils.isBlank(xtrn)) return null;
 		return arhedMapper.getAllArhedByXtrn(xtrn, sessionManager.getBusinessId());
 	}
 
 	@Override
 	public Arhed findObapByXcus(String xcus) {
-		if(StringUtils.isBlank(xcus))
-			return null;		
+		if(StringUtils.isBlank(xcus)) return null;
 		return arhedMapper.findObapByXcus(xcus, TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
@@ -83,8 +81,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	
 	@Override
 	public Arhed findAdarByXcus(String xcus) {
-		if(StringUtils.isBlank(xcus))
-			return null;		
+		if(StringUtils.isBlank(xcus)) return null;
 		return arhedMapper.findAdarByXcus(xcus, TransactionCodeType.ACCOUNT_ADAR.getdefaultCode(), sessionManager.getBusinessId());
 	}
 
@@ -92,11 +89,19 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	public List<Arhed> getAllAdars() {
 		return arhedMapper.getAllAdars(TransactionCodeType.ACCOUNT_ADAR.getdefaultCode(), sessionManager.getBusinessId());
 	}
-	
+
 	@Override
 	public List<Arhed> findByXstaff(String xstaff){
 		if(StringUtils.isBlank(xstaff)) return Collections.emptyList();
 		return arhedMapper.findByXstaff(xstaff, sessionManager.getBusinessId());
 	}
+
+	@Transactional
+	@Override
+	public long deleteVoucher(String xvoucher) {
+		if(StringUtils.isBlank(xvoucher)) return 0;
+		return arhedMapper.deleteVoucher(xvoucher, sessionManager.getBusinessId());
+	}
+
 	
 }

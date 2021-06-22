@@ -68,6 +68,9 @@ public abstract class AbstractModel<U> implements Serializable {
 	@Transient
 	private String copyId;
 
+	@Transient
+	private String centralzid;
+
 	@PreUpdate
 	public void onUpdate() {
 		try {

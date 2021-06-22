@@ -33,6 +33,7 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		if(opordheader == null) return 0;
 		opordheader.setZid(sessionManager.getBusinessId());
 		opordheader.setZauserid(getAuditUser());
+		opordheader.setCentralzid(getBusinessId());
 		return opordMapper.saveOpordHeader(opordheader);
 	}
 
@@ -147,6 +148,12 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 	@Override
 	public Oporddetail findOporddetailByXordernumAndXitem(String xordernum, String xitem) {
 		if(StringUtils.isBlank(xordernum) || StringUtils.isBlank(xitem)) return null;
+		return opordMapper.findOporddetailByXordernumAndXitem(xordernum, xitem, sessionManager.getBusinessId()).stream().findFirst().orElse(null);
+	}
+
+	@Override
+	public List<Oporddetail> findAllOporddetailByXordernumAndXitem(String xordernum, String xitem) {
+		if(StringUtils.isBlank(xordernum) || StringUtils.isBlank(xitem)) return null;
 		return opordMapper.findOporddetailByXordernumAndXitem(xordernum, xitem, sessionManager.getBusinessId());
 	}
 
@@ -257,5 +264,14 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		if(StringUtils.isBlank(xordernum) || xparentrow == 0 || StringUtils.isBlank(xtype)) return Collections.emptyList();
 		return opordMapper.findAllSubitemDetail(xordernum, xparentrow, xtype, sessionManager.getBusinessId());
 	}
+
+	@Override
+	@Transactional
+	public long deleteSubItems(String xordernum, int xparentrow, String xtype) {
+		if(StringUtils.isBlank(xordernum) || xparentrow == 0 || StringUtils.isBlank(xtype)) return 0;
+		return opordMapper.deleteSubItems(xordernum, xparentrow, xtype, sessionManager.getBusinessId());
+	}
+
+	
 
 }

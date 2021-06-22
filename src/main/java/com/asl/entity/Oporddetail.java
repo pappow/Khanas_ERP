@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,6 +36,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = { "zid", "xordernum", "xrow" }, callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@XmlRootElement(name = "oporddetail")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Oporddetail extends AbstractModel<String> {
 
 	private static final long serialVersionUID = -8200619366025104933L;

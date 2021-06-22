@@ -50,7 +50,7 @@ ck.ui.config.ckBigMenu = function(){
 		} else {
 			$('.ckbigmenu').css({
 				'width': '402px',
-				'overflow' : 'inherit'
+				'overflow-y' : 'scroll'
 			});
 		}
 	});

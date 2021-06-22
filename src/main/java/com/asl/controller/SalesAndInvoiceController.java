@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -92,10 +93,19 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("payStatusList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode(), Boolean.TRUE));
 
-		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
-		if(isBoshila()) {
-			return "pages/land/salesninvoice/opdo";
+		List<Opdodetail> details = opdoService.findOpdoDetailByXdornum(xdornum);
+		List<Opdodetail> mainitems = details.stream().filter(f -> !"Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+		List<Opdodetail> subitems = details.stream().filter(f -> "Set Item".equalsIgnoreCase(f.getXtype())).collect(Collectors.toList());
+		for(Opdodetail m : mainitems) {
+			for(Opdodetail s : subitems) {
+				if(m.getXrow() == s.getXparentrow()) {
+					m.getSubitems().add(s);
+				}
+			}
 		}
+		model.addAttribute("opdoDetailsList", mainitems);
+
+		if(isBoshila()) return "pages/land/salesninvoice/opdo";
 		return "pages/salesninvoice/salesandinvoice/opdo";
 	}
 
@@ -310,8 +320,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		}
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
-				.intValue();
+		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
 
 		if (opdoDetailList.size() == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);

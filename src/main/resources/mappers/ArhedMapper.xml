@@ -35,6 +35,7 @@
 			xtyperec,
 			xinvnum,
 			xstaff,
+			xstatus,
 			zid,
 			zauserid,
 			zuuserid,
@@ -73,6 +74,7 @@
 			#{xtyperec, jdbcType=VARCHAR},
 			#{xinvnum, jdbcType=VARCHAR},
 			#{xstaff, jdbcType=VARCHAR},
+			#{xstatus, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -113,6 +115,7 @@
 			xtyperec=#{xtyperec, jdbcType=VARCHAR},
 			xinvnum=#{xtyperec, jdbcType=VARCHAR},
 			xstaff=#{xstaff, jdbcType=VARCHAR},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -125,7 +128,13 @@
 	</update>
 	
 	<select id="findArhedByXvoucher" resultType="Arhed">
-		SELECT * FROM Arhed WHERE xvoucher=#{xvoucher} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			Arhed 
+		WHERE 
+			xvoucher=#{xvoucher} 
+			AND zid=#{zid}
 	</select>
 
 	<select id="getAllArhed" resultType="Arhed">
@@ -167,5 +176,14 @@
 	<select id="findByXstaff" resultType="Arhed">
 		SELECT * FROM Arhed WHERE (UPPER(xstaff) LIKE #{xstaff} ||'%') AND zid=#{zid} AND zactive='1'
 	</select>
+
+	<delete id="deleteVoucher">
+		DELETE
+		FROM
+			arhed
+		WHERE
+			xvoucher=#{xvoucher}
+			AND zid=#{zid}
+	</delete>
 
 </mapper>

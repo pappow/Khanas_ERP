@@ -63,4 +63,6 @@ public interface OpdoService {
 	public List<Opdoheader> findOpdoXdornum(String xdornum);
 
 	public List<BranchesRequisitions> getSalesInvoiceMatrxi(Date xdate);
+
+	public Opdoheader findOpordheaderByXordernum(String xordernum);
 }

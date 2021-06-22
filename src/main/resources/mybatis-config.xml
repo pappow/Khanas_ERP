@@ -59,5 +59,6 @@
 		<mapper resource="mappers/LandSurveyMapper.xml"/>
 		<mapper resource="mappers/LandMemberInfoMapper.xml"/>
 		<mapper resource="mappers/LandComEventMapper.xml"/>
+		<mapper resource="mappers/OpreqMapper.xml"/>
 	</mappers>
 </configuration>

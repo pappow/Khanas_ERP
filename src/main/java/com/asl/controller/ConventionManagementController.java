@@ -46,7 +46,7 @@ public class ConventionManagementController extends ASLAbstractController {
 
 		String xstartdate = sdf.format(cal.getTime()).toUpperCase();
 		String xenddate = sdf.format(cal2.getTime()).toUpperCase();
-		List<ConventionBookedDetails> bookedHalls = hallBookingService.allBookedHallsInDateRange2("Convention Hall", xstartdate, xenddate);
+		List<ConventionBookedDetails> bookedHalls = hallBookingService.allBookedHallsInDateRange2(xstartdate, xenddate);
 		bookedHalls.stream().forEach(b -> b.setBooked(true));
 		List<String> bhList = new ArrayList<String>();
 		bookedHalls.stream().forEach(b -> bhList.add(b.getXitem()));

@@ -5,7 +5,7 @@
 
 	<insert id="saveOpordHeader" parameterType="Opordheader">
 		<selectKey keyProperty="xordernum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${centralzid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO opordheader
 		(
@@ -562,7 +562,7 @@
 			caitem.xcatitem 
 		FROM 
 			oporddetail od
-			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+			left JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
 		WHERE 
 			od.xordernum=#{xordernum}
 			AND od.xitem LIKE 'ICHL-%'
@@ -629,17 +629,12 @@
 
 	<select id="allBookedHallsInDateRange" resultType="String">
 		select
-			distinct opd.xitem
+			oh.xordernum
 		from 
-			oporddetail opd
-			join opordheader oh on oh.xordernum = opd.xordernum and oh.zid = opd.zid and oh.zactive='1'
+			opordheader oh
 		where
-			opd.zid=#{zid}
-			and opd.zactive='1'
-			and opd.xcatitem=#{xcatitem}
-			<if test="xordernum != null || xordernum != ''">
-				and oh.xordernum != #{xordernum}
-			</if>
+			oh.zid=#{zid}
+			and oh.zactive='1'
 			and 
 				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xstartdate} and (to_char(oh.xenddate, 'dd-MON-yyyy') || ' ' || oh.xendtime) &gt;= #{xstartdate})
 				OR
@@ -662,7 +657,6 @@
 		where
 			opd.zid=#{zid}
 			and opd.zactive='1'
-			and opd.xcatitem=#{xcatitem}
 			and 
 				(((to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &gt;= #{xstartdate} AND (to_char(oh.xstartdate, 'dd-MON-yyyy') || ' ' || oh.xstarttime) &lt;= #{xenddate})
 				OR
@@ -680,4 +674,15 @@
 			AND xtype=#{xtype}
 			AND xparentrow=#{xparentrow}
 	</select>
+
+	<delete id="deleteSubItems">
+		DELETE
+		FROM
+			oporddetail
+		WHERE
+			zid=#{zid}
+			AND xordernum=#{xordernum}
+			AND xtype=#{xtype}
+			AND xparentrow=#{xparentrow}
+	</delete>
 </mapper>

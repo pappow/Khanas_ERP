@@ -237,19 +237,27 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 
+	@GetMapping("/caitem/food/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getConventionFoods(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.getFoodItems(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
+	@GetMapping("/caitem/food/withoutset/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getNonSetItem(@PathVariable String hint){
+		List<Caitem> caitemList = caitemService.getFoodItems(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		caitemList.stream().filter(c -> !c.isXsetmenu()).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
+
 	@GetMapping("/caitem/{xitem}/subitem/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getItemAsSubitem(@PathVariable String xitem, @PathVariable String hint){
 		List<Caitem> caitemList = caitemService.searchCaitem(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		caitemList.stream().filter(c -> !xitem.equalsIgnoreCase(c.getXitem())).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
-		return list;
-	}
-
-	@GetMapping("/caitem/withoutset/{hint}")
-	public @ResponseBody List<SearchSuggestResult> getNonSetItem(@PathVariable String hint){
-		List<Caitem> caitemList = caitemService.searchCaitem(hint);
-		List<SearchSuggestResult> list = new ArrayList<>();
-		caitemList.stream().filter(c -> !c.isXsetmenu()).forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
 		return list;
 	}
 

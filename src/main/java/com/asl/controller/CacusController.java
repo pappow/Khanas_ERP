@@ -174,11 +174,6 @@ public class CacusController extends ASLAbstractController {
 		return doArchiveOrRestore(xcus, cacusType, true);
 	}
 
-	@PostMapping("/restore/{xcus}/{cacusType}")
-	public @ResponseBody Map<String, Object> restore(@PathVariable String xcus, @PathVariable String cacusType){
-		return doArchiveOrRestore(xcus, cacusType, false);
-	}
-
 	public Map<String, Object> doArchiveOrRestore(String xcus, String cacusType, boolean archive){
 		Cacus cacus = cacusService.findByXcus(xcus);
 		if(cacus == null) {
@@ -186,15 +181,15 @@ public class CacusController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		cacus.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = cacusService.update(cacus);
+		// delete cacus
+		long count = cacusService.deleteCacus(cacus.getXcus());
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't delete " + ("SUP".equalsIgnoreCase(cacusType) ? "Supplier" : "Customer"));
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Updated successfully");
-		responseHelper.setRedirectUrl("/mastersetup/cacus/" + cacus.getXcus() + "?cacusType=" + cacusType);
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/mastersetup/cacus?cacusType=" + cacusType);
 		return responseHelper.getResponse();
 	}
 }

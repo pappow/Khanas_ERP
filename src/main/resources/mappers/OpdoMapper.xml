@@ -5,7 +5,7 @@
 
 	<insert id="saveOpdoHeader" parameterType="Opdoheader">
  		<selectKey keyProperty="xdornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${centralzid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Opdoheader
 		(
@@ -161,7 +161,8 @@
 			xlong,
 			xrategrn,
 			xqtycrn,
-
+			xtype,
+			xparentrow,
 			zid,
 			zauserid,
 			zuuserid,
@@ -185,7 +186,8 @@
 			#{xlong, jdbcType=VARCHAR},
 			#{xrategrn, jdbcType=DECIMAL},
 			#{xqtycrn, jdbcType=DECIMAL},
-			
+			#{xtype, jdbcType=VARCHAR},
+			#{xparentrow, jdbcType=INTEGER},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -212,6 +214,8 @@
 			xlong=#{xlong, jdbcType=VARCHAR},
 			xrategrn=#{xrategrn, jdbcType=DECIMAL},
 			xqtycrn=#{xqtycrn, jdbcType=DECIMAL},
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xparentrow=#{xparentrow, jdbcType=INTEGER},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -290,7 +294,7 @@
 	</select>
 
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
-		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid}
 	</select>
 	
 	<select id="findOpdoDetailByXdornumAndXitem" resultType="Opdodetail">
@@ -303,10 +307,14 @@
 			caitem.xdesc,
 			caitem.xgitem,
 			caitem.xcatitem
-		FROM Opdodetail od
-			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
-		WHERE od.xdornum=#{xdornum} AND od.zid=#{zid} AND od.zactive='1'
-		ORDER BY XROW ASC
+		FROM 
+			opdodetail od
+			left JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{centralzid} and caitem.zactive='1'
+		WHERE 
+			od.xdornum=#{xdornum} 
+			AND od.zid=#{zid} 
+		ORDER BY 
+			XROW ASC
 	</select>
 	
 	
@@ -346,7 +354,7 @@
 			AND XTYPETRN=#{xtypetrn}
 			AND XTRN=#{xtrn}
 		ORDER BY
-			xdornum DESC
+			xstatusord, xdornum  DESC
 	</select>
 
 	<select id="findAllInvoiceOrder" resultType="Opdoheader">
@@ -428,5 +436,16 @@
 			AND CAITEM.XPRODITEM='1'
 		ORDER BY
 			ZBUSINESS.ZORG, CAITEM.XSEQN, OPDODETAIL.XITEM ASC
+	</select>
+
+	<select id="findOpordheaderByXordernum" resultType="Opdoheader">
+		SELECT 
+			* 
+		FROM
+			opdoheader
+		WHERE
+			zid=#{zid}
+			AND xordernum=#{xordernum}
+			AND zactive='1'
 	</select>
 </mapper>
