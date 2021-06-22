@@ -73,7 +73,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine RM0607;
 	private ProfileLine RM0608;
 
-
+	private ProfileLine RM0701;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
@@ -288,5 +288,9 @@ public class ReportProfile implements Serializable {
 		addToProfileLineMap(profileLine);
 	}
 	
+	public void setRM0701(ProfileLine profileLine) {
+		this.RM0701 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
 
 }

@@ -55,6 +55,8 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0606 = new HashMap<>();
 	public static final Map<String, String> RM0607 = new HashMap<>();
 	public static final Map<String, String> RM0608 = new HashMap<>();
+	
+	public static final Map<String, String> RM0701 = new HashMap<>();
 
 	static {
 		RM0301.put("param1", "ZID|" + ReportParamDataType.STRING.name());
@@ -249,6 +251,12 @@ public class ReportParamMap {
 
 		RM0608.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0608.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		
+		RM0701.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0701.put("param2", "LAND|" + ReportParamDataType.STRING.name());
+		RM0701.put("param3", "MEMBER|" + ReportParamDataType.STRING.name());
+		RM0701.put("param4", "DAG|" + ReportParamDataType.STRING.name());
+		
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
