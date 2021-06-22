@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.LandSurvey;
 import com.asl.entity.LandSurveyor;
 import com.asl.mapper.LandSurveyorMapper;
 import com.asl.service.LandSurveyorService;
@@ -47,6 +48,14 @@ public class LandSurveyorServiceImpl extends AbstractGenericService implements L
 		if (StringUtils.isBlank(xsurveyor))
 			return null;
 		return landsurveyorMapper.findByLandSurveyor(xsurveyor, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long delete(LandSurveyor landsurveyor) {
+		if(landsurveyor == null) return 0;
+			long count = landsurveyorMapper.deleteLandSurveyor(landsurveyor);
+			return count;
+		
 	}
 
 }

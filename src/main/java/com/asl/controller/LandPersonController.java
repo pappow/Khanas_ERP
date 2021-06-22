@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandPerson;
+import com.asl.entity.LandSurveyor;
 import com.asl.entity.LandDocument;
 import com.asl.entity.LandEducation;
 import com.asl.entity.LandExperience;
@@ -139,6 +140,27 @@ public class LandPersonController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/landperson/" + lp.getXperson());
 		return responseHelper.getResponse();
 	}
+		
+		@PostMapping("/delete/{xperson}")
+		public @ResponseBody Map<String, Object> deletePerson(@PathVariable String xperson,  Model model) {
+			LandPerson lp = landPersonService.findByLandPerson(xperson);
+			if(lp == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = landPersonService.delete(lp);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setRedirectUrl("/landperson/" + xperson );
+			return responseHelper.getResponse();
+	}
+	
+	
 
 	// For Person Education
 

@@ -11,6 +11,8 @@ public interface LandMemberInfoService {
 	
 	public long update(LandMemberInfo landMemberInfo);
 
+	public long delete(LandMemberInfo landMemberInfo);
+	
 	public List<LandMemberInfo> getAllLandMemberInfo();
 
 	public LandMemberInfo findByLandMemberInfo(String xmember);

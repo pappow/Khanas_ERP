@@ -69,6 +69,10 @@
 			xcommittee=#{xcommittee , jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="deleteLandCommitteeInfo" parameterType="LandCommitteeInfo">
+		DELETE FROM cacommittee WHERE  xcommittee=#{xcommittee} AND zactive='1' AND zid=#{zid}
+	</delete>
 
 	<select id="getAllLandCommitteeInfo" resultType="LandCommitteeInfo">
 		SELECT 

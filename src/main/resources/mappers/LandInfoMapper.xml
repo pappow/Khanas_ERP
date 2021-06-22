@@ -106,6 +106,10 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
+	<delete id="deleteLandInfo" parameterType="LandInfo">
+		DELETE FROM calandinfo WHERE  xland=#{xland} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 	<select id="getAllLandInfo" resultType="LandInfo">
 		SELECT 
 			* 
@@ -206,7 +210,22 @@
 	</select>
 
 	<select id="findByLandOwner" resultType="LandOwner">
-		SELECT * FROM calandowner WHERE xland=#{xland} AND zid=#{zid} AND zactive='1'
+	select 
+		calandowner.xrow,
+        caperson.xperson,
+		caperson.xname as xpername,
+        calandowner.xtype,
+        calandowner.xqty,
+        calandowner.xunit,
+        calandowner.xnote
+		
+	from
+        calandowner
+        LEFT JOIN caperson on caperson.xperson = calandowner.xperson AND caperson.zid=#{zid}
+	where
+       calandowner.xland=#{xland} 
+       AND calandowner.zid=#{zid} 
+       AND calandowner.zactive='1' 
 	</select>
 
 	<select id="findLandOwnerByXlandAndXrow" resultType="LandOwner">

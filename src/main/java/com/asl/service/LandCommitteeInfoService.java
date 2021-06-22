@@ -11,6 +11,8 @@ public interface LandCommitteeInfoService {
 
 	public long update(LandCommitteeInfo landcommiteeinfo);
 
+	public long delete(LandCommitteeInfo landcommiteeinfo);
+	
 	public List<LandCommitteeInfo> getAllLandCommitteeInfo();
 
 	public LandCommitteeInfo findByLandCommitteeInfo(String xcommittee);

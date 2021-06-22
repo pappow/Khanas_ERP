@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.LandComEvent;
 import com.asl.entity.LandEventsMember;
 import com.asl.entity.LandOwner;
+import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -94,6 +95,24 @@ public class LandComEventController extends ASLAbstractController{
 		responseHelper.setRedirectUrl("/landevents/" + landComEvent.getXevent());
 			return responseHelper.getResponse();
 		}
+	@PostMapping("/delete/{xevent}")
+	public @ResponseBody Map<String, Object> deleteComEvent(@PathVariable String xevent,  Model model) {
+		LandComEvent lp = landComEventService.findAllLandComEvent(xevent);
+		if(lp == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landComEventService.delete(lp);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landevents/" + xevent );
+		return responseHelper.getResponse();
+}
 
 	//start of event members
 	

@@ -132,6 +132,24 @@ public class LandSurveyorController extends ASLAbstractController{
 	}
 
 	
+	@PostMapping("/delete/{xsurveyor}")
+	public @ResponseBody Map<String, Object> deleteSurveyor(@PathVariable String xsurveyor,  Model model) {
+		LandSurveyor ls = landSurveyorService.findByLandSurveyor(xsurveyor);
+		if(ls == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landSurveyorService.delete(ls);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landsurveyor/" + xsurveyor );
+		return responseHelper.getResponse();
+	}
 	// For Surveyor Land Document
 
 		@GetMapping("/{xsurveyor}/surveyor/{xrow}/show")

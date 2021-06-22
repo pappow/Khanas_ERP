@@ -15,6 +15,8 @@ public interface LandPersonMapper {
 	
 	public long updateLandPerson(LandPerson landperson);
 
+	public long deleteLandPerson(LandPerson landperson);
+	
 	public List<LandPerson> getAllLandPerson(String zid);
 
 	public LandPerson findByLandPerson(String xperson, String zid);

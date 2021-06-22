@@ -83,6 +83,10 @@
 			xevent=#{xevent, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="deleteLandComEvent" parameterType="LandComEvent">
+		DELETE FROM caeventheader WHERE  xevent=#{xevent} AND zactive='1' AND zid=#{zid}
+	</delete>
 
 	<select id="getAllLandComEvent" resultType="LandComEvent">
 		SELECT 

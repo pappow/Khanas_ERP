@@ -16,6 +16,8 @@ public interface LandCommitteeInfoMapper {
 
 	public long updateLandCommitteeInfo(LandCommitteeInfo landcommiteeinfo);
 
+	public long deleteLandCommitteeInfo(LandCommitteeInfo landcommiteeinfo);
+	
 	public List<LandCommitteeInfo> getAllLandCommitteeInfo(String zid);
 
 	public LandCommitteeInfo findByLandCommitteeInfo(String xcommittee, String zid);

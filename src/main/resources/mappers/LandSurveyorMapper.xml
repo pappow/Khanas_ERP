@@ -104,4 +104,8 @@
 			zid=#{zid} 
 			AND xsurveyor=#{xsurveyor}
 	</select>
+	
+	<delete id="deleteLandSurveyor" parameterType="LandSurveyor">
+		DELETE FROM casurveyor WHERE  xsurveyor=#{xsurveyor} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>

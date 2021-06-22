@@ -89,6 +89,24 @@ public class LandOtherEventsController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 	
+	@PostMapping("/delete/{xevent}")
+	public @ResponseBody Map<String, Object> deleteOtherEvent(@PathVariable String xevent,  Model model) {
+		LandComEvent lp = landComEventService.findAllLandComEvent(xevent);
+		if(lp == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landComEventService.delete(lp);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landevents/" + xevent );
+		return responseHelper.getResponse();
+}
 	//start of event members
 	
 	@GetMapping("/{xevent}/eventmember/{xrow}/show")

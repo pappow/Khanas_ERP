@@ -54,5 +54,8 @@ public class LandOwner extends AbstractModel<String> {
 	private String xunit;
 
 	@Transient
+	private String xpername;
+	
+	@Transient
 	private boolean newData;
 }

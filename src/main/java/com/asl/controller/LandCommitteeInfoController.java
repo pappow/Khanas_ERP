@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.LandCommitteeInfo;
 import com.asl.entity.LandCommitteeMembers;
 import com.asl.entity.LandOwner;
+import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -52,7 +53,7 @@ public class LandCommitteeInfoController extends ASLAbstractController{
 	@GetMapping("/{xcommittee}")
 	public String loadSurveyorPage(@PathVariable String xcommittee, Model model) {
 		LandCommitteeInfo landCommitteeInfo = landCommitteeInfoService.findByLandCommitteeInfo(xcommittee);
-		if (landCommitteeInfo == null) return "redirect:/landsurveyor";
+		if (landCommitteeInfo == null) return "redirect:/landcommitteeinfo";
 		
 		model.addAttribute("committee", landCommitteeInfo);
 		model.addAttribute("lcmlist", landCommitteeInfoService.findByLandCommitteeMembers(xcommittee));
@@ -93,6 +94,25 @@ public class LandCommitteeInfoController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 	
+
+	@PostMapping("/delete/{xcommittee}")
+	public @ResponseBody Map<String, Object> deleteCommitteeInfo(@PathVariable String xcommittee,  Model model) {
+		LandCommitteeInfo lci = landCommitteeInfoService.findByLandCommitteeInfo(xcommittee);
+		if(lci == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landCommitteeInfoService.delete(lci);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landcommitteeinfo/" + xcommittee );
+		return responseHelper.getResponse();
+}
 	//start of landCommitteeMembers
 	
 		@GetMapping("/{xcommittee}/commembers/{xrow}/show")

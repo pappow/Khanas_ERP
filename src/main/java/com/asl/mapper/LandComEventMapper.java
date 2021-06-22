@@ -18,6 +18,8 @@ public interface LandComEventMapper {
 	
 	public long updateLandComEvent(LandComEvent landComEvent);
 	
+	public long deleteLandComEvent(LandComEvent landComEvent);
+	
 	public List<LandComEvent> getAllLandComEvent(String zid);
 	
 	public List<LandComEvent> getAllLandOtherEvent(String zid);

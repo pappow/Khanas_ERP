@@ -17,6 +17,8 @@ public interface LandInfoMapper {
 	
 	public long updateLandInfo(LandInfo landinfo);
 
+	public long deleteLandInfo(LandInfo landinfo);
+	
 	public List<LandInfo> getAllLandInfo(String zid);
 
 	public LandInfo findByLandInfo(String xland, String zid);
