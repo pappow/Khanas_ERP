@@ -103,5 +103,12 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 		return arhedMapper.deleteVoucher(xvoucher, sessionManager.getBusinessId());
 	}
 
+	@Transactional
+	@Override
+	public List<Arhed> getAllArhedByXtrnarhedAndXtype(String xtrnarhed, String xtype) {
+		if(StringUtils.isBlank(xtrnarhed) || StringUtils.isBlank(xtype)) return Collections.emptyList();
+		return arhedMapper.getAllArhedByXtrnarhedAndXtype(xtrnarhed, xtype, sessionManager.getBusinessId());
+	}
+
 	
 }

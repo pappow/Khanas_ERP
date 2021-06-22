@@ -255,6 +255,12 @@
 			<version>5.5.13.2</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.26</version>
+		</dependency>
 
 
 	</dependencies>

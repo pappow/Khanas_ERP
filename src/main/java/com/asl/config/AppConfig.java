@@ -39,4 +39,7 @@ public class AppConfig {
 
 	@Value("${default.report.saved-xml-path}")
 	private String savedXmlPath;
+
+	@Value("${default.document-path}")
+	private String documentPath;
 }

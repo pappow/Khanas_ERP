@@ -57,11 +57,12 @@
 										<a th:if="${#strings.isEmpty(arhed.xvoucher)}" th:href="@{/purchasing/supplierpayment}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.zactive == true}" th:href="@{/purchasing/supplierpayment/archive/} + ${arhed.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher)}" th:href="@{/purchasing/supplierpayment/print/} + ${arhed.xvoucher}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/purchasing/supplierpayment/confirm/} + ${arhed.xvoucher}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-check-circle"></i> Confirm</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/purchasing/supplierpayment/save}" th:object="${arhed}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" th:field="*{xtype}"/>
-											<input type="hidden" th:field="*{xstatus}"/>
 											<div class="row">
 												<div class="col-md-6">
 													
@@ -84,7 +85,7 @@
 													
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date</label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xdate"
@@ -171,6 +172,13 @@
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xaitamt}" min="0">
 														</div>
 													</div> -->
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatus">Status</label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xstatus}">
+															<input type="text" class="form-control" th:field="*{xstatus}" disabled="disabled">
+														</div>
+													</div>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">

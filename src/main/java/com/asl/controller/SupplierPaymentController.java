@@ -34,7 +34,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 	public String loadSupplierPaymentPage(Model model) {
 
 		model.addAttribute("arhed", getDefaultArhed());
-		model.addAttribute("allArhed", arhedService.getAllArheds());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrnarhedAndXtype(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode(), TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
@@ -53,7 +53,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 		if(data == null) data = getDefaultArhed();
 
 		model.addAttribute("arhed", data);
-		model.addAttribute("allArhed", arhedService.getAllArheds());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrnarhedAndXtype(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode(), TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
@@ -80,8 +80,9 @@ public class SupplierPaymentController extends ASLAbstractController {
 
 		arhed.setXtypetrn("Account Payment");
 		arhed.setXstatus("Open");
+		arhed.setXstatusjv("Open");
 		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
+		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 		return arhed;
 	}
 
@@ -155,5 +156,24 @@ public class SupplierPaymentController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@PostMapping("/confirm/{xvoucher}")
+	public @ResponseBody Map<String, Object> confirmMoneyReceipt(@PathVariable String xvoucher){
+		Arhed voucher = arhedService.findArhedByXvoucher(xvoucher);
+		if(voucher == null) {
+			responseHelper.setErrorStatusAndMessage("Voucher not found in this system");
+			return responseHelper.getResponse();
+		}
+
+		voucher.setXstatus("Confirmed");
+		long count = arhedService.update(voucher);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't confirm voucher");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Voucher confirmed successfully");
+		responseHelper.setRedirectUrl("/purchasing/supplierpayment/" + voucher.getXvoucher());
+		return responseHelper.getResponse();
+	}
 
 }

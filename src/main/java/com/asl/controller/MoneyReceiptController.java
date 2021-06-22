@@ -35,15 +35,10 @@ public class MoneyReceiptController extends ASLAbstractController{
 	@GetMapping
 	public String loadMoneyReceiptPage(Model model) {
 
-		model.addAttribute("arhed", getDefaultArhed());		
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_MR.getdefaultCode()));
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_MR.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("arhed", getDefaultArhed());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
-		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
-		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
 		if(isBoshila()) {
 			return "pages/land/moneyreceipt/arhed";
 		}
@@ -52,19 +47,13 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 	@GetMapping("/{xvoucher}")
 	public String loadMoneyReceiptPage(@PathVariable String xvoucher, Model model) {
-		
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
 		model.addAttribute("arhed", data);
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_MR.getdefaultCode()));
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_MR.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
-		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
-		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
 		if(isBoshila()) {
 			return "pages/land/moneyreceipt/arhed";
 		}
@@ -73,19 +62,12 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
+		arhed.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
+		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
-		arhed.setXbalprime(BigDecimal.ZERO);
-		arhed.setXvatamt(BigDecimal.ZERO);
-		arhed.setXaitamt(BigDecimal.ZERO);
-		arhed.setXdiscprime(BigDecimal.ZERO);
-		arhed.setXbase(BigDecimal.ZERO);
-		arhed.setXvatait("No Vat");
-		arhed.setXpaymentterm("Credit");
-		arhed.setXtypetrn("Money Receipts");
 		arhed.setXstatus("Open");
-		arhed.setXtype(TransactionCodeType.ACCOUNT_MR.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_MR.getCode());
+		arhed.setXstatusjv("Open");
 
 		return arhed;
 	}
@@ -109,8 +91,8 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 		//Modify transaction codes for arhed
 		arhed.setXsign(-1);
-		arhed.setXtype(TransactionCodeType.ACCOUNT_MR.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_MR.getdefaultCode());
+		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getCode());
+		arhed.setXtrnarhed(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
 
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
@@ -160,5 +142,23 @@ public class MoneyReceiptController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 
-	
+	@PostMapping("/confirm/{xvoucher}")
+	public @ResponseBody Map<String, Object> confirmMoneyReceipt(@PathVariable String xvoucher){
+		Arhed voucher = arhedService.findArhedByXvoucher(xvoucher);
+		if(voucher == null) {
+			responseHelper.setErrorStatusAndMessage("Voucher not found in this system");
+			return responseHelper.getResponse();
+		}
+
+		voucher.setXstatus("Confirmed");
+		long count = arhedService.update(voucher);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't confirm voucher");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Voucher confirmed successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + voucher.getXvoucher());
+		return responseHelper.getResponse();
+	}
 }

@@ -11,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -132,7 +133,7 @@ public class Arhed extends AbstractModel<String> {
 	@Column(name = "xinvnum")
 	private String xinvnum;
 
-	@Column(name = "xtrnarhed")
+	@Transient
 	private String xtrnarhed;
 
 }

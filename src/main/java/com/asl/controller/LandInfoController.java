@@ -26,11 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandDagDetails;
 import com.asl.entity.LandDocument;
-import com.asl.entity.LandSurvey;
-import com.asl.entity.LandEducation;
 import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
+import com.asl.entity.LandSurvey;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -389,7 +388,7 @@ public class LandInfoController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		 
+
 		if (files != null && files.length > 0) {
 
 			// Rename the file
@@ -402,7 +401,7 @@ public class LandInfoController extends ASLAbstractController {
 			//Split Text
 			 String[] a = files[0].getOriginalFilename().split("\\.");
 			 String part1 = a[0];
-			 System.out.println("The File Name Is: "+part1);
+			 //System.out.println("The File Name Is: "+part1);
 			 //End split
 			
 			String fileName = UUID.randomUUID() + "_" + part1 + "." + extension;
@@ -410,14 +409,14 @@ public class LandInfoController extends ASLAbstractController {
 
 			try {
 				// create a directory if not exist
-				String uploadPath = "D://Bosila//BosilaDocuments";
+				String uploadPath = appConfig.getDocumentPath();
 				File dir = new File(uploadPath);
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
 				// Upload file into server
 				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
-				landDocument.setXdocument(uploadPath + "/" + fileName);
+				landDocument.setXdocument(fileName);
 				landDocument.setXnameold(files[0].getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -441,7 +440,7 @@ public class LandInfoController extends ASLAbstractController {
 		
 		String xtrn =  xtrnService.generateAndGetXtrnNumber(landDocument.getXtypetrn(), landDocument.getXtrn(), 6);
 		landDocument.setXdoc(xtrn);
-		System.out.println("The Value Of Xtrn Is Now: "+xtrn);
+		//System.out.println("The Value Of Xtrn Is Now: "+xtrn);
 
 		// if new detail
 		long count = landDocumentService.save(landDocument);

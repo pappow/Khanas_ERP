@@ -138,10 +138,29 @@
 	</select>
 
 	<select id="getAllArhed" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE 'AP%'  OR UPPER(xvoucher) LIKE 'PM%') 
-		AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			arhed 
+		WHERE 
+			zid=#{zid}
+		ORDER BY
+			xstatus, xvoucher DESC
 	</select>
-	
+
+	<select id="getAllArhedByXtrnarhedAndXtype" resultType="Arhed">
+		SELECT 
+			* 
+		FROM 
+			arhed 
+		WHERE 
+			zid=#{zid}
+			AND xtrnarhed=#{xtrnarhed}
+			AND xtype=#{xtype}
+		ORDER BY
+			xstatus, xvoucher DESC
+	</select>
+
 	<select id="findObapByXcus" resultType="Arhed">
 		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
 	</select>
@@ -170,7 +189,13 @@
 	</select>
 	
 	<select id="getAllArhedByXtrn" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			arhed 
+		WHERE 
+			(UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+			AND zid=#{zid}
 	</select>
 	
 	<select id="findByXstaff" resultType="Arhed">

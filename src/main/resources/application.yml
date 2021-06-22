@@ -1,3 +1,7 @@
 spring:
   profiles:
-    active: khanas
+    active: boshila
+  servlet: 
+    multipart: 
+      max-file-size: 15MB
+      max-request-size: 15MB

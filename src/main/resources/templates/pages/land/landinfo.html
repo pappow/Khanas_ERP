@@ -29,9 +29,8 @@
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
 										<li class="active"><a th:href="@{/landinfo}">Land Info</a></li>
-									
 									</div>
-								
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
 							</div>
 						</div>
@@ -462,7 +461,9 @@
 								<td th:text="${ld.xdoc}"></td>
 								<td th:text="${ld.xdoctype}"></td>
 								<td th:text="${ld.xname}"></td>
-								<td th:text="${ld.xdocument}"></td>
+								<td>
+									<a th:href="@{/download/document/} + ${ld.xdocument} + '/' + ${ld.xnameold}" target="_blank" th:text="${ld.xnameold}">Download</a>
+								</td>
 								<td th:text="${ld.xnote}"></td>
 								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/show', data-target-modal='landdocumentmodal'"><i class="fas fa-edit"></i></button>
