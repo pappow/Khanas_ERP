@@ -38,4 +38,6 @@ public interface ArhedMapper {
 	public List<Arhed> findByXstaff(String xstaff, String zid);
 
 	public long deleteVoucher(String xvoucher, String zid);
+
+	public List<Arhed> getAllArhedByXtrnarhedAndXtype(String xtrnarhed, String xtype, String zid);
 }

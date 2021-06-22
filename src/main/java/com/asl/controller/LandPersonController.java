@@ -399,7 +399,7 @@ public class LandPersonController extends ASLAbstractController {
 			//Split Text
 			 String[] a = files[0].getOriginalFilename().split("\\.");
 			 String part1 = a[0];
-			 System.out.println("The File Name Is: "+part1);
+			//System.out.println("The File Name Is: "+part1);
 			 //End split
 			
 			String fileName = UUID.randomUUID() + "_" + part1 + "." + extension;
@@ -407,14 +407,14 @@ public class LandPersonController extends ASLAbstractController {
 
 			try {
 				// create a directory if not exist
-				String uploadPath = "D://Bosila//BosilaDocuments";
+				String uploadPath = appConfig.getDocumentPath();
 				File dir = new File(uploadPath);
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
 				// Upload file into server
 				Files.copy(files[0].getInputStream(), Paths.get(uploadPath, fileName));
-				landDocument.setXdocument(uploadPath + "/" + fileName);
+				landDocument.setXdocument(fileName);
 				landDocument.setXnameold(files[0].getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();

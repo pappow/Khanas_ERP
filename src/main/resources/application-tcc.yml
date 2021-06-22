@@ -64,6 +64,7 @@ default:
   copyright-text: Powered by <a href="http://www.automationservicesbd.com" target="_blank">ASL</a> &copy; Copyright
   im-ex-path: D:/TCC/importexport
   logging-path: D:/TCC/logs 
+  document-path: D:/TCC/documents
   report: 
     template-path: D:/TCC/cr-reports
     xsl-path: D:/TCC/xsl

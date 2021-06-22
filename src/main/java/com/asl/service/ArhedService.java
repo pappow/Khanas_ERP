@@ -37,4 +37,6 @@ public interface ArhedService {
 	public List<Arhed> findByXstaff(String xstaff);
 
 	public long deleteVoucher(String xvoucher);
+
+	public List<Arhed> getAllArhedByXtrnarhedAndXtype(String xtrnarhed, String xtype);
 }

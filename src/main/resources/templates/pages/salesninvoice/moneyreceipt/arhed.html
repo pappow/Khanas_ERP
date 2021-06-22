@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Purchase Order</title>
+		<title>Money Receipt</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -56,20 +56,21 @@
 									<div class="form-action-button">
 										<a th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(arhed.xvoucher)}" th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.zactive == true}" th:href="@{/salesninvoice/moneyreceipt/archive/} + ${arhed.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/salesninvoice/moneyreceipt/archive/} + ${arhed.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher)}" th:href="@{/salesninvoice/moneyreceipt/print/} + ${arhed.xvoucher}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/salesninvoice/moneyreceipt/confirm/} + ${arhed.xvoucher}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-check-circle"></i> Confirm</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/moneyreceipt/save}" th:object="${arhed}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<input type="hidden" th:field="*{xtype}"/>
-											<input type="hidden" th:field="*{xstatus}"/>
+											<input type="hidden" th:field="*{xtypetrn}"/>
 											<div class="row">
 												<div class="col-md-6">
 													
 													<div class="form-group" th:if="${#strings.isEmpty(arhed.xvoucher)}">
-														<label class="control-label col-md-4" for="xtrnarhed">Code</label>
+														<label class="control-label col-md-4" for="xtype">Code</label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrnarhed}">
+															<select class="form-control" th:field="*{xtype}">
 																<option th:each="prefix : ${arhedprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
@@ -85,7 +86,7 @@
 													
 													<div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdate">Date</label>
-														<div class="input-group date col-md-6 datepicker">
+														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
 																	id="xdate"
@@ -172,6 +173,13 @@
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xaitamt}" min="0">
 														</div>
 													</div> -->
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatus">Status</label>
+														<div class="col-md-6">
+															<input type="hidden" class="form-control" th:field="*{xstatus}">
+															<input type="text" class="form-control" th:field="*{xstatus}" disabled="disabled">
+														</div>
+													</div>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">

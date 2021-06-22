@@ -66,6 +66,7 @@ default:
   copyright-text: Powered by <a href="http://www.automationservicesbd.com" target="_blank">ASL</a> &copy; Copyright
   im-ex-path: D:/ASL/importexport
   logging-path: D:/ASL/logs 
+  document-path: D:/ASL/documents
   report: 
     template-path: D:/ASL/cr-reports
     xsl-path: D:/ASL/xsl
