@@ -27,9 +27,9 @@ public enum MenuProfile {
 	M0210(9999, "M0210", "200", "M0204", "Vat & Tax Entry", "Y","/mastersetup/vatait"),
 
 	M0300(9999, "M0300", "300", "MASTER", "Procurements", "Y","/purchasing"),
-	M0301(9999, "M0301", "300", "M0300", "Branches Requisition", "Y","/purchasing/bqls"),
-	M0302(9999, "M0302", "300", "M0300", "Branches Requisition Details", "Y","/purchasing/bqls/details"),
-	M0303(9999, "M0303", "300", "M0300", "All Open Requisitions of Branches", "Y","/purchasing/bqls/allopenreq"),
+	M0301(9999, "M0301", "300", "M0300", "Requisitions List (From Branch)", "Y","/purchasing/bqls"),
+	M0302(9999, "M0302", "300", "M0300", "Requisitions Matrix (From Branch)", "Y","/purchasing/bqls/details"),
+	M0303(9999, "M0303", "300", "M0300", "Open Requisitions (From Branch)", "Y","/purchasing/bqls/allopenreq"),
 	M0304(9999, "M0304", "300", "M0300", "Purchase Order", "Y","/purchasing/poord"),
 	M0305(9999, "M0305", "300", "M0300", "Direct GRN", "N","/purchasing/grn"),
 	M0306(9999, "M0306", "300", "M0300", "GRN", "Y","/purchasing/pogrn"),
@@ -55,8 +55,8 @@ public enum MenuProfile {
 
 	M0500(9999, "M0500", "500", "MASTER", "Production", "Y","/production"),
 	M0501(9999, "M0501", "500", "M0500", "BOM Entry/Receipe Setting", "Y","/production/bom"),
-	M0502(9999, "M0502", "500", "M0500", "Production Planning against sales order (Requisition)", "Y","/production/suggestion"),
-	M0503(9999, "M0503", "500", "M0500", "Production Process / Batch", "Y","/production/batch"),
+	M0502(9999, "M0502", "500", "M0500", "Production Planning", "Y","/production/suggestion"),
+	M0503(9999, "M0503", "500", "M0500", "Production Process/Batch", "Y","/production/batch"),
 
 	M0600(9999, "M0600", "600", "MASTER", "Inventory Management", "Y","/inventory"),
 	M0601(9999, "M0601", "600", "M0600", "Stock Opening Entry", "Y","/inventory/openingentry"),

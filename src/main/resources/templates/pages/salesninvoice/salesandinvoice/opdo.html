@@ -75,7 +75,7 @@
 													<div class="col-md-6">
 
 														<div class="form-group" th:if="${#strings.isEmpty(opdoheader.xdornum)}">
-															<label class="control-label col-md-4" for="xtrn">Prefix : </label>
+															<label class="control-label col-md-4" for="xtrn">Prefix</label>
 															<div class="col-md-4">
 																<select class="form-control" th:field="*{xtrn}">
 																	<option th:each="prefix : ${opdoprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>

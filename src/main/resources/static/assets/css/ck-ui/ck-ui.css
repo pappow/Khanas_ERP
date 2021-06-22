@@ -426,7 +426,7 @@ ul.ckbigmenu {
 	border-radius: 10px !important;
 	width: 402px;
 	padding: 5px 5px;
-	max-height: 600px;
+	max-height: 400px;
 	overflow-y: scroll;
 }
 
