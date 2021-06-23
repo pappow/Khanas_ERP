@@ -84,7 +84,7 @@ public class LandInfoController extends ASLAbstractController {
 		LandInfo landInfo = landInfoService.findByLandInfo(xland);
 		if (landInfo == null) return "redirect:/landinfo";
 
-		
+		 
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
 		model.addAttribute("lelist", landInfoService.findByLandEvents(xland));
