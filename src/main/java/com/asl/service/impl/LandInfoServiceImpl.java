@@ -43,6 +43,13 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 	}
 
 	@Override
+	public long delete(LandInfo landinfo) {
+		if(landinfo == null) return 0;
+		long count = landinfoMapper.deleteLandInfo(landinfo);
+		return count;
+	}
+	
+	@Override
 	public List<LandInfo> getAllLandInfo() {
 		return landinfoMapper.getAllLandInfo(sessionManager.getBusinessId());
 	}
@@ -209,6 +216,8 @@ public class LandInfoServiceImpl extends AbstractGenericService implements LandI
 		if(StringUtils.isBlank(xland)) return Collections.emptyList();
 		return landinfoMapper.searchLandId(xland.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	
 
 	
 	

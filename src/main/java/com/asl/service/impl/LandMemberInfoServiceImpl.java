@@ -42,6 +42,13 @@ public class LandMemberInfoServiceImpl extends AbstractGenericService implements
 	}
 
 	@Override
+	public long delete(LandMemberInfo landMemberInfo) {
+		if(landMemberInfo == null) return 0;
+		long count = landMemberInfoMapper.deleteLandMemberInfo(landMemberInfo);
+		return count;
+	}
+	
+	@Override
 	public List<LandMemberInfo> getAllLandMemberInfo() {
 		return landMemberInfoMapper.getAllLandMemberInfo(sessionManager.getBusinessId());
 	}
@@ -58,5 +65,7 @@ public class LandMemberInfoServiceImpl extends AbstractGenericService implements
 		if(StringUtils.isBlank(xmember)) return Collections.emptyList();
 		return landMemberInfoMapper.searchMemberId(xmember, sessionManager.getBusinessId());
 	}
+
+
 
 }

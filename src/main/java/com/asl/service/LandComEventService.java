@@ -8,9 +8,11 @@ import com.asl.entity.LandOwner;
 
 public interface LandComEventService {
 	
-public long saveLandComEvent(LandComEvent landComEvent);
+	public long saveLandComEvent(LandComEvent landComEvent);
 	
 	public long updateLandComEvent(LandComEvent landComEvent);
+	
+	public long delete(LandComEvent landComEvent);
 	
 	public List<LandComEvent> getAllLandComEvent();
 	

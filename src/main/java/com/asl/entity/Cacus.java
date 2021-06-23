@@ -35,6 +35,9 @@ public class Cacus extends AbstractModel<String> {
 	@Column(name = "xcus")
 	private String xcus;
 
+	@Column(name = "xperson")
+	private String xperson; 
+
 	@Column(name = "xorg")
 	private String xorg; 
 

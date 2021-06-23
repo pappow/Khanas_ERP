@@ -41,6 +41,13 @@ public class LandComEventServiceImpl extends AbstractGenericService implements L
 	}
 
 	@Override
+	public long delete(LandComEvent landComEvent) {
+		if(landComEvent == null) return 0;
+		long count = landComEventMapper.deleteLandComEvent(landComEvent);
+		return count;
+	}
+	
+	@Override
 	public List<LandComEvent> getAllLandComEvent() {
 		return landComEventMapper.getAllLandComEvent(sessionManager.getBusinessId());
 	}
@@ -112,6 +119,7 @@ public class LandComEventServiceImpl extends AbstractGenericService implements L
 		
 		
 	}
+
 
 	
 

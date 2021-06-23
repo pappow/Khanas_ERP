@@ -70,7 +70,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		model.addAttribute("payStatusList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
 		model.addAttribute("currencyList", xcodeService.findByXtype(CodeType.CURRENCY_OF_PRICE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
-			return "pages/land/salesninvoice/opdo";
+			return "pages/land/salesninvoice/opdo"; 
 		}
 		return "pages/salesninvoice/salesandinvoice/opdo";
 	}
@@ -196,6 +196,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 	public String reloadOpdoDetailTable(@PathVariable String xdornum, Model model) {
 		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
 		model.addAttribute("opdoheader", opdoService.findOpdoHeaderByXdornum(xdornum));
+		if(isBoshila()) return "pages/land/salesninvoice/opdo::opdodetailtable";
 		return "pages/salesninvoice/salesandinvoice/opdo::opdodetailtable";
 	}
 
@@ -234,6 +235,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			}
 			model.addAttribute("opdodetail", opdodetail);
 		}
+		if(isBoshila()) return "pages/land/salesninvoice/opdodetailmodal::opdodetailmodal";
 		return "pages/salesninvoice/salesandinvoice/opdodetailmodal::opdodetailmodal";
 	}
 

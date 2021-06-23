@@ -156,6 +156,7 @@ public class SearchSuggestController extends ASLAbstractController {
 		CommitteeList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcommittee(),c.getXcommittee())));
 		return list;
 	}
+	
 	@GetMapping("/personId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonId(@PathVariable String hint){
 		

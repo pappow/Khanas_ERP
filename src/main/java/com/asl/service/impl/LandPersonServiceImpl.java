@@ -43,6 +43,13 @@ public class LandPersonServiceImpl extends AbstractGenericService implements Lan
 	}
 
 	@Override
+	public long delete(LandPerson landperson) {
+		if(landperson == null) return 0;
+		long count = landpersonMapper.deleteLandPerson(landperson);
+		return count;
+	}
+	
+	@Override
 	public List<LandPerson> getAllLandPerson() {
 		return landpersonMapper.getAllLandPerson(sessionManager.getBusinessId());
 	}
@@ -112,4 +119,6 @@ public class LandPersonServiceImpl extends AbstractGenericService implements Lan
 		long count = landpersonMapper.deleteDetail(landEducation);
 		return count;
 	}
+
+
 }

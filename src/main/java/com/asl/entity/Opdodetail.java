@@ -75,6 +75,12 @@ public class Opdodetail extends AbstractModel<String> {
 	@Column(name = "xparentrow")
 	private int xparentrow;
 
+	@Column(name = "xserial")
+	private String xserial;
+
+	@Column(name = "xland")
+	private String xland;
+
 	@Transient
 	private String xdesc;
 	@Transient

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.LandMemberInfo;
+import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -88,5 +89,24 @@ public class LandMemberInfoController extends ASLAbstractController{
 		responseHelper.setRedirectUrl("/landmemberinfo/" + landMemberInfo.getXmember());
 			return responseHelper.getResponse();
 		}
+
+	@PostMapping("/delete/{xmember}")
+	public @ResponseBody Map<String, Object> deleteMember(@PathVariable String xmember,  Model model) {
+		LandMemberInfo lm = landMemberInfoService.findByLandMemberInfo(xmember);
+		if(lm == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landMemberInfoService.delete(lm);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landmemberinfo/" + xmember );
+		return responseHelper.getResponse();
+}
 
 }

@@ -10,10 +10,12 @@ import com.asl.entity.LandPerson;
 
 public interface LandInfoService {
 	
-public long save(LandInfo landinfo);
+	public long save(LandInfo landinfo);
 	
 	public long update(LandInfo landinfo);
 
+	public long delete(LandInfo landinfo);
+	
 	public List<LandInfo> getAllLandInfo();
 
 	public LandInfo findByLandInfo(String xland);

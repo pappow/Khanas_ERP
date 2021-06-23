@@ -12,6 +12,8 @@ public interface LandSurveyorService {
 	public long save(LandSurveyor landsurveyor);
 	
 	public long update(LandSurveyor landsurveyor);
+	
+	public long delete(LandSurveyor landsurveyor);
 
 	public List<LandSurveyor> getAllLandSurveyor();
 

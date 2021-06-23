@@ -27,5 +27,5 @@ public interface XcodesMapper {
 
 	public Xcodes getSeilingRecord(String direction, String zid);
 
-	public long deleteXcodes(String xcodes, String xtype, String zid);
+	public long deleteXcodes(String xcode, String xtype, String zid);
 }

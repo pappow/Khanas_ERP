@@ -50,6 +50,8 @@ public enum CodeType {
 	
 	LAND_UNIT("Land Unit"),
 	LAND_TYPE("Land Type"),
+	LANDITEM_CATEGORY("Item Categories"),
+	
 	
 	MEMBER_DESIGNATION("Member Designation"),
 

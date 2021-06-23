@@ -30,6 +30,7 @@ import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandSurvey;
+import com.asl.entity.LandPerson;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -156,6 +157,24 @@ public class LandInfoController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 	
+	@PostMapping("/delete/{xland}")
+	public @ResponseBody Map<String, Object> deleteLandInfo(@PathVariable String xland,  Model model) {
+		LandInfo li = landInfoService.findByLandInfo(xland);
+		if(li == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landInfoService.delete(li);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/landinfo/" + xland );
+		return responseHelper.getResponse();
+}
 	//start of landowner
 	
 	@GetMapping("/{xland}/owner/{xrow}/show")

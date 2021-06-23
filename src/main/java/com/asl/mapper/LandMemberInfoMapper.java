@@ -13,6 +13,8 @@ public interface LandMemberInfoMapper {
 	public long saveLandMemberInfo(LandMemberInfo landMemberInfo);
 	
 	public long updateLandMemberInfo(LandMemberInfo landMemberInfo);
+	
+	public long deleteLandMemberInfo(LandMemberInfo landMemberInfo);
 
 	public List<LandMemberInfo> getAllLandMemberInfo(String zid);
 

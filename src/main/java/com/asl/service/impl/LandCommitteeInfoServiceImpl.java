@@ -36,6 +36,13 @@ public class LandCommitteeInfoServiceImpl extends AbstractGenericService impleme
 	}
 
 	@Override
+	public long delete(LandCommitteeInfo landcommiteeinfo) {
+		if(landcommiteeinfo == null) return 0;
+		long count = landcommitteeinfoMapper.deleteLandCommitteeInfo(landcommiteeinfo);
+		return count;
+	}
+	
+	@Override
 	public List<LandCommitteeInfo> getAllLandCommitteeInfo() {
 		return landcommitteeinfoMapper.getAllLandCommitteeInfo(sessionManager.getBusinessId());
 	}
@@ -105,6 +112,7 @@ public class LandCommitteeInfoServiceImpl extends AbstractGenericService impleme
 			return null;
 		return landcommitteeinfoMapper.findByXcommitteeAndXperson(xcommittee, xperson, sessionManager.getBusinessId());
 	}
+
 
 	//end of LandCommitteeMembers
 

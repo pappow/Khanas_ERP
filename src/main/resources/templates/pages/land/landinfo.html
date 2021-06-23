@@ -59,8 +59,8 @@
 														<a th:href="@{/landinfo}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a th:if="${#strings.isEmpty(info.xland)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
-														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == true}" th:href="@{/landinfo/archive/} + ${info.xland}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == false}" th:href="@{/landinfo/restore/} + ${info.xland}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+														<a th:if="${not #strings.isEmpty(info.xland) and info.zactive == true}" th:href="@{/landinfo/delete/} + ${info.xland}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														
 													</div>
 												</div>
 											</div>
@@ -265,15 +265,15 @@
 															</div>
 
 															<div class="form-group" >
-																<label class="control-label col-md-4" for="xland">Land Ref.</label>
+																<label class="control-label col-md-4" for="xlandparent">Land Ref.</label>
 																<div class="col-sm-8">
 																	<input 	type="text" 
 																			class="form-control searchsuggest" 
 																			placeholder="Search..." 
-																			th:value="${info.xland}" 
+																			th:value="${info.xlandparent}" 
 																			th:attr="search-url='search/landId'"/>
-																	<input type="hidden" id="search-val" th:field="*{xland}"/>
-																	<input type="hidden" id="search-des" th:value="*{xland}"/>
+																	<input type="hidden" id="search-val" th:field="*{xlandparent}"/>
+																	<input type="hidden" id="search-des" th:value="*{xlandparent}"/>
 																</div>
 															</div>
 
@@ -377,9 +377,10 @@
 							</tr>
 						</thead>
 						<tbody>
+						
 							<tr th:each="d, n : ${lpelist}">
 								<td th:text="${n.count}"></td>
-								<td><a th:href="@{/landperson/} + ${d.xperson}" target="_blank" th:text="${d.xperson}"></a></td>
+								<td  th:text="${d.xperson} + ' - ' + ${d.xpername}"></td>
 								<td th:text="${d.xtype}"></td>
 								<td th:text="${d.xqty}"></td>
 								<td th:text="${d.xunit}"></td>
@@ -447,7 +448,6 @@
 								<th>SL#</th>
 								<th>Document ID</th>
 								<th>Document Type</th>
-								<th>Name</th>
 								<th>Document </th>
 								<th>Note</th>
 								<th data-nosort="Y" style="text-align: right;">
@@ -460,11 +460,11 @@
 								<td th:text="${n.count}"></td>
 								<td th:text="${ld.xdoc}"></td>
 								<td th:text="${ld.xdoctype}"></td>
-								<td th:text="${ld.xname}"></td>
 								<td>
 									<a th:href="@{/download/document/} + ${ld.xdocument} + '/' + ${ld.xnameold}" target="_blank" th:text="${ld.xnameold}">Download</a>
 								</td>
 								<td th:text="${ld.xnote}"></td>
+								
 								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/show', data-target-modal='landdocumentmodal'"><i class="fas fa-edit"></i></button>
 									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
@@ -526,7 +526,6 @@
 						<thead>
 							<tr>
 								<th>SL#</th>
-								<th>Land ID</th>
 								<th>Surveyor ID</th>
 								<th>Date</th>
 								<th>Note</th>
@@ -538,7 +537,6 @@
 						<tbody>
 							<tr th:each="ls, n : ${llslist}">
 								<td th:text="${n.count}"></td>
-								<td th:text="${ls.xland}"></td>
 								<td th:text="${ls.xsurveyor}"></td>
 								<td th:text="${ls.xdate}"></td>
 								<td th:text="${ls.xnote}"></td>

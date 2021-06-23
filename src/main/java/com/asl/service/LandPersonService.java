@@ -13,6 +13,8 @@ public interface LandPersonService {
 	public long save(LandPerson landperson);
 	
 	public long update(LandPerson landperson);
+	
+	public long delete(LandPerson landperson);
 
 	public List<LandPerson> getAllLandPerson();
 

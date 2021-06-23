@@ -41,6 +41,7 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
+		model.addAttribute("landItemCategories", xcodeService.findByXtype(CodeType.LANDITEM_CATEGORY.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		
 		if(isBoshila()) {
@@ -60,6 +61,7 @@ public class CaitemControlller extends ASLAbstractController {
 		model.addAttribute("xitemGroups", xcodeService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitPurs", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode(), Boolean.TRUE));
 		model.addAttribute("xunitSels", xcodeService.findByXtype(CodeType.SELLING_UNIT.getCode(), Boolean.TRUE));
+		model.addAttribute("landItemCategories", xcodeService.findByXtype(CodeType.LANDITEM_CATEGORY.getCode(), Boolean.TRUE));
 		model.addAttribute("allCaitems", caitemService.getAllCaitems());
 		model.addAttribute("caitemdetails", caitemService.findCaitemdetailByXitem(xitem));
 		if(isBoshila()) {

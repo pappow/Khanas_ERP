@@ -59,6 +59,10 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
+	<delete id="deleteLandMemberInfo" parameterType="LandMemberInfo">
+		DELETE FROM camember WHERE  xmember=#{xmember} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 	<select id="getAllLandMemberInfo" resultType="LandMemberInfo">
 		SELECT 
 			* 
