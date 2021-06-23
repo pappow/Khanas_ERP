@@ -13,6 +13,9 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +33,6 @@ import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandSurvey;
-import com.asl.entity.LandPerson;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -673,7 +675,20 @@ public class LandInfoController extends ASLAbstractController {
 		responseHelper.setReloadSectionIdWithUrl("surveytable", "/landinfo/survey/" + xland);
 		return responseHelper.getResponse();
 	}
-	
+
+	@PostMapping("/print/{xland}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xland) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		//landS
 		
+		
+		return null;
+	}
+	
+	
 }
 	

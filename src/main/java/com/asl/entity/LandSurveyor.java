@@ -1,6 +1,5 @@
 package com.asl.entity;
 
-
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -22,17 +21,16 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = { "zid", "xsurveyor" }, callSuper = false)
 public class LandSurveyor extends AbstractModel<String> {
 
-	
 	private static final long serialVersionUID = -7233867795317696070L;
-	
+
 	@Id
-	@Basic(optional=false)
-	@Column(name="zid")
+	@Basic(optional = false)
+	@Column(name = "zid")
 	private String zid;
 
 	@Id
-	@Basic(optional=false)
-	@Column(name="xsurveyor")
+	@Basic(optional = false)
+	@Column(name = "xsurveyor")
 	private String xsurveyor;
 
 	@Column(name = "xname")
