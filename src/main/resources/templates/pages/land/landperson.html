@@ -297,7 +297,6 @@
 											<th>SL#</th>
 											<th>Document ID</th>
 											<th>Document Type</th>
-											<th>Title</th>
 											<th>Document </th>
 											<th>Note</th>
 											<th data-nosort="Y" style="text-align: right;">
@@ -310,7 +309,6 @@
 											<td th:text="${n.count}"></td>
 											<td th:text="${pd.xdoc}"></td>
 											<td th:text="${pd.xdoctype}"></td>
-											<td th:text="${pd.xname}"></td>
 											<td>
 												<a th:href="@{/download/document/} + ${pd.xdocument} + '/' + ${pd.xnameold}" target="_blank" th:text="${pd.xnameold}">Download</a>
 											</td>

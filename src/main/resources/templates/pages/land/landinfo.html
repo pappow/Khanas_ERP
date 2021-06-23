@@ -448,9 +448,7 @@
 								<th>SL#</th>
 								<th>Document ID</th>
 								<th>Document Type</th>
-								<th>Name</th>
 								<th>Document </th>
-								
 								<th>Note</th>
 								<th data-nosort="Y" style="text-align: right;">
 									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/new/show', data-target-modal='landdocumentmodal'"><i class="fas fa-plus"></i></button>
@@ -462,7 +460,6 @@
 								<td th:text="${n.count}"></td>
 								<td th:text="${ld.xdoc}"></td>
 								<td th:text="${ld.xdoctype}"></td>
-								<td th:text="${ld.xname}"></td>
 								<td>
 									<a th:href="@{/download/document/} + ${ld.xdocument} + '/' + ${ld.xnameold}" target="_blank" th:text="${ld.xnameold}">Download</a>
 								</td>

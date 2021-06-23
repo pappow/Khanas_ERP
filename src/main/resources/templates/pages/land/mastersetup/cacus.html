@@ -85,11 +85,11 @@
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xorg">Company / Name: </label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{xorg}" required="required"/>
+															<input type="text" class="form-control" th:field="*{xorg}" />
 														</div>
 													</div>
 													
-													<div class="form-group" >
+													<div class="form-group" th:if="${cacusType eq 'CUS'}">
 														<label class="control-label col-md-4" for="xperson">Person Id:</label>
 														<div class="col-sm-8">
 															<input 	type="text" 
@@ -187,6 +187,7 @@
 												<tr>
 													<th th:text="${cacusType eq 'SUP' ? 'Supplier No' : 'Customer No'}"></th>
 													<th>Company/Name</th>
+													<th th:if="${cacusType eq 'CUS'}">Person</th>
 													<th>Address</th>
 													<th>Active</th>
 												</tr>
@@ -197,6 +198,7 @@
 														<a th:href="@{/mastersetup/cacus/} + ${c.xcus} + '?cacusType=' + ${cacusType}" th:text="${c.xcus}"></a>
 													</td>
 													<td th:text="${c.xorg}"></td>
+													<td th:if="${cacusType eq 'CUS'}" th:text="${c.xperson}"></td>
 													<td th:text="${c.xmadd}"></td>
 													<td th:text="${c.zactive == true ? 'Y' : 'N'}"></td>
 												</tr>
