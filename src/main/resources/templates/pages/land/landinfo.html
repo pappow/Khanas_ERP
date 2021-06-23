@@ -450,6 +450,7 @@
 								<th>Document Type</th>
 								<th>Name</th>
 								<th>Document </th>
+								
 								<th>Note</th>
 								<th data-nosort="Y" style="text-align: right;">
 									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/new/show', data-target-modal='landdocumentmodal'"><i class="fas fa-plus"></i></button>
@@ -466,6 +467,7 @@
 									<a th:href="@{/download/document/} + ${ld.xdocument} + '/' + ${ld.xnameold}" target="_blank" th:text="${ld.xnameold}">Download</a>
 								</td>
 								<td th:text="${ld.xnote}"></td>
+								
 								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/show', data-target-modal='landdocumentmodal'"><i class="fas fa-edit"></i></button>
 									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/landinfo/} + ${info.xland} + '/land/' + ${ld.xrow} + '/delete'"><i class="fas fa-trash"></i></button>

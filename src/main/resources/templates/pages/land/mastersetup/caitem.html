@@ -53,7 +53,7 @@
 									<div class="section-header sectionbartoggle">
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(caitem.xitem)}" th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
 										<a th:if="${not #strings.isEmpty(caitem.xitem) and caitem.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(caitem.xitem) and caitem.zactive == true}" th:href="@{/mastersetup/caitem/archive/} + ${caitem.xitem}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
@@ -67,7 +67,7 @@
 												<div class="col-md-6">
 
 													<div class="form-group" th:if="${#strings.isEmpty(caitem.xitem)}">
-														<label class="control-label col-md-4" for="xitem">Prefix</label>
+														<label class="control-label col-md-4" for="xitem">Item Code</label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{codeType}">
 																<option th:each="prefix : ${itemxtrnnumbers}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -89,7 +89,7 @@
 														</div>
 													</div>
 													
-													<span th:if="${isBoshila}">
+													<!-- <span th:if="${isBoshila}">
 													<div class="form-group" >
 														<label class="control-label col-md-4" for="xmember">Member ID:</label>
 														<div class="col-sm-8">
@@ -102,13 +102,13 @@
 															<input type="hidden" id="search-des" th:value="*{xmember}"/>
 														</div>
 													</div>
-													</span>
+													</span> -->
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xcatitem">Item Category</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xcatitem}">
 																<option value="">-- Select --</option>
-																<option th:each="category : ${xitemCategories}" th:value="${category.xcode}" th:text="${category.xcode}"></option>
+																<option th:each="category : ${landItemCategories}" th:value="${category.xcode}" th:text="${category.xcode}"></option>
 															</select>
 														</div>
 													</div>
@@ -122,19 +122,21 @@
 														</div>
 													</div>
 
-													<div class="form-group input2">
+													<!-- <div class="form-group input2">
 														<label class="control-label col-sm-4" for="xproditem">Prod Item ?</label>
 														<div class="col-sm-8">
 															<div class="checkbox">
 																<label><input type="checkbox" class="form-control-input2" th:field="*{xproditem}" value="Y"/></label>
 															</div>
 														</div>
-													</div>
+													</div> -->
 
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xunitpur">Unit of Measurement</label>
+														<label class="control-label col-md-4" for="xunitpur">UOM</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xunitpur}">
+																<option value="Decimal">Decimal</option>
+																<option value="Katha">Katha</option>
 																<option th:each="unit : ${xunitPurs}" th:value="${unit.xcode}" th:text="${unit.xcode}"></option>
 															</select>
 														</div>
@@ -147,12 +149,18 @@
 															</select>
 														</div>
 													</div> -->
-													<div class="form-group">
+													
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcodeold">Old Code</label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xcodeold}">
 														</div>
-													</div>
+													</div> -->
+													
+													
+
+												</div>
+												<div class="col-md-6">
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xrate">Sales Rate</label>
 														<div class="col-md-8">
@@ -165,9 +173,6 @@
 															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xminqty}" required="required">
 														</div>
 													</div>
-
-												</div>
-												<div class="col-md-6">
 													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xcus">Party</label>
 														<div class="col-md-8">
@@ -204,7 +209,7 @@
 													</div> -->
 													
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xdealerp">Branch Price</label>
+														<label class="control-label col-md-4" for="xdealerp">B2B Price</label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" data-smk-type="decimal" th:field="*{xdealerp}">
 														</div>
@@ -217,7 +222,7 @@
 														</div>
 													</div> -->
 
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xseqn">Sequence</label>
 														<div class="col-md-8">
 															<input type="number" class="form-control" th:field="*{xseqn}">
@@ -231,7 +236,7 @@
 																<label><input type="checkbox" class="form-control-input2" th:field="*{allowreq}" value="Y"/></label>
 															</div>
 														</div>
-													</div>
+													</div> -->
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xvatrate">Vat Rate (%)</label>
@@ -240,14 +245,14 @@
 														</div>
 													</div>
 
-													<div class="form-group input2">
+													<!-- <div class="form-group input2">
 														<label class="control-label col-sm-4" for="xsetmenu">Is Set Menu ?</label>
 														<div class="col-sm-8">
 															<div class="checkbox">
 																<label><input type="checkbox" class="form-control-input2" th:field="*{xsetmenu}" value="Y"/></label>
 															</div>
 														</div>
-													</div>
+													</div> -->
 
 												</div>
 											</div>
@@ -266,13 +271,10 @@
 												<thead>
 													<tr>
 														<th>Item Code</th>
-														<th>Seqn</th>
 														<th>Item Name</th>
 														<th>Item Category</th>
 														<th>Item Group</th>
-														<th>Type</th>
-														<th>Purchase Unit</th>
-														<th>Selling Unit</th>
+														<th>UOM</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -280,13 +282,10 @@
 														<td>
 															<a th:href="@{/mastersetup/caitem/} + ${caitem.xitem}" th:text="${caitem.xitem}"></a>
 														</td>
-														<td th:text="${caitem.xseqn}"></td>
 														<td th:text="${caitem.xdesc}"></td>
 														<td th:text="${caitem.xcatitem}"></td>
 														<td th:text="${caitem.xgitem}"></td>
-														<td th:text="${caitem.xproditem ? 'Production' : ''}"></td>
 														<td th:text="${caitem.xunitpur}"></td>
-														<td th:text="${caitem.xunitsel}"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -297,51 +296,7 @@
 						</div>
 					</div>
 
-					<!-- Item detail -->
-					<div class="col-md-12">
-						<!-- detail section -->
-						<section th:if="${not #strings.isEmpty(caitem.xitem)}" id="data-maintenance" style="margin-top: 30px;">
-							<div class="section-header sectionbartoggle">
-								<h1>Item Details</h1>
-							</div>
-							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="caitemdetailtable" th:fragment="caitemdetailtable">
-									<thead>
-										<tr>
-											<th>SN.</th>
-											<th>Item</th>
-											<th>Quantity</th>
-											<th>Unit</th>
-											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/mastersetup/caitem/} + ${caitem.xitem} + '/caitemdetail/new/show', data-target-modal='caitemdetailmodal'"><i class="fas fa-plus"></i></button>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="d,n : ${caitemdetails}">
-											<td th:text="${n.count}"></td>
-											<td>
-												<a th:href="@{/mastersetup/caitem/} + ${d.xsubitem}" target="_blank" th:text="${d.xsubitem} + ' - ' + ${d.xdesc}"></a>
-											</td>
-											<td th:text="${d.xqtyord}"></td>
-											<td th:text="${d.xunit}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/mastersetup/caitem/} + ${d.xitem} + '/caitemdetail/' + ${d.xsubitem} + '/delete'"><i class="fas fa-trash"></i></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</section>
-					</div>
 					
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal -->
-		<div id="caitemdetailmodal-section"></div>
-
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
 	</body>
