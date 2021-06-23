@@ -57,8 +57,8 @@ mybatis:
 
 JNDIName: jdbcTemplate
 default: 
-  #birtUrl: http://62.171.179.61:8080/birt/frameset?__report=Bosila/
-  birtUrl: http://localhost:8080/birt/frameset?__report=Bosila/
+  birtUrl: http://62.171.179.61:8080/birt/frameset?__report=boshila/
+  #birtUrl: http://localhost:8080/birt/frameset?__report=bosila/
   allow-system-admin: Y
   site-title: AJU <span class="title-divider">ERP</span>
   logo-name: asl.png
