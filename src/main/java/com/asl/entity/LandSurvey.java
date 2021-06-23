@@ -11,6 +11,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,21 +22,23 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "calanservey")
 @IdClass(LandSurveyPK.class)
-@EqualsAndHashCode(of = { "zid", "xland","xrow"}, callSuper = false)
-public class LandSurvey extends AbstractModel<String>{
-	
+@EqualsAndHashCode(of = { "zid", "xland", "xrow" }, callSuper = false)
+@XmlRootElement(name = "surveys")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class LandSurvey extends AbstractModel<String> {
+
 	private static final long serialVersionUID = -3036589229579591189L;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
 	private String zid;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xland")
 	private String xland;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
@@ -41,17 +46,17 @@ public class LandSurvey extends AbstractModel<String>{
 
 	@Column(name = "xsurveyor")
 	private String xsurveyor;
-	
+
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
 
 	@Column(name = "xtype")
 	private String xtype;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Transient
 	private boolean newData;
 

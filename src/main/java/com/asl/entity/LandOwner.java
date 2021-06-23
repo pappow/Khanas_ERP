@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +21,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "calandowner")
 @IdClass(LandOwnerPK.class)
 @EqualsAndHashCode(of = { "zid", "xland","xrow" }, callSuper = false)
+@XmlRootElement(name = "owners")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LandOwner extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 8511409160374470441L;
