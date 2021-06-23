@@ -21,76 +21,75 @@ import lombok.EqualsAndHashCode;
 @Table(name = "calandinfo")
 @IdClass(LandInfoPK.class)
 @EqualsAndHashCode(of = { "zid", "xland" }, callSuper = false)
-public class LandInfo extends AbstractModel<String>{
+public class LandInfo extends AbstractModel<String> {
 
-	
 	private static final long serialVersionUID = 4352784604780796645L;
-	
+
 	@Id
-	@Basic(optional=false)
-	@Column(name="zid")
+	@Basic(optional = false)
+	@Column(name = "zid")
 	private String zid;
 
 	@Id
-	@Basic(optional=false)
-	@Column(name="xland")
+	@Basic(optional = false)
+	@Column(name = "xland")
 	private String xland;
 
-	@Column(name="xlname")
+	@Column(name = "xlname")
 	private String xlname;
-	
-	@Column(name="xblock")
+
+	@Column(name = "xblock")
 	private String xblock;
 
-	@Column(name="xroad")
+	@Column(name = "xroad")
 	private String xroad;
-	
-	@Column(name="xlandqty")
+
+	@Column(name = "xlandqty")
 	private BigDecimal xlandqty;
 
-	@Column(name="xlandunit")
+	@Column(name = "xlandunit")
 	private String xlandunit;
 
-	@Column(name="xlandgrsqty")
+	@Column(name = "xlandgrsqty")
 	private BigDecimal xlandgrsqty;
 
-	@Column(name="xlanggrsunit")
+	@Column(name = "xlanggrsunit")
 	private String xlanggrsunit;
 
-	@Column(name="xlanddedroad")
+	@Column(name = "xlanddedroad")
 	private Integer xlanddedroad;
 
-	@Column(name="xlanddedother")
+	@Column(name = "xlanddedother")
 	private Integer xlanddedother;
 
-	@Column(name="xlandnetqty")
+	@Column(name = "xlandnetqty")
 	private BigDecimal xlandnetqty;
 
-	@Column(name="xlandnetunit")
+	@Column(name = "xlandnetunit")
 	private String xlandnetunit;
 
-	@Column(name="xriversideqty")
+	@Column(name = "xriversideqty")
 	private BigDecimal xriversideqty;
 
-	@Column(name="xriversideunit")
+	@Column(name = "xriversideunit")
 	private String xriversideunit;
 
-	@Column(name="xnote")
+	@Column(name = "xnote")
 	private String xnote;
 
-	@Column(name="xlandparent")
+	@Column(name = "xlandparent")
 	private String xlandparent;
 
-	@Column(name="xstatus")
+	@Column(name = "xstatus")
 	private String xstatus;
-	
-	@Column(name="xroadred")
+
+	@Column(name = "xroadred")
 	private BigDecimal xroadred;
 
-	@Column(name="xotherred")
+	@Column(name = "xotherred")
 	private BigDecimal xotherred;
 
-	@Column(name="xdateborn")
+	@Column(name = "xdateborn")
 	@Temporal(TemporalType.DATE)
 	private Date xdateborn;
 
@@ -99,7 +98,7 @@ public class LandInfo extends AbstractModel<String>{
 
 	@Column(name = "xtrn")
 	private String xtrn;
-	
+
 	@Transient
 	private String xname;
 }

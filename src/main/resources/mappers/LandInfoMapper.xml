@@ -403,4 +403,47 @@
 	<delete id="deleteLandEvents" parameterType="LandEvents">
 		DELETE FROM calandevent WHERE xrow=#{xrow} AND xland=#{xland} AND zactive='1' AND zid=#{zid}
 	</delete>
+
+	<!-- <select id="getLandInfoReportData" >
+		SELECT 
+			calandinfo.xland,
+			calandinfo.xlname,
+			calandinfo.xblock,
+			calandinfo.xroad,
+			calandinfo.xlandqty,
+			calandinfo.xlandunit,
+			calandinfo.xlanddedroad,
+			calandinfo.xlanddedother,
+			calandinfo.xriversideqty,
+			calandinfo.xriversideunit,
+			calandinfo.xdateborn,
+			calandinfo.xnote,
+			
+			calandowner.xperson as ownerid,
+			caperson.xname as ownername,
+			calandowner.xtype as ownertype,
+			calandowner.xqty as ownerqty,
+			calandowner.xunit as ownerunit,
+			calandowner.xnote as ownernote,
+			
+			calanddag.xdagtype,
+			calanddag.xdagnum as dagnumber,
+			calanddag.xtype as dagtype,
+			calanddag.xqty as dagqty,
+			calanddag.xunit as dagunit,
+			
+			calanservey.xsurveyor,
+			calanservey.xdate as survdate,
+			calanservey.xnote as survnote
+
+		FROM
+			calandinfo 
+			LEFT JOIN calandowner ON calandowner.xland = calandinfo.xland AND calandowner.zid = calandinfo.zid
+			LEFT JOIN calanddag ON calanddag.xland = calandinfo.xland AND calanddag.zid = calandinfo.zid
+			LEFT JOIN caperson ON caperson.xperson = calandowner.xperson AND caperson.zid = calandowner.zid
+			LEFT JOIN calanservey ON calanservey.xland = calandinfo.xland AND calanservey.zid = calandinfo.zid
+		WHERE
+			calandinfo.zid=#{zid}
+			AND calandinfo.zactive='1'
+	</select> -->
 </mapper>

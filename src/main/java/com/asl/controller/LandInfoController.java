@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +15,10 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,10 +36,11 @@ import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
 import com.asl.entity.LandSurvey;
-import com.asl.entity.LandPerson;
+import com.asl.entity.Zbusiness;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.report.LandInfoReport;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
 import com.asl.service.LandSurveyService;
@@ -82,7 +89,7 @@ public class LandInfoController extends ASLAbstractController {
 		LandInfo landInfo = landInfoService.findByLandInfo(xland);
 		if (landInfo == null) return "redirect:/landinfo";
 
-		
+		 
 		model.addAttribute("info", landInfo);
 		model.addAttribute("allInfos", landInfoService.getAllLandInfo());
 		model.addAttribute("lelist", landInfoService.findByLandEvents(xland));
@@ -673,7 +680,53 @@ public class LandInfoController extends ASLAbstractController {
 		responseHelper.setReloadSectionIdWithUrl("surveytable", "/landinfo/survey/" + xland);
 		return responseHelper.getResponse();
 	}
-	
+
+	@GetMapping("/print/{xland}")
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xland) {
+		String message;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("text", "html"));
+		headers.add("X-Content-Type-Options", "nosniff");
+
+		//landS
+		LandInfo landInfo = landInfoService.findByLandInfo(xland);
+		if(landInfo == null) {
+			message = "Land info not found to do print";
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E, dd-MMM-yyyy");
+		Zbusiness zb = sessionManager.getZbusiness();
+
+		LandInfoReport report = new LandInfoReport();
+		report.setBusinessName(zb.getZorg());
+		report.setBusinessAddress(zb.getXmadd());
+		report.setReportName("Land Info Report : " + xland);
+		report.setPrintDate(sdf.format(new Date()));
+
+		BeanUtils.copyProperties(landInfo, report);
+
+		List<LandOwner> owners = landInfoService.findByLandOwner(xland);
+		if(owners != null && !owners.isEmpty()) report.setOwners(owners);
+
+		List<LandDagDetails> dagList = landInfoService.findByLandDagDetails(xland);
+		if(dagList != null && !dagList.isEmpty()) report.setDags(dagList);
+
+		List<LandSurvey> surveyList = landSurveyService.findByXlandSurvey(xland);
+		if(surveyList != null && !surveyList.isEmpty()) report.setSurveys(surveyList);
+
 		
+
+		byte[] byt = getPDFByte(report, "landinfo.xsl");
+		if(byt == null) {
+			message = "Can't generate pdf for Land : " + xland;
+			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		headers.setContentType(new MediaType("application", "pdf"));
+		return new ResponseEntity<>(byt, headers, HttpStatus.OK);
+	}
+	
+	
 }
 	

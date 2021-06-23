@@ -15,21 +15,21 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "cadocument")
 @IdClass(LandDocumentPK.class)
-@EqualsAndHashCode(of = { "zid","xdoc","xrow"}, callSuper = false)
-public class LandDocument extends AbstractModel<String>{
-	
+@EqualsAndHashCode(of = { "zid", "xdoc", "xrow" }, callSuper = false)
+public class LandDocument extends AbstractModel<String> {
+
 	private static final long serialVersionUID = -1482216443995609989L;
 
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
 	private String zid;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xdoc")
 	private String xdoc;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
@@ -43,29 +43,29 @@ public class LandDocument extends AbstractModel<String>{
 
 	@Column(name = "xland")
 	private String xland;
-	
+
 	@Column(name = "xdoctype")
 	private String xdoctype;
-	
+
 	@Column(name = "xname")
 	private String xname;
-	
+
 	@Column(name = "xdocument")
 	private String xdocument;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 
 	@Column(name = "xtrn")
 	private String xtrn;
-	
-	@Column(name="xnameold")
+
+	@Column(name = "xnameold")
 	private String xnameold;
-	
+
 	@Transient
 	private boolean newData;
-	
+
 }

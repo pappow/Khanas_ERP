@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +20,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "calanddag")
 @IdClass(LandDagDetailsPK.class)
 @EqualsAndHashCode(of = { "zid", "xrow" }, callSuper = false)
+@XmlRootElement(name = "dags")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LandDagDetails extends AbstractModel<String> {
 
 	
