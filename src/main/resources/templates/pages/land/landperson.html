@@ -208,7 +208,7 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(person.xperson)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Education Details for (<span th:text="${person.xperson}"></span>)</h1>
+								<h1>Education Details of <span th:text="${person.xperson}"></span></h1>
 							</div>
 							<div class="section-body" style="overflow-y:scroll;height:200px;">
 								<table class="table table-striped table-bordered normal-table" id="educationtable" th:fragment="educationtable">
@@ -249,7 +249,7 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(person.xperson)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Experience Details for (<span th:text="${person.xperson}"></span>)</h1>
+								<h1>Experience Details of <span th:text="${person.xperson}"></span></h1>
 							</div>
 							<div class="section-body" style="overflow-y:scroll;height:200px;">
 								<table class="table table-striped table-bordered normal-table" id="experiencetable" th:fragment="experiencetable">
@@ -288,7 +288,7 @@
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(person.xperson)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>Document Details for (<span th:text="${person.xperson}"></span>)</h1>
+								<h1>Document Details of <span th:text="${person.xperson}"></span></h1>
 							</div>
 							<div class="section-body" style="overflow-y:scroll;height:200px;">
 								<table class="table table-striped table-bordered normal-table" id="persondocumenttable" th:fragment="persondocumenttable">

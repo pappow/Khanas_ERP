@@ -519,7 +519,7 @@
 			<div class="col-md-12">
 				<section th:if="${not #strings.isEmpty(info.xland)}" id="data-maintenance" style="margin-top: 30px;">
 				<div class="section-header sectionbartoggle">
-					<h1>Survey Details For (<span th:text="${info.xland}"></span>)</h1>
+					<h1>Survey Details of <span th:text="${info.xland}"></span></h1>
 				</div>
 				<div class="section-body" style="overflow-y:scroll;height:200px;">
 					<table class="table table-striped table-bordered normal-table" id="surveytable" th:fragment="surveytable">

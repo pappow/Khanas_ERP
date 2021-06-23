@@ -12,7 +12,7 @@ public enum ReportMenu {
 
 	// Procurements  -- M0300
 	RM0301(999, "300", "Procurements", "Purchase Order Listing", ReportParamMap.RM0301, "Y", false, false, 1000),
-	RM0302(999, "300", "Procurements", "Land Information", ReportParamMap.RM0302, "Y", false, false, 1000),
+	RM0302(999, "300", "Procurements", "Suggestion Report", ReportParamMap.RM0302, "Y", false, false, 1000),
 	RM0303(999, "300", "Procurements", "Purchase Listing", ReportParamMap.RM0303, "Y", false, false, 1000),
 	RM0304(999, "300", "Procurements", "Purchase Deviation Listing", ReportParamMap.RM0304, "Y", false, false, 1000),
 	RM0305(999, "300", "Procurements", "GRN Listing", ReportParamMap.RM0305, "Y", false, false, 1000),
@@ -54,7 +54,16 @@ public enum ReportMenu {
 	RM0605(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0605, "Y", false, false, 1000),
 	RM0606(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0606, "Y", false, false, 1000),
 	RM0607(999, "600", "Inventory", "Item List", ReportParamMap.RM0607, "Y", false, false, 1000),
-	RM0608(999, "600", "Inventory", "Inventory Management Report", ReportParamMap.RM0608, "Y", false, false, 1000);
+	RM0608(999, "600", "Inventory", "Inventory Management Report", ReportParamMap.RM0608, "Y", false, false, 1000),
+	
+	//Land Report --RM0700
+	RM0701(999, "700", "Land Management", "Land Details Report", ReportParamMap.RM0701, "Y", false, false, 1000),
+	RM0702(999, "700", "Land Management", "Land Information Report", ReportParamMap.RM0702, "Y", false, false, 1000),
+	RM0703(999, "700", "Land Management", "Sales Listing Detail", ReportParamMap.RM0703, "Y", false, false, 1000),
+	RM0704(999, "700", "Land Management", "Sales Listing Summary", ReportParamMap.RM0704, "Y", false, false, 1000),
+	RM0705(999, "700", "Land Management", "Dag Wise Land Information Details", ReportParamMap.RM0705, "Y", false, false, 1000),
+	RM0706(999, "700", "Land Management", "Member Wise Land Information Details", ReportParamMap.RM0706, "Y", false, false, 1000),
+	RM0707(999, "700", "Land Management", "Money Receipt Listing", ReportParamMap.RM0707, "Y", false, false, 1000);
 
 	private int seqn;
 	private String group;

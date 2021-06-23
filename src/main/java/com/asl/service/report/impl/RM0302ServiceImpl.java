@@ -26,8 +26,7 @@ public class RM0302ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// chalan
-		if(!isDev())fieldsList.add(FormFieldBuilder.generateSearchField(2, "Chalan", "search/report/chalan", "", true));
-		if(isDev())fieldsList.add(FormFieldBuilder.generateSearchField(3, "Land Owner Name", "search/personName", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Chalan", "search/report/chalan", "", true));
 		
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

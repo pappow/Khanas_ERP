@@ -55,6 +55,15 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0606 = new HashMap<>();
 	public static final Map<String, String> RM0607 = new HashMap<>();
 	public static final Map<String, String> RM0608 = new HashMap<>();
+	
+	//Land
+	public static final Map<String, String> RM0701 = new HashMap<>();
+	public static final Map<String, String> RM0702 = new HashMap<>();
+	public static final Map<String, String> RM0703 = new HashMap<>();
+	public static final Map<String, String> RM0704 = new HashMap<>();
+	public static final Map<String, String> RM0705 = new HashMap<>();
+	public static final Map<String, String> RM0706 = new HashMap<>();
+	public static final Map<String, String> RM0707 = new HashMap<>();
 
 	static {
 		RM0301.put("param1", "ZID|" + ReportParamDataType.STRING.name());
@@ -249,6 +258,46 @@ public class ReportParamMap {
 
 		RM0608.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0608.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		
+		RM0701.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0701.put("param2", "LAND|" + ReportParamDataType.STRING.name());
+		RM0701.put("param3", "CSDAG|" + ReportParamDataType.STRING.name());
+		RM0701.put("param4", "RSDAG|" + ReportParamDataType.STRING.name());
+		RM0701.put("param5", "CITYDAG|" + ReportParamDataType.STRING.name());
+//		RM0701.put("param3", "MEMBER|" + ReportParamDataType.STRING.name());
+//		RM0701.put("param4", "DAG|" + ReportParamDataType.STRING.name());
+		
+		
+		RM0702.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0702.put("param2", "LAND|" + ReportParamDataType.STRING.name());
+		
+		RM0703.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0703.put("param2", "From Date|" + ReportParamDataType.DATE.name());
+		RM0703.put("param3", "To Date|" + ReportParamDataType.DATE.name());
+		RM0703.put("param4", "Customer|" + ReportParamDataType.STRING.name());
+		RM0703.put("param5", "Do Status|" + ReportParamDataType.STRING.name());
+		RM0703.put("param6", "Do Number|" + ReportParamDataType.STRING.name());
+		
+		RM0704.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0704.put("param2", "From Date|" + ReportParamDataType.DATE.name());
+		RM0704.put("param3", "To Date|" + ReportParamDataType.DATE.name());
+		RM0704.put("param4", "Customer|" + ReportParamDataType.STRING.name());
+		RM0704.put("param5", "Do Status|" + ReportParamDataType.STRING.name());
+		RM0704.put("param6", "Do Number|" + ReportParamDataType.STRING.name());
+		
+		RM0705.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0705.put("param2", "TYPE|" + ReportParamDataType.STRING.name());
+		RM0705.put("param3", "NUM|" + ReportParamDataType.STRING.name());
+		
+		RM0706.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0706.put("param2", "MEMBER|" + ReportParamDataType.STRING.name());
+		
+		RM0707.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0707.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		RM0707.put("param3", "TDATE|" + ReportParamDataType.DATE.name());
+		RM0707.put("param4", "XGCUS|" + ReportParamDataType.STRING.name());
+		RM0707.put("param5", "PAYTYPE|" + ReportParamDataType.STRING.name());
+		RM0707.put("param6", "RECBY|" + ReportParamDataType.STRING.name());
 		
 //		SRS.put("param1", "zid|" + ReportParamDataType.INTEGER.name());
 //		SRS.put("param2", "fdate|" + ReportParamDataType.DATE.name());
