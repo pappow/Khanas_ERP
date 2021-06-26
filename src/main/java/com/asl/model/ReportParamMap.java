@@ -207,6 +207,7 @@ public class ReportParamMap {
 		RM0503.put("param4", "XGITEM|" + ReportParamDataType.STRING.name());
 		RM0503.put("param5", "XCATITEM|" + ReportParamDataType.STRING.name());
 		RM0503.put("param6", "XITEM|" + ReportParamDataType.STRING.name());
+		RM0503.put("param7", "XWH|" + ReportParamDataType.STRING.name());
 		
 		RM0504.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0504.put("param2", "RAWMET|" + ReportParamDataType.STRING.name());

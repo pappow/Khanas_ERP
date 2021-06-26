@@ -139,9 +139,16 @@
 	<select id="findByZid" resultType="Zbusiness">
 		SELECT * FROM Zbusiness WHERE zid=#{zid} AND zactive='1'
 	</select>
-
+	<select id="findfromZid" resultType="Zbusiness">
+		SELECT * FFROM Zbusiness WHERE zid=#{zid} AND zactive='1'	
+	</select>
+	
 	<select id="getAllBranchBusiness" resultType="Zbusiness">
 		SELECT * FROM Zbusiness WHERE centralzid=#{zid} AND branch='1' AND zactive='1'
+	</select>
+	
+	<select id="getBranchBusiness" resultType="Zbusiness">
+		SELECT * FROM Zbusiness WHERE zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="getCentralBusiness" resultType="Zbusiness">
