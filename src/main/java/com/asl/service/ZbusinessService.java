@@ -18,8 +18,12 @@ public interface ZbusinessService {
 	public long update(Zbusiness zbusiness);
 
 	public Zbusiness findBById(String zid);
+	
+	public Zbusiness findfromZid();
 
 	public List<Zbusiness> getAllBranchBusiness();
+	
+	public List<Zbusiness> getBranchBusiness();
 
 	public Zbusiness getCentralBusiness();
 }

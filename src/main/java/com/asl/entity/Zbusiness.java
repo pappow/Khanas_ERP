@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.asl.enums.ProfileType;
@@ -122,5 +123,8 @@ public class Zbusiness extends AbstractModel<String> {
 	@Enumerated(EnumType.STRING)
 	private ProfileType xdine;
 	
+	@Lob
+    @Column(name = "ximage")
+    private byte[] ximage;
 
 }

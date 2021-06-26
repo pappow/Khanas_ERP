@@ -17,7 +17,12 @@ public interface ZbusinessMapper {
 	public long update(Zbusiness zbusiness);
 
 	Zbusiness findByZid(String zid);
+	
+	Zbusiness findfromZid(String zid);
 
 	public List<Zbusiness> getAllBranchBusiness(String zid);
+	
+	public List<Zbusiness> getBranchBusiness(String zid);
+	
 	public Zbusiness getCentralBusiness(String centralzid);
 }

@@ -38,10 +38,20 @@ public class ZbusinessServiceImpl extends AbstractGenericService implements Zbus
 		if(StringUtils.isBlank(zid)) return null;
 		return businessMapper.findByZid(zid);
 	}
-
+	
+	@Override
+	public Zbusiness findfromZid() {
+		return businessMapper.findByZid(sessionManager.getBusinessId());
+	}
+	
 	@Override
 	public List<Zbusiness> getAllBranchBusiness() {
 		return businessMapper.getAllBranchBusiness(sessionManager.getBusinessId());
+	}
+	
+	@Override
+	public List<Zbusiness> getBranchBusiness() {
+		return businessMapper.getBranchBusiness(sessionManager.getBusinessId());
 	}
 
 	@Override
