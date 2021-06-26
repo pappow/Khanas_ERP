@@ -2,7 +2,10 @@
 	<li class="dropdown ckbigmenucontainer">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fas fa-th"></i></a>
 		<ul class="dropdown-menu ckbigmenu">
-			<meta th:remove="tag" th:include="pages/dashboard/dashboard :: mainmenu"/>
+			<meta th:if="${isKhanas}" th:remove="tag" th:include="pages/dashboard/dashboard-khanas :: mainmenu"/>
+			<meta th:if="${isTcc}" th:remove="tag" th:include="pages/dashboard/dashboard-tcc :: mainmenu"/>
+			<meta th:if="${isBoshila}" th:remove="tag" th:include="pages/dashboard/dashboard-boshila :: mainmenu"/>
+			<meta th:if="${isDev}" th:remove="tag" th:include="pages/dashboard/dashboard :: mainmenu"/>
 			<!-- <li class="ckbigmenu-li">
 				<a th:href="@{/}">
 					<span class="ckbigmenu-icon" style="background: blue;">
