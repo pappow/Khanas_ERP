@@ -27,12 +27,12 @@ spring:
     cache: false
   datasource: 
     driver-class-name: oracle.jdbc.OracleDriver
-#    url: jdbc:oracle:thin:@localhost:1521:orcl
-#    username: RES_ERP
-#    password: Asl1234
-    url: jdbc:oracle:thin:@103.231.135.60:1521:orcl
-    username: res_erp
-    password: res_erp
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: RES_ERP
+    password: Asl1234
+#    url: jdbc:oracle:thin:@103.231.135.60:1521:orcl
+#    username: res_erp
+#    password: res_erp
     tomcat:
       max-wait: 200000
       max-active: 500
