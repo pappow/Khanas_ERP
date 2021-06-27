@@ -107,6 +107,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 		arhed.setXsign(+1);
 		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
 		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
+		arhed.setXtrn(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());

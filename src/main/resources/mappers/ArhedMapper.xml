@@ -155,7 +155,7 @@
 			arhed 
 		WHERE 
 			zid=#{zid}
-			AND xtrnarhed=#{xtrnarhed}
+			AND xtrn=#{xtrnarhed}
 			AND xtype=#{xtype}
 		ORDER BY
 			xstatus, xvoucher DESC
