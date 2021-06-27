@@ -72,68 +72,68 @@
 													<div class="col-md-6">
 													
 														<div class="form-group">
-																<label class="control-label col-md-4" for="xland">Business ID</label>
-																<div class="col-md-8">
+																<label class="control-label col-md-5" for="xland">Business ID</label>
+																<div class="col-md-6">
 																	<input type="text" class="form-control" th:field="*{zid}" disabled="disabled"/>
 																</div>
 															</div>
 													 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="zorg">Business Name</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-5" for="zorg">Business Name</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{zorg}" maxlength="100"/>
 															</div>
 														</div>
 											
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xoutlet">Outlet No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-5" for="xoutlet">Outlet No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xoutlet}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xshopno">Shop No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-5" for="xshopno">Shop No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xshopno}" maxlength="100"/>
 															</div>
 															
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xterminalno">Terminal No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-5" for="xterminalno">Terminal No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xterminalno}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xmadd">Address</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-5" for="xmadd">Address</label>
+															<div class="col-md-6">
 																<textarea class="form-control" rows="3" th:field="*{xmadd}" placeholder="Your Address here.."></textarea>
 															</div>
 														</div>
 														</div>
-														<div class="col-md-6">
+														<div class="col-md-6" style="margin-top:25px;">
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xcontact">Contact No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-2" for="xcontact">Contact No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xcontact}" maxlength="100"/>
 															</div>
 															
 														</div>
 														
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xvatregno">VAT Reg. No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-2" for="xvatregno">VAT Reg. No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xvatregno}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xmusakno">Musak No.</label>
-															<div class="col-md-8">
+															<label class="control-label col-md-2" for="xmusakno">Musak No.</label>
+															<div class="col-md-6">
 																<input type="text" class="form-control" th:field="*{xmusakno}" maxlength="100"/>
 															</div>
 														</div>
 														<div class="form-group">
-															<div class="col-sm-8 col-sm-offset-4">
+															<div class="col-sm-6 col-sm-offset-2">
 																<div class="radio" for="xdine">
 																	<label><input type="radio" class="form-control-input2" th:field="*{xdine}" th:value="${T(com.asl.enums.ProfileType).C}"  required="required"/>Casual Dine</label>
 																	<label><input type="radio" class="form-control-input2" th:field="*{xdine}" th:value="${T(com.asl.enums.ProfileType).F}"  required="required"/>Fine Dine</label>

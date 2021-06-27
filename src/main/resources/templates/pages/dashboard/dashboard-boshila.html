@@ -77,7 +77,7 @@
 										</tr>
 									</span>
 
-
+										
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Housing Management</td>
@@ -548,6 +548,17 @@
 												<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr> -->
+										<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">Business Setup</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/businessprof}">Business Profile</a></td>
+											<td>
+												<a th:href="@{/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									  </span>
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Land</td>
