@@ -35,7 +35,9 @@ import com.asl.entity.LandDocument;
 import com.asl.entity.LandEvents;
 import com.asl.entity.LandInfo;
 import com.asl.entity.LandOwner;
+import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurvey;
+import com.asl.entity.LandSurveyor;
 import com.asl.entity.Zbusiness;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -43,7 +45,9 @@ import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.LandInfoReport;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
+import com.asl.service.LandPersonService;
 import com.asl.service.LandSurveyService;
+import com.asl.service.LandSurveyorService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,11 +55,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/landinfo")
 public class LandInfoController extends ASLAbstractController {
-	
+
 	@Autowired private LandInfoService landInfoService;
 	@Autowired private LandDocumentService landDocumentService;
 	@Autowired private LandSurveyService landSurveyService;
-	
+	@Autowired private LandPersonService landPersonService;
+	@Autowired private LandSurveyorService landSurveyorService;
+
 	@GetMapping
 	public String loadLandInfoPage(Model model) {
 		
@@ -703,21 +709,40 @@ public class LandInfoController extends ASLAbstractController {
 		report.setBusinessAddress(zb.getXmadd());
 		report.setReportName("Land Info Report : " + xland);
 		report.setPrintDate(sdf.format(new Date()));
+		report.setFromDate(sdf.format(new Date()));
 
 		BeanUtils.copyProperties(landInfo, report);
+		
 
 		List<LandOwner> owners = landInfoService.findByLandOwner(xland);
-		if(owners != null && !owners.isEmpty()) report.setOwners(owners);
+		if(owners != null && !owners.isEmpty()) {
+			for(LandOwner owner : owners) {
+				if(StringUtils.isBlank(owner.getXperson())) continue;
+				LandPerson lp = landPersonService.findByLandPerson(owner.getXperson());
+				if(lp != null) {
+					owner.setXperson(owner.getXperson() + " - " + lp.getXname());
+				}
+			}
+			report.setOwners(owners);
+		}
 
 		List<LandDagDetails> dagList = landInfoService.findByLandDagDetails(xland);
 		if(dagList != null && !dagList.isEmpty()) report.setDags(dagList);
 
 		List<LandSurvey> surveyList = landSurveyService.findByXlandSurvey(xland);
-		if(surveyList != null && !surveyList.isEmpty()) report.setSurveys(surveyList);
+		if(surveyList != null && !surveyList.isEmpty()) {
+			for(LandSurvey ls : surveyList) {
+				if(StringUtils.isBlank(ls.getXsurveyor())) continue;
+				LandSurveyor lsy = landSurveyorService.findByLandSurveyor(ls.getXsurveyor());
+				if(lsy != null) {
+					ls.setXsurveyor(ls.getXsurveyor() + " - " + lsy.getXname());
+				}
+			}
+			report.setSurveys(surveyList);
+		}
 
-		
 
-		byte[] byt = getPDFByte(report, "landinfo.xsl");
+		byte[] byt = getPDFByte(report, "landinforeport.xsl");
 		if(byt == null) {
 			message = "Can't generate pdf for Land : " + xland;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
