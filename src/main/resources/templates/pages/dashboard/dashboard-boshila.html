@@ -147,6 +147,86 @@
 									</span>
 
 
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">Acounting</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/account}">General Accounts</a></td>
+											<td>
+												<a th:href="@{/account}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										
+									</span>
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">General Accounts</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/chartofaccounts}">Chart of Accounts</a></td>
+											<td>
+												<a th:href="@{/chartofaccounts}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/bankentry}">Bank Entry</a></td>
+											<td>
+												<a th:href="@{/bankentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/accountdefaults}">Account Defaults</a></td>
+											<td>
+												<a th:href="@{/accountdefaults}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/voucherheader}">Voucher Header</a></td>
+											<td>
+												<a th:href="@{/voucherheader}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/bankvoucherentry}">Bank Voucher Entry</a></td>
+											<td>
+												<a th:href="@{/bankvoucherentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/aradjustmententry}">Customer Adjustment Entry</a></td>
+											<td>
+												<a th:href="@{/aradjustmententry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/customeropening}">Customer Opening Entry</a></td>
+											<td>
+												<a th:href="@{/customeropening}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/supadjustentry}">Supplier Adjustment Entry</a></td>
+											<td>
+												<a th:href="@{/supadjustentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/moneyreceipt}">Money Receipt Entry</a></td>
+											<td>
+												<a th:href="@{/moneyreceipt}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										
+									</span>
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td><a th:href="@{/logout}" style="color: red !important; font-weight: bold; margin-left: 0px;">Logout</a></td>
+											<td>
+												<a th:href="@{/logout}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
 									<span th:if="${isDev or isKhanas or isTcc}">
 										<span th:if="${menuProfile.M0300 ne null and menuProfile.M0300.display}">
 											<tr>
@@ -201,7 +281,7 @@
 												<td>
 													<a th:href="@{/purchasing}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
-											</tr> -->
+											</tr>
 											<tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
 												<td><a th:href="@{/purchasing/poord}" th:text="${menuProfile.M0304.screenprompt}">Purchase Order</a></td>
 												<td>
@@ -421,6 +501,15 @@
 	
 									<!-- <span th:if="${isBoshila or isDev}">
 										<tr>
+<<<<<<< Upstream, based on upstream/develop
+=======
+											<td colspan="2">Sales And Invoice</td>
+										</tr>
+
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+
+>>>>>>> 76c29d5 account
 											<td colspan="2">Master Setup</td>
 										</tr>
 										
@@ -451,6 +540,11 @@
 										
 										<tr>
 											<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales And Invoice</a></td>
+<<<<<<< Upstream, based on upstream/develop
+=======
+
+											<td><a th:href="@{/salesninvoice/salesandinvoice}">Land Sale</a></td>
+>>>>>>> 76c29d5 account
 											<td>
 												<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -493,12 +587,26 @@
 										</tr> -->
 									</span>
 										
+<<<<<<< Upstream, based on upstream/develop
 									<!-- 
+=======
+									<!-- <span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">Procurements</td>
+										</tr>
+
+									</span>
+										
+>>>>>>> 76c29d5 account
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Procurements</td>
 										</tr>
+<<<<<<< Upstream, based on upstream/develop
 										
+=======
+
+>>>>>>> 76c29d5 account
 										<tr>
 											<td><a th:href="@{/purchasing/supplierpayment}">Supplier Payment</a></td>
 											<td>
@@ -539,6 +647,10 @@
 												<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>	
+<<<<<<< Upstream, based on upstream/develop
+=======
+
+>>>>>>> 76c29d5 account
 									</span>
 										
 										
@@ -589,6 +701,13 @@
 											</td>
 										</tr>
 
+<<<<<<< Upstream, based on upstream/develop
+=======
+
+									</span> -->
+
+
+>>>>>>> 76c29d5 account
 										<tr>
 											<td><a th:href="@{/landmemberinfo}">Land Member Info</a></td>
 											<td>
@@ -602,7 +721,11 @@
 												<a th:href="@{/landevents}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr> -->
+<<<<<<< Upstream, based on upstream/develop
 										
+=======
+
+>>>>>>> 76c29d5 account
 										<!-- <tr>
 											<td><a th:href="@{/purchasing/supopenentry}">Customer Opening</a></td>
 											<td>

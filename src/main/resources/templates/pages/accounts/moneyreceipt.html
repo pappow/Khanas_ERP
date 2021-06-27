@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Money Receipt Entry</title>
+		<meta th:remove="tag" th:include="commons :: common-meta" />
+		<meta th:remove="tag" th:include="commons :: common-css" />
+		<meta th:remove="tag" th:include="commons :: common-js" />
+	</head>
+	<body>
+		<!-- Header section -->
+		<div class="header-section" th:include="commons :: header-section"></div>
+
+		<!-- Menu section -->
+		<div class="navbar-inverse menu-section">
+			<div class="container-fluid">
+				<div class="row">
+					<nav class="navbar navbar-inverse">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+										<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+									</button>
+								</div>
+								<div class="collapse navbar-collapse" id="myNavbar">
+									<div class="nav navbar-nav">
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/moneyreceipt}">Money Receipt</a></li>
+									</div>
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
+								</div>
+							</div>
+						</div> 
+					</nav>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Content section -->
+		<div>
+			<div class="container-fluid">
+				<div class="row">
+					<h1 class="text-center">Money Receipt</h1>
+				</div>
+			
+				<div class="row">
+					<div class="col-md-12 content-area">
+
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Section list head -->
+								<section id="data-maintenance" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										
+									</div>
+									<div class="form-action-button">
+										<a th:href="@{/moneyreceipt}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${#strings.isEmpty(arhed.xvoucher)}" th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/salesninvoice/moneyreceipt/archive/} + ${arhed.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher)}" th:href="@{/salesninvoice/moneyreceipt/print/} + ${arhed.xvoucher}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print</a>
+										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/salesninvoice/moneyreceipt/confirm/} + ${arhed.xvoucher}" class="btn btn-sm btn-warning archive-btn-link"><i class="fas fa-check-circle"></i> Confirm</a>
+									</div>
+									<div class="section-body section-border">
+										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/moneyreceipt/save}" th:object="${arhed}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<input type="hidden" th:field="*{xtypetrn}"/>
+											<div class="row">
+												<div class="col-md-6">
+													
+													<div class="form-group" th:if="${#strings.isEmpty(arhed.xvoucher)}">
+														<label class="control-label col-md-4" for="xtype">M.R. Number</label>
+														<div class="col-md-4">
+															<select class="form-control" th:field="*{xtype}">
+																<option th:each="prefix : ${arhedprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+															</select>
+														</div>
+													</div>
+													
+													<div class="form-group" th:if="${not #strings.isEmpty(arhed.xvoucher)}">
+														<label class="control-label col-md-4" for="xvoucher">M.R. Number</label>
+														<div class="col-md-8">
+															<input type="hidden" class="form-control" th:field="*{xvoucher}">
+															<input type="text" class="form-control" th:field="*{xvoucher}" disabled="disabled">
+														</div>
+													</div>
+													
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="xdate">M.R. Date</label>
+														<div class="input-group date col-md-7 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id="xdate"
+																	name="xdate"
+																	th:value="${arhed.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(arhed.xdate, df)}"/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Cheque/TT/DD/<br>P.Order/Ref.No. </label>
+														<div class="col-md-8">
+															<input type="text" class="form-control"  required="required">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xcus">Customer ID</label>
+														<div class="col-sm-8">
+															<input 	type="text" 
+																	class="form-control searchsuggest" 
+																	placeholder="Search..." 
+																	th:value="${arhed.xcus}" 
+																	th:attr="search-url='search/customer'"/>
+															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
+															<input type="hidden" id="search-des" th:value="*{xcus}"/>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Name</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" id="" name="" value="" >
+														</div>
+													</div>
+													
+													<div class="form-group datepicker">
+														<label class="control-label col-md-4" for="">Cheque/TT/DD/<br>P.Order/Ref.Date</label>
+														<div class="input-group date col-md-7 datepicker">
+															<input 	type="datepicker" 
+																	class="form-control" 
+																	id=""
+																	name=""
+																	/>
+															<div class="input-group-addon">
+																<span class="glyphicon glyphicon-calendar"></span>
+															</div>
+														</div>
+													</div>
+											        <div class="form-group">
+														<label class="control-label col-md-4" for="">Account No.</label>
+														<div class="col-md-8">
+															<input type="number" class="form-control"  min="0" required="required">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Account Name</label>
+														<div class="col-md-6">
+															<input type="number" class="form-control"  min="0" value="Cash Control Name">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xpaymenttype">Payment Type</label>
+														<div class="col-md-8">
+															<select class="form-control" th:field="*{xpaymenttype}">
+																<option th:each="x : ${paymenttypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
+															</select>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Sub Account </label>
+														<div class="col-md-6">
+															<input type="text" data-smk-type="decimal" class="form-control" min="0">
+														</div>
+													</div> 
+
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Sub Account Name</label>
+														<div class="col-md-6">
+															
+															<input type="text" class="form-control" value="xyz" disabled="disabled">
+														</div>
+													</div>
+													
+												</div>
+												
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Quatation/Invoice</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" placeholder="0001112354">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Total Receivable Ammount</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" placeholder="900.00">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">VAT Paid by Customer</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" placeholder="0.00">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">AIT Paid by Customer</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" placeholder="0.00">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Discount</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" placeholder="0.00">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Payment Transaction Type</label>
+														<div class="col-md-8">
+															<select class="form-control" >
+																<option value="Pick">Pick</option>
+															</select>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Customer Bank Name</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" >
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="">Voucher No.</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" value="RV--0000010" disabled="disabled">
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xnote">Note</label>
+														<div class="col-md-8">
+															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														</div>
+													</div>
+													
+													
+													
+													
+													
+										</form>
+									</div>
+								</section>
+							</div>
+		
+									
+							<div class="col-md-6">
+								<section id="list-manager" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										<h1>All Money Receipt Entries</h1>
+									</div>
+									<div class="section-body">
+										<table class="table table-striped table-bordered datatable nowrap">
+											<thead>
+												<tr>
+													<th>M.R. Number</th>
+													<th>Date</th>
+													<th>Customer</th>
+													<th>Amount</th>
+													<th>Status</th>
+												</tr>
+											</thead>
+											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+												<tr th:each="arhed : ${allArhed}">
+													<td>
+														<a th:href="@{/moneyreceipt/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
+													</td>
+													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
+													<td th:text="${arhed.xcus}"></td>
+													<td th:text="${arhed.xprime}"></td>
+													<td th:text="${arhed.xstatus}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+				<!-- Footer section -->
+		<div class="footer-section" th:include="commons :: footer-section"></div>
+	</body>
+	<script>
+		$(document).ready(function(){
+			$(".vatait-select").on("change", function(){
+				var vataitId = $(".vatait-select").val()
+				$.ajax({
+					url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
+					type : 'GET',
+					beforeSend : loadingMask2.show(),
+					success: function(data){
+						loadingMask2.hide();
+						console.log(data.xvat);
+						var vatPercent = parseFloat(data.xvat);
+						var aitPercent = parseFloat(data.xait);
+						var vatAmount = (parseFloat($("input[name='xprime']").val()) * vatPercent)/100;
+						var aitAmount = (parseFloat($("input[name='xprime']").val()) * aitPercent)/100;						
+						
+						$('input[name="xvatamt"]').val(vatAmount);
+						//$('input.xvatamt-show').val(vatAmount);
+						$('input[name="xaitamt"]').val(aitAmount);
+						//$('input.xaitamt-show').val(aitAmount);
+					},
+					error : function(jqXHR, status, errorThrown){
+						showMessage(status, "Something went wrong .... ");
+						loadingMask2.hide();
+					}
+				});
+			});
+		});
+	</script>
+</html>
