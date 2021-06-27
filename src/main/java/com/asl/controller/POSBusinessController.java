@@ -94,7 +94,7 @@ public class POSBusinessController extends ASLAbstractController {
 			responseHelper.setRedirectUrl("/posbusiness/" + zb.getZid());
 			return responseHelper.getResponse();
 		}
-		
+		 
 		// If new
 		long count = zbusinessService.save(zbusiness);
 		if(count == 0) {
