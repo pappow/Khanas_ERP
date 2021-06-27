@@ -1,14 +1,13 @@
 package com.asl.controller;
 
+import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,25 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.asl.entity.Bmbomheader;
-import com.asl.entity.LandInfo;
 import com.asl.entity.Zbusiness;
+import com.asl.enums.ProfileType;
 import com.asl.enums.ResponseStatus;
-import com.asl.enums.TransactionCodeType;
 import com.asl.service.ZbusinessService;
 
 import lombok.extern.slf4j.Slf4j;
-
-import com.asl.enums.ProfileType;
 
 @Slf4j
 @Controller
