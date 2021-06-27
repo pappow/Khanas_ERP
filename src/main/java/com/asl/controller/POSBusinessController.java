@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/posbusiness")
-public class POSBusinessController extends ASLAbstractController{
+public class POSBusinessController extends ASLAbstractController {
 	@Autowired private ZbusinessService zbusinessService;
 	
 	@GetMapping
