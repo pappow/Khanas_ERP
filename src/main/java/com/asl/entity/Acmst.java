@@ -61,4 +61,7 @@ public class Acmst extends AbstractModel<String>{
 	@Column(name = "xaccusage")
 	private String xaccusage;
 	
+	@Column(name = "xlong")
+	private String xlong;
+	
 }
