@@ -77,7 +77,7 @@
 										</tr>
 									</span>
 
-										
+
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Housing Management</td>
@@ -219,6 +219,113 @@
 										</tr>
 										
 									</span>
+									
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">HR & Payroll</td>
+										</tr>
+										<tr>
+											<td colspan="2">Master Setup</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/defaultset}">Default Setting</a></td>
+											<td>
+												<a th:href="@{/defaultset}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										
+										<tr>
+											<td colspan="2">HR Department</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/hrpersonal}">Personal Information</a></td>
+											<td>
+												<a th:href="@{/hrpersonal}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/promohistory}">Promotion History</a></td>
+											<td>
+												<a th:href="@{/promohistory}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/transhistory}">Transfer History</a></td>
+											<td>
+												<a th:href="@{/transhistory}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/qualification}">Qualification</a></td>
+											<td>
+												<a th:href="@{/qualification}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/experience}">Experience</a></td>
+											<td>
+												<a th:href="@{/experience}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/cngdesignation}">Change Designation</a></td>
+											<td>
+												<a th:href="@{/cngdesignation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">Payroll</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/paypersonal}">Personal Information</a></td>
+											<td>
+												<a th:href="@{/paypersonal}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/salaryde}">Salary Details</a></td>
+											<td>
+												<a th:href="@{/salaryde}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+									
+									<span th:if="${isBoshila or isDev}">
+										<tr>
+											<td colspan="2">Production</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/fodetails}">FO Details</a></td>
+											<td>
+												<a th:href="@{/fodetails}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/machinemas}">Machine Master</a></td>
+											<td>
+												<a th:href="@{/machinemas}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/productionde}">Production Details</a></td>
+											<td>
+												<a th:href="@{/productionde}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/proplan}">Print Production Plan</a></td>
+											<td>
+												<a th:href="@{/proplan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/countde}">Count Details</a></td>
+											<td>
+												<a th:href="@{/countde}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+									
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td><a th:href="@{/logout}" style="color: red !important; font-weight: bold; margin-left: 0px;">Logout</a></td>
@@ -498,18 +605,9 @@
 											<td><a th:href="@{/posdashboard}"> POS Dashboard</a></td>	
 										</tr>	
 									</span>
-	
-									<!-- <span th:if="${isBoshila or isDev}">
-										<tr>
-<<<<<<< Upstream, based on upstream/develop
-=======
-											<td colspan="2">Sales And Invoice</td>
-										</tr>
 
 									<span th:if="${isBoshila or isDev}">
 										<tr>
-
->>>>>>> 76c29d5 account
 											<td colspan="2">Master Setup</td>
 										</tr>
 										
@@ -532,7 +630,7 @@
 											</td>
 										</tr>
 									</span>
-										 -->
+										
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Sales And Invoice</td>
@@ -540,11 +638,6 @@
 										
 										<tr>
 											<td><a th:href="@{/salesninvoice/salesandinvoice}">Sales And Invoice</a></td>
-<<<<<<< Upstream, based on upstream/develop
-=======
-
-											<td><a th:href="@{/salesninvoice/salesandinvoice}">Land Sale</a></td>
->>>>>>> 76c29d5 account
 											<td>
 												<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -587,26 +680,11 @@
 										</tr> -->
 									</span>
 										
-<<<<<<< Upstream, based on upstream/develop
-									<!-- 
-=======
-									<!-- <span th:if="${isBoshila or isDev}">
-										<tr>
-											<td colspan="2">Procurements</td>
-										</tr>
-
-									</span>
-										
->>>>>>> 76c29d5 account
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Procurements</td>
 										</tr>
-<<<<<<< Upstream, based on upstream/develop
-										
-=======
 
->>>>>>> 76c29d5 account
 										<tr>
 											<td><a th:href="@{/purchasing/supplierpayment}">Supplier Payment</a></td>
 											<td>
@@ -647,10 +725,6 @@
 												<a th:href="@{/inventory/transferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>	
-<<<<<<< Upstream, based on upstream/develop
-=======
-
->>>>>>> 76c29d5 account
 									</span>
 										
 										
@@ -660,18 +734,7 @@
 												<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr> -->
-										<span th:if="${isBoshila or isDev}">
-										<tr>
-											<td colspan="2">Business Setup</td>
-										</tr>
-										<tr>
-											<td><a th:href="@{/businessprof}">Business Profile</a></td>
-											<td>
-												<a th:href="@{/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-											</td>
-										</tr>
-									  </span>
-									<!-- <span th:if="${isBoshila or isDev}">
+									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Land</td>
 										</tr>
@@ -701,31 +764,20 @@
 											</td>
 										</tr>
 
-<<<<<<< Upstream, based on upstream/develop
-=======
-
-									</span> -->
-
-
->>>>>>> 76c29d5 account
 										<tr>
 											<td><a th:href="@{/landmemberinfo}">Land Member Info</a></td>
 											<td>
 												<a th:href="@{/landmemberinfo}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-									</span> -->
+									</span>
 										<!-- <tr>
 											<td><a th:href="@{/landevents}">Land Events</a></td>
 											<td>
 												<a th:href="@{/landevents}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr> -->
-<<<<<<< Upstream, based on upstream/develop
-										
-=======
 
->>>>>>> 76c29d5 account
 										<!-- <tr>
 											<td><a th:href="@{/purchasing/supopenentry}">Customer Opening</a></td>
 											<td>
@@ -820,7 +872,7 @@
 											<td><a th:href="@{/report}" th:text="${menuProfile.M0700.screenprompt}">All Report</a></td>
 											<td>
 												<a th:href="@{/report}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-											</td>
+											</td> 
 										</tr>
 									</span>
 
