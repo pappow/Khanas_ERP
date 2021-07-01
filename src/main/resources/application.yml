@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: boshila
+    active: garments
   servlet: 
     multipart: 
       max-file-size: 15MB

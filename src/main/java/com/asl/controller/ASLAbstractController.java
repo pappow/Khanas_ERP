@@ -123,7 +123,11 @@ public class ASLAbstractController {
 		return Arrays.asList(env.getActiveProfiles()).contains("boshila");
 	}
 
-
+	@ModelAttribute("isGarments")
+	public boolean isGarments() {
+		return Arrays.asList(env.getActiveProfiles()).contains("garments");
+	}
+	
 	@ModelAttribute("isDev")
 	public boolean isDev() {
 		return Arrays.asList(env.getActiveProfiles()).contains("dev");
