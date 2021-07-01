@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Production Details</title>
+		<title>Knit Production Details</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -28,7 +28,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Home</a></li>
-										<li class="active"><a th:href="@{/productionde}">Production Details</a></li>
+										<li class="active"><a th:href="@{/productionde}">Knit Production Details</a></li>
 									
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -54,7 +54,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Production Details</h1>
+														<h1>Knit Production Details</h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/productionde}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
@@ -108,7 +108,7 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Knit Production Plan Number </label>
 																<div class="col-md-8">
-																	<input type="number" class="form-control"  maxlength="100" placeholder="12345" />
+																	<input type="text" class="form-control"  maxlength="100" placeholder="Through Search" />
 																</div>
 															</div>
 														</div>
@@ -123,17 +123,14 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Status</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option>Active</option>
-																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
-																	</select>
+																	<input type="text" class="form-control" maxlength="100" value="Open/Confirmed" disabled="disabled" />
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Remarks</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" placeholder="" />
+																	<textarea class="form-control" rows="3"  placeholder=""></textarea>
 																</div>
 															</div>
 															
@@ -150,7 +147,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1> All Production Details</h1>
+										<h1> Knit Production Details</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
