@@ -21,6 +21,8 @@ public class DashboardController extends ASLAbstractController {
 			return "pages/dashboard/dashboard-tcc";
 		} else if (isBoshila()) {
 			return "pages/dashboard/dashboard-boshila";
+		} else if (isGarments()) {
+			return "pages/dashboard/dashboard-garments";
 		}
 
 		return "pages/dashboard/dashboard";
