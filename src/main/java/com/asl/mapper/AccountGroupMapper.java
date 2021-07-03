@@ -17,7 +17,13 @@ public interface AccountGroupMapper {
 
 	public long update(AccountGroup accountGroup);
 
+	public long delete(String xagcode, String zid);
+
 	public List<AccountGroup> getAllByLevelAndType(int xaglevel, String xagtype, String zid);
 
+	public List<AccountGroup> getAllByLevel(int xaglevel, String zid);
+
 	public AccountGroup findByCode(String xagcode, String zid);
+
+	public List<AccountGroup> getAllByXagparent(String xagparent, String zid);
 }

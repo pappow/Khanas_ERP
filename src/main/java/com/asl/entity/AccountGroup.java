@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,4 +45,10 @@ public class AccountGroup extends AbstractModel<String> {
 
 	@Column(name = "xagparent")
 	private String xagparent;
+
+	@Transient
+	private String parentname;
+
+	@Transient
+	private boolean existingRecord;
 }
