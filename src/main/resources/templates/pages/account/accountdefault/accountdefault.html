@@ -53,11 +53,12 @@
 									</div>
 									<div class="form-action-button">
 										<a th:href="@{/accdefault}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
-										<a th:if="${not acdef.dataExist}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${not acdef.dataExist}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${acdef.dataExist}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/accdefault/save}" th:with="df=${'E, dd-MMM-yyyy'}" th:object="${acdef}">
+										<form id="mainform" class="form-horizontal" th:action="@{/accdefault/save}" method="POST" th:with="df=${'E, dd-MMM-yyyy'}" th:object="${acdef}">
+											<input type="hidden" th:field="*{dataExist}"/>
 											<div class="row">
 												<div class="col-md-5">
 													 <div class="form-group">

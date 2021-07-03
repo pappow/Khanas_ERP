@@ -26,7 +26,7 @@
 			zauserid,
 			zaip,
 			zactive,
-			ztime,
+			ztime
 		)
 		VALUES
 		(
@@ -50,7 +50,7 @@
 			#{zauserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
