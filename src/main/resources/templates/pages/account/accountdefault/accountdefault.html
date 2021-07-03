@@ -24,9 +24,8 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/account}">General Accounts</a></li>
-										<li class="active"><a th:href="@{/account/accdefault}">Account Default</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/accdefault}">Account Default</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -36,143 +35,145 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
 						<div class="row">
-							<div class="col-md-6">
+							<h1 class="text-center">Account Default</h1>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Account Default</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/account/accdefault}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-										<a href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a href="#" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:href="@{/accdefault}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${not acdef.dataExist}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:if="${acdef.dataExist}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:with="df=${'E, dd-MMM-yyyy'}">
+										<form id="mainform" class="form-horizontal" th:action="@{/accdefault/save}" th:with="df=${'E, dd-MMM-yyyy'}" th:object="${acdef}">
 											<div class="row">
-												<div class="col-md-6">
-													<div class="form-group">
-														<label class="control-label col-md-4">Year: </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+												<div class="col-md-5">
+													 <div class="form-group">
+														<label class="control-label col-md-6" for="xyear">Year </label>
+														<div class="col-md-6">
+															<input type="number" class="form-control" th:field="*{xyear}" required="required">
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4">Period : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+														<label class="control-label col-md-6" for="xper">Period</label>
+														<div class="col-md-6">
+															<input type="number" class="form-control" th:field="*{xper}" required="required">
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4">Period Offset : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+															<label class="control-label col-md-6" for="xoffset">Period Offset </label>
+															<div class="col-md-6">
+																<input type="number" class="form-control" th:field="*{xoffset}" required="required">
+															</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-6" for="xaccpl">Profit & Loss Appropriation ACC</label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xaccpl}" required="required">
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4">P/L Appropriation Acc. : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+														<label class="control-label col-md-6" for="xaccgl">Gain and Loss Acc</label>
+														<div class="col-md-6">
+															<input type="text" class="form-control" th:field="*{xaccgl}">
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4">Gain and Loss Acc. : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
-														</div>
+														<label class="control-label col-md-6" for="xaccrule">Rule</label>
+															<div class="col-md-6">
+																<select class="form-control" th:field="*{xaccrule}">
+																	<option value="Open">Open</option>
+																	<option value="Current Period Only">Current Period Only</option>
+																	<option value="Current And Greater">Current And Greater</option>
+																</select>
+															</div>
 													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4">Rule : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4">Get Acc Preriod : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
-														</div>
-													</div>
-													
 												</div>
-												
-												<div class="col-md-6">
+
+												<div class="col-md-5">
 													<div class="form-group">
-														<label class="control-label col-md-4">Max Length : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+														<label class="control-label col-md-5" for="xgetper">Get Accounting Period</label>
+														<div class="col-md-6">
+															<select class="form-control" th:field="*{xgetper}">
+																<option value="From Date">From Date</option>
+																<option value="From Default">From Default</option>
+															</select>
 														</div>
 													</div>
-												<div class="form-group">
-													<label class="control-label col-md-4">Option : </label>
-														<div class="col-sm-8 col-md-offset-4">
-															<div class="radio">
-																<label><input type="radio" name="Option" required="required"/>Yes</label>
-															</div>
-															<div class="radio">
-																<label><input type="radio" name="Option" required="required"/>No</label>
-															</div>
-														</div>
-												</div> 
+
 													<div class="form-group">
-														<label class="control-label col-md-4">Day : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+														<label class="control-label col-md-5" for="xlength">Trn. Length</label>
+														<div class="col-md-6">
+															<input type="number" class="form-control" th:field="*{xlength}">
 														</div>
 													</div>
+
 													<div class="form-group">
-														<label class="control-label col-md-4">Previous Vou. Entry : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
+														<label class="control-label col-md-5" for="xyesno">Follow Approval?</label>
+														<div class="col-md-6">
+															<select class="form-control" th:field="*{xyesno}">
+																<option value="No">No</option>
+																<option value="Yes">Yes</option>
+															</select>
 														</div>
 													</div>
-													<div class="form-group">
-														<label class="control-label col-md-4">Back Lock Entry : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control">
-														</div>
-													</div>
+
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4">Expiration Date : </label>
-														<div class="input-group date col-md-6 datepicker">
+														<label class="control-label col-md-5" for="xdateexp">Expiration Date</label>
+														<div class="input-group date col-md-5 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
-																	th:value="${#dates.format(#dates.createNow(), df)}"/>
+																	id="xdateexp"
+																	name="xdateexp"
+																	required="required"
+																	th:value="${acdef.xdateexp == null ? #dates.format(#dates.createNow(), df) : #dates.format(acdef.xdateexp, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
 														</div>
 													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-								</section>
-							</div>
-														
-							<div class="col-md-6">
 
-							</div>
+													<div class="form-group">
+														<label class="control-label col-md-5" for="xbacklock">Back Lock Entry</label>
+														<div class="col-md-6">
+															<select class="form-control" th:field="*{xbacklock}">
+																<option value="No">No</option>
+																<option value="Yes">Yes</option>
+															</select>
+														</div>
+													</div>
+
+												</div>
+										</div>
+									</form>
+								</div>
+							</section>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 
 		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
-
-		<script type="text/javascript" th:src="@{/assets/js/ck-ui/ck-search-suggest.js}"></script>
-		
 	</body>
 </html>

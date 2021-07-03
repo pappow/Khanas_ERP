@@ -11,8 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@Entity
-@Table(name = "acgroup")
+//@Entity
+//@Table(name = "acgroup")
 @IdClass(AcgroupPK.class)
 @EqualsAndHashCode(of = { "zid", "xgroup" }, callSuper = false)
 public class Acgroup extends AbstractModel<String>{

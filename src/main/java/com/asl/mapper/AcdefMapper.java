@@ -1,13 +1,16 @@
 package com.asl.mapper;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Acdef;
 
+@Mapper
 public interface AcdefMapper {
-	public long saveAcdef(Acdef acdef);
-	public long updateAcdef(Acdef acdef);
-	
-	public List<Acdef> getAllAcdef(String zid);
+
+	public long save(Acdef acdef);
+
+	public long update(Acdef acdef);
+
+	public Acdef find(String zid);
 
 }

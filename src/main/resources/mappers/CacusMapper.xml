@@ -27,6 +27,7 @@
 			xcountry,
 			xcur,
 			xisrandom,
+
 			zid,
 			zauserid,
 			zuuserid,
@@ -56,6 +57,7 @@
 			#{xcountry, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
 			#{xisrandom, jdbcType=BOOLEAN},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -88,6 +90,7 @@
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xisrandom=#{xisrandom, jdbcType=BOOLEAN},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
