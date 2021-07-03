@@ -54,7 +54,6 @@
 			#{ztime, jdbcType=TIMESTAMP},
 			#{zutime, jdbcType=TIMESTAMP},
 			#{zuuserid, jdbcType=VARCHAR}
-
 		)
 	</insert>
 
@@ -83,14 +82,14 @@
 			zutime=#{zutime, jdbcType=TIMESTAMP},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR}
 		WHERE
-			xshift=#{xshift, jdbcType=VARCHAR},
+			xshift=#{xshift, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<select id="getAllShiftSettings" resultType="ShiftSettings">
 		SELECT * FROM shiftsettings WHERE zid=#{zid} order by ztime desc
 	</select>
-	
+
 	<select id="findByShiftSettings" resultType="ShiftSettings">
 		SELECT 
 			* 

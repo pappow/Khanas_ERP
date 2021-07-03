@@ -60,5 +60,7 @@
 		<mapper resource="mappers/LandMemberInfoMapper.xml"/>
 		<mapper resource="mappers/LandComEventMapper.xml"/>
 		<mapper resource="mappers/OpreqMapper.xml"/>
+		<mapper resource="mappers/AccountGroupMapper.xml"/>
+		<mapper resource="mappers/AcdefMapper.xml"/>
 	</mappers>
 </configuration>

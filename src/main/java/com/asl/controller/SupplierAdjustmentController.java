@@ -46,9 +46,9 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		if(isBoshila()) {
-			return "pages/land/supplieradjustment/arhed";
-		}
+//		if(isBoshila()) {
+//			return "pages/land/supplieradjustment/arhed";
+//		}
 		return "pages/procurement/supplieradjustment/arhed";
 	}
 	
@@ -67,9 +67,9 @@ public class SupplierAdjustmentController extends ASLAbstractController{
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
 		model.addAttribute("jvstatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		if(isBoshila()) {
-			return "pages/land/supplieradjustment/arhed";
-		}
+//		if(isBoshila()) {
+//			return "pages/land/supplieradjustment/arhed";
+//		}
 		return "pages/procurement/supplieradjustment/arhed";
 	}
 	
