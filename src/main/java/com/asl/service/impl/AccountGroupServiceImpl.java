@@ -39,6 +39,13 @@ public class AccountGroupServiceImpl extends AbstractGenericService implements A
 		return accountGroupMapper.update(accountGroup);
 	}
 
+	@Transactional
+	@Override
+	public long delete(String xagcode) {
+		if(StringUtils.isBlank(xagcode)) return 0;
+		return accountGroupMapper.delete(xagcode, sessionManager.getBusinessId());
+	}
+
 	@Override
 	public List<AccountGroup> getAllByLevelAndType(int xaglevel, String xagtype) {
 		if(StringUtils.isBlank(xagtype)) return Collections.emptyList();
@@ -50,5 +57,18 @@ public class AccountGroupServiceImpl extends AbstractGenericService implements A
 		if(StringUtils.isBlank(xagcode)) return null;
 		return accountGroupMapper.findByCode(xagcode, sessionManager.getBusinessId());
 	}
+
+	@Override
+	public List<AccountGroup> getAllByLevel(int xaglevel) {
+		return accountGroupMapper.getAllByLevel(xaglevel, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<AccountGroup> getAllByXagparent(String xagparent) {
+		if(StringUtils.isBlank(xagparent)) return Collections.emptyList();
+		return accountGroupMapper.getAllByXagparent(xagparent, sessionManager.getBusinessId());
+	}
+
+	
 
 }

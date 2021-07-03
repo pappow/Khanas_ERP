@@ -57,7 +57,7 @@
 			AND xagcode=#{xagcode, jdbcType=VARCHAR}
 	</update>
 
-	<select id="getAllByLevelAndType">
+	<select id="getAllByLevelAndType" resultType="AccountGroup">
 		SELECT
 			*
 		FROM
@@ -68,7 +68,17 @@
 			AND zid=#{zid}
 	</select>
 
-	<select id="findByCode">
+	<select id="getAllByLevel" resultType="AccountGroup">
+		SELECT
+			*
+		FROM
+			acgroup
+		WHERE
+			xaglevel=#{xaglevel}
+			AND zid=#{zid}
+	</select>
+
+	<select id="findByCode" resultType="AccountGroup">
 		SELECT
 			*
 		FROM
@@ -77,5 +87,24 @@
 			xagcode=#{xagcode}
 			AND zid=#{zid}
 	</select>
+
+	<select id="getAllByXagparent" resultType="AccountGroup">
+		SELECT
+			*
+		FROM
+			acgroup
+		WHERE
+			xagparent=#{xagparent}
+			AND zid=#{zid}
+	</select>
+
+	<delete id="delete">
+		DELETE
+		FROM
+			acgroup
+		WHERE
+			xagcode=#{xagcode}
+			AND zid=#{zid}
+	</delete>
 
 </mapper>

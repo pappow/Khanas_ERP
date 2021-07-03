@@ -17,7 +17,13 @@ public interface AccountGroupService {
 
 	public long update(AccountGroup accountGroup);
 
+	public long delete(String xagcode);
+
 	public List<AccountGroup> getAllByLevelAndType(int xaglevel, String xagtype);
 
+	public List<AccountGroup> getAllByLevel(int xaglevel);
+
 	public AccountGroup findByCode(String xagcode);
+
+	public List<AccountGroup> getAllByXagparent(String xagparent);
 }
