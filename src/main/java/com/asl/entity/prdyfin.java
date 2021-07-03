@@ -92,6 +92,9 @@ public class prdyfin extends AbstractModel<String>{
 	@Column(name = "xlong")
 	private String xlong;
 	
+	@Column(name = "xtype")
+	private String xtype;
+	
 	@Column(name = "xemail")
 	private String xemail;
 	

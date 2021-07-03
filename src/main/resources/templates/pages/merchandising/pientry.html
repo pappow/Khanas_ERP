@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Bill of Material(BOM) Setting</title>
+		<title>PI Entry</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -28,7 +28,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Home</a></li>
-										<li class="active"><a th:href="@{/cabom}">Bill of Material(BOM) Setting</a></li>
+										<li class="active"><a th:href="@{/pientry}">PI Entry</a></li>
 									
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -54,13 +54,14 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Bill of Material(BOM) Setting</h1>
+														<h1>PI Entry</h1>
 													</div>
 													<div class="form-action-button">
-														<a th:href="@{/cabom}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+														<a th:href="@{/pientry}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a  class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														<a th:href="@{/piestimtn}" class="btn btn-info">PI Estimation Details</a>
 													</div>
 												</div>
 											</div>
@@ -75,35 +76,43 @@
 														<div class="col-md-6">
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">BOM ID</label>
+																<label class="control-label col-md-4" for="">FO No. </label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder="BM--000001"/>
+																	<input type="text" class="form-control" placeholder="Through Search"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">BOM Raw Material</label>
+																<label class="control-label col-md-4" for="">PI No.</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<input type="text" class="form-control" placeholder="Auto Genarate"/>
 																</div>
 															</div>
 															
-														</div>
-														
+															
+													</div>
 														<div class="col-md-6">
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for=""><!-- Department in Use -->Using Purpose</label>
+																<label class="control-label col-md-4" for="">Remarks</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option>Finishing</option>
-																		<option>Cutting</option>
-																		<option>Knitting</option>
-																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-																	</select>
+																	<textarea class="form-control" rows="3"  placeholder=" "></textarea>
 																</div>
 															</div>
 															
+															<div class="form-group">
+																<label class="control-label col-md-4" for="">Created By</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" value="abc@gmail.com" disabled="disabled"//>
+																</div>
+															</div>
+															
+															<div class="form-group">
+																<label class="control-label col-md-4" for="">Confirmed By</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" value="xyz@gmail.com" disabled="disabled"/>
+																</div>
+															</div>
 														</div>
 														<div class="col-md-6">
 														</div>
@@ -117,17 +126,17 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1> List of Bill of Material(BOM)   </h1>
+										<h1> List of PI</h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>BOM ID</th>
-														<th>BOM Raw Material</th>
-														<th>Used Department</th>
-													</tr>
+														<th>FO No.</th>
+														<th>PI No.</th>
+														<th>Created By</th>
+														<th>Confirmed By
 												</thead>
 												<tbody>
 													

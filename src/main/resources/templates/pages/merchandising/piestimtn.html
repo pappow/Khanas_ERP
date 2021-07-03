@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>PI Estimation Detail</title>
+		<title>PI Estimation </title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -28,7 +28,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Home</a></li>
-										<li class="active"><a th:href="@{/piestimtn}">PI Estimation Detail</a></li>
+										<li class="active"><a th:href="@{/piestimtn}">PI Estimation </a></li>
 									
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -54,13 +54,14 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>PI Estimation Detail</h1>
+														<h1>PI Estimation </h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/piestimtn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a  class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														<a th:href="@{/pientry}" class="btn btn-info">Back</a>
 													</div>
 												</div>
 											</div>

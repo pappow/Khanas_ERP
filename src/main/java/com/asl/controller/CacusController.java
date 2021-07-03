@@ -53,6 +53,9 @@ public class CacusController extends ASLAbstractController {
 		if(isBoshila()) {
 			return "pages/land/mastersetup/cacus";
 		}
+		else if(isGarments()) {
+			return "pages/merchandising/cacus";
+		}
 		return "pages/mastersetup/cacus/cacus";
 	}
 
@@ -68,6 +71,9 @@ public class CacusController extends ASLAbstractController {
 		setOtherDefaultData(cacusType, model);
 		if(isBoshila()) {
 			return "pages/land/mastersetup/cacus";
+		}
+		else if(isGarments()) {
+			return "pages/merchandising/cacus";
 		}
 		return "pages/mastersetup/cacus/cacus";
 	}
