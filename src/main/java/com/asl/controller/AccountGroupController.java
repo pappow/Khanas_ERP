@@ -36,7 +36,7 @@ public class AccountGroupController extends ASLAbstractController {
 		model.addAttribute("groups", agService.getAllByLevel(level));
 		model.addAttribute("childgroups", Collections.emptyList());
 
-		return "pages/accountgroup/accountgroup";
+		return "pages/account/accountgroup/accountgroup";
 	}
 
 	private AccountGroup getDefaultAccountGroup(int level, String asparent) {
@@ -64,7 +64,7 @@ public class AccountGroupController extends ASLAbstractController {
 		model.addAttribute("acgroup", ag);
 		model.addAttribute("groups", agService.getAllByLevel(ag.getXaglevel()));
 		model.addAttribute("childgroups", agService.getAllByXagparent(ag.getXagcode()));
-		return "pages/accountgroup/accountgroup";
+		return "pages/account/accountgroup/accountgroup";
 	}
 
 	@PostMapping("/save")

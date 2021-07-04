@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Account Group</title>
+		<title>Accounts Group</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
 		<meta th:remove="tag" th:include="commons :: common-css" />
 		<meta th:remove="tag" th:include="commons :: common-js" />
@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li class="active"><a th:href="@{/acgroup}">Account Group</a></li>
+										<li class="active"><a th:href="@{/acgroup}">Accounts Group</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -42,7 +42,7 @@
 				<div class="row">
 					<div class="col-md-12 content-area">
 						<div class="row">
-							<h1 class="text-center">Account Group</h1>
+							<h1 class="text-center">Accounts Group</h1>
 						</div>
 
 						<div class="row">
@@ -126,7 +126,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Account Groups (Level - <span th:text="${acgroup.xaglevel}"></span>)</h1>
+										<h1>Accounts Group (Level - <span th:text="${acgroup.xaglevel}"></span>)</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">
@@ -152,7 +152,7 @@
 
 								<section th:if="${not #lists.isEmpty(childgroups)}" id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Child Groups of <span th:text="'(' + ${acgroup.xagcode} + ' - ' + ${acgroup.xagname} + ')'"></span> (Level - <span th:text="${acgroup.xaglevel + 1}"></span>)</h1>
+										<h1>Sub Groups of <span th:text="'(' + ${acgroup.xagcode} + ' - ' + ${acgroup.xagname} + ')'"></span> (Level - <span th:text="${acgroup.xaglevel + 1}"></span>)</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">
