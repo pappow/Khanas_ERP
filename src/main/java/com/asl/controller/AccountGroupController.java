@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("/acgroup")
+@RequestMapping("/account/acgroup")
 public class AccountGroupController extends ASLAbstractController {
 
 	@Autowired private AccountGroupService agService;
@@ -105,7 +105,7 @@ public class AccountGroupController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Account group updated successfully");
-			responseHelper.setRedirectUrl("/acgroup/"+ exg.getXagcode() +"?level=" + exg.getXaglevel());
+			responseHelper.setRedirectUrl("/account/acgroup/"+ exg.getXagcode() +"?level=" + exg.getXaglevel());
 			return responseHelper.getResponse();
 		}
 
@@ -117,7 +117,7 @@ public class AccountGroupController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Account group created successfully");
-		responseHelper.setRedirectUrl("/acgroup/"+ accountGroup.getXagcode() +"?level=" + accountGroup.getXaglevel());
+		responseHelper.setRedirectUrl("/account/acgroup/"+ accountGroup.getXagcode() +"?level=" + accountGroup.getXaglevel());
 		return responseHelper.getResponse();
 	}
 
@@ -149,7 +149,7 @@ public class AccountGroupController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Account Group deleted successfully");
-		responseHelper.setRedirectUrl("/acgroup?level=" + ag.getXaglevel());
+		responseHelper.setRedirectUrl("/account/acgroup?level=" + ag.getXaglevel());
 		return responseHelper.getResponse();
 	}
 }

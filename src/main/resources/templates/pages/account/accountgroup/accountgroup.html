@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li class="active"><a th:href="@{/acgroup}">Accounts Group</a></li>
+										<li class="active"><a th:href="@{/account/acgroup}">Accounts Group</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -53,17 +53,17 @@
 										
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/acgroup?level=} + ${acgroup.xaglevel}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:href="@{/account/acgroup?level=} + ${acgroup.xaglevel}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${acgroup.xaglevel eq 1 and #strings.isEmpty(acgroup.xagparent) and #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${acgroup.xaglevel ne 1 and not #strings.isEmpty(acgroup.xagparent) and #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(acgroup.xagcode)}" th:href="@{/acgroup/archive/} + ${acgroup.xagcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(acgroup.xagcode)}" th:href="@{/account/acgroup/archive/} + ${acgroup.xagcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 
-										<a th:if="${acgroup.xaglevel ne 1}" th:href="@{/acgroup/} + ${acgroup.xagparent} + '?level=' + ${acgroup.xaglevel - 1}" class="btn btn-sm btn-primary">Back to Level <span th:text="${acgroup.xaglevel - 1}"></span></a>
-										<a th:if="${acgroup.xaglevel ne 5}" th:href="@{/acgroup?level=} + ${acgroup.xaglevel + 1} + '&asparent=' + ${acgroup.xagcode}" class="btn btn-sm btn-primary">Level <span th:text="${acgroup.xaglevel + 1}"></span></a>
+										<a th:if="${acgroup.xaglevel ne 1}" th:href="@{/account/acgroup/} + ${acgroup.xagparent} + '?level=' + ${acgroup.xaglevel - 1}" class="btn btn-sm btn-primary">Back to Level <span th:text="${acgroup.xaglevel - 1}"></span></a>
+										<a th:if="${acgroup.xaglevel ne 5 and not #strings.isEmpty(acgroup.xagcode)}" th:href="@{/account/acgroup?level=} + ${acgroup.xaglevel + 1} + '&asparent=' + ${acgroup.xagcode}" class="btn btn-sm btn-primary">Level <span th:text="${acgroup.xaglevel + 1}"></span></a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/acgroup/save}" method="POST" th:object="${acgroup}">
+										<form id="mainform" class="form-horizontal" th:action="@{/account/acgroup/save}" method="POST" th:object="${acgroup}">
 											<input type="hidden" th:field="*{existingRecord}"/>
 											<div class="row">
 												<div class="col-md-12">
@@ -140,7 +140,7 @@
 											<tbody>
 												<tr th:each="g,n : ${groups}">
 													<td>
-														<a th:href="@{/acgroup/} + ${g.xagcode} + '?level=' + ${g.xaglevel}" th:text="${g.xagname}"></a>
+														<a th:href="@{/account/acgroup/} + ${g.xagcode} + '?level=' + ${g.xaglevel}" th:text="${g.xagname}"></a>
 													</td>
 													<td th:text="${g.xagcode}"></td>
 													<td th:text="${g.xagtype}"></td>
@@ -166,7 +166,7 @@
 											<tbody>
 												<tr th:each="g,n : ${childgroups}">
 													<td>
-														<a th:href="@{/acgroup/} + ${g.xagcode} + '?level=' + ${g.xaglevel}" th:text="${g.xagname}"></a>
+														<a th:href="@{/account/acgroup/} + ${g.xagcode} + '?level=' + ${g.xaglevel}" th:text="${g.xagname}"></a>
 													</td>
 													<td th:text="${g.xagcode}"></td>
 													<td th:text="${g.xagtype}"></td>

@@ -6,10 +6,10 @@ package com.asl.enums;
  */
 public enum AccountType {
 
-	ASSET("ASSET", "Asset"), 
-	LIABILITY("LIABILITY", "Liability"), 
-	INCOME("INCOME", "Income"),
-	EXPENDITURE("EXPENDITURE", "Expenditure");
+	ASSET("Asset", "Asset"), 
+	LIABILITY("Liability", "Liability"), 
+	INCOME("Income", "Income"),
+	EXPENDITURE("Expenditure", "Expenditure");
 
 	private String code;
 	private String description;

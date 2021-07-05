@@ -28,6 +28,7 @@ import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
+import com.asl.service.AccountGroupService;
 import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
@@ -70,14 +71,12 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private ArhedService arhedService;
 	@Autowired private PdmstService pdmstService;
 	@Autowired private LandOwnerService landOwnerService;
-	
 	@Autowired private LandDocumentService landDocumentService;
 	@Autowired private LandPersonService landPersonService;
-
 	@Autowired private LandMemberInfoService landMemberInfoService;
-
 	@Autowired private LandCommitteeInfoService landCommitteeInfoService;
 	@Autowired private LandInfoService  landInfoService;
+	@Autowired private AccountGroupService accountGroupService;
 
 
 	@GetMapping("/staff/{hint}")
