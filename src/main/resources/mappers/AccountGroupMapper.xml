@@ -107,4 +107,17 @@
 			AND zid=#{zid}
 	</delete>
 
+	<select id="searchByCodeOrName" resultType="AccountGroup">
+		SELECT 
+			* 
+		FROM 
+			acgroup 
+		WHERE 
+			zid=#{zid} 
+			AND ((UPPER(xagcode) LIKE '%' || #{hint} || '%') 
+			OR (UPPER(xagname) LIKE '%' || #{hint} || '%'))
+		ORDER BY 
+			xagcode, xagname
+	</select>
+
 </mapper>

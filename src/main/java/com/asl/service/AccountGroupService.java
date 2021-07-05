@@ -26,4 +26,6 @@ public interface AccountGroupService {
 	public AccountGroup findByCode(String xagcode);
 
 	public List<AccountGroup> getAllByXagparent(String xagparent);
+
+	public List<AccountGroup> searchByCodeOrName(String hint);
 }

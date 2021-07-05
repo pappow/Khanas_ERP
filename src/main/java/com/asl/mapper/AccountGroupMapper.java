@@ -26,4 +26,6 @@ public interface AccountGroupMapper {
 	public AccountGroup findByCode(String xagcode, String zid);
 
 	public List<AccountGroup> getAllByXagparent(String xagparent, String zid);
+
+	public List<AccountGroup> searchByCodeOrName(String hint, String zid);
 }

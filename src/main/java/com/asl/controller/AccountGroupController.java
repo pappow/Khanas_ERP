@@ -33,7 +33,7 @@ public class AccountGroupController extends ASLAbstractController {
 	public String LoadAccountGroupPage(@RequestParam(required = false) int level, @RequestParam(required = false) String asparent, Model model){
 
 		model.addAttribute("acgroup", getDefaultAccountGroup(level, asparent));
-		model.addAttribute("groups", agService.getAllByLevel(level));
+		model.addAttribute("groups", level == 1 || StringUtils.isBlank(asparent) ? agService.getAllByLevel(level) : agService.getAllByLevelAndType(level, agService.findByCode(asparent).getXagtype()));
 		model.addAttribute("childgroups", Collections.emptyList());
 
 		return "pages/account/accountgroup/accountgroup";
@@ -41,12 +41,13 @@ public class AccountGroupController extends ASLAbstractController {
 
 	private AccountGroup getDefaultAccountGroup(int level, String asparent) {
 		AccountGroup ag = new AccountGroup();
-		ag.setXagtype(AccountType.ASSET.getCode());
 		ag.setXaglevel(level == 0 ? 1 : level);
+		ag.setXagtype(AccountType.ASSET.getCode());
 		if(!"null".equalsIgnoreCase(asparent)) {
 			ag.setXagparent(asparent);
 			AccountGroup parent = agService.findByCode(asparent);
 			ag.setParentname(parent != null ? parent.getXagname() : "");
+			ag.setXagtype(parent != null ? parent.getXagtype() : AccountType.ASSET.getCode());
 		}
 		return ag;
 	}
@@ -62,7 +63,7 @@ public class AccountGroupController extends ASLAbstractController {
 		AccountGroup parent = agService.findByCode(StringUtils.isNotBlank(asparent) ? asparent : ag.getXagparent());
 		ag.setParentname(parent != null ? parent.getXagname() : "");
 		model.addAttribute("acgroup", ag);
-		model.addAttribute("groups", agService.getAllByLevel(ag.getXaglevel()));
+		model.addAttribute("groups", level == 1 ? agService.getAllByLevel(level) : agService.getAllByLevelAndType(level, ag.getXagtype()));
 		model.addAttribute("childgroups", agService.getAllByXagparent(ag.getXagcode()));
 		return "pages/account/accountgroup/accountgroup";
 	}

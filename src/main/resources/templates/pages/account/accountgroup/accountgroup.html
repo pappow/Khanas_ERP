@@ -53,7 +53,7 @@
 										
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/account/acgroup?level=} + ${acgroup.xaglevel}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:href="@{/account/acgroup?level=} + ${acgroup.xaglevel} + '&asparent=' + ${acgroup.xagparent}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${acgroup.xaglevel eq 1 and #strings.isEmpty(acgroup.xagparent) and #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${acgroup.xaglevel ne 1 and not #strings.isEmpty(acgroup.xagparent) and #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(acgroup.xagcode)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
@@ -96,16 +96,16 @@
 														</div>
 														<div class="col-md-6" th:if="${#strings.isEmpty(acgroup.xagcode) and #strings.isEmpty(acgroup.xagparent)}">
 															<div class="radio">
-																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).ASSET}" required="required"/><span th:text="${T(com.asl.enums.AccountType).ASSET.description}"></span></label>
+																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).ASSET.code}" required="required"/><span th:text="${T(com.asl.enums.AccountType).ASSET.description}"></span></label>
 															</div>
 															<div class="radio">
-																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).LIABILITY}" required="required"/><span th:text="${T(com.asl.enums.AccountType).LIABILITY.description}"></span></label>
+																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).LIABILITY.code}" required="required"/><span th:text="${T(com.asl.enums.AccountType).LIABILITY.description}"></span></label>
 															</div>
 															<div class="radio">
-																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).INCOME}" required="required"/><span th:text="${T(com.asl.enums.AccountType).INCOME.description}"></span></label>
+																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).INCOME.code}" required="required"/><span th:text="${T(com.asl.enums.AccountType).INCOME.description}"></span></label>
 															</div>
 															<div class="radio">
-																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).EXPENDITURE}" required="required"/><span th:text="${T(com.asl.enums.AccountType).EXPENDITURE.description}"></span></label>
+																<label><input type="radio" class="form-control-input2" th:field="*{xagtype}" th:value="${T(com.asl.enums.AccountType).EXPENDITURE.code}" required="required"/><span th:text="${T(com.asl.enums.AccountType).EXPENDITURE.description}"></span></label>
 															</div>
 														</div>
 													</div>
