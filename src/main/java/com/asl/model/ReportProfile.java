@@ -45,6 +45,7 @@ public class ReportProfile implements Serializable {
 	private ProfileLine RM0311;
 	private ProfileLine RM0312;
 	private ProfileLine RM0313;
+	private ProfileLine RM0314;
 
 	private ProfileLine RM0401;
 	private ProfileLine RM0402;
@@ -191,6 +192,10 @@ public class ReportProfile implements Serializable {
 	}
 	public void setRM0313(ProfileLine profileLine) {
 		this.RM0313 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setRM0314(ProfileLine profileLine) {
+		this.RM0314 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
 
