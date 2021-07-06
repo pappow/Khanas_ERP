@@ -72,6 +72,10 @@ public class ReportController extends ASLAbstractController {
 			}
 		});
 
+		if(!isBoshila()) {
+			profileLinesMap.remove("Land Management");
+		}
+
 		model.addAttribute("plmap", profileLinesMap);
 		return "pages/report/reportlist";
 	}

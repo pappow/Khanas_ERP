@@ -69,6 +69,10 @@ public class AccountGroupServiceImpl extends AbstractGenericService implements A
 		return accountGroupMapper.getAllByXagparent(xagparent, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<AccountGroup> searchByCodeOrName(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return accountGroupMapper.searchByCodeOrName(hint.toUpperCase(), sessionManager.getBusinessId());
+	}
 
 }
