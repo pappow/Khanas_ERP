@@ -20,7 +20,7 @@ public enum TransactionCodeType {
 	BATCH_NUMBER("Batch Number", "BN--", null),
 
 	COMMITTEEINFO_ID("Committee ID", "CMT-", TransactionCodes.COMMITTEEINFO_ID),
-	CUSTOMER_NUMBER("Customer Number", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
+	CUSTOMER_NUMBER("Customer", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
 	CHALAN_NUMBER("Chalan Number", "CH-", TransactionCodes.CHALAN_NUMBER),
 
 	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
@@ -48,7 +48,7 @@ public enum TransactionCodeType {
 
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 
-	SUPPLIER_NUMBER("Supplier Number", "SU-", TransactionCodes.SUPPLIER_NUMBER),
+	SUPPLIER_NUMBER("Supplier", "SU-", TransactionCodes.SUPPLIER_NUMBER),
 	SURVEYOR_ID("Surveyor ID", "SRVR--", TransactionCodes.LAND_ID),
 	STOCK_TAKE("Stock Take", "TAG-", null),
 	SALES_ORDER("Sales Order", "SO-", TransactionCodes.SALES_ORDER),
