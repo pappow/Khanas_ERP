@@ -62,5 +62,6 @@
 		<mapper resource="mappers/OpreqMapper.xml"/>
 		<mapper resource="mappers/AccountGroupMapper.xml"/>
 		<mapper resource="mappers/AcdefMapper.xml"/>
+		<mapper resource="mappers/AcmstMapper.xml"/>
 	</mappers>
 </configuration>

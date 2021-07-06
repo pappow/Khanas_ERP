@@ -2,12 +2,18 @@ package com.asl.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.asl.entity.Acmst;
 
+@Mapper
 public interface AcmstMapper {
-	public long saveAcmst(Acmst Acmst);
-	public long updateAcmst(Acmst Acmst);
-	
+
+	public long save(Acmst acmst);
+
+	public long update(Acmst acmst);
+
 	public List<Acmst> getAllAcmst(String zid);
 
+	public Acmst findByXacc(String xacc, String zid);
 }
