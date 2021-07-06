@@ -30,7 +30,7 @@ public class RM0314ServiceImpl extends AbstractReportService {
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE);
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
@@ -39,7 +39,7 @@ public class RM0314ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// xcus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Supplier Group", options, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Customer Group", options, "", false));
 
 //		// xorg
 //		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));
