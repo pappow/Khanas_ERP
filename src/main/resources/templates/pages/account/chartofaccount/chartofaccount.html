@@ -59,7 +59,7 @@
 										<form id="mainform" class="form-horizontal" th:action="@{/account/coa/save}" method="post" th:object="${acmst}" th:with="df=${'E, dd-MMM-yyyy'}">
 											<div class="row">
 												<div class="col-md-6">
-													<div class="form-group">
+													<div class="form-group" th:if="${#strings.isEmpty(acmst.xacc)}">
 														<label class="control-label col-sm-4" for="xgroup">Group</label>
 														<div class="col-sm-8">
 															<input 	type="text" 
@@ -69,6 +69,13 @@
 																	th:attr="search-url='search/acgroup'"/>
 															<input type="hidden" id="search-val" class="search-xitem" th:field="*{xgroup}"/>
 															<input type="hidden" id="search-des" th:value="*{xgroup}"/>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(acmst.xacc)}">
+														<label class="control-label col-md-4" for="xgroup">Group</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:value="${acmst.xgroup} + ' - ' + ${acmst.xgroupname}" disabled="disabled">
 														</div>
 													</div>
 
@@ -179,6 +186,7 @@
 														<th>Account</th>
 														<th>Group</th>
 														<th>Account Usage</th>
+														<th>Account Type</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -188,6 +196,7 @@
 														</td>
 														<td th:text="${ac.xgroup} + ' - ' + ${ac.xgroupname}"></td>
 														<td th:text="${ac.xaccusage}"></td>
+														<td th:text="${ac.xacctype}"></td>
 													</tr>
 												</tbody>
 											</table>

@@ -42,8 +42,20 @@ public class ChartOfAccountController extends ASLAbstractController {
 
 	@GetMapping("/{xacc}")
 	public String loadChartAccountrPage(@PathVariable String xacc, Model model) {
-		
-		
+		Acmst acmst = acmstService.findByXacc(xacc);
+		if(acmst == null) return "redirect:/acount/coa";
+
+		Map<String, AccountGroup> hkey = accountGroupService.getAccountGroupHirerkey(acmst.getXgroup());
+		if(hkey != null) {
+			if(hkey.get("LEVEL_1") != null) acmst.setXhrc1(hkey.get("LEVEL_1").getXagcode() + " - " + hkey.get("LEVEL_1").getXagname());
+			if(hkey.get("LEVEL_2") != null) acmst.setXhrc2(hkey.get("LEVEL_2").getXagcode() + " - " + hkey.get("LEVEL_2").getXagname());
+			if(hkey.get("LEVEL_3") != null) acmst.setXhrc3(hkey.get("LEVEL_3").getXagcode() + " - " + hkey.get("LEVEL_3").getXagname());
+			if(hkey.get("LEVEL_4") != null) acmst.setXhrc4(hkey.get("LEVEL_4").getXagcode() + " - " + hkey.get("LEVEL_4").getXagname());
+			if(hkey.get("LEVEL_5") != null) acmst.setXhrc5(hkey.get("LEVEL_5").getXagcode() + " - " + hkey.get("LEVEL_5").getXagname());
+		}
+
+		model.addAttribute("acmst", acmst);
+		model.addAttribute("acmstlist", acmstService.getAllAcmst());
 		
 		return "pages/account/chartofaccount/chartofaccount";
 	}
