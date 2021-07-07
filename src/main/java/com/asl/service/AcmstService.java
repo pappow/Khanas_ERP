@@ -17,4 +17,6 @@ public interface AcmstService {
 
 	public Acmst findByXacc(String xacc);
 
+	public long delete(String xacc);
+
 }

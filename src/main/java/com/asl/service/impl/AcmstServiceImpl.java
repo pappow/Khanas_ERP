@@ -49,6 +49,11 @@ public class AcmstServiceImpl extends AbstractGenericService implements AcmstSer
 		return acmstMapper.findByXacc(xacc, sessionManager.getBusinessId());
 	}
 
-	
+	@Transactional
+	@Override
+	public long delete(String xacc) {
+		if(StringUtils.isBlank(xacc)) return 0;
+		return acmstMapper.delete(xacc, sessionManager.getBusinessId());
+	}
 
 }

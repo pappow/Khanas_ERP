@@ -13,6 +13,8 @@ public interface AcmstMapper {
 
 	public long update(Acmst acmst);
 
+	public long delete(String xacc, String zid);
+
 	public List<Acmst> getAllAcmst(String zid);
 
 	public Acmst findByXacc(String xacc, String zid);

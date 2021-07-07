@@ -83,4 +83,13 @@
 			AND acmst.xacc=#{xacc}
 	</select>
 
+	<delete id="delete">
+		DELETE 
+		FROM 
+			acmst 
+		WHERE
+			zid=#{zid} 
+			AND xacc=#{xacc}
+	</delete>
+
 </mapper>

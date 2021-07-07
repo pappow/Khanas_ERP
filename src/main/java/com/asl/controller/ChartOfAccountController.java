@@ -1,9 +1,11 @@
 package com.asl.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.AccountGroup;
 import com.asl.entity.Acgroup;
 import com.asl.entity.Acmst;
+import com.asl.enums.ResponseStatus;
 import com.asl.service.AccountGroupService;
 import com.asl.service.AcmstService;
 
@@ -56,7 +59,7 @@ public class ChartOfAccountController extends ASLAbstractController {
 
 		model.addAttribute("acmst", acmst);
 		model.addAttribute("acmstlist", acmstService.getAllAcmst());
-		
+
 		return "pages/account/chartofaccount/chartofaccount";
 	}
 
@@ -72,12 +75,27 @@ public class ChartOfAccountController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please select a account group");
 			return responseHelper.getResponse();
 		}
-		
-		
+
 		// if existing
-		
-		
-		
+		if(StringUtils.isNotBlank(acmst.getXacc())) {
+			Acmst exist = acmstService.findByXacc(acmst.getXacc());
+			if(exist == null) {
+				responseHelper.setErrorStatusAndMessage("Account not found to do update");
+				return responseHelper.getResponse();
+			}
+
+			BeanUtils.copyProperties(acmst, exist, "xacc", "xgroup", "xacctype");
+			long count = acmstService.update(exist);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't save this account");
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Account updated successfully");
+			responseHelper.setRedirectUrl("/account/coa/" + exist.getXacc());
+			return responseHelper.getResponse();
+		}
+
 		// if new
 		AccountGroup acgroup = accountGroupService.findByCode(acmst.getXgroup());
 		if(acgroup == null) {
@@ -89,11 +107,37 @@ public class ChartOfAccountController extends ASLAbstractController {
 		long count = acmstService.save(acmst);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't save this account");
+			return responseHelper.getResponse();
 		}
 
+		responseHelper.setSuccessStatusAndMessage("Account created successfully");
+		responseHelper.setRedirectUrl("/account/coa/" + acmst.getXacc());
 		return responseHelper.getResponse();
 	}
 
+	@PostMapping("/archive/{xacc}")
+	public @ResponseBody Map<String, Object> archive(@PathVariable String xacc){
+		return doArchiveOrRestore(xacc, true);
+	}
+
+	public Map<String, Object> doArchiveOrRestore(String xacc, boolean archive){
+		Acmst acmst = acmstService.findByXacc(xacc);
+		if(acmst == null) {
+			responseHelper.setErrorStatusAndMessage("Account not found to do delete");
+			return responseHelper.getResponse();
+		}
+
+
+		long count = acmstService.delete(xacc);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't Delete Account");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Account deleted successfully");
+		responseHelper.setRedirectUrl("/account/coa");
+		return responseHelper.getResponse();
+	}
 	
 
 }
