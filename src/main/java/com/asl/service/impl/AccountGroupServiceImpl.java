@@ -1,7 +1,9 @@
 package com.asl.service.impl;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,28 @@ public class AccountGroupServiceImpl extends AbstractGenericService implements A
 	public List<AccountGroup> searchByCodeOrName(String hint) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return accountGroupMapper.searchByCodeOrName(hint.toUpperCase(), sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Map<String, AccountGroup> getAccountGroupHirerkey(String xgroup) {
+		if(StringUtils.isBlank(xgroup)) return Collections.emptyMap();
+
+		Map<String, AccountGroup> hirerkey = new HashMap<>();
+		AccountGroup acgroup = findByCode(xgroup);
+		if(acgroup != null) prepareAccountGroupHirerkey(hirerkey, acgroup);
+
+		return hirerkey;
+	}
+
+	private Map<String, AccountGroup> prepareAccountGroupHirerkey(Map<String, AccountGroup> hirerkey, AccountGroup acgroup){
+		hirerkey.put("LEVEL_" + acgroup.getXaglevel(), acgroup);
+
+		if(acgroup.getXaglevel() == 1) return hirerkey;
+
+		AccountGroup nextacgroup = findByCode(acgroup.getXagparent());
+		if(nextacgroup != null) prepareAccountGroupHirerkey(hirerkey, nextacgroup);
+
+		return hirerkey;
 	}
 
 }

@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.AcmstMapper">
-	<insert id="saveAcmst" parameterType="Acmst">
+	<insert id="save" parameterType="Acmst">
+		<selectKey keyProperty="xacc" resultType="String" order="BEFORE">
+			SELECT COALESCE(Max(xacc), #{xgroup}) + 1 FROM acmst WHERE xgroup=#{xgroup} AND xacctype=#{xacctype} AND zid=#{zid}
+		</selectKey>
 		INSERT INTO acmst
 		(
 			xacc,
@@ -17,11 +20,11 @@
 			zauserid,
 			zaip,
 			zactive,
-			ztime,
+			ztime
 		)
 		VALUES
 		(
-			#{xacc, jdbcType=VARCHAR},
+			#{xacc},
 			#{xgroup, jdbcType=VARCHAR},
 			#{xdesc, jdbcType=VARCHAR},
 			#{xacctype, jdbcType=VARCHAR},
@@ -37,7 +40,7 @@
 		)
 	</insert>
 
-	<update id="updateAcmst" parameterType="Acmst">
+	<update id="update" parameterType="Acmst">
 		UPDATE 
 			acmst 
 		SET
@@ -59,21 +62,25 @@
 
 	<select id="getAllAcmst" resultType="Acmst">
 		SELECT
-			*
+			acmst.*,
+			acgroup.xagname as xgroupname
 		FROM
 			acmst
+			left join acgroup on acgroup.xagcode = acmst.xgroup and acgroup.zid = acmst.zid
 		WHERE
-			zid=#{zid}
+			acmst.zid=#{zid}
 	</select>
 
 	<select id="findByXacc" resultType="Acmst">
 		SELECT
-			*
+			acmst.*,
+			acgroup.xagname as xgroupname
 		FROM
 			acmst
+			left join acgroup on acgroup.xagcode = acmst.xgroup and acgroup.zid = acmst.zid
 		WHERE
-			zid=#{zid}
-			AND xacc=#{xacc}
+			acmst.zid=#{zid}
+			AND acmst.xacc=#{xacc}
 	</select>
 
 </mapper>

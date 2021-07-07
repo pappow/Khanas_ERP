@@ -56,7 +56,7 @@
 										<a href="#" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:object="${acmst}" th:with="df=${'E, dd-MMM-yyyy'}">
+										<form id="mainform" class="form-horizontal" th:action="@{/account/coa/save}" method="post" th:object="${acmst}" th:with="df=${'E, dd-MMM-yyyy'}">
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group">
@@ -82,7 +82,7 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xdesc">Account Name</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xdesc}">
+															<input type="text" class="form-control" th:field="*{xdesc}" required="required">
 														</div>
 													</div>
 
@@ -99,19 +99,19 @@
 																<label><input type="radio" th:field="*{xaccusage}" value="AP" required="required"/>AP</label>
 															</div>
 															<div class="radio">
-																<label><input type="radio" th:field="*{xaccusage}" required="required"/>Advance</label>
+																<label><input type="radio" th:field="*{xaccusage}" value="Advance" required="required"/>Advance</label>
 															</div>
 															<div class="radio">
-																<label><input type="radio" th:field="*{xaccusage}" required="required"/>Expense</label>
+																<label><input type="radio" th:field="*{xaccusage}" value="Expense" required="required"/>Expense</label>
 															</div>
 															
 														</div>
 													</div> 
 
 													<div class="form-group">
-														<label class="control-label col-md-4" for="">Note</label>
+														<label class="control-label col-md-4" for="xlong">Note</label>
 														<div class="col-md-8">
-															<textarea class="form-control" rows="3"  placeholder="Note here.."></textarea>
+															<textarea class="form-control" rows="3" th:field="*{xlong}" placeholder="Note here.."></textarea>
 														</div>
 													</div>
 													
@@ -119,45 +119,45 @@
 
 
 												<div class="col-md-6">
-													<div class="form-group">
-														<label class="control-label col-md-4">Account Type </label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xacctype">Account Type</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" value="" disabled="disabled">
+															<input type="text" class="form-control" th:field="*{xacctype}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4">Level 1</label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xhrc1">Level 1</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" readonly placeholder="1010">
+															<input type="text" class="form-control" th:field="*{xhrc1}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4">Level 2</label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xhrc2">Level 2</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control"  readonly placeholder="1011">
+															<input type="text" class="form-control" th:field="*{xhrc2}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4">Level 3</label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xhrc3">Level 3</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control"  readonly placeholder="1012">
+															<input type="text" class="form-control" th:field="*{xhrc3}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4">Level 4</label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xhrc4">Level 4</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control"  readonly placeholder="1013">
+															<input type="text" class="form-control" th:field="*{xhrc4}" disabled="disabled">
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4">Level 5</label>
+													<div class="form-group" th:if="${not #strings.isEmpty(xacc)}">
+														<label class="control-label col-md-4" for="xhrc5">Level 5</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control"  readonly placeholder="1014">
+															<input type="text" class="form-control" th:field="*{xhrc5}" disabled="disabled">
 														</div>
 													</div>
 
@@ -177,15 +177,18 @@
 												<thead>
 													<tr>
 														<th>Account</th>
-														<th>Description</th>
-														<th>Account Type</th>
+														<th>Group</th>
 														<th>Account Usage</th>
-														<th>Account Source</th>
-														<th>Account Group</th>
 													</tr>
 												</thead>
 												<tbody>
-													
+													<tr th:each="ac : ${acmstlist}">
+														<td>
+															<a th:href="@{/account/coa/} + ${ac.xacc}" th:text="${ac.xacc} + ' - ' + ${ac.xdesc}"></a>
+														</td>
+														<td th:text="${ac.xgroup} + ' - ' + ${ac.xgroupname}"></td>
+														<td th:text="${ac.xaccusage}"></td>
+													</tr>
 												</tbody>
 											</table>
 										</div>

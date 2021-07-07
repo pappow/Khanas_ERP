@@ -1,6 +1,7 @@
 package com.asl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -28,4 +29,6 @@ public interface AccountGroupService {
 	public List<AccountGroup> getAllByXagparent(String xagparent);
 
 	public List<AccountGroup> searchByCodeOrName(String hint);
+
+	public Map<String, AccountGroup> getAccountGroupHirerkey(String xgroup);
 }
