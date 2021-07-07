@@ -62,4 +62,7 @@ public class Acmst extends AbstractModel<String> {
 
 	@Transient
 	private String xhrc5;
+
+	@Transient
+	private String xgroupname;
 }
