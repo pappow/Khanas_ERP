@@ -62,7 +62,7 @@ public class RM0503ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Category", ItemCategory, "", false));
 		
 		// Item
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item Code/Name", "search/caitem", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/caitem", "", true));
 		
 		// xwh
 		fieldsList.add(FormFieldBuilder.generateDropdownField(7, "Warehouse", options, " ", false));

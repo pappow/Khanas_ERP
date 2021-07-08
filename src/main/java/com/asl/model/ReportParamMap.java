@@ -90,10 +90,9 @@ public class ReportParamMap {
 		RM0305.put("param2", "From Date|" + ReportParamDataType.DATE.name());
 		RM0305.put("param3", "To Date|" + ReportParamDataType.DATE.name());
 		RM0305.put("param4", "Supplier|" + ReportParamDataType.STRING.name());
-		RM0305.put("param5", "Item|" + ReportParamDataType.STRING.name());
-		RM0305.put("param6", "Item Group|" + ReportParamDataType.STRING.name());
-		RM0305.put("param7", "Item Name|" + ReportParamDataType.STRING.name());
-		RM0305.put("param8", "Status|" + ReportParamDataType.STRING.name());
+		RM0305.put("param5", "Item Group|" + ReportParamDataType.STRING.name());
+		RM0305.put("param6", "Item|" + ReportParamDataType.STRING.name());
+		RM0305.put("param7", "Status|" + ReportParamDataType.STRING.name());
 		
 		RM0307.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0307.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
@@ -122,13 +121,13 @@ public class ReportParamMap {
 		RM0312.put("param2", "From Date|" + ReportParamDataType.DATE.name());
 		RM0312.put("param3", "To Date|" + ReportParamDataType.DATE.name());
 		RM0312.put("param4", "Supplier|" + ReportParamDataType.STRING.name());
-		RM0312.put("param5", "Status|" + ReportParamDataType.STRING.name());
+		RM0312.put("param5", "Item Group|" + ReportParamDataType.STRING.name());
 		RM0312.put("param6", "Item Code|" + ReportParamDataType.STRING.name());
-		RM0312.put("param7", "Item Group|" + ReportParamDataType.STRING.name());
-		RM0312.put("param8", "Item Name|" + ReportParamDataType.STRING.name());
+		RM0312.put("param7", "Status|" + ReportParamDataType.STRING.name());
 		
 		RM0313.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0313.put("param2", "ITEM|" + ReportParamDataType.STRING.name());
+
 		
 		RM0314.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0314.put("param2", "XGCUS|" + ReportParamDataType.STRING.name());
@@ -137,10 +136,9 @@ public class ReportParamMap {
 		RM0401.put("param2", "From Date|" + ReportParamDataType.DATE.name());
 		RM0401.put("param3", "To Date|" + ReportParamDataType.DATE.name());
 		RM0401.put("param4", "Customer|" + ReportParamDataType.STRING.name());
-		RM0401.put("param5", "Status|" + ReportParamDataType.STRING.name());
+		RM0401.put("param5", "Item Group|" + ReportParamDataType.STRING.name());
 		RM0401.put("param6", "Item Code|" + ReportParamDataType.STRING.name());
-		RM0401.put("param7", "Item Name|" + ReportParamDataType.STRING.name());
-		RM0401.put("param8", "Item Group|" + ReportParamDataType.STRING.name());
+		RM0401.put("param7", "Status|" + ReportParamDataType.STRING.name());
 		
 		RM0402.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0402.put("param2", "From Date|" + ReportParamDataType.DATE.name());
@@ -185,10 +183,9 @@ public class ReportParamMap {
 		RM0410.put("param2", "From Date|" + ReportParamDataType.DATE.name());
 		RM0410.put("param3", "To Date|" + ReportParamDataType.DATE.name());
 		RM0410.put("param4", "Xcus|" + ReportParamDataType.STRING.name());
-		RM0410.put("param5", "Status|" + ReportParamDataType.STRING.name());
+		RM0410.put("param5", "Item Group|" + ReportParamDataType.STRING.name());
 		RM0410.put("param6", "Item Code|" + ReportParamDataType.STRING.name());
-		RM0410.put("param7", "Item Name|" + ReportParamDataType.STRING.name());
-		RM0410.put("param8", "Item Group|" + ReportParamDataType.STRING.name());
+		RM0410.put("param7", "Status|" + ReportParamDataType.STRING.name());
 		
 		RM0411.put("param1", "zid|" + ReportParamDataType.STRING.name());
 		RM0411.put("param2", "Date|" + ReportParamDataType.DATE.name());
@@ -215,9 +212,6 @@ public class ReportParamMap {
 		
 		RM0504.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0504.put("param2", "RAWMET|" + ReportParamDataType.STRING.name());
-		
-		RM0313.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0313.put("param2", "ITEM|" + ReportParamDataType.STRING.name());
 		
 		RM0601.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0601.put("param2", "XITEM|" + ReportParamDataType.STRING.name());

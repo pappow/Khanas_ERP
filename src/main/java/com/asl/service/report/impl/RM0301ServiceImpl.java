@@ -48,6 +48,13 @@ public class RM0301ServiceImpl extends AbstractReportService {
 
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
+		
+		List<DropdownOption> options = new ArrayList<>();
+		options.add(new DropdownOption("", "-- Select --"));
+		options.add(new DropdownOption("Open", "Open"));
+		options.add(new DropdownOption("Confirmed", "Confirmed"));
+		options.add(new DropdownOption("GRN Created", "GRN Created"));
+		
 
 		// ZID
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
@@ -59,12 +66,6 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
 		// Status
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		options.add(new DropdownOption("Open", "Open"));
-		options.add(new DropdownOption("Confirmed", "Confirmed"));
-		options.add(new DropdownOption("GRN Created", "GRN Created"));
-		
 		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "Open", false));
 
 		// xcus - Customer / Supplier
