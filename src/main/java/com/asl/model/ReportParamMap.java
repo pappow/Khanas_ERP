@@ -241,6 +241,7 @@ public class ReportParamMap {
 		RM0605.put("param4", "ITM|" + ReportParamDataType.STRING.name());
 		RM0605.put("param5", "ITMGRP|" + ReportParamDataType.STRING.name());
 		RM0605.put("param6", "ITMCAT|" + ReportParamDataType.STRING.name());
+		RM0605.put("param7", "XWH|" + ReportParamDataType.STRING.name());
 		
 
 		RM0606.put("param1", "ZID|" + ReportParamDataType.STRING.name());
