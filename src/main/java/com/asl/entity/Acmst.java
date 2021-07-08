@@ -1,13 +1,12 @@
 package com.asl.entity;
 
-import java.util.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +16,10 @@ import lombok.EqualsAndHashCode;
 @Table(name = "acmst")
 @IdClass(AcmstPK.class)
 @EqualsAndHashCode(of = { "zid", "xacc" }, callSuper = false)
-public class Acmst extends AbstractModel<String>{
-	
+public class Acmst extends AbstractModel<String> {
+
 	private static final long serialVersionUID = -3861938671021034446L;
-	
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "zid")
@@ -30,38 +29,40 @@ public class Acmst extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xacc")
 	private String xacc;
-	
+
 	@Column(name = "xgroup")
 	private String xgroup;
-	
-	@Column(name = "xdecs")
-	private String xdecs;
-	
+
+	@Column(name = "xdesc")
+	private String xdesc;
+
 	@Column(name = "xacctype")
 	private String xacctype;
-	
-	@Column(name = "xhrc1")
-	private String xhrc1;
-	
-	@Column(name = "xhrc2")
-	private String xhrc2;
 
-	@Column(name = "xhrc3")
-	private String xhrc3;
-	
-	@Column(name = "xhrc4")
-	private String xhrc4;
-	
-	@Column(name = "xhrc5")
-	private String xhrc5;
-	
 	@Column(name = "xnum")
 	private Integer xnum;
-	
+
 	@Column(name = "xaccusage")
 	private String xaccusage;
-	
+
 	@Column(name = "xlong")
 	private String xlong;
-	
+
+	@Transient
+	private String xhrc1;
+
+	@Transient
+	private String xhrc2;
+
+	@Transient
+	private String xhrc3;
+
+	@Transient
+	private String xhrc4;
+
+	@Transient
+	private String xhrc5;
+
+	@Transient
+	private String xgroupname;
 }

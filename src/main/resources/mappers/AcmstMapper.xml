@@ -2,72 +2,94 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.asl.mapper.AcmstMapper">
-	<insert id="saveAcmst" parameterType="Acmst">
-	
-		INSERT INTO Acmst
+	<insert id="save" parameterType="Acmst">
+		<selectKey keyProperty="xacc" resultType="String" order="BEFORE">
+			SELECT COALESCE(Max(xacc), #{xgroup}) + 1 FROM acmst WHERE xgroup=#{xgroup} AND xacctype=#{xacctype} AND zid=#{zid}
+		</selectKey>
+		INSERT INTO acmst
 		(
 			xacc,
 			xgroup,
-			xdecs,
+			xdesc,
 			xacctype,
-			xhrc1,
-			xhrc2,
-			xhrc3,
-			xhrc4,
-			xhrc5,
 			xnum,
 			xaccusage,
-			zid,
-			ztime,
-			zutime,
-			zauserid,
-			zuuserid
+			xlong,
 
+			zid,
+			zauserid,
+			zaip,
+			zactive,
+			ztime
 		)
 		VALUES
 		(
-			#{xacc, jdbcType=VARCHAR},
+			#{xacc},
 			#{xgroup, jdbcType=VARCHAR},
-			#{xdecs, jdbcType=VARCHAR},
+			#{xdesc, jdbcType=VARCHAR},
 			#{xacctype, jdbcType=VARCHAR},
-			#{xhrc1, jdbcType=VARCHAR},
-			#{xhrc2, jdbcType=VARCHAR},
-			#{xhrc3, jdbcType=VARCHAR},
-			#{xhrc4, jdbcType=VARCHAR},
-			#{xhrc5, jdbcType=VARCHAR},
 			#{xnum, jdbcType=INTEGER},
 			#{xaccusage, jdbcType=VARCHAR},
+			#{xlong, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR}
-			
+			#{zaip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
-	<update id="updateAcmst" parameterType="Acmst">
+	<update id="update" parameterType="Acmst">
 		UPDATE 
-			Acmst 
+			acmst 
 		SET
-			xgroup=#{xacc, jdbcType=VARCHAR},
-			Xdesc=#{xgroup, jdbcType=VARCHAR},
-			xacctype=#{xdecs, jdbcType=VARCHAR},
+			xgroup=#{xgroup, jdbcType=VARCHAR},
+			xdesc=#{xdesc, jdbcType=VARCHAR},
 			xacctype=#{xacctype, jdbcType=VARCHAR},
-			xhrc1=#{xhrc1, jdbcType=VARCHAR},
-			xhrc2=#{xhrc2, jdbcType=VARCHAR},
-			xhrc3=#{xhrc3, jdbcType=VARCHAR},
-			xhrc4=#{xhrc4, jdbcType=VARCHAR},
-			xhrc5=#{xhrc5, jdbcType=VARCHAR},
 			xnum=#{xnum, jdbcType=INTEGER},
 			xaccusage=#{xaccusage, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
-			zutime=#{zutime, jdbcType=TIMESTAMP},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
-			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+			xlong=#{xlong, jdbcType=VARCHAR},
+
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			zid=#{zid, jdbcType=VARCHAR}
+			xacc=#{xacc, jdbcType=VARCHAR}
+			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+
+	<select id="getAllAcmst" resultType="Acmst">
+		SELECT
+			acmst.*,
+			acgroup.xagname as xgroupname
+		FROM
+			acmst
+			left join acgroup on acgroup.xagcode = acmst.xgroup and acgroup.zid = acmst.zid
+		WHERE
+			acmst.zid=#{zid}
+	</select>
+
+	<select id="findByXacc" resultType="Acmst">
+		SELECT
+			acmst.*,
+			acgroup.xagname as xgroupname
+		FROM
+			acmst
+			left join acgroup on acgroup.xagcode = acmst.xgroup and acgroup.zid = acmst.zid
+		WHERE
+			acmst.zid=#{zid}
+			AND acmst.xacc=#{xacc}
+	</select>
+
+	<delete id="delete">
+		DELETE 
+		FROM 
+			acmst 
+		WHERE
+			zid=#{zid} 
+			AND xacc=#{xacc}
+	</delete>
 
 </mapper>
