@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import com.asl.enums.ReportMenu;
 import com.asl.interceptor.MenuAccessAuthorizationInterceptor;
@@ -30,10 +31,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		return new ReportAccessAuthorizationInterceptor();
 	}
 
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+		lci.setParamName("lang");
+		return lci;
+	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		//registry.addInterceptor(menuAccessInterceptor()).addPathPatterns(getMenuPaths()); 
 		registry.addInterceptor(reportAccessInterceptor()).addPathPatterns(getReportPaths());
+		registry.addInterceptor(localeChangeInterceptor());
 	}
 
 	private String[] getMenuPaths() {
