@@ -44,7 +44,7 @@ public class RM0607ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// caitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item Code/Name", "search/caitem", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item", "search/caitem", "", true));
 		
 		// Item Group
 		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Item Group", Itemgroups, "", false));
