@@ -14,12 +14,19 @@ import com.asl.entity.Xtrn;
 public interface XtrnMapper {
 
 	public long save(Xtrn xtrn);
+
 	public long update(Xtrn xtrn);
 
 	public List<Xtrn> getAllXtrn(String zid, Boolean zactive);
+
 	public List<Xtrn> findByXtypetrn(String xtypetrn, String zid, Boolean zactive);
+
 	public List<Xtrn> findByXtrn(String xtrn, String zid, Boolean zactive);
+
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, String zid, Boolean zactive);
+
 	public String generateXtrn(String xtypetrn, String xtrn, int leftpad, String zid);
+
+	public long delete(String xtypetrn, String xtrn, String zid);
 
 }
