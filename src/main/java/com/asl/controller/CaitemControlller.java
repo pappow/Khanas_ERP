@@ -47,6 +47,9 @@ public class CaitemControlller extends ASLAbstractController {
 		if(isBoshila()) {
 			return "pages/land/mastersetup/caitem";
 		}
+		else if(isGarments()) {
+			return "pages/merchandising/caitem";
+		}
 		return "pages/mastersetup/caitem/caitem";
 	}
 
@@ -67,6 +70,10 @@ public class CaitemControlller extends ASLAbstractController {
 		if(isBoshila()) {
 			data.setXmember("");
 			return "pages/land/mastersetup/caitem";
+		}
+		else if(isGarments()) {
+			data.setXmember("");
+			return "pages/merchandising/caitem";
 		}
 		return "pages/mastersetup/caitem/caitem";
 	}

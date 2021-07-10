@@ -75,6 +75,19 @@
 												<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
+										<tr th:if="${isBoshila or isDev}">
+											<td><a th:href="@{/cadag}">Dag Master</a></td>
+											<td>
+												<a th:href="@{/cadag}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										
+										<tr th:if="${isBoshila or isDev}">
+											<td><a th:href="@{/dag}">Dag Master 2</a></td>
+											<td>
+												<a th:href="@{/dag}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
 									</span>
 
 
@@ -86,12 +99,12 @@
 											<td><a th:href="@{/landperson}">Personal Info</a></td>
 											<td>
 												<a th:href="@{/landperson}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-											</td>
+											</td> 
 										</tr>
 										<tr>
-											<td><a th:href="@{/landmemberinfo}">Member Info</a></td>
+											<td><a th:href="@{/cacus}">Member Info</a></td>
 											<td>
-												<a th:href="@{/landmemberinfo}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/cacus}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>

@@ -319,7 +319,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/countde}">Yarn Count Details</a></td>
+											<td><a th:href="@{/countde}">.Yarn Count Details</a></td>
 											<td>
 												<a th:href="@{/countde}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -331,19 +331,19 @@
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/batchdetails}">.Batch Details</a></td>
+											<td><a th:href="@{/batchdetails}">.Batch Planning Details</a></td>
 											<td>
 												<a th:href="@{/batchdetails}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/batchentry}">Batch Entry</a></td>
+											<td><a th:href="@{/batchentry}">Batch Header</a></td>
 											<td>
 												<a th:href="@{/batchentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/batchdetailsentry}">Batch Details Entry</a></td>
+											<td><a th:href="@{/batchdetailsentry}">.Batch Details </a></td>
 											<td>
 												<a th:href="@{/batchdetailsentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -386,7 +386,7 @@
 										</tr>
 										
 										<tr>
-											<td><a th:href="@{/prcutng}">Cutting Production Detail Entry</a></td>
+											<td><a th:href="@{/prcutng}">.Cutting Production Plan Details </a></td>
 											<td>
 												<a th:href="@{/prcutng}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -398,7 +398,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/prswng}">Sewing Production Detail Entry </a></td>
+											<td><a th:href="@{/prswng}">.Sewing Production Plan Details </a></td>
 											<td>
 												<a th:href="@{/prswng}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -451,7 +451,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/cafiledetails}">File Details</a></td>
+											<td><a th:href="@{/cafiledetails}">.Filewise FO</a></td>
 											<td>
 												<a th:href="@{/cafiledetails}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
@@ -482,19 +482,257 @@
 										</tr>
 										
 										<tr>
-											<td><a th:href="@{/pofodesnd}">FO Details</a></td>
+											<td><a th:href="@{/pofodesnd}">.FO Details</a></td>
 											<td>
 												<a th:href="@{/pofodesnd}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/piestimtn}">PI Estimation Detail</a></td>
+											<td><a th:href="@{/piestimtn}">.PI Estimation Detail</a></td>
 											<td>
 												<a th:href="@{/piestimtn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										
 									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2"  style="color: red !important; font-weight: bold; margin-left: 0px;">RMG Manufacturing</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">Master Setup</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/recipemaster}">Recipe Master</a></td>
+											<td>
+												<a th:href="@{/recipemaster}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/cabom}">Bill Of Material (BOM) Setting For RMG FInishing</a></td>
+											<td>
+												<a th:href="@{/cabom}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/mastersetup/cacus?cacusType=CUS}">Buyer Master</a></td>
+											<td>
+												<a th:href="@{/mastersetup/cacus?cacusType=CUS}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/caagent}">Agent Master</a></td>
+											<td>
+												<a th:href="@{/caagent}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/mastersetup/caitem}">Item Master</a></td>
+											<td>
+												<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									
+									
+										</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">Merchandising </td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/cafile}">Filewise FO Entry</a></td>
+											<td>
+												<a th:href="@{/cafile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									
+										<tr>
+											<td><a th:href="@{/pientry}">Buyer Order</a></td>
+											<td>
+												<a th:href="@{/pientry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/pientry}">Budget Entry</a></td>
+											<td>
+												<a th:href="@{/pientry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/pofodesn}">Fabric Order(FO)</a></td>
+											<td>
+												<a th:href="@{/pofodesn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/pientry}">PI Entry</a></td>
+											<td>
+												<a th:href="@{/pientry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<!-- <tr>
+											<td><a th:href="@{/}">Estimation Entry</a></td>
+											<td>
+												<a th:href="@{/}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										 --><tr>
+											<td><a th:href="@{/cateam}">Team Entry & Role Assign</a></td>
+											<td>
+												<a th:href="@{/cateam}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">Knit Production Plan</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/proplan}">Knit Production Plan</a></td>
+											<td>
+												<a th:href="@{/proplan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/productionde}">Knit Production Transaction</a></td>
+											<td>
+												<a th:href="@{/productionde}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">RMG Batch Plan </td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/batchplan}">Batch Plan Entry</a></td>
+											<td>
+												<a th:href="@{/batchplan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">Knit Dyeing</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prplandy}">Dyeing Plan Entry </a></td>
+											<td>
+												<a th:href="@{/prplandy}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prdying}">Dyeing Transaction Entry</a></td>
+											<td>
+												<a th:href="@{/prdying}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prdyfin}">Dyeing Finishing Transaction</a></td>
+											<td>
+												<a th:href="@{/prdyfin}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prqc}">QC Inspection Entry </a></td>
+											<td>
+												<a th:href="@{/prqc}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">Knit Dyeing Reprocess</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prplandyr}">Dyeing Plan Entry (Reprocess) </a></td>
+											<td>
+												<a th:href="@{/prplandyr}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prdyingr}">Dyeing Transaction Entry (Reprocess) </a></td>
+											<td>
+												<a th:href="@{/prdyingr}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prdyfinr}">Dyeing Finishing Transaction (Reprocess) </a></td>
+											<td>
+												<a th:href="@{/prdyfinr}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prqcre}">QC Inspection Entry (Reprocess)</a></td>
+											<td>
+												<a th:href="@{/prqcre}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
+									<span th:if="${isGarments or isDev}">
+										<tr>
+											<td colspan="2">RMG Production</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prcutplan}">Cutting Plan Entry </a></td>
+											<td>
+												<a th:href="@{/prcutplan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prcutng}">Cutting Transaction Entry </a></td>
+											<td>
+												<a th:href="@{/prcutng}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prsewplan}">Sewing Plan Entry </a></td>
+											<td>
+												<a th:href="@{/prsewplan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prswng}">Sewing Transaction Entry</a></td>
+											<td>
+												<a th:href="@{/prswng}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prqcfin}">QC Inpection Entry</a></td>
+											<td>
+												<a th:href="@{/prqcfin}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prplanfin}">RMG Finishing Plan Entry </a></td>
+											<td>
+												<a th:href="@{/prplanfin}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/prfinshng}">RMG Finishing Transaction Entry</a></td>
+											<td>
+												<a th:href="@{/prfinshng}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr>
+											<td><a th:href="@{/finlqc}">RMG Finished Goods Inspection </a></td>
+											<td>
+												<a th:href="@{/finlqc}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+									</span>
+
 									<span th:if="${isGarments or isDev}">
 										<tr>
 											<td><a th:href="@{/logout}" style="color: red !important; font-weight: bold; margin-left: 0px;">Logout</a></td>

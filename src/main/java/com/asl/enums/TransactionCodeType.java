@@ -14,6 +14,7 @@ public enum TransactionCodeType {
 	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAR("Customer Adjustment", "ADAR-", TransactionCodes.AR_TRANSACTION),
+	AGENT_TRANSFER_ORDER("Agent Transfer Order", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
 	MONEY_RECEIPTS("AR Transactions", "MR--", TransactionCodes.AR_TRANSACTION),
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),

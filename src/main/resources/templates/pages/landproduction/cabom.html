@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Bill of Material(BOM) </title>
+		<title>Bill of Material(BOM) Setting</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -28,7 +28,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Home</a></li>
-										<li class="active"><a th:href="@{/cabom}">Bill of Material(BOM) </a></li>
+										<li class="active"><a th:href="@{/cabom}">Bill of Material(BOM) Setting</a></li>
 									
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -54,7 +54,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Bill of Material(BOM) </h1>
+														<h1>Bill of Material(BOM) Setting</h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/cabom}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
@@ -84,7 +84,7 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">BOM Raw Material</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<input type="text" class="form-control" placeholder="Multiple Row"/>
 																</div>
 															</div>
 															
@@ -93,9 +93,10 @@
 														<div class="col-md-6">
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Department in Use</label>
+																<label class="control-label col-md-4" for=""><!-- Department in Use -->Using Purpose</label>
 																<div class="col-md-8">
 																	<select class="form-control" >
+																		<option>Finishing</option>
 																		<option>Cutting</option>
 																		<option>Knitting</option>
 																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>

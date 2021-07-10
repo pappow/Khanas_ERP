@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Cutting Production Plan </title>
+		<title>Cutting Plan </title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -28,7 +28,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}">Home</a></li>
-										<li class="active"><a th:href="@{/prcutplan}">Cutting Production Plan </a></li>
+										<li class="active"><a th:href="@{/prcutplan}">Cutting Plan </a></li>
 									
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -54,13 +54,14 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="section-header sectionbartoggle">
-														<h1>Cutting Production Plan </h1>
+														<h1>Cutting Plan </h1>
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/prcutplan}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
 														<a  class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														<a th:href="@{/prcutng}" class="btn btn-info"> Cutting Production Plan Details</a>
 													</div>
 												</div>
 											</div>
@@ -75,7 +76,7 @@
 														<div class="col-md-6">
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Plan ID.</label>
+																<label class="control-label col-md-4" for="">Plan ID</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" placeholder="CPLN000001"/>
 																</div>
@@ -106,7 +107,12 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Dyeing Process</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<select class="form-control" >
+																		<option>Single Jersey</option>
+																		<option>Corchet</option>
+																		<option>Wrap Knitted Fabric</option>
+																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
@@ -120,28 +126,36 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Item</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<input type="text" class="form-control" placeholder="Through Search"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Size</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<select class="form-control" >
+																		<option>XL</option>
+																		<option>Double XL</option>
+																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Color</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" placeholder=""/>
+																	<select class="form-control" >
+																		<option>Grey Melange</option>
+																		<option>Dark Grey</option>
+																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Unit</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" />
+																	<input type="text" class="form-control" value="Kg" disabled="disabled"/>
 																</div>
 															</div>
 															
@@ -193,10 +207,11 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Status</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
+																	<input type="text" class="form-control" value="Open/Confirmed" disabled="disabled"/>
+																	<!-- <select class="form-control" >
 																		<option>Active</option>
 																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-																	</select>
+																	</select> -->
 																</div>
 															</div>
 														</div>
@@ -212,7 +227,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1> List of Cutting Production Plan  </h1>
+										<h1> List of Cutting Plans  </h1>
 									</div>
 									<div class="section-body">
 										<div style="overflow-x: scroll;">

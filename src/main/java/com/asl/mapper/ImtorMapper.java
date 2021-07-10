@@ -16,6 +16,8 @@ public interface ImtorMapper {
 
 	public long updateImtorHeader(ImtorHeader imtorHeader);
 
+	public long deleteImtorHeader(ImtorHeader imtorHeader);
+	
 	public long saveImtorDetail(ImtorDetail imtorDetail);
 
 	public long updateImtorDetail(ImtorDetail imtorDetail);
@@ -42,5 +44,7 @@ public interface ImtorMapper {
 	public void procConfirmTO(String zid, String user, String xtornum, String p_action, String p_seq);
 
 	public long deleteImtorDetailByXtornum(String xtornum, String zid);
+	
+	public List<ImtorHeader> getAllImtorHeaderbyPrefix(String xtypetrn, String zid);
 
 }

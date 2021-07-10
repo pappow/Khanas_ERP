@@ -135,15 +135,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 	
-	@GetMapping("/memberId/{hint}")
-	public @ResponseBody List<SearchSuggestResult> getMemnerId(@PathVariable String hint){
-		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		
-		List<LandMemberInfo> MemberList = landMemberInfoService.searchMemberId(hint);
-		List<SearchSuggestResult> list = new ArrayList<>();
-		MemberList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXmember(),c.getXmember())));
-		return list;
-	}
+	/*
+	 * @GetMapping("/memberId/{hint}") public @ResponseBody
+	 * List<SearchSuggestResult> getMemnerId(@PathVariable String hint){
+	 * if(StringUtils.isBlank(hint)) return Collections.emptyList();
+	 * 
+	 * List<LandMemberInfo> MemberList = landMemberInfoService.searchMemberId(hint);
+	 * List<SearchSuggestResult> list = new ArrayList<>();
+	 * MemberList.stream().forEach(c -> list.add(new
+	 * SearchSuggestResult(c.getXmember(),c.getXmember()))); return list; }
+	 */
 	
 	@GetMapping("/landSur/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getLandDoc(@PathVariable String hint){

@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,13 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return imtorMapper.updateImtorHeader(imtorHeader);
 	}
 
+	@Override
+	public long delete(ImtorHeader imtorHeader) {
+		if(imtorHeader == null) return 0;
+		long count = imtorMapper.deleteImtorHeader(imtorHeader);
+		return count;
+	}
+	
 	@Override
 	public long saveDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
@@ -153,6 +161,14 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		if(StringUtils.isBlank(xtornum)) return 0;
 		return imtorMapper.deleteImtorDetailByXtornum(xtornum, sessionManager.getBusinessId());
 	}
+
+	@Override
+	public List<ImtorHeader> getAllImtorHeaderbyPrefix(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
+		return imtorMapper.getAllImtorHeaderbyPrefix(xtypetrn, sessionManager.getBusinessId());
+	}
+
+
 
 	
 }
