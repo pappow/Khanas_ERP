@@ -34,6 +34,7 @@ public class TransactionCodes {
 	public static final Map<String, String> LANDCOMEVENT_ID = new HashMap<>();
 	public static final Map<String, String> LANDOTHEREVENT_ID = new HashMap<>();
 	public static final Map<String, String> AGENT_TRANSFER_ORDER = new HashMap<>();
+	public static final Map<String, String> GL_VOUCHER = new HashMap<>();
 
 	static {
 		
@@ -45,7 +46,12 @@ public class TransactionCodes {
 		//AR Transactional Codes
 		AR_TRANSACTION.put("Customer Adjustment", "ADAR-");
 		AR_TRANSACTION.put("Money Receipt", "MR-");
-		
+
+		GL_VOUCHER.put("Contra Voucher", "CV--");
+		GL_VOUCHER.put("Journal Voucher", "JV--");
+		GL_VOUCHER.put("Opening Balance", "OB--");
+		GL_VOUCHER.put("Payment Voucher", "PV--");
+		GL_VOUCHER.put("Receive Voucher", "RV--");
 
 	}
 }

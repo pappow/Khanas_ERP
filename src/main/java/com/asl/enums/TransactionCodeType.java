@@ -29,7 +29,7 @@ public enum TransactionCodeType {
 	EMPLOYEE_ID("Employee ID", "EID-", TransactionCodes.EMPLOYEE_ID),
 
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
-	GL_VOUCHER("GL Voucher", "JV--", null),
+	GL_VOUCHER("GL Voucher", "JV--", TransactionCodes.GL_VOUCHER),
 
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
