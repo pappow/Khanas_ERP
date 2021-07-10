@@ -15,6 +15,8 @@ public interface ImtorService {
 
 	public long update(ImtorHeader imtorHeader);
 
+	public long delete(ImtorHeader imtorHeader);
+	
 	public long saveDetail(ImtorDetail imtorDetail);
 
 	public long saveDetail(List<ImtorDetail> imtorDetails) throws ServiceException;
@@ -43,5 +45,7 @@ public interface ImtorService {
 	public void procConfirmTO(String xtornum, String p_action, String p_seq);
 
 	public long deleteImtorDetailByXtornum(String xtornum);
+	
+	public List<ImtorHeader> getAllImtorHeaderbyPrefix(String xtypetrn);
 
 }

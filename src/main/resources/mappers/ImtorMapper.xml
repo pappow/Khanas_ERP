@@ -124,6 +124,10 @@
 			AND zid=#{zid}
 	</update>
 
+	<delete id="deleteImtorHeader" parameterType="ImtorHeader">
+		DELETE FROM imtorHeader WHERE  xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 	<insert id="saveImtorDetail" parameterType="ImtorDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
@@ -234,6 +238,14 @@
 			ImtorHeader
 		WHERE zid=#{zid} AND zactive='1'
 		ORDER BY xtornum DESC
+	</select>
+	
+	<select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
+		SELECT *
+		FROM
+			ImtorHeader
+		WHERE xtypetrn=#{xtypetrn} AND zid=#{zid} AND zactive='1'
+		
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXrow" resultType="ImtorDetail">

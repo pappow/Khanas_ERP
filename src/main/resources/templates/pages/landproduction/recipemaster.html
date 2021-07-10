@@ -164,7 +164,11 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Department in Use</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" />
+																	<select class="form-control" >
+																		<option>Dyeing</option>
+																		<option>Dyeing-Finishing</option>
+																		<option th:each="d : ${ownerTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															

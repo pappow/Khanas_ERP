@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Land Member Info</title>
+		<title>Member Info</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -10,8 +10,6 @@
 
 		<!-- Header section -->
 		<div class="header-section" th:include="commons :: header-section"></div>
-		
-
 
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
@@ -27,11 +25,10 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li class="active"><a th:href="@{/landmemberinfo}">Land Member Info</a></li>
-									
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/cacus}">Member Info</a></li>
 									</div>
-								
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
 							</div>
 						</div>
@@ -39,96 +36,106 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
+
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="row">
-												<div class="col-md-12">
-													<div class="section-header sectionbartoggle">
-														<h1>Member Info</h1>
-													</div>
-													<div class="form-action-button">
-														<a th:href="@{/landmemberinfo}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-														<a th:if="${#strings.isEmpty(landmember.xmember)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-														<a th:if="${not #strings.isEmpty(landmember.xmember) and landmember.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
-														<a th:if="${not #strings.isEmpty(landmember.xmember) and landmember.zactive == true}" th:href="@{/landmemberinfo/delete/} + ${landmember.xmember}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-														
-													</div>
-												</div>
-											</div>
-										</div>
+									<div class="section-header sectionbartoggle">
+										<h1>Member Info</h1>
+									</div>
+									<div class="form-action-button">
+										<a th:href="@{/cacus}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:if="${#strings.isEmpty(cacus.xcus)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+										<a th:if="${not #strings.isEmpty(cacus.xcus) and cacus.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(cacus.xcus) and cacus.zactive == true}" th:href="@{/cacus/delete/} + ${cacus.xcus} " class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" method="post" th:action="@{/landmemberinfo/save}" th:object="${landmember}">
+										<form id="mainform" class="form-horizontal" th:action="@{/cacus/save}" th:object="${cacus}" method="post">
 											<input type="hidden" th:field="*{xtypetrn}"/>
-											<input type="hidden" th:field="*{xmember}"/>
+											<input type="hidden" th:field="*{xcus}"/>
 											<div class="row">
-												<div class="col-md-12">
-													<div class="row">
-														<div class="col-md-6">
-
-															<div class="form-group" th:if="${#strings.isEmpty(landmember.xmember)}">
-																<label class="control-label col-md-4" for="xtrn">Member ID </label>
-																<div class="col-md-8">
-																	<select class="form-control" th:field="*{xtrn}">
-																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
-																	</select>
-																</div>
-															</div>
-
-															<div class="form-group" th:if="${not #strings.isEmpty(landmember.xmember)}" >
-																<label class="control-label col-md-4" for="xmember">Member ID</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" th:value="*{xmember}" disabled="disabled"/>
-																</div>
-															</div>
-
-															<div class="form-group" >
-																<label class="control-label col-md-4" for="xperson">Person ID</label>
-																<div class="col-sm-8">
-																	<input 	type="text" 
-																			class="form-control searchsuggest" 
-																			placeholder="Search..." 
-																			th:value="${landmember.xperson}" 
-																			th:attr="search-url='search/personId'"/>
-																	<input type="hidden" id="search-val" th:field="*{xperson}"/>
-																	<input type="hidden" id="search-des" th:value="*{xperson}"/>
-																</div>
-															</div>
-
-															<div class="form-group">
-																<label class="control-label col-md-4" for="xdesignation">Designation</label>
-																<div class="col-md-8">
-																	<select class="form-control" th:field="*{xdesignation}">
-																		<option th:each="d : ${designationTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-																	</select>
-																</div>
-															</div>
-
+												<div class="col-md-6">
+													<div class="form-group" th:if="${#strings.isEmpty(cacus.xcus)}">
+														<label class="control-label col-sm-4" for="xtrn" >Member ID </label>
+														<div class="col-sm-8">
+															<select class="form-control" th:field="*{xtrn}" >
+																<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
+															</select>
 														</div>
-
-														<div class="col-md-6">
-
-															
-	
-															<div class="form-group">
-																<label class="control-label col-md-4" for="xnote">Note</label>
-																<div class="col-md-8">
-																	<textarea class="form-control" rows="3" th:field="*{xnote}" placeholder="Note"></textarea>
-																</div>
-															</div>
-														</div>
-														
 													</div>
+													<div class="form-group" th:if="${not #strings.isEmpty(cacus.xcus)}">
+														<label class="control-label col-sm-4" for="xcus" >Member ID </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" th:field="*{xcus}" disabled="disabled"/>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xorg">Company / Name</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" th:field="*{xorg}" />
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xmadd">Address </label>
+														<div class="col-sm-8">
+															<textarea rows="3" cols="" class="form-control" th:field="*{xmadd}"></textarea>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xcontact">Contact</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" th:field="*{xcontact}"/>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xphone">Phone </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" th:field="*{xphone}"/>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xcrlimit">Credit Limit </label>
+														<div class="col-sm-8">
+															<input type="number" class="form-control" th:field="*{xcrlimit}" min="0"/>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xvatregno">Vat RegN </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" th:field="*{xvatregno}"/>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="control-label col-sm-4" for="xstatuscus" >Status </label>
+														<div class="col-sm-8">
+															<select class="form-control" th:field="*{xstatuscus}">
+																<option th:each="sg : ${memberStatus}" th:text="${sg.xcode}" th:value="${sg.xcode}"></option>
+															</select>
+														</div>
+													</div>
+													
+													<div class="form-group" >
+														<label class="control-label col-sm-4" for="xgcus">Member Group </label>
+														<div class="col-sm-8">
+															<select class="form-control" th:field="*{xgcus}" required="required">
+																<option value="">Select</option>
+																<option th:each="sg : ${memberGroup}" th:text="${sg.xcode}" th:value="${sg.xcode}"></option>
+															</select>
+														</div>
+													</div>
+													
+
 												</div>
 											</div>
 										</form>
@@ -136,44 +143,62 @@
 								</section>
 							</div>
 							<div class="col-md-6">
-								<section id="list-manager" style="margin-top: 30px;">
+								<section style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
 										<h1>All Member Info</h1>
 									</div>
 									<div class="section-body">
-										<div style="overflow-x: scroll;">
-											<table class="table table-striped table-bordered datatable nowrap">
-												<thead>
-													<tr>
-														
-														<th>Member ID</th>
-														<th>Person ID</th>
-														<th>Designation</th>
-														
-													</tr>
-													
-												</thead>
-												<tbody>
-													<tr th:each="ar : ${allLandMembers}">
-														<td><a th:href="@{/landmemberinfo/} + ${ar.xmember}" th:text="${ar.xmember}"></a></td>
-														<td th:text="${ar.xperson}"></td>
-														<td th:text="${ar.xdesignation }"></td>
-														
-													</tr>
-													
-												</tbody>
-											</table>
-										</div>
+										<table class="table table-striped table-bordered datatable nowrap">
+											<thead>
+												<tr>
+													<th>Member ID</th>
+													<th>Company/Name</th>
+													<th>Address</th>
+													<th>Active</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="c : ${allMembers}">
+													<td>
+														<a th:href="@{/cacus/} + ${c.xcus}" th:text="${c.xcus}"></a>
+													</td>
+													<td th:text="${c.xorg}"></td>
+													<td th:text="${c.xmadd}"></td>
+													<td th:text="${c.zactive == true ? 'Y' : 'N'}"></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</section>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
 		</div>
 
-		  <!-- Footer section -->
+		<!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				if($('#xgcus').val() == 'Branch'){
+					$('.branch-selection').removeClass('nodisplay');
+				}
+
+				$('#xgcus').on('change', function(e){
+					e.preventDefault();
+					if($(this).val() == 'Branch'){
+						$('.branch-selection').removeClass('nodisplay');
+					} else {
+						$('#xcuszid').val("");
+						$('.branch-selection').addClass('nodisplay');
+					}
+				})
+			})
+		</script>
+		
 	</body>
 </html>

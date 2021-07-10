@@ -104,7 +104,7 @@ public class LandOtherEventsController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/landevents/" + xevent );
+		responseHelper.setRedirectUrl("/landotherevents/" + xevent );
 		return responseHelper.getResponse();
 }
 	//start of event members

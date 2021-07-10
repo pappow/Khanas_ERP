@@ -63,5 +63,6 @@
 		<mapper resource="mappers/AccountGroupMapper.xml"/>
 		<mapper resource="mappers/AcdefMapper.xml"/>
 		<mapper resource="mappers/AcmstMapper.xml"/>
+		<mapper resource="mappers/LandDagMasterMapper.xml"/>
 	</mappers>
 </configuration>
