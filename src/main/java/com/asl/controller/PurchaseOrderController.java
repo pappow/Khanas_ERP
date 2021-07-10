@@ -52,10 +52,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
@@ -69,10 +67,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 		data.setXtypetrn(data.getXtype());
 
 		model.addAttribute("poordheader", data);
-		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
@@ -82,8 +78,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
-		poord.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
-		poord.setXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode());
 		poord.setXstatuspor("Open");
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
@@ -91,14 +85,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(PoordHeader poordHeader, BindingResult bindingResult){
-		if((poordHeader == null || StringUtils.isBlank(poordHeader.getXtype())) || StringUtils.isBlank(poordHeader.getXtrn()) && StringUtils.isBlank(poordHeader.getXpornum())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
 		// Validate
 		if(StringUtils.isBlank(poordHeader.getXcus())) {
-			responseHelper.setErrorStatusAndMessage("Please select a supplier to create purchase order!");
+			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
 
@@ -122,6 +111,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
 		responseHelper.setSuccessStatusAndMessage("Purchase Order created successfully");
 		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
