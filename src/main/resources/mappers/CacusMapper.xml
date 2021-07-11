@@ -136,6 +136,14 @@
 		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	<select id="searchCustomer" resultType="Cacus">
+		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND (xgcus LIKE '%'|| 'Branch' ||'%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<!-- <select id="searchCustomer" resultType="Cacus">
+		SELECT * FROM cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+	</select> -->
+	
 	<select id="searchXorg" resultType="Cacus">
 		SELECT * FROM Cacus WHERE (UPPER(xorg) LIKE '%' || #{xorg} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
@@ -163,4 +171,7 @@
 			xcus=#{xcus}
 			AND ZID=#{zid}
 	</delete>
+	
+	
+	
 </mapper>

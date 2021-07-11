@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Imstock;
 import com.asl.entity.ImtorDetail;
@@ -27,6 +28,7 @@ import com.asl.entity.Opordheader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.ImstockService;
 import com.asl.service.ImtorService;
@@ -41,10 +43,16 @@ public class AgentTransferOrderController extends ASLAbstractController{
 	@Autowired private ImstockService imstockService;
 	@Autowired private CaitemService caitemService;
 	@Autowired private OpordService opordService;
+	@Autowired private CacusService cacusService;
 
 	@GetMapping
 	public String loadTransferOrderdPage(Model model) {
 		model.addAttribute("imtorheader", getDefaultImtorHeader());
+		/*
+		 * model.addAttribute("allImtorHeaders",
+		 * imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.
+		 * AGENT_TRANSFER_ORDER.getCode()));
+		 */
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
@@ -56,7 +64,14 @@ public class AgentTransferOrderController extends ASLAbstractController{
 	@GetMapping("/{xtornum}")
 	public String loadPoordPage(@PathVariable String xtornum, Model model) {
 		ImtorHeader data = imtorService.findImtorHeaderByXtornum(xtornum); 
-		if(data == null) data = getDefaultImtorHeader();
+		if(data == null) return "rdirect:/inventory/agenttransferorder";
+
+		if(StringUtils.isNotBlank(data.getXcus())) {
+			Cacus c = cacusService.findByXcus(data.getXcus());
+			if(c != null) {
+				data.setXorg(c.getXorg());
+			}
+		}
 
 		model.addAttribute("imtorheader", data);
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
@@ -126,9 +141,9 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 
-	@PostMapping("/delete/{xtornum}")
-	public @ResponseBody Map<String, Object> deleteLandInfo(@PathVariable String xtornum,  Model model) {
-		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
+	@PostMapping("/delete/{xtypetrn}")
+	public @ResponseBody Map<String, Object> deleteLandInfo(@PathVariable String xtypetrn,  Model model) {
+		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtypetrn);
 		if(imtorHeader == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
@@ -141,7 +156,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/inventory/agenttransferorder/" + xtornum );
+		responseHelper.setRedirectUrl("/inventory/agenttransferorder" );
 		return responseHelper.getResponse();
 }
 	

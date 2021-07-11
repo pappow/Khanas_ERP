@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,10 +59,16 @@ public class ImtorHeader extends AbstractModel<String> {
 
 	@Column(name = "xlong")
 	private String xlong;
+	
+	@Column(name = "xcus")
+	private String xcus;
 
 	@Column(name = "xchalanref")
 	private String xchalanref;
 
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
+	
+	@Transient
+	private String xorg;
 }

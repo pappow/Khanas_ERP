@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active: garments
+    active: khanas
   servlet: 
     multipart: 
       max-file-size: 15MB

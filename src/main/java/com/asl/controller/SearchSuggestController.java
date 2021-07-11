@@ -78,6 +78,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandCommitteeInfoService landCommitteeInfoService;
 	@Autowired private LandInfoService  landInfoService;
 	@Autowired private AccountGroupService accountGroupService;
+	
 
 	@GetMapping("/acgroup/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAcgroup(@PathVariable String hint){
@@ -176,8 +177,26 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 	
-	
+	/*
+	 * @GetMapping("/customerId/{hint}") public @ResponseBody
+	 * List<SearchSuggestResult> getCustomerId(@PathVariable String hint){
+	 * 
+	 * 
+	 * List<Cacus> CusList = cacusService.searchCustomer(hint);
+	 * List<SearchSuggestResult> list = new ArrayList<>();
+	 * CusList.stream().forEach(c -> list.add(new
+	 * SearchSuggestResult(c.getXcus(),c.getXcus()+ " - " +c.getXorg()))); return
+	 * list; }
+	 */
 
+	@GetMapping("/branchCustomer/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getBranchCustomers(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cacus> branchCusList = cacusService.searchCustomer(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		branchCusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		return list;
+	}
 
 	@GetMapping("/personName/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPersonName(@PathVariable String hint){
@@ -197,6 +216,13 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 
+	@GetMapping("/assetCaitem/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAssetCaitems(@PathVariable String hint){
+		List<Caitem> assetCaitemList = caitemService.searchAssetCaitem(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		assetCaitemList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXitem(), c.getXitem() + " - " + c.getXdesc())));
+		return list;
+	}
 
 	@GetMapping("/caitem/central/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getCentralCaitems(@PathVariable String hint){

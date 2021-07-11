@@ -20,14 +20,12 @@
 			xtrn,
 			xtypetrn,
 			xlong,
+			xcus,
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -42,14 +40,12 @@
 			#{xtrn, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xlong, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
@@ -112,6 +108,7 @@
 			xtrn=#{xtrn, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xlong=#{xlong, jdbcType=VARCHAR},
+			xcus=#{xcus, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -201,7 +198,7 @@
 	</delete>
 
 	<delete id="deleteImtorDetailByXtornum">
-		DELETE FROM imtordetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+		DELETE FROM imtordetail WHERE xtypetrn=#{xtypetrn} AND zactive='1' AND zid=#{zid}
 	</delete>
 
 	<select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
@@ -210,6 +207,14 @@
 			ImtorHeader 
 		WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
 	</select>
+	
+	<!-- <select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
+		SELECT ImtorHeader.*, cacus.xorg as "xorg"
+		FROM
+			ImtorHeader 
+			JOIN cacus on cacus.xcus=ImtorHeader.xcus AND cacus.zid=#{zid}
+		WHERE  ImtorHeader.xtornum=#{xtornum} AND ImtorHeader.zid=#{zid} AND ImtorHeader.zactive='1'
+	</select> -->
 
 	<select id="findImtorHeaderByXchalanref" resultType="ImtorHeader">
 		SELECT * FROM ImtorHeader WHERE xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
@@ -223,7 +228,7 @@
 			JOIN caitem on caitem.xitem=det.xitem AND caitem.zid=#{centralzid}
 			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
-			det.xtornum=#{xtornum} AND det.zid=#{zid} AND det.zactive='1' 
+			det.xtornum=#{xtornum}  AND det.zid=#{zid} AND det.zactive='1' 
 		ORDER BY 
 			xcodes.seqn, det.xrow 
 	</select>
@@ -232,20 +237,38 @@
 		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
 	</select>
 
+	
+       
+	
+	
 	<select id="getAllImtorHeader" resultType="ImtorHeader">
 		SELECT *
 		FROM
 			ImtorHeader
 		WHERE zid=#{zid} AND zactive='1'
 		ORDER BY xtornum DESC
-	</select>
+	</select> 
 	
-	<select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
-		SELECT *
+	<!-- <select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
+		SELECT ImtorHeader.*, cacus.xorg as "xorg"
 		FROM
-			ImtorHeader
-		WHERE xtypetrn=#{xtypetrn} AND zid=#{zid} AND zactive='1'
+			ImtorHeader 
+			JOIN cacus on cacus.xcus=ImtorHeader.xcus AND cacus.zid=#{zid}
+		WHERE  ImtorHeader.xtypetrn=#{xtypetrn} AND ImtorHeader.zid=#{zid} AND ImtorHeader.zactive='1'
 		
+	</select> -->
+	
+	 <select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
+		SELECT 
+			imtorheader.*,
+			cacus.xorg
+		FROM
+			imtorheader
+			left join cacus on cacus.xcus = imtorheader.xcus and cacus.zid=imtorheader.zid and cacus.zactive='1'
+		WHERE 
+			imtorheader.xtypetrn=#{xtypetrn} 
+			AND imtorheader.zid=#{zid} 
+			AND imtorheader.zactive='1'
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXrow" resultType="ImtorDetail">

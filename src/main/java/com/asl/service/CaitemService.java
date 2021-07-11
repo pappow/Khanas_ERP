@@ -21,6 +21,8 @@ public interface CaitemService {
 	public Caitem findByXitem(String xitem);
 
 	public List<Caitem> searchCaitem(String hint);
+	
+	public List<Caitem> searchAssetCaitem(String hint);
 
 	public List<Caitem> searchFinishedProductionCaitem(String hint);
 
