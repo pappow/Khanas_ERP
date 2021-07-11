@@ -99,12 +99,9 @@
 													</div>
 
 													<div class="form-group">
-														<label class="control-label col-md-4">unit</label>
+														<label class="control-label col-md-4" for="">Unit</label>
 														<div class="col-md-8">
-															<select class="form-control">
-																<option>Kg</option>
-																<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-															</select>
+															<input type="text" class="form-control" value="Kg" disabled="disabled"/>
 														</div>
 													</div>
 

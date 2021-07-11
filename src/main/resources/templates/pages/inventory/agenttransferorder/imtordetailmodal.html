@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<form id="mainform-modal" th:action="@{/inventory/transferorder/imtordetail/save}" method="post" class="form-horizontal" th:object="${imtordetail}">
+					<form id="mainform-modal" th:action="@{/inventory/agenttransferorder/imtordetail/save}" method="post" class="form-horizontal" th:object="${imtordetail}">
 						<input type="hidden" th:field="*{xtornum}"/>
 						<input type="hidden" th:field="*{xchalanref}"/>
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
@@ -23,7 +23,7 @@
 											class="form-control searchsuggest xitemsearch" 
 											placeholder="Search..." 
 											th:value="${imtordetail.xitem}" 
-											th:attr="search-url='search/caitem'"/>
+											th:attr="search-url='search/assetCaitem'"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
 									<input type="hidden" id="search-des" th:value="*{xitem}"/>
 								</div>
@@ -41,13 +41,13 @@
 									<input type="text" data-smk-type="decimal" class="form-control qty" th:field="*{xqtyord}" min="1"/>
 								</div>
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="control-label col-sm-4" for="xrate">Rate : </label>
 								<div class="col-sm-8">
 									<input type="hidden" data-smk-type="decimal" th:field="*{xrate}" min="0"/>
 									<input type="text" th:value="*{xrate}" class="form-control xrate-display" min="0" disabled="disabled"/>
 								</div>
-							</div>
+							</div> -->
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xnote">Note : </label>
 								<div class="col-sm-8">
@@ -55,29 +55,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<h4 class="text-center">Available Quantity In Stock</h4>
-							<div>
-								<table class="table table-bordered table-stripped" id="stocktable" th:fragment="stocktable">
-									<thead>
-										<tr>
-											<th>Warehouse</th>
-											<th>Incoming</th>
-											<th>In Hand</th>
-											<th>Available</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="a : ${availablestock}">
-											<td th:text="${a.xwh}"></td>
-											<td th:text="${a.xqtyrt}"></td>
-											<td th:text="${a.xinhand}"></td>
-											<td th:text="${a.xavail}"></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+						
 					</form>
 				</div>
 			</div>
@@ -102,7 +80,7 @@
 							$(".xrate-display").val(0);
 
 							var rdata = {};
-							rdata.reloadurl = '/inventory/transferorder/stock/blankitem';
+							rdata.reloadurl = '/inventory/agenttransferorder/stock/blankitem';
 							rdata.reloadelementid = 'stocktable';
 							doSectionReloadWithNewData(rdata);
 							return;
@@ -110,7 +88,7 @@
 
 						loadingMask2.show(),
 						$.ajax({
-							url : getBasepath() + '/inventory/transferorder/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/inventory/agenttransferorder/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							success : function(data) {
 								loadingMask2.hide();
@@ -120,7 +98,7 @@
 								$(".xrate-display").val(data.xrate);
 
 								var rdata = {};
-								rdata.reloadurl = '/inventory/transferorder/stock/' + $('input[name="xitem"]').val();
+								rdata.reloadurl = '/inventory/agenttransferorder/stock/' + $('input[name="xitem"]').val();
 								rdata.reloadelementid = 'stocktable';
 								doSectionReloadWithNewData(rdata);
 							},

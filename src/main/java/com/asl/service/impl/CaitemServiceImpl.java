@@ -56,6 +56,12 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return caitemMapper.searchCaitem(hint.toUpperCase(), getBusinessId());
 	}
+	
+	@Override
+	public List<Caitem> searchAssetCaitem(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return caitemMapper.searchAssetCaitem(hint.toUpperCase(), getBusinessId());
+	}
 
 	@Override
 	public List<Caitem> searchCentralCaitem(String hint) {
@@ -147,6 +153,8 @@ public class CaitemServiceImpl extends AbstractGenericService implements CaitemS
 		if(caitemdetail == null) return 0;
 		return caitemMapper.deleteCaitemDetail(caitemdetail);
 	}
+
+	
 
 	
 }

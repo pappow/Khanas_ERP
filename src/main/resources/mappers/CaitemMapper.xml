@@ -167,7 +167,19 @@
 	</select>
 
 	<select id="searchCaitem" resultType="Caitem">
-		SELECT * FROM Caitem WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%')  AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="searchAssetCaitem" resultType="Caitem">
+		SELECT 
+			* 
+		FROM 
+			caitem 
+		WHERE (UPPER(xitem) LIKE '%' || #{xitem} || '%'  OR UPPER(xdesc) LIKE '%' || #{xitem} || '%') AND (xcatitem LIKE '%'|| 'Asset' ||'%')   AND zid=#{zid} AND zactive='1'
 	</select>
 
 	<select id="searchCentralCaitem" resultType="Caitem">

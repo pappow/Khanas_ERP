@@ -34,4 +34,6 @@ public interface CacusMapper {
 	public Cacus findCacusByXcuszid(String xcuszid, String zid);
 
 	public long deleteCacus(String xcus, String zid);
+	
+	public List<Cacus> searchCustomer(String xtype, String xcus, String zid);
 }

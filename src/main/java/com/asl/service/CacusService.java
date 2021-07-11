@@ -34,4 +34,6 @@ public interface CacusService {
 	public Cacus findCacusByXcuszid(String xcuszid);
 
 	public long deleteCacus(String xcus);
+	
+	public List<Cacus> searchCustomer(String xtype, String xcus);
 }
