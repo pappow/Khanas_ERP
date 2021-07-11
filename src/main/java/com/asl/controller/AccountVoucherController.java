@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -62,6 +63,11 @@ public class AccountVoucherController extends ASLAbstractController{
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(acheader.getXdate());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		System.out.println("voucher year : " + sdf.format(cal.getTime()));
+		System.out.println("acdef year : " + acdef.getXyear());
+		System.out.println("Year diff : " + (Integer.parseInt(sdf.format(cal.getTime())) - Integer.parseInt(acdef.getXyear())));
 
 		
 
