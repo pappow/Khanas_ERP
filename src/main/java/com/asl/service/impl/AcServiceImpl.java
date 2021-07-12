@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.Acdef;
 import com.asl.entity.Acdetail;
 import com.asl.entity.Acheader;
 import com.asl.mapper.AcMapper;
@@ -128,4 +130,27 @@ public class AcServiceImpl extends AbstractGenericService implements AcService {
 		}
 		return count;
 	}
+
+	@Override
+	public Acheader setXyearAndXper(Acheader acheader, Acdef acdef) {
+		if(acheader == null) return acheader;
+		if(acdef == null) return acheader;
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(acheader.getXdate());
+
+		int year = cal.get(Calendar.YEAR);
+		int per = 12 + (cal.get(Calendar.MONTH) + 1) - acdef.getXoffset();
+		if(per <= 12) {
+			year = year - 1;
+		} else {
+			per = per - 12;
+		}
+
+		acheader.setXyear(year);
+		acheader.setXper(per);
+		return acheader;
+	}
+
+	
 }

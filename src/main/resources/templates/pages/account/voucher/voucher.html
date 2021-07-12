@@ -57,7 +57,7 @@
 											<a th:if="${not #strings.isEmpty(acheader.xvoucher) and acheader.zactive == true and acheader.xstatusjv ne 'Posted'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 											<a th:if="${not #strings.isEmpty(acheader.xvoucher) and acheader.zactive == true and acheader.xstatusjv ne 'Posted'}" th:href="@{/account/voucher/archive/} + ${acheader.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 											<a th:if="${not #strings.isEmpty(acheader.xvoucher) and acheader.zactive == true and acheader.xstatusjv eq 'Balanced'}" th:href="@{/account/voucher/posted/} + ${acheader.xvoucher}" class="btn btn-sm btn-primary archive-btn-link"><i class="fas fa-paper-plane"></i> Posted</a>
-											<a th:if="${not #strings.isEmpty(acheader.xvoucher) and acheader.zactive == true and acheader.xstatusjv eq 'Posted'}" th:href="@{/account/voucher/unposted/} + ${acheader.xvoucher}" class="btn btn-sm btn-primary archive-btn-link"><i class="fas fa-paper-plane"></i>Un Posted</a>
+											<a th:if="${not #strings.isEmpty(acheader.xvoucher) and acheader.zactive == true and acheader.xstatusjv eq 'Posted'}" th:href="@{/account/voucher/unposted/} + ${acheader.xvoucher}" class="btn btn-sm btn-primary archive-btn-link"><i class="fas fa-paper-plane"></i> Un Posted</a>
 										</div>
 										<div class="section-body section-border">
 											<form id="mainform" class="form-horizontal" th:action="@{/account/voucher/save}" th:object="${acheader}" method="POST" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -202,7 +202,7 @@
 												<tr>
 													<th>SN.</th>
 													<th>Account</th>
-													<th>David</th>
+													<th>Debit</th>
 													<th>Credit</th>
 													<!-- <th>Sub</th> -->
 													<th>Description</th>

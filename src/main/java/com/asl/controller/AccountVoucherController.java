@@ -1,9 +1,6 @@
 package com.asl.controller;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -86,65 +83,8 @@ public class AccountVoucherController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 
-		// acdef cal
-		Calendar acdefcal = Calendar.getInstance();
-		acdefcal.set(Calendar.YEAR, Integer.parseInt(acdef.getXyear()));
-		acdefcal.set(Calendar.DAY_OF_MONTH, acdef.getXper());
-		acdefcal.set(Calendar.DATE, acdefcal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		System.out.println("====> " + acdefcal.getTime());
-
 		// voucher cal
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(acheader.getXdate());
-
-		System.out.println("Acdef : " + acdefcal.getTime());
-		System.out.println("Selected : " + cal.getTime());
-		
-		SimpleDateFormat yformat = new SimpleDateFormat("yyyy");
-		SimpleDateFormat mformat = new SimpleDateFormat("MM");
-		if(acdefcal.get(Calendar.YEAR) - cal.get(Calendar.YEAR) == 0) {  // same year
-
-			int mdif = acdefcal.get(Calendar.MONTH) - cal.get(Calendar.MONTH);
-			if(mdif == 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR));
-				acheader.setXper(mdif + 1);
-			} if(mdif < 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR));
-				acheader.setXper((mdif * (-1)) + 1);
-			} else if (mdif > 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR) - 1);
-				acheader.setXper((12 - acdef.getXoffset()) + (acdef.getXoffset() - mdif) + 1);
-			}
-
-		} else if (acdefcal.get(Calendar.YEAR) - cal.get(Calendar.YEAR) < 0) {   // future year
-			acheader.setXyear(cal.get(Calendar.YEAR) - 1);
-			acheader.setXper((12 - acdef.getXoffset()) + cal.get(Calendar.MONTH) + 1);
-
-//			int mdif = acdefcal.get(Calendar.MONTH) - cal.get(Calendar.MONTH);
-//			if(mdif == 0) {
-//				acheader.setXyear(cal.get(Calendar.YEAR));
-//				acheader.setXper(mdif + 1);
-//			} if(mdif < 0) {
-//				acheader.setXyear(cal.get(Calendar.YEAR));
-//				acheader.setXper((mdif * (-1)) + 1);
-//			} else if (mdif > 0) {
-//				
-//				acheader.setXper((12 - acdef.getXoffset()) + (acdef.getXoffset() - mdif) + 1);
-//			}
-			
-		} else {   // prev year
-			acheader.setXyear(cal.get(Calendar.YEAR));
-			acheader.setXper((12 - acdef.getXoffset()) + cal.get(Calendar.MONTH) + 1);
-		}
-		
-		
-		
-//		System.out.println("voucher year : " + sdf.format(cal.getTime()));
-//		System.out.println("acdef year : " + acdef.getXyear());
-//		System.out.println("Year diff : " + (Integer.parseInt(sdf.format(cal.getTime())) - Integer.parseInt(acdef.getXyear())));
-
-		
-		
+		acheader = acService.setXyearAndXper(acheader, acdef);
 
 		// if existing
 		if(StringUtils.isNotBlank(acheader.getXvoucher())) {

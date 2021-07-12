@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.asl.entity.Acdef;
 import com.asl.entity.Acdetail;
 import com.asl.entity.Acheader;
 
@@ -39,5 +40,7 @@ public interface AcService {
 	public void procAcVoucherPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher);
 
 	public void procAcVoucherUnPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher);
+
+	public Acheader setXyearAndXper(Acheader acheader, Acdef acdef);
 
 }

@@ -5,7 +5,7 @@
 
 	<insert id="saveOpdoHeader" parameterType="Opdoheader">
  		<selectKey keyProperty="xdornum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${centralzid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Opdoheader
 		(
