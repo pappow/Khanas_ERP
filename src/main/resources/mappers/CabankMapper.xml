@@ -3,10 +3,10 @@
 
 <mapper namespace="com.asl.mapper.CabankMapper">
 	<insert id="save" parameterType="Cabank">
-		<!-- <selectKey keyProperty="ximtrnnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnimtrn}', 6) FROM DUAL
-		</selectKey> -->
-		INSERT INTO Cabank
+		<selectKey keyProperty="xbank" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 2) FROM DUAL
+		</selectKey>
+		INSERT INTO cabank
 		(
 			xbank,
 			zemail,
@@ -14,8 +14,10 @@
 			xbranch,
 			xmadd,
 			xacc,
-			xswiftcode,	
-				
+			xswiftcode,
+			xtypetrn,
+			xtrn,
+
 			zid,
 			zauserid,
 			zuuserid,
@@ -33,8 +35,10 @@
 			#{xbranch, jdbcType=VARCHAR},
 			#{xmadd, jdbcType=VARCHAR},
 			#{xacc, jdbcType=VARCHAR},
-			#{xswiftcode, jdbcType=VARCHAR},	
-			
+			#{xswiftcode, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
