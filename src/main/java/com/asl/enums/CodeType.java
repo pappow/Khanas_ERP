@@ -9,6 +9,7 @@ public enum CodeType {
 
 	BANK_STATUS("Bank Status"),
 	BLOOD_GROUP("Blood Group"),
+	BRANCH("Branch"),
 
 	CURRENCY_OF_COST("Currency of Cost"),
 	CURRENCY_OF_PRICE("Currency of Price"),

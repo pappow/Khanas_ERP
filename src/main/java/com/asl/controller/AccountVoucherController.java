@@ -54,6 +54,7 @@ public class AccountVoucherController extends ASLAbstractController{
 		acheader.setXtrn(TransactionCodeType.GL_VOUCHER.getdefaultCode());
 		acheader.setXstatusjv("Balanced");
 		acheader.setXdate(new Date());
+		acheader.setXwh("01");
 		return acheader;
 	}
 
@@ -116,21 +117,24 @@ public class AccountVoucherController extends ASLAbstractController{
 			}
 
 		} else if (acdefcal.get(Calendar.YEAR) - cal.get(Calendar.YEAR) < 0) {   // future year
-			
-			int mdif = acdefcal.get(Calendar.MONTH) - cal.get(Calendar.MONTH);
-			if(mdif == 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR));
-				acheader.setXper(mdif + 1);
-			} if(mdif < 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR));
-				acheader.setXper((mdif * (-1)) + 1);
-			} else if (mdif > 0) {
-				acheader.setXyear(cal.get(Calendar.YEAR) - 1);
-				acheader.setXper((12 - acdef.getXoffset()) + (acdef.getXoffset() - mdif) + 1);
-			}
+			acheader.setXyear(cal.get(Calendar.YEAR) - 1);
+			acheader.setXper((12 - acdef.getXoffset()) + cal.get(Calendar.MONTH) + 1);
+
+//			int mdif = acdefcal.get(Calendar.MONTH) - cal.get(Calendar.MONTH);
+//			if(mdif == 0) {
+//				acheader.setXyear(cal.get(Calendar.YEAR));
+//				acheader.setXper(mdif + 1);
+//			} if(mdif < 0) {
+//				acheader.setXyear(cal.get(Calendar.YEAR));
+//				acheader.setXper((mdif * (-1)) + 1);
+//			} else if (mdif > 0) {
+//				
+//				acheader.setXper((12 - acdef.getXoffset()) + (acdef.getXoffset() - mdif) + 1);
+//			}
 			
 		} else {   // prev year
-			
+			acheader.setXyear(cal.get(Calendar.YEAR));
+			acheader.setXper((12 - acdef.getXoffset()) + cal.get(Calendar.MONTH) + 1);
 		}
 		
 		
@@ -177,12 +181,14 @@ public class AccountVoucherController extends ASLAbstractController{
 
 	@GetMapping("{xvoucher}/voucherdetail/{xrow}/show")
 	public String openVoucherDetailModal(@PathVariable String xvoucher, @PathVariable String xrow, Model model) {
+		Acheader acheader = acService.findAcheaderByXvoucher(xvoucher);
 
 		if("new".equalsIgnoreCase(xrow)) {
 			Acdetail acdetail = new Acdetail();
 			acdetail.setXvoucher(xvoucher);
 			acdetail.setXdebit(BigDecimal.ZERO);
 			acdetail.setXcredit(BigDecimal.ZERO);
+			acdetail.setXwh(acheader != null ? acheader.getXwh() : "01");
 			model.addAttribute("acdetail", acdetail);
 		} else {
 			Acdetail acdetail = acService.findAcdetailByXrowAndXvoucher(Integer.parseInt(xrow), xvoucher);

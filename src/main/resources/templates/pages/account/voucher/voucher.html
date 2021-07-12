@@ -62,6 +62,7 @@
 										<div class="section-body section-border">
 											<form id="mainform" class="form-horizontal" th:action="@{/account/voucher/save}" th:object="${acheader}" method="POST" th:with="df=${'E, dd-MMM-yyyy'}">
 												<input type="hidden" th:field="*{xtypetrn}"/>
+												<input type="hidden" th:field="*{xwh}"/>
 	
 												<div class="row">
 													<div class="col-md-6">
