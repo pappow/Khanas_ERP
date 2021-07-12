@@ -107,4 +107,14 @@
 		SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 	</select>
 
+	<delete id="delete">
+		DELETE 
+		FROM
+			xtrn
+		WHERE
+			xtypetrn=#{xtypetrn}
+			AND xtrn=#{xtrn}
+			AND zid=#{zid}
+	</delete>
+
 </mapper>

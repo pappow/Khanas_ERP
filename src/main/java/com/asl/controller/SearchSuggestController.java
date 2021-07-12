@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.AccountGroup;
+import com.asl.entity.Acmst;
 import com.asl.entity.Arhed;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.LandCommitteeInfo;
 import com.asl.entity.LandInfo;
-import com.asl.entity.LandMemberInfo;
 import com.asl.entity.LandPerson;
 import com.asl.entity.LandSurveyor;
 import com.asl.entity.Modetail;
@@ -30,17 +30,16 @@ import com.asl.entity.Pocrnheader;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.AccountGroupService;
+import com.asl.service.AcmstService;
 import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
-
+import com.asl.service.LandCommitteeInfoService;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
-import com.asl.service.LandMemberInfoService;
 import com.asl.service.LandOwnerService;
 import com.asl.service.LandPersonService;
-import com.asl.service.LandCommitteeInfoService;
 import com.asl.service.MoService;
 import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
@@ -74,11 +73,19 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandOwnerService landOwnerService;
 	@Autowired private LandDocumentService landDocumentService;
 	@Autowired private LandPersonService landPersonService;
-	@Autowired private LandMemberInfoService landMemberInfoService;
 	@Autowired private LandCommitteeInfoService landCommitteeInfoService;
 	@Autowired private LandInfoService  landInfoService;
 	@Autowired private AccountGroupService accountGroupService;
-	
+	@Autowired private AcmstService acmstServicee;
+
+	@GetMapping("/account/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAccount(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Acmst> acgroups = acmstServicee.searchByXaccORXdesc(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		acgroups.stream().forEach(a -> list.add(new SearchSuggestResult(a.getXacc(), a.getXacc() + " - " + a.getXdesc())));
+		return list;
+	}
 
 	@GetMapping("/acgroup/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAcgroup(@PathVariable String hint){

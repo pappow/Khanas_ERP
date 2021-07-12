@@ -19,4 +19,5 @@ public interface AcmstService {
 
 	public long delete(String xacc);
 
+	public List<Acmst> searchByXaccORXdesc(String hint);
 }

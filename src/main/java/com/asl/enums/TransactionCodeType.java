@@ -19,6 +19,7 @@ public enum TransactionCodeType {
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
+	BANK_CODE("Bank Code","BNK-",null),
 
 	COMMITTEEINFO_ID("Committee ID", "CMT-", TransactionCodes.COMMITTEEINFO_ID),
 	CUSTOMER_NUMBER("Customer", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
@@ -29,6 +30,7 @@ public enum TransactionCodeType {
 	EMPLOYEE_ID("Employee ID", "EID-", TransactionCodes.EMPLOYEE_ID),
 
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
+	GL_VOUCHER("GL Voucher", "JV--", TransactionCodes.GL_VOUCHER),
 
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),

@@ -3,8 +3,10 @@
 
 <mapper namespace="com.asl.mapper.AcMapper">
 	<insert id="saveAcheader" parameterType="Acheader">
-	
-		INSERT INTO Acheader
+		<selectKey keyProperty="xvoucher" resultType="String" order="BEFORE">
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+		</selectKey>
+		INSERT INTO acheader
 		(
 			xvoucher,
 			xref,
@@ -16,6 +18,7 @@
 			xwh,
 			xsub,
 			xtrn,
+			xtypetrn,
 			xlcno,
 			xgrnno,
 			xstatus,
@@ -35,16 +38,16 @@
 			xcur,
 			xtype,
 			xordernum,
-			zid,
-			ztime,
-			zutime,
-			zauserid,
-			zuuserid
 
+			zid,
+			zauserid,
+			zaip,
+			zactive,
+			ztime
 		)
 		VALUES
 		(
-			#{xvoucher, jdbcType=VARCHAR},
+			#{xvoucher},
 			#{xref, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xlong, jdbcType=VARCHAR},
@@ -72,21 +75,21 @@
 			#{xexch, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
 			#{xordernum, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR}
-			
+			#{zaip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
 	<update id="updateAcheader" parameterType="Acheader">
 		UPDATE 
-			Acheader 
+			acheader 
 		SET
-			xvoucher=#{xvoucher, jdbcType=VARCHAR},
 			xref=#{xref, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xlong=#{xlong, jdbcType=VARCHAR},
@@ -114,23 +117,69 @@
 			xexch=#{xexch, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xordernum=#{xordernum, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
-			zutime=#{zutime, jdbcType=TIMESTAMP},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
-			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			zid=#{zid, jdbcType=VARCHAR}
+			AND xvoucher=#{xvoucher, jdbcType=VARCHAR}
 	</update>
-	
-	
+
+	<delete id="deleteAcheader">
+		DELETE
+		FROM
+			acheader
+		WHERE
+			zid=#{zid}
+			AND xvoucher=#{xvoucher}
+	</delete>
+
+	<update id="updateAcheaderXstatusjv">
+		<selectKey keyProperty="xstatusjv" resultType="String" order="BEFORE">
+			SELECT Func_get_voucher_stat('${zid}', '${xvoucher}') FROM DUAL
+		</selectKey>
+		UPDATE
+			acheader
+		SET
+			xstatusjv=#{xstatusjv}
+		WHERE
+			zid=#{zid, jdbcType=VARCHAR}
+			AND xvoucher=#{xvoucher, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllAcheader" resultType="Acheader">
+		SELECT
+			*
+		FROM
+			acheader
+		WHERE 
+			zid=#{zid}
+		ORDER BY
+			xvoucher DESC
+	</select>
+
+	<select id="findAcheaderByXvoucher" resultType="Acheader">
+		SELECT
+			*
+		FROM
+			acheader
+		WHERE 
+			zid=#{zid}
+			AND xvoucher=#{xvoucher}
+	</select>
+
 	<insert id="saveAcdetail" parameterType="Acdetail">
-	
-		INSERT INTO Acdetail
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM acdetail WHERE xvoucher=#{xvoucher} AND zid=#{zid}
+		</selectKey>
+		INSERT INTO acdetail
 		(
-			xvoucher,
 			xrow,
+			xvoucher,
 			xacc,
 			xprime,
 			xlong,
@@ -145,24 +194,24 @@
 			xinvnum,
 			xdeptname,
 			xbase,
-			zid,
-			ztime,
-			zutime,
-			zauserid,
-			zuuserid
 
+			zid,
+			zauserid,
+			zaip,
+			zactive,
+			ztime
 		)
 		VALUES
 		(
+			#{xrow},
 			#{xvoucher, jdbcType=VARCHAR},
-			#{xrow, jdbcType=INTEGER},
 			#{xacc, jdbcType=VARCHAR},
-			#{xprime, jdbcType=INTEGER},
+			#{xprime, jdbcType=DECIMAL},
 			#{xlong, jdbcType=VARCHAR},
 			#{xsub, jdbcType=VARCHAR},
 			#{xwh, jdbcType=VARCHAR},
-			#{xdebit, jdbcType=INTEGER},
-			#{xcredit, jdbcType=INTEGER},
+			#{xdebit, jdbcType=DECIMAL},
+			#{xcredit, jdbcType=DECIMAL},
 			#{xcountry, jdbcType=VARCHAR},
 			#{xstaff, jdbcType=VARCHAR},
 			#{xregi, jdbcType=VARCHAR},
@@ -170,27 +219,26 @@
 			#{xinvnum, jdbcType=VARCHAR},
 			#{xdeptname, jdbcType=VARCHAR},
 			#{xbase, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR}		
+			#{zaip, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
 	<update id="updateAcdetail" parameterType="Acdetail">
 		UPDATE 
-			Acdetail 
+			acdetail 
 		SET
-			xvoucher=#{xvoucher, jdbcType=VARCHAR},
-			xrow=#{xrow, jdbcType=INTEGER},
 			xacc=#{xacc, jdbcType=VARCHAR},
-			xprime=#{xprime, jdbcType=INTEGER},
+			xprime=#{xprime, jdbcType=DECIMAL},
 			xlong=#{xlong, jdbcType=VARCHAR},
 			xsub=#{xsub, jdbcType=VARCHAR},
 			xwh=#{xwh, jdbcType=VARCHAR},
-			xdebit=#{xdebit, jdbcType=INTEGER},
-			xcredit=#{xcredit, jdbcType=INTEGER},
+			xdebit=#{xdebit, jdbcType=DECIMAL},
+			xcredit=#{xcredit, jdbcType=DECIMAL},
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xstaff=#{xstaff, jdbcType=VARCHAR},
 			xregi=#{xregi, jdbcType=VARCHAR},
@@ -198,13 +246,71 @@
 			xinvnum=#{xinvnum, jdbcType=VARCHAR},
 			xdeptname=#{xdeptname, jdbcType=VARCHAR},
 			xbase=#{xbase, jdbcType=VARCHAR},
-			zid=#{zid, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
-			zutime=#{zutime, jdbcType=TIMESTAMP},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
-			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+
+			zuuserid=#{zuuserid, jdbcType=VARCHAR},
+			zuip=#{zuip, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			zid=#{zid, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND xvoucher=#{xvoucher, jdbcType=VARCHAR}
 	</update>
+
+	<delete id="deleteAcdetail">
+		DELETE
+		FROM
+			acdetail
+		WHERE
+			zid=#{zid}
+			AND xrow=#{xrow}
+			AND xvoucher=#{xvoucher}
+	</delete>
+
+	<select id="getAllAcdetail" resultType="Acdetail">
+		SELECT
+			acdetail.*,
+			acmst.xdesc as accountname
+		FROM
+			acdetail
+			left join acmst on acmst.xacc = acdetail.xacc and acmst.zid = acdetail.zid
+		WHERE
+			acdetail.zid=#{zid}
+	</select>
+
+	<select id="findAcdetailByXrowAndXvoucher" resultType="Acdetail">
+		SELECT
+			acdetail.*,
+			acmst.xdesc as accountname
+		FROM
+			acdetail 
+			left join acmst on acmst.xacc = acdetail.xacc and acmst.zid = acdetail.zid
+		WHERE 
+			acdetail.zid=#{zid}
+			AND acdetail.xvoucher=#{xvoucher}
+			AND acdetail.xrow=#{xrow}
+	</select>
+
+	<select id="findAcdetailsByXvoucher" resultType="Acdetail">
+		SELECT
+			acdetail.*,
+			acmst.xdesc as accountname
+		FROM
+			acdetail
+			left join acmst on acmst.xacc = acdetail.xacc and acmst.zid = acdetail.zid
+		WHERE 
+			acdetail.zid=#{zid}
+			AND acdetail.xvoucher=#{xvoucher}
+	</select>
+
+	<select id = "procAcVoucherPost" statementType = "CALLABLE">
+		{call AC_VoucherPost(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xyear, jdbcType = INTEGER, mode = IN}, #{xper, jdbcType = INTEGER, mode = IN}, #{xfvoucher, jdbcType = VARCHAR, mode = IN}, #{xtvoucher, jdbcType = VARCHAR, mode = IN})}
+	</select>
+
+	<select id = "procAcVoucherUnPost" statementType = "CALLABLE">
+		{call AC_VoucherUnPost(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xyear, jdbcType = INTEGER, mode = IN}, #{xper, jdbcType = INTEGER, mode = IN}, #{xfvoucher, jdbcType = VARCHAR, mode = IN}, #{xtvoucher, jdbcType = VARCHAR, mode = IN})}
+	</select>
+
+	
 
 </mapper>

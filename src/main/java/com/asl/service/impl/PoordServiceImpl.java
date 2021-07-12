@@ -19,8 +19,7 @@ import com.asl.service.PoordService;
 @Service
 public class PoordServiceImpl extends AbstractGenericService implements PoordService {
 
-	@Autowired
-	private PoordMapper poordMapper;
+	@Autowired private PoordMapper poordMapper;
 
 	@Override
 	@Transactional
@@ -47,9 +46,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 
 	@Override
 	public PoordHeader findPoordHeaderByXpornum(String xpornum) {
-		if (StringUtils.isBlank(xpornum))
-			return null;
-
+		if (StringUtils.isBlank(xpornum)) return null;
 		return poordMapper.findPoordHeaderByXpornum(xpornum, sessionManager.getBusinessId());
 	}
 

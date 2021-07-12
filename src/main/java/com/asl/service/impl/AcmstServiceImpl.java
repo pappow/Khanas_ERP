@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -56,4 +57,9 @@ public class AcmstServiceImpl extends AbstractGenericService implements AcmstSer
 		return acmstMapper.delete(xacc, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Acmst> searchByXaccORXdesc(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return acmstMapper.searchByXaccORXdesc(hint.toUpperCase(), sessionManager.getBusinessId());
+	}
 }

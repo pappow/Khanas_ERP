@@ -35,4 +35,6 @@ public interface XtrnService {
 	public Xtrn findByXtypetrnAndXtrn(String xtypetrn, String xtrn, Boolean zactive);
 
 	public String generateAndGetXtrnNumber(String xtypetrn, String xtrn, int leftpad);
+
+	public long delete(String xtypetrn, String xtrn);
 }
