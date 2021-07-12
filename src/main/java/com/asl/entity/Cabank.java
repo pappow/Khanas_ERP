@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,5 +47,14 @@ public class Cabank extends AbstractModel<String> {
 
 	@Column(name = "xswiftcode")
 	private String xswiftcode;
+
+	@Column(name = "xtypetrn")
+	private String xtypetrn;
+
+	@Column(name = "xtrn")
+	private String xtrn;
+
+	@Transient
+	private String accountname;
 
 }

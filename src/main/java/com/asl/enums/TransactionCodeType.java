@@ -19,6 +19,7 @@ public enum TransactionCodeType {
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
+	BANK_CODE("Bank Code","BNK-",null),
 
 	COMMITTEEINFO_ID("Committee ID", "CMT-", TransactionCodes.COMMITTEEINFO_ID),
 	CUSTOMER_NUMBER("Customer", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
