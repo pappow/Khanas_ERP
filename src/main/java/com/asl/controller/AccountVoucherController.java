@@ -251,8 +251,7 @@ public class AccountVoucherController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSecondReloadSectionIdWithUrl("voucherform", "/account/voucher/voucherform/" + acheader.getXvoucher());
-		responseHelper.setReloadSectionIdWithUrl("voucherdetailtable", "/account/voucher/voucherdetail/" + acheader.getXvoucher());
+		responseHelper.setRedirectUrl("/account/voucher/" + acheader.getXvoucher());
 		responseHelper.setSuccessStatusAndMessage("Posted successful");
 		return responseHelper.getResponse();
 	}
@@ -283,8 +282,7 @@ public class AccountVoucherController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSecondReloadSectionIdWithUrl("voucherform", "/account/voucher/voucherform/" + acheader.getXvoucher());
-		responseHelper.setReloadSectionIdWithUrl("voucherdetailtable", "/account/voucher/voucherdetail/" + acheader.getXvoucher());
+		responseHelper.setRedirectUrl("/account/voucher/" + acheader.getXvoucher());
 		responseHelper.setSuccessStatusAndMessage("Unposted successful");
 		return responseHelper.getResponse();
 	}
