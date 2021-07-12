@@ -1,11 +1,14 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +30,7 @@ public class Acdetail extends AbstractModel<String> {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "xrow")
-	private Integer xrow;
+	private int xrow;
 
 	@Id
 	@Basic(optional = false)
@@ -38,7 +41,7 @@ public class Acdetail extends AbstractModel<String> {
 	private String xacc;
 
 	@Column(name = "xprime")
-	private Integer xprime;
+	private BigDecimal xprime;
 
 	@Column(name = "xlong")
 	private String xlong;
@@ -50,10 +53,10 @@ public class Acdetail extends AbstractModel<String> {
 	private String xwh;
 
 	@Column(name = "xdebit")
-	private Integer xdebit;
+	private BigDecimal xdebit;
 
 	@Column(name = "xcredit")
-	private Integer xcredit;
+	private BigDecimal xcredit;
 
 	@Column(name = "xcountry")
 	private String xcountry;
@@ -75,5 +78,8 @@ public class Acdetail extends AbstractModel<String> {
 
 	@Column(name = "xbase")
 	private String xbase;
+
+	@Transient
+	private String accountname;
 
 }

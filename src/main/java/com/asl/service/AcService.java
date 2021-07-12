@@ -15,13 +15,29 @@ public interface AcService {
 
 	public long updateAcheader(Acheader acheader);
 
+	public long deleteAcheader(String xvoucher);
+
 	public List<Acheader> getAllAcheader();
+
+	public Acheader findAcheaderByXvoucher(String xvoucher);
 
 	// For Detail Entity
 	public long saveAcdetail(Acdetail acdetail);
 
 	public long updateAcdetail(Acdetail acdetail);
 
+	public long deleteAcdetail(int xrow, String xvoucher);
+
 	public List<Acdetail> getAllAcdetail();
+
+	public Acdetail findAcdetailByXrowAndXvoucher(int xrow, String xvoucher);
+
+	public List<Acdetail> findAcdetailsByXvoucher(String xvoucher);
+
+	public long updateAcheaderXstatusjv(String xvoucher);
+
+	public void procAcVoucherPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher);
+
+	public void procAcVoucherUnPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher);
 
 }

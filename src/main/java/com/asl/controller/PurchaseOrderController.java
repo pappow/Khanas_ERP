@@ -122,7 +122,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return doArchiveOrRestore(xpornum, true);
 	}
 
-	public Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
+	private Map<String, Object> doArchiveOrRestore(String xpornum, boolean archive){
 		// todo: need to delete actually from db
 		
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);

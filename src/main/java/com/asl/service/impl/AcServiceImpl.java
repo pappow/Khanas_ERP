@@ -1,7 +1,9 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,13 +45,23 @@ public class AcServiceImpl extends AbstractGenericService implements AcService {
 		return acMapper.getAllAcheader(sessionManager.getBusinessId());
 	}
 
+	@Override
+	public Acheader findAcheaderByXvoucher(String xvoucher) {
+		if(StringUtils.isBlank(xvoucher)) return null;
+		return acMapper.findAcheaderByXvoucher(xvoucher, sessionManager.getBusinessId());
+	}
+
 	@Transactional
 	@Override
 	public long saveAcdetail(Acdetail acdetail) {
 		if(acdetail == null) return 0;
 		acdetail.setZid(sessionManager.getBusinessId());
 		acdetail.setZauserid(getAuditUser());
-		return acMapper.saveAcdetail(acdetail);
+		long count = acMapper.saveAcdetail(acdetail);
+		if(count != 0) {
+			count = updateAcheaderXstatusjv(acdetail.getXvoucher());
+		}
+		return count;
 	}
 
 	@Transactional
@@ -58,7 +70,18 @@ public class AcServiceImpl extends AbstractGenericService implements AcService {
 		if(acdetail == null) return 0;
 		acdetail.setZid(sessionManager.getBusinessId());
 		acdetail.setZuuserid(getAuditUser());
-		return acMapper.updateAcdetail(acdetail);
+		long count = acMapper.updateAcdetail(acdetail);
+		if(count != 0) {
+			count = updateAcheaderXstatusjv(acdetail.getXvoucher());
+		}
+		return count;
+	}
+
+	@Transactional
+	@Override
+	public long updateAcheaderXstatusjv(String xvoucher) {
+		if(StringUtils.isBlank(xvoucher)) return 0;
+		return acMapper.updateAcheaderXstatusjv(xvoucher, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -66,4 +89,43 @@ public class AcServiceImpl extends AbstractGenericService implements AcService {
 		return acMapper.getAllAcdetail(sessionManager.getBusinessId());
 	}
 
+	@Override
+	public Acdetail findAcdetailByXrowAndXvoucher(int xrow, String xvoucher) {
+		if(xrow == 0 || StringUtils.isBlank(xvoucher)) return null;
+		return acMapper.findAcdetailByXrowAndXvoucher(xrow, xvoucher, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Acdetail> findAcdetailsByXvoucher(String xvoucher) {
+		if(StringUtils.isBlank(xvoucher)) return Collections.emptyList();
+		return acMapper.findAcdetailsByXvoucher(xvoucher, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public void procAcVoucherPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher) {
+		acMapper.procAcVoucherPost(sessionManager.getBusinessId(), getAuditUser(), xyear, xper, xfvoucher, xtvoucher);
+	}
+
+	@Override
+	public void procAcVoucherUnPost(Integer xyear, Integer xper, String xfvoucher, String xtvoucher) {
+		acMapper.procAcVoucherUnPost(sessionManager.getBusinessId(), getAuditUser(), xyear, xper, xfvoucher, xtvoucher);
+	}
+
+	@Transactional
+	@Override
+	public long deleteAcheader(String xvoucher) {
+		if(StringUtils.isBlank(xvoucher)) return 0;
+		return acMapper.deleteAcheader(xvoucher, sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
+	public long deleteAcdetail(int xrow, String xvoucher) {
+		if(xrow == 0 || StringUtils.isBlank(xvoucher)) return 0;
+		long count = acMapper.deleteAcdetail(xrow, xvoucher, sessionManager.getBusinessId());
+		if(count != 0) {
+			count = updateAcheaderXstatusjv(xvoucher);
+		}
+		return count;
+	}
 }

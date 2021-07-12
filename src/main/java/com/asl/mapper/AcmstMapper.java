@@ -18,4 +18,6 @@ public interface AcmstMapper {
 	public List<Acmst> getAllAcmst(String zid);
 
 	public Acmst findByXacc(String xacc, String zid);
+
+	public List<Acmst> searchByXaccORXdesc(String hint, String zid);
 }

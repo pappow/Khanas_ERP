@@ -92,4 +92,8 @@
 			AND xacc=#{xacc}
 	</delete>
 
+	<select id="searchByXaccORXdesc" resultType="Acmst">
+		SELECT * FROM acmst WHERE ((UPPER(xacc) LIKE '%' || #{hint} || '%') OR (UPPER(xdesc) LIKE '%' || #{hint} || '%')) AND zid=#{zid} ORDER BY xdesc, xacc
+	</select>
+
 </mapper>
