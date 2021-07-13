@@ -53,6 +53,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
@@ -68,6 +69,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		model.addAttribute("poordheader", data);
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		if(isBoshila()) {
@@ -78,6 +80,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	private PoordHeader getDefaultPoordHeader() {
 		PoordHeader poord = new PoordHeader();
+		poord.setXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode());
 		poord.setXstatuspor("Open");
 		poord.setXtotamt(BigDecimal.ZERO);
 		return poord;
