@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -76,4 +77,6 @@ public class PoordDetail extends AbstractModel<String> {
 	@Column(name = "xgitem")
 	private String xgitem;
 
+	@Transient
+	private String itemname;
 }

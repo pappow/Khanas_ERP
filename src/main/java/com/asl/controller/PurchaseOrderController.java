@@ -166,7 +166,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			poorddetail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
 			model.addAttribute("poorddetail", poorddetail);
 		} else {
-			PoordDetail poorddetail = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+			PoordDetail poorddetail = poordService.findPoorddetailByXpornumAndXrow(xpornum, Integer.parseInt(xrow));
 			if(poorddetail == null) {
 				poorddetail = new PoordDetail();
 				poorddetail.setXpornum(xpornum);
@@ -205,7 +205,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 
 		// if existing
-		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
+		PoordDetail existDetail = poordService.findPoorddetailByXpornumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
 		if(existDetail != null) {
 			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
 			long count = poordService.updateDetail(existDetail);
@@ -250,7 +250,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
-		PoordDetail pd = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+		PoordDetail pd = poordService.findPoorddetailByXpornumAndXrow(xpornum, Integer.parseInt(xrow));
 		if(pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();

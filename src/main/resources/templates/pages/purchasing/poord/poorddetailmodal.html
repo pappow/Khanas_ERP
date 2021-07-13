@@ -19,10 +19,10 @@
 									<input 	type="text" 
 											class="form-control searchsuggest xitemsearch" 
 											placeholder="Search..." 
-											th:value="${poorddetail.xitem}" 
+											th:value="${#strings.isEmpty(poorddetail.xitem) ? '' : poorddetail.xitem + ' - ' + poorddetail.itemname}" 
 											th:attr="search-url='search/caitem'"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
-									<input type="hidden" id="search-des" th:value="${poorddetail.xitem}"/>
+									<input type="hidden" id="search-des" th:value="*{xitem}"/>
 								</div>
 							</div>
 							<div class="form-group">

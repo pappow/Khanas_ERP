@@ -35,7 +35,7 @@ public interface PoordService {
 
 	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum, String branchzid);
 
-	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow);
+	public PoordDetail findPoorddetailByXpornumAndXrow(String xpornum, int xrow);
 
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum);
 

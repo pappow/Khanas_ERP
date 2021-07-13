@@ -198,28 +198,28 @@
 									<thead>
 										<tr>
 											<th>SL.</th>
-											<th>Item Code</th>
-											<th>Note</th>
+											<th>Item</th>
 											<th>Qty</th>
 											<th>Rate</th>
 											<th>Purchase Unit</th>
 											<th>Net Amount</th>
+											<th>Note</th>
 											<th data-nosort="Y" style="text-align: right;" th:if="${poordheader.xstatuspor != 'Confirmed'}">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/new/show', data-target-modal='poorddetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="d : ${poorddetailsList}">
-											<td th:text="${#lists.size(poorddetailsList) - dStat.index}"></td>
+										<tr th:each="d,n : ${poorddetailsList}">
+											<td th:text="${d.xrow}"></td>
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
 											</td>
-											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:text="${d.xunitpur}"></td>
 											<td th:text="${d.xlineamt}"></td>
+											<td th:text="${d.xnote}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${poordheader.xstatuspor != 'Confirmed'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/show', data-target-modal='poorddetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
