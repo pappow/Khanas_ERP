@@ -59,7 +59,7 @@
 									<div class="section-body section-border">
 										<div id="poordheaderform" th:fragment="poordheaderform">
 											<form id="mainform" class="form-horizontal" th:action="@{/purchasing/poord/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-												<input type="hidden" id="xtypetrn" name="xtypetrn" value="Purchase Order"/>
+												<input type="hidden" th:field="*{xtypetrn}"/>
 												<input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" class="form-control" th:field="*{xpornum}">
 												<div class="row">
 													<div class="col-md-6">
@@ -67,7 +67,7 @@
 															<label class="control-label col-md-4" for="xtrn">P.O. Code</label>
 															<div class="col-md-4">
 																<select class="form-control" id="xtrn" name="xtrn">
-																	<option value="PO--">PO--</option>
+																	<option th:each="p : ${prefix}" th:value="${p.xtrn}" th:text="${p.xtrn}"></option>
 																</select>
 															</div>
 														</div>
