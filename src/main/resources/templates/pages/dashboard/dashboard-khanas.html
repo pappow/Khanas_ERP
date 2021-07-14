@@ -354,6 +354,12 @@
 											<td colspan="2" style="padding-left: 20px !important;">Accounts Receivable</td>
 										</tr>
 										<tr th:if="${menuProfile.M0408 ne null and menuProfile.M0408.display}">
+											<td><a th:href="@{/receivable/moneyreceipt}" th:text="${menuProfile.M0408.screenprompt}">Money Receipt </a></td>
+											<td>
+												<a th:href="@{/receivable/moneyreceipt}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0408 ne null and menuProfile.M0408.display}">
 											<td><a th:href="@{/salesninvoice/moneyreceipt}" th:text="${menuProfile.M0408.screenprompt}">Money Receipt</a></td>
 											<td>
 												<a th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>

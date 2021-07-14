@@ -41,4 +41,6 @@ public interface LandMemberInfoMapper {
 	public List<Cacus> getAllCacusByPrefix(String xtypetrn, String zid);
 	
 	public List<Cacus> getAllLandMembers(String zid);
+	
+	public List<Cacus> searchMember( String xcus, String zid);
 }

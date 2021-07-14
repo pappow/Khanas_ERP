@@ -22,7 +22,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	@Transactional
 	@Override
 	public long save(Arhed arhed) {
-		if (arhed == null || StringUtils.isBlank(arhed.getXtype()) || StringUtils.isBlank(arhed.getXtrnarhed())) return 0;
+		if (arhed == null) return 0;
 		arhed.setZid(sessionManager.getBusinessId());
 		arhed.setZauserid(getAuditUser());
 		arhed.setXstaff(getAuditUser());

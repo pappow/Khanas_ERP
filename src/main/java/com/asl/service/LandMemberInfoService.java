@@ -39,4 +39,6 @@ public interface LandMemberInfoService {
 	public List<Cacus> getAllCacusByPrefix(String xtypetrn);
 	
 	public List<Cacus> getAllLandMembers();
+	
+	public List<Cacus> searchMember(String xcus);
 }

@@ -77,7 +77,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="xorg">Company / Name</label>
+														<label class="control-label col-sm-4" for="xorg">Member Name</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xorg}" />
 														</div>
@@ -89,12 +89,12 @@
 															<textarea rows="3" cols="" class="form-control" th:field="*{xmadd}"></textarea>
 														</div>
 													</div>
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="control-label col-sm-4" for="xcontact">Contact</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xcontact}"/>
 														</div>
-													</div>
+													</div> -->
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xphone">Phone </label>
 														<div class="col-sm-8">
@@ -103,7 +103,21 @@
 													</div>
 												</div>
 												<div class="col-md-6">
-													<div class="form-group">
+												
+													<div class="form-group" >
+														<label class="control-label col-md-4" for="xperson">Person Id</label>
+														<div class="col-sm-8">
+															<input 	type="text" 
+																	class="form-control searchsuggest" 
+																	placeholder="Search..." 
+																	th:value="${cacus.xperson}" 
+																	th:attr="search-url='search/personId'"/>
+															<input type="hidden" id="search-val" th:field="*{xperson}"/>
+															<input type="hidden" id="search-des" th:value="*{xperson}"/>
+														</div>
+													</div>
+													
+													<!-- <div class="form-group">
 														<label class="control-label col-sm-4" for="xcrlimit">Credit Limit </label>
 														<div class="col-sm-8">
 															<input type="number" class="form-control" th:field="*{xcrlimit}" min="0"/>
@@ -114,7 +128,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{xvatregno}"/>
 														</div>
-													</div>
+													</div> -->
 													
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="xstatuscus" >Status </label>
@@ -152,7 +166,8 @@
 											<thead>
 												<tr>
 													<th>Member ID</th>
-													<th>Company/Name</th>
+													<th>Member Name</th>
+													<th>Person ID</th>
 													<th>Address</th>
 													<th>Active</th>
 												</tr>
@@ -163,6 +178,7 @@
 														<a th:href="@{/cacus/} + ${c.xcus}" th:text="${c.xcus}"></a>
 													</td>
 													<td th:text="${c.xorg}"></td>
+													<td th:text="${c.xperson}"></td>
 													<td th:text="${c.xmadd}"></td>
 													<td th:text="${c.zactive == true ? 'Y' : 'N'}"></td>
 												</tr>

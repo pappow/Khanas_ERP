@@ -63,12 +63,11 @@
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/moneyreceipt/save}" th:object="${arhed}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<input type="hidden" th:field="*{xtypetrn}"/>
 											<div class="row">
 												<div class="col-md-6">
-													
+													<input type="hidden" th:field="*{xtrntype}"/>
 													<div class="form-group" th:if="${#strings.isEmpty(arhed.xvoucher)}">
-														<label class="control-label col-md-4" for="xtype">Code</label>
+														<label class="control-label col-md-4" for="xtype">M.R. Code</label>
 														<div class="col-md-4">
 															<select class="form-control" th:field="*{xtype}">
 																<option th:each="prefix : ${arhedprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
@@ -77,7 +76,7 @@
 													</div>
 													
 													<div class="form-group" th:if="${not #strings.isEmpty(arhed.xvoucher)}">
-														<label class="control-label col-md-4" for="xvoucher">Voucher Number</label>
+														<label class="control-label col-md-4" for="xvoucher">M.R. Number</label>
 														<div class="col-md-8">
 															<input type="hidden" class="form-control" th:field="*{xvoucher}">
 															<input type="text" class="form-control" th:field="*{xvoucher}" disabled="disabled">
@@ -85,7 +84,7 @@
 													</div>
 													
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdate">Date</label>
+														<label class="control-label col-md-4" for="xdate">Receipt Date</label>
 														<div class="input-group date col-md-7 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
@@ -115,12 +114,12 @@
 															<input type="hidden" id="search-des" th:value="*{xcus}"/>
 														</div>
 													</div>
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xbank">Bank</label>
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xbank">Deposit Account/Bank</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" id="xbank" name="xbank" value="BNK-01" readonly="readonly">
+															<input type="text" class="form-control" id="xbank" name="xbank" placeholder="BNK-01" >
 														</div>
-													</div> -->
+													</div>
 											        <!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xwh">Store</label>
 														<div class="col-md-8">
@@ -130,7 +129,7 @@
 														</div>
 													</div> -->
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xprime">Amount</label>
+														<label class="control-label col-md-4" for="xprime">Receipt Amount</label>
 														<div class="col-md-6">
 															<input type="number" class="form-control" th:field="*{xprime}" min="0" required="required">
 														</div>
@@ -174,7 +173,7 @@
 														</div>
 													</div> -->
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xstatus">Status</label>
+														<label class="control-label col-md-4" for="xstatus">M.R. Status</label>
 														<div class="col-md-6">
 															<input type="hidden" class="form-control" th:field="*{xstatus}">
 															<input type="text" class="form-control" th:field="*{xstatus}" disabled="disabled">
@@ -189,19 +188,14 @@
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xnote">Note</label>
-														<div class="col-md-8">
-															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
-														</div>
-													</div>
-													<div class="form-group">
+													
+													<!-- <div class="form-group">
 														<label class="control-label col-md-4" for="xstatusjv">JV Status</label>
 														<div class="col-md-6">
 															<input type="hidden" class="form-control" th:field="*{xstatusjv}">
 															<input type="text" class="form-control" th:field="*{xstatusjv}" disabled="disabled">
 														</div>
-													</div>
+													</div> -->
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xdocnum">JV Number</label>
 														<div class="col-md-8">
@@ -209,6 +203,13 @@
 															<input type="text" class="form-control" th:field="*{xdocnum}" disabled="disabled">
 														</div>
 													</div> 
+													
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xnote">Note</label>
+														<div class="col-md-8">
+															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														</div>
+													</div>
 													
 													<!-- <div class="form-group datepicker">
 														<label class="control-label col-md-4" for="xdateref">Date Ref. : </label>

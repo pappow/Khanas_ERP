@@ -134,6 +134,6 @@ public class Arhed extends AbstractModel<String> {
 	private String xinvnum;
 
 	@Transient
-	private String xtrnarhed;
+	private String xtrntype;
 
 }

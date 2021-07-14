@@ -54,7 +54,7 @@ public enum CodeType {
 	LANDITEM_CATEGORY("Item Categories"),
 	
 	
-	MEMBER_DESIGNATION("Member Designation"),
+	MEMBER_GROUP("Member Group"),
 
 	OBJECT_TYPE("Object Type"),
 	OWNER_TYPE("Owner Type"),

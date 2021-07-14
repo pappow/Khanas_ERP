@@ -25,7 +25,7 @@ import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
-@RequestMapping("/moneyreceipt")
+@RequestMapping("/salesninvoice/moneyreceipt")
 public class MoneyReceiptController extends ASLAbstractController{
 
 	@Autowired private ArhedService arhedService;
@@ -50,6 +50,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
+		data.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
@@ -62,8 +63,8 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
+
 		arhed.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
-		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
@@ -91,8 +92,11 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 		//Modify transaction codes for arhed
 		arhed.setXsign(-1);
+		arhed.setXtypetrn("Sale");
+		arhed.setXpaymentterm("Credit");
+		arhed.setXwh("01");
+		arhed.setXstatusbnk("Open");
 		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
 
 		// if existing record
 		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
@@ -104,7 +108,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Voucher updated successfully");
-			responseHelper.setRedirectUrl("/moneyreceipt/" + arhed.getXvoucher());
+			responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
 		}
 
@@ -115,7 +119,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Voucher created successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt/" + arhed.getXvoucher());
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + arhed.getXvoucher());
 		return responseHelper.getResponse();
 	}
 
@@ -138,7 +142,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Voucher deleted successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt");
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt");
 		return responseHelper.getResponse();
 	}
 
@@ -158,7 +162,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Voucher confirmed successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt/" + voucher.getXvoucher());
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + voucher.getXvoucher());
 		return responseHelper.getResponse();
 	}
 }

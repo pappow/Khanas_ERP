@@ -133,6 +133,15 @@ public class SearchSuggestController extends ASLAbstractController {
 		return list;
 	}
 	
+	@GetMapping("/member/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getMemberss(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cacus> memList = landMemberInfoService.searchMember( hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		memList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		return list;
+	}
+	
 	@GetMapping("/landId/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getLandId(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();

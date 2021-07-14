@@ -109,6 +109,11 @@ public class LandMemberInfoServiceImpl extends AbstractGenericService implements
 		return count;
 	}
 
+	@Override
+	public List<Cacus> searchMember(String xcus) {
+		if( StringUtils.isBlank(xcus)) return Collections.emptyList();
+		return landMemberInfoMapper.searchMember(xcus.toUpperCase(), sessionManager.getBusinessId());
+	}
 
 
 

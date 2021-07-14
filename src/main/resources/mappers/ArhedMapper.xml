@@ -4,7 +4,7 @@
 <mapper namespace="com.asl.mapper.ArhedMapper">
 	<insert id="saveArhed" parameterType="Arhed">
 		<selectKey keyProperty="xvoucher" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnarhed}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrntype}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Arhed
 		(

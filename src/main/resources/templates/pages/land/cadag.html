@@ -57,7 +57,7 @@
 														<a th:href="@{/cadag}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 														<a th:if="${dag.xdagid eq 0}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 														<a  th:if="${dag.xdagid ne 0 and dag.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
-														<a th:if="${dag.xdagid ne 0 and dag.zactive == true}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														<a th:if="${dag.xdagid ne 0 and dag.zactive == true}" th:href="@{/cadag/delete/} + ${dag.xdagid}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 													</div>
 												</div>
 											</div>
