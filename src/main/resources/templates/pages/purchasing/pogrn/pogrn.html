@@ -309,7 +309,7 @@
 											<th>Purchase Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${pogrnheader.xstatusgrn != 'Confirmed'}">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -325,7 +325,7 @@
 											<td th:text="${d.xunitpur}"></td>
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xnote}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${pogrnheader.xstatusgrn != 'Confirmed'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
