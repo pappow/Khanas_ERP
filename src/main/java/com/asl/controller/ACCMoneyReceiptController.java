@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Arhed;
+import com.asl.entity.LandInfo;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -25,8 +26,8 @@ import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
-@RequestMapping("/moneyreceipt")
-public class MoneyReceiptController extends ASLAbstractController{
+@RequestMapping("/salesninvoice/moneyreceipt")
+public class ACCMoneyReceiptController extends ASLAbstractController{
 
 	@Autowired private ArhedService arhedService;
 	@Autowired private XcodesService xcodeService;	
@@ -50,6 +51,7 @@ public class MoneyReceiptController extends ASLAbstractController{
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
+		data.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
@@ -62,8 +64,8 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
-		arhed.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
-		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
+
+		arhed.setXtrntype(TransactionCodeType.MONEY_RECEIPTS.getCode());
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
@@ -74,11 +76,6 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
-		if(arhed == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		
 		// Validate
 		if(StringUtils.isBlank(arhed.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Customer required");
@@ -91,20 +88,23 @@ public class MoneyReceiptController extends ASLAbstractController{
 
 		//Modify transaction codes for arhed
 		arhed.setXsign(-1);
-		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode());
+		arhed.setXtypetrn("Sale");
+		arhed.setXpaymentterm("Credit");
+		arhed.setXwh("01");
+		arhed.setXstatusbnk("Open");
+		arhed.setXbase(arhed.getXprime());
 
 		// if existing record
-		Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
-		if(existArhed != null) {
-			BeanUtils.copyProperties(arhed, existArhed, "xvoucher", "xtype", "xdate", "xtrnarhed");
+		if(StringUtils.isNotBlank(arhed.getXvoucher())) {
+			Arhed existArhed = arhedService.findArhedByXvoucher(arhed.getXvoucher());
+			BeanUtils.copyProperties(arhed, existArhed, "xvoucher", "xtype");
 			long count = arhedService.update(existArhed);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Voucher updated successfully");
-			responseHelper.setRedirectUrl("/moneyreceipt/" + arhed.getXvoucher());
+			responseHelper.setSuccessStatusAndMessage("Money Receipt updated successfully");
+			responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
 		}
 
@@ -114,51 +114,48 @@ public class MoneyReceiptController extends ASLAbstractController{
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Voucher created successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt/" + arhed.getXvoucher());
+		responseHelper.setSuccessStatusAndMessage("Money Receipt created successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + arhed.getXvoucher());
 		return responseHelper.getResponse();
 	}
 
-	@PostMapping("/archive/{xvoucher}")
-	public @ResponseBody Map<String, Object> archive(@PathVariable String xvoucher){
-		return doArchiveOrRestore(xvoucher, true);
-	}
-
-	public Map<String, Object> doArchiveOrRestore(String xvoucher, boolean archive){
+	
+	@PostMapping("/delete/{xvoucher}")
+	public @ResponseBody Map<String, Object> delete(@PathVariable String xvoucher, Model model){
 		Arhed voucher = arhedService.findArhedByXvoucher(xvoucher);
 		if(voucher == null) {
-			responseHelper.setErrorStatusAndMessage("Voucher not found in this system");
+			responseHelper.setErrorStatusAndMessage("Money Receipt not found in this system");
 			return responseHelper.getResponse();
 		}
 
 		long count = arhedService.deleteVoucher(xvoucher);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't delete voucher");
+			responseHelper.setErrorStatusAndMessage("Can't delete Money Receipt");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Voucher deleted successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt");
+		responseHelper.setSuccessStatusAndMessage("Money Receipt deleted successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt");
 		return responseHelper.getResponse();
 	}
-
+	
 	@PostMapping("/confirm/{xvoucher}")
 	public @ResponseBody Map<String, Object> confirmMoneyReceipt(@PathVariable String xvoucher){
 		Arhed voucher = arhedService.findArhedByXvoucher(xvoucher);
 		if(voucher == null) {
-			responseHelper.setErrorStatusAndMessage("Voucher not found in this system");
+			responseHelper.setErrorStatusAndMessage("Money Receipt not found in this system");
 			return responseHelper.getResponse();
 		}
 
 		voucher.setXstatus("Confirmed");
 		long count = arhedService.update(voucher);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't confirm voucher");
+			responseHelper.setErrorStatusAndMessage("Can't confirm Money Receipt");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Voucher confirmed successfully");
-		responseHelper.setRedirectUrl("/moneyreceipt/" + voucher.getXvoucher());
+		responseHelper.setSuccessStatusAndMessage("Money Receipt confirmed successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/moneyreceipt/" + voucher.getXvoucher());
 		return responseHelper.getResponse();
 	}
 }

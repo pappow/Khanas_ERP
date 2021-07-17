@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.LandOwner;
 import com.asl.entity.Cadag;
+import com.asl.entity.LandInfo;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.LandDagMasterService;
@@ -83,4 +84,23 @@ public class LandDagMasterController  extends ASLAbstractController{
 		responseHelper.setRedirectUrl("/cadag/" + cadag.getXdagid() );
 		return responseHelper.getResponse();
 	}
+	
+	@PostMapping("/delete/{xdagid}")
+	public @ResponseBody Map<String, Object> deleteLandInfo(@PathVariable int xdagid,  Model model) {
+		Cadag li = landDagMasterService.findbyXdagid(xdagid);
+		if(li == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = landDagMasterService.deleteLandDagMaster(li);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/cadag/" + xdagid );
+		return responseHelper.getResponse();
+}
 }

@@ -4,7 +4,7 @@
 <mapper namespace="com.asl.mapper.ArhedMapper">
 	<insert id="saveArhed" parameterType="Arhed">
 		<selectKey keyProperty="xvoucher" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xtrnarhed}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtrntype}','${xtype}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Arhed
 		(
@@ -32,10 +32,16 @@
 			xsign,
 			xtype,
 			xcusledbal,
-			xtyperec,
-			xinvnum,
+			xtrn,
 			xstaff,
 			xstatus,
+			xpaymentterm,
+			xtypeobj,
+			xsub,
+			xtypeadj,
+			xtyperec,
+			xinvnum,
+			xcur,
 			zid,
 			zauserid,
 			zuuserid,
@@ -71,10 +77,16 @@
 			#{xsign, jdbcType=INTEGER},
 			#{xtype, jdbcType=VARCHAR},
 			#{xcusledbal, jdbcType=DECIMAL},
-			#{xtyperec, jdbcType=VARCHAR},
-			#{xinvnum, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=DECIMAL},
 			#{xstaff, jdbcType=VARCHAR},
 			#{xstatus, jdbcType=VARCHAR},
+			#{xpaymentterm, jdbcType=DECIMAL},
+			#{xtypeobj, jdbcType=DECIMAL},
+			#{xsub, jdbcType=DECIMAL},
+			#{xtypeadj, jdbcType=DECIMAL},
+			#{xtyperec, jdbcType=VARCHAR},
+			#{xinvnum, jdbcType=VARCHAR},
+			#{xcur, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -112,10 +124,17 @@
 			xsign=#{xsign, jdbcType=INTEGER},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xcusledbal=#{xcusledbal, jdbcType=DECIMAL},
-			xtyperec=#{xtyperec, jdbcType=VARCHAR},
-			xinvnum=#{xtyperec, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=DECIMAL},
 			xstaff=#{xstaff, jdbcType=VARCHAR},
 			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xpaymentterm=#{xpaymentterm, jdbcType=DECIMAL},
+			xtypeobj=#{xtypeobj, jdbcType=DECIMAL},
+			xsub=#{xsub, jdbcType=DECIMAL},
+			xtypeadj=#{xtypeadj, jdbcType=DECIMAL},
+			xtyperec=#{xtyperec, jdbcType=VARCHAR},
+			xinvnum=#{xinvnum, jdbcType=VARCHAR},
+			xcur=#{xcur, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -165,8 +184,19 @@
 		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
 	</select>
 	
+	
+	
 	<select id="getAllObaps" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE  '%'|| 'OBAP' ||'%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="findObarByXcus" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') AND xcus=#{xcus} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="getAllObars" resultType="Arhed">
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE  '%'|| 'OBAR' ||'%') 
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	
@@ -175,7 +205,7 @@
 	</select>
 	
 	<select id="getAllAdaps" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE  '%'|| 'ADAP' ||'%') 
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	
@@ -184,7 +214,7 @@
 	</select>
 	
 	<select id="getAllAdars" resultType="Arhed">
-		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE #{xtrn} ||'%') 
+		SELECT * FROM Arhed WHERE (UPPER(xvoucher) LIKE  '%'|| 'ADAR' ||'%') 
 		AND zid=#{zid} AND zactive='1'
 	</select>
 	

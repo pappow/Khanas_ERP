@@ -97,4 +97,17 @@
 		WHERE 
 			cabank.zid=#{zid} 
 	</select>
+	
+	<select id="searchBank" resultType="Cabank">
+		SELECT 
+			* 
+		FROM 
+			cabank 
+		WHERE 
+			(UPPER(xbank) LIKE '%' || #{xbank} || '%' OR UPPER(xname) LIKE '%' || #{xbank} || '%') 
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+	
+	
 </mapper>

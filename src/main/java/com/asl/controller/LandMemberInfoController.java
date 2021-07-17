@@ -1,9 +1,5 @@
 package com.asl.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,27 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
-import com.asl.entity.LandComEvent;
-import com.asl.entity.LandMemberInfo;
-import com.asl.entity.Xcodes;
-import com.asl.entity.Xtrn;
-import com.asl.enums.CacusType;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.service.CacusService;
 import com.asl.service.LandMemberInfoService;
-import com.asl.service.XcodesService;
-import com.asl.service.XtrnService;
-import com.asl.service.ZbusinessService;
 
 @Controller
 @RequestMapping("/cacus")
-public class LandCacusController extends ASLAbstractController{
+public class LandMemberInfoController extends ASLAbstractController{
 	
 	@Autowired private LandMemberInfoService cacusService;
 	
@@ -47,7 +33,7 @@ public class LandCacusController extends ASLAbstractController{
 		model.addAttribute("allMembers", cacusService.getAllLandMembers());
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LANDMEMBER_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("memberStatus",xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
-		model.addAttribute("memberGroup",xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE));
+		model.addAttribute("memberGroup",xcodesService.findByXtype(CodeType.MEMBER_GROUP.getCode(), Boolean.TRUE));
 		return "pages/land/landmemberinfo";
 	}
 	
@@ -68,7 +54,7 @@ public class LandCacusController extends ASLAbstractController{
 		model.addAttribute("allMembers", cacusService.getAllLandMembers());
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.LANDMEMBER_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("memberStatus",xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
-		model.addAttribute("memberGroup",xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE));
+		model.addAttribute("memberGroup",xcodesService.findByXtype(CodeType.MEMBER_GROUP.getCode(), Boolean.TRUE));
 		
 		
 		return "pages/land/landmemberinfo";
@@ -98,13 +84,8 @@ public class LandCacusController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 
-		long cus = cacusService.save(cacus);
-		if(cus ==0) {
-			responseHelper.setErrorStatusAndMessage("Can't save info");
-			return responseHelper.getResponse();
-		}
 		
-		
+
 		// If new
 		long count = cacusService.save(cacus);
 		if(count == 0) {

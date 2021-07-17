@@ -22,4 +22,6 @@ public interface CabankService {
 	public Cabank findCaBankByXbank(String xbank);
 
 	public List<Cabank> getAllCaBank();
+	
+	public List<Cabank> searchBank(String hint);
 }

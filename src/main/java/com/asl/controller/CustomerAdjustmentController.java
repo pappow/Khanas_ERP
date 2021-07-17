@@ -85,7 +85,7 @@ public class CustomerAdjustmentController extends ASLAbstractController{
 	
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
-		if((arhed == null || StringUtils.isBlank(arhed.getXtype())) || StringUtils.isBlank(arhed.getXtrnarhed())) {
+		if((arhed == null || StringUtils.isBlank(arhed.getXtype())) || StringUtils.isBlank(arhed.getXtrntype())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}

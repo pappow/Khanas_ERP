@@ -24,7 +24,7 @@ import com.asl.service.ArhedService;
 import com.asl.service.XcodesService;
 
 @Controller
-@RequestMapping("/purchasing/supplierpayment")
+@RequestMapping("/supplierpayment")
 public class SupplierPaymentController extends ASLAbstractController {
 
 	@Autowired private ArhedService arhedService;
@@ -82,13 +82,13 @@ public class SupplierPaymentController extends ASLAbstractController {
 		arhed.setXstatus("Open");
 		arhed.setXstatusjv("Open");
 		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
+		arhed.setXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 		return arhed;
 	}
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Arhed arhed, BindingResult bindingResult){
-		if((arhed == null || StringUtils.isBlank(arhed.getXtrnarhed())) && StringUtils.isBlank(arhed.getXvoucher())) {
+		if((arhed == null )) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
@@ -106,7 +106,7 @@ public class SupplierPaymentController extends ASLAbstractController {
 		//Modify transaction codes for arhed
 		arhed.setXsign(+1);
 		arhed.setXtype(TransactionCodeType.ACCOUNT_PAYMENT.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
+		arhed.setXtrntype(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 		arhed.setXtrn(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode());
 
 		// if existing record

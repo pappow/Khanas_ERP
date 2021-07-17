@@ -99,7 +99,7 @@ public class SupplierOpeningEntryController extends ASLAbstractController{
 		else if("Due".equalsIgnoreCase(arhed.getXtyperec()) &&  BigDecimal.ZERO.compareTo(arhed.getXbalprime()) == -1)
 			arhed.setXsign(-1);
 		arhed.setXtype(TransactionCodeType.ACCOUNT_OBAP.getCode());
-		arhed.setXtrnarhed(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode());
+		arhed.setXtrntype(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode());
 		arhed.setXtypetrn("AP Transaction");
 		arhed.setXstatusjv("Confirmed");
 		

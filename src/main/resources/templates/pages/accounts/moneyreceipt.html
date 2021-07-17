@@ -54,7 +54,7 @@
 										
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/moneyreceipt}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(arhed.xvoucher)}" th:href="@{/salesninvoice/moneyreceipt}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(arhed.xvoucher) and arhed.xstatus eq 'Open'}" th:href="@{/salesninvoice/moneyreceipt/archive/} + ${arhed.xvoucher}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>

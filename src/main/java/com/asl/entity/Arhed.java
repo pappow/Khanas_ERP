@@ -132,8 +132,11 @@ public class Arhed extends AbstractModel<String> {
 
 	@Column(name = "xinvnum")
 	private String xinvnum;
+	
+	@Column(name = "xcur")
+	private String xcur;
 
 	@Transient
-	private String xtrnarhed;
+	private String xtrntype;
 
 }

@@ -293,9 +293,9 @@
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0605 ne null and menuProfile.M0605.display}">
-												<td><a th:href="@{/inventory/agenttransferorder}" >Asset Transfer Order</a></td>
+												<td><a th:href="@{/inventory/asset}" >Asset Transfer Order</a></td>
 												<td>
-													<a th:href="@{/inventory/agenttransferorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+													<a th:href="@{/inventory/asset}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0606 ne null and menuProfile.M0606.display}">
@@ -353,6 +353,7 @@
 										<tr>
 											<td colspan="2" style="padding-left: 20px !important;">Accounts Receivable</td>
 										</tr>
+										
 										<tr th:if="${menuProfile.M0408 ne null and menuProfile.M0408.display}">
 											<td><a th:href="@{/salesninvoice/moneyreceipt}" th:text="${menuProfile.M0408.screenprompt}">Money Receipt</a></td>
 											<td>
@@ -360,15 +361,15 @@
 											</td>
 										</tr>
 										<tr th:if="${menuProfile.M0410 ne null and menuProfile.M0410.display}">
-											<td><a th:href="@{/salesninvoice/customeradjustment}" th:text="${menuProfile.M0410.screenprompt}">Customer Adjustment</a></td>
+											<td><a th:href="@{/cusadjustment}" th:text="${menuProfile.M0410.screenprompt}">Customer Adjustment</a></td>
 											<td>
-												<a th:href="@{/salesninvoice/customeradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/cusadjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr>
-											<td><a th:href="@{/salesninvoice/customeropening}">Customer Opening</a></td>
+											<td><a th:href="@{/cusopening}">Customer Opening</a></td>
 											<td>
-												<a th:href="@{/salesninvoice/customeropening}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/cusopening}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 									</span>
@@ -384,15 +385,15 @@
 											</td>
 										</tr>
 										<tr th:if="${isCentral and menuProfile.M0308 ne null and menuProfile.M0308.display}">
-											<td><a th:href="@{/procurement/supplieradjustment}" th:text="${menuProfile.M0308.screenprompt}">Supplier Adjustment</a></td>
+											<td><a th:href="@{/supplieradjustment}" th:text="${menuProfile.M0308.screenprompt}">Supplier Adjustment</a></td>
 											<td>
-												<a th:href="@{/procurement/supplieradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/supplieradjustment}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr th:if="${isCentral and menuProfile.M0309 ne null and menuProfile.M0309.display}">
-											<td><a th:href="@{/purchasing/supopenentry}" th:text="${menuProfile.M0309.screenprompt}">Supplier Opening Entry</a></td>
+											<td><a th:href="@{/supopening}" th:text="${menuProfile.M0309.screenprompt}">Supplier Opening Entry</a></td>
 											<td>
-												<a th:href="@{/purchasing/supopenentry}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/supopening}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 									</span>

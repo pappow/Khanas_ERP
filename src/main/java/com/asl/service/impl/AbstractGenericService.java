@@ -1,12 +1,14 @@
 package com.asl.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.asl.config.AppConfig;
+import com.asl.entity.Arhed;
 import com.asl.entity.Zbusiness;
 import com.asl.service.ASLSessionManager;
 
@@ -42,5 +44,10 @@ public abstract class AbstractGenericService  {
 
 	protected String getAuditUser() {
 		return sessionManager.getLoggedInUserDetails().getUsername();
+	}
+
+	public List<Arhed> getAllAdars() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

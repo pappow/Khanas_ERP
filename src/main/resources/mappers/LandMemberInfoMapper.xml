@@ -27,7 +27,6 @@
 			xcountry,
 			xcur,
 			xisrandom,
-
 			zid,
 			zauserid,
 			zuuserid,
@@ -57,7 +56,6 @@
 			#{xcountry, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
 			#{xisrandom, jdbcType=BOOLEAN},
-
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -90,7 +88,6 @@
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xisrandom=#{xisrandom, jdbcType=BOOLEAN},
-
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -155,8 +152,33 @@
 			ztime desc
 	</select>
 	
+	<!-- <select id="getAllLandMembers" resultType="Cacus">
+		SELECT 
+			cacus.*,
+			caperson.xpername 
+		FROM 
+			cacus
+			left join caperson on caperson.xperson = cacus.xperson and caperson.zid=cacus.zid and caperson.zactive='1' 
+		WHERE
+			(cacus.xcus LIKE '%'|| 'MEM' ||'%' )
+			AND cacus.zid=#{zid} 
+			AND cacus.zactive='1'
+		order by 
+			ztime desc
+	</select> -->
+	
 	<select id="searchCacus" resultType="Cacus">
 		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="searchMember" resultType="Cacus">
+		SELECT 
+			* 
+		FROM 
+			cacus 
+		WHERE 
+			(UPPER(xcus) LIKE '%' || 'MEM-' || '%' OR UPPER(xorg) LIKE '%' || 'MEM-' || '%' OR xphone LIKE '%' || #{xcus} || '%') 
+			 AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<select id="searchXorg" resultType="Cacus">

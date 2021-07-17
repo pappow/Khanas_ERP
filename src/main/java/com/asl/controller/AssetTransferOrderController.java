@@ -36,8 +36,8 @@ import com.asl.service.OpordService;
 import com.asl.service.XcodesService;
 
 @Controller
-@RequestMapping("/inventory/agenttransferorder")
-public class AgentTransferOrderController extends ASLAbstractController{
+@RequestMapping("/inventory/asset")
+public class AssetTransferOrderController extends ASLAbstractController{
 	@Autowired private ImtorService imtorService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private ImstockService imstockService;
@@ -58,13 +58,13 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		
-		return "pages/inventory/agenttransferorder/imtor";
+		return "pages/inventory/asset/imtor";
 	}
 
 	@GetMapping("/{xtornum}")
 	public String loadPoordPage(@PathVariable String xtornum, Model model) {
 		ImtorHeader data = imtorService.findImtorHeaderByXtornum(xtornum); 
-		if(data == null) return "rdirect:/inventory/agenttransferorder";
+		if(data == null) return "rdirect:/inventory/asset";
 
 		if(StringUtils.isNotBlank(data.getXcus())) {
 			Cacus c = cacusService.findByXcus(data.getXcus());
@@ -80,7 +80,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		
-		return "pages/inventory/agenttransferorder/imtor";
+		return "pages/inventory/asset/imtor";
 	}
 
 	private ImtorHeader getDefaultImtorHeader() {
@@ -125,7 +125,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 			}
 
 			responseHelper.setSuccessStatusAndMessage("Transfer Order Updated Successfully");
-			responseHelper.setRedirectUrl("/inventory/agenttransferorder/" + existImtorHeader.getXtornum());
+			responseHelper.setRedirectUrl("/inventory/asset/" + existImtorHeader.getXtornum());
 			return responseHelper.getResponse();
 		}
 
@@ -137,7 +137,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Created Successfully");
-		responseHelper.setRedirectUrl("/inventory/agenttransferorder/" + imtorHeader.getXtornum());
+		responseHelper.setRedirectUrl("/inventory/asset/" + imtorHeader.getXtornum());
 		return responseHelper.getResponse();
 	}
 
@@ -156,7 +156,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/inventory/agenttransferorder" );
+		responseHelper.setRedirectUrl("/inventory/asset" );
 		return responseHelper.getResponse();
 }
 	
@@ -185,14 +185,14 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted Successfully");
-		responseHelper.setRedirectUrl("/inventory/agenttransferorder");
+		responseHelper.setRedirectUrl("/inventory/asset");
 		return responseHelper.getResponse();
 	}
 
 	@GetMapping("{xtornum}/imtordetail/{xrow}/show")
 	public String openImtorDetailModal(@PathVariable String xtornum, @PathVariable String xrow, Model model) {
 		ImtorHeader imtorHeader = imtorService.findImtorHeaderByXtornum(xtornum);
-		if(imtorHeader == null) return "redirect:/inventory/agenttransferorder";
+		if(imtorHeader == null) return "redirect:/inventory/asset";
 
 		model.addAttribute("fromWarehouse", imtorHeader.getXfwh());
 		model.addAttribute("toWarehouse", imtorHeader.getXfwh());
@@ -215,7 +215,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 			model.addAttribute("imtordetail", imtordetail);
 			model.addAttribute("availablestock", imstockService.findByXitem(imtordetail.getXitem()));
 		}
-		return "pages/inventory/agenttransferorder/imtordetailmodal::imtordetailmodal";
+		return "pages/inventory/asset/imtordetailmodal::imtordetailmodal";
 	}
 
 	@PostMapping("/imtordetail/save")
@@ -262,7 +262,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 				return responseHelper.getResponse();
 			}
 
-			responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/agenttransferorder/imtordetail/" + imtorDetail.getXtornum());
+			responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/asset/imtordetail/" + imtorDetail.getXtornum());
 			responseHelper.setSuccessStatusAndMessage("Transfer Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -284,7 +284,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/agenttransferorder/imtordetail/" + imtorDetail.getXtornum());
+		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/asset/imtordetail/" + imtorDetail.getXtornum());
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -293,7 +293,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 	public String reloadImtorDetailTabble(@PathVariable String xtornum, Model model) {
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		model.addAttribute("imtorheader", imtorService.findImtorHeaderByXtornum(xtornum));
-		return "pages/inventory/agenttransferorder/imtor::imtordetailtable";
+		return "pages/inventory/asset/imtor::imtordetailtable";
 	}
 
 	@PostMapping("{xtornum}/imtordetail/{xrow}/delete")
@@ -311,7 +311,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/agenttransferorder/imtordetail/" + xtornum);
+		responseHelper.setReloadSectionIdWithUrl("imtordetailtable", "/inventory/asset/imtordetail/" + xtornum);
 		return responseHelper.getResponse();
 	}
 
@@ -360,7 +360,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Transfer Order Confirmed successfully");
-		responseHelper.setRedirectUrl("/inventory/agenttransferorder/" + xtornum);
+		responseHelper.setRedirectUrl("/inventory/asset/" + xtornum);
 		return responseHelper.getResponse();
 	}
 
@@ -372,7 +372,7 @@ public class AgentTransferOrderController extends ASLAbstractController{
 	@GetMapping("/stock/{xitem}")
 	public String findAvailableStockInfo(@PathVariable String xitem, Model model){
 		model.addAttribute("availablestock", imstockService.findByXitem(xitem));
-		return "pages/inventory/agenttransferorder/imtordetailmodal::stocktable";
+		return "pages/inventory/asset/imtordetailmodal::stocktable";
 	}
 
 }

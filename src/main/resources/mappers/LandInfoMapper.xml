@@ -31,6 +31,7 @@
 			xdateborn,
 			xtypetrn,
 			xtrn,
+			xcus,
 			zactive,
 			zauserid,
 			zid,
@@ -62,6 +63,7 @@
 			#{xdateborn,jdbcType=DATE},
 			#{xtypetrn, jdbcType=VARCHAR},
 			#{xtrn, jdbcType=VARCHAR},
+			#{xcus, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zid, jdbcType=VARCHAR},
@@ -96,6 +98,7 @@
 			xdateborn=#{xdateborn,jdbcType=DATE},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
 			xtrn=#{xtrn, jdbcType=VARCHAR},
+			xcus=#{xcus, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
 			zauserid=#{zauserid, jdbcType=VARCHAR},
 			ztime=#{ztime, jdbcType=TIMESTAMP},
@@ -122,6 +125,20 @@
 			ztime desc
 	</select>
 
+	
+	
+	<!-- <select id="getAllLandInfo" resultType="LandInfo">
+		SELECT 
+			calandinfo.*,
+			cacus.xorg 
+		FROM 
+			calandinfo 
+			left join cacus on cacus.xcus = calandinfo.xcus and cacus.zid=calandinfo.zid and cacus.zactive='1'
+		WHERE 
+			calandinfo.zid=#{zid} 
+			AND calandinfo.zactive='1'
+		
+	</select> -->
 	<select id="findByLandInfo" resultType="LandInfo">
 		SELECT 
 			* 

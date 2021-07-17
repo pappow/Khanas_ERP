@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -91,4 +92,7 @@ public class Cacus extends AbstractModel<String> {
 
 	@Column(name = "xtrn")
 	private String xtrn;
+	
+	@Transient
+	private String xpername;
 }

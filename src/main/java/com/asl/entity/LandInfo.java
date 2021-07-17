@@ -98,7 +98,13 @@ public class LandInfo extends AbstractModel<String> {
 
 	@Column(name = "xtrn")
 	private String xtrn;
+	
+	@Column(name = "xcus")
+	private String xcus;
 
 	@Transient
 	private String xname;
+	
+	@Transient
+	private String xorg;
 }
