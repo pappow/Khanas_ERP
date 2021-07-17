@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.AccountGroup;
 import com.asl.entity.Acmst;
 import com.asl.entity.Arhed;
+import com.asl.entity.Cabank;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.LandCommitteeInfo;
@@ -33,11 +34,13 @@ import com.asl.service.AccountGroupService;
 import com.asl.service.AcmstService;
 import com.asl.service.ArhedService;
 import com.asl.service.BmbomService;
+import com.asl.service.CabankService;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.LandCommitteeInfoService;
 import com.asl.service.LandDocumentService;
 import com.asl.service.LandInfoService;
+import com.asl.service.LandMemberInfoService;
 import com.asl.service.LandOwnerService;
 import com.asl.service.LandPersonService;
 import com.asl.service.MoService;
@@ -77,6 +80,8 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private LandInfoService  landInfoService;
 	@Autowired private AccountGroupService accountGroupService;
 	@Autowired private AcmstService acmstServicee;
+	@Autowired private LandMemberInfoService landMemberInfoService;
+	@Autowired private CabankService cabankService;
 
 	@GetMapping("/account/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAccount(@PathVariable String hint){
@@ -192,6 +197,16 @@ public class SearchSuggestController extends ASLAbstractController {
 		LandList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXperson(),c.getXperson()+ " - " +c.getXname())));
 		return list;
 	}
+	
+	@GetMapping("/bank/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getBank(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cabank> bankList = cabankService.searchBank(hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		bankList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXbank(),c.getXbank()+ " - " +c.getXname())));
+		return list;
+	}
+	
 	
 	/*
 	 * @GetMapping("/customerId/{hint}") public @ResponseBody

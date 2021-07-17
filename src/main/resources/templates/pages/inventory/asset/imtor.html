@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li class="active"><a th:href="@{/inventory/agenttransferorder}">Asset Transfer Order</a></li>
+										<li class="active"><a th:href="@{/inventory/asset}">Asset Transfer Order</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -50,14 +50,14 @@
 										<h1>Asset transfer order</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/inventory/agenttransferorder}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-										<a th:if="${#strings.isEmpty(imtorheader.xtornum)}" th:href="@{/inventory/agenttransferorder}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Create Order</a>
+										<a th:href="@{/inventory/asset}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
+										<a th:if="${#strings.isEmpty(imtorheader.xtornum)}" th:href="@{/inventory/asset}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Create Order</a>
 										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/agenttransferorder/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-paper-plane"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/agenttransferorder/delete/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/asset/confirmimtor/} + ${imtorheader.xtornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-paper-plane"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(imtorheader.xtornum) and imtorheader.xstatustor != 'Confirmed' and imtorheader.zactive == true}" th:href="@{/inventory/asset/delete/} + ${imtorheader.xtornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/inventory/agenttransferorder/save}" th:object="${imtorheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+										<form id="mainform" class="form-horizontal" th:action="@{/inventory/asset/save}" th:object="${imtorheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 											<input type="hidden" class="form-control" th:field="*{xtypetrn}">
 											<input type="hidden" th:if="${not #strings.isEmpty(imtorheader.xtornum)}" class="form-control" th:field="*{xtornum}">
 											<div class="row">
@@ -185,7 +185,7 @@
 												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 													<tr th:each="imtor : ${allImtorHeaders}">
 														<td>
-															<a th:href="@{/inventory/agenttransferorder/} + ${imtor.xtornum}" th:text="${imtor.xtornum}"></a>
+															<a th:href="@{/inventory/asset/} + ${imtor.xtornum}" th:text="${imtor.xtornum}"></a>
 														</td>
 														<td  th:text="${#dates.format(imtor.xdate, df)}"></td>
 														<td th:text="${imtor.xchalanref}"></td>
@@ -208,7 +208,7 @@
 					<div class="col-md-12">
 						<!-- imtordetail section -->
 						<section th:if="${not #strings.isEmpty(imtorheader.xtornum)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/inventory/agenttransferorder/imtordetails/} + ${imtorheader.xtornum}"></a>
+							<a id="listlines-url" th:href="@{/inventory/asset/imtordetails/} + ${imtorheader.xtornum}"></a>
 							<div class="section-header sectionbartoggle">
 								<h1>Transfer Order Details</h1>
 							</div>
@@ -222,7 +222,7 @@
 											<th>Unit</th>
 											<th>Rate</th>
 											<th th:if="${imtorheader.xstatustor eq 'Open'}" data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/inventory/agenttransferorder/} + ${imtorheader.xtornum} + '/imtordetail/new/show', data-target-modal='imtordetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/inventory/asset/} + ${imtorheader.xtornum} + '/imtordetail/new/show', data-target-modal='imtordetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -234,8 +234,8 @@
 											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:if="${imtorheader.xstatustor eq 'Open'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/inventory/agenttransferorder/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/show', data-target-modal='imtordetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/inventory/agenttransferorder/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/inventory/asset/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/show', data-target-modal='imtordetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/inventory/asset/} + ${imtorheader.xtornum} + '/imtordetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

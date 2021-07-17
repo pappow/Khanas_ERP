@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -55,5 +56,12 @@ public class CabankServiceImpl extends AbstractGenericService implements CabankS
 	public List<Cabank> getAllCaBank() {
 		return cabankMapper.getAllCaBank(sessionManager.getBusinessId());
 	}
+
+	@Override
+	public List<Cabank> searchBank(String hint) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return cabankMapper.searchBank(hint.toUpperCase(), sessionManager.getBusinessId());
+	}
+	
 
 }

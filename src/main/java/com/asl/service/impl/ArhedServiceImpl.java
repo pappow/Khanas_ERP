@@ -25,7 +25,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 		if (arhed == null) return 0;
 		arhed.setZid(sessionManager.getBusinessId());
 		arhed.setZauserid(getAuditUser());
-		arhed.setXstaff(getAuditUser());
+		arhed.setXstaff(StringUtils.isBlank(arhed.getXstaff()) ? getAuditUser() : arhed.getXstaff());
 		return arhedMapper.saveArhed(arhed);
 	}
 
@@ -35,7 +35,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 		if (arhed == null || StringUtils.isBlank(arhed.getXvoucher())) return 0;
 		arhed.setZid(sessionManager.getBusinessId());
 		arhed.setZuuserid(getAuditUser());
-		arhed.setXstaff(getAuditUser());
+		arhed.setXstaff(StringUtils.isBlank(arhed.getXstaff()) ? getAuditUser() : arhed.getXstaff());
 		return arhedMapper.updateArhed(arhed);
 	}
 
@@ -49,7 +49,7 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	public List<Arhed> getAllArheds() {
 		return arhedMapper.getAllArhed(sessionManager.getBusinessId());
 	}
-
+	
 	@Override
 	public List<Arhed> getAllArhedByXtrn(String xtrn) {
 		if(StringUtils.isBlank(xtrn)) return null;
@@ -66,7 +66,16 @@ public class ArhedServiceImpl extends AbstractGenericService implements ArhedSer
 	public List<Arhed> getAllObaps() {
 		return arhedMapper.getAllObaps(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), sessionManager.getBusinessId());
 	}
+	@Override
+	public Arhed findObarByXcus(String xcus) {
+		if(StringUtils.isBlank(xcus)) return null;
+		return arhedMapper.findObarByXcus(xcus, TransactionCodeType.ACCOUNT_OBAR.getdefaultCode(), sessionManager.getBusinessId());
+	}
 
+	@Override
+	public List<Arhed> getAllObars() {
+		return arhedMapper.getAllObars(TransactionCodeType.ACCOUNT_OBAR.getdefaultCode(), sessionManager.getBusinessId());
+	}
 	@Override
 	public Arhed findAdapByXcus(String xcus) {
 		if(StringUtils.isBlank(xcus))

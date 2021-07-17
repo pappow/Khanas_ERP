@@ -16,22 +16,27 @@ public interface ArhedMapper {
 	public Arhed findArhedByXvoucher(String xvoucher, String zid);
 
 	public List<Arhed> getAllArhed(String zid);
+	
+	public List<Arhed> getAllArhedByXtrn(String xtrn, String zid);
 
 	// Supplier Opening Entry
 	public Arhed findObapByXcus(String xcus, String xtrn, String zid);
 
 	public List<Arhed> getAllObaps(String xtrn, String zid);
+	
+	// Customer Opening Entry
+	public Arhed findObarByXcus(String xcus, String xtrn, String zid);
 
-	public List<Arhed> getAllArhedByXtrn(String xtrn, String zid);
-
+	public List<Arhed> getAllObars(String xtrn, String zid);
+	
 	// Supplier Adjustment
 	public Arhed findAdapByXcus(String xcus, String xtrn, String zid);
-
+	
 	public List<Arhed> getAllAdaps(String xtrn, String zid);
 
 	// Customer Adjustment
 	public Arhed findAdarByXcus(String xcus, String xtrn, String zid);
-
+	
 	public List<Arhed> getAllAdars(String xtrn, String zid);
 
 	// Search Field

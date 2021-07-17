@@ -15,22 +15,28 @@ public interface ArhedService {
 	public Arhed findArhedByXvoucher(String xvoucher);
 
 	public List<Arhed> getAllArheds();
+	
+	public List<Arhed> getAllArhedByXtrn(String xtrn);
 
 	// Supplier Opening Entry
 	public Arhed findObapByXcus(String xcus);
-
+	
 	public List<Arhed> getAllObaps();
+	
+	// Customer Opening Entry
+	public Arhed findObarByXcus(String xcus);
 
-	public List<Arhed> getAllArhedByXtrn(String xtrn);
+	public List<Arhed> getAllObars();
+	
 
 	// Supplier Adjustment
 	public Arhed findAdapByXcus(String xcus);
-
+	
 	public List<Arhed> getAllAdaps();
 
 	// Customer Adjustment
 	public Arhed findAdarByXcus(String xcus);
-
+	
 	public List<Arhed> getAllAdars();
 
 	// Search Field

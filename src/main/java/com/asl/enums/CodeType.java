@@ -2,10 +2,14 @@
 package com.asl.enums;
 
 /**
+ * 
  * @author Zubayer Ahamed
  * @since Feb 28, 2021
  */
 public enum CodeType {
+	
+	ADJUSTMENT_TYPE("Adjustment Type"),
+	ADJUSTMENT_WITH("Adjustment With"),
 
 	BANK_STATUS("Bank Status"),
 	BLOOD_GROUP("Blood Group"),

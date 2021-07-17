@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<form id="mainform-modal" th:action="@{/inventory/agenttransferorder/imtordetail/save}" method="post" class="form-horizontal" th:object="${imtordetail}">
+					<form id="mainform-modal" th:action="@{/inventory/asset/imtordetail/save}" method="post" class="form-horizontal" th:object="${imtordetail}">
 						<input type="hidden" th:field="*{xtornum}"/>
 						<input type="hidden" th:field="*{xchalanref}"/>
 						<input type="hidden" th:if="${xrow ne 0}" th:field="*{xrow}"/>
@@ -80,7 +80,7 @@
 							$(".xrate-display").val(0);
 
 							var rdata = {};
-							rdata.reloadurl = '/inventory/agenttransferorder/stock/blankitem';
+							rdata.reloadurl = '/inventory/asset/stock/blankitem';
 							rdata.reloadelementid = 'stocktable';
 							doSectionReloadWithNewData(rdata);
 							return;
@@ -88,7 +88,7 @@
 
 						loadingMask2.show(),
 						$.ajax({
-							url : getBasepath() + '/inventory/agenttransferorder/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/inventory/asset/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							success : function(data) {
 								loadingMask2.hide();
@@ -98,7 +98,7 @@
 								$(".xrate-display").val(data.xrate);
 
 								var rdata = {};
-								rdata.reloadurl = '/inventory/agenttransferorder/stock/' + $('input[name="xitem"]').val();
+								rdata.reloadurl = '/inventory/asset/stock/' + $('input[name="xitem"]').val();
 								rdata.reloadelementid = 'stocktable';
 								doSectionReloadWithNewData(rdata);
 							},
