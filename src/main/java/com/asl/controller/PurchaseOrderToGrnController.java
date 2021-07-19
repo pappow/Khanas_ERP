@@ -67,7 +67,6 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 		pogrnHeader.setXstatusgrn("Open");
 		pogrnHeader.setXdate(new Date());
 		pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-		pogrnHeader.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 		pogrnHeader.setXvatamt(BigDecimal.ZERO);
 		pogrnHeader.setXaitamt(BigDecimal.ZERO);
 		pogrnHeader.setXdiscprime(BigDecimal.ZERO);

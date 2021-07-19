@@ -1,14 +1,11 @@
 package com.asl.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -238,6 +235,8 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		pogrnHeader.setXtotamt(poordHeader.getXtotamt());
 		pogrnHeader.setXwh(poordHeader.getXwh());
 		pogrnHeader.setXcus(poordHeader.getXcus());
+		pogrnHeader.setZid(sessionManager.getBusinessId());
+		pogrnHeader.setZauserid(getAuditUser());
 
 		long count = pogrnMapper.savePogrnHeader(pogrnHeader);
 		if(count == 0) {
@@ -258,6 +257,8 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			detail.setXrate(poorddetail.getXrate());
 			detail.setXunitpur(poorddetail.getXunitpur());
 			detail.setXlineamt(poorddetail.getXlineamt());
+			detail.setZid(sessionManager.getBusinessId());
+			detail.setZauserid(getAuditUser());
 
 			long dcount = pogrnMapper.savePogrnDetail(detail);
 			if(dcount == 0) throw new ServiceException("Can't save detail");

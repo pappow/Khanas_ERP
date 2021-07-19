@@ -96,7 +96,6 @@ public class PogrnController extends ASLAbstractController {
 	private PogrnHeader getDefaultPogrnHeader() {
 		PogrnHeader pogrn = new PogrnHeader();
 		pogrn.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-		pogrn.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 		pogrn.setXdate(new Date());
 		pogrn.setXstatusgrn("Open");
 		pogrn.setXtypetrn("Purchase");

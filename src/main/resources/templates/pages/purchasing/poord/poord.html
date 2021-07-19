@@ -194,6 +194,44 @@
 								</section>
 							</div>
 						</div>
+
+
+						<div class="row">
+							<div class="col-md-12">
+								<section id="list-manager" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										<h1 th:text="'GRN List of ' + ${poordheader.xpornum}"></h1>
+									</div>
+									<div class="section-body">
+										<div style="overflow-x: scroll;">
+											<table class="table table-striped table-bordered datatable nowrap">
+												<thead>
+													<tr>
+														<th>GRN Number</th>
+														<th>Date</th>
+														<th>Supplier</th>
+														<th>Total Amount</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+													<tr th:each="g,n : ${grnlist}">
+														<td th:text="${n.count}"></td>
+														<!-- <td>
+															<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
+														</td>
+														<td  th:text="${#dates.format(poord.xdate, df)}"></td>
+														<td th:text="${poord.xcus} + ' - ' + ${poord.xorg}"></td>
+														<td th:text="${poord.xtotamt}"></td>
+														<td th:text="${poord.xstatuspor}"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
 					</div>
 
 					<div class="col-md-12">

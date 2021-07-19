@@ -3,7 +3,6 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
-import com.asl.entity.PogrnDetail;
-import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
@@ -77,6 +74,9 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
+
+		model.addAttribute("grnlist", pogrnService.findPogrnHeaderByXpornum(xpornum));
+
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
