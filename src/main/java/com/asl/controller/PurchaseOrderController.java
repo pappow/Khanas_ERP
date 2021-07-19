@@ -3,6 +3,7 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,36 +26,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
+import com.asl.entity.PogrnDetail;
+import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ServiceException;
 import com.asl.model.report.ItemDetails;
 import com.asl.model.report.PurchaseOrder;
 import com.asl.model.report.PurchaseReport;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
+import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
-import com.asl.service.XcodesService;
-import com.asl.service.XtrnService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/purchasing/poord")
 public class PurchaseOrderController extends ASLAbstractController {
 
-	@Autowired private XcodesService xcodeService;
 	@Autowired private PoordService poordService;
-	@Autowired private XtrnService xtrnService;
 	@Autowired private CacusService cacusService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private PogrnService pogrnService;
 
 	@GetMapping
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
@@ -70,12 +75,24 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poordheader", data);
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
 		return "pages/purchasing/poord/poord";
+	}
+
+	@GetMapping("/clear")
+	public String clearPoordForm(Model model) {
+		model.addAttribute("poordheader", getDefaultPoordHeader());
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		if(isBoshila()) {
+			return "pages/land/purchasing/poord::poordheaderform";
+		}
+		return "pages/purchasing/poord/poord::poordheaderform";
 	}
 
 	private PoordHeader getDefaultPoordHeader() {
@@ -95,10 +112,11 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		// if existing record
-		PoordHeader existPoordHeader = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
-		if(existPoordHeader != null) {
-			BeanUtils.copyProperties(poordHeader, existPoordHeader, "xpornum", "xtype", "xtypetrn", "xtrn", "xtotamt");
-			long count = poordService.update(existPoordHeader);
+		if(StringUtils.isNotBlank(poordHeader.getXpornum())) {
+			PoordHeader exist = poordService.findPoordHeaderByXpornum(poordHeader.getXpornum());
+
+			BeanUtils.copyProperties(poordHeader, exist, "xpornum", "xtype", "xtypetrn", "xtrn", "xtotamt");
+			long count = poordService.update(exist);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
@@ -156,7 +174,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping("{xpornum}/poorddetail/{xrow}/show")
 	public String openPoordDetailModal(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
 
-		model.addAttribute("purchaseUnit", xcodeService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
+		model.addAttribute("purchaseUnit", xcodesService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 
 		if("new".equalsIgnoreCase(xrow)) {
 			PoordDetail poorddetail = new PoordDetail();
@@ -242,8 +260,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping("/poordheaderform/{xpornum}")
 	public String reloadPoordheaderForm(@PathVariable String xpornum, Model model) {
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("postatusList", xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("poordheader", poordService.findPoordHeaderByXpornum(xpornum));
 		return "pages/purchasing/poord/poord::poordheaderform";
 	}
@@ -335,5 +353,16 @@ public class PurchaseOrderController extends ASLAbstractController {
 	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
 		Caitem centralCaitem = caitemService.findByXitem(xitem);
 		return centralCaitem;
+	}
+
+	@PostMapping("/creategrn/{xpornum}")
+	public @ResponseBody Map<String, Object> confirmPurchase(@PathVariable String xpornum){
+		try {
+			return poordService.createPurchaseOrderToGRN(responseHelper, xpornum);
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
 	}
 }

@@ -1,12 +1,14 @@
 package com.asl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.model.ResponseHelper;
 import com.asl.model.ServiceException;
 
 @Component
@@ -57,4 +59,6 @@ public interface PoordService {
 	public List<com.asl.model.report.RM0301> getRM0301(String fdate, String tdate, String xcus, String xstatuspor, String xitem);
 
 	public long deletePoordheaderByXpornum(String xpornum);
+
+	public Map<String, Object> createPurchaseOrderToGRN(ResponseHelper responseHelper, String xpornum) throws ServiceException;
 }

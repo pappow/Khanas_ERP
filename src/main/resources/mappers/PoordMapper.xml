@@ -249,12 +249,14 @@
 
 	<select id="findPoordHeaderByXpornum" resultType="PoordHeader">
 		SELECT 
-			* 
+			poordheader.*,
+			cacus.xorg as xorg
 		FROM 
 			poordheader 
+			LEFT JOIN cacus on cacus.xcus = poordheader.xcus and cacus.zid = poordheader.zid and cacus.zactive='1'
 		WHERE 
-			xpornum=#{xpornum} 
-			AND zid=#{zid}
+			poordheader.xpornum=#{xpornum} 
+			AND poordheader.zid=#{zid}
 	</select>
 
 	<select id="findBranchPoordHeaderByXpornumForCentral" resultType="PoordHeader">

@@ -706,6 +706,7 @@ function submitModalForm(customurl){
 	});
 }
 
+
 /**
  * Section reloader from form submitted returned data
  * @param rdata

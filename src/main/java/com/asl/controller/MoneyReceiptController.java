@@ -25,7 +25,7 @@ import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
-@RequestMapping("/salesninvoice/moneyreceipt")
+@RequestMapping("/salesninvoice/moneyreceipt2")
 public class MoneyReceiptController extends ASLAbstractController{
 
 	@Autowired private ArhedService arhedService;

@@ -1,17 +1,27 @@
 package com.asl.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.PogrnDetail;
+import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.enums.TransactionCodeType;
+import com.asl.mapper.PogrnMapper;
 import com.asl.mapper.PoordMapper;
+import com.asl.model.ResponseHelper;
 import com.asl.model.ServiceException;
 import com.asl.model.report.RM0301;
 import com.asl.service.PoordService;
@@ -20,6 +30,7 @@ import com.asl.service.PoordService;
 public class PoordServiceImpl extends AbstractGenericService implements PoordService {
 
 	@Autowired private PoordMapper poordMapper;
+	@Autowired private PogrnMapper pogrnMapper;
 
 	@Override
 	@Transactional
@@ -200,4 +211,75 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		if(StringUtils.isBlank(xpornum)) return 0;
 		return poordMapper.deletePoordheaderByXpornum(xpornum, sessionManager.getBusinessId());
 	}
+
+	@Transactional
+	@Override
+	public Map<String, Object> createPurchaseOrderToGRN(ResponseHelper responseHelper, String xpornum) throws ServiceException {
+		PoordHeader poordHeader = findPoordHeaderByXpornum(xpornum);
+		if(poordHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find purchase order : " + xpornum);
+			return responseHelper.getResponse();
+		}
+
+		// check purchase order has item details
+		List<PoordDetail> poordDetailList = findPoorddetailByXpornum(xpornum);
+		if(poordDetailList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("This purchase order has no item");
+			return responseHelper.getResponse();
+		}
+
+		// Create a GRN header first
+		PogrnHeader pogrnHeader = new PogrnHeader();
+		pogrnHeader.setXpornum(xpornum);
+		pogrnHeader.setXtypetrn(TransactionCodeType.GRN_NUMBER.getCode());
+		pogrnHeader.setXtrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
+		pogrnHeader.setXdate(new Date());
+		pogrnHeader.setXstatusgrn("Open");
+		pogrnHeader.setXtotamt(poordHeader.getXtotamt());
+		pogrnHeader.setXwh(poordHeader.getXwh());
+		pogrnHeader.setXcus(poordHeader.getXcus());
+
+		long count = pogrnMapper.savePogrnHeader(pogrnHeader);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create GRN for purchase order : " + xpornum);
+			return responseHelper.getResponse();
+		}
+
+		// Create grn details from purchase details
+		
+		for(int i = 0; i < poordDetailList.size(); i++) {
+			PoordDetail poorddetail = poordDetailList.get(i);
+
+			PogrnDetail detail = new PogrnDetail();
+			detail.setXgrnnum(pogrnHeader.getXgrnnum());
+			detail.setXitem(poorddetail.getXitem());
+			detail.setXdocrow(poorddetail.getXrow());
+			detail.setXqtygrn(poorddetail.getXqtyord());
+			detail.setXrate(poorddetail.getXrate());
+			detail.setXunitpur(poorddetail.getXunitpur());
+			detail.setXlineamt(poorddetail.getXlineamt());
+
+			long dcount = pogrnMapper.savePogrnDetail(detail);
+			if(dcount == 0) throw new ServiceException("Can't save detail");
+		}
+
+		// now update poorddetails with grn qty
+		for(int i = 0; i < poordDetailList.size(); i++) {
+			PoordDetail poorddetail = poordDetailList.get(i);
+			poorddetail.setXqtygrn(poorddetail.getXqtyord());
+			long dcount = updateDetail(poorddetail);
+			if(dcount == 0) throw new ServiceException("Can't update purchase detail");
+		}
+
+		// now update poordheader status
+		poordHeader.setXstatuspor("GRN Created");
+		long phcount = update(poordHeader);
+		if(phcount == 0) throw new ServiceException("Can't update purchase order status");
+
+		responseHelper.setSuccessStatusAndMessage("GRN created successfully");
+		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		return responseHelper.getResponse();
+	}
+
+	
 }

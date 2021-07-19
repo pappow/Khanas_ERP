@@ -38,7 +38,7 @@ public class PogrnDetail extends AbstractModel<String> {
 	private int xrow;
 
 	@Column(name = "xdocrow")
-	private String xdocrow;
+	private int xdocrow;
 
 	@Column(name = "xcomtype")
 	private String xcomtype;

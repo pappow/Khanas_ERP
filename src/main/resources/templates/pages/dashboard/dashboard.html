@@ -47,6 +47,40 @@
 							</div>
 							<div class="section-body" th:fragment="mainmenu">
 								<table class="table dashboard-menu-table">
+									<tr>
+										<td colspan="2">Master Setup</td>
+									</tr>
+									<tr th:if="${isCentral and menuProfile.M0205 ne null and menuProfile.M0205.display}">
+										<td><a th:href="@{/mastersetup/cacus?cacusType=SUP}" th:text="${menuProfile.M0205.screenprompt}">Supplier Master</a></td>
+										<td>
+											<a th:href="@{/mastersetup/cacus?cacusType=SUP}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${isCentral and menuProfile.M0206 ne null and menuProfile.M0206.display}">
+										<td><a th:href="@{/mastersetup/cacus?cacusType=CUS}" th:text="${menuProfile.M0206.screenprompt}">Customer Master</a></td>
+										<td>
+											<a th:href="@{/mastersetup/cacus?cacusType=CUS}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${(isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
+										<td><a th:href="@{/mastersetup/caitem}" th:text="${menuProfile.M0202.screenprompt}">Item Master</a></td>
+										<td>
+											<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
+										<td><a th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0208.screenprompt}">Codes</a></td>
+										<td>
+											<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
+										<td><a th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0209.screenprompt}">Transaction Codes</a></td>
+										<td>
+											<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 
 									<tr>
 										<td colspan="2">Accounting</td>
@@ -102,19 +136,6 @@
 										<td><a th:href="@{/procurement/potogrn}">PO to GRN</a></td>
 										<td>
 											<a th:href="@{/procurement/potogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
-									
-									
-									
-									
-									
-
-
-									<tr>
-										<td><a th:href="@{/logout}" style="color: red !important; font-weight: bold; margin-left: 0px;">Logout</a></td>
-										<td>
-											<a th:href="@{/logout}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 								</table>
