@@ -327,7 +327,7 @@
 			xpornum DESC
 	</select>
 
-	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
+	<select id="getPoordHeadersByXtypetrn" resultType="PoordHeader">
 		SELECT 
 			ph.*, 
 			c.xorg
@@ -335,7 +335,7 @@
 			POORDHEADER ph 
 			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid = ph.zid
 		WHERE 
-			ph.xtype=#{xtype}
+			ph.xtypetrn=#{xtypetrn}
 			AND ph.zid=#{zid} 
 		ORDER BY 
 			ph.xpornum DESC

@@ -31,7 +31,7 @@ public interface PogrnService {
 
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum);
 
-	public PogrnHeader findPogrnHeaderByXpornum(String xpornum);
+	public List<PogrnHeader> findPogrnHeaderByXpornum(String xpornum);
 
 	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow);
 

@@ -233,7 +233,15 @@
 	</select>
 
 	<select id="findPogrnHeaderByXpornum" resultType="PogrnHeader">
-		SELECT * FROM PogrnHeader WHERE xpornum=#{xpornum} AND zid=#{zid}
+		SELECT 
+			pogrnheader.*,
+			cacus.xorg as xorg
+		FROM 
+			pogrnheader
+			left join cacus on cacus.xcus = pogrnheader.xcus AND cacus.zid = pogrnheader.zid AND cacus.zactive='1' 
+		WHERE 
+			pogrnheader.xpornum=#{xpornum} 
+			AND pogrnheader.zid=#{zid}
 	</select>	
 
 	<select id="findPogrnDetailByXgrnnumAndXrow" resultType="PogrnDetail">

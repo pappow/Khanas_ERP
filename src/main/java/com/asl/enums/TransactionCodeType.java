@@ -16,7 +16,6 @@ public enum TransactionCodeType {
 	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
 	ACCOUNT_ADAR("Customer Adjustment", "ADAR-", TransactionCodes.AR_TRANSACTION),
 	AGENT_TRANSFER_ORDER("Agent Transfer Order", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
-	MONEY_RECEIPTS("AR Transactions", "MR--", TransactionCodes.AR_TRANSACTION),
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
@@ -33,6 +32,8 @@ public enum TransactionCodeType {
 	GRN_NUMBER("GRN Number", "GRN-", TransactionCodes.GRN_NUMBER),
 	GL_VOUCHER("GL Voucher", "JV--", TransactionCodes.GL_VOUCHER),
 
+	HALL_BOOKING_SALES_ORDER("Hall Booking SO", "HBSO", null),
+
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
@@ -43,6 +44,8 @@ public enum TransactionCodeType {
 	LANDCOMEVENT_ID("Land Com Event", "EVCM", TransactionCodes.LANDCOMEVENT_ID),
 	LANDOTHEREVENT_ID("Land Other Event", "EVOH", TransactionCodes.LANDOTHEREVENT_ID),
 
+	MONEY_RECEIPTS("AR Transactions", "MR--", TransactionCodes.AR_TRANSACTION),
+
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PRN_NUMBER("PRN Number", "PR--", null),
@@ -51,6 +54,7 @@ public enum TransactionCodeType {
 	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null),
 
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
+	ROOM_BOOKING_SALES_ORDER("Room Booking SO", "RBSO-", null),
 
 	SUPPLIER_NUMBER("Supplier", "SU-", TransactionCodes.SUPPLIER_NUMBER),
 	SURVEYOR_ID("Surveyor ID", "SRVR--", TransactionCodes.LAND_ID),
@@ -61,11 +65,8 @@ public enum TransactionCodeType {
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 
-	VOUCHER_NUMBER("Voucher Number", "VCH-",null),
+	VOUCHER_NUMBER("Voucher Number", "VCH-",null);
 	
-	//Convention Hall Codes
-	HALL_BOOKING_SALES_ORDER("Hall Booking SO", "HBSO", null),
-	ROOM_BOOKING_SALES_ORDER("Room Booking SO", "RBSO-", null);
 
 	private String code;
 	private String defaultCode;

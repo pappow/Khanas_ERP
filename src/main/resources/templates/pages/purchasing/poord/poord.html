@@ -196,7 +196,7 @@
 						</div>
 
 
-						<div class="row">
+						<div class="row" th:if="${not #lists.isEmpty(grnlist)}">
 							<div class="col-md-12">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
@@ -216,7 +216,11 @@
 												</thead>
 												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 													<tr th:each="g,n : ${grnlist}">
-														<td th:text="${n.count}"></td>
+														<td th:text="${g.xgrnnum}"></td>
+														<td  th:text="${#dates.format(g.xdate, df)}"></td>
+														<td th:text="${g.xcus} + ' - ' + ${g.xorg}"></td>
+														<td th:text="${g.xtotamt}"></td>
+														<td th:text="${g.xstatusgrn}"></td>
 														<!-- <td>
 															<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
 														</td>

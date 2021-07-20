@@ -56,6 +56,10 @@ public class ResponseHelper {
 		this.response.put("thirdreloadurl", url);
 	}
 
+	public void setReloadSections(Map<String, String> map) {
+		this.response.put("reloadsections", map);
+	}
+
 	public void setTriggerModalUrl(String modalId, String url) {
 		this.response.put("modalid", modalId);
 		this.response.put("triggermodalurl", url);

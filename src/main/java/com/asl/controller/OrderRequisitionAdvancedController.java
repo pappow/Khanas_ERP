@@ -208,7 +208,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 
 	@GetMapping("/allrequisition")
 	public String loadAllReqListPage(Model model) {
-		model.addAttribute("reqs", poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode()));
+		model.addAttribute("reqs", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 		return "pages/procurement/requisition/requisitionslist";
 	}
 

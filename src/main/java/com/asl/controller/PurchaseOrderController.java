@@ -54,8 +54,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping
 	public String loadPoordPage(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
@@ -68,10 +68,11 @@ public class PurchaseOrderController extends ASLAbstractController {
 		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum);
 		if(data == null) data = getDefaultPoordHeader();
 		data.setXtypetrn(data.getXtype());
+		if(data.getXtotamt() == null) data.setXtotamt(BigDecimal.ZERO);
 
 		model.addAttribute("poordheader", data);
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 
@@ -86,7 +87,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping("/clear")
 	public String clearPoordForm(Model model) {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
@@ -147,27 +148,30 @@ public class PurchaseOrderController extends ASLAbstractController {
 		// todo: need to delete actually from db
 		
 		PoordHeader poordHeader = poordService.findPoordHeaderByXpornum(xpornum);
-		if(poordHeader == null || "GRN Created".equalsIgnoreCase(poordHeader.getXstatuspor()) || "Confirmed".equalsIgnoreCase(poordHeader.getXstatuspor())) {
-			responseHelper.setErrorStatusAndMessage("Confirmed Purchase Order can't be archived");
+		if(poordHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find purchase order " + xpornum);
+			return responseHelper.getResponse();
+		}
+		if(!"Open".equalsIgnoreCase(poordHeader.getXstatuspor())) {
+			responseHelper.setErrorStatusAndMessage("Can't delete purhcase order, because order is not Open");
 			return responseHelper.getResponse();
 		}
 
-		poordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = poordService.update(poordHeader);
+		// check order has detail
+		List<PoordDetail> details = poordService.findPoorddetailByXpornum(xpornum);
+		if(details != null && !details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Delete all order details first");
+			return responseHelper.getResponse();
+		}
+
+		long count = poordService.deletePoordheaderByXpornum(xpornum);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't archive Purchase Order");
+			responseHelper.setErrorStatusAndMessage("Can't Delete Purchase Order");
 			return responseHelper.getResponse();
 		}
 
-		long totalDetail = poordService.countOfRequisitionDetailsByXpornum(xpornum);
-		long dcount = poordService.archiveAllPoordDetailByXpornum(xpornum);
-		if(dcount == 0 && totalDetail > 0) {
-			responseHelper.setErrorStatusAndMessage("Purchase order archived successfully, but item details not archived");
-			return responseHelper.getResponse();
-		}
-
-		responseHelper.setSuccessStatusAndMessage("Purchase order updated successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Purchase order deleted successfully");
+		responseHelper.setRedirectUrl("/purchasing/poord");
 		return responseHelper.getResponse();
 	}
 
@@ -205,22 +209,27 @@ public class PurchaseOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// Check item already exist in detail list
+		// validation
 		if(StringUtils.isBlank(poordDetail.getXitem())) {
 			responseHelper.setErrorStatusAndMessage("Please select an item");
 			return responseHelper.getResponse();
 		}
-		if(poordDetail.getXrow() == 0 && poordService.findPoorddetailByXpornumAndXitem(poordDetail.getXpornum(), poordDetail.getXitem()) != null) {
-			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
-			return responseHelper.getResponse();
-		}
 		if(BigDecimal.ZERO.equals(poordDetail.getXqtyord()) || poordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1){
-			responseHelper.setErrorStatusAndMessage("Purchase Quantity should be minimum 1");
+			responseHelper.setErrorStatusAndMessage("Purchase quantity should be greater then zero");
 			return responseHelper.getResponse();
 		}
 
 		// modify line amount
+		// first get item vat rate
+		Caitem caitem = caitemService.findByXitem(poordDetail.getXitem());
+		if(caitem == null) {
+			responseHelper.setErrorStatusAndMessage("Item not found");
+			return responseHelper.getResponse();
+		}
+		if(caitem.getXvatrate() == null) caitem.setXvatrate(BigDecimal.ZERO);
+
 		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
+		poordDetail.setXlineamt(poordDetail.getXlineamt().add((poordDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		PoordDetail existDetail = poordService.findPoorddetailByXpornumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
@@ -228,24 +237,24 @@ public class PurchaseOrderController extends ASLAbstractController {
 			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
 			long count = poordService.updateDetail(existDetail);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update order detail");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
 			responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
-			responseHelper.setSuccessStatusAndMessage("Order Item detail updated successfully");
+			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
 
 		// if new detail
 		long count = poordService.saveDetail(poordDetail);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't save order detail");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
 		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
-		responseHelper.setSuccessStatusAndMessage("Order Item detail saved successfully");
+		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
 

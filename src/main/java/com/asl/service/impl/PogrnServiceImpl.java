@@ -105,7 +105,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public PogrnHeader findPogrnHeaderByXpornum(String xpornum) {
+	public List<PogrnHeader> findPogrnHeaderByXpornum(String xpornum) {
 		if (StringUtils.isBlank(xpornum)) return null;
 		return pogrnMapper.findPogrnHeaderByXpornum(xpornum, sessionManager.getBusinessId());
 	}

@@ -24,7 +24,7 @@ public interface PogrnMapper {
 
 	public PogrnHeader findPogrnHeaderByXgrnnum(String xgrnnum, String zid);
 
-	public PogrnHeader findPogrnHeaderByXpornum(String xpornum, String zid);
+	public List<PogrnHeader> findPogrnHeaderByXpornum(String xpornum, String zid);
 
 	public PogrnDetail findPogrnDetailByXgrnnumAndXrow(String xgrnnum, int xrow, String zid);
 
