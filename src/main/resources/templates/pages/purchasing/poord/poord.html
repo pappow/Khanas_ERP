@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li class="active"><a th:href="@{/purchasing/poord}">Purchase Order</a></li>
+										<li class="active"><a th:href="@{/procurements/poord}">Purchase Order</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -50,16 +50,16 @@
 									<div id="poordheaderform" th:fragment="poordheaderform">
 										<div class="section-header sectionbartoggle"></div>
 										<div class="form-action-button">
-											<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default" data-reloadurl="/purchasing/poord/clear" data-reloadelementid="poordheaderform"><i class="fas fa-redo-alt"></i> Clear</a>
-											<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/purchasing/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+											<a th:href="@{/procurements/poord}" class="btn btn-sm btn-default" data-reloadurl="/procurements/poord/clear" data-reloadelementid="poordheaderform"><i class="fas fa-redo-alt"></i> Clear</a>
+											<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/procurements/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.xstatuspor ne 'GRN Created' and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Open' and poordheader.zactive == true}" th:href="@{/purchasing/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Open' and poordheader.zactive == true}" th:href="@{/purchasing/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/purchasing/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-check-square"></i> Create GRN</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Open' and poordheader.zactive == true}" th:href="@{/procurements/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Open' and poordheader.zactive == true}" th:href="@{/procurements/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/procurements/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-check-square"></i> Create GRN</a>
 										</div>
 										<div class="section-body section-border">
 											<div id="poordheaderform" th:fragment="poordheaderform">
-												<form id="mainform" class="form-horizontal" th:action="@{/purchasing/poord/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+												<form id="mainform" class="form-horizontal" th:action="@{/procurements/poord/save}" th:object="${poordheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 													<input type="hidden" th:field="*{xtypetrn}"/>
 													<div class="row">
 														<div class="col-md-6">
@@ -117,6 +117,12 @@
 																	</select>
 																</div>
 															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xnote">Note</label>
+																<div class="col-md-8">
+																	<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+																</div>
+															</div>
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
@@ -131,12 +137,6 @@
 																<div class="col-md-8">
 																	<input type="hidden" class="form-control" th:field="*{xstatuspor}">
 																	<input type="text" class="form-control" th:value="*{xstatuspor}" disabled="disabled">
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="xnote">Note</label>
-																<div class="col-md-8">
-																	<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
 																</div>
 															</div>
 														</div>
@@ -180,7 +180,7 @@
 												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 													<tr th:each="poord : ${allPoordHeader}">
 														<td>
-															<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
+															<a th:href="@{/procurements/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
 														</td>
 														<td  th:text="${#dates.format(poord.xdate, df)}"></td>
 														<td th:text="${poord.xcus} + ' - ' + ${poord.xorg}"></td>
@@ -216,18 +216,13 @@
 												</thead>
 												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 													<tr th:each="g,n : ${grnlist}">
-														<td th:text="${g.xgrnnum}"></td>
+														<td>
+															<a th:href="@{/procurements/pogrn/} + ${g.xgrnnum}" th:text="${g.xgrnnum}" target="_blank"></a>
+														</td>
 														<td  th:text="${#dates.format(g.xdate, df)}"></td>
 														<td th:text="${g.xcus} + ' - ' + ${g.xorg}"></td>
 														<td th:text="${g.xtotamt}"></td>
 														<td th:text="${g.xstatusgrn}"></td>
-														<!-- <td>
-															<a th:href="@{/purchasing/poord/} + ${poord.xpornum}" th:text="${poord.xpornum}"></a>
-														</td>
-														<td  th:text="${#dates.format(poord.xdate, df)}"></td>
-														<td th:text="${poord.xcus} + ' - ' + ${poord.xorg}"></td>
-														<td th:text="${poord.xtotamt}"></td>
-														<td th:text="${poord.xstatuspor}"></td> -->
 													</tr>
 												</tbody>
 											</table>
@@ -240,7 +235,7 @@
 
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(poordheader.xpornum)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/purchasing/poord/poorddetails/} + ${poordheader.xpornum}"></a>
+							<a id="listlines-url" th:href="@{/procurements/poord/poorddetails/} + ${poordheader.xpornum}"></a>
 							<div class="section-header sectionbartoggle">
 								<h1 th:text="'Purchase Order Details of ' + ${poordheader.xpornum}"></h1>
 							</div>
@@ -256,7 +251,7 @@
 											<th>Net Amount</th>
 											<th>Note</th>
 											<th data-nosort="Y" style="text-align: right;" th:if="${poordheader.xstatuspor == 'Open'}">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/new/show', data-target-modal='poorddetailmodal'"><i class="fas fa-plus"></i></button>
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurements/poord/} + ${poordheader.xpornum} + '/poorddetail/new/show', data-target-modal='poorddetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -272,8 +267,8 @@
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xnote}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${poordheader.xstatuspor == 'Open'}">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/show', data-target-modal='poorddetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurements/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/show', data-target-modal='poorddetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/procurements/poord/} + ${poordheader.xpornum} + '/poorddetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

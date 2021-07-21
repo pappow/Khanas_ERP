@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>GRN - Good Receipt Note</title>
+	<title>GRN</title>
 	<meta th:remove="tag" th:include="commons :: common-meta" />
 	<meta th:remove="tag" th:include="commons :: common-css" />
 	<meta th:remove="tag" th:include="commons :: common-js" />
@@ -25,7 +25,7 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li class="active"><a th:href="@{/purchasing/pogrn}">GRN</a></li>
+										<li class="active"><a th:href="@{/procurements/pogrn}">GRN</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -40,214 +40,139 @@
 		<div>
 			<div class="container-fluid">
 				<div class="row">
+					<div class="row">
+						<h1 class="text-center">GRN - Good Receipt Note</h1>
+					</div>
+
 					<div class="col-md-12 content-area">
 
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Good Receipt Note / Number</h1>
-									</div>
-									<div class="form-action-button">
-										<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-										<a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/confirmgrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-info confirm-btn-link"><i class="fas fa-clipboard-check"></i> Return</a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/print/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
-										<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open' and pogrnheader.zactive == true}" th:href="@{/purchasing/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-									</div>
-									<div class="section-body section-border">
-										<div id="pogrnheaderform" th:fragment="pogrnheaderform">
-											<form id="mainform" class="form-horizontal" th:action="@{/purchasing/pogrn/save}" th:object="${pogrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-												<input type="hidden" th:field="*{xtype}"/>
-												<input type="hidden" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}" class="form-control" th:field="*{xgrnnum}">
-												<input type="hidden" class="form-control" th:field="*{xtotamt}">
-												<div class="row">
-													<div class="col-md-6">
-
-														<div class="form-group" th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}">
-															<label class="control-label col-md-4" for="xtrngrn">GRN Prefix : </label>
-															<div class="col-md-4">
-																<select class="form-control" th:field="*{xtrngrn}">
-																	<option th:each="prefix : ${grnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
-																</select>
-															</div>
-														</div>
-
-														<div class="form-group" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}">
-															<label class="control-label col-md-4" for="xgrnnum">GRN Number : </label>
-															<div class="col-md-8">
-																<input type="text" class="form-control" th:value="*{xgrnnum}" disabled="disabled">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xcus">Supplier No : </label>
-															<div class="col-sm-6">
-																<input 	type="text" 
-																		class="form-control searchsuggest" 
-																		placeholder="Search..." 
-																		th:value="${pogrnheader.xcus}" 
-																		th:attr="search-url='search/supplier'"/>
-																<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
-																<input type="hidden" id="search-des" th:value="*{xcus}"/>
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xinvnum">Supplier Bill No : </label>
-															<div class="col-md-8">
-																<input type="text" class="form-control" th:field="*{xinvnum}">
-															</div>
-														</div>
-
-														<div class="form-group datepicker">
-															<label class="control-label col-md-4" for="xdate">Date : </label>
-															<div class="input-group date col-md-6 datepicker">
-																<input 	type="datepicker" 
-																		class="form-control" 
-																		id="xdate"
-																		name="xdate"
-																		th:value="${pogrnheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(pogrnheader.xdate, df)}"/>
-																<div class="input-group-addon">
-																	<span class="glyphicon glyphicon-calendar"></span>
+									<div id="pogrnheaderform" th:fragment="pogrnheaderform">
+										<div class="section-header sectionbartoggle"></div>
+										<div class="form-action-button">
+											<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+											<a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/procurements/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed'}" th:href="@{/procurements/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-info confirm-btn-link"><i class="fas fa-clipboard-check"></i> Return</a>
+											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Open'}" th:href="@{/procurements/pogrn/print/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open'}" th:href="@{/procurements/pogrn/archive/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open'}" th:href="@{/procurements/pogrn/confirmgrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
+										</div>
+										<div class="section-body section-border">
+											<div id="pogrnheaderform" th:fragment="pogrnheaderform">
+												<form id="mainform" class="form-horizontal" th:action="@{/procurements/pogrn/save}" th:object="${pogrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+													<input type="hidden" th:field="*{xtypetrn}"/>
+	
+													<div class="row">
+														<div class="col-md-6">
+	
+															<div class="form-group" th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}">
+																<label class="control-label col-md-4" for="xtrn">Code</label>
+																<div class="col-md-4">
+																	<select class="form-control" th:field="*{xtrn}">
+																		<option th:each="prefix : ${grnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
+																	</select>
 																</div>
 															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xwh">Warehouse : </label>
-															<div class="col-md-8">
-																<select class="form-control" th:field="*{xwh}">
-																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
-																</select>
+	
+															<div class="form-group" th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}">
+																<label class="control-label col-md-4" for="xgrnnum">GRN Number</label>
+																<div class="col-md-8">
+																	<input type="hidden" class="form-control" th:field="*{xgrnnum}">
+																	<input type="text" class="form-control" th:value="*{xgrnnum}" disabled="disabled">
+																</div>
 															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
-															<div class="col-md-8">
-																<input type="text" class="form-control" th:field="*{xvoucher}">
+	
+															<div class="form-group datepicker">
+																<label class="control-label col-md-4" for="xdate">Date</label>
+																<div class="input-group date col-md-6 datepicker">
+																	<input 	type="datepicker" 
+																			class="form-control" 
+																			id="xdate"
+																			name="xdate"
+																			th:value="${pogrnheader.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(pogrnheader.xdate, df)}"/>
+																	<div class="input-group-addon">
+																		<span class="glyphicon glyphicon-calendar"></span>
+																	</div>
+																</div>
 															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xnote">Note : </label>
-															<div class="col-md-8">
-																<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xcus">Supplier</label>
+																<div class="col-sm-6">
+																	<input 	type="text" 
+																			class="form-control searchsuggest" 
+																			placeholder="Search..." 
+																			th:value="${#strings.isEmpty(pogrnheader.xcus) ? '' : pogrnheader.xcus + ' - ' + pogrnheader.xorg}" 
+																			th:attr="search-url='search/supplier'"/>
+																	<input type="hidden" id="search-val" th:field="*{xcus}" value=""/>
+																	<input type="hidden" id="search-des" th:value="*{xcus}"/>
+																</div>
 															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xstatusgrn">GRN Status : </label>
-															<div class="col-md-8">
-																<input type="hidden" class="form-control" th:field="*{xstatusgrn}"/>
-																<input type="text" class="form-control" th:value="*{xstatusgrn}" disabled="disabled"/>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xwh">Warehouse</label>
+																<div class="col-md-8">
+																	<select class="form-control" th:field="*{xwh}">
+																		<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode} + ' - ' + ${wh.xdescdet}"></option>
+																	</select>
+																</div>
 															</div>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xinvnum">Supplier Bill No.</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" th:field="*{xinvnum}">
+																</div>
+															</div>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xvoucher">Voucher No.</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" th:field="*{xvoucher}">
+																</div>
+															</div>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xnote">Note</label>
+																<div class="col-md-8">
+																	<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+																</div>
+															</div>
+	
 														</div>
-
+	
+														<div class="col-md-6">
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xtotamt">Total Amount</label>
+																<div class="col-md-6">
+																	<input type="hidden" class="form-control xtotamt" th:field="*{xtotamt}">
+																	<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
+																</div>
+															</div>
+	
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xstatusgrn">GRN Status</label>
+																<div class="col-md-8">
+																	<input type="hidden" class="form-control" th:field="*{xstatusgrn}"/>
+																	<input type="text" class="form-control" th:value="*{xstatusgrn}" disabled="disabled"/>
+																</div>
+															</div>
+	
+														</div>
 													</div>
-													<div class="col-md-6">
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
-															<div class="col-md-6">
-																<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
-															<div class="col-md-8">
-																<select class="form-control vatait-select" th:field="*{xvatait}">
-																	<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
-																</select>
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
-															<div class="col-md-6">
-																<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
-																<input type="text" class="form-control xvatamt-show" min="0" th:value="${pogrnheader.xvatamt}" disabled="disabled">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
-															<div class="col-md-6">
-																<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xaitamt}" min="0">
-																<input type="text" class="form-control xaitamt-show" min="0" th:value="${pogrnheader.xaitamt}" disabled="disabled">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xdiscprime">Prime Discount: </label>
-															<div class="col-md-6">
-																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscprime}" min="0">
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xgrandtot">Grand Total: </label>
-															<div class="col-md-6">
-																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xgrandtot}" min="0" disabled="disabled">
-															</div>
-														</div>
-
-													</div>
-												</div>
-											</form>
-
-											<script>
-												$(document).ready(function(){
-													$("input[name='xdiscprime']").off('blur').on('blur', function(e){
-														var vatAmount = parseFloat($('input[name="xvatamt"]').val());
-														var aitAmount = parseFloat($('input[name="xaitamt"]').val());
-
-														if($("input[name='xdiscprime']").val() == '') $("input[name='xdiscprime']").val(0);
-														var totalAmt = parseFloat($("input[name='xtotamt']").val());
-														var discountPrime = parseFloat($("input[name='xdiscprime']").val());
-														var grandTotal = totalAmt + vatAmount + aitAmount - discountPrime;
-														$('input[name="xgrandtot"]').val(grandTotal);
-													})
-
-													$(".vatait-select").off('change').on("change", function(){
-														var vataitId = $(".vatait-select").val()
-														loadingMask2.show();
-														$.ajax({
-															url: getBasepath() + "/mastersetup/vatait/vataitdetail/" + vataitId,
-															type : 'GET',
-															success: function(data){
-																loadingMask2.hide();
-
-																var vatPercent = parseFloat(data.xvat);
-																var aitPercent = parseFloat(data.xait);
-																var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-																var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
-
-																$('input[name="xvatamt"]').val(vatAmount);
-																$('input.xvatamt-show').val(vatAmount);
-																$('input[name="xaitamt"]').val(aitAmount);
-																$('input.xaitamt-show').val(aitAmount);
-
-																if($("input[name='xdiscprime']").val() == '') $("input[name='xdiscprime']").val(0);
-																var totalAmt = parseFloat($("input[name='xtotamt']").val());
-																var discountPrime = parseFloat($("input[name='xdiscprime']").val());
-																var grandTotal = totalAmt + vatAmount + aitAmount - discountPrime;
-																$('input[name="xgrandtot"]').val(grandTotal);
-															},
-															error : function(jqXHR, status, errorThrown){
-																showMessage(status, "Something went wrong .... ");
-																loadingMask2.hide();
-															}
-														});
-													});
-												})
-											</script>
-
+												</form>
+											</div>
 										</div>
+										<script>
+											$(document).ready(function(){
+												ck.ui.config.editmode();
+												ck.ui.config.dateAndTimepicker();
+											})
+										</script>
 									</div>
 								</section>
 							</div>
@@ -261,26 +186,22 @@
 										<table class="table table-striped table-bordered datatable nowrap">
 											<thead>
 												<tr>
-													<th>GRN No.</th>
-													<th>Purchase Order</th>
+													<th>GRN Number</th>
 													<th>Date</th>
 													<th>Supplier</th>
-													<th>Warehouse</th>
+													<th>Total Amount</th>
 													<th>Status</th>
-													<th>Return No.</th>
 												</tr>
 											</thead>
 											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="pogrn : ${allPogrnHeader}">
+												<tr th:each="g,n : ${allPogrnHeader}">
 													<td>
-														<a th:href="@{/purchasing/pogrn/} + ${pogrn.xgrnnum}" th:text="${pogrn.xgrnnum}"></a>
+														<a th:href="@{/procurements/pogrn/} + ${g.xgrnnum}" th:text="${g.xgrnnum}"></a>
 													</td>
-													<td th:text="${pogrn.xpornum}"></td>
-													<td th:text="${#dates.format(pogrn.xdate, df)}"></td>
-													<td th:text="${pogrn.xorg}"></td>
-													<td th:text="${pogrn.xwh}"></td>
-													<td th:text="${pogrn.xstatusgrn}"></td>
-													<td th:text="${pogrn.xcrnnum}"></td>
+													<td  th:text="${#dates.format(g.xdate, df)}"></td>
+													<td th:text="${g.xcus} + ' - ' + ${g.xorg}"></td>
+													<td th:text="${g.xtotamt}"></td>
+													<td th:text="${g.xstatusgrn}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -289,17 +210,16 @@
 
 							</div>
 						</div>
-						
 					</div>
 
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/purchasing/pogrn/pogrndetail/} + ${pogrnheader.xgrnnum}"></a>
+							<a id="listlines-url" th:href="@{/procurements/pogrn/pogrndetail/} + ${pogrnheader.xgrnnum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>GRN Item Details</h1>
+								<h1>GRN Details</h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="pogrndetailtable" th:fragment="pogrndetailtable">
+								<table class="table table-striped table-bordered normal-table nowrap" id="pogrndetailtable" th:fragment="pogrndetailtable">
 									<thead>
 										<tr>
 											<th>Row</th>
@@ -309,9 +229,7 @@
 											<th>Purchase Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
-											</th>
+											<th data-nosort="Y" style="text-align: right;">Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -326,8 +244,8 @@
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xnote}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/purchasing/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurements/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/procurements/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
@@ -353,7 +271,7 @@
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: getBasepath() + "/purchasing/pogrn/returngrn/" + grnNum,
+					url: getBasepath() + "/procurements/pogrn/returngrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						if(status == "success")

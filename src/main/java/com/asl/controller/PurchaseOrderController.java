@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("/purchasing/poord")
+@RequestMapping("/procurements/poord")
 public class PurchaseOrderController extends ASLAbstractController {
 
 	@Autowired private PoordService poordService;
@@ -67,7 +67,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 	public String loadPoordPage(@PathVariable String xpornum, Model model) {
 		PoordHeader data = poordService.findPoordHeaderByXpornum(xpornum);
 		if(data == null) data = getDefaultPoordHeader();
-		data.setXtypetrn(data.getXtype());
 		if(data.getXtotamt() == null) data.setXtotamt(BigDecimal.ZERO);
 
 		model.addAttribute("poordheader", data);
@@ -123,7 +122,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Purchase Order updated successfully");
-			responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+			responseHelper.setRedirectUrl("/procurements/poord/" + poordHeader.getXpornum());
 			return responseHelper.getResponse();
 		}
 
@@ -135,7 +134,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Purchase Order created successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setRedirectUrl("/procurements/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
 
@@ -171,7 +170,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Purchase order deleted successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord");
+		responseHelper.setRedirectUrl("/procurements/poord");
 		return responseHelper.getResponse();
 	}
 
@@ -214,8 +213,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please select an item");
 			return responseHelper.getResponse();
 		}
-		if(BigDecimal.ZERO.equals(poordDetail.getXqtyord()) || poordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1){
-			responseHelper.setErrorStatusAndMessage("Purchase quantity should be greater then zero");
+		if(poordDetail.getXqtyord() == null || BigDecimal.ZERO.equals(poordDetail.getXqtyord()) || poordDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1){
+			responseHelper.setErrorStatusAndMessage("Purchase quantity should be greater then 0");
 			return responseHelper.getResponse();
 		}
 
@@ -240,8 +239,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 				responseHelper.setErrorStatusAndMessage("Can't update order detail");
 				return responseHelper.getResponse();
 			}
-			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
-			responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
+			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + poordDetail.getXpornum());
+			responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + poordDetail.getXpornum());
 			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -252,8 +251,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Can't save order detail");
 			return responseHelper.getResponse();
 		}
-		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + poordDetail.getXpornum());
-		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + poordDetail.getXpornum());
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + poordDetail.getXpornum());
+		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + poordDetail.getXpornum());
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -290,8 +289,8 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/purchasing/poord/poorddetail/" + xpornum);
-		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/purchasing/poord/poordheaderform/" + xpornum);
+		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + xpornum);
+		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + xpornum);
 		return responseHelper.getResponse();
 	}
 

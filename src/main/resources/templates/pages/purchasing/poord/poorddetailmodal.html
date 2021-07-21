@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<form id="mainform-modal" th:action="@{/purchasing/poord/poorddetail/save}" method="post" class="form-horizontal" th:object="${poorddetail}">
+					<form id="mainform-modal" th:action="@{/procurements/poord/poorddetail/save}" method="post" class="form-horizontal" th:object="${poorddetail}">
 						<input type="hidden" th:field="*{xpornum}"/>
 						<input type="hidden" th:field="*{xrow}"/>
 						<div class="col-md-6">
@@ -106,7 +106,7 @@
 						if(olditem != '' && olditem == $('input[name="xitem"]').val()) return;
 
 						$.ajax({
-							url : getBasepath() + '/purchasing/poord/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/procurements/poord/caitem/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
 							beforeSend : loadingMask2.show(),
 							success : function(data) {

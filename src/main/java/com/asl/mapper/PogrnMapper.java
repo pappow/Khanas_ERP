@@ -41,4 +41,6 @@ public interface PogrnMapper {
 	public long archiveDetailsByXgrnnum(String xgrnnum, String zuuserid, String zid);
 
 	public long countOfPogrndetailByXgrnnum(String xgrnnum, String zid);
+
+	public long deletePogrnheader(String xgrnnum, String zid);
 }

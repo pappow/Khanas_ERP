@@ -114,6 +114,15 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
+	<delete id="deletePogrnheader">
+		DELETE
+		FROM 
+			pogrnheader
+		WHERE
+			xgrnnum=#{xgrnnum}
+			AND zid=#{zid}
+	</delete>
+
 	<update id="archiveDetailsByXgrnnum">
 		UPDATE
 			pogrndetail
@@ -138,13 +147,7 @@
 		UPDATE
 			pogrnheader pgh
 		SET
-			pgh.xtotamt=Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid),
-			pgh.xvatamt=(Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100,
-			pgh.xaitamt=(Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100,
-			pgh.xgrandtot=  Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) 
-							+ ((Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xvat FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100)
-							+ ((Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid) * (SELECT v.xait FROM vatait v WHERE v.xvatait=pgh.xvatait AND v.zid=pgh.zid AND v.zactive='1'))/100)
-							- pgh.xdiscprime
+			pgh.xtotamt=Func_GetTotalAmtGRNDetails(pgh.xgrnnum, pgh.zid)
 		WHERE
 			pgh.xgrnnum=#{xgrnnum}
 			AND pgh.zid=#{zid}
@@ -221,7 +224,13 @@
 	</update>
 
 	<delete id="deletePogrnDetail" parameterType="PogrnHeader">
-		DELETE FROM pogrndetail WHERE xrow=#{xrow} AND xgrnnum=#{xgrnnum} AND zid=#{zid}
+		DELETE 
+		FROM 
+			pogrndetail 
+		WHERE 
+			xrow=#{xrow} 
+			AND xgrnnum=#{xgrnnum} 
+			AND zid=#{zid}
 	</delete>
 
 	<select id="countOfPogrndetailByXgrnnum" resultType="Long">
@@ -229,7 +238,15 @@
 	</select>
 
 	<select id="findPogrnHeaderByXgrnnum" resultType="PogrnHeader">
-		SELECT * FROM PogrnHeader WHERE xgrnnum=#{xgrnnum} AND zid=#{zid}
+		SELECT 
+			pogrnheader.*, 
+			cacus.xorg
+		FROM 
+			pogrnheader 
+			LEFT JOIN cacus ON cacus.xcus = pogrnheader.xcus AND cacus.zid = pogrnheader.zid AND cacus.zactive='1'
+		WHERE 
+			pogrnheader.xgrnnum=#{xgrnnum} 
+			AND pogrnheader.zid=#{zid}
 	</select>
 
 	<select id="findPogrnHeaderByXpornum" resultType="PogrnHeader">
@@ -246,13 +263,17 @@
 
 	<select id="findPogrnDetailByXgrnnumAndXrow" resultType="PogrnDetail">
 		SELECT 
-			* 
+			pogrndetail.*,
+			caitem.xdesc as "xitemdesc", 
+			caitem.xcatitem,
+			caitem.xgitem 
 		FROM 
-			PogrnDetail 
+			pogrndetail
+			LEFT JOIN caitem ON caitem.xitem = pogrndetail.xitem AND caitem.zid = pogrndetail.zid AND caitem.zactive='1'
 		WHERE 
-			xgrnnum=#{xgrnnum} 
-			AND xrow=#{xrow} 
-			AND zid=#{zid} 
+			pogrndetail.xgrnnum=#{xgrnnum} 
+			AND pogrndetail.xrow=#{xrow} 
+			AND pogrndetail.zid=#{zid} 
 	</select>
 
 	<select id="findPogrnDetailByXgrnnum" resultType="PogrnDetail">
@@ -263,7 +284,7 @@
 			caitem.xgitem 
 		FROM
 			PogrnDetail pd
-			JOIN caitem on caitem.xitem=pd.xitem AND caitem.zid=#{zid}
+			JOIN caitem on caitem.xitem=pd.xitem AND caitem.zid=#{zid} AND caitem.zactive='1'
 		WHERE 
 			pd.xgrnnum=#{xgrnnum} 
 			AND pd.zid=#{zid} 
@@ -273,9 +294,10 @@
 
 	<select id="getAllPogrnHeader" resultType="PogrnHeader">
 		SELECT 
-			ph.*, c.xorg 
+			ph.*, 
+			c.xorg 
 		FROM
-			PogrnHeader ph
+			pogrnheader ph
 			left join cacus c on c.xcus = ph.xcus AND c.zid = ph.zid and c.zactive='1'
 		WHERE  
 			ph.zid=#{zid} 

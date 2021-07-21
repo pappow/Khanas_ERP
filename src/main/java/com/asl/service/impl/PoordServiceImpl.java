@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -248,12 +249,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		
 		for(int i = 0; i < poordDetailList.size(); i++) {
 			PoordDetail poorddetail = poordDetailList.get(i);
+			if(poorddetail.getXqtygrn() == null) poorddetail.setXqtygrn(BigDecimal.ZERO);
 
 			PogrnDetail detail = new PogrnDetail();
 			detail.setXgrnnum(pogrnHeader.getXgrnnum());
 			detail.setXitem(poorddetail.getXitem());
 			detail.setXdocrow(poorddetail.getXrow());
-			detail.setXqtygrn(poorddetail.getXqtyord());
+			detail.setXqtygrn(poorddetail.getXqtyord().subtract(poorddetail.getXqtygrn()));
 			detail.setXrate(poorddetail.getXrate());
 			detail.setXunitpur(poorddetail.getXunitpur());
 			detail.setXlineamt(poorddetail.getXlineamt());
@@ -262,12 +264,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 
 			long dcount = pogrnMapper.savePogrnDetail(detail);
 			if(dcount == 0) throw new ServiceException("Can't save detail");
+
+			poorddetail.setXqtygrn(poorddetail.getXqtygrn().add(detail.getXqtygrn()));
 		}
 
 		// now update poorddetails with grn qty
 		for(int i = 0; i < poordDetailList.size(); i++) {
 			PoordDetail poorddetail = poordDetailList.get(i);
-			poorddetail.setXqtygrn(poorddetail.getXqtyord());
 			long dcount = updateDetail(poorddetail);
 			if(dcount == 0) throw new ServiceException("Can't update purchase detail");
 		}
@@ -278,7 +281,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		if(phcount == 0) throw new ServiceException("Can't update purchase order status");
 
 		responseHelper.setSuccessStatusAndMessage("GRN created successfully");
-		responseHelper.setRedirectUrl("/purchasing/poord/" + poordHeader.getXpornum());
+		responseHelper.setRedirectUrl("/procurements/poord/" + poordHeader.getXpornum());
 		return responseHelper.getResponse();
 	}
 

@@ -3,11 +3,11 @@ package com.asl.service.impl;
 import java.util.Collections;
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
@@ -17,35 +17,36 @@ import com.asl.service.PogrnService;
 
 @Service
 public class PogrnServiceImpl extends AbstractGenericService implements PogrnService {
-	
+
 	@Autowired
 	private PogrnMapper pogrnMapper;
 
+	@Transactional
 	@Override
 	public long save(PogrnHeader pogrnHeader) {
-		//if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()) || StringUtils.isBlank(pogrnHeader.getXtrnpor()))
-		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtype()))
-			return 0;
+		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXtypetrn())) return 0;
 		pogrnHeader.setZid(sessionManager.getBusinessId());
 		pogrnHeader.setZauserid(getAuditUser());
 		return pogrnMapper.savePogrnHeader(pogrnHeader);
 	}
 
+	@Transactional
 	@Override
 	public long update(PogrnHeader pogrnHeader) {
-		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXgrnnum()))
-			return 0;
+		if (pogrnHeader == null || StringUtils.isBlank(pogrnHeader.getXgrnnum())) return 0;
 		pogrnHeader.setZid(sessionManager.getBusinessId());
 		pogrnHeader.setZuuserid(getAuditUser());
 		return pogrnMapper.updatePogrnHeader(pogrnHeader);
 	}
 
+	@Transactional
 	@Override
 	public long updatePogrnHeaderTotalAmt(PogrnDetail pogrnDetail) {
 		if(pogrnDetail == null) return 0;
 		return pogrnMapper.updatePogrnHeaderTotalAmt(pogrnDetail);
 	}
-	
+
+	@Transactional
 	@Override
 	public long updatePogrnHeaderTotalAmtAndGrandTotalAmt(String xgrnnum) {
 		if(StringUtils.isBlank(xgrnnum)) return 0;
@@ -157,13 +158,15 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		return pogrnMapper.countOfPogrndetailByXgrnnum(xgrnnum, sessionManager.getBusinessId());
 	}
 
+	@Transactional
+	@Override
+	public long deletePogrnheader(String xgrnnum) {
+		if(StringUtils.isBlank(xgrnnum)) return 0;
+		return pogrnMapper.deletePogrnheader(xgrnnum, sessionManager.getBusinessId());
+	}
 
-	/*
-	 * @Override public List<PogrnHeader> search(String xwh, String sup, String
-	 * status, String fromDate, String toDate) { // TODO Auto-generated method stub
-	 * return pogrnMapper.search(xwh, sup, status, fromDate, toDate); }
-	 */
 
+	
 	
 
 }
