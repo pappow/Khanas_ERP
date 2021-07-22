@@ -48,6 +48,17 @@
 							<div class="section-body" th:fragment="mainmenu">
 								<table class="table dashboard-menu-table">
 									<tr>
+										<td colspan="2">System Administration</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/system/list}">List</a></td>
+										<td>
+											<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
+
+									<tr>
 										<td colspan="2">Master Setup</td>
 									</tr>
 									<tr th:if="${isCentral and menuProfile.M0205 ne null and menuProfile.M0205.display}">

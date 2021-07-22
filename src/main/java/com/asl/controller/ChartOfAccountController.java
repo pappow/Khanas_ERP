@@ -1,7 +1,5 @@
 package com.asl.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.AccountGroup;
-import com.asl.entity.Acgroup;
 import com.asl.entity.Acmst;
-import com.asl.enums.ResponseStatus;
 import com.asl.service.AccountGroupService;
 import com.asl.service.AcmstService;
 

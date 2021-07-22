@@ -43,6 +43,7 @@ public enum TransactionCodeType {
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
 	LANDCOMEVENT_ID("Land Com Event", "EVCM", TransactionCodes.LANDCOMEVENT_ID),
 	LANDOTHEREVENT_ID("Land Other Event", "EVOH", TransactionCodes.LANDOTHEREVENT_ID),
+	LIST_CODE("List Code","LIST",null),
 
 	MONEY_RECEIPTS("AR Transactions", "MR--", TransactionCodes.AR_TRANSACTION),
 

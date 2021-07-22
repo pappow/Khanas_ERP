@@ -1,6 +1,5 @@
 package com.asl.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -12,13 +11,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.asl.controller.ASLAbstractController;
-
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
 @Table(name = "acdef")
+@EqualsAndHashCode(of = {"zid"}, callSuper = false)
 public class Acdef extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 8879484564833804963L;

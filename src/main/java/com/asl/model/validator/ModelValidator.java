@@ -11,7 +11,6 @@ import org.springframework.validation.Errors;
 import com.asl.entity.ListHead;
 import com.asl.entity.Profile;
 import com.asl.entity.Xusers;
-import com.asl.service.ListService;
 import com.asl.service.ProfileService;
 import com.asl.service.XusersService;
 /**
@@ -21,7 +20,6 @@ import com.asl.service.XusersService;
 @Component
 public class ModelValidator extends ConstraintValidator {
 
-	@Autowired private ListService listService;
 	@Autowired private ProfileService profileService;
 	@Autowired private XusersService xusersService;
 //	@Autowired private ShopService shopService;
@@ -82,14 +80,6 @@ public class ModelValidator extends ConstraintValidator {
 
 		super.validate(listHead, errors, validator);
 		if (errors.hasErrors()) return;
-
-		// Check for duplicate listcode if this listhead has id
-		ListHead lh = listService.findListHeadByListCode(listHead.getListCode());
-		if(lh == null) return;
-
-		if(listHead.getListHeadId() == null || (!listHead.getListHeadId().equals(lh.getListHeadId()))) {
-			errors.rejectValue("listCode", "Listcode exist");
-		}
 	}
 
 	public void validateProfile(Profile profile, Errors errors, Validator validator) {

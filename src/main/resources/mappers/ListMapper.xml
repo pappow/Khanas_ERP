@@ -4,10 +4,9 @@
 <mapper namespace="com.asl.mapper.ListMapper">
 
 	<insert id="saveListHead" parameterType="ListHead">
-		INSERT INTO ListHead
+		INSERT INTO LH
 		(
-			listHeadId,
-			listCode,
+			listcode,
 			description,
 			prompt1,
 			prompt2,
@@ -26,19 +25,18 @@
 			prompt15,
 			prompt16,
 			notes,
+			xtypetrn,
+			xtrn,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
-			LIST_HEAD_SEQ.nextval,
-			#{listCode, jdbcType=VARCHAR},
+			#{listcode, jdbcType=VARCHAR},
 			#{description, jdbcType=VARCHAR},
 			#{prompt1, jdbcType=VARCHAR},
 			#{prompt2, jdbcType=VARCHAR},
@@ -57,22 +55,21 @@
 			#{prompt15, jdbcType=VARCHAR},
 			#{prompt16, jdbcType=VARCHAR},
 			#{notes, jdbcType=VARCHAR},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
 	<update id="updateListHead" parameterType="ListHead">
 		UPDATE
-			ListHead
+			LH
 		SET
-			listCode=#{listCode, jdbcType=VARCHAR},
 			description=#{description, jdbcType=VARCHAR},
 			prompt1=#{prompt1, jdbcType=VARCHAR},
 			prompt2=#{prompt2, jdbcType=VARCHAR},
@@ -91,207 +88,242 @@
 			prompt15=#{prompt15, jdbcType=VARCHAR},
 			prompt16=#{prompt16, jdbcType=VARCHAR},
 			notes=#{notes, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			listHeadId=#{listHeadId}
+			listcode=#{listcode, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
 	<insert id="saveDataList" parameterType="DataList">
-		INSERT INTO DataList
+		<selectKey keyProperty="listid" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(listid), 0) + 1 FROM DL WHERE listcode=#{listcode} AND zid=#{zid}
+		</selectKey>
+		INSERT INTO DL
 		(
-			listId,
-			listCode,
+			listid,
+			listcode,
 			description,
-			listValue1,
-			listValue2,
-			listValue3,
-			listValue4,
-			listValue5,
-			listValue6,
-			listValue7,
-			listValue8,
-			listValue9,
-			listValue10,
-			listValue11,
-			listValue12,
-			listValue13,
-			listValue14,
-			listValue15,
-			listValue16,
-			extraValue1,
-			extraValue2,
-			extraValue3,
-			extraValue4,
-			extraValue5,
+			listvalue1,
+			listvalue2,
+			listvalue3,
+			listvalue4,
+			listvalue5,
+			listvalue6,
+			listvalue7,
+			listvalue8,
+			listvalue9,
+			listvalue10,
+			listvalue11,
+			listvalue12,
+			listvalue13,
+			listvalue14,
+			listvalue15,
+			listvalue16,
+			extravalue1,
+			extravalue2,
+			extravalue3,
+			extravalue4,
+			extravalue5,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
-			DATA_LIST_SEQ.nextval,
-			#{listCode, jdbcType=VARCHAR},
+			#{listid}
+			#{listcode, jdbcType=VARCHAR},
 			#{description, jdbcType=VARCHAR},
-			#{listValue1, jdbcType=VARCHAR},
-			#{listValue2, jdbcType=VARCHAR},
-			#{listValue3, jdbcType=VARCHAR},
-			#{listValue4, jdbcType=VARCHAR},
-			#{listValue5, jdbcType=VARCHAR},
-			#{listValue6, jdbcType=VARCHAR},
-			#{listValue7, jdbcType=VARCHAR},
-			#{listValue8, jdbcType=VARCHAR},
-			#{listValue9, jdbcType=VARCHAR},
-			#{listValue10, jdbcType=VARCHAR},
-			#{listValue11, jdbcType=VARCHAR},
-			#{listValue12, jdbcType=VARCHAR},
-			#{listValue13, jdbcType=VARCHAR},
-			#{listValue14, jdbcType=VARCHAR},
-			#{listValue15, jdbcType=VARCHAR},
-			#{listValue16, jdbcType=VARCHAR},
-			#{extraValue1, jdbcType=VARCHAR},
-			#{extraValue2, jdbcType=VARCHAR},
-			#{extraValue3, jdbcType=VARCHAR},
-			#{extraValue4, jdbcType=VARCHAR},
-			#{extraValue5, jdbcType=VARCHAR},
+			#{listvalue1, jdbcType=VARCHAR},
+			#{listvalue2, jdbcType=VARCHAR},
+			#{listvalue3, jdbcType=VARCHAR},
+			#{listvalue4, jdbcType=VARCHAR},
+			#{listvalue5, jdbcType=VARCHAR},
+			#{listvalue6, jdbcType=VARCHAR},
+			#{listvalue7, jdbcType=VARCHAR},
+			#{listvalue8, jdbcType=VARCHAR},
+			#{listvalue9, jdbcType=VARCHAR},
+			#{listvalue10, jdbcType=VARCHAR},
+			#{listvalue11, jdbcType=VARCHAR},
+			#{listvalue12, jdbcType=VARCHAR},
+			#{listvalue13, jdbcType=VARCHAR},
+			#{listvalue14, jdbcType=VARCHAR},
+			#{listvalue15, jdbcType=VARCHAR},
+			#{listvalue16, jdbcType=VARCHAR},
+			#{extravalue1, jdbcType=VARCHAR},
+			#{extravalue2, jdbcType=VARCHAR},
+			#{extravalue3, jdbcType=VARCHAR},
+			#{extravalue4, jdbcType=VARCHAR},
+			#{extravalue5, jdbcType=VARCHAR},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
 	<update id="updateDataList" parameterType="DataList">
 		UPDATE 
-			DataList
+			DL
 		SET
-			listCode=#{listCode, jdbcType=VARCHAR},
 			description=#{description, jdbcType=VARCHAR},
-			listValue1=#{listValue1, jdbcType=VARCHAR},
-			listValue2=#{listValue2, jdbcType=VARCHAR},
-			listValue3=#{listValue3, jdbcType=VARCHAR},
-			listValue4=#{listValue4, jdbcType=VARCHAR},
-			listValue5=#{listValue5, jdbcType=VARCHAR},
-			listValue6=#{listValue6, jdbcType=VARCHAR},
-			listValue7=#{listValue7, jdbcType=VARCHAR},
-			listValue8=#{listValue8, jdbcType=VARCHAR},
-			listValue9=#{listValue9, jdbcType=VARCHAR},
-			listValue10=#{listValue10, jdbcType=VARCHAR},
-			listValue11=#{listValue11, jdbcType=VARCHAR},
-			listValue12=#{listValue12, jdbcType=VARCHAR},
-			listValue13=#{listValue13, jdbcType=VARCHAR},
-			listValue14=#{listValue14, jdbcType=VARCHAR},
-			listValue15=#{listValue15, jdbcType=VARCHAR},
-			listValue16=#{listValue16, jdbcType=VARCHAR},
-			extraValue1=#{extraValue1, jdbcType=VARCHAR},
-			extraValue2=#{extraValue2, jdbcType=VARCHAR},
-			extraValue3=#{extraValue3, jdbcType=VARCHAR},
-			extraValue4=#{extraValue4, jdbcType=VARCHAR},
-			extraValue5=#{extraValue5, jdbcType=VARCHAR},
-			zauserid=#{zauserid, jdbcType=VARCHAR},
+			listvalue1=#{listvalue1, jdbcType=VARCHAR},
+			listvalue2=#{listvalue2, jdbcType=VARCHAR},
+			listvalue3=#{listvalue3, jdbcType=VARCHAR},
+			listvalue4=#{listvalue4, jdbcType=VARCHAR},
+			listvalue5=#{listvalue5, jdbcType=VARCHAR},
+			listvalue6=#{listvalue6, jdbcType=VARCHAR},
+			listvalue7=#{listvalue7, jdbcType=VARCHAR},
+			listvalue8=#{listvalue8, jdbcType=VARCHAR},
+			listvalue9=#{listvalue9, jdbcType=VARCHAR},
+			listvalue10=#{listvalue10, jdbcType=VARCHAR},
+			listvalue11=#{listvalue11, jdbcType=VARCHAR},
+			listvalue12=#{listvalue12, jdbcType=VARCHAR},
+			listvalue13=#{listvalue13, jdbcType=VARCHAR},
+			listvalue14=#{listvalue14, jdbcType=VARCHAR},
+			listvalue15=#{listvalue15, jdbcType=VARCHAR},
+			listvalue16=#{listvalue16, jdbcType=VARCHAR},
+			extravalue1=#{extravalue1, jdbcType=VARCHAR},
+			extravalue2=#{extravalue2, jdbcType=VARCHAR},
+			extravalue3=#{extravalue3, jdbcType=VARCHAR},
+			extravalue4=#{extravalue4, jdbcType=VARCHAR},
+			extravalue5=#{extravalue5, jdbcType=VARCHAR},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			listId=#{listId}
+			listid=#{listid}
+			AND listcode=#{listcode, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 
-	<select id="findListHeadById" resultType="ListHead">
-		SELECT * FROM ListHead WHERE listHeadId=#{listHeadId}
+	<select id="findListHeadByListcode" resultType="ListHead">
+		SELECT 
+			* 
+		FROM 
+			LH 
+		WHERE 
+			listcode=#{listcode}
+			AND zid=#{zid}
 	</select>
 
-	<select id="findDataListById" resultType="DataList">
-		SELECT * FROM DataList WHERE listId=#{listId}
-	</select>
-
-	<select id="findListHeadByListCode" resultType="ListHead">
-		SELECT * FROM ListHead WHERE listCode=#{listCode} AND zid=#{zid} AND zactive='1'
+	<select id="findDataListByListcodeAndListid" resultType="DataList">
+		SELECT 
+			* 
+		FROM 
+			DL 
+		WHERE 
+			listid=#{listid}
+			AND listcode=#{listcode}
+			AND zid=#{zid}
 	</select>
 
 	<select id="findDataListByListCode" resultType="DataList">
-		SELECT * FROM DataList WHERE listCode=#{listCode} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			DL 
+		WHERE 
+			listcode=#{listcode} 
+			AND zid=#{zid}
 	</select>
 
 	<select id="getList" resultType="DataList">
 		SELECT 
 			* 
 		FROM 
-			DataList 
+			DL 
 		WHERE 
-			listCode=#{listCode} 
+			listcode=#{listcode} 
 			AND zid=#{zid}
-			AND zactive='1'
-			<if test="params.listValue1 != null and params.listValue1 != ''">
-				AND listValue1=#{params.listValue1}
+			<if test="params.listvalue1 != null and params.listvalue1 != ''">
+				AND listvalue1=#{params.listvalue1}
 			</if>
-			<if test="params.listValue2 != null and params.listValue2 != ''">
-				AND listValue2=#{params.listValue2}
+			<if test="params.listvalue2 != null and params.listvalue2 != ''">
+				AND listvalue2=#{params.listvalue2}
 			</if>
-			<if test="params.listValue3 != null and params.listValue3 != ''">
-				AND listValue3=#{params.listValue3}
+			<if test="params.listvalue3 != null and params.listvalue3 != ''">
+				AND listvalue3=#{params.listvalue3}
 			</if>
-			<if test="params.listValue4 != null and params.listValue4 != ''">
-				AND listValue4=#{params.listValue4}
+			<if test="params.listvalue4 != null and params.listvalue4 != ''">
+				AND listvalue4=#{params.listvalue4}
 			</if>
-			<if test="params.listValue5 != null and params.listValue5 != ''">
-				AND listValue5=#{params.listValue5}
+			<if test="params.listvalue5 != null and params.listvalue5 != ''">
+				AND listvalue5=#{params.listvalue5}
 			</if>
-			<if test="params.listValue6 != null and params.listValue6 != ''">
-				AND listValue6=#{params.listValue6}
+			<if test="params.listvalue6 != null and params.listvalue6 != ''">
+				AND listvalue6=#{params.listvalue6}
 			</if>
-			<if test="params.listValue7 != null and params.listValue7 != ''">
-				AND listValue7=#{params.listValue7}
+			<if test="params.listvalue7 != null and params.listvalue7 != ''">
+				AND listvalue7=#{params.listvalue7}
 			</if>
-			<if test="params.listValue8 != null and params.listValue8 != ''">
-				AND listValue8=#{params.listValue8}
+			<if test="params.listvalue8 != null and params.listvalue8 != ''">
+				AND listvalue8=#{params.listvalue8}
 			</if>
-			<if test="params.listValue9 != null and params.listValue9 != ''">
-				AND listValue9=#{params.listValue9}
+			<if test="params.listvalue9 != null and params.listvalue9 != ''">
+				AND listvalue9=#{params.listvalue9}
 			</if>
-			<if test="params.listValue10 != null and params.listValue10 != ''">
-				AND listValue10=#{params.listValue10}
+			<if test="params.listvalue10 != null and params.listvalue10 != ''">
+				AND listvalue10=#{params.listvalue10}
 			</if>
-			<if test="params.listValue11 != null and params.listValue11 != ''">
-				AND listValue11=#{params.listValue11}
+			<if test="params.listvalue11 != null and params.listvalue11 != ''">
+				AND listvalue11=#{params.listvalue11}
 			</if>
-			<if test="params.listValue12 != null and params.listValue12 != ''">
-				AND listValue12=#{params.listValue12}
+			<if test="params.listvalue12 != null and params.listvalue12 != ''">
+				AND listvalue12=#{params.listvalue12}
 			</if>
-			<if test="params.listValue13 != null and params.listValue13 != ''">
-				AND listValue13=#{params.listValue13}
+			<if test="params.listvalue13 != null and params.listvalue13 != ''">
+				AND listvalue13=#{params.listvalue13}
 			</if>
-			<if test="params.listValue14 != null and params.listValue14 != ''">
-				AND listValue14=#{params.listValue14}
+			<if test="params.listvalue14 != null and params.listvalue14 != ''">
+				AND listvalue14=#{params.listvalue14}
 			</if>
-			<if test="params.listValue15 != null and params.listValue15 != ''">
-				AND listValue15=#{params.listValue15}
+			<if test="params.listvalue15 != null and params.listvalue15 != ''">
+				AND listvalue15=#{params.listvalue15}
 			</if>
-			<if test="params.listValue16 != null and params.listValue16 != ''">
-				AND listValue16=#{params.listValue16}
+			<if test="params.listvalue16 != null and params.listvalue16 != ''">
+				AND listvalue16=#{params.listvalue16}
 			</if>
 	</select>
 
 	<select id="getAllListHead" resultType="ListHead">
-		SELECT * FROM ListHead WHERE zid=#{zid} ORDER BY listHeadid ASC
+		SELECT 
+			* 
+		FROM 
+			LH 
+		WHERE 
+			zid=#{zid} 
+		ORDER BY 
+			listcode DESC
 	</select>
+
+	<delete id="deleteListHead">
+		DELETE
+		FROM
+			LH
+		WHERE
+			zid=#{zid} 
+			AND listcode=#{listcode}
+	</delete>
+
+	<delete id="deleteDataList">
+		DELETE
+		FROM
+			DL
+		WHERE
+			zid=#{zid} 
+			AND listcode=#{listcode}
+			AND listid=#{listid}
+	</delete>
 
 </mapper>

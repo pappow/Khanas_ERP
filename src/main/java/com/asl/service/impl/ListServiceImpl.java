@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.DataList;
 import com.asl.entity.ListHead;
@@ -24,102 +25,114 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 	@Autowired private ListMapper listMapper;
 
 	@Override
-	public String modifiedListCode(String pc) {
-		if(StringUtils.isBlank(pc)) return "";
-		pc = pc.toUpperCase();
-		pc = pc.replace(" ", "_");
-		return pc;
+	public String modifiedListcode(String listcode) {
+		if(StringUtils.isBlank(listcode)) return "";
+		listcode = listcode.trim();
+		listcode = listcode.toUpperCase();
+		listcode = listcode.replace(" ", "_");
+		return listcode;
 	}
 
+	@Transactional
 	@Override
-	public long save(ListHead listHead) {
-		return save(listHead, sessionManager.getBusinessId());
+	public long saveListHead(ListHead listHead) {
+		return saveListHead(listHead, sessionManager.getBusinessId());
 	}
 
+	@Transactional
 	@Override
-	public long save(ListHead listHead, String businessId) {
+	public long saveListHead(ListHead listHead, String zid) {
 		if(listHead == null) return 0;
-		listHead.setListCode(modifiedListCode(listHead.getListCode()));
-		listHead.setZid(businessId);
+		listHead.setListcode(modifiedListcode(listHead.getListcode()));
+		listHead.setZid(zid);
+		listHead.setZauserid(getAuditUser());
 		return listMapper.saveListHead(listHead);
 	}
 
+	@Transactional
 	@Override
-	public long update(ListHead listHead) {
-		return update(listHead, sessionManager.getBusinessId());
+	public long updateListHead(ListHead listHead) {
+		return updateListHead(listHead, sessionManager.getBusinessId());
 	}
 
+	@Transactional
 	@Override
-	public long update(ListHead listHead, String businessId) {
+	public long updateListHead(ListHead listHead, String zid) {
 		if(listHead == null) return 0;
-		listHead.setListCode(modifiedListCode(listHead.getListCode()));
-		listHead.setZid(businessId);
+		listHead.setListcode(modifiedListcode(listHead.getListcode()));
+		listHead.setZid(zid);
+		listHead.setZuuserid(getAuditUser());
 		return listMapper.updateListHead(listHead);
 	}
-
+	
+	@Transactional
 	@Override
-	public long save(DataList dataList) {
-		return save(dataList, sessionManager.getBusinessId());
+	public long saveDataList(DataList dataList) {
+		return saveDataList(dataList, sessionManager.getBusinessId());
 	}
 
+	@Transactional
 	@Override
-	public long save(DataList dataList, String businessId) {
+	public long saveDataList(DataList dataList, String zid) {
 		if(dataList == null) return 0;
-		dataList.setZid(businessId);
+		dataList.setZid(zid);
+		dataList.setZauserid(getAuditUser());
 		return listMapper.saveDataList(dataList);
 	}
 
+	@Transactional
 	@Override
-	public long update(DataList dataList) {
-		return update(dataList, sessionManager.getBusinessId());
+	public long updateDataList(DataList dataList) {
+		return updateDataList(dataList, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public long update(DataList dataList, String businessId) {
+	public long updateDataList(DataList dataList, String zid) {
 		if(dataList == null) return 0;
-		dataList.setZid(businessId);
+		dataList.setZid(zid);
+		dataList.setZuuserid(getAuditUser());
 		return listMapper.updateDataList(dataList);
 	}
 
 	@Override
-	public ListHead findListHeadById(Long listHeadId) {
-		if(listHeadId == null) return null;
-		return listMapper.findListHeadById(listHeadId);
+	public ListHead findListHeadByListcode(String listcode) {
+		return findListHeadByListcode(listcode, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public DataList findDataListById(Long dataListId) {
-		if(dataListId == null) return null;
-		return listMapper.findDataListById(dataListId);
+	public ListHead findListHeadByListcode(String listcode, String zid) {
+		if(StringUtils.isBlank(listcode) || StringUtils.isBlank(zid)) return null;
+		return listMapper.findListHeadByListcode(listcode, zid);
 	}
 
 	@Override
-	public ListHead findListHeadByListCode(String listCode) {
-		return findListHeadByListCode(listCode, sessionManager.getBusinessId());
+	public DataList findDataListByListcodeAndListid(int listid, String listcode) {
+		return listMapper.findDataListByListcodeAndListid(listid, listcode, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public ListHead findListHeadByListCode(String listCode, String businessId) {
-		if(StringUtils.isBlank(listCode) || StringUtils.isBlank(businessId)) return null;
-		return listMapper.findListHeadByListCode(listCode, businessId);
+	public DataList findDataListByListcodeAndListid(int listid, String listcode, String zid) {
+		if(StringUtils.isBlank(listcode) || StringUtils.isBlank(zid)) return null;
+		return listMapper.findDataListByListcodeAndListid(listid, listcode, zid);
+	}
+
+
+	@Override
+	public List<DataList> findDataListByListcode(String listcode) {
+		return findDataListByListcode(listcode, sessionManager.getBusinessId());
 	}
 
 	@Override
-	public List<DataList> findDataListByListCode(String listCode) {
-		return findDataListByListCode(listCode, sessionManager.getBusinessId());
-	}
-
-	@Override
-	public List<DataList> findDataListByListCode(String listCode, String businessId) {
-		if(StringUtils.isBlank(listCode) || StringUtils.isBlank(businessId)) return Collections.emptyList();
-		List<DataList> list = listMapper.findDataListByListCode(listCode, businessId);
+	public List<DataList> findDataListByListcode(String listcode, String zid) {
+		if(StringUtils.isBlank(listcode) || StringUtils.isBlank(zid)) return Collections.emptyList();
+		List<DataList> list = listMapper.findDataListByListCode(listcode, zid);
 		if(list == null) return Collections.emptyList();
 		return list;
 	}
 
 	@Override
-	public List<DataList> getList(String listCode, String... values){
-		if(StringUtils.isBlank(listCode)) return Collections.emptyList();
+	public List<DataList> getList(String listcode, String... values){
+		if(StringUtils.isBlank(listcode)) return Collections.emptyList();
 
 		Map<String, String> paramMap = new HashMap<>();
 		if(values != null) {
@@ -127,91 +140,52 @@ public class ListServiceImpl extends AbstractGenericService implements ListServi
 			for(String value : values) {
 				index++;
 				if(StringUtils.isBlank(value)) continue;
-				paramMap.put("listValue" + index, value);
+				paramMap.put("listvalue" + index, value);
 			}
 		}
 
-		List<DataList> resultList = listMapper.getList(listCode, sessionManager.getBusinessId(), paramMap);
+		List<DataList> resultList = listMapper.getList(listcode, sessionManager.getBusinessId(), paramMap);
 		return resultList != null ? resultList : Collections.emptyList();
 	}
 
+
 	@Override
 	public List<ListHead> getAllListHead() {
-		List<ListHead> list = listMapper.getAllListHead(sessionManager.getBusinessId());
+		return getAllListHead(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<ListHead> getAllListHead(String zid) {
+		if(StringUtils.isBlank(zid)) return Collections.emptyList();
+		List<ListHead> list = listMapper.getAllListHead(zid);
 		if(list == null) return Collections.emptyList();
 		return list;
 	}
 
-//	@Override
-//	public List<Map<String, Object>> getExportDataByChunk(long limit, long offset) {
-//		StringBuilder sql = new StringBuilder("SELECT ")
-//												.append("lh.listHeadId AS LH_ID, ")
-//												.append("lh.listCode AS LH_CODE, ")
-//												.append("lh.description AS LH_DESC, ")
-//												.append("lh.prompt1 AS LH_PRMP_1, ")
-//												.append("lh.prompt2 AS LH_PRMP_2, ")
-//												.append("lh.prompt3 AS LH_PRMP_3, ")
-//												.append("lh.prompt4 AS LH_PRMP_4, ")
-//												.append("lh.prompt5 AS LH_PRMP_5, ")
-//												.append("lh.prompt6 AS LH_PRMP_6, ")
-//												.append("lh.prompt7 AS LH_PRMP_7, ")
-//												.append("lh.prompt8 AS LH_PRMP_8, ")
-//												.append("lh.prompt9 AS LH_PRMP_9, ")
-//												.append("lh.prompt10 AS LH_PRMP_10, ")
-//												.append("lh.prompt11 AS LH_PRMP_11, ")
-//												.append("lh.prompt12 AS LH_PRMP_12, ")
-//												.append("lh.prompt13 AS LH_PRMP_13, ")
-//												.append("lh.prompt14 AS LH_PRMP_14, ")
-//												.append("lh.prompt15 AS LH_PRMP_15, ")
-//												.append("lh.prompt16 AS LH_PRMP_16, ")
-//												.append("ls.listId AS LS_ID, ")
-//												.append("ls.listCode AS LS_CODE, ")
-//												.append("ls.listValue1 AS LS_VAL_1, ")
-//												.append("ls.listValue2 AS LS_VAL_2, ")
-//												.append("ls.listValue3 AS LS_VAL_3, ")
-//												.append("ls.listValue4 AS LS_VAL_4, ")
-//												.append("ls.listValue5 AS LS_VAL_5, ")
-//												.append("ls.listValue6 AS LS_VAL_6, ")
-//												.append("ls.listValue7 AS LS_VAL_7, ")
-//												.append("ls.listValue8 AS LS_VAL_8, ")
-//												.append("ls.listValue9 AS LS_VAL_9, ")
-//												.append("ls.listValue10 AS LS_VAL_10, ")
-//												.append("ls.listValue11 AS LS_VAL_11, ")
-//												.append("ls.listValue12 AS LS_VAL_12, ")
-//												.append("ls.listValue13 AS LS_VAL_13, ")
-//												.append("ls.listValue14 AS LS_VAL_14, ")
-//												.append("ls.listValue15 AS LS_VAL_15, ")
-//												.append("ls.listValue16 AS LS_VAL_16 ")
-//											.append("FROM ")
-//												.append("lh ")
-//												.append("LEFT JOIN ls ON ls.listCode = lh.listCode AND ls.status = 'L' AND ls.bsid='"+ sessionManager.getBusinessId() +"' ")
-//											.append("WHERE ")
-//												.append("lh.bsid = '"+ sessionManager.getBusinessId() +"' ")
-//												.append("AND lh.statUS = 'L' ")
-//												.append("ORDER BY lh.listCode ")
-//												.append("OFFSET "+ offset +" ROWS ")
-//												.append("FETCH NEXT "+ limit +" ROWS ONLY ");
-//		return jdbcTemplate.queryForList(sql.toString());
-//	}
-//
-//	@Transactional
-//	@Override
-//	public int archiveDataListByListCode(String listCode) {
-//		return archiveDataListByListCode(listCode, sessionManager.getBusinessId());
-//	}
-//
-//	@Transactional
-//	@Override
-//	public int archiveDataListByListCode(String listCode, String businessId) {
-//		StringBuilder sql = new StringBuilder("UPDATE DataList ls SET ls.status=:stat WHERE ls.businessId=:bsid AND ls.status=:lstat AND UPPER(ls.listCode)=:lscd");
-//		return em.createQuery(sql.toString())
-//				.setParameter("stat", RecordStatus.D)
-//				.setParameter("bsid", businessId)
-//				.setParameter("lstat", RecordStatus.L)
-//				.setParameter("lscd", listCode.toUpperCase())
-//				.executeUpdate();
-//	}
+	@Transactional
+	@Override
+	public long deleteListHead(String listcode) {
+		return deleteListHead(listcode, sessionManager.getBusinessId());
+	}
 
-	
+	@Transactional
+	@Override
+	public long deleteListHead(String listcode, String zid) {
+		if(StringUtils.isBlank(listcode) || StringUtils.isBlank(zid)) return 0;
+		return listMapper.deleteListHead(listcode, zid);
+	}
+
+	@Transactional
+	@Override
+	public long deleteDataList(int listid, String listcode) {
+		return deleteDataList(listid, listcode, sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
+	public long deleteDataList(int listid, String listcode, String zid) {
+		if(StringUtils.isBlank(listcode) || StringUtils.isBlank(zid)) return 0;
+		return listMapper.deleteDataList(listid, listcode, zid);
+	}
 
 }

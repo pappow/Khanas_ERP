@@ -25,7 +25,7 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
 										<li class="active"><a th:href="@{/system/list}">List</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -42,47 +42,43 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
+						<div class="row">
+							<h1 class="text-center">List Maintenance</h1>
+						</div>
 
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>List Head</h1>
-									</div>
+									<div class="section-header sectionbartoggle"></div>
 									<div class="form-action-button">
-										<a th:href="@{/system/list}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(listHead.listHeadId)}" th:href="@{/system/list}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.zactive == true}" th:href="@{/system/list/archive/} + ${listHead.listHeadId}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and listHead.zactive == false}" th:href="@{/system/list/restore/} + ${listHead.listHeadId}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<a th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId) and listHead.zactive == true}" th:href="@{/system/list/}  + ${listHead.listHeadId} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
-										<!-- Form Pagination -->
-										<a th:href="@{/formpaging/jump/top?table=ListHead&column=listHeadId&redirectUrl=/system/list}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(listHead.listHeadId) ? 'start' : listHead.listHeadId} + '?table=ListHead&column=listHeadId&redirectUrl=/system/list'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(listHead.listHeadId) ? 'start' : listHead.listHeadId} + '?table=ListHead&column=listHeadId&redirectUrl=/system/list'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/formpaging/jump/bottom?table=ListHead&column=listHeadId&redirectUrl=/system/list}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a>
+										<a th:href="@{/system/list}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${#strings.isEmpty(listHead.listcode)}" th:href="@{/system/list}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+										<a th:if="${not #strings.isEmpty(listHead.listcode)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(listHead.listcode)}" th:href="@{/system/list/archive/} + ${listHead.listcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(listHead.listcode) and #strings.isEmpty(listHead.copyId)}" th:href="@{/system/list/}  + ${listHead.listcode} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/system/list/save}" th:object="${listHead}" method="post">
-											<input type="hidden" th:if="${#strings.isEmpty(listHead.copyId)}" th:field="*{listHeadId}"/>
-											<input type="hidden" th:if="${not #strings.isEmpty(listHead.copyId)}" id="listHeadId" name= "listHeadId"/>
+											<input type="hidden" th:field="*{newData}"/>
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="listCode">List code: </label>
+														<label class="control-label col-sm-4" for="listcode">List code</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" th:field="*{listCode}" required="required" maxlength="100">
+															<input th:if="${#strings.isEmpty(listHead.listcode)}" type="text" class="form-control" th:field="*{listcode}" required="required" maxlength="100">
+															<input th:if="${not #strings.isEmpty(listHead.listcode)}" type="text" class="form-control" th:field="*{listcode}" required="required" maxlength="100" disabled="disabled">
+															<input th:if="${not #strings.isEmpty(listHead.listcode)}" type="hidden" class="form-control" th:field="*{listcode}" required="required" maxlength="100">
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="description">Description: </label>
+														<label class="control-label col-sm-4" for="description">Description</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{description}" required="required" maxlength="100">
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="notes">Information: </label>
+														<label class="control-label col-sm-4" for="notes">Note</label>
 														<div class="col-sm-8">
 															<textarea class="form-control" th:field="*{notes}"></textarea>
 														</div>
@@ -92,49 +88,49 @@
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt1">List prompt 1: </label>
+														<label class="control-label col-sm-4" for="prompt1">List prompt 1</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt1}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt2">List prompt 2: </label>
+														<label class="control-label col-sm-4" for="prompt2">List prompt 2</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt2}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt3">List prompt 3: </label>
+														<label class="control-label col-sm-4" for="prompt3">List prompt 3</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt3}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt4">List prompt 4: </label>
+														<label class="control-label col-sm-4" for="prompt4">List prompt 4</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt4}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt5">List prompt 5: </label>
+														<label class="control-label col-sm-4" for="prompt5">List prompt 5</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt5}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt6">List prompt 6: </label>
+														<label class="control-label col-sm-4" for="prompt6">List prompt 6</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt6}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt7">List prompt 7: </label>
+														<label class="control-label col-sm-4" for="prompt7">List prompt 7</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt7}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt8">List prompt 8: </label>
+														<label class="control-label col-sm-4" for="prompt8">List prompt 8</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt8}" maxlength="100"/>
 														</div>
@@ -142,49 +138,49 @@
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt9">List prompt 9: </label>
+														<label class="control-label col-sm-4" for="prompt9">List prompt 9</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt9}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt10">List prompt 10: </label>
+														<label class="control-label col-sm-4" for="prompt10">List prompt 10</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt10}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt11">List prompt 11: </label>
+														<label class="control-label col-sm-4" for="prompt11">List prompt 11</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt11}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt12">List prompt 12: </label>
+														<label class="control-label col-sm-4" for="prompt12">List prompt 12</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt12}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt13">List prompt 13: </label>
+														<label class="control-label col-sm-4" for="prompt13">List prompt 13</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt13}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt14">List prompt 14: </label>
+														<label class="control-label col-sm-4" for="prompt14">List prompt 14</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt14}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt15">List prompt 15: </label>
+														<label class="control-label col-sm-4" for="prompt15">List prompt 15</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt15}" maxlength="100"/>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="control-label col-sm-4" for="prompt16">List prompt 16: </label>
+														<label class="control-label col-sm-4" for="prompt16">List prompt 16</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" th:field="*{prompt16}" maxlength="100"/>
 														</div>
@@ -204,16 +200,14 @@
 										<table class="table table-striped table-bordered datatable nowrap" id="listmanagertable" th:fragment="listmanagertable">
 											<thead>
 												<tr>
-													<th>Code</th>
+													<th>List Code</th>
 													<th>Description</th>
-													<th>Status</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr th:each="lh : ${listHeads}">
-													<td><a th:href="@{/system/list/} + ${lh.listHeadId}" th:text="${lh.listCode}"></a></td>
+													<td><a th:href="@{/system/list/} + ${lh.listcode}" th:text="${lh.listcode}"></a></td>
 													<td th:text="${lh.description}"></td>
-													<td th:text="${lh.zactive == true ? 'Y' : 'N'}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -223,10 +217,9 @@
 						</div>
 
 						<!-- Section list line -->
-						<section th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/system/list/listlines/} + ${listHead.listCode}"></a>
+						<section th:if="${not #strings.isEmpty(listHead.listcode)}" id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
-								<h1>List Line</h1>
+								<h1>List Lines</h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered datatable nowrap" id="listtable" th:fragment="listtable">
@@ -248,8 +241,8 @@
 											<th th:if="${not #strings.isEmpty(listHead.prompt14)}" th:text="${listHead.prompt14}">id</th>
 											<th th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${listHead.prompt15}">id</th>
 											<th th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${listHead.prompt16}">id</th>
-											<th data-nosort="Y" style="text-align: right;" th:if="${not #strings.isEmpty(listHead.listHeadId) and #strings.isEmpty(listHead.copyId)}">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/new/show', data-target-modal='listmodal'"><i class="fas fa-plus"></i></button>
+											<th data-nosort="Y" style="text-align: right;" th:if="${not #strings.isEmpty(listHead.listcode) and #strings.isEmpty(listHead.copyId)}">
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/new/show', data-target-modal='listmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
 									</thead>
@@ -272,8 +265,8 @@
 											<td th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${list.listValue15}">id</td>
 											<td th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${list.listValue16}">id</td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/show', data-target-modal='listmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listHeadId} + '/listline/' + ${list.listId} + '/archive'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listId} + '/show', data-target-modal='listmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listId} + '/archive'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

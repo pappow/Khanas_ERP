@@ -1,10 +1,10 @@
 package com.asl.entity;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -16,63 +16,91 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Entity
-@Table(name = "dataList")
-@EqualsAndHashCode(of = { "listId" }, callSuper = false)
+@Table(name = "DL")
+@IdClass(DataListPK.class)
+@EqualsAndHashCode(of = { "zid","listid","listcode" }, callSuper = false)
 public class DataList extends AbstractModel<String> {
 
 	private static final long serialVersionUID = 2402818361445233745L;
 
-	@Column(name = "zid", nullable = false)
+	@Id
+	@Basic(optional = false)
+	@Column(name = "zid")
 	private String zid;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "listId", unique = true, nullable = false)
-	private Long listId;
-	@Column(name = "listCode", nullable = false, length = 100)
-	private String listCode;
+	@Basic(optional = false)
+	@Column(name = "listid")
+	private int listid;
+
+	@Id
+	@Basic(optional = false)
+	@Column(name = "listcode", length = 100)
+	private String listcode;
+
 	@Column(name = "description", length = 100)
 	private String description;
-	@Column(name = "listValue1")
-	private String listValue1;
-	@Column(name = "listValue2")
-	private String listValue2;
-	@Column(name = "listValue3")
-	private String listValue3;
-	@Column(name = "listValue4")
-	private String listValue4;
-	@Column(name = "listValue5")
-	private String listValue5;
-	@Column(name = "listValue6")
-	private String listValue6;
-	@Column(name = "listValue7")
-	private String listValue7;
-	@Column(name = "listValue8")
-	private String listValue8;
-	@Column(name = "listValue9")
-	private String listValue9;
-	@Column(name = "listValue10")
-	private String listValue10;
-	@Column(name = "listValue11")
-	private String listValue11;
-	@Column(name = "listValue12")
-	private String listValue12;
-	@Column(name = "listValue13")
-	private String listValue13;
-	@Column(name = "listValue14")
-	private String listValue14;
-	@Column(name = "listValue15")
-	private String listValue15;
-	@Column(name = "listValue16")
-	private String listValue16;
-	@Column(name = "extraValue1")
-	private String extraValue1;
-	@Column(name = "extraValue2")
-	private String extraValue2;
-	@Column(name = "extraValue3")
-	private String extraValue3;
-	@Column(name = "extraValue4")
-	private String extraValue4;
-	@Column(name = "extraValue5")
-	private String extraValue5;
+
+	@Column(name = "listvalue1")
+	private String listvalue1;
+
+	@Column(name = "listvalue2")
+	private String listvalue2;
+
+	@Column(name = "listvalue3")
+	private String listvalue3;
+
+	@Column(name = "listvalue4")
+	private String listvalue4;
+
+	@Column(name = "listvalue5")
+	private String listvalue5;
+
+	@Column(name = "listvalue6")
+	private String listvalue6;
+
+	@Column(name = "listvalue7")
+	private String listvalue7;
+
+	@Column(name = "listvalue8")
+	private String listvalue8;
+
+	@Column(name = "listvalue9")
+	private String listvalue9;
+
+	@Column(name = "listvalue10")
+	private String listvalue10;
+
+	@Column(name = "listvalue11")
+	private String listvalue11;
+
+	@Column(name = "listvalue12")
+	private String listvalue12;
+
+	@Column(name = "listvalue13")
+	private String listvalue13;
+
+	@Column(name = "listvalue14")
+	private String listvalue14;
+
+	@Column(name = "listvalue15")
+	private String listvalue15;
+
+	@Column(name = "listvalue16")
+	private String listvalue16;
+
+	@Column(name = "extravalue1")
+	private String extravalue1;
+
+	@Column(name = "extravalue2")
+	private String extravalue2;
+
+	@Column(name = "extravalue3")
+	private String extravalue3;
+
+	@Column(name = "extravalue4")
+	private String extravalue4;
+
+	@Column(name = "extravalue5")
+	private String extravalue5;
 }
