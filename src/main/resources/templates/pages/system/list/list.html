@@ -56,7 +56,6 @@
 										<a th:if="${#strings.isEmpty(listHead.listcode)}" th:href="@{/system/list}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(listHead.listcode)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(listHead.listcode)}" th:href="@{/system/list/archive/} + ${listHead.listcode}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-										<a th:if="${not #strings.isEmpty(listHead.listcode) and #strings.isEmpty(listHead.copyId)}" th:href="@{/system/list/}  + ${listHead.listcode} + '/copy'" class="btn btn-sm btn-primary copy-btn"><i class="fas fa-copy"></i> Copy</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/system/list/save}" th:object="${listHead}" method="post">
@@ -248,25 +247,25 @@
 									</thead>
 									<tbody>
 										<tr th:each="list : ${listLines}">
-											<td th:if="${not #strings.isEmpty(listHead.prompt1)}" th:text="${list.listValue1}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt2)}" th:text="${list.listValue2}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt3)}" th:text="${list.listValue3}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt4)}" th:text="${list.listValue4}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt5)}" th:text="${list.listValue5}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt6)}" th:text="${list.listValue6}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt7)}" th:text="${list.listValue7}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt8)}" th:text="${list.listValue8}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt9)}" th:text="${list.listValue9}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt10)}" th:text="${list.listValue10}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt11)}" th:text="${list.listValue11}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt12)}" th:text="${list.listValue12}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt13)}" th:text="${list.listValue13}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt14)}" th:text="${list.listValue14}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${list.listValue15}">id</td>
-											<td th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${list.listValue16}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt1)}" th:text="${list.listvalue1}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt2)}" th:text="${list.listvalue2}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt3)}" th:text="${list.listvalue3}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt4)}" th:text="${list.listvalue4}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt5)}" th:text="${list.listvalue5}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt6)}" th:text="${list.listvalue6}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt7)}" th:text="${list.listvalue7}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt8)}" th:text="${list.listvalue8}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt9)}" th:text="${list.listvalue9}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt10)}" th:text="${list.listvalue10}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt11)}" th:text="${list.listvalue11}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt12)}" th:text="${list.listvalue12}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt13)}" th:text="${list.listvalue13}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt14)}" th:text="${list.listvalue14}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt15)}" th:text="${list.listvalue15}">id</td>
+											<td th:if="${not #strings.isEmpty(listHead.prompt16)}" th:text="${list.listvalue16}">id</td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listId} + '/show', data-target-modal='listmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listId} + '/archive'"><i class="fas fa-trash"></i></button>
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listid} + '/show', data-target-modal='listmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/system/list/} + ${listHead.listcode} + '/listline/' + ${list.listid} + '/archive'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>

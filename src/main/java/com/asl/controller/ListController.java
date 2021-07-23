@@ -20,14 +20,11 @@ import com.asl.entity.ListHead;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.ListService;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * @author Zubayer Ahamed
  * @since Dec 04, 2020
  *
  */
-@Slf4j
 @Controller
 @RequestMapping("/system/list")
 public class ListController extends ASLAbstractController {
@@ -105,157 +102,6 @@ public class ListController extends ASLAbstractController {
 		return doArchiveOrRestore(listcode, true);
 	}
 
-
-	@GetMapping("/{listHeadId}/copy")
-	public String copy(@PathVariable Long listHeadId, Model model) {
-		if(listHeadId == null) {
-			model.addAttribute("listHead", new ListHead());
-			return "redirect:/system/list";
-		}
-
-//		ListHead lh = listService.findListHeadByListcode(Long.valueOf(listHeadId));
-//		if(lh == null) {
-//			model.addAttribute("listHead", new ListHead());
-//			return "redirect:/system/list";
-//		}
-//
-//		//lh.setCopyId(String.valueOf(lh.getListHeadId()));
-//		lh.setListCode("Copy of " + lh.getListCode());
-//		lh.setDescription("Copy of " + lh.getDescription());
-////		lh.setListHeadId(null);
-//		model.addAttribute("listHead", lh);
-		return "pages/list/list";
-	}
-
-	@GetMapping("{listHeadId}/listline/{listLineId}/show")
-	public String openModalToAddOrUpdateList(@PathVariable String listHeadId, @PathVariable String listLineId, Model model) {
-		ListHead lh = null;
-//		try {
-//			lh = listService.findListHeadByListcode(Long.valueOf(listHeadId));
-//		} catch (Exception e) {
-//			log.error(ERROR, e.getMessage(), e);
-//		}
-
-		if(lh == null) return "redirect:/system/list";
-
-		model.addAttribute("listHead", lh);
-
-		if("new".equalsIgnoreCase(listLineId)) {
-			model.addAttribute("dataList", new DataList());
-		} else {
-			DataList dl = null;
-//			try {
-//				dl = listService.findDataListByListcodeAndListid(Long.valueOf(listLineId));
-//			} catch (Exception e) {
-//				log.error("Error is : {}, {}", e.getMessage(), e);
-//			}
-//
-//			if(dl == null) return "redirect:/system/list";
-
-			model.addAttribute("dataList", dl);
-		}
-
-		return "pages/list/listmodal::listmodal";
-	}
-
-	@PostMapping("/listline/save")
-	public @ResponseBody Map<String, Object> saveListLine(DataList dataList, String listHeadId){
-		if(StringUtils.isBlank(listHeadId) || dataList == null) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
-		ListHead lh = null;
-//		try {
-//			lh = listService.findListHeadByListcode(Long.valueOf(listHeadId));
-//		} catch (Exception e) {
-//			log.error(ERROR, e.getMessage(), e);
-//		}
-//		if(lh == null || StringUtils.isBlank(lh.getListCode())) {
-//			responseHelper.setStatus(ResponseStatus.ERROR);
-//			return responseHelper.getResponse();
-//		}
-
-//		try {
-//			DataList dl = null;
-//			if(dataList.getListId() != null) {
-//				dl = listService.findDataListById(dataList.getListId());
-//				if(dl != null) {
-//					setNewDataListToOldDataList(dataList, dl);
-//					long count = listService.update(dl);
-//					if(count == 0) {
-//						responseHelper.setStatus(ResponseStatus.ERROR);
-//						return responseHelper.getResponse();
-//					}
-//
-//					responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + dl.getListCode());
-//					responseHelper.setSuccessStatusAndMessage("List updated successfully");
-//					return responseHelper.getResponse();
-//				}
-//			} 
-
-//			dataList.setListCode(lh.getListCode());
-		//	dataList.setStatus(RecordStatus.L);
-			long count = listService.saveDataList(dataList);
-			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-
-//			responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + dataList.getListCode());
-//			responseHelper.setSuccessStatusAndMessage("List saved successfully");
-//		} catch (Exception e) {
-//			log.error(ERROR, e.getMessage(), e);
-//			responseHelper.setStatus(ResponseStatus.ERROR);
-//		}
-
-		return responseHelper.getResponse();
-	}
-
-	@GetMapping("/listlines/{listCode}")
-	public String getReloadedListLineSection(@PathVariable String listCode, Model model){
-//		model.addAttribute("listHead", listService.findListHeadByListCode(listCode));
-		model.addAttribute("listLines", listService.findDataListByListcode(listCode));
-		return "pages/list/list::listtable";
-	}
-
-	@PostMapping("{listHeadId}/listline/{listLineId}/archive")
-	public @ResponseBody Map<String, Object> archiveListLine(@PathVariable String listHeadId, @PathVariable String listLineId, Model model) {
-		ListHead lh = null;
-//		try {
-//			lh = listService.findListHeadByListcode(Long.valueOf(listHeadId));
-//		} catch (Exception e) {
-//			log.error("Error is : {}, {}", e.getMessage(), e);
-//		}
-
-//		if(lh == null || lh.getListHeadId() == null) {
-//			responseHelper.setStatus(ResponseStatus.ERROR);
-//			return responseHelper.getResponse();
-//		}
-
-		try {
-//			DataList dl = listService.findDataListByListcodeAndListid(Long.valueOf(listLineId));
-//			if(dl == null || dl.getListId() == null) {
-//				responseHelper.setStatus(ResponseStatus.ERROR);
-//				return responseHelper.getResponse();
-//			}
-
-//			dl.setZactive(Boolean.FALSE);
-//			long count = listService.updateDataList(dl);
-//			if(count == 0) {
-//				responseHelper.setStatus(ResponseStatus.ERROR);
-//				return responseHelper.getResponse();
-//			}
-//
-//			responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + lh.getListCode());
-//			responseHelper.setSuccessStatusAndMessage("List archived successfully");
-		} catch (Exception e) {
-			log.error("Error is : {}, {}", e.getMessage(), e);
-			responseHelper.setStatus(ResponseStatus.ERROR);
-		}
-		return responseHelper.getResponse();
-	}
-
 	private Map<String, Object> doArchiveOrRestore(String listcode, boolean doArchive) {
 		if(StringUtils.isBlank(listcode)) {
 			responseHelper.setErrorStatusAndMessage("Can't delete list");
@@ -274,7 +120,6 @@ public class ListController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Delete all list lines first");
 			return responseHelper.getResponse();
 		}
-		
 
 		long count = listService.deleteListHead(listcode);
 		if(count == 0) {
@@ -284,6 +129,92 @@ public class ListController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("List deleted successfully");
 		responseHelper.setRedirectUrl("/system/list");
+		return responseHelper.getResponse();
+	}
+
+
+	@GetMapping("{listcode}/listline/{listid}/show")
+	public String openModalToAddOrUpdateList(@PathVariable String listcode, @PathVariable String listid, Model model) {
+		ListHead lh = listService.findListHeadByListcode(listcode);
+		if(lh == null) return "redirect:/system/list";
+
+		model.addAttribute("listHead", lh);
+
+		if("new".equalsIgnoreCase(listid)) {
+			DataList dl = new DataList();
+			dl.setListcode(listcode);
+			model.addAttribute("dataList", dl);
+		} else {
+			DataList dl = listService.findDataListByListcodeAndListid(Integer.valueOf(listid), listcode);
+			if(dl == null) return "redirect:/system/list";
+			model.addAttribute("dataList", dl);
+		}
+
+		return "pages/system/list/listmodal::listmodal";
+	}
+
+	@PostMapping("/listline/save")
+	public @ResponseBody Map<String, Object> saveListLine(DataList dataList){
+		if(StringUtils.isBlank(dataList.getListcode()) || dataList == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		ListHead lh = listService.findListHeadByListcode(dataList.getListcode());
+		if(lh == null) {
+			responseHelper.setErrorStatusAndMessage("List not found in this system");
+			return responseHelper.getResponse();
+		}
+
+		// if new
+		if(dataList.getListid() == 0) {
+			long count = listService.saveDataList(dataList);
+			if(count == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't save list line");
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("List line saved successfully");
+			responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + dataList.getListcode());
+			return responseHelper.getResponse();
+		}
+
+		DataList exist = listService.findDataListByListcodeAndListid(dataList.getListid(), dataList.getListcode());
+		if(exist == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find list line in this system");
+			return responseHelper.getResponse();
+		}
+
+		BeanUtils.copyProperties(dataList, exist);
+		long count = listService.updateDataList(exist);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update list line");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("List line updated successfully");
+		responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + dataList.getListcode());
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/listlines/{listcode}")
+	public String getReloadedListLineSection(@PathVariable String listcode, Model model){
+		model.addAttribute("listHead", listService.findListHeadByListcode(listcode));
+		model.addAttribute("listLines", listService.findDataListByListcode(listcode));
+		return "pages/system/list/list::listtable";
+	}
+
+	@PostMapping("{listcode}/listline/{listid}/archive")
+	public @ResponseBody Map<String, Object> archiveListLine(@PathVariable String listcode, @PathVariable int listid, Model model) {
+
+		long count = listService.deleteDataList(listid, listcode);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete list line");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("List line deleted successfully");
+		responseHelper.setReloadSectionIdWithUrl("listtable", "/system/list/listlines/" + listcode);
 		return responseHelper.getResponse();
 	}
 }

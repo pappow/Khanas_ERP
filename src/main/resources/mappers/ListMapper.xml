@@ -137,7 +137,7 @@
 		)
 		VALUES
 		(
-			#{listid}
+			#{listid},
 			#{listcode, jdbcType=VARCHAR},
 			#{description, jdbcType=VARCHAR},
 			#{listvalue1, jdbcType=VARCHAR},
