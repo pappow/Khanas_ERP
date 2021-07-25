@@ -13,17 +13,25 @@
 						<input type="hidden" th:field="*{xgrnnum}"/>
 						<input type="hidden" th:field="*{xrow}"/>
 						<input type="hidden" th:field="*{xdocrow}"/>
+						<input type="hidden" th:field="*{prevqty}"/>
 						<div class="col-md-6">
-							<div class="form-group">
+							<div class="form-group" th:if="${pogrndetail.xrow == 0}">
 								<label class="control-label col-sm-4" for="xitem">Item</label>
 								<div class="col-sm-8">
 									<input 	type="text" 
 											class="form-control searchsuggest xitemsearch" 
 											placeholder="Search..." 
 											th:value="${#strings.isEmpty(pogrndetail.xitem) ? '' : pogrndetail.xitem + ' - ' + pogrndetail.xitemdesc}" 
-											th:attr="search-url='search/caitem'"/>
+											th:attr="search-url='search/poordcaitem/' + ${xpornum}"/>
 									<input type="hidden" id="search-val" th:field="*{xitem}" class="search-xitem" value=""/>
 									<input type="hidden" id="search-des" th:value="*{xitem}"/>
+								</div>
+							</div>
+							<div class="form-group" th:if="${pogrndetail.xrow != 0}">
+								<label class="control-label col-sm-4" for="xitem">Item</label>
+								<div class="col-sm-8">
+									<input type="hidden" th:field="*{xitem}"/>
+									<input type="text" th:value="${#strings.isEmpty(pogrndetail.xitem) ? '' : pogrndetail.xitem + ' - ' + pogrndetail.xitemdesc}" class="form-control xunitpur-display" disabled="disabled"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -91,12 +99,15 @@
 						if($('input[name="xitem"]').val() == ''){
 							$('input.xunitpur-display').val('');
 							$('input[name="xrate"]').val('');
+							$("#xdocrow").val(0);
+							$("#prevqty").val(0);
+							$("#xqtygrn").val(0);
 							return;
 						}
 
 						loadingMask2.show();
 						$.ajax({
-							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val(),
+							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val().split("|")[0],
 							type : 'GET',
 							success : function(data) {
 								loadingMask2.hide();
@@ -104,6 +115,9 @@
 								$('input.xunitpur-display').val(data.xunitpur);	
 								$('input[name="xrate"]').val(data.xrate);
 								$(".qty").focus();
+								$("#xdocrow").val($('input[name="xitem"]').val().split("|")[1]);
+								$("#prevqty").val($('input[name="xitem"]').val().split("|")[2]);
+								$("#xqtygrn").val($('input[name="xitem"]').val().split("|")[2]);
 							},
 							error : function(jqXHR, status, errorThrown){
 								showMessage(status, "Something went wrong .... ");

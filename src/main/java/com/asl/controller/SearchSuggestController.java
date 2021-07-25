@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
 import com.asl.service.AccountGroupService;
@@ -82,6 +84,15 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private AcmstService acmstServicee;
 	@Autowired private LandMemberInfoService landMemberInfoService;
 	@Autowired private CabankService cabankService;
+
+	@GetMapping("/poordcaitem/{xpornum}/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getPurchaseOrderAvailableItem(@PathVariable String xpornum, @PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<SearchSuggestResult> list = new ArrayList<>();
+		List<PoordDetail> details = poordService.searchPurchaseOrderAvailableItem(xpornum, hint);
+		details.stream().forEach(d -> list.add(new SearchSuggestResult(d.getXitem().concat("|").concat(String.valueOf(d.getXrow())).concat("|").concat(d.getXqtyord().subtract(d.getXqtygrn() == null ? BigDecimal.ZERO : d.getXqtygrn()).toString()), d.getXrow() + ". " + d.getXitem() + " - " + d.getItemname())));
+		return list;
+	}
 
 	@GetMapping("/account/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getAccount(@PathVariable String hint){

@@ -174,6 +174,32 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@PostMapping("/confirm/{xpornum}")
+	public @ResponseBody Map<String, Object> confirm(@PathVariable String xpornum){
+
+		PoordHeader ph = poordService.findPoordHeaderByXpornum(xpornum);
+		if(ph == null) {
+			responseHelper.setErrorStatusAndMessage("Purchase order " + xpornum + " not found");
+			return responseHelper.getResponse();
+		}
+
+		if(!"Open".equalsIgnoreCase(ph.getXstatuspor())) {
+			responseHelper.setErrorStatusAndMessage("Purchase order " + xpornum + " is not Open");
+			return responseHelper.getResponse();
+		}
+
+		ph.setXstatuspor("Confirmed");
+		long count = poordService.update(ph);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't CoPurchase order " + xpornum + " is not Open");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + ph.getXpornum());
+		responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
+		return responseHelper.getResponse();
+	}
+
 	@GetMapping("{xpornum}/poorddetail/{xrow}/show")
 	public String openPoordDetailModal(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
 

@@ -84,11 +84,15 @@
 
 	<select id="find" resultType="Acdef">
 		SELECT
-			*
+			acdef.*,
+			acmst.xdesc as xaccpldesc,
+			ac.xdesc as xaccgldesc
 		FROM
 			acdef
+			left join acmst  on acmst.xacc = acdef.xaccpl and acmst.zid = acdef.zid
+			left join acmst ac on ac.xacc = acdef.xaccgl and ac.zid = acdef.zid
 		WHERE
-			zid=#{zid}
+			acdef.zid=#{zid}
 	</select>
 
 </mapper>

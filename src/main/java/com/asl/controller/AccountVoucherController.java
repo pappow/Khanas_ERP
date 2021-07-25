@@ -1,6 +1,8 @@
 package com.asl.controller;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Acdef;
 import com.asl.entity.Acdetail;
 import com.asl.entity.Acheader;
+import com.asl.entity.Acsubview;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.AcService;
 import com.asl.service.AcdefService;
+import com.asl.service.AcsubviewSerevice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +38,7 @@ public class AccountVoucherController extends ASLAbstractController{
 
 	@Autowired private AcService acService;
 	@Autowired private AcdefService acdefService;
+	@Autowired private AcsubviewSerevice acsubviewSerevice;
 
 	@GetMapping
 	public String loadAccountVoucherPage(Model model) {
@@ -130,9 +135,13 @@ public class AccountVoucherController extends ASLAbstractController{
 			acdetail.setXcredit(BigDecimal.ZERO);
 			acdetail.setXwh(acheader != null ? acheader.getXwh() : "01");
 			model.addAttribute("acdetail", acdetail);
+			model.addAttribute("subaccounts", Collections.emptyList());
 		} else {
-			Acdetail acdetail = acService.findAcdetailByXrowAndXvoucher(Integer.parseInt(xrow), xvoucher);
+			Acdetail acdetail = acService.findAcdetailByXrowAndXvoucher(Integer.parseInt(xrow), xvoucher);	
 			model.addAttribute("acdetail", acdetail);
+			List<Acsubview> list = acsubviewSerevice.findSubAccountByXacc(acdetail.getXacc());
+			list.sort(Comparator.comparing(Acsubview::getXsub));
+			model.addAttribute("subaccounts", list);
 		}
 
 		return "pages/account/voucher/voucherdetailmodal::voucherdetailmodal";
@@ -339,5 +348,12 @@ public class AccountVoucherController extends ASLAbstractController{
 		responseHelper.setSecondReloadSectionIdWithUrl("voucherform", "/account/voucher/voucherform/" + xvoucher);
 		responseHelper.setSuccessStatusAndMessage("Voucher detail saved successfully");
 		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/subaccount/{xacc}")
+	public @ResponseBody List<Acsubview> getSubAccount(@PathVariable String xacc){
+		List<Acsubview> list = acsubviewSerevice.findSubAccountByXacc(xacc);
+		list.sort(Comparator.comparing(Acsubview::getXsub));
+		return list;
 	}
 }

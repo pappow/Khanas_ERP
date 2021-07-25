@@ -424,4 +424,20 @@
 			AND zid=#{zid}
 	</delete>
 
+	<select id="searchPurchaseOrderAvailableItem" resultType="PoordDetail">
+		SELECT 
+			poorddetail.*,
+			caitem.xdesc as itemname 
+		FROM 
+			poorddetail 
+			LEFT JOIN caitem ON caitem.xitem = poorddetail.xitem AND caitem.zid = poorddetail.zid AND caitem.zactive='1'
+		WHERE 
+			poorddetail.xpornum=#{xpornum}
+			AND (UPPER(poorddetail.xitem) LIKE '%' || #{xitem} || '%') 
+			AND poorddetail.zid=#{zid} 
+			AND poorddetail.xqtygrn != poorddetail.xqtyord
+		ORDER BY 
+			poorddetail.xitem
+	</select>
+
 </mapper>
