@@ -54,10 +54,11 @@
 										<div class="form-action-button">
 											<a th:href="@{/procurements/poord}" class="btn btn-sm btn-default" data-reloadurl="/procurements/poord/clear" data-reloadelementid="poordheaderform"><i class="fas fa-redo-alt"></i> Clear</a>
 											<a th:if="${#strings.isEmpty(poordheader.xpornum)}" th:href="@{/procurements/poord}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Confirmed' and poordheader.xstatuspor ne 'GRN Created' and poordheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor != 'Open' and poordheader.zactive == true}" th:href="@{/procurements/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor == 'Open' and poordheader.zactive == true}" th:href="@{/procurements/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.zactive == true}" th:href="@{/procurements/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-check-square"></i> Create GRN</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor eq 'Open'}" th:href="@{/procurements/poord/archive/} + ${poordheader.xpornum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor ne 'Open'}" th:href="@{/procurements/poord/print/} + ${poordheader.xpornum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor eq 'Open'}" th:href="@{/procurements/poord/confirm/} + ${poordheader.xpornum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-check-square"></i> Confirm</a>
+											<a th:if="${not #strings.isEmpty(poordheader.xpornum) and poordheader.xstatuspor ne 'Open'}" th:href="@{/procurements/poord/creategrn/} + ${poordheader.xpornum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-check-square"></i> Create GRN</a>
 										</div>
 										<div class="section-body section-border">
 											<div id="poordheaderform" th:fragment="poordheaderform">

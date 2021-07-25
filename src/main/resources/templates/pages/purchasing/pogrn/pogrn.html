@@ -54,7 +54,7 @@
 										<div class="section-header sectionbartoggle"></div>
 										<div class="form-action-button">
 											<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
-											<a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/procurements/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+											<!-- <a th:if="${#strings.isEmpty(pogrnheader.xgrnnum)}" th:href="@{/procurements/pogrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a> -->
 											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn == 'Confirmed'}" th:href="@{/procurements/pogrn/returngrn/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-info confirm-btn-link"><i class="fas fa-clipboard-check"></i> Return</a>
 											<a th:if="${not #strings.isEmpty(pogrnheader.xgrnnum) and pogrnheader.xstatusgrn != 'Open'}" th:href="@{/procurements/pogrn/print/} + ${pogrnheader.xgrnnum}" class="btn btn-sm btn-primary print-btn-link" target="_blank"><i class="fas fa-print"></i> Print </a>
@@ -235,7 +235,9 @@
 											<th>Purchase Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th data-nosort="Y" style="text-align: right;" th:if="${pogrnheader.xstatusgrn eq 'Open'}">Action</th>
+											<th data-nosort="Y" style="text-align: right;" th:if="${pogrnheader.xstatusgrn eq 'Open'}">
+												<button type="button" class="btn btn-success btn-edit editmode" th:attr="data-url=@{/procurements/pogrn/} + ${pogrnheader.xgrnnum} + '/pogrndetail/new/show', data-target-modal='pogrndetailmodal'"><i class="fas fa-plus"></i></button>
+											</th>
 										</tr>
 									</thead>
 									<tbody>

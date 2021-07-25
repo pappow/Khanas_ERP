@@ -76,4 +76,9 @@ public class Acdef extends AbstractModel<String> {
 
 	@Transient
 	private boolean dataExist;
+
+	@Transient 
+	private String xaccpldesc;
+	@Transient
+	private String xaccgldesc;
 }

@@ -29,6 +29,17 @@
 										</div>
 									</div>
 								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label col-sm-4" for="xsub">Sub Account</label>
+										<div class="col-sm-8">
+											<select th:field="*{xsub}" class="form-control">
+												<option value="">-- Select --</option>
+												<option th:each="s : ${subaccounts}" th:value="${s.xsub}" th:text="${s.xsub}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -76,6 +87,45 @@
 			$(document).ready(function(){
 				// Init ui for modal
 				ck.ui.config.buttonevent();
+
+				$('.xitemsearch').on('blur', function(){
+					setTimeout(() => {
+						if($('input[name="xacc"]').val() == ''){
+							$("#xsub option").remove(); 
+							var mySelect = $('#xsub');
+							mySelect.append(
+								$('<option></option>').val("").html("-- Select --")
+							);
+							return;
+						}
+
+						loadingMask2.show();
+						$.ajax({
+							url : getBasepath() + '/account/voucher/subaccount/' + $('input[name="xacc"]').val(),
+							type : 'GET',
+							success : function(data) {
+								loadingMask2.hide();
+								if(data == undefined || data == null) return;
+
+								$("#xsub option").remove(); 
+								var mySelect = $('#xsub');
+								mySelect.append(
+									$('<option></option>').val("").html("-- Select --")
+								);
+								$.each(data, function(val, obj) {
+									mySelect.append(
+										$('<option></option>').val(obj.xsub).html(obj.xsub)
+									);
+								});
+
+							},
+							error : function(jqXHR, status, errorThrown){
+								showMessage(status, "Something went wrong .... ");
+								loadingMask2.hide();
+							}
+						})
+					}, 1000);
+				});
 			});
 		</script>
 	</div>

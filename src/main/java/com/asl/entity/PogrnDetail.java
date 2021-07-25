@@ -70,4 +70,7 @@ public class PogrnDetail extends AbstractModel<String> {
 	private String xcatitem;
 	@Transient
 	private String xgitem;
+
+	@Transient
+	private BigDecimal prevqty;
 }

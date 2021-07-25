@@ -15,7 +15,7 @@ import com.asl.entity.Acdef;
 import com.asl.service.AcdefService;
 
 @Controller
-@RequestMapping("/accdefault")
+@RequestMapping("/account/accdefault")
 public class AccountDefaultController extends ASLAbstractController {
 
 	@Autowired private AcdefService acdefService;
@@ -52,7 +52,7 @@ public class AccountDefaultController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Account default updated successfully");
-			responseHelper.setRedirectUrl("/accdefault");
+			responseHelper.setRedirectUrl("/account/accdefault");
 			return responseHelper.getResponse();
 		}
 
@@ -64,7 +64,7 @@ public class AccountDefaultController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Account default saved successfully");
-		responseHelper.setRedirectUrl("/accdefault");
+		responseHelper.setRedirectUrl("/account/accdefault");
 		return responseHelper.getResponse();
 	}
 

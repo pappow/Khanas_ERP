@@ -61,4 +61,6 @@ public interface PoordService {
 	public long deletePoordheaderByXpornum(String xpornum);
 
 	public Map<String, Object> createPurchaseOrderToGRN(ResponseHelper responseHelper, String xpornum) throws ServiceException;
+
+	public List<PoordDetail> searchPurchaseOrderAvailableItem(String xpornum, String xitem);
 }

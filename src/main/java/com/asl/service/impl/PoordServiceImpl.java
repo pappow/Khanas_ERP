@@ -219,23 +219,6 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			return responseHelper.getResponse();
 		}
 
-		// Check PO has already open GRN
-		boolean openExist = false;
-		String openGrnNumber = "";
-		List<PogrnHeader> grns = pogrnMapper.findPogrnHeaderByXpornum(xpornum, sessionManager.getBusinessId());
-		if(grns != null && !grns.isEmpty()) {
-			for(PogrnHeader pgh : grns) {
-				if("Open".equalsIgnoreCase(pgh.getXstatusgrn())) {
-					openExist = true;
-					openGrnNumber = pgh.getXgrnnum();
-				}
-			}
-		}
-		if(openExist) {
-			responseHelper.setErrorStatusAndMessage("This purchase order already has Open GRN : " + openGrnNumber);
-			return responseHelper.getResponse();
-		}
-
 		// check purchase order has item details
 		List<PoordDetail> poordDetailList = findPoorddetailByXpornum(xpornum);
 		if(poordDetailList.isEmpty()) {
@@ -307,7 +290,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		}
 
 		// now update poordheader status
-		poordHeader.setXstatuspor("GRN Created");
+		poordHeader.setXstatuspor("Full Received");
 		long phcount = update(poordHeader);
 		if(phcount == 0) throw new ServiceException("Can't update purchase order status");
 
@@ -316,5 +299,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		return responseHelper.getResponse();
 	}
 
-	
+	@Override
+	public List<PoordDetail> searchPurchaseOrderAvailableItem(String xpornum, String xitem){
+		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(xitem)) return Collections.emptyList();
+		return poordMapper.searchPurchaseOrderAvailableItem(xpornum, xitem.toUpperCase(), sessionManager.getBusinessId());
+	}
 }
