@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -165,7 +166,13 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		return pogrnMapper.deletePogrnheader(xgrnnum, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public BigDecimal getTotalGRNQtyOfConfirmedGRNDetail(int xdocrow, String xpornum) {
+		if(xdocrow == 0 || StringUtils.isBlank(xpornum)) return BigDecimal.ZERO;
+		return pogrnMapper.getTotalGRNQtyOfConfirmedGRNDetail(xdocrow, xpornum, sessionManager.getBusinessId());
+	}
 
+	
 	
 	
 

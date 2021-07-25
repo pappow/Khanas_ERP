@@ -1,5 +1,6 @@
 package com.asl.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -50,4 +51,6 @@ public interface PogrnService {
 	public long countOfPogrndetailByXgrnnum(String xgrnnum);
 	
 	public long deletePogrnheader(String xgrnnum);
+
+	public BigDecimal getTotalGRNQtyOfConfirmedGRNDetail(int xdocrow, String xpornum);
 }

@@ -219,12 +219,40 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			return responseHelper.getResponse();
 		}
 
+		// Check PO has already open GRN
+		boolean openExist = false;
+		String openGrnNumber = "";
+		List<PogrnHeader> grns = pogrnMapper.findPogrnHeaderByXpornum(xpornum, sessionManager.getBusinessId());
+		if(grns != null && !grns.isEmpty()) {
+			for(PogrnHeader pgh : grns) {
+				if("Open".equalsIgnoreCase(pgh.getXstatusgrn())) {
+					openExist = true;
+					openGrnNumber = pgh.getXgrnnum();
+				}
+			}
+		}
+		if(openExist) {
+			responseHelper.setErrorStatusAndMessage("This purchase order already has Open GRN : " + openGrnNumber);
+			return responseHelper.getResponse();
+		}
+
 		// check purchase order has item details
 		List<PoordDetail> poordDetailList = findPoorddetailByXpornum(xpornum);
 		if(poordDetailList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("This purchase order has no item");
 			return responseHelper.getResponse();
 		}
+		// check is there is any available item to make GRN
+		boolean itemavailable = false;
+		for(PoordDetail p : poordDetailList) {
+			if(p.getXqtygrn() == null) p.setXqtygrn(BigDecimal.ZERO);
+			if(!p.getXqtygrn().equals(p.getXqtyord())) itemavailable = true;
+		}
+		if(!itemavailable) {
+			responseHelper.setErrorStatusAndMessage("This purchase order has no item available to make GRN");
+			return responseHelper.getResponse();
+		}
+
 
 		// Create a GRN header first
 		PogrnHeader pogrnHeader = new PogrnHeader();
@@ -261,6 +289,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			detail.setXlineamt(poorddetail.getXlineamt());
 			detail.setZid(sessionManager.getBusinessId());
 			detail.setZauserid(getAuditUser());
+			
+			// if item has no qty, then it don't need to save
+			if(BigDecimal.ZERO.equals(detail.getXqtygrn())) continue;
 
 			long dcount = pogrnMapper.savePogrnDetail(detail);
 			if(dcount == 0) throw new ServiceException("Can't save detail");

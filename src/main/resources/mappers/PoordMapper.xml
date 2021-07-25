@@ -284,19 +284,10 @@
 
 	<select id="findPoorddetailByXpornum" resultType="PoordDetail">
 		SELECT 
-			poorddetail.xpornum,
-			poorddetail.xrow,
-			poorddetail.xitem,
-			caitem.xdesc as "xitemdesc",
+			poorddetail.*,
+			caitem.xdesc as itemname,
 			caitem.xcatitem,
-			caitem.xgitem,
-			poorddetail.xnote,
-			poorddetail.xlineamt,
-			poorddetail.xunitpur,
-			poorddetail.xqtyord,
-			poorddetail.xrate,
-			poorddetail.xlineamt,
-			poorddetail.zactive
+			caitem.xgitem
 		FROM 
 			poorddetail 
 			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{centralzid}

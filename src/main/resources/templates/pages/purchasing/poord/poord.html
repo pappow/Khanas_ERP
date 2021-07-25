@@ -41,7 +41,9 @@
 			<div class="container-fluid">
 				<div class="row">
 					<h1 class="text-center">Purchase Order</h1>
+				</div>
 
+				<div class="row">
 					<div class="col-md-6 content-area">
 						<div class="row">
 							<div class="col-md-12">
@@ -259,7 +261,7 @@
 										<tr th:each="d,n : ${poorddetailsList}">
 											<td th:text="${d.xrow}"></td>
 											<td>
-												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xitemdesc}"></a>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.itemname}"></a>
 											</td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>

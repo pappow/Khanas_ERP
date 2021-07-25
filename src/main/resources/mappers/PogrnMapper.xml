@@ -259,7 +259,9 @@
 		WHERE 
 			pogrnheader.xpornum=#{xpornum} 
 			AND pogrnheader.zid=#{zid}
-	</select>	
+		ORDER BY
+			pogrnheader.xstatusgrn desc, pogrnheader.xgrnnum DESC
+	</select>
 
 	<select id="findPogrnDetailByXgrnnumAndXrow" resultType="PogrnDetail">
 		SELECT 
@@ -315,5 +317,18 @@
 	
 	<select id="searchPoord" resultType="PogrnHeader">
 		SELECT * FROM POGRNHEADER WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="getTotalGRNQtyOfConfirmedGRNDetail" resultType="Decimal">
+		SELECT
+			NVL(SUM(pogrndetail.xqtygrn), 0) as totalgrnqty
+		FROM
+			pogrndetail
+			LEFT JOIN pogrnheader ON pogrnheader.xgrnnum = pogrndetail.xgrnnum AND pogrnheader.zid = pogrndetail.zid
+		WHERE
+			pogrnheader.zid=#{zid}
+			AND pogrnheader.xpornum=#{xpornum}
+			AND pogrndetail.xdocrow = #{xdocrow}
+			AND pogrnheader.xstatusgrn='Confirmed'
 	</select>
 </mapper>

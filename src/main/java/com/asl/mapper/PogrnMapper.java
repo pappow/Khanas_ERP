@@ -1,5 +1,6 @@
 package com.asl.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -43,4 +44,6 @@ public interface PogrnMapper {
 	public long countOfPogrndetailByXgrnnum(String xgrnnum, String zid);
 
 	public long deletePogrnheader(String xgrnnum, String zid);
+
+	public BigDecimal getTotalGRNQtyOfConfirmedGRNDetail(int xdocrow, String xpornum, String zid);
 }

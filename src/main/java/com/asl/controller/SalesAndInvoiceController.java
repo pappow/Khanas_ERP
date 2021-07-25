@@ -127,7 +127,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		opdoheader.setXpaid(BigDecimal.ZERO);
 		opdoheader.setXchange(BigDecimal.ZERO);
 		opdoheader.setXpaystatus("Due");
-		opdoheader.setXwh("Central Store");
+		opdoheader.setXwh("01");
 		return opdoheader;
 	}
 

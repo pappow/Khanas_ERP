@@ -9,8 +9,9 @@ public enum ProfileType {
 	U("U", "User Profile"),
 	M("M", "Menu Profile"),
 	R("R", "Report Profile"),
+	MOD("MOD","Module Profile"),
 	
-	//for posbuziness
+	//for pos business
 	C("C", "Casual Dine"),
 	F("F", "Fine Dine");
 

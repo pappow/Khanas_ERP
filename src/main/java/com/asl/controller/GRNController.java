@@ -43,7 +43,6 @@ import com.asl.service.CaitemService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
-import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
@@ -58,7 +57,6 @@ public class GRNController extends ASLAbstractController {
 	@Autowired private PocrnService pocrnService;
 	@Autowired private XcodesService xcodeService;
 	@Autowired private XtrnService xtrnService;
-	@Autowired private VataitService vataitService;
 	@Autowired private CacusService cacusService;
 	@Autowired private PoordService poordService;
 	@Autowired private CaitemService caitemService;
@@ -190,12 +188,20 @@ public class GRNController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Can't find Puchase order detail for this item row");
 			return responseHelper.getResponse();
 		}
-		if(pogrnDetail.getXqtygrn().compareTo(podetail.getXqtyord()) == 1) {
+		// calculate and update poordetail xqtygrn 
+		BigDecimal totalGrnQty = pogrnService.getTotalGRNQtyOfConfirmedGRNDetail(podetail.getXrow(), podetail.getXpornum());
+		BigDecimal finalValue = totalGrnQty.add(pogrnDetail.getXqtygrn());
+		if(finalValue.compareTo(podetail.getXqtyord()) == 1) {
 			responseHelper.setErrorStatusAndMessage("GRN quantity can't be greater then purchase order quantity");
 			return responseHelper.getResponse();
 		}
-		
-		
+		podetail.setXqtygrn(finalValue);
+		long count2 = poordService.updateDetail(podetail);
+		if(count2 == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update GRN qty to purchase detail");
+			return responseHelper.getResponse();
+		}
+
 
 		// modify line amount
 		// first get item vat rate
@@ -228,7 +234,7 @@ public class GRNController extends ASLAbstractController {
 		// if new detail
 		long count = pogrnService.saveDetail(pogrnDetail);
 		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't save GRN details");
 			return responseHelper.getResponse();
 		}
 
@@ -251,9 +257,6 @@ public class GRNController extends ASLAbstractController {
 		model.addAttribute("pogrnheader", data);
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
-		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.PURCHASE_ORDER_STATUS.getCode(), Boolean.TRUE));
-		model.addAttribute("grnStatusList", xcodeService.findByXtype(CodeType.GRN_STATUS.getCode(), Boolean.TRUE));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
 		return "pages/purchasing/pogrn/pogrn::pogrnheaderform";
 	}
 
@@ -264,6 +267,26 @@ public class GRNController extends ASLAbstractController {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
+
+		// calculate and update poordetail xqtygrn 
+		PogrnHeader pgh = pogrnService.findPogrnHeaderByXgrnnum(pd.getXgrnnum());
+		if(pgh == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find GRN");
+			return responseHelper.getResponse();
+		}
+		PoordDetail podetail = poordService.findPoorddetailByXpornumAndXrow(pgh.getXpornum(), pd.getXdocrow());
+		if(podetail == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Puchase order detail for this item row");
+			return responseHelper.getResponse();
+		}
+		BigDecimal totalGrnQty = pogrnService.getTotalGRNQtyOfConfirmedGRNDetail(podetail.getXrow(), podetail.getXpornum());
+		podetail.setXqtygrn(totalGrnQty);
+		long count2 = poordService.updateDetail(podetail);
+		if(count2 == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update GRN qty to purchase detail");
+			return responseHelper.getResponse();
+		}
+
 
 		long count = pogrnService.deleteDetail(pd);
 		if (count == 0) {
