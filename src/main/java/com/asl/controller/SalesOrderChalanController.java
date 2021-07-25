@@ -462,8 +462,8 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
 		imtorHeader.setXstatustor("Open");
 		imtorHeader.setXchalanref(xordernum);
-		imtorHeader.setXfwh("Central Store");
-		imtorHeader.setXtwh("Production Store");
+		imtorHeader.setXfwh("01");
+		imtorHeader.setXtwh("02");
 		imtorHeader.setXdate(new Date());
 
 		long count = imtorService.save(imtorHeader);
@@ -537,8 +537,8 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		imtorHeader.setXtrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getdefaultCode());
 		imtorHeader.setXstatustor("Open");
 		imtorHeader.setXchalanref(xordernum);
-		imtorHeader.setXfwh("Production Store");
-		imtorHeader.setXtwh("Central Store");
+		imtorHeader.setXfwh("02");
+		imtorHeader.setXtwh("01");
 		imtorHeader.setXdate(new Date());
 
 		long count = imtorService.save(imtorHeader);

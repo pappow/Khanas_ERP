@@ -14,41 +14,47 @@ import com.asl.entity.ListHead;
 @Component
 public interface ListService {
 
-	public String modifiedListCode(String listCode);
+	public String modifiedListcode(String listcode);
 
-	public long save(ListHead listHead);
+	public long saveListHead(ListHead listHead);
 
-	public long save(ListHead listHead, String businessId);
+	public long saveListHead(ListHead listHead, String zid);
 
-	public long update(ListHead listHead);
+	public long updateListHead(ListHead listHead);
 
-	public long update(ListHead listHead, String businessId);
+	public long updateListHead(ListHead listHead, String zid);
 
-	public long save(DataList dataList);
+	public long deleteListHead(String listcode);
 
-	public long save(DataList dataList, String businessId);
+	public long deleteListHead(String listcode, String zid);
 
-	public long update(DataList dataList);
+	public long saveDataList(DataList dataList);
 
-	public long update(DataList dataList, String businessId);
+	public long saveDataList(DataList dataList, String zid);
 
-	public ListHead findListHeadById(Long listHeadId);
+	public long updateDataList(DataList dataList);
 
-	public DataList findDataListById(Long dataListId);
+	public long updateDataList(DataList dataList, String zid);
 
-	public ListHead findListHeadByListCode(String listCode);
+	public long deleteDataList(int listid, String listcode);
 
-	public ListHead findListHeadByListCode(String listCode, String businessId);
+	public long deleteDataList(int listid, String listcode, String zid);
 
-	public List<DataList> findDataListByListCode(String listCode);
+	public ListHead findListHeadByListcode(String listcode);
 
-	public List<DataList> findDataListByListCode(String listCode, String businessId);
+	public ListHead findListHeadByListcode(String listcode, String zid);
 
-	public List<DataList> getList(String listCode, String... values);
+	public DataList findDataListByListcodeAndListid(int listid, String listcode);
+
+	public DataList findDataListByListcodeAndListid(int listid, String listcode, String zid);
+
+	public List<DataList> findDataListByListcode(String listcode);
+
+	public List<DataList> findDataListByListcode(String listcode, String zid);
+
+	public List<DataList> getList(String listcode, String... values);
 
 	public List<ListHead> getAllListHead();
 
-//	public List<Map<String, Object>> getExportDataByChunk(long limit, long offset);
-//	public int archiveDataListByListCode(String listCode);
-//	public int archiveDataListByListCode(String listCode, String businessId);
+	public List<ListHead> getAllListHead(String zid);
 }

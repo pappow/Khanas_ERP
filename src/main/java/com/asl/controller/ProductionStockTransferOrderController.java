@@ -70,8 +70,8 @@ public class ProductionStockTransferOrderController extends ASLAbstractControlle
 		ImtorHeader imtorHeader = new ImtorHeader();
 		//imtorHeader.setXtype(TransactionCodeType.PURCHASE_ORDER.getCode());
 		//imtorHeader.setXtotamt(BigDecimal.ZERO);
-		imtorHeader.setXfwh("Production Store");
-		imtorHeader.setXtwh("Central Store");
+		imtorHeader.setXfwh("02");
+		imtorHeader.setXtwh("01");
 		imtorHeader.setXstatustor("Open");
 		return imtorHeader;
 	}

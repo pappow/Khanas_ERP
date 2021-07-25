@@ -363,7 +363,7 @@ var Lobibox = Lobibox || {};
         img: null,                  // Image source string
         closable: true,             // Make notifications closable
         hideCloseButton: false,     // Notification may be closable but you can hide close button and it will be closed by clicking on notification itsef
-        delay: 2000,                // Hide notification after this time (in miliseconds)
+        delay: 4000,                // Hide notification after this time (in miliseconds)
         delayIndicator: true,       // Show timer indicator
         closeOnClick: true,         // Close notifications by clicking on them
         width: 400,                 // Width of notification box

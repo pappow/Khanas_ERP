@@ -205,7 +205,7 @@ public class BomController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		bmbomdetail.setXwh("Production Store");
+		bmbomdetail.setXwh("02");
 
 		// if existing
 		Bmbomdetail existDetail = bmbomService.findBmbomdetailByXbomkeyAndXbomrow(bmbomdetail.getXbomkey(), bmbomdetail.getXbomrow());

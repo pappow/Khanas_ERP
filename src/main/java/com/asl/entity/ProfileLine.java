@@ -98,19 +98,19 @@ public class ProfileLine extends AbstractModel<String> {
 	private String managerprompt;
 
 	public ProfileLine(DataList dl) {
-		if(dl == null || StringUtils.isBlank(dl.getListValue1())) return;
+		if(dl == null || StringUtils.isBlank(dl.getListvalue1())) return;
 		try {
-			this.seqn = Integer.parseInt(dl.getListValue2());
-			this.profiletype = ProfileType.valueOf(dl.getListValue3());
+			this.seqn = Integer.parseInt(dl.getListvalue2());
+			this.profiletype = ProfileType.valueOf(dl.getListvalue3());
 		} catch (Exception e) {
 			log.error("Errir is : {}, {}", e.getMessage(), e);
 			return;
 		}
-		this.profilecode = dl.getListValue1();
-		this.managerprompt = dl.getListValue4();
-		this.screenprompt = dl.getListValue5();
-		this.display = "Y".equalsIgnoreCase(dl.getListValue6());
-		this.required = "Y".equalsIgnoreCase(dl.getListValue7());
+		this.profilecode = dl.getListvalue1();
+		this.managerprompt = dl.getListvalue4();
+		this.screenprompt = dl.getListvalue5();
+		this.display = "Y".equalsIgnoreCase(dl.getListvalue6());
+		this.required = "Y".equalsIgnoreCase(dl.getListvalue7());
 	}
 
 	public ProfileLine(ReportMenu rm) {

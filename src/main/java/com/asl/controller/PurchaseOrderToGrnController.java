@@ -41,7 +41,7 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadPoToGrnPage(Model model) {
-		model.addAttribute("poordHeaders", poordService.getPoordHeadersByXtype(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		model.addAttribute("poordHeaders", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		return "pages/procurement/potogrn/potogrn";
 	}
 
@@ -67,7 +67,6 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 		pogrnHeader.setXstatusgrn("Open");
 		pogrnHeader.setXdate(new Date());
 		pogrnHeader.setXtype(TransactionCodeType.GRN_NUMBER.getCode());
-		pogrnHeader.setXtrngrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 		pogrnHeader.setXvatamt(BigDecimal.ZERO);
 		pogrnHeader.setXaitamt(BigDecimal.ZERO);
 		pogrnHeader.setXdiscprime(BigDecimal.ZERO);
@@ -82,7 +81,7 @@ public class PurchaseOrderToGrnController extends ASLAbstractController {
 		}
 
 		// Now find grn header which is saved now
-		pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
+		//pogrnHeader = pogrnService.findPogrnHeaderByXpornum(xpornum);
 
 		List<PogrnDetail> grnDetails = new ArrayList<>();
 		for(int i=0; i< poordDetailList.size(); i++) {

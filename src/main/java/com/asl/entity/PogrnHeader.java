@@ -81,11 +81,6 @@ public class PogrnHeader extends AbstractModel<String> {
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 
-	@Transient
-	private String xtrngrn;
-
-	// Following additional fields have been proposed for Arhed Purpose
-
 	@Column(name = "xvatait")
 	private String xvatait;
 
@@ -102,10 +97,13 @@ public class PogrnHeader extends AbstractModel<String> {
 	private BigDecimal xgrandtot;
 
 	@Column(name = "xdocnum")
-	private Integer xdocnum;
+	private String xdocnum;
 
 	@Column(name = "xcrnnum")
 	private String xcrnnum;
+
+	@Column(name = "xtrn")
+	private String xtrn;
 
 	@Transient
 	private String xorg;

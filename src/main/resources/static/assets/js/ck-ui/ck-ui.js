@@ -178,6 +178,17 @@ ck.ui.config.editmode = function(){
 			submitMainForm($(this).attr('href'));
 		});
 	}
+	
+	// Bind clear button event
+	if($('a.btn.clear-btn').length > 0){
+		$('a.btn.clear-btn').off('click').on('click', function(e){
+			e.preventDefault();
+			var rdata = {};
+			rdata.reloadurl = $(this).data('reloadurl');
+			rdata.reloadelementid = $(this).data('reloadelementid')
+			doSectionReloadWithNewData(rdata);
+		});
+	}
 };
 
 

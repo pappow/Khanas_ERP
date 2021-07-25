@@ -112,7 +112,7 @@
 														</div>
 	
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xlong" th:text="#{voucher.form.label.xlong}">Description</label>
+															<label class="control-label col-md-4" for="xlong" th:text="#{voucher.form.label.xlong}">Note</label>
 															<div class="col-md-8">
 																<textarea class="form-control" rows="3" th:field="*{xlong}"></textarea>
 															</div>
@@ -160,10 +160,43 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>List of Vouchers</h1>
+										<h1>Un-posted Voucher List</h1>
 									</div>
 									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
+										<table class="table table-striped table-bordered datatable nowrap" th:with="df=${'E, dd-MMM-yyyy'}">
+											<thead>
+												<tr>
+													<th th:text="#{voucher.table.heading.xvoucher}">Voucher No.</th>
+													<th th:text="#{voucher.table.heading.xdate}">Date</th>
+													<th th:text="#{voucher.table.heading.xlcno}">LC No.</th>
+													<th th:text="#{voucher.table.heading.xyear}">Year</th>
+													<th th:text="#{voucher.table.heading.xper}">Period</th>
+													<th th:text="#{voucher.table.heading.xstatusjv}">Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:if="${v.xstatusjv ne 'Posted'}" th:each="v : ${vouchers}">
+													<td>
+														<a th:href="@{/account/voucher/} + ${v.xvoucher}" th:text="${v.xvoucher}"></a>
+													</td>
+													<td th:text="${#dates.format(v.xdate, df)}"></td>
+													<td th:text="${v.xlcno}"></td>
+													<td th:text="${v.xyear}"></td>
+													<td th:text="${v.xper}"></td>
+													<td th:text="${v.xstatusjv}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</section>
+								
+								
+								<section id="list-manager" style="margin-top: 30px;">
+									<div class="section-header sectionbartoggle">
+										<h1>All Vouchers</h1>
+									</div>
+									<div class="section-body">
+										<table class="table table-striped table-bordered datatable nowrap" th:with="df=${'E, dd-MMM-yyyy'}">
 											<thead>
 												<tr>
 													<th th:text="#{voucher.table.heading.xvoucher}">Voucher No.</th>
@@ -179,7 +212,7 @@
 													<td>
 														<a th:href="@{/account/voucher/} + ${v.xvoucher}" th:text="${v.xvoucher}"></a>
 													</td>
-													<td th:text="${v.xdate}"></td>
+													<td th:text="${#dates.format(v.xdate, df)}"></td>
 													<td th:text="${v.xlcno}"></td>
 													<td th:text="${v.xyear}"></td>
 													<td th:text="${v.xper}"></td>
@@ -194,7 +227,7 @@
 							<div class="col-md-12">
 								<section th:if="${not #strings.isEmpty(acheader.xvoucher)}" id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Voucher Details</h1>
+										<h1 th:text="'Voucher Details for - ' + ${acheader.xvoucher}"></h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap" id="voucherdetailtable" th:fragment="voucherdetailtable">
@@ -204,8 +237,8 @@
 													<th>Account</th>
 													<th>Debit</th>
 													<th>Credit</th>
-													<!-- <th>Sub</th> -->
-													<th>Description</th>
+													<th>Sub Account</th>
+													<th>Note</th>
 													<th data-nosort="Y" style="text-align: right;" th:if="${acheader.xstatusjv != 'Posted'}">
 														<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/account/voucher/} + ${acheader.xvoucher} + '/voucherdetail/new/show', data-target-modal='voucherdetailmodal'"><i class="fas fa-plus"></i></button>
 													</th>
@@ -219,7 +252,7 @@
 													</td>
 													<td th:text="${d.xdebit}"></td>
 													<td th:text="${d.xcredit}"></td>
-													<!-- <td th:text="${d.xsub}"></td> -->
+													<td th:text="${d.xsub}"></td>
 													<td th:text="${d.xlong}"></td>
 													<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${acheader.xstatusjv != 'Posted'}">
 														<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/account/voucher/} + ${acheader.xvoucher} + '/voucherdetail/' + ${d.xrow} + '/show', data-target-modal='voucherdetailmodal'"><i class="fas fa-edit"></i></button>

@@ -46,7 +46,7 @@ function showScreenMessage(type, message, identifier){
 		$('.ck-alert-message').html("");
 		$('.ck-alert').removeClass(type);
 		$('.ck-alert').addClass('nodisplay');
-	}, 1000);
+	}, 3000);
 }
 
 
@@ -705,6 +705,7 @@ function submitModalForm(customurl){
 		}
 	});
 }
+
 
 /**
  * Section reloader from form submitted returned data

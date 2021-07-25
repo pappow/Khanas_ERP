@@ -136,21 +136,15 @@
 												</td>
 											</tr> -->
 											<tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
-												<td><a th:href="@{/purchasing/poord}" th:text="${menuProfile.M0304.screenprompt}">Purchase Order</a></td>
+												<td><a th:href="@{/procurements/poord}" th:text="${menuProfile.M0304.screenprompt}">Purchase Order</a></td>
 												<td>
-													<a th:href="@{/purchasing/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-												</td>
-											</tr>
-											<tr th:if="${isCentral and menuProfile.M0304 ne null and menuProfile.M0304.display}">
-												<td><a th:href="@{/procurement/potogrn}">PO to GRN</a></td>
-												<td>
-													<a th:href="@{/procurement/potogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+													<a th:href="@{/procurements/poord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${isCentral and menuProfile.M0306 ne null and menuProfile.M0306.display}">
-												<td><a th:href="@{/purchasing/pogrn}" th:text="${menuProfile.M0306.screenprompt}">GRN</a></td>
+												<td><a th:href="@{/procurements/pogrn}" th:text="${menuProfile.M0306.screenprompt}">GRN</a></td>
 												<td>
-													<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+													<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
@@ -169,9 +163,9 @@
 												<td colspan="2" th:text="${menuProfile.M0400.screenprompt}">Sales & Invoicing</td>
 											</tr>
 											<tr th:if="${menuProfile.M0401 ne null and menuProfile.M0401.display}">
-												<td><a th:href="@{/salesninvoice/salesorder}">Sales Order</a></td>
+												<td><a th:href="@{/salesninvoice/opord}">Sales Order</a></td>
 												<td>
-													<a th:href="@{/salesninvoice/salesorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+													<a th:href="@{/salesninvoice/opord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0402 ne null and menuProfile.M0402.display}">
@@ -438,13 +432,6 @@
 										</tr>
 									</span>
 
-
-									<tr>
-										<td><a th:href="@{/logout}" style="color: red !important; font-weight: bold; margin-left: 0px;">Logout</a></td>
-										<td>
-											<a th:href="@{/logout}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-										</td>
-									</tr>
 
 								</table>
 							</div>

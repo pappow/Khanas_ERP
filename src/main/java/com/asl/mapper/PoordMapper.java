@@ -35,7 +35,7 @@ public interface PoordMapper {
 
 	public PoordHeader findBranchPoordHeaderByXpornumForCentral(String xpornum, String branchzid);
 
-	public PoordDetail findPoorddetailByXportNumAndXrow(String xpornum, int xrow, String zid);
+	public PoordDetail findPoorddetailByXpornumAndXrow(String xpornum, int xrow, String zid);
 
 	public List<PoordDetail> findPoorddetailByXpornum(String xpornum, String zid, String centralzid);
 
@@ -43,7 +43,7 @@ public interface PoordMapper {
 
 	public List<PoordHeader> getAllPoordHeader(String zid);
 
-	public List<PoordHeader> getPoordHeadersByXtype(String xtype, String zid);
+	public List<PoordHeader> getPoordHeadersByXtypetrn(String xtypetrn, String zid);
 
 	public PoordDetail findPoorddetailByXpornumAndXitem(String xpornum, String xitem, String zid);
 	

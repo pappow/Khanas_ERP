@@ -30,6 +30,9 @@ spring:
     url: jdbc:oracle:thin:@103.231.135.60:1521:orcl
     username: res_erp
     password: res_erp
+#    url: jdbc:oracle:thin:@161.97.181.255:1521:xe
+#    username: SYSTEM
+#    password: zubayer%123
     tomcat:
       max-wait: 20000
       max-active: 50

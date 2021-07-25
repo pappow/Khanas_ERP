@@ -45,7 +45,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 
-		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode());
+		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode());
 		model.addAttribute("allPoordHeader", poordheadersList);
 
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
@@ -60,7 +60,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 
 		model.addAttribute("poordheader", data);
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
-		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtype(TransactionCodeType.REQUISITION_ORDER.getCode()));
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
@@ -175,7 +175,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 			poorddetail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
 			model.addAttribute("poorddetail", poorddetail);
 		} else {
-			PoordDetail poorddetail = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+			PoordDetail poorddetail = poordService.findPoorddetailByXpornumAndXrow(xpornum, Integer.parseInt(xrow));
 			if(poorddetail == null) {
 				poorddetail = new PoordDetail();
 				poorddetail.setXpornum(xpornum);
@@ -225,7 +225,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		poordDetail.setXlineamt(poordDetail.getXrate().multiply(poordDetail.getXqtyord() != null ? poordDetail.getXqtyord() : BigDecimal.ZERO));
 
 		// if existing
-		PoordDetail existDetail = poordService.findPoorddetailByXportNumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
+		PoordDetail existDetail = poordService.findPoorddetailByXpornumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
 		if(existDetail != null) {
 			BeanUtils.copyProperties(poordDetail, existDetail, "xpornum", "xrow");
 			long count = poordService.updateDetail(existDetail);
@@ -259,7 +259,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
-		PoordDetail pd = poordService.findPoorddetailByXportNumAndXrow(xpornum, Integer.parseInt(xrow));
+		PoordDetail pd = poordService.findPoorddetailByXpornumAndXrow(xpornum, Integer.parseInt(xrow));
 		if(pd == null) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();

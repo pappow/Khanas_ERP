@@ -26,7 +26,6 @@
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
 										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
-										<li><a th:href="@{/mastersetup/cap}">Codes and parameters</a></li>
 										<li class="active"><a th:href="@{/mastersetup/xtrn}">Transaction Codes</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
@@ -43,20 +42,21 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
+						<div class="row">
+							<h1 class="text-center">Transaction Codes</h1>
+						</div>
 
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Transaction Code</h1>
+										
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-										<a th:if="${#strings.isEmpty(xtrn.xtrn)}" th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-redo-alt"></i> Add</a>
+										<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${#strings.isEmpty(xtrn.xtrn)}" th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == true}" th:href="@{/mastersetup/xtrn/archive/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(xtrn.xtrn) and xtrn.zactive == false}" th:href="@{/mastersetup/xtrn/restore/} + ${xtrn.xtypetrn} + '/' + ${xtrn.xtrn}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/xtrn/save}" th:object="${xtrn}" method="post">
@@ -97,6 +97,14 @@
 															<input type="number" class="form-control" th:field="*{xinc}" min="1" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}" required="required">
 														</div>
 													</div>
+													<div class="form-group input2">
+														<label class="control-label col-sm-4" for="zactive">Is Active ?</label>
+														<div class="col-sm-8">
+															<div class="checkbox">
+																<label><input type="checkbox" class="form-control-input2" th:field="*{zactive}" value="Y"/></label>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</form>
@@ -106,7 +114,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Transaction Codes</h1>
+										<h1>List of Transaction Codes</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap" id="xtrntable" th:fragment="xtrntable">

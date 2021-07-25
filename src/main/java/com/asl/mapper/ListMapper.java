@@ -16,18 +16,24 @@ import com.asl.entity.ListHead;
 public interface ListMapper {
 
 	public long saveListHead(ListHead listHead);
+
 	public long saveDataList(DataList dataList);
 
 	public long updateListHead(ListHead listHead);
+
 	public long updateDataList(DataList dataList);
 
-	public ListHead findListHeadById(Long listHeadId);
-	public DataList findDataListById(Long listId);
+	public long deleteListHead(String listcode, String zid);
 
-	public ListHead findListHeadByListCode(String listCode, String zid);
-	public List<DataList> findDataListByListCode(String listCode, String zid);
+	public long deleteDataList(int listid, String listcode, String zid);
 
-	public List<DataList> getList(String listCode, String zid, Map<String, String> params);
+	public ListHead findListHeadByListcode(String listcode, String zid);
+
+	public DataList findDataListByListcodeAndListid(int listid, String listcode, String zid);
+
+	public List<DataList> findDataListByListCode(String listcode, String zid);
+
+	public List<DataList> getList(String listcode, String zid, Map<String, String> params);
 
 	public List<ListHead> getAllListHead(String zid);
 }

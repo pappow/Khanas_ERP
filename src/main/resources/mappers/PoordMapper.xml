@@ -7,7 +7,7 @@
 		<selectKey keyProperty="xpornum" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO PoordHeader
+		INSERT INTO poordheader
 		(
 			xpornum,
 			xcus,
@@ -27,12 +27,9 @@
 
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -51,21 +48,18 @@
 			#{xgrnnum, jdbcType=VARCHAR},
 			#{xordernum, jdbcType=VARCHAR},
 			#{xreqtype, jdbcType=VARCHAR},
-			
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
 	<update id="updatePoordHeader" parameterType="PoordHeader">
 		UPDATE
-			PoordHeader
+			poordheader
 		SET
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xsup=#{xsup, jdbcType=VARCHAR},
@@ -83,10 +77,8 @@
 			xreqtype=#{xreqtype, jdbcType=VARCHAR},
 
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xpornum=#{xpornum, jdbcType=VARCHAR}
@@ -94,7 +86,13 @@
 	</update>
 
 	<delete id="deletePoordDetail" parameterType="PoordDetail">
-		DELETE FROM PoordDetail WHERE xrow=#{xrow} AND xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
+		DELETE 
+		FROM 
+			poorddetail 
+		WHERE 
+			xrow=#{xrow} 
+			AND xpornum=#{xpornum} 
+			AND zid=#{zid}
 	</delete>
 
 	<update id="archiveAllPoordDetailByXpornum">
@@ -103,25 +101,34 @@
 		SET
 			zactive='0'
 		WHERE
-			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+			xpornum=#{xpornum} 
+			AND zid=#{zid} 
+			AND zactive='1'
 	</update>
 
 	<delete id="deleteDetailByXpornum">
 		DELETE 
 			poorddetail
 		WHERE
-			xpornum=#{xpornum} AND zid=#{zid}
+			xpornum=#{xpornum} 
+			AND zid=#{zid}
 	</delete>
 
 	<select id="countOfRequisitionDetailsByXpornum" resultType="Long">
-		SELECT COUNT(*) FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			COUNT(*) 
+		FROM 
+			poorddetail 
+		WHERE 
+			xpornum=#{xpornum} 
+			AND zid=#{zid} 
 	</select>
 
 	<insert id="savePoordDetail" parameterType="PoordDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM PoordDetail WHERE xpornum=#{xpornum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid}
 		</selectKey>
-		INSERT INTO PoordDetail
+		INSERT INTO poorddetail
 		(
 			xpornum,
 			xrow,
@@ -134,14 +141,12 @@
 			xqtygrn,
 			xcfpur,
 			xqtypur,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -156,14 +161,12 @@
 			#{xqtygrn, jdbcType=DECIMAL},
 			#{xcfpur, jdbcType=DECIMAL},
 			#{xqtypur, jdbcType=DECIMAL},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
@@ -181,14 +184,12 @@
 			xqtygrn,
 			xcfpur,
 			xqtypur,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -203,20 +204,18 @@
 			#{xqtygrn, jdbcType=DECIMAL},
 			#{xcfpur, jdbcType=DECIMAL},
 			#{xqtypur, jdbcType=DECIMAL},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
 	<update id="updatePoordDetail" parameterType="PoordDetail">
 		UPDATE 
-			PoordDetail
+			poorddetail
 		SET
 			xitem=#{xitem, jdbcType=VARCHAR},
 			xnote=#{xnote, jdbcType=VARCHAR},
@@ -227,11 +226,10 @@
 			xqtygrn=#{xqtygrn, jdbcType=DECIMAL},
 			xcfpur=#{xcfpur, jdbcType=DECIMAL},
 			xqtypur=#{xqtypur, jdbcType=DECIMAL},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xpornum=#{xpornum, jdbcType=VARCHAR}
@@ -243,45 +241,59 @@
 		UPDATE 
 			poordheader
 		SET
-			xtotamt=(SELECT SUM(xlineamt) FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1')
+			xtotamt=(SELECT SUM(xlineamt) FROM poorddetail WHERE xpornum=#{xpornum} AND zid=#{zid})
 		WHERE
-			xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+			xpornum=#{xpornum} 
+			AND zid=#{zid}
 	</update>
 
 	<select id="findPoordHeaderByXpornum" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xpornum=#{xpornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			poordheader.*,
+			cacus.xorg as xorg
+		FROM 
+			poordheader 
+			LEFT JOIN cacus on cacus.xcus = poordheader.xcus and cacus.zid = poordheader.zid and cacus.zactive='1'
+		WHERE 
+			poordheader.xpornum=#{xpornum} 
+			AND poordheader.zid=#{zid}
 	</select>
 
 	<select id="findBranchPoordHeaderByXpornumForCentral" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE xpornum=#{xpornum} AND zid=#{branchzid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			poordheader 
+		WHERE 
+			xpornum=#{xpornum} 
+			AND zid=#{branchzid} 
 	</select>
 
-	<select id="findPoorddetailByXportNumAndXrow" resultType="PoordDetail">
-		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	<select id="findPoorddetailByXpornumAndXrow" resultType="PoordDetail">
+		SELECT 
+			poorddetail.*,
+			caitem.xdesc as itemname
+		FROM 
+			poorddetail 
+			left join caitem on caitem.xitem = poorddetail.xitem and caitem.zid = poorddetail.zid and caitem.zactive='1'
+		WHERE 
+			poorddetail.xpornum=#{xpornum} 
+			AND poorddetail.xrow=#{xrow} 
+			AND poorddetail.zid=#{zid} 
 	</select>
 
 	<select id="findPoorddetailByXpornum" resultType="PoordDetail">
 		SELECT 
-			poorddetail.xpornum,
-			poorddetail.xrow,
-			poorddetail.xitem,
-			caitem.xdesc as "xitemdesc",
+			poorddetail.*,
+			caitem.xdesc as itemname,
 			caitem.xcatitem,
-			caitem.xgitem,
-			poorddetail.xnote,
-			poorddetail.xlineamt,
-			poorddetail.xunitpur,
-			poorddetail.xqtyord,
-			poorddetail.xrate,
-			poorddetail.xlineamt,
-			poorddetail.zactive
+			caitem.xgitem
 		FROM 
 			poorddetail 
 			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{centralzid}
 		WHERE 
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{zid}
-			AND poorddetail.zactive='1'
 		ORDER BY poorddetail.xrow DESC
 	</select> 
 
@@ -293,34 +305,56 @@
 		WHERE
 			xpornum=#{xpornum}
 			AND zid=#{branchzid}
-			AND zactive='1'
 		ORDER BY xrow DESC
 	</select>
 
 	<select id="getAllPoordHeader" resultType="PoordHeader">
-		SELECT * FROM PoordHeader WHERE zid=#{zid} AND zactive='1' ORDER BY xpornum DESC
+		SELECT 
+			* 
+		FROM 
+			poordheader 
+			WHERE zid=#{zid} 
+		ORDER BY 
+			xpornum DESC
 	</select>
 
-	<select id="getPoordHeadersByXtype" resultType="PoordHeader">
+	<select id="getPoordHeadersByXtypetrn" resultType="PoordHeader">
 		SELECT 
-			ph.*, c.xorg
+			ph.*, 
+			c.xorg
 		FROM 
 			POORDHEADER ph 
 			LEFT JOIN CACUS c ON c.xcus=ph.xcus AND c.zid = ph.zid
 		WHERE 
-			ph.xtype=#{xtype}
+			ph.xtypetrn=#{xtypetrn}
 			AND ph.zid=#{zid} 
-			AND ph.zactive='1'
 		ORDER BY 
 			ph.xpornum DESC
 	</select>
 
 	<select id="findPoorddetailByXpornumAndXitem" resultType="PoordDetail">
-		SELECT * FROM PoordDetail WHERE xpornum=#{xpornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1' ORDER BY xrow DESC
+		SELECT 
+			* 
+		FROM 
+			poorddetail 
+		WHERE 
+			xpornum=#{xpornum} 
+			AND xitem=#{xitem} 
+			AND zid=#{zid} 
+		ORDER BY 
+			xrow DESC
 	</select>
 	
 	<select id="searchXpornum" resultType="PoordHeader">
-		SELECT * FROM PoordDetail WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1' ORDER BY xpornum
+		SELECT 
+			* 
+		FROM 
+			poorddetail 
+		WHERE 
+			(UPPER(xpornum) LIKE '%' || #{xpornum} || '%') 
+			AND zid=#{zid}  
+		ORDER BY 
+			xpornum
 	</select>
 
 	<select id="findBranchCustomerByRequsitionNumber" resultType="Cacus">
@@ -385,15 +419,6 @@
 		DELETE
 		FROM
 			poordheader
-		WHERE
-			xpornum=#{xpornum}
-			AND zid=#{zid}
-	</delete>
-
-	<delete id="deletePoorddetail">
-		DELETE
-		FROM
-			poorddetail
 		WHERE
 			xpornum=#{xpornum}
 			AND zid=#{zid}

@@ -144,7 +144,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				}
 
 				batch.setXstatusmor("Open");
-				batch.setXwh("Production Store");
+				batch.setXwh("02");
 				batcList.add(batch);
 			}
 
@@ -264,7 +264,7 @@ public class ProductionBatchController extends ASLAbstractController {
 		// validate
 		// add or update validation table
 		if(StringUtils.isNotBlank(batch.getXbomkey()) && bd != null) {
-			Imstock imstock = imstockService.findByXitemAndXwh(bd.getXbomcomp(), "Production Store");
+			Imstock imstock = imstockService.findByXitemAndXwh(bd.getXbomcomp(), "02");
 			BigDecimal usedRaw = psvService.getTotalRawUsedExceptCurrentBatch(batch.getXchalan(), bd.getXbomcomp(), xbatch);
 
 			// Stock validation
@@ -327,7 +327,7 @@ public class ProductionBatchController extends ASLAbstractController {
 					Modetail modetail = new Modetail();
 					modetail.setXitem(bd.getXbomcomp());
 					modetail.setXqtyreq(xproduction.multiply(BigDecimal.valueOf(1000)));
-					modetail.setXwh("Production Store");
+					modetail.setXwh("02");
 					modetail.setXtype("Default");
 					modetail.setXbatch(batch.getXbatch());
 					modetail.setXunit("gm");
@@ -431,7 +431,7 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 		}
 
-		modetail.setXwh("Production Store");
+		modetail.setXwh("02");
 		modetail.setXqtyreq(modetail.getXqtyactual().multiply(BigDecimal.valueOf(1000)));
 		if(bomRawWastage) modetail.setXqtyreq(BigDecimal.ZERO);
 
@@ -441,7 +441,7 @@ public class ProductionBatchController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Batch not found in this system");
 			return responseHelper.getResponse();
 		}
-		Imstock imstock = imstockService.findByXitemAndXwh(modetail.getXitem(), "Production Store");
+		Imstock imstock = imstockService.findByXitemAndXwh(modetail.getXitem(), "02");
 		BigDecimal usedRaw = psvService.getTotalRawUsedExceptCurrentBatch(batch.getXchalan(), modetail.getXitem(), batch.getXbatch());
 		// Stock validation
 		if(imstock.getXavail().subtract(usedRaw).compareTo(modetail.getXqtyactual()) == -1) {
@@ -637,7 +637,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				imtrn.setXtype(TransactionCodeType.TRANSACTION_TRANSFER.getCode());
 				imtrn.setXtrn(TransactionCodeType.TRANSACTION_TRANSFER.getdefaultCode());
 				imtrn.setXitem(moh.getXitem());
-				imtrn.setXwh("Production Store");
+				imtrn.setXwh("02");
 				imtrn.setXdate(new Date());
 				imtrn.setXqty(moh.getXqtycom() == null ? BigDecimal.ZERO : moh.getXqtycom());
 				imtrn.setXval(BigDecimal.ZERO);
@@ -683,7 +683,7 @@ public class ProductionBatchController extends ASLAbstractController {
 				imtrn.setXtype(TransactionCodeType.INVENTORY_TRANSACTION.getCode());
 				imtrn.setXtrn("IS--");
 				imtrn.setXitem(detail.getXitem());
-				imtrn.setXwh("Production Store");
+				imtrn.setXwh("02");
 				imtrn.setXdate(new Date());
 				imtrn.setXqty(detail.getXqtyord() == null ? BigDecimal.ZERO : detail.getXqtyord());
 				imtrn.setXval(BigDecimal.ZERO);
