@@ -66,5 +66,6 @@
 		<mapper resource="mappers/LandDagMasterMapper.xml"/>
 		<mapper resource="mappers/AcMapper.xml"/>
 		<mapper resource="mappers/AcsubviewMapper.xml"/>
+		<mapper resource="mappers/AcsubMapper.xml"/>
 	</mappers>
 </configuration>

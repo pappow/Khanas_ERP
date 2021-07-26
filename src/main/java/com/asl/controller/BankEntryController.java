@@ -111,6 +111,7 @@ public class BankEntryController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		responseHelper.setSuccessStatusAndMessage("Bank deleted successfully");
 		responseHelper.setRedirectUrl("/account/bankentry");
 		return responseHelper.getResponse();
 	}
