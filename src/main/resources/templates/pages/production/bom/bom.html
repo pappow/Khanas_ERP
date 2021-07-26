@@ -141,7 +141,7 @@
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<!-- <a id="listlines-url" th:href="@{/purchasing/poord/poorddetails/} + ${bom.xbomkey}"></a> -->
 							<div class="section-header sectionbartoggle">
-								<h1>BOM Details</h1>
+								<h1>BOM Details of <span th:text="${bom.xbomkey}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered datatable nowrap" id="bomdetailtable" th:fragment="bomdetailtable">

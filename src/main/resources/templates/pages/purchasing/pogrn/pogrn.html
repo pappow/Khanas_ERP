@@ -151,7 +151,6 @@
 																	<input type="hidden" class="form-control xtotamt" th:field="*{xtotamt}">
 																	<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
 																</div>
-															</div>
 
 															<div class="form-group">
 																<label class="control-label col-md-4" for="xstatusgrn">GRN Status</label>
@@ -222,7 +221,7 @@
 						<section th:if="${not #strings.isEmpty(pogrnheader.xgrnnum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/procurements/pogrn/pogrndetail/} + ${pogrnheader.xgrnnum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>GRN Details</h1>
+								<h1>GRN Item Details of <span th:text="${pogrnheader.xgrnnum}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table nowrap" id="pogrndetailtable" th:fragment="pogrndetailtable">

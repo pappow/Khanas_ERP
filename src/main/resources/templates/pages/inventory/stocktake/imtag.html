@@ -114,7 +114,7 @@
 														<label class="control-label col-md-4" for="wh">Warehouse : </label>
 														<div class="col-md-5">
 															<select class="form-control" th:field="*{xwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
+																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
 															</select>
 														</div>
 													</div>
@@ -180,7 +180,7 @@
 						<section th:if="${not #strings.isEmpty(imtag.xtagnum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/inventory/stocktake/imtagdetails/} + ${imtag.xtagnum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>Stock Take Entry Details</h1>
+								<h1>Stock Take Entry Details of <span th:text="${imtag.xtagnum}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered datatable nowrap" id="imtagdetailtable" th:fragment="imtagdetailtable">

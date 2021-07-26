@@ -71,4 +71,10 @@ public class ImtorHeader extends AbstractModel<String> {
 	
 	@Transient
 	private String xorg;
+	
+	@Transient
+	private String xfwhdesc;
+	
+	@Transient
+	private String xtwhdesc;
 }
