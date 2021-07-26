@@ -21,14 +21,12 @@ import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
-import com.asl.entity.Zbusiness;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.service.XtrnService;
-import com.asl.service.ZbusinessService;
 
 @Controller
 @RequestMapping("/salesninvoice/opord")
@@ -38,7 +36,6 @@ public class SalesOrderController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private VataitService vataitService;
-	@Autowired private ZbusinessService businessService;
 
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
@@ -46,16 +43,8 @@ public class SalesOrderController extends ASLAbstractController {
 		model.addAttribute("opordheader", getDefaultOpordHeader());
 
 		List<Opordheader> allHeaders = opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode());
-		allHeaders.stream().forEach(h -> {
-			Zbusiness zb = businessService.findBById(h.getXcus());
-			if(zb != null) {
-				h.setBranchname(zb.getZorg());
-			}
-		});
 		model.addAttribute("allOpordHeader", allHeaders);
-
 		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
 
 		return "pages/salesninvoice/salesorder/salesorder";
 	}
@@ -81,6 +70,7 @@ public class SalesOrderController extends ASLAbstractController {
 		opordheader.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
 		opordheader.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
 		opordheader.setXstatus("Open");
+		opordheader.setXstatusord("Open");
 
 		opordheader.setXtotamt(BigDecimal.ZERO);
 		opordheader.setXgrandtot(BigDecimal.ZERO);
@@ -252,6 +242,7 @@ public class SalesOrderController extends ASLAbstractController {
 		opordDetail.setXcatitem(caitem.getXcatitem());
 		opordDetail.setXgitem(caitem.getXgitem());
 		opordDetail.setXlineamt(opordDetail.getXqtyord().multiply(opordDetail.getXrate()).setScale(2, RoundingMode.DOWN));
+		opordDetail.setXlineamt(opordDetail.getXlineamt().add(opordDetail.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		Oporddetail existDetail = opordService.findOporddetailByXordernumAndXrow(opordDetail.getXordernum(), opordDetail.getXrow());
@@ -303,6 +294,39 @@ public class SalesOrderController extends ASLAbstractController {
 	@GetMapping("/itemdetail/{xitem}")
 	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
 		return caitemService.findByXitem(xitem);
+	}
+
+	@PostMapping("/confirm/{xordernum}")
+	public @ResponseBody Map<String, Object> confirm(@PathVariable String xordernum){
+
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " not found");
+			return responseHelper.getResponse();
+		}
+
+		if(!"Open".equalsIgnoreCase(oh.getXstatusord())) {
+			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " is not Open");
+			return responseHelper.getResponse();
+		}
+
+		// check sales order has details
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Sales order details is empty");
+			return responseHelper.getResponse();
+		}
+
+		oh.setXstatusord("Confirmed");
+		long count = opordService.updateOpordHeader(oh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't Confirmed sales order " + xordernum);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("opordheaderform", "/salesninvoice/opord/opordheaderform/" + xordernum);
+		responseHelper.setSuccessStatusAndMessage("Order Confirmed successfully");
+		return responseHelper.getResponse();
 	}
 
 }

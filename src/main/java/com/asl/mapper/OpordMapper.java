@@ -54,7 +54,7 @@ public interface OpordMapper {
 
 	public List<Opordheader> findAllProductionCompletedChalan(String xtypetrn, String xtrn, String zid);
 
-	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, String xdate, String zid);
+	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatusord, String xdate, String zid);
 
 	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);
 

@@ -5,7 +5,7 @@
 
 	<insert id="saveOpordHeader" parameterType="Opordheader">
 		<selectKey keyProperty="xordernum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${centralzid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO opordheader
 		(
@@ -286,7 +286,15 @@
 	</delete>
 
 	<select id="findOpordHeaderByXordernum" resultType="Opordheader">
-		SELECT * FROM Opordheader WHERE xordernum=#{xordernum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			opordheader.*,
+			cacus.xorg
+		FROM 
+			opordheader 
+			LEFT JOIN cacus ON cacus.xcus = opordheader.xcus AND cacus.zid = opordheader.zid AND cacus.zactive='1'
+		WHERE 
+			opordheader.xordernum=#{xordernum} 
+			AND opordheader.zid=#{zid}
 	</select>
 
 	<select id="findOporddetailByXordernumAndXrow" resultType="Oporddetail">
@@ -451,31 +459,31 @@
 
 	<select id="findAllOpordHeaderByXtypetrnAndXtrn" resultType="Opordheader">
 		SELECT
-			*
+			OPORDHEADER.*,
+			cacus.xorg
 		FROM 
 			OPORDHEADER
+			LEFT JOIN cacus ON cacus.xcus = opordheader.xcus AND cacus.zid = opordheader.zid AND cacus.zactive='1'
 		WHERE
-			ZID=#{zid}
-			AND ZACTIVE='1'
-			AND XTYPETRN=#{xtypetrn}
-			AND XTRN=#{xtrn}
+			OPORDHEADER.ZID=#{zid}
+			AND OPORDHEADER.XTYPETRN=#{xtypetrn}
+			AND OPORDHEADER.XTRN=#{xtrn}
 		ORDER BY
-			XORDERNUM DESC
+			OPORDHEADER.XORDERNUM DESC
 	</select>
 
 	<select id="findAllSalesOrder" resultType="Opordheader">
 		SELECT 
 			OPORDHEADER.*,
-			ZBUSINESS.ZORG AS "branchname"
+			cacus.xorg AS "branchname"
 		FROM 
 			OPORDHEADER
-			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
+			LEFT JOIN cacus ON cacus.xcus = OPORDHEADER.xcus AND cacus.zid = OPORDHEADER.zid AND cacus.zactive='1'
 		WHERE
 			OPORDHEADER.ZID=#{zid}
-			AND OPORDHEADER.ZACTIVE='1'
 			AND OPORDHEADER.XTYPETRN=#{xtypetrn}
 			AND OPORDHEADER.XTRN=#{xtrn}
-			AND OPORDHEADER.XSTATUS=#{xstatus}
+			AND OPORDHEADER.XSTATUSORD=#{xstatusord}
 			AND TO_CHAR(OPORDHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
 		ORDER BY
 			OPORDHEADER.XORDERNUM DESC
@@ -484,10 +492,10 @@
 	<select id="findAllSalesOrderByChalan" resultType="Opordheader">
 		SELECT 
 			OPORDHEADER.*,
-			ZBUSINESS.ZORG AS "branchname"
+			cacus.xorg AS "branchname"
 		FROM 
 			OPORDHEADER
-			JOIN ZBUSINESS ON ZBUSINESS.ZID = OPORDHEADER.XCUS
+			LEFT JOIN cacus ON cacus.xcus = OPORDHEADER.xcus AND cacus.zid = OPORDHEADER.zid AND cacus.zactive='1'
 		WHERE
 			OPORDHEADER.ZID=#{zid}
 			AND OPORDHEADER.ZACTIVE='1'

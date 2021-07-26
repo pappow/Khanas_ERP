@@ -140,14 +140,23 @@ public class CacusController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		if(!"Branch".equalsIgnoreCase(cacus.getXgcus())){
+			cacus.setXcuszid(null);
+		}
+
 		// validation xcuszid
-		if("CUS".equalsIgnoreCase(cacusType) 
-				&& StringUtils.isNotBlank(cacus.getXcuszid()) 
-				&& StringUtils.isBlank(cacus.getXcus())
-				&& cacusService.findCacusByXcuszid(cacus.getXcuszid()) != null) {
-			// check this customer already exist with this branch id
-			responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
-			return responseHelper.getResponse();
+		if("CUS".equalsIgnoreCase(cacusType) && StringUtils.isNotBlank(cacus.getXcuszid()) && "Branch".equalsIgnoreCase(cacus.getXgcus())) {
+			Cacus ex = cacusService.findCacusByXcuszid(cacus.getXcuszid());
+			if(ex != null) {
+				if(StringUtils.isBlank(cacus.getXcus())) {
+					responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
+					return responseHelper.getResponse();
+				}
+				if(!cacus.getXcus().equalsIgnoreCase(ex.getXcus())) {
+					responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
+					return responseHelper.getResponse();
+				}
+			}
 		}
 
 		// if existing

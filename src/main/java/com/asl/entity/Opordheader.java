@@ -203,4 +203,7 @@ public class Opordheader extends AbstractModel<String> {
 	@Transient
 	private String branchname;
 
+	@Transient
+	private String xorg;
+
 }

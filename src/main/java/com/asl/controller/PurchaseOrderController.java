@@ -188,15 +188,22 @@ public class PurchaseOrderController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// check puchase order has details list
+		List<PoordDetail> details = poordService.findPoorddetailByXpornum(xpornum);
+		if(details == null || details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Purchase order details is empty");
+			return responseHelper.getResponse();
+		}
+
 		ph.setXstatuspor("Confirmed");
 		long count = poordService.update(ph);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't CoPurchase order " + xpornum + " is not Open");
+			responseHelper.setErrorStatusAndMessage("Can't confirmed purchase order " + xpornum);
 			return responseHelper.getResponse();
 		}
 
 		responseHelper.setReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + ph.getXpornum());
-		responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
+		responseHelper.setSuccessStatusAndMessage("Purchase order confirmed successfully");
 		return responseHelper.getResponse();
 	}
 

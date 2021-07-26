@@ -81,14 +81,12 @@
 											<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-
 									<tr>
 										<td><a th:href="@{/businessprof}">Business Profile</a></td>
 										<td>
 											<a th:href="@{/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-									
 
 
 									<tr>
@@ -145,6 +143,22 @@
 										<td><a th:href="@{/procurements/pogrn}">GRN</a></td>
 										<td>
 											<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
+									<tr>
+										<td colspan="2">Sales & Invoicing</td>
+									</tr>
+									<tr th:if="${menuProfile.M0401 ne null and menuProfile.M0401.display}">
+										<td><a th:href="@{/salesninvoice/opord}">Sales Order</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/opord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0405 ne null and menuProfile.M0405.display}">
+										<td><a th:href="@{/salesninvoice/salesandinvoice}">Invoice</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 

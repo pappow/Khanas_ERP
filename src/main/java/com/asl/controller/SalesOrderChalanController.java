@@ -216,17 +216,33 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		// now update sales order with chalan reference
 		oh.setXchalanref(chalan);
-		oh.setXstatus("Confirmed");
+		oh.setXstatusord("Confirmed");
 		long count = opordService.updateOpordHeader(oh);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
-		responseHelper.setThirdReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + chalan);
-		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
+		// now create suggestion
+		Opordheader pchalan = opordService.findOpordHeaderByXordernum(chalan);
+		if(pchalan == null) {
+			responseHelper.setErrorStatusAndMessage("Chalan " + chalan + " not found in this system");
+			return responseHelper.getResponse();
+		}
+		// delete suggestion table where xordernum
+		productionSuggestionService.deleteSuggestion(chalan, pchalan.getXdate());
+		// create suggestion
+		productionSuggestionService.createSuggestion(chalan);
+		// update chalan status
+		pchalan.setSuggestionCreated(true);
+		long chalancount = opordService.updateOpordHeader(pchalan);
+		if(chalancount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update chalan suggestion status");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + chalan);
+		responseHelper.setSuccessStatusAndMessage("Sales order " + oh.getXordernum() + " assigned to chalan " + chalan + " successfully");
 		return responseHelper.getResponse();
 	}
 
@@ -266,17 +282,36 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 		// now update sales order with chalan reference
 		oh.setXchalanref(null);
-		oh.setXstatus("Open");
+		oh.setXstatusord("Open");
 		long count = opordService.updateOpordHeader(oh);
 		if(count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opensalesorderstable", "/salesninvoice/salesorderchalan/opensalesorder/query?xordernum="+ chalan +"&date=" + SDF.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("salesorderchalandetailtable", "/salesninvoice/salesorderchalan/chalandetail/" + chalan);
-		responseHelper.setThirdReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + chalan);
-		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
+		// now create suggestion
+		Opordheader pchalan = opordService.findOpordHeaderByXordernum(chalan);
+		if(pchalan == null) {
+			responseHelper.setErrorStatusAndMessage("Chalan " + chalan + " not found in this system");
+			return responseHelper.getResponse();
+		}
+		// delete suggestion table where xordernum
+		productionSuggestionService.deleteSuggestion(chalan, pchalan.getXdate());
+		// create suggestion
+		productionSuggestionService.createSuggestion(chalan);
+		// update chalan status
+		List<Oporddetail> chalandetails = opordService.findOporddetailByXordernum(chalan);
+		if(chalandetails == null || chalandetails.isEmpty()) {
+			pchalan.setSuggestionCreated(false);
+			long chalancount = opordService.updateOpordHeader(pchalan);
+			if(chalancount == 0) {
+				responseHelper.setErrorStatusAndMessage("Can't update chalan suggestion status");
+				return responseHelper.getResponse();
+			}
+		}
+
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + chalan);
+		responseHelper.setSuccessStatusAndMessage("Sales order " + oh.getXordernum() + " unassigned from chalan " + chalan + " successfully");
 		return responseHelper.getResponse();
 	}
 
@@ -525,8 +560,8 @@ public class SalesOrderChalanController extends ASLAbstractController {
 			}
 		}
 
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + xordernum);
 		responseHelper.setSuccessStatusAndMessage("Transfer order created successfull");
-		responseHelper.setReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + xordernum);
 		return responseHelper.getResponse();
 	}
 
@@ -591,7 +626,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Transfer order created successfull");
-		responseHelper.setReloadSectionIdWithUrl("chalanform", "/salesninvoice/salesorderchalan/reloadchalanform/" + xordernum);
+		responseHelper.setRedirectUrl("/salesninvoice/salesorderchalan/" + xordernum);
 		return responseHelper.getResponse();
 	}
 	
