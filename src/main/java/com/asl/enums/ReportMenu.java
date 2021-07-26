@@ -35,7 +35,7 @@ public enum ReportMenu {
 	RM0405(999, "400", "Sales & Invoicing", "Customer Ledger Detail", ReportParamMap.RM0405, "Y", false, false, 1000),
 	RM0406(999, "400", "Sales & Invoicing", "Customer Ledger Summary", ReportParamMap.RM0406, "Y", false, false, 1000),
 	RM0407(999, "400", "Sales & Invoicing", "Both Party Ledger", ReportParamMap.RM0407, "Y", false, false, 1000),
-	RM0408(999, "400", "Sales & Invoicing", "Customer List", ReportParamMap.RM0408, "Y", false, false, 1000),
+	//RM0408(999, "400", "Sales & Invoicing", "Customer List", ReportParamMap.RM0408, "Y", false, false, 1000),
 	RM0409(999, "400", "Sales & Invoicing", "Receivable and Collection Statement", ReportParamMap.RM0409, "Y", false, false, 1000),
 	RM0410(999, "400", "Sales & Invoicing", "Sales Return Listing", ReportParamMap.RM0410, "Y", false, false, 1000),
 	RM0411(999, "400", "Sales & Invoicing", "Branch Distribution Report", ReportParamMap.RM0411, "Y", false, false, 1000),
@@ -55,7 +55,8 @@ public enum ReportMenu {
 	RM0605(999, "600", "Inventory", "Item Transaction Detail", ReportParamMap.RM0605, "Y", false, false, 1000),
 	RM0606(999, "600", "Inventory", "Item Transaction Summary", ReportParamMap.RM0606, "Y", false, false, 1000),
 	RM0607(999, "600", "Inventory", "Item List", ReportParamMap.RM0607, "Y", false, false, 1000),
-	//RM0608(999, "600", "Inventory", "Inventory Management Report", ReportParamMap.RM0608, "Y", false, false, 1000),
+	RM0608(999, "600", "Inventory", "Inventory Management Report", ReportParamMap.RM0608, "Y", false, false, 1000),
+	
 	
 	//Land Report --RM0700
 	RM0701(999, "700", "Land Management", "Land Details Report", ReportParamMap.RM0701, "Y", false, false, 1000),
