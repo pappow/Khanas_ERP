@@ -105,7 +105,7 @@
 														<label class="control-label col-md-4" for="xfwh">From Warehouse : </label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xfwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
+																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
 															</select>
 														</div>
 													</div>
@@ -114,7 +114,7 @@
 														<label class="control-label col-md-4" for="xtwh">To Warehouse : </label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xtwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
+																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
 															</select>
 														</div>
 													</div>
@@ -195,7 +195,7 @@
 						<section th:if="${not #strings.isEmpty(imtorheader.xtornum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/inventory/transferorder/imtordetails/} + ${imtorheader.xtornum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>Transfer Order Details</h1>
+								<h1>Transfer Order Details of <span th:text="${imtorheader.xtornum}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table nowrap" id="imtordetailtable" th:fragment="imtordetailtable">

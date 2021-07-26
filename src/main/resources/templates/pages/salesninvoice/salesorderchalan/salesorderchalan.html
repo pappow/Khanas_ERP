@@ -255,7 +255,7 @@
 						<section id="data-maintenance" style="margin-top: 30px;">
 							<div class="section-header sectionbartoggle">
 								<h1>
-									Chalan Details
+									Chalan Details of <span th:text="${salesorderchalan.xordernum}"></span>
 									<a th:if="${not #strings.isEmpty(salesorderchalan.xordernum) and salesorderchalan.zactive == true and salesorderchalan.xstatus eq 'Confirmed'}" th:href="@{/salesninvoice/salesorderchalan/print/} + ${salesorderchalan.xordernum}" class="" target="_blank"><i class="fas fa-print"></i> Print</a>
 								</h1>
 							</div>

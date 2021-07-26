@@ -162,7 +162,7 @@
 															<label class="control-label col-md-4" for="xwh">Store</label>
 															<div class="col-md-8">
 																<select class="form-control" th:field="*{xwh}">
-																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
+																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
 																</select>
 															</div>
 														</div>
@@ -370,7 +370,7 @@
 						<section th:if="${not #strings.isEmpty(opdoheader.xdornum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/salesninvoice/salesandinvoice/opdodetail/} + ${opdoheader.xdornum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>Invoice Details</h1>
+								<h1>Invoice Details of <span th:text="${opdoheader.xdornum}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table nowrap" id="opdodetailtable" th:fragment="opdodetailtable">

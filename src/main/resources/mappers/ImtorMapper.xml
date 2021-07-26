@@ -261,10 +261,14 @@
 	 <select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
 		SELECT 
 			imtorheader.*,
-			cacus.xorg
+			cacus.xorg,
+			x.xdescdet as xfwhdesc,
+			y.xdescdet as xtwhdesc
 		FROM
 			imtorheader
 			left join cacus on cacus.xcus = imtorheader.xcus and cacus.zid=imtorheader.zid and cacus.zactive='1'
+			left join xcodes x ON x.xcode = imtorheader.xfwh AND x.zid = imtorheader.zid AND x.zactive='1'
+			left join xcodes y ON y.xcode = imtorheader.xtwh AND y.zid = imtorheader.zid AND y.zactive='1'
 		WHERE 
 			imtorheader.xtypetrn=#{xtypetrn} 
 			AND imtorheader.zid=#{zid} 
