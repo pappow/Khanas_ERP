@@ -54,4 +54,9 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return pdmstMapper.searchStaff(hint.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	@Override
+	public List<Pdmst> getAllHRPdmst(Boolean zactive) {
+		return pdmstMapper.getAllPdmst(sessionManager.getBusinessId(), zactive);
+	}
 }

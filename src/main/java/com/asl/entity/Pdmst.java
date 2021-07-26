@@ -36,9 +36,89 @@ public class Pdmst extends AbstractModel<String> {
 
 	@Column(name = "xname")
 	private String xname;
+	
+	@Column(name = "xfname")
+	private String xfname;
+	
+	@Column(name = "xmname")
+	private String xmname;
+	
+	@Column(name = "xmadd")
+	private String xmadd;  // current address
 
+	@Column(name = "xpadd")
+	private String xpadd;  // permanent address
+	
+	@Column(name = "xbirthdate")
+	@Temporal(TemporalType.DATE)
+	private Date xbirthdate;
+	
+	@Column(name = "xsex")
+	private String xsex;
+	
+	@Column(name = "xmstat")
+	private String xmstat;
+	
+	@Column(name = "xdeptname")
+	private String xdeptname;
+	
+	@Column(name = "xsec")
+	private String xsec;
+
+	@Column(name = "xdesignation")
+	private String xdesignation;
+	
+	@Column(name = "xdatejoin")
+	@Temporal(TemporalType.DATE)
+	private Date xdatejoin;
+	
+	@Column(name = "xgrade")
+	private String xgrade;
+	
 	@Column(name = "xemail")
 	private String xemail;
+	
+	@Column(name = "xenddate")
+	@Temporal(TemporalType.DATE)
+	private Date xenddate;
+	
+	@Column(name = "xretdate")
+	@Temporal(TemporalType.DATE)
+	private Date xretdate;
+	
+	@Column(name = "xempstatus")
+	private String xempstatus;
+	
+	@Column(name = "xdistrict")
+	private String xdistrict;
+	
+	@Column(name = "xdatecom")
+	@Temporal(TemporalType.DATE)
+	private Date xdatecom;
+	
+	@Column(name = "xbank")
+	private String xbank;
+	
+	@Column(name = "xacc")
+	private String xacc;
+	
+	@Column(name = "xposition")
+	private String xposition;
+	
+	@Column(name = "xtin")
+	private String xtin;
+	
+	@Column(name = "xempcategory")
+	private String xempcategory;
+	
+	@Column(name = "xstatus")
+	private String xstatus;
+	
+	@Column(name = "xsid")
+	private String xsid;
+	
+	@Column(name = "xbloodgroup")
+	private String xbloodgroup;
 
 	@Column(name = "xphone")
 	private String xphone;
@@ -46,58 +126,48 @@ public class Pdmst extends AbstractModel<String> {
 	@Column(name = "xmobile")
 	private String xmobile;
 
-	@Column(name = "xmadd")
-	private String xmadd;  // current address
+	@Column(name = "xplan")
+	private String xplan;
 
-	@Column(name = "xpadd")
-	private String xpadd;  // permanent address
+	@Column(name = "xcar")
+	private String xcar;
 
-	@Column(name = "xsex")
-	private String xsex;
+	@Column(name = "xgross")
+	private String xgross;
 
-	@Column(name = "xempstatus")
-	private String xempstatus;
+	@Column(name = "xemname")
+	private String xemname;
 
-	@Column(name = "xposition")
-	private String xposition;
+	@Column(name = "xrelation")
+	private String xrelation;
 
-	@Column(name = "xdesignation")
-	private String xdesignation;
-
-	@Column(name = "xdeptname")
-	private String xdeptname;
-
-	@Column(name = "xempcategory")
-	private String xempcategory;
-
-	@Column(name = "xbirthdate")
-	@Temporal(TemporalType.DATE)
-	private Date xbirthdate;
-
-	@Column(name = "xdatejoin")
-	@Temporal(TemporalType.DATE)
-	private Date xdatejoin;
-
-	@Column(name = "xdatecom")
-	@Temporal(TemporalType.DATE)
-	private Date xdatecom;
-
-	@Column(name = "xenddate")
-	@Temporal(TemporalType.DATE)
-	private Date xenddate;
-
-	@Column(name = "xemptype")
-	private String xemptype;
-
-	@Column(name = "xdistrict")
-	private String xdistrict;
-
+	@Column(name = "xemcmobile")
+	private String xemcmobile;
+	
 	@Column(name = "xreligion")
 	private String xreligion;
+	
+	@Column(name = "xemptype")
+	private String xemptype;
+	
+	@Column(name = "xsignature")
+	private String xsignature;
 
-	@Column(name = "xbloodgroup")
-	private String xbloodgroup;
-
+	@Column(name = "xgrossold")
+	private String xgrossold;
+	
+	@Column(name = "xshortname")
+	private String xshortname;
+	
+	@Column(name = "xbnkpay")
+	private String xbnkpay;
+	
+	@Column(name = "xweekday")
+	private String xweekday;
+	
+	@Column(name = "xhdayapp")
+	private String xhdayapp;
+	
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
 

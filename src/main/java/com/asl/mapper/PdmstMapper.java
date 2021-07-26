@@ -20,5 +20,7 @@ public interface PdmstMapper {
 
 	public List<Pdmst> getAllPdmst(String zid, Boolean zactive);
 	
+	public List<Pdmst> getAllHRPdmst(String zid, Boolean zactive);
+	
 	public List<Pdmst> searchStaff(String xstaff, String zid);
 }
