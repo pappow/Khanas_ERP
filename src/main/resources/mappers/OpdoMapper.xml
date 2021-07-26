@@ -351,16 +351,17 @@
 	
 	<select id="findAllOpdoHeaderByXtypetrnAndXtrn" resultType="Opdoheader">
 		SELECT
-			*
+			OPDOHEADER.*,
+			cacus.xorg
 		FROM 
 			OPDOHEADER
+			left join cacus on cacus.xcus = OPDOHEADER.xcus and cacus.zid = OPDOHEADER.zid and cacus.zactive='1'
 		WHERE
-			ZID=#{zid}
-			AND ZACTIVE='1'
-			AND XTYPETRN=#{xtypetrn}
-			AND XTRN=#{xtrn}
+			OPDOHEADER.ZID=#{zid}
+			AND OPDOHEADER.XTYPETRN=#{xtypetrn}
+			AND OPDOHEADER.XTRN=#{xtrn}
 		ORDER BY
-			xstatusord, xdornum  DESC
+			OPDOHEADER.xstatusord DESC, OPDOHEADER.xdornum  DESC
 	</select>
 
 	<select id="findAllInvoiceOrder" resultType="Opdoheader">

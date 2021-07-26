@@ -140,17 +140,14 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 		List<ImtorDetail> details = imtorService.findImtorDetailByXtornum(xtornum);
 		if(details != null && !details.isEmpty()) {
-			long dcount = imtorService.deleteImtorDetailByXtornum(xtornum);
-			if(dcount == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't archive transfer order");
-				return responseHelper.getResponse();
-			}
+			responseHelper.setErrorStatusAndMessage("Delete all transfer order details first");
+			return responseHelper.getResponse();
 		}
 
-		imtorHeader.setZactive(Boolean.FALSE);
-		long count = imtorService.update(imtorHeader);
+
+		long count = imtorService.delete(imtorHeader);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't archive transfer order");
+			responseHelper.setErrorStatusAndMessage("Can't delete transfer order");
 			return responseHelper.getResponse();
 		}
 
@@ -310,7 +307,7 @@ public class StockTransferOrderController extends ASLAbstractController {
 		for(ImtorDetail id : imtorDetailList) {
 			Imstock is = imstockService.findByXitemAndXwh(id.getXitem(), imtorHeader.getXfwh());
 			if(is == null || is.getXinhand().compareTo(id.getXqtyord()) == -1) {
-				error.append("Item " + is.getXitem() + " not available in " + imtorHeader.getXfwh() + " to do transfer\n");
+				error.append("==> Item " + is.getXitem() + " not available in " + imtorHeader.getXfwh() + " - " + imtorHeader.getXfwhdesc() + " to do transfer<br/>");
 			}
 		}
 		if(StringUtils.isNotBlank(error.toString())) {

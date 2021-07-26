@@ -122,12 +122,17 @@
 	</update>
 
 	<delete id="deleteImtorHeader" parameterType="ImtorHeader">
-		DELETE FROM imtorHeader WHERE  xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+		DELETE 
+		FROM 
+			imtorHeader 
+		WHERE 
+			xtornum=#{xtornum} 
+			zid=#{zid}
 	</delete>
 	
 	<insert id="saveImtorDetail" parameterType="ImtorDetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM ImtorDetail WHERE xtornum=#{xtornum} AND zid=#{zid}
 		</selectKey>
 		INSERT INTO ImtorDetail
 		(
@@ -194,18 +199,37 @@
 	</update>
 
 	<delete id="deleteImtorDetail" parameterType="ImtorDetail">
-		DELETE FROM ImtorDetail WHERE xrow=#{xrow} AND xtornum=#{xtornum} AND zactive='1' AND zid=#{zid}
+		DELETE 
+		FROM 
+			ImtorDetail 
+		WHERE 
+			xrow=#{xrow} 
+			AND xtornum=#{xtornum} 
+			AND zid=#{zid}
 	</delete>
 
 	<delete id="deleteImtorDetailByXtornum">
-		DELETE FROM imtordetail WHERE xtypetrn=#{xtypetrn} AND zactive='1' AND zid=#{zid}
+		DELETE 
+		FROM 
+			imtordetail 
+		WHERE 
+			xtypetrn=#{xtypetrn} 
+			AND zid=#{zid}
 	</delete>
 
 	<select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
-		SELECT * 
+		SELECT 
+			distinct
+			imtorheader.*,
+			x.xdescdet as xfwhdesc,
+			y.xdescdet as xtwhdesc
 		FROM 
-			ImtorHeader 
-		WHERE xtornum=#{xtornum} AND zid=#{zid} AND zactive='1'
+			imtorheader 
+			left join xcodes x ON x.xcode = imtorheader.xfwh AND x.zid = imtorheader.zid AND x.zactive='1'
+			left join xcodes y ON y.xcode = imtorheader.xtwh AND y.zid = imtorheader.zid AND y.zactive='1'
+		WHERE 
+			imtorheader.xtornum=#{xtornum} 
+			AND imtorheader.zid=#{zid}
 	</select>
 	
 	<!-- <select id="findImtorHeaderByXtornum" resultType="ImtorHeader">
@@ -217,7 +241,25 @@
 	</select> -->
 
 	<select id="findImtorHeaderByXchalanref" resultType="ImtorHeader">
-		SELECT * FROM ImtorHeader WHERE xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			imtorheader 
+		WHERE 
+			xchalanref=#{xchalanref} 
+			AND zid=#{zid}
+	</select>
+
+	<select id="findImtorHeaderByXchalanrefAndXfwhAndXtwh" resultType="ImtorHeader">
+		SELECT 
+			* 
+		FROM 
+			imtorheader 
+		WHERE 
+			xchalanref=#{xchalanref} 
+			AND zid=#{zid}
+			AND xfwh=#{xfwh}
+			AND xtwh=#{xtwh}
 	</select>
 
 	<select id="findImtorDetailByXtornum" resultType="ImtorDetail">
@@ -228,25 +270,32 @@
 			JOIN caitem on caitem.xitem=det.xitem AND caitem.zid=#{centralzid}
 			left join xcodes on xcodes.xcode = caitem.xcatitem and xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
-			det.xtornum=#{xtornum}  AND det.zid=#{zid} AND det.zactive='1' 
+			det.xtornum=#{xtornum} 
+			AND det.zid=#{zid} 
 		ORDER BY 
 			xcodes.seqn, det.xrow 
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXchalanref" resultType="ImtorDetail">
-		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xchalanref=#{xchalanref} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			ImtorDetail 
+		WHERE 
+			xtornum=#{xtornum} 
+			AND xchalanref=#{xchalanref} 
+			AND zid=#{zid}
 	</select>
 
-	
-       
-	
-	
 	<select id="getAllImtorHeader" resultType="ImtorHeader">
-		SELECT *
+		SELECT 
+			*
 		FROM
 			ImtorHeader
-		WHERE zid=#{zid} AND zactive='1'
-		ORDER BY xtornum DESC
+		WHERE 
+			zid=#{zid} 
+		ORDER BY 
+			xtornum DESC
 	</select> 
 	
 	<!-- <select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
@@ -257,9 +306,10 @@
 		WHERE  ImtorHeader.xtypetrn=#{xtypetrn} AND ImtorHeader.zid=#{zid} AND ImtorHeader.zactive='1'
 		
 	</select> -->
-	
-	 <select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
+
+	<select id="getAllImtorHeaderbyPrefix" resultType="ImtorHeader">
 		SELECT 
+			distinct
 			imtorheader.*,
 			cacus.xorg,
 			x.xdescdet as xfwhdesc,
@@ -272,15 +322,30 @@
 		WHERE 
 			imtorheader.xtypetrn=#{xtypetrn} 
 			AND imtorheader.zid=#{zid} 
-			AND imtorheader.zactive='1'
+		ORDER BY
+			imtorheader.xtornum DESC
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXrow" resultType="ImtorDetail">
-		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			ImtorDetail 
+		WHERE 
+			xtornum=#{xtornum} 
+			AND xrow=#{xrow} 
+			AND zid=#{zid}
 	</select>
 
 	<select id="findImtorDetailByXtornumAndXitem" resultType="ImtorDetail">
-		SELECT * FROM ImtorDetail WHERE xtornum=#{xtornum} AND xitem=#{xitem} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			ImtorDetail 
+		WHERE 
+			xtornum=#{xtornum} 
+			AND xitem=#{xitem} 
+			AND zid=#{zid}
 	</select>
 
 	<select id = "procConfirmTO" statementType = "CALLABLE">

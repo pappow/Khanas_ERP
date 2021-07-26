@@ -109,7 +109,6 @@
 						$.ajax({
 							url : getBasepath() + '/procurements/poord/caitem/itemdetail/' + $('input[name="xitem"]').val(),
 							type : 'GET',
-							beforeSend : 
 							success : function(data) {
 								loadingMask2.hide();
 								if(data == undefined || data == null) return;

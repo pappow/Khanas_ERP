@@ -79,4 +79,6 @@ public class Imstock extends AbstractModel<String> {
 	private String zorg;
 	@Transient
 	private String xmadd;
+	@Transient
+	private String xdescdet;
 }
