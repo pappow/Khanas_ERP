@@ -15,6 +15,8 @@ public interface PdmstService {
 	public long update(Pdmst pdmst);
 
 	public List<Pdmst> getAll(Boolean zactive);
+	
+	public List<Pdmst> getAllHRPdmst(Boolean zactive);
 
 	public Pdmst findByXstaff(String xstaff, Boolean zactive);
 

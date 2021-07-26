@@ -131,30 +131,27 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Sex</label>
 																<div class="col-md-8">
-																	<select class="form-control" th:field="">
+																	<select class="form-control" >
 																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">mstat </label>
+																<label class="control-label col-md-4" for="">Marital Status </label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
-																</div>
-															</div>
-															
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Group</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Department Name</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
@@ -166,11 +163,13 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Designation</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Join Date</label>
+																<label class="control-label col-md-4" for="">Date of Join</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -186,7 +185,9 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Grade</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
@@ -196,7 +197,7 @@
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">End Date</label>
+																<label class="control-label col-md-4" for="">Date of End</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -210,7 +211,7 @@
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Retire Date</label>
+																<label class="control-label col-md-4" for="">Date of Retirement</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -226,17 +227,21 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Employee Status</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">District</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">com Date</label>
+																<label class="control-label col-md-4" for="">Date of Confirmation</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
@@ -250,15 +255,9 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Bank </label>
+																<label class="control-label col-md-4" for="">Bank Name</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Description</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" placeholder="Search"/>
 																</div>
 															</div>
 															<div class="form-group">
@@ -278,7 +277,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">TIN</label>
+																<label class="control-label col-md-4" for="">TIN No.</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
@@ -287,26 +286,32 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Employee Category</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Status</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">S ID</label>
+																<label class="control-label col-md-4" for="">Superior ID</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" placeholder="Search"/>
 																</div>
 															</div>
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Blood Group</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
@@ -316,31 +321,27 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Plan</label>
+																<label class="control-label col-md-4" for="">Leave Plan</label>
+																<div class="col-md-8">
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="">Car No.</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Car</label>
+																<label class="control-label col-md-4" for="">Gross Salary</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Lyearti</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Gross</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Employee m Name</label>
+																<label class="control-label col-md-4" for="">Emergency Contact</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
@@ -352,7 +353,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Emergency Mobile No.</label>
+																<label class="control-label col-md-4" for="">Mobile No.(Em. Con.)</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
@@ -372,31 +373,15 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Employee Type</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Signature</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Old Gross</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Father Name</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Mother Name</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" placeholder="Image Upload"/>
 																</div>
 															</div>
 															<div class="form-group">
@@ -406,7 +391,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Bank Pay</label>
+																<label class="control-label col-md-4" for="">Bank Pay Amount</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" />
 																</div>
@@ -414,13 +399,17 @@
 															<div class="form-group">
 																<label class="control-label col-md-4" for="">Week Day</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Holiday</label>
+																<label class="control-label col-md-4" for="">Holiday Applicable</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<select class="form-control" >
+																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
 																</div>
 															</div>
 															
