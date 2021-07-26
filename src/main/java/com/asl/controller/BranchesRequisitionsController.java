@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
@@ -41,6 +42,7 @@ import com.asl.model.report.MatrixReport;
 import com.asl.model.report.MatrixReportData;
 import com.asl.model.report.TableColumn;
 import com.asl.model.report.Total;
+import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.OpordService;
 import com.asl.service.PoordService;
@@ -57,6 +59,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 	@Autowired private PoordService poordService;
 	@Autowired private OpordService opordService;
 	@Autowired private CaitemService caitemService;
+	@Autowired private CacusService cacusService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -260,11 +263,20 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		oh.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
 		oh.setXpornum(ph.getXpornum());
 		oh.setXdate(new Date());
-		oh.setXcus(ph.getZid());
 		oh.setXstatus("Open");
+		oh.setXstatusord("Open");
 		oh.setXnote(ph.getXnote());
 		oh.setXdiscamt(BigDecimal.ZERO);
 		oh.setXvatait("No Vat");
+
+		// Tag with branch customer    xgcus   xcuszid
+		Cacus cacus = cacusService.findCacusByXcuszid(ph.getZid());
+		if(cacus == null) {
+			responseHelper.setErrorStatusAndMessage("There is no customer found for this branch");
+			return responseHelper.getResponse();
+		}
+		oh.setXcus(cacus.getXcus());
+
 		long ohCount = opordService.saveOpordHeader(oh);
 		if(ohCount == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't crete sales order");
@@ -299,6 +311,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 			od.setXcatitem(c.getXcatitem());
 			od.setXgitem(c.getXgitem());
 			od.setXlineamt(od.getXqtyord().multiply(od.getXrate()));
+			od.setXlineamt(od.getXlineamt().add(od.getXlineamt().multiply(c.getXvatrate() == null ? BigDecimal.ZERO : c.getXvatrate()).divide(BigDecimal.valueOf(100))));
 
 			detailsList.add(od);
 		}

@@ -60,7 +60,7 @@ public interface OpordService {
 
 	public List<Opordheader> findAllProductionCompletedChalan(String xtypetrn, String xtrn);
 
-	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatus, Date xdate);
+	public List<Opordheader> findAllSalesOrder(String xtypetrn, String xtrn, String xstatusord, Date xdate);
 
 	public List<Opordheader> findAllSalesOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
 

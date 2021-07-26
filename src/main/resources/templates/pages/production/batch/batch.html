@@ -82,7 +82,7 @@
 									<div class="section-body">
 										<table class="table table-striped table-bordered" id="batchdetailtable" th:fragment="batchdetailtable">
 											<h1 th:if="${not #lists.isEmpty(batchList)}" style="text-align: center; font-size: 25px;">
-												Batch Details of Chalan : <a th:href="@{/salesninvoice/salesorderchalan/} + ${chalan.xordernum}" target="_blank" th:text="${chalan.xordernum}"></a>
+												Batch Details of Production Chalan : <a th:href="@{/salesninvoice/salesorderchalan/} + ${chalan.xordernum}" target="_blank" th:text="${chalan.xordernum}"></a>
 												<!-- <a target="_blank" th:href="@{/production/batch/print/} + ${chalan.xordernum}"><i class="fas fa-print"></i> Print</a> -->
 												<a target="_blank" th:href="@{/production/batch/print/dailyproduction/} + ${chalan.xordernum}"><i class="fas fa-print"></i> Print</a>
 											</h1>

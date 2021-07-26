@@ -143,10 +143,14 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			// Create all details
 			int i = 1;
 			for(PoordDetail d : details) {
+				Caitem c = caitemService.findByXitem(d.getXitem());
+				if(c == null) continue;
+
 				d.setXrow(i);
 				d.setXpornum(poordHeader.getXpornum());
 				if(d.getXrate() == null) d.setXrate(BigDecimal.ZERO);
 				d.setXlineamt(d.getXqtyord().multiply(d.getXrate()));
+				d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
 				i++;
 			}
 
@@ -181,10 +185,14 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 		// Create all details
 		int i = 1;
 		for(PoordDetail d : details) {
+			Caitem c = caitemService.findByXitem(d.getXitem());
+			if(c == null) continue;
+
 			d.setXrow(i);
 			d.setXpornum(poh.getXpornum());
 			if(d.getXrate() == null) d.setXrate(BigDecimal.ZERO);
 			d.setXlineamt(d.getXqtyord().multiply(d.getXrate()));
+			d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
 			i++;
 		}
 
