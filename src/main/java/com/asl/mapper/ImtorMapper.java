@@ -26,7 +26,9 @@ public interface ImtorMapper {
 
 	public ImtorHeader findImtorHeaderByXtornum(String xtornum, String zid);
 
-	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref, String zid);
+	public List<ImtorHeader> findImtorHeaderByXchalanref(String xchalanref, String zid);
+	
+	public List<ImtorHeader> findImtorHeaderByXchalanrefAndXfwhAndXtwh(String xchalanref, String xfwh, String xtwh, String zid);
 
 	public List<ImtorHeader> getAllImtorHeader(String zid);
 

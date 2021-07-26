@@ -17,9 +17,9 @@ import com.asl.service.ImtorService;
 @Service
 public class ImtorServiceImpl extends AbstractGenericService implements ImtorService {
 
-	@Autowired
-	private ImtorMapper imtorMapper;
+	@Autowired private ImtorMapper imtorMapper;
 
+	@Transactional
 	@Override
 	public long save(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtrn()))
@@ -32,6 +32,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return imtorMapper.saveImtorHeader(imtorHeader);
 	}
 
+	@Transactional
 	@Override
 	public long update(ImtorHeader imtorHeader) {
 		if (imtorHeader == null || StringUtils.isBlank(imtorHeader.getXtornum())) return 0;
@@ -40,13 +41,15 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return imtorMapper.updateImtorHeader(imtorHeader);
 	}
 
+	@Transactional
 	@Override
 	public long delete(ImtorHeader imtorHeader) {
 		if(imtorHeader == null) return 0;
 		long count = imtorMapper.deleteImtorHeader(imtorHeader);
 		return count;
 	}
-	
+
+	@Transactional
 	@Override
 	public long saveDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
@@ -74,6 +77,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return totalCount;
 	}
 
+	@Transactional
 	@Override
 	public long updateDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null || StringUtils.isBlank(imtorDetail.getXtornum())) return 0;
@@ -84,6 +88,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return count;
 	}
 
+	@Transactional
 	@Override
 	public long deleteDetail(ImtorDetail imtorDetail) {
 		if(imtorDetail == null) return 0;
@@ -99,9 +104,15 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 	}
 
 	@Override
-	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref) {
+	public List<ImtorHeader> findImtorHeaderByXchalanref(String xchalanref) {
 		if (StringUtils.isBlank(xchalanref)) return null;
 		return imtorMapper.findImtorHeaderByXchalanref(xchalanref, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<ImtorHeader> findImtorHeaderByXchalanrefAndXfwhAndXtwh(String xchalanref, String xfwh, String xtwh) {
+		if (StringUtils.isBlank(xchalanref) || StringUtils.isBlank(xfwh) || StringUtils.isBlank(xtwh)) return null;
+		return imtorMapper.findImtorHeaderByXchalanrefAndXfwhAndXtwh(xchalanref, xfwh, xtwh, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -145,6 +156,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		return imtorMapper.findImtorDetailByXtornumAndXitem(xtornum, xitem, sessionManager.getBusinessId());
 	}
 
+	@Transactional
 	@Override
 	public long updateImtorHeaderTotalAmt(ImtorDetail imtorDetail) {
 		if(imtorDetail == null) return 0;
@@ -156,6 +168,7 @@ public class ImtorServiceImpl extends AbstractGenericService implements ImtorSer
 		imtorMapper.procConfirmTO(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xtornum, p_action, p_seq);
 	}
 
+	@Transactional
 	@Override
 	public long deleteImtorDetailByXtornum(String xtornum) {
 		if(StringUtils.isBlank(xtornum)) return 0;

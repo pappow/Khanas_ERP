@@ -89,19 +89,6 @@
 															</div>
 														</div>
 
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xcus">Customer</label>
-															<div class="col-sm-8">
-																<input 	type="text" 
-																		class="form-control searchsuggest" 
-																		placeholder="Search..." 
-																		th:value="${opdoheader.xcus}" 
-																		th:attr="search-url='search/customer'"/>
-																<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
-																<input type="hidden" id="search-des" th:value="*{xcus}"/>
-															</div>
-														</div>
-
 														<div class="form-group datepicker">
 															<label class="control-label col-md-4" for="xdate">Invoice Date</label>
 															<div class="input-group date col-md-7 datepicker">
@@ -113,6 +100,28 @@
 																<div class="input-group-addon">
 																	<span class="glyphicon glyphicon-calendar"></span>
 																</div>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xcus">Customer</label>
+															<div class="col-sm-8">
+																<input 	type="text" 
+																		class="form-control searchsuggest" 
+																		placeholder="Search..." 
+																		th:value="${#strings.isEmpty(opdoheader.xcus) ? '' : opdoheader.xcus + ' - ' + opdoheader.xorg}" 
+																		th:attr="search-url='search/customer'"/>
+																<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
+																<input type="hidden" id="search-des" th:value="*{xcus}"/>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xwh">Store</label>
+															<div class="col-md-8">
+																<select class="form-control" th:field="*{xwh}">
+																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}+' - '+${wh.xdescdet}"></option>
+																</select>
 															</div>
 														</div>
 
@@ -134,13 +143,6 @@
 															</div>
 														</div>
 
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xordernum">Sales Order</label>
-															<div class="col-md-8">
-																<input type="text" class="form-control" th:field="*{xordernum}">
-															</div>
-														</div>
-
 														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xstatusjv">JV Status : </label>
 															<div class="col-md-8">
@@ -159,19 +161,9 @@
 														</div>
 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xwh">Store</label>
+															<label class="control-label col-md-4" for="xnote">Note</label>
 															<div class="col-md-8">
-																<select class="form-control" th:field="*{xwh}">
-																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
-																</select>
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xstatusord">DO Status</label>
-															<div class="col-md-8">
-																<input type="hidden" class="form-control" th:field="*{xstatusord}">
-																<input type="text" class="form-control" th:value="*{xstatusord}" disabled="disabled">
+																<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
 															</div>
 														</div>
 
@@ -255,10 +247,26 @@
 														</div> -->
 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xtotamt">Sub Total</label>
+															<label class="control-label col-md-4" for="xordernum">Sales Order</label>
+															<div class="col-md-8">
+																<input type="hidden" class="form-control" th:field="*{xordernum}">
+																<input type="text" class="form-control" th:value="*{xordernum}" disabled="disabled">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xtotamt">Total Amount</label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xtotamt}">
 																<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatusord">DO Status</label>
+															<div class="col-md-8">
+																<input type="hidden" class="form-control" th:field="*{xstatusord}">
+																<input type="text" class="form-control" th:value="*{xstatusord}" disabled="disabled">
 															</div>
 														</div>
 
@@ -271,13 +279,13 @@
 															</div>
 														</div> -->
 
-														<div class="form-group">
+														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xvatamt">Vat Amount</label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xvatamt}"/>
 																<input type="text" class="form-control" th:value="*{xvatamt}" disabled="disabled">
 															</div>
-														</div>
+														</div> -->
 
 														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xait">Tax Amount</label>
@@ -287,7 +295,7 @@
 															</div>
 														</div> -->
 
-														<div class="form-group">
+														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xdiscamt">Discount</label>
 															<div class="col-md-6">
 																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscamt}" min="0">
@@ -299,7 +307,7 @@
 															<div class="col-md-6">
 																<input type="text" class="form-control xgrandtot" th:field="*{xgrandtot}" disabled="disabled">
 															</div>
-														</div>
+														</div> -->
 
 														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xpaid">Paid Amount</label>
@@ -315,12 +323,7 @@
 															</div>
 														</div> -->
 
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xnote">Note</label>
-															<div class="col-md-8">
-																<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
-															</div>
-														</div>
+														
 
 													</div>
 												</div>
@@ -352,7 +355,7 @@
 														<a th:href="@{/salesninvoice/salesandinvoice/} + ${opdo.xdornum}" th:text="${opdo.xdornum}"></a>
 													</td>
 													<td  th:text="${#dates.format(opdo.xdate, df)}"></td>
-													<td th:text="${opdo.xcus}"></td>
+													<td th:text="${#strings.isEmpty(opdo.xcus) ? '' : opdo.xcus + ' - ' + opdo.xorg}"></td>
 													<td th:text="${opdo.xtotamt}"></td>
 													<td th:text="${opdo.xstatusord}"></td>
 												</tr>
@@ -390,7 +393,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="d : ${opdoDetailsList}">
-											<td th:text="${dStat.index +1}"></td>
+											<td th:text="${d.xrow}"></td>
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} +' - '+ ${d.xdesc}"></a>
 											</td>

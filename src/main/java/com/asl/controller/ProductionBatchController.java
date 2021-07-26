@@ -32,6 +32,7 @@ import com.asl.entity.Caitem;
 import com.asl.entity.DailyProductionBatchDetail;
 import com.asl.entity.Imstock;
 import com.asl.entity.ImtorDetail;
+import com.asl.entity.ImtorHeader;
 import com.asl.entity.Imtrn;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
@@ -611,18 +612,18 @@ public class ProductionBatchController extends ASLAbstractController {
 		}
 
 		if(StringUtils.isBlank(chalan.getRawxtornum())) {
-			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			List<String> batchList = new ArrayList<>();
-			for(Moheader mh : mhList) {
-				if(!"Open".equalsIgnoreCase(mh.getXstatusmor())) continue;
-				batchList.add(mh.getXbatch());
-			}
-			moService.bulkProcessProduction(batchList, "Process", errorCode);
-			String em = getProcedureErrorMessages(errorCode);
-			if(StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
+//			String errorCode = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+//			List<String> batchList = new ArrayList<>();
+//			for(Moheader mh : mhList) {
+//				if(!"Open".equalsIgnoreCase(mh.getXstatusmor())) continue;
+//				batchList.add(mh.getXbatch());
+//			}
+//			moService.bulkProcessProduction(batchList, "Process", errorCode);
+//			String em = getProcedureErrorMessages(errorCode);
+//			if(StringUtils.isNotBlank(em)) {
+//				responseHelper.setErrorStatusAndMessage(em);
+//				return responseHelper.getResponse();
+//			}
 		} else {
 			// check transfer order already confirmed
 			if("Open".equalsIgnoreCase(imtorService.findImtorHeaderByXtornum(chalan.getRawxtornum()).getXstatustor())) {
@@ -671,7 +672,19 @@ public class ProductionBatchController extends ASLAbstractController {
 			}
 
 			// Remove raw transfered material from inventory
-			List<ImtorDetail> toDetails = imtorService.findImtorDetailByXtornum(chalan.getRawxtornum());
+			// find TO first
+			List<ImtorHeader> imtorheaders = imtorService.findImtorHeaderByXchalanrefAndXfwhAndXtwh(chalan.getXordernum(), "01", "02");
+			if(imtorheaders == null || imtorheaders.isEmpty()) {
+				responseHelper.setErrorStatusAndMessage("Can't found any raw materials transfer order Central Store to Production Store for chalan " + chalan.getXordernum());
+				return responseHelper.getResponse();
+			}
+			List<ImtorDetail> toDetails = new ArrayList<>();
+			for(ImtorHeader header : imtorheaders) {
+				List<ImtorDetail> list = imtorService.findImtorDetailByXtornum(header.getXtornum());
+				if(list != null && !list.isEmpty()) {
+					toDetails.addAll(list);
+				}
+			}
 			if(toDetails == null || toDetails.isEmpty()) {
 				responseHelper.setErrorStatusAndMessage("Can't find any transfer order details");
 				return responseHelper.getResponse();

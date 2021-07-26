@@ -90,7 +90,7 @@ public class ProdChalanToTransferOrder extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		imtorHeader = imtorService.findImtorHeaderByXchalanref(imtorHeader.getXchalanref());
+		imtorHeader = imtorService.findImtorHeaderByXchalanref(imtorHeader.getXchalanref()).stream().findFirst().orElse(null);
 
 		// Update chalan with transfer order reference
 		Opordheader oh = opordService.findOpordHeaderByXordernum(imtorHeader.getXchalanref());

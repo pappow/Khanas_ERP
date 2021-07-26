@@ -222,8 +222,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		if(deliveryChalanCount == 0) return 0;
 
 		// Now fetch deliveryChalan again which is saved now by usning production chalan reference
-		Opdoheader savedDeliveryChalan = opdoMapper.findPoordHeaderByXordernum(productionChalan.getXordernum(), sessionManager.getBusinessId());
-		if(savedDeliveryChalan == null) return 0;
+//		Opdoheader savedDeliveryChalan = opdoMapper.findPoordHeaderByXordernum(productionChalan.getXordernum(), sessionManager.getBusinessId());
+//		if(savedDeliveryChalan == null) return 0;
 
 		// Create sales from sales order of production chalan first
 		int salesSavedCount = 0;
@@ -235,7 +235,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXstatusord("Open");
 			sales.setXstatusjv("Open");
 			sales.setXstatusar("Open");
-			sales.setXdocnum(savedDeliveryChalan.getXdornum());   // assign this sales to delivery chalan
+			sales.setXdocnum(deliveryChalan.getXdornum());   // assign this sales to delivery chalan
 			sales.setXchalancreated(true);
 			sales.setXvatait("No Vat");
 			sales.setXtotamt(BigDecimal.ZERO);
@@ -243,9 +243,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXvatamt(BigDecimal.ZERO);
 			sales.setXdiscamt(BigDecimal.ZERO);
 			sales.setXgrandtot(BigDecimal.ZERO);
-			Cacus customer = cacusService.findCacusByXcuszid(salesOrder.getXcus());
-			if(customer != null) sales.setXcus(customer.getXcus());  // set branch reference for this sales
-
+			sales.setXcus(salesOrder.getXcus());  // set branch reference for this sales
 			sales.setXordernum(salesOrder.getXordernum());  // set sales order reference
 			sales.setRequisitionnumber(salesOrder.getXpornum());  // set branch requisition number reference
 			sales.setZid(sessionManager.getBusinessId());
@@ -276,15 +274,17 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				salesItem.setXunitsel(salesOrderItem.getXunit());
 				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
 				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
+				salesItem.setXlineamt(salesItem.getXlineamt().add(salesItem.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 				salesItem.setXcatitem(salesOrderItem.getXcatitem());
 				salesItem.setXgitem(salesOrderItem.getXgitem());
+				salesItem.setXdorrow(salesOrderItem.getXrow());
 				salesItem.setZid(sessionManager.getBusinessId());
 
 				long salesItemCount = saveDetail(salesItem);
 				if(salesItemCount == 0) continue;
 
 				// Add item for delivery chalan also
-				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(savedDeliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
+				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(deliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
 				if(chItem != null) {
 					chItem.setXqtyord(chItem.getXqtyord().add(salesItem.getXqtyord()));
 					opdoMapper.updateOpdoDetail(chItem);
@@ -299,7 +299,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 		if(salesSavedCount == salesOrdersOfProductionChalan.size()) {
 			productionChalan.setInvoicecreated(true);
-			productionChalan.setXdornum(savedDeliveryChalan.getXdornum());
+			productionChalan.setXdornum(deliveryChalan.getXdornum());
 			opordMapper.updateOpordHeader(productionChalan);
 		}
 

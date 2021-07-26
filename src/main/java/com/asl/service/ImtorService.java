@@ -27,7 +27,9 @@ public interface ImtorService {
 
 	public ImtorHeader findImtorHeaderByXtornum(String xtornum);
 
-	public ImtorHeader findImtorHeaderByXchalanref(String xchalanref);
+	public List<ImtorHeader> findImtorHeaderByXchalanref(String xchalanref);
+
+	public List<ImtorHeader> findImtorHeaderByXchalanrefAndXfwhAndXtwh(String xchalanref, String xfwh, String xtwh);
 
 	public List<ImtorHeader> getAllImtorHeader();
 
