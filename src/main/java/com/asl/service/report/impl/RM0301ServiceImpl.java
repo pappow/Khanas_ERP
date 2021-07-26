@@ -54,7 +54,7 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		options.add(new DropdownOption("Open", "Open"));
 		options.add(new DropdownOption("Confirmed", "Confirmed"));
 		options.add(new DropdownOption("GRN Created", "GRN Created"));
-		options.add(new DropdownOption("Full Receipt", "Full Receipt"));
+		options.add(new DropdownOption("Full Received", "Full Receipt"));
 		
 		
 		// ZID

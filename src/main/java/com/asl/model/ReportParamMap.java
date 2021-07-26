@@ -117,6 +117,7 @@ public class ReportParamMap {
 		
 		RM0311.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0311.put("param2", "XGCUS|" + ReportParamDataType.STRING.name());
+		RM0311.put("param3", "Active|" + ReportParamDataType.STRING.name());
 		
 		RM0312.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0312.put("param2", "From Date|" + ReportParamDataType.DATE.name());
@@ -132,6 +133,7 @@ public class ReportParamMap {
 		
 		RM0314.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0314.put("param2", "XGCUS|" + ReportParamDataType.STRING.name());
+		RM0314.put("param3", "Active|" + ReportParamDataType.STRING.name());
 		
 		RM0401.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0401.put("param2", "From Date|" + ReportParamDataType.DATE.name());
@@ -172,8 +174,8 @@ public class ReportParamMap {
 		RM0406.put("param4", "CusGroup|" + ReportParamDataType.STRING.name());
 		RM0406.put("param5", "XCUS|" + ReportParamDataType.STRING.name());
 
-		RM0408.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0408.put("param2", "XGCUS|" + ReportParamDataType.STRING.name());
+//		RM0408.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+//		RM0408.put("param2", "XGCUS|" + ReportParamDataType.STRING.name());
 		
 		RM0409.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0409.put("param2", "FDATE|" + ReportParamDataType.DATE.name());

@@ -35,7 +35,7 @@ public enum ReportMenu {
 	RM0405(999, "400", "Sales & Invoicing", "Customer Ledger Detail", ReportParamMap.RM0405, "Y", false, false, 1000),
 	RM0406(999, "400", "Sales & Invoicing", "Customer Ledger Summary", ReportParamMap.RM0406, "Y", false, false, 1000),
 	RM0407(999, "400", "Sales & Invoicing", "Both Party Ledger", ReportParamMap.RM0407, "Y", false, false, 1000),
-	RM0408(999, "400", "Sales & Invoicing", "Customer List", ReportParamMap.RM0408, "Y", false, false, 1000),
+	//RM0408(999, "400", "Sales & Invoicing", "Customer List", ReportParamMap.RM0408, "Y", false, false, 1000),
 	RM0409(999, "400", "Sales & Invoicing", "Receivable and Collection Statement", ReportParamMap.RM0409, "Y", false, false, 1000),
 	RM0410(999, "400", "Sales & Invoicing", "Sales Return Listing", ReportParamMap.RM0410, "Y", false, false, 1000),
 	RM0411(999, "400", "Sales & Invoicing", "Branch Distribution Report", ReportParamMap.RM0411, "Y", false, false, 1000),
