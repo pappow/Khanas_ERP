@@ -243,7 +243,8 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXvatamt(BigDecimal.ZERO);
 			sales.setXdiscamt(BigDecimal.ZERO);
 			sales.setXgrandtot(BigDecimal.ZERO);
-			sales.setXcus(salesOrder.getXcus());  // set branch reference for this sales
+			sales.setXwh("01");  // set for central store invoice
+			sales.setXcus(salesOrder.getXcus());  // set branch reference for this sales, customer
 			sales.setXordernum(salesOrder.getXordernum());  // set sales order reference
 			sales.setRequisitionnumber(salesOrder.getXpornum());  // set branch requisition number reference
 			sales.setZid(sessionManager.getBusinessId());

@@ -287,17 +287,17 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan::deliveryorderchalandetailtable";
 	}
 
-	@PostMapping("/lockchalan/{xdornum}")
-	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String xdornum, Model model) {
-		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
+	@PostMapping("/lockchalan/{chalan}")
+	public @ResponseBody Map<String, Object> lockChalan(@PathVariable String chalan, Model model) {
+		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(chalan);
 		if (oh == null) {
-			responseHelper.setErrorStatusAndMessage("Delivery chalan " + xdornum + " not exist in this system");
+			responseHelper.setErrorStatusAndMessage("Delivery chalan " + chalan + " not exist in this system");
 			return responseHelper.getResponse();
 		}
 
-		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum);
+		List<Opdoheader> invoiceList = opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), chalan);
 		if(invoiceList == null || invoiceList.isEmpty()) {
-			responseHelper.setErrorStatusAndMessage("No Sales invoice assigned in this delivery chalan : " + xdornum);
+			responseHelper.setErrorStatusAndMessage("No Sales invoice assigned in this delivery chalan : " + chalan);
 			return responseHelper.getResponse();
 		}
 
@@ -358,7 +358,6 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 					responseHelper.setErrorStatusAndMessage(em);
 					return responseHelper.getResponse();
 				}
-				
 			}
 
 			if(!"Confirmed".equalsIgnoreCase(order.getXstatusar())){
@@ -383,7 +382,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Chalan locked successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/deliveryorderchalan/" + xdornum);
+		responseHelper.setRedirectUrl("/salesninvoice/deliveryorderchalan/" + chalan);
 		return responseHelper.getResponse();
 	}
 
