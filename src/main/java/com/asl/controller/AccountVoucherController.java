@@ -68,7 +68,19 @@ public class AccountVoucherController extends ASLAbstractController{
 		model.addAttribute("acheader", acheader);
 		model.addAttribute("voucherprefix", xtrnService.findByXtypetrn(TransactionCodeType.GL_VOUCHER.getCode(), Boolean.TRUE));
 		model.addAttribute("vouchers", acService.getAllAcheader());
-		model.addAttribute("acdetails", acService.findAcdetailsByXvoucher(xvoucher));
+
+		List<Acdetail> acdetails = acService.findAcdetailsByXvoucher(xvoucher);
+		BigDecimal totalDebit = BigDecimal.ZERO;
+		BigDecimal totalCredit = BigDecimal.ZERO;
+		if(acdetails != null && !acdetails.isEmpty()) {
+			for(Acdetail acd : acdetails) {
+				totalDebit = totalDebit.add(acd.getXdebit() == null ? BigDecimal.ZERO : acd.getXdebit());
+				totalCredit = totalCredit.add(acd.getXcredit() == null ? BigDecimal.ZERO : acd.getXcredit());
+			}
+		}
+		model.addAttribute("acdetails", acdetails);
+		model.addAttribute("totalDebit", totalDebit);
+		model.addAttribute("totalCredit", totalCredit);
 
 		return"pages/account/voucher/voucher";
 	}
@@ -218,7 +230,19 @@ public class AccountVoucherController extends ASLAbstractController{
 	@GetMapping("/voucherdetail/{xvoucher}")
 	public String reloadVouvherDetailTabble(@PathVariable String xvoucher, Model model) {
 		model.addAttribute("acheader", acService.findAcheaderByXvoucher(xvoucher));
-		model.addAttribute("acdetails", acService.findAcdetailsByXvoucher(xvoucher));
+		
+		List<Acdetail> acdetails = acService.findAcdetailsByXvoucher(xvoucher);
+		BigDecimal totalDebit = BigDecimal.ZERO;
+		BigDecimal totalCredit = BigDecimal.ZERO;
+		if(acdetails != null && !acdetails.isEmpty()) {
+			for(Acdetail acd : acdetails) {
+				totalDebit = totalDebit.add(acd.getXdebit() == null ? BigDecimal.ZERO : acd.getXdebit());
+				totalCredit = totalCredit.add(acd.getXcredit() == null ? BigDecimal.ZERO : acd.getXcredit());
+			}
+		}
+		model.addAttribute("acdetails", acdetails);
+		model.addAttribute("totalDebit", totalDebit);
+		model.addAttribute("totalCredit", totalCredit);
 		return"pages/account/voucher/voucher::voucherdetailtable";
 	}
 

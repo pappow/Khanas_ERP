@@ -82,4 +82,7 @@ public class Acdetail extends AbstractModel<String> {
 	@Transient
 	private String accountname;
 
+	@Transient
+	private String xorg;
+
 }

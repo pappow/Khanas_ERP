@@ -35,7 +35,7 @@
 										<div class="col-sm-8">
 											<select th:field="*{xsub}" class="form-control">
 												<option value="">-- Select --</option>
-												<option th:each="s : ${subaccounts}" th:value="${s.xsub}" th:text="${s.xsub}"></option>
+												<option th:each="s : ${subaccounts}" th:value="${s.xsub}" th:text="${s.xsub + ' - ' + s.xorg}"></option>
 											</select>
 										</div>
 									</div>
@@ -114,7 +114,7 @@
 								);
 								$.each(data, function(val, obj) {
 									mySelect.append(
-										$('<option></option>').val(obj.xsub).html(obj.xsub)
+										$('<option></option>').val(obj.xsub).html(obj.xsub + ' - ' + obj.xorg)
 									);
 								});
 
