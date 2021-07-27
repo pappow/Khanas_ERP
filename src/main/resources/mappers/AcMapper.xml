@@ -307,6 +307,8 @@
 		WHERE 
 			acdetail.zid=#{zid}
 			AND acdetail.xvoucher=#{xvoucher}
+		ORDER BY 
+			acdetail.xrow DESC
 	</select>
 
 	<select id = "procAcVoucherPost" statementType = "CALLABLE">

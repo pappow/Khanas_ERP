@@ -227,7 +227,7 @@
 							<div class="col-md-12">
 								<section th:if="${not #strings.isEmpty(acheader.xvoucher)}" id="data-maintenance" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1 th:text="'Voucher Details for - ' + ${acheader.xvoucher}"></h1>
+										<h1 th:text="'Voucher Details of ' + ${acheader.xvoucher}"></h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered normal-table nowrap" id="voucherdetailtable" th:fragment="voucherdetailtable">
@@ -235,8 +235,8 @@
 												<tr>
 													<th>SN.</th>
 													<th>Account</th>
-													<th>Debit</th>
-													<th>Credit</th>
+													<th class="text-right">Debit</th>
+													<th class="text-right">Credit</th>
 													<th>Sub Account</th>
 													<th>Note</th>
 													<th data-nosort="Y" style="text-align: right;" th:if="${acheader.xstatusjv != 'Posted'}">
@@ -250,8 +250,8 @@
 													<td>
 														<a th:href="@{/account/coa/} + ${d.xacc}" target="_blank" th:text="${d.xacc} + ' - ' + ${d.accountname}"></a>
 													</td>
-													<td th:text="${d.xdebit}"></td>
-													<td th:text="${d.xcredit}"></td>
+													<td class="text-right" th:text="${d.xdebit}"></td>
+													<td class="text-right" th:text="${d.xcredit}"></td>
 													<td th:text="${#strings.isEmpty(d.xsub) ? '' : d.xsub + ' - ' + d.xorg}"></td>
 													<td th:text="${d.xlong}"></td>
 													<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${acheader.xstatusjv != 'Posted'}">
@@ -260,6 +260,12 @@
 													</td>
 												</tr>
 											</tbody>
+											<tfoot>
+												<th colspan="2" class="text-right">Total</th>
+												<th class="text-right" th:text="${totalDebit}">0</th>
+												<th class="text-right" th:text="${totalCredit}">0</th>
+												<th colspan="2"></th>
+											</tfoot>
 										</table>
 									</div>
 								</section>
