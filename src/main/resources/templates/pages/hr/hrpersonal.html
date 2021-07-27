@@ -58,69 +58,77 @@
 													</div>
 													<div class="form-action-button">
 														<a th:href="@{/hrpersonal}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
-														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
-														<a  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
-														<a  class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+														<a th:if="${#strings.isEmpty(hrinfo.xstaff)}"  class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+														<a th:if="${not #strings.isEmpty(hrinfo.xstaff) and hrinfo.zactive == true}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Update</a>
+														<a th:if="${not #strings.isEmpty(hrinfo.xstaff) and hrinfo.zactive == true}" th:href="@{/hrpersonal/delete/} + ${hrinfo.xstaff}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											
+										<form id="mainform" class="form-horizontal" th:action="@{/hrpersonal/save}" th:object="${hrinfo}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<input type="hidden" th:field="*{xtypetrn}"/>
+											<input type="hidden" th:field="*{xtrn}" th:if="${not #strings.isEmpty(hrinfo.xstaff)}"/>
 											<div class="row">
 												<div class="col-md-12">
 													<div class="row">
 														<div class="col-md-6">
-															<div class="form-group" >
-																<label class="control-label col-md-4" for="">Employee ID</label>
+															<div class="form-group" th:if="${#strings.isEmpty(hrinfo.xstaff)}">
+																<label class="control-label col-md-4" for="xtrn">Employee ID</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
+																	<select class="form-control" th:field="*{xtrn}">
 																		<option th:each="d : ${prefixes}" th:value="${d.xtrn}" th:text="${d.xtrn}"></option>
 																	</select>
 																</div>
 															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Employee Name </label>
+															<div class="form-group" th:if="${not #strings.isEmpty(hrinfo.xstaff)}">
+																<label class="control-label col-md-4" for="xstaff">Employee ID</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100" />
+																	<input type="hidden" class="form-control" th:field="*{xstaff}">
+																	<input type="text" class="form-control" th:value="*{xstaff}" disabled="disabled">
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Father's Name </label>
+																<label class="control-label col-md-4" for="xname">Employee Name </label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100" />
+																	<input type="text" class="form-control"  maxlength="100" th:field="*{xname}" required="required"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Mother's Name </label>
+																<label class="control-label col-md-4" for="xfname">Father's Name </label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100"/>
+																	<input type="text" class="form-control" th:field="*{xfname}" maxlength="100" />
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xmname">Mother's Name </label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" th:field="*{xmname}" maxlength="100"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Mailing Address </label>
+																<label class="control-label col-md-4" for="xmadd">Mailing Address </label>
 																<div class="col-md-8">
-																	<textarea class="form-control" rows="3"  placeholder="Mailing Address here.."></textarea>
+																	<textarea class="form-control" rows="3" th:field="*{xmadd}" placeholder="Mailing Address here.."></textarea>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Permanent Address </label>
+																<label class="control-label col-md-4" for="xpadd">Permanent Address </label>
 																<div class="col-md-8">
-																	<textarea class="form-control" rows="3" placeholder="Permanent Address here.."></textarea>
+																	<textarea class="form-control" rows="3" th:field="*{xpadd}" placeholder="Permanent Address here.."></textarea>
 																</div>
 															</div>
 															
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Date of Birth</label>
+																<label class="control-label col-md-4" for="xbirthdate">Date of Birth</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
-																			id=""
-																			name=""
-																			required="required"
+																			id="xbirthdate"
+																			name="xbirthdate"
+																			th:value="${hrinfo.xbirthdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(hrinfo.xbirthdate, df)}"
 																			/>
 																	<div class="input-group-addon">
 																		<span class="glyphicon glyphicon-calendar"></span>
@@ -129,53 +137,53 @@
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Sex</label>
+																<label class="control-label col-md-4" for="xsex">Sex</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control"  th:field="*{xsex}">
+																		<option th:each="d : ${sexTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Marital Status </label>
+																<label class="control-label col-md-4" for="xmstat">Marital Status </label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xmstat}">
+																		<option th:each="d : ${maritalStatus}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Department Name</label>
+																<label class="control-label col-md-4" for="xdeptname">Department Name</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xdeptname}">
+																		<option th:each="d : ${departmentNames}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Section</label>
+																<label class="control-label col-md-4" for="xsec">Section</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control"  maxlength="100"/>
+																	<input type="text" class="form-control"  maxlength="100" th:field="*{xsec}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Designation</label>
+																<label class="control-label col-md-4" for="xdesignation">Designation</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xdesignation}">
+																		<option th:each="d : ${designationNames}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Date of Join</label>
+																<label class="control-label col-md-4" for="xdatejoin">Date of Join</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
-																			id=""
-																			name=""
-																			required="required"
+																			id="xdatejoin"
+																			name="xdatejoin"
+																			th:value="${hrinfo.xdatejoin == null ? #dates.format(#dates.createNow(), df) : #dates.format(hrinfo.xdatejoin, df)}"
 																			/>
 																	<div class="input-group-addon">
 																		<span class="glyphicon glyphicon-calendar"></span>
@@ -183,27 +191,27 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Grade</label>
+																<label class="control-label col-md-4" for="xgrade">Grade</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xgrade}">
+																		<option th:each="d : ${grades}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Email </label>
+																<label class="control-label col-md-4" for="xemail">Email </label>
 																<div class="col-md-8">
-																	<input type="email" class="form-control"  maxlength="100" />
+																	<input type="email" class="form-control"  maxlength="100" th:field="*{xemail}"/>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Date of End</label>
+																<label class="control-label col-md-4" for="xenddate">Date of End</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
-																			id=""
-																			name=""
-																			required="required"
+																			id="xenddate"
+																			name="xenddate"
+																			th:value="${hrinfo.xenddate == null ? #dates.format(#dates.createNow(), df) : #dates.format(hrinfo.xenddate, df)}"
 																			/>
 																	<div class="input-group-addon">
 																		<span class="glyphicon glyphicon-calendar"></span>
@@ -211,13 +219,13 @@
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Date of Retirement</label>
+																<label class="control-label col-md-4" for="xretdate">Date of Retirement</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
-																			id=""
-																			name=""
-																			required="required"
+																			id="xretdate"
+																			name="xretdate"
+																			th:value="${hrinfo.xretdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(hrinfo.xretdate, df)}"
 																			/>
 																	<div class="input-group-addon">
 																		<span class="glyphicon glyphicon-calendar"></span>
@@ -225,29 +233,29 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Employee Status</label>
+																<label class="control-label col-md-4" for="xempstatus">Employee Status</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xempstatus}">
+																		<option th:each="d : ${employeeStatus}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">District</label>
+																<label class="control-label col-md-4" for="xdistrict">District</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xdistrict}">
+																		<option th:each="d : ${districtNames}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group datepicker">
-																<label class="control-label col-md-4" for="">Date of Confirmation</label>
+																<label class="control-label col-md-4" for="xdatecom">Date of Confirmation</label>
 																<div class="input-group date col-md-7 datepicker">
 																	<input 	type="datepicker" 
 																			class="form-control" 
-																			id=""
-																			name=""
-																			required="required"
+																			id="xdatecom"
+																			name="xdatecom"
+																			th:value="${hrinfo.xdatecom == null ? #dates.format(#dates.createNow(), df) : #dates.format(hrinfo.xdatecom, df)}"
 																			/>
 																	<div class="input-group-addon">
 																		<span class="glyphicon glyphicon-calendar"></span>
@@ -255,15 +263,21 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Bank Name</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" placeholder="Search"/>
+																<label class="control-label col-md-4" for="xbank">Bank Name</label>
+																<div class="col-sm-8">
+																	<input 	type="text" 
+																		class="form-control searchsuggest" 
+																		placeholder="Search..." 
+																		th:value="${hrinfo.xbank}" 
+																		th:attr="search-url='search/bank'"/>
+																	<input type="hidden" class="required" id="search-val" th:field="*{xbank}" value=""/>
+																	<input type="hidden" id="search-des" th:value="*{xbank}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Account No.</label>
+																<label class="control-label col-md-4" for="xacc">Account No.</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100"  th:field="*{xacc}"/>
 																</div>
 															</div>
 															
@@ -271,144 +285,149 @@
 														<div class="col-md-6">
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Position</label>
+																<label class="control-label col-md-4" for="xposition">Position</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xposition}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">TIN No.</label>
+																<label class="control-label col-md-4" for="xtin">TIN No.</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Employee Category</label>
-																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-																	</select>
+																	<input type="number" class="form-control" maxlength="100" th:field="*{xtin}"/>
 																</div>
 															</div>
 															
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Status</label>
+																<label class="control-label col-md-4" for="xempcategory">Employee Category</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xempcategory}">
+																		<option th:each="d : ${employeeCategories}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	</select>
+																</div>
+															</div>
+															
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xstatus">Status</label>
+																<div class="col-md-8">
+																	<input type="hidden" class="form-control" th:field="*{xstatus}">
+																	<input type="text" class="form-control" th:value="Open" disabled="disabled">
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xsid">Superior ID</label>
+																<div class="col-sm-8">
+																	<input 	type="text" 
+																		class="form-control searchsuggest" 
+																		placeholder="Search..." 
+																		th:value="${hrinfo.xsid}" 
+																		th:attr="search-url='search/staff'"/>
+																	<input type="hidden" class="required" id="search-val" th:field="*{xsid}" value=""/>
+																	<input type="hidden" id="search-des" th:value="*{xsid}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xbloodgroup">Blood Group</label>
+																<div class="col-md-8">
+																	<select class="form-control" th:field="*{xbloodgroup}">
+																		<option th:each="d : ${bloodGropus}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Superior ID</label>
+																<label class="control-label col-md-4" for="xphone">Phone No.</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" placeholder="Search"/>
+																	<input type="number" class="form-control" maxlength="100" th:field="*{xphone}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Blood Group</label>
+																<label class="control-label col-md-4" for="xplan">Leave Plan</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xplan}">
+																		<option th:each="d : ${leavePlans}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Phone No.</label>
+																<label class="control-label col-md-4" for="xcar">Car No.</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xcar}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Leave Plan</label>
+																<label class="control-label col-md-4" for="xgross">Gross Salary</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xgross}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xemname">Emergency Contact</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xemname}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xrelation">Relation</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xrelation}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xemcmobile">Mobile No.(Em. Con.)</label>
+																<div class="col-md-8">
+																	<input type="number" class="form-control" maxlength="100" th:field="*{xemcmobile}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xmobile">Mobile No.</label>
+																<div class="col-md-8">
+																	<input type="number" class="form-control" maxlength="100" th:field="*{xmobile}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xreligion">Religion</label>
+																<div class="col-md-8">
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xreligion}"/>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label col-md-4" for="xemptype">Employee Type</label>
+																<div class="col-md-8">
+																	<select class="form-control" th:field="*{xemptype}">
+																		<option th:each="d : ${employeeTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Car No.</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Gross Salary</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Emergency Contact</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Relation</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Mobile No.(Em. Con.)</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Mobile No.</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Religion</label>
-																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="control-label col-md-4" for="">Employee Type</label>
-																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
-																	</select>
-																</div>
-															</div>
-															<div class="form-group">
+															<!-- <div class="form-group">
 																<label class="control-label col-md-4" for="">Signature</label>
 																<div class="col-md-8">
 																	<input type="text" class="form-control" maxlength="100" placeholder="Image Upload"/>
 																</div>
-															</div>
+															</div> -->
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Short Name</label>
+																<label class="control-label col-md-4" for="xshortname">Short Name</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="text" class="form-control" maxlength="100" th:field="*{xshortname}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Bank Pay Amount</label>
+																<label class="control-label col-md-4" for="xbnkpay">Bank Pay Amount</label>
 																<div class="col-md-8">
-																	<input type="text" class="form-control" maxlength="100" />
+																	<input type="number" class="form-control" maxlength="100" th:field="*{xbnkpay}"/>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Week Day</label>
+																<label class="control-label col-md-4" for="xweekday">Week Day</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xweekday}">
+																		<option th:each="d : ${weekDays}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="control-label col-md-4" for="">Holiday Applicable</label>
+																<label class="control-label col-md-4" for="xhdayapp">Holiday Applicable</label>
 																<div class="col-md-8">
-																	<select class="form-control" >
-																		<option th:each="d : ${landUnitTypes}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																	<select class="form-control" th:field="*{xhdayapp}">
+																		<option th:each="d : ${holidays}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
 																	</select>
 																</div>
 															</div>
@@ -433,14 +452,21 @@
 											<table class="table table-striped table-bordered datatable nowrap">
 												<thead>
 													<tr>
-														<th>Staff ID</th>
-														<th>Staff Name</th>
+														<th>Employee ID</th>
+														<th>Employee Name</th>
 														<th>Position</th>
 														<th>Email</th>
 													</tr>
 												</thead>
 												<tbody>
-													
+													<tr th:each="s : ${allHrinfos}">
+													<td>
+														<a th:href="@{/hrpersonal/} + ${s.xstaff}" th:text="${s.xstaff}"></a>
+													</td>
+													<td th:text="${s.xname}"></td>
+													<td th:text="${s.xposition}"></td>
+													<td th:text="${s.xemail}"></td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -450,6 +476,39 @@
 						</div>
 					</div>
 					
+					
+					<div class="col-md-12">
+			<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
+			<div class="section-header sectionbartoggle">
+				<h1>Experience Details of <span th:text="${hrinfo.xstaff}"></span> </h1>			
+			</div>
+				<div class="section-body" style="overflow-y:scroll;height:200px;">
+					<table class="table table-striped table-bordered normal-table" id="hrexperiencetable" th:fragment="hrexperiencetable">
+						<thead>
+							<tr>
+								<th>SL#</th>
+								<th>Note </th>
+								<th data-nosort="Y" style="text-align: right;">
+									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/new/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-plus"></i></button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="d, n : ${hrelist}">
+								<td th:text="${n.count}"></td>
+								<td th:text="${d.xnote}"></td>
+								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-edit"></i></button>
+									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		</section>
+	</div>
+	
+	
 				</div>
 			</div>
 		</div>

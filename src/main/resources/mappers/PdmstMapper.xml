@@ -190,6 +190,10 @@
 			xstaff=#{xstaff, jdbcType=VARCHAR}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="delete" parameterType="Pdmst">
+		DELETE FROM pdmst WHERE  xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
+	</delete>
 
 	<select id="findPdmstByXstaff" resultType="Pdmst">
 		SELECT * FROM pdmst WHERE xstaff=#{xstaff} AND zid=#{zid} 
@@ -206,10 +210,19 @@
 	</select>
 	
 	<select id="getAllHRPdmst" resultType="Pdmst">
-		SELECT * FROM pdmst WHERE zid=#{zid} 
-		<if test="zactive != null and zactive != ''">
-			AND zactive=#{zactive}
-		</if>
+		SELECT 
+			* 
+		FROM 
+			pdmst 
+		WHERE
+			zid=#{zid} 
+			AND zactive='1'
+		
+	</select>
+	
+	<select id="findAllPdmst" resultType="Pdmst">
+		SELECT * FROM pdmst WHERE xstaff=#{xstaff} AND zid=#{zid} 
+		
 	</select>
 
 	<select id="searchStaff" resultType="Pdmst">
@@ -223,4 +236,78 @@
 			AND zactive='1'
 			AND allowlogin='1'
 	</select>
+	
+	
+	<!-- For HRExperience -->
+	<insert id="savePdexperience" parameterType="Pdexperience">
+	
+	    <selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM pdexperience WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO pdexperience
+		(
+			xstaff,
+			xrow,
+			xnote,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xstaff, jdbcType=VARCHAR},
+			#{xrow},
+			#{xnote, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updatePdexperience" parameterType="Pdexperience">
+		UPDATE 
+			pdexperience
+		SET
+			xnote=#{xnote, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xstaff=#{xstaff, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllPdexperience" resultType="Pdexperience">
+		SELECT 
+			* 
+		FROM 
+			pdexperience 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByPdexperience" resultType="Pdexperience">
+	SELECT * FROM pdexperience WHERE xstaff=#{xstaff} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPdexperienceByXstaffAndXrow" resultType="Pdexperience">
+		SELECT * FROM pdexperience WHERE xstaff=#{xstaff} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<delete id="deletePdexperience" parameterType="Pdexperience">
+		DELETE FROM pdexperience WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
+	</delete>
 </mapper>

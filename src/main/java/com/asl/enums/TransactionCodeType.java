@@ -33,6 +33,7 @@ public enum TransactionCodeType {
 	GL_VOUCHER("GL Voucher", "JV--", TransactionCodes.GL_VOUCHER),
 
 	HALL_BOOKING_SALES_ORDER("Hall Booking SO", "HBSO", null),
+	HR_EMPLOYEE_ID("HR Employee ID", "EID-", TransactionCodes.HR_EMPLOYEE_ID),
 
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
