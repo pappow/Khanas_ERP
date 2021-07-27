@@ -73,4 +73,11 @@ public class Xcodes extends AbstractModel<String> {
 
 	@Column(name = "seqn")
 	private Long seqn;
+
+	@Column(name = "xlong")
+	private String xlong;
+
+	// Cost Center
+	// Department Name
+	// Store/Warehouse
 }

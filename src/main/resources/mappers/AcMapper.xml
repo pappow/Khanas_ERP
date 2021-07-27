@@ -280,11 +280,14 @@
 
 	<select id="findAcdetailByXrowAndXvoucher" resultType="Acdetail">
 		SELECT
+			distinct
 			acdetail.*,
-			acmst.xdesc as accountname
+			acmst.xdesc as accountname,
+			acsubview.xorg
 		FROM
 			acdetail 
 			left join acmst on acmst.xacc = acdetail.xacc and acmst.zid = acdetail.zid
+			left join acsubview on acsubview.xsub = acdetail.xsub and acsubview.zid = acdetail.zid
 		WHERE 
 			acdetail.zid=#{zid}
 			AND acdetail.xvoucher=#{xvoucher}
@@ -293,11 +296,14 @@
 
 	<select id="findAcdetailsByXvoucher" resultType="Acdetail">
 		SELECT
+			distinct
 			acdetail.*,
-			acmst.xdesc as accountname
+			acmst.xdesc as accountname,
+			acsubview.xorg
 		FROM
 			acdetail
 			left join acmst on acmst.xacc = acdetail.xacc and acmst.zid = acdetail.zid
+			left join acsubview on acsubview.xsub = acdetail.xsub and acsubview.zid = acdetail.zid
 		WHERE 
 			acdetail.zid=#{zid}
 			AND acdetail.xvoucher=#{xvoucher}
