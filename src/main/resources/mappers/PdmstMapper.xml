@@ -237,6 +237,91 @@
 			AND allowlogin='1'
 	</select>
 	
+	<!-- For HRQualification-->
+	<insert id="savePdeducation" parameterType="Pdeducation">
+	
+	    <selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM pdeducation WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO pdeducation
+		(
+			xstaff,
+			xrow,
+			xyear, 
+			xexam, 
+			xinstitute, 
+			xmajor, 
+			xresult,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xstaff, jdbcType=VARCHAR},
+			#{xrow},
+			#{xyear, jdbcType=VARCHAR},
+			#{xexam, jdbcType=VARCHAR},
+			#{xinstitute, jdbcType=VARCHAR},
+			#{xmajor, jdbcType=VARCHAR},
+			#{xresult, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updatePdeducation" parameterType="Pdeducation">
+		UPDATE 
+			pdeducation
+		SET
+			xyear=#{xyear, jdbcType=VARCHAR},
+			xexam=#{xexam, jdbcType=VARCHAR},
+			xinstitute=#{xinstitute, jdbcType=VARCHAR},
+			xmajor=#{xmajor, jdbcType=VARCHAR},
+			xresult=#{xresult, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xstaff=#{xstaff, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllPdeducation" resultType="Pdeducation">
+		SELECT 
+			* 
+		FROM 
+			pdeducation 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByPdeducation" resultType="Pdeducation">
+	SELECT * FROM pdeducation WHERE xstaff=#{xstaff} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPdeducationByXstaffAndXrow" resultType="Pdeducation">
+		SELECT * FROM pdeducation WHERE xstaff=#{xstaff} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<delete id="deletePdeducation" parameterType="Pdeducation">
+		DELETE FROM pdeducation WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
 	
 	<!-- For HRExperience -->
 	<insert id="savePdexperience" parameterType="Pdexperience">
@@ -309,5 +394,102 @@
 
 	<delete id="deletePdexperience" parameterType="Pdexperience">
 		DELETE FROM pdexperience WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
+	<!-- For HRPromotion -->
+	<insert id="savePdpromodt" parameterType="Pdpromodt">
+	
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM pdpromodt WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO pdpromodt
+		(
+			xstaff,
+			xrow,
+			xdate,
+			xdesignation,
+			xdesigpromo,
+			xgrade,
+			xgradetran,
+			xnote,
+			xstatus,
+			xdateeff,
+			xgrossold,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xstaff, jdbcType=VARCHAR},
+			#{xrow},
+			#{xdate, jdbcType=DATE},
+			#{xdesignation, jdbcType=VARCHAR},
+			#{xdesigpromo, jdbcType=VARCHAR},
+			#{xgrade, jdbcType=VARCHAR},
+			#{xgradetran, jdbcType=VARCHAR},
+			#{xnote, jdbcType=VARCHAR},
+			#{xstatus, jdbcType=VARCHAR},
+			#{xdateeff, jdbcType=DATE},
+			#{xgrossold, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updatePdpromodt" parameterType="Pdpromodt">
+		UPDATE 
+			pdpromodt
+		SET
+			xdate=#{xdate, jdbcType=DATE},
+			xdesignation=#{xdesignation, jdbcType=VARCHAR},
+			xdesigpromo=#{xdesigpromo, jdbcType=VARCHAR},
+			xgrade=#{xgrade, jdbcType=VARCHAR},
+			xgradetran=#{xgradetran, jdbcType=VARCHAR},
+			xnote=#{xnote, jdbcType=VARCHAR},
+			xstatus=#{xstatus, jdbcType=VARCHAR},
+			xdateeff=#{xdateeff, jdbcType=DATE},
+			xgrossold=#{xgrossold, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xstaff=#{xstaff, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllPdpromodt" resultType="Pdpromodt">
+		SELECT 
+			* 
+		FROM 
+			pdpromodt 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByPdpromodt" resultType="Pdpromodt">
+	SELECT * FROM pdpromodt WHERE xstaff=#{xstaff} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPdpromodtByXstaffAndXrow" resultType="Pdpromodt">
+		SELECT * FROM pdpromodt WHERE xstaff=#{xstaff} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<delete id="deletePdpromodt" parameterType="Pdpromodt">
+		DELETE FROM pdpromodt WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

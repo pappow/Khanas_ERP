@@ -37,8 +37,8 @@ public class ACCMoneyReceiptController extends ASLAbstractController{
 	public String loadMoneyReceiptPage(Model model) {
 
 		model.addAttribute("arhed", getDefaultArhed());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
-		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.MONEY_RECEIPTS.getCode(),TransactionCodeType.MONEY_RECEIPTS.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
 		if(isBoshila()) {
 			return "pages/accounts/moneyreceipt";

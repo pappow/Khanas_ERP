@@ -35,10 +35,10 @@ public class ACCSupplierAdjustmentController extends ASLAbstractController{
 	public String loadSupAdjustmentPage(Model model) {
 
 		model.addAttribute("arhed", getDefaultArhed());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAP.getCode()));
-		model.addAttribute("adjustmenttypeList", xcodeService.findByXtype(CodeType.ADJUSTMENT_TYPE.getCode()));
-		model.addAttribute("adjustmentwithList", xcodeService.findByXtype(CodeType.ADJUSTMENT_WITH.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllAdaps());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.ACCOUNT_ADAP.getCode(),TransactionCodeType.ACCOUNT_ADAP.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("adjustmenttypeList", xcodeService.findByXtype(CodeType.ADJUSTMENT_TYPE.getCode(), Boolean.TRUE));
+		model.addAttribute("adjustmentwithList", xcodeService.findByXtype(CodeType.ADJUSTMENT_WITH.getCode(), Boolean.TRUE));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_ADAP.getdefaultCode()));
 		
 		return "pages/salesninvoice/supplier/supplieradjustment";
 	}
@@ -53,7 +53,7 @@ public class ACCSupplierAdjustmentController extends ASLAbstractController{
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAP.getCode()));
 		model.addAttribute("adjustmenttypeList", xcodeService.findByXtype(CodeType.ADJUSTMENT_TYPE.getCode()));
 		model.addAttribute("adjustmentwithList", xcodeService.findByXtype(CodeType.ADJUSTMENT_WITH.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllAdaps());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_ADAP.getdefaultCode()));
 		
 		return "pages/salesninvoice/supplier/supplieradjustment";
 	}

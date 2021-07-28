@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
+import com.asl.entity.Pdpromodt;
 import com.asl.mapper.PdmstMapper;
 import com.asl.service.PdmstService;
 
@@ -74,6 +76,52 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		return pdmstMapper.findAllPdmst(xstaff, sessionManager.getBusinessId());
 	}
 
+	//for HRQualification
+	@Transactional
+	@Override
+	public long savePdeducation(Pdeducation pdqua) {
+		if (pdqua == null)
+			return 0;
+		pdqua.setZid(sessionManager.getBusinessId());
+		pdqua.setZauserid(getAuditUser());
+		return pdmstMapper.savePdeducation(pdqua);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdeducation(Pdeducation pdqua) {
+		if (pdqua == null)
+			return 0;
+		pdqua.setZid(sessionManager.getBusinessId());
+		pdqua.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdeducation(pdqua);
+	}
+
+	@Override
+	public long deletePdeducation(Pdeducation pdqua) {
+		if(pdqua == null) return 0;
+		long count = pdmstMapper.deletePdeducation(pdqua);
+		return count;
+	}
+
+	@Override
+	public List<Pdeducation> getAllPdeducation() {
+		return pdmstMapper.getAllPdeducation(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdeducation> findByPdeducation(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdeducation(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdeducation findPdeducationByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdeducationByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+	
 	//for HRExperience
 	
 	@Transactional
@@ -120,6 +168,54 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
 		return pdmstMapper.findPdexperienceByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
 	}
+
+	//for HRQualification
+	@Transactional
+	@Override
+	public long savePdpromodt(Pdpromodt pdpr) {
+		if (pdpr == null)
+			return 0;
+		pdpr.setZid(sessionManager.getBusinessId());
+		pdpr.setZauserid(getAuditUser());
+		return pdmstMapper.savePdpromodt(pdpr);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdpromodt(Pdpromodt pdpr) {
+		if (pdpr == null)
+			return 0;
+		pdpr.setZid(sessionManager.getBusinessId());
+		pdpr.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdpromodt(pdpr);
+	}
+
+	@Override
+	public long deletePdpromodt(Pdpromodt pdpr) {
+		if(pdpr == null) return 0;
+		long count = pdmstMapper.deletePdpromodt(pdpr);
+		return count;
+	}
+
+	@Override
+	public List<Pdpromodt> getAllPdpromodt() {
+		return pdmstMapper.getAllPdpromodt(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdpromodt> findByPdpromodt(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdpromodt(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdpromodt findPdpromodtByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdpromodtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+
+	
 
 	
 }
