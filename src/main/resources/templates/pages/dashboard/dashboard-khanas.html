@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Dashboard</title>
+		<title>Home</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -70,10 +70,16 @@
 												<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${menuProfile.M0203 ne null and menuProfile.M0203.display}">
-											<td><a th:href="@{/mastersetup/cap}" th:text="${menuProfile.M0203.screenprompt}">Code & Parameters</a></td>
+										<tr th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
+											<td><a th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0208.screenprompt}">Codes</a></td>
 											<td>
-												<a th:href="@{/mastersetup/cap}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
+											<td><a th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0209.screenprompt}">Transaction Codes</a></td>
+											<td>
+												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 									</span>
@@ -147,12 +153,6 @@
 													<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
-											<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
-												<td><a th:href="@{/procurement/grnreturn}" th:text="${menuProfile.M0310.screenprompt}">GRN Return</a></td>
-												<td>
-													<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-												</td>
-											</tr>
 										</span>
 									</span>
 
@@ -178,12 +178,6 @@
 												<td><a th:href="@{/salesninvoice/salesorder/detailmatrix}">Sales Orders Matrix</a></td>
 												<td>
 													<a th:href="@{/salesninvoice/salesorder/detailmatrix}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-												</td>
-											</tr>
-											<tr th:if="${menuProfile.M0404 ne null and menuProfile.M0404.display}">
-												<td><a th:href="@{/salesninvoice/salesorderchalan}">Production Chalan</a></td>
-												<td>
-													<a th:href="@{/salesninvoice/salesorderchalan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0405 ne null and menuProfile.M0405.display}">
@@ -229,10 +223,10 @@
 											<tr>
 												<td colspan="2" th:text="${menuProfile.M0500.screenprompt}">Production</td>
 											</tr>
-											<tr th:if="${menuProfile.M0501 ne null and menuProfile.M0501.display}">
-												<td><a th:href="@{/production/bom}" th:text="${menuProfile.M0501.screenprompt}">BOM Entry/Receipe Setting</a></td>
+											<tr th:if="${menuProfile.M0404 ne null and menuProfile.M0404.display}">
+												<td><a th:href="@{/salesninvoice/salesorderchalan}">Production Chalan</a></td>
 												<td>
-													<a th:href="@{/production/bom}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+													<a th:href="@{/salesninvoice/salesorderchalan}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0502 ne null and menuProfile.M0502.display}">
@@ -245,6 +239,12 @@
 												<td><a th:href="@{/production/batch}" th:text="${menuProfile.M0503.screenprompt}">Production Process / Batch</a></td>
 												<td>
 													<a th:href="@{/production/batch}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												</td>
+											</tr>
+											<tr th:if="${menuProfile.M0501 ne null and menuProfile.M0501.display}">
+												<td><a th:href="@{/production/bom}" th:text="${menuProfile.M0501.screenprompt}">BOM Entry/Receipe Setting</a></td>
+												<td>
+													<a th:href="@{/production/bom}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 										</span>
@@ -290,12 +290,6 @@
 												<td><a th:href="@{/inventory/asset}" >Asset Transfer Order</a></td>
 												<td>
 													<a th:href="@{/inventory/asset}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
-												</td>
-											</tr>
-											<tr th:if="${menuProfile.M0606 ne null and menuProfile.M0606.display}">
-												<td><a th:href="@{/inventory/pchtotrord}" th:text="${menuProfile.M0606.screenprompt}">Production Chalan to Transfer Order</a></td>
-												<td>
-													<a th:href="@{/inventory/pchtotrord}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
 											<tr th:if="${menuProfile.M0607 ne null and menuProfile.M0607.display}">

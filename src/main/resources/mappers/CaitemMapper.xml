@@ -341,4 +341,13 @@
 			AND XITEM=#{xitem}
 			AND XSUBITEM=#{xsubitem}
 	</delete>
+
+	<delete id="deleteCaitem">
+		DELETE
+		FROM
+			caitem
+		WHERE
+			ZID=#{zid}
+			AND XITEM=#{xitem}
+	</delete>
 </mapper>

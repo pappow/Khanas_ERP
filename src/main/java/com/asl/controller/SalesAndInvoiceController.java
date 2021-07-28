@@ -168,7 +168,7 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		// if existing record
 		Opdoheader existOpdoHeader = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
 		if (existOpdoHeader != null) {
-			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xtypetrn", "xdate", "xtrnopdo", "xtrn");
+			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xtypetrn", "xtrnopdo", "xtrn");
 			long count = opdoService.update(existOpdoHeader);
 			if (count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);

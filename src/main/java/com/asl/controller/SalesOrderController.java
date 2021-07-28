@@ -90,10 +90,10 @@ public class SalesOrderController extends ASLAbstractController {
 		}
 
 		// Validate
-//		if (StringUtils.isBlank(opordHeader.getXcus())) {
-//			responseHelper.setErrorStatusAndMessage("Please select a customer to create Sales Order");
-//			return responseHelper.getResponse();
-//		}
+		if (StringUtils.isBlank(opordHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Please select a customer to create Sales Order");
+			return responseHelper.getResponse();
+		}
 
 		Vatait vatait = vataitService.findVataitByXvatait(opordHeader.getXvatait());
 		if(opordHeader.getXtotamt() == null) opordHeader.setXtotamt(BigDecimal.ZERO);

@@ -305,13 +305,12 @@
 			caitem.xcatitem 
 		FROM 
 			oporddetail od
-			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{centralzid}
+			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{centralzid} AND caitem.zactive='1'
 			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			od.xordernum=#{xordernum} 
 			AND od.xrow=#{xrow} 
 			AND od.zid=#{zid} 
-			AND od.zactive='1'
 		ORDER BY
 			xcodes.seqn
 	</select>
@@ -324,18 +323,17 @@
 			caitem.xcatitem
 		FROM
 			oporddetail 
-			JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{centralzid}
+			LEFT JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid=#{centralzid} AND caitem.zactive='1'
 			LEFT JOIN xcodes ON xcodes.xcode = caitem.xcatitem AND xcodes.zid = caitem.zid and xcodes.zactive='1'
 		WHERE 
 			oporddetail.xordernum=#{xordernum}
 			AND oporddetail.zid=#{zid}
-			AND oporddetail.zactive='1'
 		ORDER BY
 			xcodes.seqn, caitem.xcatitem, oporddetail.xitem
 	</select>
 
 	<select id="getAllOpordheader" resultType="Opordheader">
-		SELECT * FROM Opordheader WHERE zid=#{zid} AND zactive='1' ORDER BY XORDERNUM DESC
+		SELECT * FROM Opordheader WHERE zid=#{zid} ORDER BY XORDERNUM DESC
 	</select>
 
 	<select id="findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus" resultType="Opordheader">
@@ -349,7 +347,6 @@
 			AND xcus=#{xcus}
 			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
 			AND zid=#{zid} 
-			AND zactive='1'
 		ORDER BY
 			XORDERNUM DESC
 	</select>
@@ -364,7 +361,6 @@
 			AND xtrn=#{xtrn}
 			AND TO_CHAR(xdate,'yyyy-MM-dd')=#{xdate}
 			AND zid=#{zid} 
-			AND zactive='1'
 		ORDER BY
 			XORDERNUM DESC
 	</select>
@@ -381,7 +377,6 @@
 			AND opordheader.xtrn=#{xtrn}
 			AND TO_CHAR(opordheader.xdate,'yyyy-MM-dd')=#{xdate}
 			AND opordheader.zid=#{zid} 
-			AND opordheader.zactive='1'
 		ORDER BY
 			OPORDHEADER.XORDERNUM DESC
 	</select>
@@ -395,7 +390,6 @@
 			xtypetrn=#{xtypetrn}
 			AND xtrn=#{xtrn}
 			AND zid=#{zid} 
-			AND zactive='1'
 			AND productioncompleted='1'
 		ORDER BY
 			XORDERNUM DESC
@@ -413,7 +407,6 @@
 			AND opordheader.xtrn=#{xtrn}
 			AND opordheader.xstatus=#{xstatus}
 			AND opordheader.zid=#{zid} 
-			AND opordheader.zactive='1'
 		ORDER BY
 			OPORDHEADER.XORDERNUM DESC
 	</select>
@@ -427,7 +420,6 @@
 			xordernum=#{xordernum}
 			AND xitem=#{xitem}
 			AND zid=#{zid} 
-			AND zactive='1'
 		ORDER BY
 			XROW DESC
 	</select>
@@ -449,7 +441,6 @@
 			LEFT JOIN XCODES ON XCODES.XCODE = CAITEM.XCATITEM AND XCODES.ZID = CAITEM.ZID AND XCODES.ZACTIVE='1'
 		WHERE
 			OPORDHEADER.ZID=#{zid}
-			AND OPORDHEADER.ZACTIVE='1'
 			AND OPORDHEADER.XTYPETRN='Sales Order'
 			AND OPORDHEADER.XTRN='SO-'
 			AND TO_CHAR(OPORDHEADER.XDATE,'yyyy-MM-dd')=#{xdate}
@@ -498,7 +489,6 @@
 			LEFT JOIN cacus ON cacus.xcus = OPORDHEADER.xcus AND cacus.zid = OPORDHEADER.zid AND cacus.zactive='1'
 		WHERE
 			OPORDHEADER.ZID=#{zid}
-			AND OPORDHEADER.ZACTIVE='1'
 			AND OPORDHEADER.XTYPETRN=#{xtypetrn}
 			AND OPORDHEADER.XTRN=#{xtrn}
 			AND OPORDHEADER.XCHALANREF=#{xchalanref}
@@ -517,7 +507,6 @@
 			AND XTYPETRN=#{xtypetrn}
 			AND XTRN=#{xtrn}
 			AND XSTATUS=#{xstatus}
-			AND ZACTIVE='1'
 	</select>
 	
 	<select id="searchXpornum" resultType="Opordheader">
@@ -542,12 +531,11 @@
 			caitem.xcatitem 
 		FROM 
 			oporddetail od
-			JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+			LEFT JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid} AND caitem.zactive='1'
 		WHERE 
 			od.xordernum=#{xordernum}
 			AND od.xitem LIKE 'ICRM-%'
 			AND od.zid=#{zid} 
-			AND od.zactive='1'
 		ORDER BY
 			od.xitem DESC
 	</select>
@@ -570,12 +558,11 @@
 			caitem.xcatitem 
 		FROM 
 			oporddetail od
-			left JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid}
+			left JOIN caitem ON caitem.xitem = od.xitem AND caitem.zid=#{zid} AND caitem.zactive='1'
 		WHERE 
 			od.xordernum=#{xordernum}
 			AND od.xitem LIKE 'ICHL-%'
 			AND od.zid=#{zid} 
-			AND od.zactive='1'
 		ORDER BY
 			od.xitem DESC
 		
@@ -621,7 +608,6 @@
 		WHERE
 			oph.xordernum=#{xordernum} 
 			AND oph.zid=#{zid} 
-			AND oph.zactive='1'
 	</update>
 
 	<update id="archiveAllOporddetailByXordernum">

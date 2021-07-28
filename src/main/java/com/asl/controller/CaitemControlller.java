@@ -140,8 +140,7 @@ public class CaitemControlller extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		caitem.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = caitemService.update(caitem);
+		long count = caitemService.deleteCaitem(xitem);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
