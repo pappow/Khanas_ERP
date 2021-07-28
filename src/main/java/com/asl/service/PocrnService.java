@@ -20,6 +20,8 @@ public interface PocrnService {
 
 	public long update(Pocrnheader pocrnheader);
 
+	public long deletePocrnHeader(String xcrnnum);
+
 	public long saveDetail(Pocrndetail pocrndetail);
 
 	public long saveDetails(List<Pocrndetail> pocrndetail) throws ServiceException;

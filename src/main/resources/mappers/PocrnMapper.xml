@@ -88,6 +88,15 @@
 			AND zid=#{zid} 
 	</update>
 
+	<delete id="deletePocrnHeader">
+		DELETE
+		FROM
+			pocrnheader
+		WHERE
+			xcrnnum=#{xcrnnum} 
+			AND zid=#{zid} 
+	</delete>
+
 	<insert id="savePocrnDetail" parameterType="Pocrndetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
 			SELECT COALESCE(Max(xrow), 0) + 1 FROM pocrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid}
@@ -154,6 +163,16 @@
 			AND xrow=#{xrow, jdbcType=INTEGER}
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
+
+	<delete id="deletePocrnDetail" parameterType="Pocrndetail">
+		DELETE
+		FROM
+			pocrndetail
+		WHERE
+			xcrnnum=#{xcrnnum, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</delete>
 
 	<select id="findPocrnHeaderByXcrnnum" resultType="Pocrnheader">
 		SELECT 

@@ -55,7 +55,7 @@
 										<a th:if="${#strings.isEmpty(pocrnheader.xcrnnum)}" th:href="@{/procurements/purchasereturn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.xstatuscrn eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.xstatuscrn eq 'Open'}" th:href="@{/procurements/purchasereturn/archive/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.xstatuscrn eq 'Open'}" th:href="@{/procurements/purchasereturn/confirmprn/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-warning confirmprn-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(pocrnheader.xcrnnum) and pocrnheader.xstatuscrn eq 'Open'}" th:href="@{/procurements/purchasereturn/confirmcrn/} + ${pocrnheader.xcrnnum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/procurements/purchasereturn/save}" th:object="${pocrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">

@@ -19,6 +19,8 @@ public interface PocrnMapper {
 
 	public long deletePocrnDetail(Pocrndetail pocrndetail);
 
+	public long deletePocrnHeader(String xcrnnum, String zid);
+
 	public List<Pocrnheader> getAllPocrnheader(String zid);
 
 	public List<Pocrndetail> findPocrnDetailByXcrnnum(String xcrnnum, String zid);

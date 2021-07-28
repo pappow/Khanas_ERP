@@ -51,6 +51,13 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 
 	@Transactional
 	@Override
+	public long deletePocrnHeader(String xcrnnum) {
+		if(StringUtils.isBlank(xcrnnum)) return 0;
+		return pocrnMapper.deletePocrnHeader(xcrnnum, sessionManager.getBusinessId());
+	}
+
+	@Transactional
+	@Override
 	public long saveDetail(Pocrndetail pocrndetail) {
 		if(pocrndetail == null || StringUtils.isBlank(pocrndetail.getXcrnnum())) return 0;
 		pocrndetail.setZid(sessionManager.getBusinessId());
@@ -89,8 +96,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 	@Override
 	public long deleteDetail(Pocrndetail pocrndetail) {
 		if(pocrndetail == null) return 0;
-		long count = pocrnMapper.deletePocrnDetail(pocrndetail);		
-		return count;
+		return pocrnMapper.deletePocrnDetail(pocrndetail);
 	}
 
 	@Override
