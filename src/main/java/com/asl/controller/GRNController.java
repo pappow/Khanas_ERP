@@ -431,12 +431,12 @@ public class GRNController extends ASLAbstractController {
 
 		Pocrnheader pocrnHeader = new Pocrnheader();
 		BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-		pocrnHeader.setXtype(TransactionCodeType.PURCHASE_RETURN.getCode());
-		pocrnHeader.setXtrncrn(TransactionCodeType.PURCHASE_RETURN.getdefaultCode());
+//		pocrnHeader.setXtype(TransactionCodeType.PURCHASE_RETURN.getCode());
+//		pocrnHeader.setXtrncrn(TransactionCodeType.PURCHASE_RETURN.getdefaultCode());
 		pocrnHeader.setXgrnnum(xgrnnum);
 		pocrnHeader.setXstatuscrn("Open");
 		pocrnHeader.setXdate(new Date());
-		pocrnHeader.setXsup(pogrnHeader.getXcus());
+//		pocrnHeader.setXsup(pogrnHeader.getXcus());
 		// pocrnHeader.setXtypetrn("??");
 
 		long count = pocrnService.save(pocrnHeader);
