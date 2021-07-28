@@ -13,6 +13,8 @@ public interface CaitemMapper {
 	public long saveCaitem(Caitem caitem);
 
 	public long updateCaitem(Caitem caitem);
+	
+	public long deleteCaitem(String xitem, String zid);
 
 	public List<Caitem> getAllCaitems(String zid);
 

@@ -309,6 +309,7 @@
 
 	<select id="findOpdoDetailByXdornum" resultType="Opdodetail">
 		SELECT 
+			distinct
 			od.*,
 			caitem.xdesc,
 			caitem.xgitem,

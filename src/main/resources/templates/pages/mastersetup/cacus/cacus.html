@@ -185,6 +185,7 @@
 													<th th:text="${cacusType eq 'SUP' ? 'Supplier Code' : 'Customer Code'}"></th>
 													<th>Name</th>
 													<th>Address</th>
+													<th>Status</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -194,6 +195,7 @@
 													</td>
 													<td th:text="${c.xorg}"></td>
 													<td th:text="${c.xmadd}"></td>
+													<td th:text="${c.zactive ? 'Active' : 'Inactive'}"></td>
 												</tr>
 											</tbody>
 										</table>

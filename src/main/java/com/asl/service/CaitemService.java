@@ -14,6 +14,8 @@ public interface CaitemService {
 
 	public long update(Caitem caitem);
 
+	public long deleteCaitem(String xitem);
+
 	public List<Caitem> getAllCaitems();
 
 	public List<Caitem> findByXcatitem(String xcatitem);
