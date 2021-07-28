@@ -150,7 +150,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 				d.setXpornum(poordHeader.getXpornum());
 				if(d.getXrate() == null) d.setXrate(BigDecimal.ZERO);
 				d.setXlineamt(d.getXqtyord().multiply(d.getXrate()));
-				d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
+				//d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
 				i++;
 			}
 
@@ -192,7 +192,7 @@ public class OrderRequisitionAdvancedController extends ASLAbstractController {
 			d.setXpornum(poh.getXpornum());
 			if(d.getXrate() == null) d.setXrate(BigDecimal.ZERO);
 			d.setXlineamt(d.getXqtyord().multiply(d.getXrate()));
-			d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
+			//d.setXlineamt(d.getXlineamt().add(d.getXlineamt().multiply(c.getXrate() == null ? BigDecimal.ZERO : c.getXrate()).divide(BigDecimal.valueOf(100))));
 			i++;
 		}
 

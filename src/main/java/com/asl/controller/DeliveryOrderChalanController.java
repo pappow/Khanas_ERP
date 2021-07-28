@@ -76,7 +76,8 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		allOpenAndConfirmesSalesOrders.addAll(opdoService.findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), xdornum));
 
 		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
-		model.addAttribute("chalandetails", opdoService.findOpdoDetailByXdornum(xdornum));
+
+		model.addAttribute("chalandetails", opdoService.findAssignedOpdoDetailByChalan(xdornum));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
@@ -144,9 +145,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@PostMapping("/opendeliveryorder/query")
 	public @ResponseBody Map<String, Object> queryForrequistionDetails(String xdornum, Date xdate, Model model) {
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
-				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + xdornum + "&date="
-						+ sdf.format(xdate));
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable","/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + xdornum + "&date=" + sdf.format(xdate));
 		responseHelper.setStatus(ResponseStatus.SUCCESS);
 		return responseHelper.getResponse();
 	}
@@ -158,8 +157,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	}
 
 	@PostMapping("/deliveryorderconfirm/{chalan}/{xdornum}")
-	public @ResponseBody Map<String, Object> confirmSalesOrderAndCreateChalanDetail(@PathVariable String chalan,
-			@PathVariable String xdornum, Model model) {
+	public @ResponseBody Map<String, Object> confirmSalesOrderAndCreateChalanDetail(@PathVariable String chalan, @PathVariable String xdornum, Model model) {
 
 		Opdoheader oh = opdoService.findOpdoHeaderByXdornum(xdornum);
 		if (oh == null) {
@@ -167,8 +165,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		if (StringUtils.isNotBlank(oh.getXdocnum())) {
-			responseHelper.setErrorStatusAndMessage(
-					"Sales order already added to chalan : " + oh.getXdocnum() + " . Please reload this page again");
+			responseHelper.setErrorStatusAndMessage("Sales order already added to chalan : " + oh.getXdocnum() + " . Please reload this page again");
 			return responseHelper.getResponse();
 		}
 
@@ -178,49 +175,18 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// create or update chalan detail first
-		for (Opdodetail pd : details) {
-			// check chalan detail already exist using item
-			Opdodetail existChalanDetail = opdoService.findOpdoDetailByXdornumAndXitem(chalan, pd.getXitem());
-			if (existChalanDetail != null) { // update existing with qty
-				existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().add(pd.getXqtyord()));
-				long countChalanDetail = opdoService.updateDetail(existChalanDetail);
-				if (countChalanDetail == 0) {
-					responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
-					return responseHelper.getResponse();
-				}
-			} else { // create new detail
-				Opdodetail opdodetail = new Opdodetail();
-				opdodetail.setXdornum(chalan);
-				opdodetail.setXitem(pd.getXitem());
-				opdodetail.setXunitsel(pd.getXunitsel());
-				opdodetail.setXqtyord(pd.getXqtyord());
-				opdodetail.setXrate(pd.getXrate());
-				long countChalanDetail = opdoService.saveDetail(opdodetail);
-				if (countChalanDetail == 0) {
-					responseHelper.setErrorStatusAndMessage("Can't create chalan detail");
-					return responseHelper.getResponse();
-				}
-			}
-		}
-
 		// now update sales order with chalan reference
 		oh.setXdocnum(chalan);
 		oh.setXchalancreated(true);
-		//oh.setXstatusord("Confirmed");
 		long count = opdoService.update(oh);
-
 		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't Update Sales Order");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
-				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date="
-						+ sdf.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable",
-				"/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
-		responseHelper.setSuccessStatusAndMessage("Sales order confirmed");
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
+		responseHelper.setSuccessStatusAndMessage("Sales order assigned to this chalan successfully");
 		return responseHelper.getResponse();
 	}
 
@@ -235,31 +201,10 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		List<Opdodetail> details = opdoService.findOpdoDetailByXdornum(xdornum);
 		if (details == null || details.isEmpty()) {
-			responseHelper
-					.setErrorStatusAndMessage("This " + xdornum + " Sales Order has no item to remove from chalan");
+			responseHelper.setErrorStatusAndMessage("This " + xdornum + " Sales Order has no item to remove from chalan");
 			return responseHelper.getResponse();
 		}
 
-		// create or update chalan detail first
-		for (Opdodetail pd : details) {
-			// check chalan detail already exist using item
-			Opdodetail existChalanDetail = opdoService.findOpdoDetailByXdornumAndXitem(chalan, pd.getXitem());
-			if (existChalanDetail == null)
-				continue;
-
-			// update existing with qty
-			existChalanDetail.setXqtyord(existChalanDetail.getXqtyord().subtract(pd.getXqtyord()));
-			long countChalanDetail = 0;
-			if (BigDecimal.ZERO.equals(existChalanDetail.getXqtyord())) {
-				countChalanDetail = opdoService.deleteDetail(existChalanDetail);
-			} else {
-				countChalanDetail = opdoService.updateDetail(existChalanDetail);
-			}
-			if (countChalanDetail == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't update chalan detail");
-				return responseHelper.getResponse();
-			}
-		}
 
 		// now update sales order with chalan reference
 		oh.setXdocnum(null);
@@ -271,19 +216,16 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable",
-				"/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date="
-						+ sdf.format(oh.getXdate()));
-		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable",
-				"/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
-		responseHelper.setSuccessStatusAndMessage("Sales order revoked");
+		responseHelper.setReloadSectionIdWithUrl("opendeliveryorderstable", "/salesninvoice/deliveryorderchalan/opendeliveryorder/query?xdornum=" + chalan + "&date=" + sdf.format(oh.getXdate()));
+		responseHelper.setSecondReloadSectionIdWithUrl("deliveryorderchalandetailtable", "/salesninvoice/deliveryorderchalan/chalandetail/" + chalan);
+		responseHelper.setSuccessStatusAndMessage("Sales order unassigned from this chalan successfully");
 		return responseHelper.getResponse();
 	}
 
 	@GetMapping("/chalandetail/{xdornum}")
 	public String reloadChalanDetailSection(@PathVariable String xdornum, Model model) {
 		model.addAttribute("deliveryorderchalan", opdoService.findOpdoHeaderByXdornum(xdornum));
-		model.addAttribute("chalandetails", opdoService.findOpdoDetailByXdornum(xdornum));
+		model.addAttribute("chalandetails", opdoService.findAssignedOpdoDetailByChalan(xdornum));
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan::deliveryorderchalandetailtable";
 	}
 

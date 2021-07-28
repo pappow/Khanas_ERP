@@ -39,6 +39,8 @@ public interface OpdoService {
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem);
 
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum);
+	
+	public List<Opdodetail> findAssignedOpdoDetailByChalan(String chalan);
 
 	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatus, Date date);
 

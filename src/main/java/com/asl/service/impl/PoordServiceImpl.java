@@ -1,6 +1,7 @@
 package com.asl.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -12,16 +13,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Caitem;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.entity.PoordHeader;
+import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.PogrnMapper;
 import com.asl.mapper.PoordMapper;
 import com.asl.model.ResponseHelper;
 import com.asl.model.ServiceException;
 import com.asl.model.report.RM0301;
+import com.asl.service.CacusService;
+import com.asl.service.CaitemService;
+import com.asl.service.OpordService;
 import com.asl.service.PoordService;
 
 @Service
@@ -29,6 +37,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 
 	@Autowired private PoordMapper poordMapper;
 	@Autowired private PogrnMapper pogrnMapper;
+	@Autowired private OpordService opordService;
+	@Autowired private CaitemService caitemService;
+	@Autowired private CacusService cacusService;
 
 	@Override
 	@Transactional
@@ -304,4 +315,102 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		if(StringUtils.isBlank(xpornum) || StringUtils.isBlank(xitem)) return Collections.emptyList();
 		return poordMapper.searchPurchaseOrderAvailableItem(xpornum, xitem.toUpperCase(), sessionManager.getBusinessId());
 	}
+
+	@Transactional
+	@Override
+	public Map<String, Object> confirmRequisitionsOfBranch(ResponseHelper responseHelper, String xpornum, String branchzid) throws ServiceException {
+		// Change requisition order status
+		PoordHeader ph = findBranchPoordHeaderByXpornumForCentral(xpornum, branchzid);
+		if(ph == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find any requisition in the system");
+			return responseHelper.getResponse();
+		}
+
+		// find all order requisition details first
+		List<PoordDetail> poordDetailsList = findPoordDetailsByXpornumAndBranchZid(xpornum, branchzid);
+		if(poordDetailsList == null || poordDetailsList.isEmpty()) {  // if no detail exist
+			responseHelper.setErrorStatusAndMessage("Requisition has no item added");
+			return responseHelper.getResponse();
+		}
+
+		// Create sales order header
+		Opordheader oh = new Opordheader();
+		oh.setXtypetrn(TransactionCodeType.SALES_ORDER.getCode());
+		oh.setXtrn(TransactionCodeType.SALES_ORDER.getdefaultCode());
+		oh.setXpornum(ph.getXpornum());
+		oh.setXdate(new Date());
+		oh.setXstatus("Open");
+		oh.setXstatusord("Open");
+		oh.setXnote(ph.getXnote());
+		oh.setXdiscamt(BigDecimal.ZERO);
+		oh.setXvatait("No Vat");
+
+		// Tag with branch customer    xgcus   xcuszid
+		Cacus cacus = cacusService.findCacusByXcuszid(ph.getZid());
+		if(cacus == null) {
+			responseHelper.setErrorStatusAndMessage("There is no customer found for this branch");
+			return responseHelper.getResponse();
+		}
+		oh.setXcus(cacus.getXcus());
+
+		long ohCount = opordService.saveOpordHeader(oh);
+		if(ohCount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't crete sales order");
+			return responseHelper.getResponse();
+		}
+
+		// if header saved successfully, then find it again from db to get xordernum
+		// find oh by  xpornum, xdate, xtypetrn and xcus 
+		Opordheader savedoh = opordService.findOpordHeaderByXtypetrnAndXpornumAndXdateAndXcus(oh.getXtypetrn(), oh.getXpornum(), oh.getXcus(), oh.getXdate());
+		if(savedoh == null) {
+			responseHelper.setErrorStatusAndMessage("Can't found any sales order");
+			return responseHelper.getResponse();
+		}
+
+		// if detail data exist
+		List<Oporddetail> detailsList = new ArrayList<>();
+		for(PoordDetail pd : poordDetailsList) {
+			// create all sales details from requisition details
+			Caitem c = caitemService.findByXitem(pd.getXitem());
+			if(c == null) {
+				responseHelper.setErrorStatusAndMessage("Item "+ pd.getXitem() +" not found");
+				return responseHelper.getResponse();
+			}
+
+			Oporddetail od = new Oporddetail();
+			od.setXordernum(savedoh.getXordernum());
+			od.setXitem(pd.getXitem());
+			od.setXunit(pd.getXunitpur());
+			od.setXqtyord(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			od.setXrate(pd.getXrate() == null ? BigDecimal.ZERO : pd.getXrate());
+			od.setXdesc(c.getXdesc());
+			od.setXcatitem(c.getXcatitem());
+			od.setXgitem(c.getXgitem());
+			od.setXlineamt(od.getXqtyord().multiply(od.getXrate()));
+
+			detailsList.add(od);
+		}
+
+		// now save all details
+		long countOD = opordService.saveBatchOpordDetail(detailsList);
+		if(countOD == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create sales order detail");
+			return responseHelper.getResponse();
+		}
+
+		// Update status and order reference
+		ph.setXstatuspor("Confirmed");
+		ph.setXordernum(savedoh.getXordernum());
+		long count = update(ph);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// reload page
+		responseHelper.setSuccessStatusAndMessage("Requisition confirmed successfully");
+		responseHelper.setReloadSectionIdWithUrl("branchesorderrequisitiontable", "/purchasing/bqls/query?date=" + sdf.format(ph.getXdate()));
+		return responseHelper.getResponse();
+	}
+
 }

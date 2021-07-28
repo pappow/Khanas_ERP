@@ -46,4 +46,6 @@ public interface PogrnMapper {
 	public long deletePogrnheader(String xgrnnum, String zid);
 
 	public BigDecimal getTotalGRNQtyOfConfirmedGRNDetail(int xdocrow, String xpornum, String zid);
+
+	public List<PogrnHeader> searchGrn(String hint, String xstatusgrn, String zid);
 }
