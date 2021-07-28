@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.LandComEvent;
 import com.asl.entity.LandDagDetails;
+import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
+import com.asl.entity.Pdpromodt;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -67,7 +69,9 @@ public class HRPersonalInfoController extends ASLAbstractController{
 		
 		model.addAttribute("hrinfo", pdmst);
 		model.addAttribute("allHrinfos", pdmstService.getAllHRPdmst());
+		model.addAttribute("hrqlist", pdmstService.findByPdeducation(xstaff));
 		model.addAttribute("hrelist", pdmstService.findByPdexperience(xstaff));
+		model.addAttribute("hrplist", pdmstService.findByPdpromodt(xstaff));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.HR_EMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
@@ -136,6 +140,88 @@ public class HRPersonalInfoController extends ASLAbstractController{
 		return responseHelper.getResponse();
 }
 
+	//start of HRQualification
+	
+	@GetMapping("/{xstaff}/hrqualification/{xrow}/show")
+	public String loadHRQualificationModal(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+		if("new".equalsIgnoreCase(xrow)) {
+			Pdeducation hrq = new Pdeducation();
+			hrq.setXstaff(xstaff);
+			model.addAttribute("hrq", hrq);
+		}
+		else {
+			Pdeducation hrq = pdmstService.findPdeducationByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(hrq==null) {
+				hrq = new Pdeducation();
+				
+			}
+			model.addAttribute("hrq", hrq);
+		}
+		
+		return "pages/hr/hrqualificationmodal::hrqualificationmodal";
+	}
+	
+	@PostMapping("/hrqualification/save")
+	public @ResponseBody Map<String, Object> saveHRQualification(Pdeducation pdqua) {
+		if (pdqua == null || StringUtils.isBlank(pdqua.getXstaff())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// if existing
+		Pdeducation exist = pdmstService.findPdeducationByXstaffAndXrow(pdqua.getXstaff(), pdqua.getXrow());
+		if (exist != null) {
+			BeanUtils.copyProperties(pdqua, exist,"xstaff");
+			long count = pdmstService.updatePdeducation(exist);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("hrqualificationtable","/hrpersonal/hrqualification/" + pdqua.getXstaff());
+			responseHelper.setSuccessStatusAndMessage("Personal qualification updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		
+		// if new detail
+		long count = pdmstService.savePdeducation(pdqua);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		responseHelper.setReloadSectionIdWithUrl("hrqualificationtable","/hrpersonal/hrqualification/" + pdqua.getXstaff());
+		responseHelper.setSuccessStatusAndMessage("Personal qualification saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/hrqualification/{xstaff}")
+	public String reloadHRQualificationTable(@PathVariable String xstaff, Model model) {
+		List<Pdeducation> hrqList = pdmstService.findByPdeducation(xstaff);
+		model.addAttribute("hrqlist", hrqList);
+		model.addAttribute("hrinfo", pdmstService.findAllPdmst(xstaff));
+		return "pages/hr/hrpersonal::hrqualificationtable";
+	}
+	
+	//delete
+		@PostMapping("{xstaff}/hrqualification/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteQualification(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			Pdeducation hrq = pdmstService.findPdeducationByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(hrq == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = pdmstService.deletePdeducation(hrq);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("hrqualificationtable", "/hrpersonal/hrqualification/" + xstaff);
+			return responseHelper.getResponse();
+		}
+	
 	//start of HRExperience
 	
 	@GetMapping("/{xstaff}/hrexperience/{xrow}/show")
@@ -215,6 +301,90 @@ public class HRPersonalInfoController extends ASLAbstractController{
 
 			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 			responseHelper.setReloadSectionIdWithUrl("hrexperiencetable", "/hrpersonal/hrexperience/" + xstaff);
+			return responseHelper.getResponse();
+		}
+		
+		//start of HRPromotion
+		
+		@GetMapping("/{xstaff}/hrpromotion/{xrow}/show")
+		public String loadHRPromotionModal(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			if("new".equalsIgnoreCase(xrow)) {
+				Pdpromodt hrp = new Pdpromodt();
+				hrp.setXstaff(xstaff);
+				model.addAttribute("hrp", hrp);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			else {
+				Pdpromodt hrp = pdmstService.findPdpromodtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+				if(hrp==null) {
+					hrp = new Pdpromodt();
+					
+				}
+				model.addAttribute("hrp", hrp);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			
+			return "pages/hr/hrpromotionmodal::hrpromotionmodal";
+		}
+		
+		@PostMapping("/hrpromotion/save")
+		public @ResponseBody Map<String, Object> saveHRPromotion(Pdpromodt pdpr) {
+			if (pdpr == null || StringUtils.isBlank(pdpr.getXstaff())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			// if existing
+			Pdpromodt exist = pdmstService.findPdpromodtByXstaffAndXrow(pdpr.getXstaff(), pdpr.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(pdpr, exist,"xstaff");
+				long count = pdmstService.updatePdpromodt(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("hrpromotiontable","/hrpersonal/hrpromotion/" + pdpr.getXstaff());
+				responseHelper.setSuccessStatusAndMessage("Personal promotion updated successfully");
+				return responseHelper.getResponse();
+			}
+
+			
+			// if new detail
+			long count = pdmstService.savePdpromodt(pdpr);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("hrpromotiontable","/hrpersonal/hrpromotion/" + pdpr.getXstaff());
+			responseHelper.setSuccessStatusAndMessage("Personal promotion saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		@GetMapping("/hrpromotion/{xstaff}")
+		public String reloadHRPromotionTable(@PathVariable String xstaff, Model model) {
+			List<Pdpromodt> hrpList = pdmstService.findByPdpromodt(xstaff);
+			model.addAttribute("hrplist", hrpList);
+			model.addAttribute("hrinfo", pdmstService.findAllPdmst(xstaff));
+			return "pages/hr/hrpersonal::hrpromotiontable";
+		}
+		
+		//delete
+		@PostMapping("{xstaff}/hrpromotion/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteHRPromotion(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			Pdpromodt hrp = pdmstService.findPdpromodtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(hrp == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = pdmstService.deletePdpromodt(hrp);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("hrpromotiontable", "/hrpersonal/hrpromotion/" + xstaff);
 			return responseHelper.getResponse();
 		}
 }

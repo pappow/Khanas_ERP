@@ -9,13 +9,13 @@ import com.asl.model.TransactionCodes;
  */
 public enum TransactionCodeType {
 
-	ACCOUNT_PAYABLE("Account Payable", "AP-", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_PAYMENT("Account Payment", "PM--", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_OBAP("Supplier Opening Entry", "OBAP", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_OBAR("Customer Opening Entry", "OBAR", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_ADAP("Supplier Adjustment", "ADAP-", TransactionCodes.AP_TRANSACTION),
-	ACCOUNT_ADAR("Customer Adjustment", "ADAR-", TransactionCodes.AR_TRANSACTION),
-	AGENT_TRANSFER_ORDER("Agent Transfer Order", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
+	ACCOUNT_PAYABLE("AR Transactions", "AP--", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_PAYMENT("AR Transactions", "PM--", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_OBAP("AR Transactions", "OBAP", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_OBAR("AR Transactions", "OBAR", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_ADAP("AR Transactions", "ADAP", TransactionCodes.AR_TRANSACTION),
+	ACCOUNT_ADAR("AR Transactions", "ADAR", TransactionCodes.AR_TRANSACTION),
+	AGENT_TRANSFER_ORDER("Asset Transfer Order", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
 
 	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),

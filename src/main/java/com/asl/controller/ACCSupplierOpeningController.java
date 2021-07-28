@@ -36,9 +36,9 @@ public class ACCSupplierOpeningController extends ASLAbstractController{
 	public String loadCusAdjustmentPage(Model model) {
 
 		model.addAttribute("arhed", getDefaultArhed());
-		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_OBAP.getCode()));
-		model.addAttribute("paymentModeList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllObaps());
+		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.ACCOUNT_OBAP.getCode(),TransactionCodeType.ACCOUNT_OBAP.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("paymentModeList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(), Boolean.TRUE));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode()));
 		
 		return "pages/salesninvoice/supplieropen/supopening";
 	}
@@ -52,7 +52,7 @@ public class ACCSupplierOpeningController extends ASLAbstractController{
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_OBAP.getCode()));
 		model.addAttribute("paymentModeList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllObaps());
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_OBAP.getdefaultCode()));
 		
 		return  "pages/salesninvoice/supplieropen/supopening";
 	}

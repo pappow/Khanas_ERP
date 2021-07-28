@@ -2,8 +2,10 @@ package com.asl.service;
 
 import java.util.List;
 
+import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
+import com.asl.entity.Pdpromodt;
 
 /**
  * @author Zubayer Ahamed
@@ -27,6 +29,19 @@ public interface PdmstService {
 
 	public List<Pdmst> searchStaff(String hint);
 	
+	//for HRQualification
+	public long savePdeducation(Pdeducation pdqua);
+	
+	public long updatePdeducation(Pdeducation pdqua);
+	
+	public long deletePdeducation(Pdeducation pdqua);
+	
+	public List<Pdeducation> getAllPdeducation();
+	
+	public List<Pdeducation> findByPdeducation(String xstaff);
+	
+	public Pdeducation findPdeducationByXstaffAndXrow(String xstaff, int xrow);
+	
 	//for HRExperience
 	public long savePdexperience(Pdexperience pdex);
 	
@@ -39,4 +54,17 @@ public interface PdmstService {
 	public List<Pdexperience> findByPdexperience(String xstaff);
 	
 	public Pdexperience findPdexperienceByXstaffAndXrow(String xstaff, int xrow);
+	
+	//for HRPromotion
+	public long savePdpromodt(Pdpromodt pdpr);
+	
+	public long updatePdpromodt(Pdpromodt pdpr);
+	
+	public long deletePdpromodt(Pdpromodt pdpr);
+	
+	public List<Pdpromodt> getAllPdpromodt();
+	
+	public List<Pdpromodt> findByPdpromodt(String xstaff);
+	
+	public Pdpromodt findPdpromodtByXstaffAndXrow(String xstaff, int xrow);
 }

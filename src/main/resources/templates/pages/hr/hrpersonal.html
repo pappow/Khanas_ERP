@@ -478,42 +478,130 @@
 					
 					
 					<div class="col-md-12">
-			<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
-			<div class="section-header sectionbartoggle">
-				<h1>Experience Details of <span th:text="${hrinfo.xstaff}"></span> </h1>			
-			</div>
-				<div class="section-body" style="overflow-y:scroll;height:200px;">
-					<table class="table table-striped table-bordered normal-table" id="hrexperiencetable" th:fragment="hrexperiencetable">
-						<thead>
-							<tr>
-								<th>SL#</th>
-								<th>Note </th>
-								<th data-nosort="Y" style="text-align: right;">
-									<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/new/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-plus"></i></button>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="d, n : ${hrelist}">
-								<td th:text="${n.count}"></td>
-								<td th:text="${d.xnote}"></td>
-								<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-									<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-edit"></i></button>
-									<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+						<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
+						<div class="section-header sectionbartoggle">
+							<h1>Qualification Details of <span th:text="${hrinfo.xstaff}"></span> </h1>			
+						</div>
+							<div class="section-body" style="overflow-y:scroll;height:200px;">
+								<table class="table table-striped table-bordered normal-table" id="hrqualificationtable" th:fragment="hrqualificationtable">
+									<thead>
+										<tr>
+											<th>SL#</th>
+											<th>Year </th>
+											<th>Exam Title </th>
+											<th>Institute </th>
+											<th>Major</th>
+											<th>Result </th>
+											<th data-nosort="Y" style="text-align: right;">
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrqualification/new/show', data-target-modal='hrqualificationmodal'"><i class="fas fa-plus"></i></button>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="d, n : ${hrqlist}">
+											<td th:text="${n.count}"></td>
+											<td th:text="${d.xyear}"></td>
+											<td th:text="${d.xexam}"></td>
+											<td th:text="${d.xinstitute}"></td>
+											<td th:text="${d.xmajor}"></td>
+											<td th:text="${d.xresult}"></td>
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrqualification/' + ${d.xrow} + '/show', data-target-modal='hrqualificationmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrqualification/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+					</section>
 				</div>
-		</section>
-	</div>
+					
+					<div class="col-md-12">
+						<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
+						<div class="section-header sectionbartoggle">
+							<h1>Experience Details of <span th:text="${hrinfo.xstaff}"></span> </h1>			
+						</div>
+							<div class="section-body" style="overflow-y:scroll;height:200px;">
+								<table class="table table-striped table-bordered normal-table" id="hrexperiencetable" th:fragment="hrexperiencetable">
+									<thead>
+										<tr>
+											<th>SL#</th>
+											<th>Note </th>
+											<th data-nosort="Y" style="text-align: right;">
+												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/new/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-plus"></i></button>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="d, n : ${hrelist}">
+											<td th:text="${n.count}"></td>
+											<td th:text="${d.xnote}"></td>
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/show', data-target-modal='hrexperiencemodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrexperience/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+					</section>
+				</div>
+				
+				<div class="col-md-12">
+					<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
+					<div class="section-header sectionbartoggle">
+						<h1>Promotion Details of <span th:text="${hrinfo.xstaff}"></span> </h1>			
+					</div>
+						<div class="section-body" style="overflow-y:scroll;height:200px;">
+							<table class="table table-striped table-bordered normal-table" id="hrpromotiontable" th:fragment="hrpromotiontable">
+								<thead>
+									<tr>
+										<th>SL#</th>
+										<th>Date </th>
+										<th>Designation </th>
+										<th>Designation Promotion </th>
+										<th>Grade</th>
+										<th>Grade Transfered </th>
+										<th>Status</th>
+										<th>Date Eff</th>
+										<th>Old Gross</th>
+										<th>Note</th>
+										<th data-nosort="Y" style="text-align: right;">
+											<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrpromotion/new/show', data-target-modal='hrpromotionmodal'"><i class="fas fa-plus"></i></button>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="d, n : ${hrplist}">
+										<td th:text="${n.count}"></td>
+										<td th:text="${d.xdate}"></td>
+										<td th:text="${d.xdesignation}"></td>
+										<td th:text="${d.xdesigpromo}"></td>
+										<td th:text="${d.xgrade}"></td>
+										<td th:text="${d.xgradetran}"></td>
+										<td th:text="${d.xnote}"></td>
+										<td th:text="${d.xstatus}"></td>
+										<td th:text="${d.xdateeff}"></td>
+										<td th:text="${d.xgrossold}"></td>
+										<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrpromotion/' + ${d.xrow} + '/show', data-target-modal='hrpromotionmodal'"><i class="fas fa-edit"></i></button>
+											<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrpromotion/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</div>
 	
 	
 				</div>
 			</div>
 		</div>
 		<!-- Modal -->
-		<div id="Surveyordocumentmodal-section"></div>
+		<div id="hrqualificationmodal-section"></div>
+		<div id="hrexperiencemodal-section"></div>
+		<div id="hrpromotionmodal-section"></div>
 		
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
