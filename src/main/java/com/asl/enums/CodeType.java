@@ -32,7 +32,7 @@ public enum CodeType {
 	EMPLOYEE_DEPARTMENT("Employee Department"),
 	EMPLOYEE_DESIGNATION("Employee Designation"),
 	EMPLOYEE_STATUS("Employee Status"),
-	EMPLOYEE_TYPE("Employment Type"),
+	EMPLOYEE_TYPE("Employee Type"),
 	EVENTMEMBER_TYPE("Event Member Type"),
 
 	GRN_STATUS("GRN Status"),
@@ -46,19 +46,31 @@ public enum CodeType {
 	EXPERIENCE_TYPE("Experience type"),
 	//Land Experience Person End
 	
+	DEPARTMENT("Department"),
+	DESIGNATION("Designation"),
+	DISTRICT("District"),
 	//Land Document Start
 	DOCUMENT_TYPE("Document type"),
 	//Land Document End
-		
+	
+	EMPLOYESS_STATUS("Employee Status"),
+	EMPLOYESS_CATEGORY("Employee Category"),
+	
 	ITEM_CATEGORY("Item Category"),
 	ITEM_SUB_CATEGORY("Item Sub-Category"),
+	
+	GRADE("Grade"),
+	
+	HOLIDAY_APPLICABLE("Holiday Applicable"),
 	
 	LAND_UNIT("Land Unit"),
 	LAND_TYPE("Land Type"),
 	LANDITEM_CATEGORY("Item Categories"),
+	LEAVE_PLAN("Leave Plan"),
 	
-	
+	MARITAL_STATUS("Marital Status"),
 	MEMBER_GROUP("Member Group"),
+	
 
 	OBJECT_TYPE("Object Type"),
 	OWNER_TYPE("Owner Type"),
@@ -87,7 +99,8 @@ public enum CodeType {
 	TRANSFER_ORDER_STATUS("Transfer Order Status"),
 	TAG_STATUS("TAG Status"),
 
-	WAREHOUSE("Warehouse");
+	WAREHOUSE("Warehouse"),
+	WEEK_DAY("Week Day");
 
 	private String code;
 

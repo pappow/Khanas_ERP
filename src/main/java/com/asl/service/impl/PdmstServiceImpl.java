@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
 import com.asl.mapper.PdmstMapper;
 import com.asl.service.PdmstService;
@@ -37,6 +38,13 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		pdmst.setZuuserid(getAuditUser());
 		return pdmstMapper.update(pdmst);
 	}
+	
+	@Override
+	public long delete(Pdmst pdmst) {
+		if(pdmst == null) return 0;
+		long count = pdmstMapper.delete(pdmst);
+		return count;
+	}
 
 	@Override
 	public List<Pdmst> getAll(Boolean zactive) {
@@ -56,7 +64,62 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	}
 
 	@Override
-	public List<Pdmst> getAllHRPdmst(Boolean zactive) {
-		return pdmstMapper.getAllPdmst(sessionManager.getBusinessId(), zactive);
+	public List<Pdmst> getAllHRPdmst() {
+		return pdmstMapper.getAllHRPdmst(sessionManager.getBusinessId());
 	}
+
+	@Override
+	public Pdmst findAllPdmst(String xstaff) {
+		if(StringUtils.isBlank(xstaff)) return null;
+		return pdmstMapper.findAllPdmst(xstaff, sessionManager.getBusinessId());
+	}
+
+	//for HRExperience
+	
+	@Transactional
+	@Override
+	public long savePdexperience(Pdexperience pdex) {
+		if (pdex == null)
+			return 0;
+		pdex.setZid(sessionManager.getBusinessId());
+		pdex.setZauserid(getAuditUser());
+		return pdmstMapper.savePdexperience(pdex);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdexperience(Pdexperience pdex) {
+		if (pdex == null)
+			return 0;
+		pdex.setZid(sessionManager.getBusinessId());
+		pdex.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdexperience(pdex);
+	}
+
+	@Override
+	public long deletePdexperience(Pdexperience pdex) {
+		if(pdex == null) return 0;
+		long count = pdmstMapper.deletePdexperience(pdex);
+		return count;
+	}
+
+	@Override
+	public List<Pdexperience> getAllPdexperience() {
+		return pdmstMapper.getAllPdexperience(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdexperience> findByPdexperience(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdexperience(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdexperience findPdexperienceByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdexperienceByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+
+	
 }
