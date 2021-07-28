@@ -31,10 +31,10 @@ public class RM0403ServiceImpl extends AbstractReportService {
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		options.add(new DropdownOption("Open", "Open"));
+		options.add(new DropdownOption("Confirmed", "Confirmed"));		
 		
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
@@ -50,7 +50,7 @@ public class RM0403ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
 		
 		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Do Status", options, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Status", options, "", false));
 		
 		// DO number
 		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Do Number", "search/report/opdo/xdornum", "", false));
