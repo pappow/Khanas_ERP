@@ -112,7 +112,6 @@
 															<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 															<div class="col-md-8">
 																<select class="form-control" th:field="*{xwh}">
-																	<option value=""> -- Select -- </option>
 																	<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}"></option>
 																</select>
 															</div>
