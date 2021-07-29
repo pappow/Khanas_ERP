@@ -231,7 +231,7 @@
 											<th>Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${pocrnheader.xstatuscrn eq 'Open'}">
 												Action
 												<!-- <button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurements/purchasereturn/} + ${pocrnheader.xcrnnum} + '/pocrndetail/new/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-plus"></i></button> -->
 											</th>
@@ -248,7 +248,7 @@
 											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xlong}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${pocrnheader.xstatuscrn eq 'Open'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/procurements/purchasereturn/} + ${pocrnheader.xcrnnum} + '/pocrndetail/' + ${d.xrow} + '/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/procurements/purchasereturn/} + ${pocrnheader.xcrnnum} + '/pocrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>

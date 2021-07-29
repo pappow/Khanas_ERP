@@ -34,5 +34,5 @@ public interface OpcrnMapper {
 	// Procedure Calls
 	public void procConfirmCRN(String zid, String user, String xcrnnum, String p_seq);
 
-	public void procTransferOPtoAR(String zid, String user, String xdocnum, String p_screen, String p_seq);
+	public void procTransferOPtoAR(String zid, String user, String xdornum, String p_screen, String p_seq);
 }

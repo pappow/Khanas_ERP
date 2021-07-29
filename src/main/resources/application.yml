@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active: dev
+    active: khanas
   servlet: 
     multipart: 
       max-file-size: 15MB

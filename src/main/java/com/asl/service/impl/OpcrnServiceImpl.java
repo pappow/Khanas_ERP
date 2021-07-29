@@ -15,11 +15,13 @@ import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.OpcrnMapper;
 import com.asl.model.ResponseHelper;
 import com.asl.model.ServiceException;
 import com.asl.service.OpcrnService;
 import com.asl.service.OpdoService;
+import com.asl.service.XtrnService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,7 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 
 	@Autowired private OpcrnMapper opcrnMapper;
 	@Autowired private OpdoService opdoService;
+	@Autowired private XtrnService xtrnService;
 
 	@Transactional
 	@Override
@@ -130,8 +133,8 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 	}
 
 	@Override
-	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq) {
-		opcrnMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdocnum, p_screen, p_seq);
+	public void procTransferOPtoAR(String xdornum, String p_screen, String p_seq) {
+		opcrnMapper.procTransferOPtoAR(sessionManager.getBusinessId(), sessionManager.getLoggedInUserDetails().getUsername(), xdornum, p_screen, p_seq);
 	}
 
 	@Transactional
@@ -200,6 +203,29 @@ public class OpcrnServiceImpl extends AbstractGenericService implements OpcrnSer
 		return responseHelper.getResponse();
 	}
 
-	
+	@Transactional
+	@Override
+	public void confirmCRN(Opcrnheader opcrnHeader) throws ServiceException {
+		String p_seq;
+		if (!"Confirmed".equalsIgnoreCase(opcrnHeader.getXstatuscrn())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			procConfirmCRN(opcrnHeader.getXcrnnum(), p_seq);
+			// Error check for procConfirmCRN
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				throw new ServiceException(em);
+			}
+		}
+		if (!"Confirmed".equalsIgnoreCase(opcrnHeader.getXstatusar())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			procTransferOPtoAR(opcrnHeader.getXcrnnum(), "opcrnheader", p_seq);
+			// Error check for procTransferPRtoAP
+			String em = getProcedureErrorMessages(p_seq);
+			if(StringUtils.isNotBlank(em)) {
+				throw new ServiceException(em);
+			}
+		}
+	}
+
 
 }

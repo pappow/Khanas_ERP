@@ -25,19 +25,14 @@ import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
 import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
-import com.asl.service.CacusService;
 import com.asl.service.OpdoService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class OpdoServiceImpl extends AbstractGenericService implements OpdoService {
 
 	@Autowired private OpdoMapper opdoMapper;
 	@Autowired private OpordMapper opordMapper;
 	@Autowired private CaitemMapper caitemMapper;
-	@Autowired private CacusService cacusService;
 
 	@Transactional
 	@Override
@@ -307,7 +302,6 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				salesItem.setXunitsel(salesOrderItem.getXunit());
 				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
 				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
-				//salesItem.setXlineamt(salesItem.getXlineamt().add(salesItem.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 				salesItem.setXcatitem(salesOrderItem.getXcatitem());
 				salesItem.setXgitem(salesOrderItem.getXgitem());
 				salesItem.setXdorrow(salesOrderItem.getXrow());
@@ -315,17 +309,6 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 				long salesItemCount = saveDetail(salesItem);
 				if(salesItemCount == 0) continue;
-
-				// Add item for delivery chalan also
-//				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(deliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
-//				if(chItem != null) {
-//					chItem.setXqtyord(chItem.getXqtyord().add(salesItem.getXqtyord()));
-//					opdoMapper.updateOpdoDetail(chItem);
-//				} else {
-//					salesItem.setXdornum(deliveryChalan.getXdornum());
-//					opdoMapper.saveOpdoDetail(salesItem);
-//				}
-
 			}
 
 		}

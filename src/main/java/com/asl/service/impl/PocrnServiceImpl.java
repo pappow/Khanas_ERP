@@ -15,11 +15,13 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
+import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.PocrnMapper;
 import com.asl.model.ResponseHelper;
 import com.asl.model.ServiceException;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
+import com.asl.service.XtrnService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,7 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 
 	@Autowired private PocrnMapper pocrnMapper;
 	@Autowired private PogrnService pogrnService;
+	@Autowired private XtrnService xtrnService;
 
 	@Transactional
 	@Override
@@ -215,5 +218,36 @@ public class PocrnServiceImpl extends AbstractGenericService implements PocrnSer
 		return responseHelper.getResponse();
 	}
 
-	
+	@Transactional
+	@Override
+	public void confirmCRN(Pocrnheader pocrnHeader) throws ServiceException {
+		String p_seq;
+		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			procConfirmCRN(pocrnHeader.getXcrnnum(), p_seq);
+			// Error check for procConfirmCRN
+			String em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				throw new ServiceException(em);
+			}
+
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			procIssuePricing(pocrnHeader.getXgrnnum(), pocrnHeader.getXwh(), p_seq);
+			// Error check for procIssuePricing
+			em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				throw new ServiceException(em);
+			}
+
+		}
+		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			procTransferPRtoAP(pocrnHeader.getXcrnnum(), p_seq);
+			// Error check for procTransferPRtoAP
+			String em = getProcedureErrorMessages(p_seq);
+			if (StringUtils.isNotBlank(em)) {
+				throw new ServiceException(em);
+			}
+		}
+	}
 }

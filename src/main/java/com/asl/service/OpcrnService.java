@@ -45,4 +45,5 @@ public interface OpcrnService {
 
 	public void procTransferOPtoAR(String xdocnum, String p_screen, String p_seq);
 
+	public void confirmCRN(Opcrnheader opcrnHeader) throws ServiceException;
 }

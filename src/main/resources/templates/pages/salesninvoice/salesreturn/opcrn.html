@@ -139,6 +139,7 @@
 															<select class="form-control" th:field="*{xpaymenttype}">
 																<option value="">-- Select --</option>
 																<option value="Cash">Cash</option>
+																<option value="Cheque">Cheque</option>
 																<option value="Other">Other</option>
 															</select>
 														</div>
@@ -229,7 +230,7 @@
 											<th>Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th data-nosort="Y" style="text-align: right;">
+											<th data-nosort="Y" style="text-align: right;" th:if="${opcrnheader.xstatuscrn eq 'Open'}">
 												Action
 												<!-- <button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/new/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-plus"></i></button> -->
 											</th>
@@ -246,7 +247,7 @@
 											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xlong}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${opcrnheader.xstatuscrn eq 'Open'}">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>

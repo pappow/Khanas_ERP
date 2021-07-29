@@ -87,6 +87,12 @@
 											<a th:href="@{/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')">
+										<td><a th:href="@{/system/aslprocerror}">PROC Errors</a></td>
+										<td>
+											<a th:href="@{/system/aslprocerror}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 
 
 									<tr>

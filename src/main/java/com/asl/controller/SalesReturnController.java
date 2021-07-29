@@ -22,15 +22,15 @@ import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
-import com.asl.entity.Pocrndetail;
-import com.asl.entity.Pocrnheader;
-import com.asl.entity.PogrnDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.OpcrnService;
 import com.asl.service.OpdoService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/salesninvoice/salesreturn")
 public class SalesReturnController extends ASLAbstractController {
@@ -105,6 +105,11 @@ public class SalesReturnController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		// HIDDEN DATA
+		opcrnHeader.setXstatusar("Open");
+		opcrnHeader.setXstatusjv("Open");
+		opcrnHeader.setXordernum(opcrnHeader.getXdornum());
+
 		// if existing record
 		if (StringUtils.isNotBlank(opcrnHeader.getXcrnnum())) {
 			Opcrnheader exist = opcrnService.findOpcrnHeaderByXcrnnum(opcrnHeader.getXcrnnum());
@@ -115,7 +120,7 @@ public class SalesReturnController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Sales return updated successfully");
-			responseHelper.setRedirectUrl("/salesninvoice/salesreturn" + exist.getXcrnnum());
+			responseHelper.setRedirectUrl("/salesninvoice/salesreturn/" + exist.getXcrnnum());
 			return responseHelper.getResponse();
 		}
 
@@ -292,53 +297,40 @@ public class SalesReturnController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/confirmsrn/{xcrnnum}")
+	@PostMapping("/confirmsrn/{xcrnnum}")
 	public @ResponseBody Map<String, Object> confirmgrn(@PathVariable String xcrnnum) {
-		if (StringUtils.isBlank(xcrnnum)) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		// Validate
-
 		// Get PocrnHeader record by Xcrnnum
 		Opcrnheader opcrnHeader = opcrnService.findOpcrnHeaderByXcrnnum(xcrnnum);
-		List<Opcrndetail> opcrnHeaderList = opcrnService.findOpcrnDetailByXcrnnum(xcrnnum);
+		if(opcrnHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Sales return not found in this system");
+			return responseHelper.getResponse();
+		}
 
-		if(StringUtils.isBlank(opcrnHeader.getXdornum())) {
-			responseHelper.setErrorStatusAndMessage("Please select a invoice no.!");
+		// validate
+		if (StringUtils.isBlank(opcrnHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Customer required");
 			return responseHelper.getResponse();
 		}
 		if (!"Open".equalsIgnoreCase(opcrnHeader.getXstatuscrn())) {
-			responseHelper.setErrorStatusAndMessage("SRN already confirmed");
+			responseHelper.setErrorStatusAndMessage("Sales Return already confirmed");
 			return responseHelper.getResponse();
-		}
-		if (opcrnHeaderList.size() == 0) {
-			responseHelper.setErrorStatusAndMessage("Please add details!");
-			return responseHelper.getResponse();
-		}
-		String p_seq;
-		if (!"Confirmed".equalsIgnoreCase(opcrnHeader.getXstatuscrn())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			opcrnService.procConfirmCRN(xcrnnum, p_seq);
-			// Error check for procConfirmCRN
-			String em = getProcedureErrorMessages(p_seq);
-			if(StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
-		}
-		if (!"Confirmed".equalsIgnoreCase(opcrnHeader.getXstatusar())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			opcrnService.procTransferOPtoAR(opcrnHeader.getXdornum(), "opdoheader", p_seq);
-			// Error check for procTransferPRtoAP
-			String em = getProcedureErrorMessages(p_seq);
-			if(StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
 		}
 
-		responseHelper.setSuccessStatusAndMessage("SRN Confirmed successfully");
+		List<Opcrndetail> opcrnHeaderList = opcrnService.findOpcrnDetailByXcrnnum(xcrnnum);
+		if(opcrnHeaderList == null || opcrnHeaderList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Sales Return has no item details");
+			return responseHelper.getResponse();
+		}
+
+		try {
+			opcrnService.confirmCRN(opcrnHeader);
+		} catch (Exception e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Sales Return Confirmed successfully");
 		responseHelper.setRedirectUrl("/salesninvoice/salesreturn/" + xcrnnum);
 		return responseHelper.getResponse();
 	}

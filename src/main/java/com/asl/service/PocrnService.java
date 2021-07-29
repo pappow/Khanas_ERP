@@ -49,4 +49,6 @@ public interface PocrnService {
 	
 	public List<Pocrnheader> findPocrnXstatuscrn(String xstatuscrn);
 
+	public void confirmCRN(Pocrnheader pocrnHeader) throws ServiceException;
+
 }

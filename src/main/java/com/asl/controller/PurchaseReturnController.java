@@ -25,11 +25,15 @@ import com.asl.entity.PogrnHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ServiceException;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/procurements/purchasereturn")
 public class PurchaseReturnController extends ASLAbstractController {
@@ -97,6 +101,10 @@ public class PurchaseReturnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Supplier not found from this GRN");
 			return responseHelper.getResponse();
 		}
+
+		// HIDDEN DATA
+		pocrnHeader.setXstatusap("Open");
+		pocrnHeader.setXstatusjv("Open");
 
 		// if existing record
 		if (StringUtils.isNotBlank(pocrnHeader.getXcrnnum())) {
@@ -298,7 +306,7 @@ public class PurchaseReturnController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
-		if ("Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
+		if (!"Open".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
 			responseHelper.setErrorStatusAndMessage("Purchase Return already confirmed");
 			return responseHelper.getResponse();
 		}
@@ -309,36 +317,12 @@ public class PurchaseReturnController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		String p_seq;
-		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatuscrn())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pocrnService.procConfirmCRN(xcrnnum, p_seq);
-			// Error check for procConfirmCRN
-			String em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
-
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pocrnService.procIssuePricing(pocrnHeader.getXgrnnum(), pocrnHeader.getXwh(), p_seq);
-			// Error check for procIssuePricing
-			em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
-
-		}
-		if (!"Confirmed".equalsIgnoreCase(pocrnHeader.getXstatusap())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			pocrnService.procTransferPRtoAP(xcrnnum, p_seq);
-			// Error check for procTransferPRtoAP
-			String em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
-				responseHelper.setErrorStatusAndMessage(em);
-				return responseHelper.getResponse();
-			}
+		try {
+			pocrnService.confirmCRN(pocrnHeader);
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
+			return responseHelper.getResponse();
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Purchase return confirmed successfully");
