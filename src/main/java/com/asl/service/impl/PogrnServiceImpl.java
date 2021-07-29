@@ -172,8 +172,11 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 		return pogrnMapper.getTotalGRNQtyOfConfirmedGRNDetail(xdocrow, xpornum, sessionManager.getBusinessId());
 	}
 
-	
-	
-	
+	@Override
+	public List<PogrnHeader> searchGrn(String hint, String xstatusgrn) {
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		return pogrnMapper.searchGrn(hint.toUpperCase(), xstatusgrn, sessionManager.getBusinessId());
+	}
+
 
 }

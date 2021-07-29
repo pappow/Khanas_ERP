@@ -50,7 +50,7 @@ public enum TransactionCodeType {
 
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
-	PRN_NUMBER("PRN Number", "PR--", null),
+	PURCHASE_RETURN("Purchase Return", "PR--", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
 	PROFILE_LINE("Profile Line", "PRL-", null),
 	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null),
@@ -63,7 +63,7 @@ public enum TransactionCodeType {
 	STOCK_TAKE("Stock Take", "TAG-", null),
 	SALES_ORDER("Sales Order", "SO--", TransactionCodes.SALES_ORDER),
 	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),
-	SRN_RETURN("Sales Return", "SR--", null),
+	SALES_RETURN("Sales Return", "SR--", null),
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 

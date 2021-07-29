@@ -63,4 +63,6 @@ public interface PoordService {
 	public Map<String, Object> createPurchaseOrderToGRN(ResponseHelper responseHelper, String xpornum) throws ServiceException;
 
 	public List<PoordDetail> searchPurchaseOrderAvailableItem(String xpornum, String xitem);
+
+	public Map<String, Object> confirmRequisitionsOfBranch(ResponseHelper responseHelper, String xpornum, String branchzid) throws ServiceException;
 }

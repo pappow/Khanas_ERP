@@ -53,4 +53,6 @@ public interface PogrnService {
 	public long deletePogrnheader(String xgrnnum);
 
 	public BigDecimal getTotalGRNQtyOfConfirmedGRNDetail(int xdocrow, String xpornum);
+
+	public List<PogrnHeader> searchGrn(String hint, String xstatusgrn);
 }

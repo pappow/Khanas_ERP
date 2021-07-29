@@ -74,6 +74,7 @@
 
 	<select id="getDetailListByXpornumAndBranchZid" resultType="PoordDetail">
 		SELECT 
+			distinct
 			poorddetail.xpornum,
 			poorddetail.xrow,
 			poorddetail.xitem,
@@ -84,17 +85,17 @@
 			poorddetail.xrate,
 			poorddetail.zactive,
 			caitem.xcatitem,
-			caitem.xgitem
+			caitem.xgitem,
+			xc.seqn
 		FROM 
 			poorddetail 
-			JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{zid}
+			LEFT JOIN caitem on caitem.xitem=poorddetail.xitem AND caitem.zid=#{zid} AND caitem.zactive='1'
 			LEFT JOIN xcodes xc ON xc.xcode = caitem.xcatitem and xc.zid = caitem.zid and xc.zactive='1'
 		WHERE 
 			poorddetail.xpornum=#{xpornum}
 			AND poorddetail.zid=#{branchzid}
-			AND poorddetail.zactive='1'
 		ORDER BY
-			xc.seqn, caitem.xcatitem, caitem.xitem
+			xc.seqn, caitem.xcatitem, poorddetail.xitem
 	</select> 
 
 </mapper>

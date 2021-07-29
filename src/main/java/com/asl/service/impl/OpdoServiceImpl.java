@@ -2,16 +2,19 @@ package com.asl.service.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
@@ -22,19 +25,14 @@ import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
 import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
-import com.asl.service.CacusService;
 import com.asl.service.OpdoService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class OpdoServiceImpl extends AbstractGenericService implements OpdoService {
 
 	@Autowired private OpdoMapper opdoMapper;
 	@Autowired private OpordMapper opordMapper;
 	@Autowired private CaitemMapper caitemMapper;
-	@Autowired private CacusService cacusService;
 
 	@Transactional
 	@Override
@@ -120,6 +118,39 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	public List<Opdodetail> findOpdoDetailByXdornum(String xdornum) {
 		if(StringUtils.isBlank(xdornum)) return Collections.emptyList();
 		return opdoMapper.findOpdoDetailByXdornum(xdornum, sessionManager.getBusinessId(), getBusinessId());
+	}
+
+	@Override
+	public List<Opdodetail> findAssignedOpdoDetailByChalan(String chalan) {
+		if(StringUtils.isBlank(chalan)) return Collections.emptyList();
+
+		List<Opdoheader> invoices = findAllInvoiceOrderByChalan(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode(),TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode(), chalan);
+		if(invoices == null || invoices.isEmpty()) return Collections.emptyList();
+
+		List<Opdodetail> finaldetails = new ArrayList<>();
+
+		Map<String, Opdodetail> map = new HashMap<>();
+		for(Opdoheader invoice : invoices) {
+			List<Opdodetail> details = findOpdoDetailByXdornum(invoice.getXdornum());
+			if(details == null || details.isEmpty()) continue;
+
+			for(Opdodetail detail : details) {
+				if(map.get(detail.getXitem()) != null) {
+					Opdodetail d = map.get(detail.getXitem());
+					d.setXqtyord(d.getXqtyord().add(detail.getXqtyord()));
+					map.put(detail.getXitem(), d);
+				} else {
+					map.put(detail.getXitem(), detail);
+				}
+			}
+		}
+
+		for(Map.Entry<String, Opdodetail> m : map.entrySet()) {
+			finaldetails.add(m.getValue());
+		}
+
+		finaldetails.sort(Comparator.comparing(Opdodetail::getXitem));
+		return finaldetails;
 	}
 
 	@Override
@@ -221,10 +252,6 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		long deliveryChalanCount = opdoMapper.saveOpdoHeader(deliveryChalan);
 		if(deliveryChalanCount == 0) return 0;
 
-		// Now fetch deliveryChalan again which is saved now by usning production chalan reference
-//		Opdoheader savedDeliveryChalan = opdoMapper.findPoordHeaderByXordernum(productionChalan.getXordernum(), sessionManager.getBusinessId());
-//		if(savedDeliveryChalan == null) return 0;
-
 		// Create sales from sales order of production chalan first
 		int salesSavedCount = 0;
 		for(Opordheader salesOrder : salesOrdersOfProductionChalan) {
@@ -254,10 +281,10 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			salesSavedCount++;
 
 			// find recently saved sales header
-			Opdoheader savedSales = opdoMapper.findPoordHeaderByXordernumAndRequisitionnumber(salesOrder.getXordernum(), salesOrder.getXpornum(), sessionManager.getBusinessId());
-			if(savedSales == null) continue;
+//			Opdoheader savedSales = opdoMapper.findPoordHeaderByXordernumAndRequisitionnumber(salesOrder.getXordernum(), salesOrder.getXpornum(), sessionManager.getBusinessId());
+//			if(savedSales == null) continue;
 
-			salesOrder.setXdornum(savedSales.getXdornum()); // now set sales reference back to sales order
+			salesOrder.setXdornum(sales.getXdornum()); // now set sales reference back to sales order
 			opordMapper.updateOpordHeader(salesOrder); // updated sales order with sales reference
 
 			// now prepare item details from sales order to sales
@@ -269,13 +296,12 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				if(caitem == null) continue;
 
 				Opdodetail salesItem = new Opdodetail();
-				salesItem.setXdornum(savedSales.getXdornum());  // set sales reference for its items
+				salesItem.setXdornum(sales.getXdornum());  // set sales reference for its items
 				salesItem.setXitem(salesOrderItem.getXitem());
 				salesItem.setXqtyord(salesOrderItem.getXqtyord() != null ? salesOrderItem.getXqtyord() : BigDecimal.ZERO);
 				salesItem.setXunitsel(salesOrderItem.getXunit());
 				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
 				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
-				salesItem.setXlineamt(salesItem.getXlineamt().add(salesItem.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 				salesItem.setXcatitem(salesOrderItem.getXcatitem());
 				salesItem.setXgitem(salesOrderItem.getXgitem());
 				salesItem.setXdorrow(salesOrderItem.getXrow());
@@ -283,17 +309,6 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 				long salesItemCount = saveDetail(salesItem);
 				if(salesItemCount == 0) continue;
-
-				// Add item for delivery chalan also
-				Opdodetail chItem = opdoMapper.findOpdoDetailByXdornumAndXitem(deliveryChalan.getXdornum(), salesOrderItem.getXitem(), sessionManager.getBusinessId());
-				if(chItem != null) {
-					chItem.setXqtyord(chItem.getXqtyord().add(salesItem.getXqtyord()));
-					opdoMapper.updateOpdoDetail(chItem);
-				} else {
-					salesItem.setXdornum(deliveryChalan.getXdornum());
-					opdoMapper.saveOpdoDetail(salesItem);
-				}
-
 			}
 
 		}

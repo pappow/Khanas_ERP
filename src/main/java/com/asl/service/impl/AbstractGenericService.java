@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.asl.config.AppConfig;
 import com.asl.entity.Arhed;
+import com.asl.entity.ProcErrorLog;
 import com.asl.entity.Zbusiness;
 import com.asl.service.ASLSessionManager;
+import com.asl.service.ProcErrorLogService;
 
 /**
  * @author Zubayer Ahamed
@@ -23,6 +25,7 @@ public abstract class AbstractGenericService  {
 	protected static final String ERROR = "Error is {}, {}";
 	@Autowired protected ASLSessionManager sessionManager;
 	@Autowired protected AppConfig appConfig;
+	@Autowired protected ProcErrorLogService errorService;
 
 	/**
 	 * Generate slug name
@@ -49,5 +52,17 @@ public abstract class AbstractGenericService  {
 	public List<Arhed> getAllAdars() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	protected String getProcedureErrorMessages(String errorCode) {
+		List<ProcErrorLog> errors = errorService.findByAction(errorCode);
+
+		if(errors == null || errors.isEmpty()) return null;
+
+		StringBuilder message = new StringBuilder();
+		errors.stream().forEach(e -> {
+			message.append(e.getOsqlCode() + " - " + e.getErrorMessage());
+		});
+		return message.toString();
 	}
 }

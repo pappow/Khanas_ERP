@@ -87,6 +87,12 @@
 											<a th:href="@{/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')">
+										<td><a th:href="@{/system/aslprocerror}">PROC Errors</a></td>
+										<td>
+											<a th:href="@{/system/aslprocerror}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 
 
 									<tr>
@@ -145,6 +151,13 @@
 											<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr>
+										<td><a th:href="@{/procurements/purchasereturn}">Purchase Return</a></td>
+										<td>
+											<a th:href="@{/procurements/purchasereturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+
 
 									<tr>
 										<td colspan="2">Sales & Invoicing</td>
@@ -159,6 +172,12 @@
 										<td><a th:href="@{/salesninvoice/salesandinvoice}">Invoice</a></td>
 										<td>
 											<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr>
+										<td><a th:href="@{/salesninvoice/salesreturn}">Sales Return</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/salesreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
 

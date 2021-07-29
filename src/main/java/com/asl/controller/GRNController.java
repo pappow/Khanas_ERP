@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
-import com.asl.entity.Caitem;
 import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
@@ -40,7 +39,6 @@ import com.asl.model.report.GRNOrder;
 import com.asl.model.report.GrnReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.service.CacusService;
-import com.asl.service.CaitemService;
 import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
 import com.asl.service.PoordService;
@@ -60,7 +58,6 @@ public class GRNController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private CacusService cacusService;
 	@Autowired private PoordService poordService;
-	@Autowired private CaitemService caitemService;
 
 	@GetMapping
 	public String loadGRNPage(Model model) {
@@ -174,7 +171,7 @@ public class GRNController extends ASLAbstractController {
 			model.addAttribute("pogrndetail", detail);
 		} else {
 			PogrnDetail detail = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
-			detail.setPrevqty(detail.getXqtygrn());
+			detail.setPrevqty(detail.getXqtygrn() == null ? BigDecimal.ZERO : detail.getXqtygrn());
 			model.addAttribute("pogrndetail", detail);
 		}
 
@@ -236,15 +233,8 @@ public class GRNController extends ASLAbstractController {
 		// first get item vat rate
 		// split item from other data
 		pogrnDetail.setXitem(pogrnDetail.getXitem().split("\\|")[0]);
-		Caitem caitem = caitemService.findByXitem(pogrnDetail.getXitem());
-		if(caitem == null) {
-			responseHelper.setErrorStatusAndMessage("Item not found");
-			return responseHelper.getResponse();
-		}
-		if(caitem.getXvatrate() == null) caitem.setXvatrate(BigDecimal.ZERO);
-
 		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
-		pogrnDetail.setXlineamt(pogrnDetail.getXlineamt().add((pogrnDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
+		//pogrnDetail.setXlineamt(pogrnDetail.getXlineamt().add((pogrnDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
@@ -431,12 +421,12 @@ public class GRNController extends ASLAbstractController {
 
 		Pocrnheader pocrnHeader = new Pocrnheader();
 		BeanUtils.copyProperties(pogrnHeader, pocrnHeader, "xdate", "xtype", "xtrngrn", "xnote");
-		pocrnHeader.setXtype(TransactionCodeType.PRN_NUMBER.getCode());
-		pocrnHeader.setXtrncrn(TransactionCodeType.PRN_NUMBER.getdefaultCode());
+//		pocrnHeader.setXtype(TransactionCodeType.PURCHASE_RETURN.getCode());
+//		pocrnHeader.setXtrncrn(TransactionCodeType.PURCHASE_RETURN.getdefaultCode());
 		pocrnHeader.setXgrnnum(xgrnnum);
 		pocrnHeader.setXstatuscrn("Open");
 		pocrnHeader.setXdate(new Date());
-		pocrnHeader.setXsup(pogrnHeader.getXcus());
+//		pocrnHeader.setXsup(pogrnHeader.getXcus());
 		// pocrnHeader.setXtypetrn("??");
 
 		long count = pocrnService.save(pocrnHeader);

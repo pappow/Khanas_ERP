@@ -19,9 +19,9 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "pocrnheader")
 @IdClass(PocrnheaderPK.class)
-@EqualsAndHashCode(of = { "zid","xcrnnum" }, callSuper = false)
-public class Pocrnheader extends AbstractModel<String>{
-	
+@EqualsAndHashCode(of = { "zid", "xcrnnum" }, callSuper = false)
+public class Pocrnheader extends AbstractModel<String> {
+
 	private static final long serialVersionUID = -5765658972092206991L;
 
 	@Id
@@ -33,57 +33,55 @@ public class Pocrnheader extends AbstractModel<String>{
 	@Basic(optional = false)
 	@Column(name = "xcrnnum")
 	private String xcrnnum;
-	
+
 	@Column(name = "xgrnnum")
 	private String xgrnnum;
-	
+
 	@Column(name = "xdate")
 	@Temporal(TemporalType.DATE)
 	private Date xdate;
-	
+
 	@Column(name = "xvoucher")
 	private String xvoucher;
-	
+
 	@Column(name = "xcus")
 	private String xcus;
-	
-	@Column(name = "xsup")
-	private String xsup;
-	
+
 	@Column(name = "xstatusgrn")
 	private String xstatusgrn;
-	
+
 	@Column(name = "xstatuscrn")
 	private String xstatuscrn;
-	
+
 	@Column(name = "xwh")
 	private String xwh;
-	
+
 	@Column(name = "xref")
 	private String xref;
-	
+
 	@Column(name = "xstatusap")
 	private String xstatusap;
-	
+
 	@Column(name = "xpaymenttype")
 	private String xpaymenttype;
-	
+
 	@Column(name = "xstatusjv")
 	private String xstatusjv;
-	
+
 	@Column(name = "xnote")
 	private String xnote;
-	
+
 	@Column(name = "xtype")
 	private String xtype;
-	
+
 	@Column(name = "xdategl")
 	@Temporal(TemporalType.DATE)
 	private Date xdategl;
-	
+
 	@Column(name = "xtypetrn")
 	private String xtypetrn;
-	
+
 	@Transient
-	private String xtrncrn;
+	private String xorg;
+
 }

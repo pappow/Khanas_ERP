@@ -29,6 +29,7 @@ import com.asl.entity.Opdoheader;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
+import com.asl.entity.PogrnHeader;
 import com.asl.entity.PoordDetail;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.SearchSuggestResult;
@@ -84,6 +85,15 @@ public class SearchSuggestController extends ASLAbstractController {
 	@Autowired private AcmstService acmstServicee;
 	@Autowired private LandMemberInfoService landMemberInfoService;
 	@Autowired private CabankService cabankService;
+
+	@GetMapping("/confirmedgrn/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getAllConfirmedGRN(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<SearchSuggestResult> list = new ArrayList<>();
+		List<PogrnHeader> grns = pogrnService.searchGrn(hint, "Confirmed");
+		grns.stream().forEach(g -> list.add(new SearchSuggestResult(g.getXgrnnum(), g.getXgrnnum())));
+		return list;
+	}
 
 	@GetMapping("/poordcaitem/{xpornum}/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getPurchaseOrderAvailableItem(@PathVariable String xpornum, @PathVariable String hint){

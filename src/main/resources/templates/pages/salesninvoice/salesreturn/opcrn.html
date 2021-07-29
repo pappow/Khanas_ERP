@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Sales Return</title>
-<meta th:remove="tag" th:include="commons :: common-meta" />
-<meta th:remove="tag" th:include="commons :: common-css" />
-<meta th:remove="tag" th:include="commons :: common-js" />
-</head>
-<body>
+	<head>
+		<title>Sales Return</title>
+		<meta th:remove="tag" th:include="commons :: common-meta" />
+		<meta th:remove="tag" th:include="commons :: common-css" />
+		<meta th:remove="tag" th:include="commons :: common-js" />
+	</head>
+	<body>
 	<!-- Header section -->
 	<div class="header-section" th:include="commons :: header-section"></div>
-	
+
 		<!-- Menu section -->
 		<div class="navbar-inverse menu-section">
 			<div class="container-fluid">
@@ -24,9 +24,8 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li><a th:href="@{/salesninvoice}">Sales & Invoice</a></li>
-										<li class="active"><a th:href="@{/salesninvoice/returnsales}">Sales Return</a></li>
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/salesninvoice/salesreturn}">Sales Return</a></li>
 									</div>
 									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
@@ -36,99 +35,53 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Content section -->
 		<div>
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12 content-area">
+						<div class="row">
+							<h1 class="text-center">Sales Return</h1>
+						</div>
 
 						<div class="row">
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle">
-										<h1>Sales Return</h1>
-									</div>
+									<div class="section-header sectionbartoggle"></div>
 									<div class="form-action-button">
-										<a th:href="@{/salesninvoice/returnsales}" class="btn btn-sm btn-default"><i class="fas fa-plus"></i> New</a>
-										<a th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}" th:href="@{/salesninvoice/returnsales}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
-										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" th:href="@{/salesninvoice/returnsales/confirmsrn/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-success confirmsrn-btn-link"><i class="fas fa-tick-alt"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == true}" th:href="@{/salesninvoice/returnsales/archive/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.zactive == false}" th:href="@{/salesninvoice/returnsales/restore/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
-										<!-- Form Pagination -->
-										<!-- <a th:href="@{/mastersetup/xcodes/paging/jump/top}" class="btn btn-sm btn-warning"><i class="fas fa-angle-double-up"></i> Top</a>
-										<a th:href="@{/formpaging/step/prev/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info"><i class="fas fa-angle-double-left"></i> Previous</a>
-										<a th:href="@{/formpaging/step/next/} + ${#strings.isEmpty(xcodes.xcode) ? 'start' : xcodes.xcode} + '?table=Xcodes&column=xcode&redirectUrl=/mastersetup/xcodes'" class="btn btn-sm btn-info">Next <i class="fas fa-angle-double-right"></i></a>
-										<a th:href="@{/mastersetup/xcodes/paging/jump/bottom}" class="btn btn-sm btn-warning">Bottom <i class="fas fa-angle-double-down"></i></a> -->
+										<a th:href="@{/salesninvoice/salesreturn}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}" th:href="@{/salesninvoice/salesreturn}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
+										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.xstatuscrn eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
+										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.xstatuscrn eq 'Open'}" th:href="@{/salesninvoice/salesreturn/archive/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(opcrnheader.xcrnnum) and opcrnheader.xstatuscrn eq 'Open'}" th:href="@{/salesninvoice/salesreturn/confirmsrn/} + ${opcrnheader.xcrnnum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-clipboard-check"></i> Confirm</a>
 									</div>
 									<div class="section-body section-border">
-										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/returnsales/save}" th:object="${opcrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(xcodes.copyId)}" id="copyId" name= "copyId"/>  -->
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(poordheader.xpornum)}" th:field="*{xpornum}"/> -->
-											<input type="hidden" th:field="*{xtype}"/>
-											<!-- <input type="hidden" th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}" class="form-control" th:field="*{xgrnnum}"> -->
-											<input type="hidden" th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}" class="form-control" th:field="*{xcrnnum}">
-											<!-- <input type="hidden" class="form-control" th:field="*{xtotamt}"> -->
+										<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/salesreturn/save}" th:object="${opcrnheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<input type="hidden" th:field="*{xtypetrn}"/>
+
 											<div class="row">
 												<div class="col-md-6">
-
 													<div class="form-group" th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}">
-														<label class="control-label col-md-4" for="xtrn">CRN Prefix : </label>
+														<label class="control-label col-md-4" for="xtype">Return Code</label>
 														<div class="col-md-4">
-															<select class="form-control" th:field="*{xtrn}">
+															<select class="form-control" th:field="*{xtype}">
 																<option th:each="prefix : ${crnprefix}" th:value="${prefix.xtrn}" th:text="${prefix.xtrn}"></option>
 															</select>
 														</div>
 													</div>
-													
+
 													<div class="form-group" th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}">
-														<label class="control-label col-md-4" for="xcrnnum">CRN Number : </label>
+														<label class="control-label col-md-4" for="xcrnnum">Return Number</label>
 														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xcrnnum}" disabled="disabled">
+															<input type="hidden" class="form-control" th:field="*{xcrnnum}">
+															<input type="text" class="form-control" th:value="*{xcrnnum}" disabled="disabled">
 														</div>
 													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xdornum">Invoice Number : </label>
-														<div class="col-sm-8">
-															<input 	type="text" 
-																	class="form-control searchsuggest" 
-																	placeholder="Search..." 
-																	th:value="${opcrnheader.xdornum}" 
-																	th:attr="search-url='search/confirmedinvoice'"/>
-															<input type="hidden" id="search-val" th:field="*{xdornum}"/>
-															<input type="hidden" id="search-des" value=""/>
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xcus">Customer No : </label>
-														<div class="col-sm-6">
-															<input type="hidden" th:field="*{xcus}">											
-															<input type="text" class="form-control" th:value="${opcrnheader.xcus}" disabled/>
-														</div>
-													</div>
-													
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xinvnum">Supplier Bill No : </label>
-														<div class="col-md-8">
-															<input type="text" class="form-control" th:field="*{xinvnum}">
-														</div>
-													</div> -->
-
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xstatuspor">Purchase Type : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatuspor}">
-																<option th:each="s : ${postatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div> -->
 
 													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdate">Date : </label>
+														<label class="control-label col-md-4" for="xdate">Date</label>
 														<div class="input-group date col-md-6 datepicker">
 															<input 	type="datepicker" 
 																	class="form-control" 
@@ -141,80 +94,79 @@
 														</div>
 													</div>
 
+													<div class="form-group" th:if="${#strings.isEmpty(opcrnheader.xcrnnum)}">
+														<label class="control-label col-md-4" for="xdornum">Invoice Number</label>
+														<div class="col-sm-8">
+															<input 	type="text" 
+																	class="form-control searchsuggest" 
+																	placeholder="Search..." 
+																	th:value="${opcrnheader.xdornum}" 
+																	th:attr="search-url='search/confirmedinvoice'"/>
+															<input type="hidden" id="search-val" th:field="*{xdornum}"/>
+															<input type="hidden" id="search-des" th:value="*{xdornum}"/>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}">
+														<label class="control-label col-md-4" for="xdornum">Invoice Number</label>
+														<div class="col-sm-6">
+															<input type="hidden" th:field="*{xdornum}">
+															<input type="text" class="form-control" th:value="*{xdornum}" disabled="disabled"/>
+														</div>
+													</div>
+
+													<div class="form-group" th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}">
+														<label class="control-label col-md-4" for="xcus">Customer</label>
+														<div class="col-sm-6">
+															<input type="hidden" th:field="*{xcus}">
+															<input type="text" class="form-control" th:value="${opcrnheader.xcus + ' - ' + opcrnheader.xorg}" disabled="disabled"/>
+														</div>
+													</div>
+
+
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
+														<label class="control-label col-md-4" for="xwh">Warehouse</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
+																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode} +' - '+ ${wh.xdescdet}"></option>
 															</select>
 														</div>
 													</div>
-													
-													
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xpaymenttype">Payment Type</label>
+														<div class="col-md-8">
+															<select class="form-control" th:field="*{xpaymenttype}">
+																<option value="">-- Select --</option>
+																<option value="Cash">Cash</option>
+																<option value="Cheque">Cheque</option>
+																<option value="Other">Other</option>
+															</select>
+														</div>
+													</div>
 
 												</div>
 												<div class="col-md-6">
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xstatusord">Sales Status : </label>
-														<div class="col-md-8">
-															<select class="form-control" th:field="*{xstatusgrn}">
-																<option th:each="s : ${grnStatusList}" th:text="${s.xcode}" th:value="${s.xcode}"></option>
-															</select>
-														</div>
-													</div> -->
-													
+
 													<div class="form-group">
-														<label class="control-label col-md-4" for="xvoucher">Voucher No. : </label>
+														<label class="control-label col-md-4" for="xvoucher">Voucher No.</label>
 														<div class="col-md-8">
 															<input type="text" class="form-control" th:field="*{xvoucher}">
 														</div>
 													</div>
-												
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xtotamt">Total Amount : </label>
-														<div class="col-md-6">
-															<input type="number" class="form-control xtotamt" th:field="*{xtotamt}" disabled="disabled">
-														</div>
-													</div> -->
-													
-													<!-- <div class="form-group">
-														<label class="control-label col-md-4" for="xvatait">Vat Tax ID : </label>
-														<div class="col-md-8">
-															<select class="form-control vatait-select" th:field="*{xvatait}">
-																<option th:each="s : ${vataitList}" th:text="${s.xvatait}" th:value="${s.xvatait}"></option>
-															</select>
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xvatamt">Vat Amount : </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xvatamt}" min="0">
-															<input type="number" class="form-control xvatamt-show" min="0" th:value="${opcrnheader.xvatamt}" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xaitamt">Tax Amount : </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control hidden" th:field="*{xaitamt}" min="0">
-															<input type="number" class="form-control xaitamt-show" min="0" th:value="${opcrnheader.xaitamt}" disabled="disabled">
-														</div>
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xdiscprime">Prime Discount: </label>
-														<div class="col-md-6">
-															<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscprime}" min="0">
-														</div>
-													</div>
- -->
-													
 
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xnote">Note : </label>
 														<div class="col-md-8">
 															<textarea class="form-control" th:field="*{xnote}" rows="3"></textarea>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label col-md-4" for="xstatucgrn">Status</label>
+														<div class="col-md-8">
+															<input type="hidden" class="form-control" th:field="*{xstatuscrn}"/>
+															<input type="text" class="form-control" th:value="*{xstatuscrn}" disabled="disabled"/>
 														</div>
 													</div>
 
@@ -224,76 +176,80 @@
 									</div>
 								</section>
 							</div>
-							
-							
+
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>All Sales Returns</h1>
+										<h1>Sales Return List</h1>
 									</div>
 									<div class="section-body">
-										<table class="table table-striped table-bordered datatable nowrap">
-											<thead>
-												<tr>
-													<th>Return Number</th>
-													<th>Date</th>
-													<th>Warehouse</th>
-													<th>Customer Number</th>
-													<th>Status</th>
-												</tr>
-											</thead>
-											<tbody th:with="df=${'E, dd-MMM-yyyy'}">
-												<tr th:each="opcrn : ${allOpcrnHeader}">
-													<td>
-														<a th:href="@{/salesninvoice/returnsales/} + ${opcrn.xcrnnum}" th:text="${opcrn.xcrnnum}"></a>
-													</td>
-													<td  th:text="${#dates.format(opcrn.xdate, df)}"></td>
-													<td th:text="${opcrn.xwh}"></td>
-													<td th:text="${opcrn.xcus}"></td>
-													<td th:text="${opcrn.xstatuscrn}"></td>
-												</tr>
-											</tbody>
-										</table>
+										<div style="overflow-x: scroll;">
+											<table class="table table-striped table-bordered datatable nowrap">
+												<thead>
+													<tr>
+														<th>Return Number</th>
+														<th>Date</th>
+														<th>Invoice Number</th>
+														<th>Customer Number</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
+													<tr th:each="opcrn : ${allOpcrnHeader}">
+														<td>
+															<a th:href="@{/salesninvoice/salesreturn/} + ${opcrn.xcrnnum}" th:text="${opcrn.xcrnnum}"></a>
+														</td>
+														<td  th:text="${#dates.format(opcrn.xdate, df)}"></td>
+														<td th:text="${opcrn.xdornum}"></td>
+														<td th:text="${opcrn.xcus + ' - ' + opcrn.xorg}"></td>
+														<td th:text="${opcrn.xstatuscrn}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</section>
 
 							</div>
 						</div>
-						
 					</div>
 
 					<div class="col-md-12">
 						<section th:if="${not #strings.isEmpty(opcrnheader.xcrnnum)}" id="data-maintenance" style="margin-top: 30px;">
-							<a id="listlines-url" th:href="@{/salesninvoice/returnsales/pocrndetail/} + ${opcrnheader.xcrnnum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>GRN Details of <span th:text="${opcrnheader.xcrnnum}"></span></h1>
+								<h1>Sales Return Details of <span th:text="${opcrnheader.xcrnnum}"></span></h1>
 							</div>
 							<div class="section-body">
-								<table class="table table-striped table-bordered datatable nowrap" id="opcrndetailtable" th:fragment="opcrndetailtable">
+								<table class="table table-striped table-bordered normal-table nowrap" id="opcrndetailtable" th:fragment="opcrndetailtable">
 									<thead>
 										<tr>
 											<th>Row</th>
-											<th>Item Code</th>
-											<th>Note</th>
+											<th>Item</th>
 											<th>Qty</th>
 											<th>Rate</th>
-											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/returnsales/} + ${opcrnheader.xcrnnum} + '/opcrndetail/new/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-plus"></i></button>
+											<th>Unit</th>
+											<th>Line Amount</th>
+											<th>Note</th>
+											<th data-nosort="Y" style="text-align: right;" th:if="${opcrnheader.xstatuscrn eq 'Open'}">
+												Action
+												<!-- <button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/new/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-plus"></i></button> -->
 											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="d : ${pocrnDetailsList}">
-											<td th:text="${dStat.index + 1}"></td>
+										<tr th:each="d : ${opcrnDetailsList}">
+											<td th:text="${d.xrow}"></td>
 											<td>
-												<a href="" th:text="${d.xitem}"></a>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" th:text="${d.xitem + ' - ' + d.xitemname}" target="_blank"></a>
 											</td>
-											<td th:text="${d.xnote}"></td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
-											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
-												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/returnsales/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/returnsales/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+											<td th:text="${d.xunit}"></td>
+											<td th:text="${d.xlineamt}"></td>
+											<td th:text="${d.xlong}"></td>
+											<td data-nosort="Y" style="text-align: right; font-size: 11px;" th:if="${opcrnheader.xstatuscrn eq 'Open'}">
+												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/show', data-target-modal='opcrndetailmodal'"><i class="fas fa-edit"></i></button>
+												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/salesreturn/} + ${opcrnheader.xcrnnum} + '/opcrndetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
@@ -304,15 +260,15 @@
 				</div>
 			</div>
 		</div>
-		
-	<!-- Modal -->
-	<div id="opcrndetailmodal-section"></div>
 
-	<!-- Footer section -->
-	<div class="footer-section" th:include="commons :: footer-section"></div>
-</body>
+		<!-- Modal -->
+		<div id="opcrndetailmodal-section"></div>
 
-<script>
+		<!-- Footer section -->
+		<div class="footer-section" th:include="commons :: footer-section"></div>
+	</body>
+
+	<script>
 		$(document).ready(function(){
 			
 			$('a.confirmsrn-btn-link').off('click').on('click', function(e){
@@ -320,7 +276,7 @@
 				var grnNum = $("#xgrnnum").val();
 				
 				$.ajax({
-					url: getBasepath() + "/salesninvoice/returnsales/confirmsrn/" + grnNum,
+					url: getBasepath() + "/salesninvoice/salesreturn/confirmsrn/" + grnNum,
 					success: function(result){
 						var status = result.status.toLowerCase()
 						
@@ -348,7 +304,7 @@
 						var vatPercent = parseFloat(data.xvat);
 						var aitPercent = parseFloat(data.xait);
 						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
-						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;						
+						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
 						
 						$('input[name="xvatamt"]').val(vatAmount);
 						$('input.xvatamt-show').val(vatAmount);

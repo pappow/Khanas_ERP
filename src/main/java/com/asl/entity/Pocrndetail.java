@@ -63,4 +63,7 @@ public class Pocrndetail extends AbstractModel<String> {
 
 	@Transient
 	private String xitemname;
+
+	@Transient
+	private BigDecimal prevqty;
 }

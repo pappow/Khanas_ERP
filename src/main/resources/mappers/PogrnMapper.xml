@@ -319,6 +319,19 @@
 		SELECT * FROM POGRNHEADER WHERE (UPPER(xpornum) LIKE '%' || #{xpornum} || '%') AND zid=#{zid} AND zactive='1'
 	</select>
 
+	<select id="searchGrn" resultType="PogrnHeader">
+		SELECT 
+			* 
+		FROM 
+			POGRNHEADER 
+		WHERE 
+			(UPPER(xgrnnum) LIKE '%' || #{hint} || '%') 
+			AND zid=#{zid}
+			<if test="xstatusgrn != null and xstatusgrn != ''">
+			AND xstatusgrn=#{xstatusgrn}
+			</if>
+	</select>
+
 	<select id="getTotalGRNQtyOfConfirmedGRNDetail" resultType="Decimal">
 		SELECT
 			NVL(SUM(pogrndetail.xqtygrn), 0) as totalgrnqty
@@ -331,4 +344,5 @@
 			AND pogrndetail.xdocrow = #{xdocrow}
 			AND pogrnheader.xstatusgrn='Confirmed'
 	</select>
+	
 </mapper>
