@@ -5,19 +5,17 @@
 
 	<insert id="saveOpcrnHeader" parameterType="Opcrnheader">
 		<selectKey keyProperty="xcrnnum" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtrncrn}', '${xtrn}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtype}', 6) FROM DUAL
 		</selectKey>
-		INSERT INTO Opcrnheader
-		(   
+		INSERT INTO opcrnheader
+		(
 			xcrnnum,
-			xdornum,
 			xdate,
 			xcus,
 			xstatuscrn,
 			xcur,
 			xexch,
 			xref,
-			xgrandtot,
 			xtotamt,
 			xvatamt,
 			xaitamt,
@@ -36,30 +34,25 @@
 			xnote,
 			xtype,
 			xtypetrn,
-			xtrn,
+			xdornum,
 			xdocnum,
-			xtrncrn,		
-			
+			xgrandtot,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
 			#{xcrnnum},
-			#{xdornum, jdbcType=VARCHAR},
 			#{xdate, jdbcType=DATE},
 			#{xcus, jdbcType=VARCHAR},
 			#{xstatuscrn, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
 			#{xexch, jdbcType=VARCHAR},
 			#{xref, jdbcType=VARCHAR},
-			#{xgrandtot, jdbcType=DECIMAL},
 			#{xtotamt, jdbcType=DECIMAL},
 			#{xvatamt, jdbcType=DECIMAL},
 			#{xaitamt, jdbcType=DECIMAL},
@@ -78,33 +71,28 @@
 			#{xnote, jdbcType=VARCHAR},
 			#{xtype, jdbcType=VARCHAR},
 			#{xtypetrn, jdbcType=VARCHAR},
-			#{xtrn, jdbcType=VARCHAR},
+			#{xdornum, jdbcType=VARCHAR},
 			#{xdocnum, jdbcType=VARCHAR},
-			#{xtrncrn, jdbcType=VARCHAR},
-			
+			#{xgrandtot, jdbcType=DECIMAL},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
-	
+
 	<update id="updateOpcrnHeader" parameterType="Opcrnheader">
 		UPDATE
-			OpcrnHeader
+			opcrnHeader
 		SET
-			xdornum=#{xdornum, jdbcType=VARCHAR},
 			xdate=#{xdate, jdbcType=DATE},
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xstatuscrn=#{xstatuscrn, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xexch=#{xexch, jdbcType=VARCHAR},
 			xref=#{xref, jdbcType=VARCHAR},
-			xgrandtot=#{xgrandtot, jdbcType=DECIMAL},
 			xtotamt=#{xtotamt, jdbcType=DECIMAL},
 			xvatamt=#{xvatamt, jdbcType=DECIMAL},
 			xaitamt=#{xaitamt, jdbcType=DECIMAL},
@@ -123,26 +111,24 @@
 			xnote=#{xnote, jdbcType=VARCHAR},
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
-			xtrn=#{xtrn, jdbcType=VARCHAR},
+			xdornum=#{xdornum, jdbcType=VARCHAR},
 			xdocnum=#{xdocnum, jdbcType=VARCHAR},
-			xtrncrn=#{xtrncrn, jdbcType=VARCHAR},
-	
-			zid=#{zid, jdbcType=VARCHAR},
+			xgrandtot=#{xgrandtot, jdbcType=DECIMAL},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
-			xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' 
+			zid=#{zid, jdbcType=VARCHAR},
+			AND xcrnnum=#{xcrnnum}
 	</update>
 	
 	<insert id="saveOpcrnDetail" parameterType="Opcrndetail">
 		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
-			SELECT COALESCE(Max(xrow), 0) + 1 FROM Opcrndetail WHERE xcrnnum=#{xcrnnum} AND zactive='1' AND zid=#{zid}
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM opcrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid}
 		</selectKey>
-		INSERT INTO Opcrndetail
+		INSERT INTO opcrndetail
 		(
 			xrow,
 			xcrnnum,
@@ -159,12 +145,9 @@
 
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -180,21 +163,18 @@
 			#{xsrate, jdbcType=DECIMAL},
 			#{xrategrn, jdbcType=DECIMAL},
 			#{xdocrow, jdbcType=INTEGER},
-			
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 
 	<update id="updateOpcrnDetail" parameterType="Opcrndetail">
 		UPDATE 
-			Opcrndetail
+			opcrndetail
 		SET
 			xitem=#{xitem, jdbcType=VARCHAR},
 			xqtyord=#{xqtyord, jdbcType=DECIMAL},
@@ -206,11 +186,10 @@
 			xsrate=#{xsrate, jdbcType=DECIMAL},
 			xrategrn=#{xrategrn, jdbcType=DECIMAL},
 			xdocrow=#{xdocrow, jdbcType=INTEGER},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xcrnnum=#{xcrnnum, jdbcType=VARCHAR}
@@ -219,23 +198,65 @@
 	</update>
 
 	<select id="findOpcrnHeaderByXcrnnum" resultType="Opcrnheader">
-		SELECT * FROM Opcrnheader WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			opcrnheader.*,
+			cacus.xorg 
+		FROM 
+			opcrnheader 
+			left join cacus on cacus.xcus = opcrnheader.xcus and cacus.zid = opcrnheader.zid and cacus.zactive='1'
+		WHERE 
+			opcrnheader.xcrnnum=#{xcrnnum} 
+			AND opcrnheader.zid=#{zid}
 	</select>
 	
 	<select id="findOpcrnHeaderByXdornum" resultType="Opcrnheader">
-		SELECT * FROM Opcrnheader WHERE xdornum=#{xdornum} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			opcrnheader 
+		WHERE 
+			xdornum=#{xdornum} 
+			AND zid=#{zid}
 	</select>
 
 	<select id="findOpcrndetailByXcrnnumAndXrow" resultType="Opcrndetail">
-		SELECT * FROM Opcrndetail WHERE xcrnnum=#{xcrnnum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			opcrndetail.*,
+			caitem.xdesc as "xitemname" 
+		FROM 
+			opcrndetail 
+			left join caitem on caitem.xitem = opcrndetail.xitem and caitem.zid = opcrndetail.zid and caitem.zactive='1'
+		WHERE 
+			opcrndetail.xcrnnum=#{xcrnnum} 
+			AND opcrndetail.xrow=#{xrow} 
+			AND opcrndetail.zid=#{zid}
 	</select>
 
 	<select id="getAllOpcrnheader" resultType="Opcrnheader">
-		SELECT * FROM Opcrnheader WHERE zid=#{zid} AND zactive='1' ORDER BY xcrnnum DESC
+		SELECT 
+			opcrnheader.*,
+			cacus.xorg 
+		FROM 
+			opcrnheader 
+			left join cacus on cacus.xcus = opcrnheader.xcus and cacus.zid = opcrnheader.zid and cacus.zactive='1'
+		WHERE 
+			opcrnheader.zid=#{zid} 
+		ORDER BY 
+			opcrnheader.xcrnnum DESC
 	</select>
-	
+
 	<select id="findOpcrnDetailByXcrnnum" resultType="Opcrndetail">
-		SELECT * FROM Opcrndetail WHERE xcrnnum=#{xcrnnum} AND zid=#{zid} AND zactive='1' ORDER BY xrow ASC
+		SELECT 
+			opcrndetail.*,
+			caitem.xdesc as "xitemname" 
+		FROM 
+			opcrndetail 
+			left join caitem on caitem.xitem = opcrndetail.xitem and caitem.zid = opcrndetail.zid and caitem.zactive='1'
+		WHERE 
+			opcrndetail.xcrnnum=#{xcrnnum} 
+			AND opcrndetail.zid=#{zid} 
+		ORDER BY 
+			opcrndetail.xrow DESC
 	</select>
 	
 	<select id = "procConfirmCRN" statementType = "CALLABLE">
@@ -246,6 +267,24 @@
 	<select id = "procTransferOPtoAR" statementType = "CALLABLE">
 		{call OP_transferOPtoAR(#{zid, jdbcType = VARCHAR, mode = IN}, #{user, jdbcType = VARCHAR, mode = IN}, #{xdornum, jdbcType = VARCHAR, mode = IN}, #{p_screen, jdbcType = VARCHAR, mode = IN}, #{p_seq, jdbcType = VARCHAR, mode = IN})}
 	</select>
-	
+
+	<delete id="deleteOpcrnHeader">
+		DELETE
+		FROM
+			opcrnheader
+		WHERE
+			zid=#{zid}
+			AND xcrnnum=#{xcrnnum}
+	</delete>
+
+	<delete id="deleteOpcrnDetail">
+		DELETE
+		FROM
+			opcrndetail
+		WHERE
+			zid=#{zid}
+			AND xcrnnum=#{xcrnnum}
+			AND xrow=#{xrow} 
+	</delete>
 
 </mapper>

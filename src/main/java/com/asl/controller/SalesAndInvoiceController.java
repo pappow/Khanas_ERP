@@ -403,10 +403,10 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			opcrnheader.setXstatuscrn("Open");
 			opcrnheader.setXdate(new Date());
 			opcrnheader.setXcus(opdoheader.getXcus());
-			opcrnheader.setXtype(TransactionCodeType.SRN_RETURN.getCode());
+			opcrnheader.setXtype(TransactionCodeType.SALES_RETURN.getCode());
 			opcrnheader.setXtypetrn("CRN Number");
-			opcrnheader.setXtrncrn(TransactionCodeType.SRN_RETURN.getCode());
-			opcrnheader.setXtrn(TransactionCodeType.SRN_RETURN.getdefaultCode());
+//			opcrnheader.setXtrncrn(TransactionCodeType.SALES_RETURN.getCode());
+//			opcrnheader.setXtrn(TransactionCodeType.SALES_RETURN.getdefaultCode());
 
 			long count = opcrnService.save(opcrnheader);
 			if (count == 0) {

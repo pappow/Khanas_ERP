@@ -242,7 +242,7 @@ public class SalesOrderController extends ASLAbstractController {
 		opordDetail.setXcatitem(caitem.getXcatitem());
 		opordDetail.setXgitem(caitem.getXgitem());
 		opordDetail.setXlineamt(opordDetail.getXqtyord().multiply(opordDetail.getXrate()).setScale(2, RoundingMode.DOWN));
-		opordDetail.setXlineamt(opordDetail.getXlineamt().add(opordDetail.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
+		//opordDetail.setXlineamt(opordDetail.getXlineamt().add(opordDetail.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		Oporddetail existDetail = opordService.findOporddetailByXordernumAndXrow(opordDetail.getXordernum(), opordDetail.getXrow());

@@ -6,7 +6,7 @@
 	<insert id="savePocrnHeader" parameterType="Pocrnheader">
 		<selectKey keyProperty="xcrnnum" resultType="String" order="BEFORE">
 			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtype}', 6) FROM DUAL
-		</selectKey> -->
+		</selectKey>
 		INSERT INTO pocrnheader
 		(
 			xcrnnum,

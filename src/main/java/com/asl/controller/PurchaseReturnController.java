@@ -30,9 +30,6 @@ import com.asl.service.PogrnService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 @RequestMapping("/procurements/purchasereturn")
 public class PurchaseReturnController extends ASLAbstractController {

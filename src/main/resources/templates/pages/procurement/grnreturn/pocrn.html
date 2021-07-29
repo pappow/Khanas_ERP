@@ -232,7 +232,8 @@
 											<th>Line Amount</th>
 											<th>Note</th>
 											<th data-nosort="Y" style="text-align: right;">
-												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurements/purchasereturn/} + ${pocrnheader.xcrnnum} + '/pocrndetail/new/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-plus"></i></button>
+												Action
+												<!-- <button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/procurements/purchasereturn/} + ${pocrnheader.xcrnnum} + '/pocrndetail/new/show', data-target-modal='pocrndetailmodal'"><i class="fas fa-plus"></i></button> -->
 											</th>
 										</tr>
 									</thead>
@@ -240,7 +241,7 @@
 										<tr th:each="d : ${pocrnDetailsList}">
 											<td th:text="${d.xrow}"></td>
 											<td>
-												<a href="" th:text="${d.xitemname}"></a>
+												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitemname}"></a>
 											</td>
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>

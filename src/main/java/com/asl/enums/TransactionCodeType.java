@@ -63,7 +63,7 @@ public enum TransactionCodeType {
 	STOCK_TAKE("Stock Take", "TAG-", null),
 	SALES_ORDER("Sales Order", "SO--", TransactionCodes.SALES_ORDER),
 	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),
-	SRN_RETURN("Sales Return", "SR--", null),
+	SALES_RETURN("Sales Return", "SR--", null),
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 

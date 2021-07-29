@@ -307,7 +307,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				salesItem.setXunitsel(salesOrderItem.getXunit());
 				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
 				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
-				salesItem.setXlineamt(salesItem.getXlineamt().add(salesItem.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
+				//salesItem.setXlineamt(salesItem.getXlineamt().add(salesItem.getXlineamt().multiply(caitem.getXvatrate() == null ? BigDecimal.ZERO : caitem.getXvatrate()).divide(BigDecimal.valueOf(100))));
 				salesItem.setXcatitem(salesOrderItem.getXcatitem());
 				salesItem.setXgitem(salesOrderItem.getXgitem());
 				salesItem.setXdorrow(salesOrderItem.getXrow());
