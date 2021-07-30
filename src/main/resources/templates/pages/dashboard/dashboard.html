@@ -180,7 +180,18 @@
 											<a th:href="@{/salesninvoice/salesreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
-
+									<!-- <tr th:if="${menuProfile.M0402 ne null and menuProfile.M0402.display}">
+										<td><a th:href="@{/salesninvoice/salesorder/allopensalesorder}">Open Sales Orders</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/salesorder/allopensalesorder}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr> -->
+									<!-- <tr th:if="${menuProfile.M0406 ne null and menuProfile.M0406.display}">
+										<td><a th:href="@{/salesninvoice/directsales}" th:text="${menuProfile.M0406.screenprompt}">Sales Invoice (Direct)</a></td>
+										<td>
+											<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr> -->
 
 									<tr>
 										<td colspan="2">Master Setup</td>
