@@ -34,26 +34,36 @@ public class RM0502ServiceImpl extends AbstractReportService {
 
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();	
 		
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
+		List<DropdownOption> Itemgroups = new ArrayList<>();
+		Itemgroups.add(new DropdownOption("", "-- Select --"));
+		groupList.stream().forEach(x -> Itemgroups.add(new DropdownOption(x.getXcode(), x.getXcode())));
+
+		List<Xcodes> categoryList = xcodesService.findByXtype(CodeType.ITEM_CATEGORY.getCode(), Boolean.TRUE);
+		List<DropdownOption> ItemCategory = new ArrayList<>();
+		ItemCategory.add(new DropdownOption("", "-- Select --"));
+		categoryList.stream().forEach(x -> ItemCategory.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 		
-		
-		// From Date
+		//From Date
 		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
 
 		// To Date
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
-
+		
 		// Batch No
 		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Batch No", "search/report/xbatch", "", false));
 		
-		// Order Status
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Order Status", "search/report/xtype", "", false));
+		// Item Group
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Group", Itemgroups, "", false));
+		
+		// Item Category
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Item Category", ItemCategory, "", false));
+		
+		// Item
+		fieldsList.add(FormFieldBuilder.generateSearchField(7, "Item", "search/caitem", "", true));
 		
 				
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
