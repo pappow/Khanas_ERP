@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Business</title>
+		<title>Business Profile</title>
 		<meta th:remove="tag" th:include="commons :: common-meta"/>
 		<meta th:remove="tag" th:include="commons :: common-css"/>
 		<meta th:remove="tag" th:include="commons :: common-js"/>
@@ -27,11 +27,10 @@
 								</div>
 								<div class="collapse navbar-collapse" id="myNavbar">
 									<div class="nav navbar-nav">
-										<li><a th:href="@{/}">Dashboard</a></li>
-										<li class="active"><a th:href="@{/businessprof}">Business</a></li>
-									
+										<li><a th:href="@{/}"><i class="fas fa-home"></i> Home</a></li>
+										<li class="active"><a th:href="@{/system/businessprof}">Business Profile</a></li>
 									</div>
-								
+									<ul class="nav navbar-nav navbar-right" th:include="ckbigmenu :: dashboard-menu"></ul>
 								</div>
 							</div>
 						</div>
@@ -64,7 +63,7 @@
 										</div>
 										</div><br>
 									<div class="section-body section-border">
-									<form id="mainform" class="form-horizontal" method="post" th:action="@{/businessprof/save}" th:object="${business}">
+									<form id="mainform" class="form-horizontal" method="post" th:action="@{/system/businessprof/save}" th:object="${business}">
 									<input type="hidden" th:field="*{zid}" maxlength="100"/>
 										<div class="row">
 											<div class="col-md-12">
@@ -170,7 +169,7 @@
 												<tbody>
 													<tr th:each="a: ${business}">
 														<td>
-															<a th:href="@{/businessprof/} + ${a.zid}" th:text="${a.zid}"></a>
+															<a th:href="@{/system/businessprof/} + ${a.zid}" th:text="${a.zid}"></a>
 														</td>
 														<td th:text="${a.zorg}"></td>
 														<td th:text="${a.xoutlet}"></td>

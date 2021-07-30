@@ -20,7 +20,7 @@ import com.asl.service.ZbusinessService;
 import com.asl.enums.ProfileType;
 
 @Controller
-@RequestMapping("/businessprof")
+@RequestMapping("/system/businessprof")
 public class BusinessProfileController extends ASLAbstractController{
 	@Autowired private ZbusinessService zbusinessService;
 	
@@ -38,7 +38,7 @@ public class BusinessProfileController extends ASLAbstractController{
 	@GetMapping("/{zid}")
 	public String loadbusinessPrifilePage(@PathVariable String zid, Model model) {
 		Zbusiness zb = zbusinessService.findBById(zid);
-		if(zb == null) return "redirect:/businessprof";
+		if(zb == null) return "redirect:/system/businessprof";
 		model.addAttribute("business", zb);
 		model.addAttribute("allbusiness", zbusinessService.findfromZid());
 		model.addAttribute("allBranchBusiness", zbusinessService.getAllBranchBusiness());
@@ -52,11 +52,10 @@ public class BusinessProfileController extends ASLAbstractController{
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		} 
-		
+
 		if(StringUtils.isBlank(zbusiness.getZid())) {
 			responseHelper.setErrorStatusAndMessage("Business ID required");
 			return responseHelper.getResponse();
-			
 		}
 		
 		// if existing
@@ -69,20 +68,20 @@ public class BusinessProfileController extends ASLAbstractController{
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Business info updated successfully");
-			responseHelper.setRedirectUrl("/businessprof/" + zb.getZid());
+			responseHelper.setRedirectUrl("/system/businessprof/" + zb.getZid());
 			return responseHelper.getResponse();
 		}
-		
+
 		// If new
 		long count = zbusinessService.save(zbusiness);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Data saved successfully");
-		responseHelper.setRedirectUrl("/pages/businessProfile/business");
+
+		responseHelper.setSuccessStatusAndMessage("Business info saved successfully");
+		responseHelper.setRedirectUrl("/system/businessprof");
 		return responseHelper.getResponse();
-		
 	}
 
 
