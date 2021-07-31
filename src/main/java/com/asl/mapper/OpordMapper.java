@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Caitem;
 import com.asl.entity.ConventionBookedDetails;
+import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;
@@ -20,6 +21,8 @@ public interface OpordMapper {
 	public long saveOpordHeader(Opordheader opordheader);
 
 	public long updateOpordHeader(Opordheader opordheader);
+
+	public long deleteOpordHeader(String xordernum, String zid);
 
 	public long saveOpordDetail(Oporddetail oporddetail);
 
@@ -87,4 +90,8 @@ public interface OpordMapper {
 	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype, String zid);
 
 	public long deleteSubItems(String xordernum, int xparentrow, String xtype, String zid);
+
+	public List<Opdoheader> getAllOpdoHeaderByXordernum(String xordernum, String zid);
+	
+	public List<Oporddetail> searchSalesOrderAvailableItem(String xordernum, String xitem, String zid);
 }

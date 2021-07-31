@@ -44,12 +44,9 @@
 			xait,
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -88,12 +85,9 @@
 			#{xait, jdbcType=DECIMAL},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		) 
 	</insert>
 	
@@ -133,10 +127,8 @@
 			xvatait=#{xvatait, jdbcType=VARCHAR},
 			xait=#{xait, jdbcType=DECIMAL},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xdornum=#{xdornum, jdbcType=VARCHAR}
@@ -167,12 +159,9 @@
 			xparentrow,
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -194,12 +183,9 @@
 			#{xparentrow, jdbcType=INTEGER},
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 		
 	</insert>
@@ -223,10 +209,8 @@
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xparentrow=#{xparentrow, jdbcType=INTEGER},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			xrow=#{xrow, jdbcType=INTEGER}
@@ -235,7 +219,13 @@
 	</update>
 	
 	<delete id="deleteOpdoDetail" parameterType="Opdodetail">
-		DELETE FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+		DELETE 
+		FROM 
+			opdodetail 
+		WHERE 
+			xdornum=#{xdornum} 
+			AND xrow=#{xrow} 
+			AND zid=#{zid}
 	</delete>
 	
 	<update id="updateOpdoHeaderTotalAmt">
@@ -300,7 +290,16 @@
 	</select>
 
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
-		SELECT * FROM Opdodetail WHERE xdornum=#{xdornum} AND xrow=#{xrow} AND zid=#{zid}
+		SELECT 
+			opdodetail.*,
+			caitem.xdesc AS "xitemdesc" 
+		FROM 
+			opdodetail 
+			left join caitem on caitem.xitem = opdodetail.xitem and caitem.zid = opdodetail.zid and caitem.zactive='1'
+		WHERE 
+			opdodetail.xdornum=#{xdornum} 
+			AND opdodetail.xrow=#{xrow} 
+			AND opdodetail.zid=#{zid}
 	</select>
 	
 	<select id="findOpdoDetailByXdornumAndXitem" resultType="Opdodetail">
@@ -446,14 +445,27 @@
 			ZBUSINESS.ZORG, CAITEM.XSEQN, OPDODETAIL.XITEM ASC
 	</select>
 
-	<select id="findOpordheaderByXordernum" resultType="Opdoheader">
+	<select id="findOpdoheaderByXordernum" resultType="Opdoheader">
 		SELECT 
-			* 
+			opdoheader.*,
+			cacus.xorg 
 		FROM
 			opdoheader
+			left join cacus on cacus.xcus = opdoheader.xcus and cacus.zid = opdoheader.zid and cacus.zactive='1'
 		WHERE
-			zid=#{zid}
-			AND xordernum=#{xordernum}
-			AND zactive='1'
+			opdoheader.zid=#{zid}
+			AND opdoheader.xordernum=#{xordernum}
+		ORDER BY
+			opdoheader.xstatusord DESC, opdoheader.xdornum DESC 
 	</select>
+
+	<delete id="deleteOpdoHeader">
+		DELETE
+		FROM 
+			opdoheader
+		WHERE
+			xdornum=#{xdornum}
+			AND zid=#{zid}
+	</delete>
+
 </mapper>

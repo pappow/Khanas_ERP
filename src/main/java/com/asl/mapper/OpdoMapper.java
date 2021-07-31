@@ -12,6 +12,7 @@ import com.asl.model.BranchesRequisitions;
 public interface OpdoMapper {
 	public long saveOpdoHeader(Opdoheader opdoheader);
 	public long updateOpdoHeader(Opdoheader opdoheader);
+	public long deleteOpdoHeader(String xdornum, String zid);
 	public long updateOpdoHeaderTotalAmt(String xdornum, String zid);
 	public long updateOpdoHeaderGrandTotalAmt(String xdornum, String zid);
 	public long updateOpdoHeaderTotalAmtAndGrandTotalAmt(String xdornum, String zid);
@@ -47,5 +48,5 @@ public interface OpdoMapper {
 
 	public List<BranchesRequisitions> getSalesInvoiceMatrxi(String xdate, String zid);
 
-	public Opdoheader findOpordheaderByXordernum(String xordernum, String zid);
+	public List<Opdoheader> findOpdoheaderByXordernum(String xordernum, String zid);
 }

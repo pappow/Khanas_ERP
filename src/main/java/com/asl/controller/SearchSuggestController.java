@@ -26,6 +26,7 @@ import com.asl.entity.LandSurveyor;
 import com.asl.entity.Modetail;
 import com.asl.entity.Moheader;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pocrnheader;
@@ -92,6 +93,15 @@ public class SearchSuggestController extends ASLAbstractController {
 		List<SearchSuggestResult> list = new ArrayList<>();
 		List<PogrnHeader> grns = pogrnService.searchGrn(hint, "Confirmed");
 		grns.stream().forEach(g -> list.add(new SearchSuggestResult(g.getXgrnnum(), g.getXgrnnum())));
+		return list;
+	}
+
+	@GetMapping("/opordcaitem/{xordernum}/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getSalesOrderAvailableItem(@PathVariable String xordernum, @PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<SearchSuggestResult> list = new ArrayList<>();
+		List<Oporddetail> details = opordService.searchSalesOrderAvailableItem(xordernum, hint);
+		details.stream().forEach(d -> list.add(new SearchSuggestResult(d.getXitem().concat("|").concat(String.valueOf(d.getXrow())).concat("|").concat(d.getXqtyord().subtract(d.getXqtydel() == null ? BigDecimal.ZERO : d.getXqtydel()).toString()), d.getXrow() + ". " + d.getXitem() + " - " + d.getItemname())));
 		return list;
 	}
 

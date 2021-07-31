@@ -681,4 +681,29 @@
 			AND xtype=#{xtype}
 			AND xparentrow=#{xparentrow}
 	</delete>
+
+	<delete id="deleteOpordHeader">
+		DELETE
+		FROM
+			opordheader
+		WHERE
+			zid=#{zid}
+			AND xordernum=#{xordernum}
+	</delete>
+
+	<select id="searchSalesOrderAvailableItem" resultType="Oporddetail">
+		SELECT 
+			oporddetail.*,
+			caitem.xdesc as itemname 
+		FROM 
+			oporddetail 
+			LEFT JOIN caitem ON caitem.xitem = oporddetail.xitem AND caitem.zid = oporddetail.zid AND caitem.zactive='1'
+		WHERE 
+			oporddetail.xordernum=#{xordernum}
+			AND (UPPER(oporddetail.xitem) LIKE '%' || #{xitem} || '%') 
+			AND oporddetail.zid=#{zid} 
+			AND oporddetail.xqtydel != oporddetail.xqtyord
+		ORDER BY 
+			oporddetail.xitem
+	</select>
 </mapper>

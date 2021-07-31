@@ -344,7 +344,7 @@ public class GRNController extends ASLAbstractController {
 
 		long count = pogrnService.deleteDetail(pd);
 		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't delete GRN detail");
 			return responseHelper.getResponse();
 		}
 
@@ -367,7 +367,7 @@ public class GRNController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
-		if ("Confirmed".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
+		if (!"Open".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
 			responseHelper.setErrorStatusAndMessage("GRN already confirmed");
 			return responseHelper.getResponse();
 		}

@@ -87,6 +87,11 @@ public class Opdodetail extends AbstractModel<String> {
 	private String xgitem;
 	@Transient
 	private String xcatitem;
+	
+	@Transient
+	private BigDecimal prevqty;
+	@Transient
+	private String xitemdesc;
 
 	@Transient
 	private List<Opdodetail> subitems = new ArrayList<>();

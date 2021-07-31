@@ -851,7 +851,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		}
 
 		// validation
-		Opdoheader existInvoice = opdoService.findOpordheaderByXordernum(xordernum);
+		Opdoheader existInvoice = opdoService.findOpdoheaderByXordernum(xordernum).stream().findFirst().orElse(null);
 		if(existInvoice != null) {
 			responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
 			responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + existInvoice.getXdornum());

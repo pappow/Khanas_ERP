@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.ServiceException;
 
 @Component
 public interface OpdoService {
@@ -15,6 +16,8 @@ public interface OpdoService {
 	public long save(Opdoheader opdoHeader);
 
 	public long update(Opdoheader opdoHeader);
+	
+	public long delete(String xdornum);
 
 	public long updateOpdoHeaderTotalAmt(String xdornum);
 
@@ -52,7 +55,7 @@ public interface OpdoService {
 
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xstatusord, String xdornum);
 
-	public long createSalesFromChalan(String xordernum);
+	public long createSalesFromChalan(String xordernum) throws ServiceException;
 
 	// Procedure Calls
 	public void procConfirmDO(String xdornum, String p_seq);
@@ -66,5 +69,5 @@ public interface OpdoService {
 
 	public List<BranchesRequisitions> getSalesInvoiceMatrxi(Date xdate);
 
-	public Opdoheader findOpordheaderByXordernum(String xordernum);
+	public List<Opdoheader> findOpdoheaderByXordernum(String xordernum);
 }

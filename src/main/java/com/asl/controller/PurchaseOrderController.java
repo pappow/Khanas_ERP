@@ -397,7 +397,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	}
 
 	@PostMapping("/creategrn/{xpornum}")
-	public @ResponseBody Map<String, Object> confirmPurchase(@PathVariable String xpornum){
+	public @ResponseBody Map<String, Object> createGRN(@PathVariable String xpornum){
 		try {
 			return poordService.createPurchaseOrderToGRN(responseHelper, xpornum);
 		} catch (ServiceException e) {
