@@ -58,13 +58,13 @@
 												<a th:href="@{/system/xusers}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${menuProfile.M0103 ne null and menuProfile.M0103.display}">
+										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0103 ne null and menuProfile.M0103.display}">
 											<td><a th:href="@{/system/profile}" th:text="${menuProfile.M0103.screenprompt}">Manage Profile</a></td>
 											<td>
 												<a th:href="@{/system/profile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${menuProfile.M0104 ne null and menuProfile.M0104.display}">
+										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0104 ne null and menuProfile.M0104.display}">
 											<td><a th:href="@{/system/profileallocation}" th:text="${menuProfile.M0104.screenprompt}">Profile Allocation</a></td>
 											<td>
 												<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
@@ -419,13 +419,13 @@
 												<a th:href="@{/mastersetup/caitem}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
+										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
 											<td><a th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0208.screenprompt}">Codes</a></td>
 											<td>
 												<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
+										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
 											<td><a th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0209.screenprompt}">Transaction Codes</a></td>
 											<td>
 												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
