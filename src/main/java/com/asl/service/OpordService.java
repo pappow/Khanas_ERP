@@ -2,14 +2,16 @@ package com.asl.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.asl.entity.Caitem;
-import com.asl.entity.ConventionBookedDetails;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.ResponseHelper;
+import com.asl.model.ServiceException;
 
 /**
  * @author Zubayer Ahamed
@@ -21,6 +23,8 @@ public interface OpordService {
 	public long saveOpordHeader(Opordheader opordheader);
 
 	public long updateOpordHeader(Opordheader opordheader);
+	
+	public long deleteOpordHeader(String xordernum);
 
 	public long saveOpordDetail(Oporddetail oporddetail);
 
@@ -88,4 +92,8 @@ public interface OpordService {
 	public List<Oporddetail> findAllSubitemDetail(String xordernum, int xparentrow, String xtype);
 
 	public long deleteSubItems(String xordernum, int xparentrow, String xtype);
+
+	public Map<String, Object> createSalesOrderToInvoice(ResponseHelper responseHelper, String xordernum) throws ServiceException;
+
+	public List<Oporddetail> searchSalesOrderAvailableItem(String xordernum, String hint);
 }

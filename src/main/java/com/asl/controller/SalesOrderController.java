@@ -23,11 +23,17 @@ import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
+import com.asl.model.ServiceException;
 import com.asl.service.CaitemService;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
+import com.asl.service.PoordService;
 import com.asl.service.VataitService;
 import com.asl.service.XtrnService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/salesninvoice/opord")
 public class SalesOrderController extends ASLAbstractController {
@@ -36,14 +42,13 @@ public class SalesOrderController extends ASLAbstractController {
 	@Autowired private CaitemService caitemService;
 	@Autowired private XtrnService xtrnService;
 	@Autowired private VataitService vataitService;
+	@Autowired private OpdoService opdoService;
 
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
 
 		model.addAttribute("opordheader", getDefaultOpordHeader());
-
-		List<Opordheader> allHeaders = opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode());
-		model.addAttribute("allOpordHeader", allHeaders);
+		model.addAttribute("allOpordHeader", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode()));
 		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
 
 		return "pages/salesninvoice/salesorder/salesorder";
@@ -56,11 +61,9 @@ public class SalesOrderController extends ASLAbstractController {
 
 		model.addAttribute("opordheader", data);
 		model.addAttribute("allOpordHeader", opordService.findAllOpordHeaderByXtypetrnAndXtrn(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode()));
-
-		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
-
 		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
+
+		model.addAttribute("invoicelist", opdoService.findOpdoheaderByXordernum(xordernum));
 
 		return "pages/salesninvoice/salesorder/salesorder";
 	}
@@ -108,7 +111,6 @@ public class SalesOrderController extends ASLAbstractController {
 		BigDecimal grandTotal = (opordHeader.getXtotamt().add(opordHeader.getXvatamt()).add(opordHeader.getXaitamt())).subtract(opordHeader.getXdiscamt());
 		opordHeader.setXgrandtot(grandTotal);
 
-
 		// if existing record
 		Opordheader existOpordHeader = opordService.findOpordHeaderByXordernum(opordHeader.getXordernum());
 		if (existOpordHeader != null) {
@@ -147,44 +149,55 @@ public class SalesOrderController extends ASLAbstractController {
 		}
 
 		// archive all details first
-		if(archive && !opordService.findOporddetailByXordernum(xordernum).isEmpty()) {
-			long count2 = opordService.archiveAllOporddetailByXordernum(xordernum);
-			if(count2 == 0) {
-				responseHelper.setErrorStatusAndMessage("Can't archive details");
-				return responseHelper.getResponse();
-			}
-		}
-
-		// update opordheader zactive
-		opordHeader.setZactive(archive ? Boolean.FALSE : Boolean.TRUE);
-		long count = opordService.updateOpordHeader(opordHeader);
-		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details != null && !details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Archive order details first");
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Salees order archived successfully");
-		responseHelper.setRedirectUrl("/salesninvoice/opord/");
+		// update opordheader zactive
+		long count = opordService.deleteOpordHeader(xordernum);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete Sales Order");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Salees order deleted successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/opord");
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/oporddetail/{xordernum}")
-	public String reloadOpordDetailTable(@PathVariable String xordernum, Model model) {
-		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
-		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
-		return "pages/salesninvoice/salesorder/salesorder::oporddetailtable";
-	}
+	@PostMapping("/confirm/{xordernum}")
+	public @ResponseBody Map<String, Object> confirm(@PathVariable String xordernum){
 
-	@GetMapping("/opordheaderform/{xordernum}")
-	public String reloadOpdoheaderform(@PathVariable String xordernum, Model model) {
-		Opordheader data = opordService.findOpordHeaderByXordernum(xordernum);
-		if (data == null) return "redirect:/salesninvoice/opord";
+		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
+		if(oh == null) {
+			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " not found");
+			return responseHelper.getResponse();
+		}
 
-		model.addAttribute("opordheader", data);
-		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("vataitList", vataitService.getAllVatait());
+		if(!"Open".equalsIgnoreCase(oh.getXstatusord())) {
+			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " is not Open");
+			return responseHelper.getResponse();
+		}
 
-		return "pages/salesninvoice/salesorder/salesorder::opordheaderform";
+		// check sales order has details
+		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
+		if(details == null || details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Sales order details is empty");
+			return responseHelper.getResponse();
+		}
+
+		oh.setXstatusord("Confirmed");
+		long count = opordService.updateOpordHeader(oh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't Confirmed sales order " + xordernum);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/salesninvoice/opord/" + xordernum);
+		responseHelper.setSuccessStatusAndMessage("Order Confirmed successfully");
+		return responseHelper.getResponse();
 	}
 
 	@GetMapping("/{xordernum}/oporddetail/{xrow}/show")
@@ -271,6 +284,25 @@ public class SalesOrderController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	@GetMapping("/oporddetail/{xordernum}")
+	public String reloadOpordDetailTable(@PathVariable String xordernum, Model model) {
+		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
+		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+		return "pages/salesninvoice/salesorder/salesorder::oporddetailtable";
+	}
+
+	@GetMapping("/opordheaderform/{xordernum}")
+	public String reloadOpdoheaderform(@PathVariable String xordernum, Model model) {
+		Opordheader data = opordService.findOpordHeaderByXordernum(xordernum);
+		if (data == null) return "redirect:/salesninvoice/opord";
+
+		model.addAttribute("opordheader", data);
+		model.addAttribute("opordprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("vataitList", vataitService.getAllVatait());
+
+		return "pages/salesninvoice/salesorder/salesorder::opordheaderform";
+	}
+
 	@PostMapping("{xordernum}/oporddetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xordernum, @PathVariable String xrow, Model model) {
 		Oporddetail pd = opordService.findOporddetailByXordernumAndXrow(xordernum, Integer.parseInt(xrow));
@@ -296,37 +328,15 @@ public class SalesOrderController extends ASLAbstractController {
 		return caitemService.findByXitem(xitem);
 	}
 
-	@PostMapping("/confirm/{xordernum}")
-	public @ResponseBody Map<String, Object> confirm(@PathVariable String xordernum){
-
-		Opordheader oh = opordService.findOpordHeaderByXordernum(xordernum);
-		if(oh == null) {
-			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " not found");
+	@PostMapping("/createinvoice/{xordernum}")
+	public @ResponseBody Map<String, Object> createInvoice(@PathVariable String xordernum){
+		try {
+			return opordService.createSalesOrderToInvoice(responseHelper, xordernum);
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
 			return responseHelper.getResponse();
 		}
-
-		if(!"Open".equalsIgnoreCase(oh.getXstatusord())) {
-			responseHelper.setErrorStatusAndMessage("Sales order " + xordernum + " is not Open");
-			return responseHelper.getResponse();
-		}
-
-		// check sales order has details
-		List<Oporddetail> details = opordService.findOporddetailByXordernum(xordernum);
-		if(details == null || details.isEmpty()) {
-			responseHelper.setErrorStatusAndMessage("Sales order details is empty");
-			return responseHelper.getResponse();
-		}
-
-		oh.setXstatusord("Confirmed");
-		long count = opordService.updateOpordHeader(oh);
-		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't Confirmed sales order " + xordernum);
-			return responseHelper.getResponse();
-		}
-
-		responseHelper.setReloadSectionIdWithUrl("opordheaderform", "/salesninvoice/opord/opordheaderform/" + xordernum);
-		responseHelper.setSuccessStatusAndMessage("Order Confirmed successfully");
-		return responseHelper.getResponse();
 	}
 
 }

@@ -21,18 +21,19 @@ import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
 import com.asl.enums.TransactionCodeType;
-import com.asl.mapper.CaitemMapper;
 import com.asl.mapper.OpdoMapper;
-import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.ServiceException;
+import com.asl.service.CaitemService;
 import com.asl.service.OpdoService;
+import com.asl.service.OpordService;
 
 @Service
 public class OpdoServiceImpl extends AbstractGenericService implements OpdoService {
 
 	@Autowired private OpdoMapper opdoMapper;
-	@Autowired private OpordMapper opordMapper;
-	@Autowired private CaitemMapper caitemMapper;
+	@Autowired private OpordService opordService;
+	@Autowired private CaitemService caitemService;
 
 	@Transactional
 	@Override
@@ -54,6 +55,13 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			opdoHeader.setZid(sessionManager.getBusinessId());
 		opdoHeader.setZuuserid(getAuditUser());
 		return opdoMapper.updateOpdoHeader(opdoHeader);
+	}
+
+	@Transactional
+	@Override
+	public long delete(String xdornum) {
+		if(StringUtils.isBlank(xdornum)) return 0;
+		return opdoMapper.deleteOpdoHeader(xdornum, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -226,13 +234,13 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 
 	@Transactional
 	@Override
-	public long createSalesFromChalan(String xordernum) {
+	public long createSalesFromChalan(String xordernum) throws ServiceException {
 		if(StringUtils.isBlank(xordernum)) return 0;
 
-		Opordheader productionChalan = opordMapper.findOpordHeaderByXordernum(xordernum, sessionManager.getBusinessId());
+		Opordheader productionChalan = opordService.findOpordHeaderByXordernum(xordernum);
 		if(productionChalan == null) return 0;
 
-		List<Opordheader> salesOrdersOfProductionChalan = opordMapper.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum, sessionManager.getBusinessId());
+		List<Opordheader> salesOrdersOfProductionChalan = opordService.findAllSalesOrderByChalan(TransactionCodeType.SALES_ORDER.getCode(), TransactionCodeType.SALES_ORDER.getdefaultCode(), xordernum);
 		if(salesOrdersOfProductionChalan == null || salesOrdersOfProductionChalan.isEmpty()) return 0;
 
 		// check delivery chalan exist (it referes that already delivery chalan created)
@@ -271,6 +279,7 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 			sales.setXdiscamt(BigDecimal.ZERO);
 			sales.setXgrandtot(BigDecimal.ZERO);
 			sales.setXwh("01");  // set for central store invoice
+			sales.setXpaymenttype("Other");
 			sales.setXcus(salesOrder.getXcus());  // set branch reference for this sales, customer
 			sales.setXordernum(salesOrder.getXordernum());  // set sales order reference
 			sales.setRequisitionnumber(salesOrder.getXpornum());  // set branch requisition number reference
@@ -285,14 +294,17 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 //			if(savedSales == null) continue;
 
 			salesOrder.setXdornum(sales.getXdornum()); // now set sales reference back to sales order
-			opordMapper.updateOpordHeader(salesOrder); // updated sales order with sales reference
+			opordService.updateOpordHeader(salesOrder); // updated sales order with sales reference
 
 			// now prepare item details from sales order to sales
-			List<Oporddetail> salesOrdeItems = opordMapper.findOporddetailByXordernum(salesOrder.getXordernum(), sessionManager.getBusinessId(), getBusinessId());
+			List<Oporddetail> salesOrdeItems = opordService.findOporddetailByXordernum(salesOrder.getXordernum());
 			if(salesOrdeItems == null || salesOrdeItems.isEmpty()) continue;
 
 			for(Oporddetail salesOrderItem : salesOrdeItems) {
-				Caitem caitem = caitemMapper.findByXitem(salesOrderItem.getXitem(), sessionManager.getBusinessId());
+				if(salesOrderItem.getXqtydel() == null) salesOrderItem.setXqtydel(BigDecimal.ZERO);
+				if(salesOrderItem.getXqtyord() == null) salesOrderItem.setXqtyord(BigDecimal.ZERO);
+
+				Caitem caitem = caitemService.findByXitem(salesOrderItem.getXitem());
 				if(caitem == null) continue;
 
 				Opdodetail salesItem = new Opdodetail();
@@ -300,23 +312,39 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 				salesItem.setXitem(salesOrderItem.getXitem());
 				salesItem.setXqtyord(salesOrderItem.getXqtyord() != null ? salesOrderItem.getXqtyord() : BigDecimal.ZERO);
 				salesItem.setXunitsel(salesOrderItem.getXunit());
-				salesItem.setXrate(caitem.getXrate() != null ? caitem.getXrate() : BigDecimal.ZERO);
+				salesItem.setXrate(salesOrderItem.getXrate() != null ? salesOrderItem.getXrate() : BigDecimal.ZERO);
 				salesItem.setXlineamt(salesItem.getXqtyord().multiply(salesItem.getXrate()));
 				salesItem.setXcatitem(salesOrderItem.getXcatitem());
 				salesItem.setXgitem(salesOrderItem.getXgitem());
 				salesItem.setXdorrow(salesOrderItem.getXrow());
 				salesItem.setZid(sessionManager.getBusinessId());
 
+				// if item has no qty, then it don't need to save
+				if(BigDecimal.ZERO.equals(salesItem.getXqtyord())) continue;
+
 				long salesItemCount = saveDetail(salesItem);
-				if(salesItemCount == 0) continue;
+				if(salesItemCount == 0) throw new ServiceException("Can't save invoice detail");
+
+				salesOrderItem.setXqtydel(salesOrderItem.getXqtydel().add(salesItem.getXqtyord()));
 			}
+
+			// now update sales order details with invoice qty
+			for(Oporddetail salesOrderItem : salesOrdeItems) {
+				long dcount = opordService.updateOpordDetail(salesOrderItem);
+				if(dcount == 0) throw new ServiceException("Can't update sales detail");
+			}
+
+			// Now update sales order header status
+			salesOrder.setXstatus("Full Received");
+			long phcount = opordService.updateOpordHeader(salesOrder);
+			if(phcount == 0) throw new ServiceException("Can't update purchase order status");
 
 		}
 
 		if(salesSavedCount == salesOrdersOfProductionChalan.size()) {
 			productionChalan.setInvoicecreated(true);
 			productionChalan.setXdornum(deliveryChalan.getXdornum());
-			opordMapper.updateOpordHeader(productionChalan);
+			opordService.updateOpordHeader(productionChalan);
 		}
 
 		return salesSavedCount == salesOrdersOfProductionChalan.size() ? 1 : 0;
@@ -330,11 +358,9 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 	}
 
 	@Override
-	public Opdoheader findOpordheaderByXordernum(String xordernum) {
+	public List<Opdoheader> findOpdoheaderByXordernum(String xordernum) {
 		if(StringUtils.isBlank(xordernum)) return null;
-		return opdoMapper.findOpordheaderByXordernum(xordernum, sessionManager.getBusinessId());
+		return opdoMapper.findOpdoheaderByXordernum(xordernum, sessionManager.getBusinessId());
 	}
-
-	
 
 }

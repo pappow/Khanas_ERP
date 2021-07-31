@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,10 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
+import com.asl.entity.Imstock;
 import com.asl.entity.Opcrndetail;
 import com.asl.entity.Opcrnheader;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
 import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -37,15 +41,17 @@ import com.asl.model.report.ItemDetails;
 import com.asl.model.report.SalesOrder;
 import com.asl.model.report.SalesOrderChalanReport;
 import com.asl.service.CacusService;
+import com.asl.service.ImstockService;
 import com.asl.service.OpcrnService;
 import com.asl.service.OpdoService;
+import com.asl.service.OpordService;
 import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
 @RequestMapping("/salesninvoice/salesandinvoice")
-public class SalesAndInvoiceController extends ASLAbstractController {
+public class InvoiceController extends ASLAbstractController {
 
 	@Autowired private OpdoService opdoService;
 	@Autowired private OpcrnService opcrnService;
@@ -53,6 +59,8 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 	@Autowired private XtrnService xtrnService;
 	@Autowired private VataitService vataitService;
 	@Autowired private CacusService cacusService;
+	@Autowired private OpordService opordService;
+	@Autowired private ImstockService imstockService;
 
 	@GetMapping
 	public String loadInvoicePage(Model model) {
@@ -111,33 +119,18 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 
 	private Opdoheader getDefaultOpdoHeader() {
 		Opdoheader opdoheader = new Opdoheader();
-		opdoheader.setXtype(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
 		opdoheader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
-		opdoheader.setXtrnopdo(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
 		opdoheader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		opdoheader.setXdate(new Date());
 		opdoheader.setXstatusord("Open");
-		opdoheader.setXstatusar("Open");
-		opdoheader.setXstatusjv("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
-		opdoheader.setXgrandtot(BigDecimal.ZERO);
-		opdoheader.setXvatait("No Vat");
-		opdoheader.setXvatamt(BigDecimal.ZERO);
-		opdoheader.setXait(BigDecimal.ZERO);
-		opdoheader.setXdiscamt(BigDecimal.ZERO);
-		opdoheader.setXpaid(BigDecimal.ZERO);
-		opdoheader.setXchange(BigDecimal.ZERO);
-		opdoheader.setXpaystatus("Due");
 		opdoheader.setXwh("01");
+		opdoheader.setXpaymenttype("Other");
 		return opdoheader;
 	}
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Opdoheader opdoHeader, BindingResult bindingResult) {
-		if (opdoHeader == null || StringUtils.isBlank(opdoHeader.getXtype())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
 		// Validate
 		if (StringUtils.isBlank(opdoHeader.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Please select a customer to create invoice");
@@ -165,13 +158,21 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			opdoHeader.setXchange(BigDecimal.ZERO);
 		}
 
+		// If new
+		opdoHeader.setXstatusar("Open");
+		opdoHeader.setXstatusjv("Open");
+
 		// if existing record
-		Opdoheader existOpdoHeader = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
-		if (existOpdoHeader != null) {
-			BeanUtils.copyProperties(opdoHeader, existOpdoHeader, "xdornum", "xtype", "xtypetrn", "xtrnopdo", "xtrn");
-			long count = opdoService.update(existOpdoHeader);
+		if (StringUtils.isNotBlank(opdoHeader.getXdornum())) {
+			Opdoheader exist = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
+			if(exist == null) {
+				responseHelper.setErrorStatusAndMessage("Invoice not found to do update");
+				return responseHelper.getResponse();
+			}
+			BeanUtils.copyProperties(opdoHeader, exist, "xdornum", "xtypetrn", "xtrn");
+			long count = opdoService.update(exist);
 			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update invoice");
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Invoice updated successfully");
@@ -179,9 +180,6 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
-		// If new
-		opdoHeader.setXstatusar("Open");
-		opdoHeader.setXstatusjv("Open");
 		long count = opdoService.save(opdoHeader);
 		if (count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
@@ -190,6 +188,166 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + opdoHeader.getXdornum());
 		return responseHelper.getResponse();
+	}
+
+	@PostMapping("/archive/{xdornum}")
+	public  @ResponseBody Map<String, Object> archive(@PathVariable String xdornum) {
+		Opdoheader header = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if(header == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Invoice in this system");
+			return responseHelper.getResponse();
+		}
+
+		List<Opdodetail> details = opdoService.findOpdoDetailByXdornum(xdornum);
+		if(details != null && !details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Delete Invoice details first");
+			return responseHelper.getResponse();
+		}
+
+		long hcount = opdoService.delete(header.getXdornum());
+		if(hcount == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't delete GRN");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Invoice deleted successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice");
+		return responseHelper.getResponse();
+	}
+
+	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
+	public String openOpdoDetailModal(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
+
+		Opdoheader opdoheader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if(opdoheader == null) return "redirect:/salesninvoice/salesandinvoice/" + xdornum;
+
+		model.addAttribute("xordernum", opdoheader.getXordernum());
+
+		if ("new".equalsIgnoreCase(xrow)) {
+			Opdodetail opdodetail = new Opdodetail();
+			opdodetail.setXdornum(xdornum);
+			opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			opdodetail.setXqtyord(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			opdodetail.setPrevqty(BigDecimal.ZERO);
+			model.addAttribute("opdodetail", opdodetail);
+		} else {
+			Opdodetail opdodetail = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
+			opdodetail.setPrevqty(opdodetail.getXqtyord() == null ? BigDecimal.ZERO : opdodetail.getXqtyord());
+			model.addAttribute("opdodetail", opdodetail);
+		}
+		if(isBoshila()) return "pages/land/salesninvoice/opdodetailmodal::opdodetailmodal";
+		return "pages/salesninvoice/salesandinvoice/opdodetailmodal::opdodetailmodal";
+	}
+
+	@PostMapping("/opdodetail/save")
+	public @ResponseBody Map<String, Object> saveOpdodetail(Opdodetail opdoDetail) {
+		if (opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(opdoDetail.getXitem())) {
+			responseHelper.setErrorStatusAndMessage("Item not selected! Please select an item");
+			return responseHelper.getResponse();
+		}
+		if(opdoDetail.getXqtyord() == null || BigDecimal.ZERO.equals(opdoDetail.getXqtyord()) || opdoDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1){
+			responseHelper.setErrorStatusAndMessage("Quantity should be greater then 0");
+			return responseHelper.getResponse();
+		}
+
+		// validate invoice quantity
+		Opdoheader oph = opdoService.findOpdoHeaderByXdornum(opdoDetail.getXdornum());
+		if(oph == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Invoice");
+			return responseHelper.getResponse();
+		}
+		Oporddetail oporddetail = opordService.findOporddetailByXordernumAndXrow(oph.getXordernum(), opdoDetail.getXdorrow());
+		if(oporddetail == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Sales order detail for this item row");
+			return responseHelper.getResponse();
+		}
+		// calculate and update oporddetail xqtygrn 
+		if(opdoDetail.getXrow() != 0) {  // for existing item
+			BigDecimal diff1 = opdoDetail.getPrevqty().subtract(opdoDetail.getXqtyord());
+			BigDecimal diff2 = oporddetail.getXqtydel().subtract(diff1);
+			if(diff2.compareTo(oporddetail.getXqtyord()) == 1) {
+				responseHelper.setErrorStatusAndMessage("Invoice quantity can't be greater then sales order quantity");
+				return responseHelper.getResponse();
+			}
+			oporddetail.setXqtydel(diff2);
+		} else {  // for new item
+			oporddetail.setXqtydel(oporddetail.getXqtydel().add(opdoDetail.getXqtyord()));
+			if(oporddetail.getXqtydel().compareTo(oporddetail.getXqtyord()) == 1) {
+				responseHelper.setErrorStatusAndMessage("Invoice quantity can't be greater then sales order quantity");
+				return responseHelper.getResponse();
+			}
+		}
+
+		long count2 = opordService.updateOpordDetail(oporddetail);
+		if(count2 == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update sales qty to Sales detail");
+			return responseHelper.getResponse();
+		}
+
+		// modify line amount
+		opdoDetail.setXitem(opdoDetail.getXitem().split("\\|")[0]);
+		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate()).setScale(2, RoundingMode.DOWN));
+
+		// if existing
+		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
+		if (existDetail != null) {
+			BeanUtils.copyProperties(opdoDetail, existDetail, "xdornum", "xrow");
+			long count = opdoService.updateDetail(existDetail);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			
+			// now update sales order header status
+			if(!updateSalesOrderStatus(oph)) {
+				responseHelper.setErrorStatusAndMessage("Can't update sales order status");
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
+			responseHelper.setSuccessStatusAndMessage("Invoice detail updated successfully");
+			return responseHelper.getResponse();
+		}
+
+		// if new detail
+		long count = opdoService.saveDetail(opdoDetail);
+		if (count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		// now update sales order header status
+		if(!updateSalesOrderStatus(oph)) {
+			responseHelper.setErrorStatusAndMessage("Can't update sales order status");
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
+		responseHelper.setSuccessStatusAndMessage("Invoice detail saved successfully");
+		return responseHelper.getResponse();
+	}
+
+	private boolean updateSalesOrderStatus(Opdoheader oph) {
+		String status = "Full Delivered";
+		List<Oporddetail> detailsList = opordService.findOporddetailByXordernum(oph.getXordernum());
+		if(detailsList != null && !detailsList.isEmpty()) {
+			for(Oporddetail pd : detailsList) {
+				if(!pd.getXqtydel().equals(pd.getXqtyord())) status = "DO Created";
+			}
+		}
+		Opordheader ph = opordService.findOpordHeaderByXordernum(oph.getXordernum());
+		ph.setXstatusord(status);
+		long phcount = opordService.updateOpordHeader(ph);
+		if(phcount == 0) {
+			return false;
+		}
+		return true;
 	}
 
 	@GetMapping("/opdodetail/{xdornum}")
@@ -214,86 +372,6 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		return "pages/salesninvoice/salesandinvoice/opdo::opdoheaderform";
 	}
 
-	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
-	public String openOpdoDetailModal(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
-
-		if ("new".equalsIgnoreCase(xrow)) {
-			Opdodetail opdodetail = new Opdodetail();
-			opdodetail.setXdornum(xdornum);
-			opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-			opdodetail.setXqtycrn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			model.addAttribute("opdodetail", opdodetail);
-		} else {
-			Opdodetail opdodetail = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
-			if (opdodetail == null) {
-				opdodetail = new Opdodetail();
-				opdodetail.setXdornum(xdornum);
-				opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-				opdodetail.setXqtyord(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
-				opdodetail.setXqtycrn(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
-			}
-			model.addAttribute("opdodetail", opdodetail);
-		}
-		if(isBoshila()) return "pages/land/salesninvoice/opdodetailmodal::opdodetailmodal";
-		return "pages/salesninvoice/salesandinvoice/opdodetailmodal::opdodetailmodal";
-	}
-
-	@PostMapping("/opdodetail/save")
-	public @ResponseBody Map<String, Object> saveOpdodetail(Opdodetail opdoDetail) {
-		if (opdoDetail == null || StringUtils.isBlank(opdoDetail.getXdornum())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		if(StringUtils.isBlank(opdoDetail.getXitem())) {
-			responseHelper.setErrorStatusAndMessage("Item not selected! Please select an item");
-			return responseHelper.getResponse();
-		}
-		if(opdoDetail.getXqtyord() == null || opdoDetail.getXqtyord().compareTo(BigDecimal.ONE) == -1) {
-			responseHelper.setErrorStatusAndMessage("Item quantity can't be less then one");
-			return responseHelper.getResponse();
-		}
-		if(opdoDetail.getXqtyord() == null || opdoDetail.getXqtyord().compareTo(BigDecimal.ZERO) == -1) {
-			responseHelper.setErrorStatusAndMessage("Item Rate can't be negative");
-			return responseHelper.getResponse();
-		}
-
-		// Check item already exist in detail list
-		if (opdoDetail.getXrow() == 0 && opdoService.findOpdoDetailByXdornumAndXitem(opdoDetail.getXdornum(), opdoDetail.getXitem()) != null) {
-			responseHelper.setErrorStatusAndMessage("Item already added into detail list. Please add another one or update existing");
-			return responseHelper.getResponse();
-		}
-
-		// modify line amount
-		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate()).setScale(2, RoundingMode.DOWN));
-
-		// if existing
-		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
-		if (existDetail != null) {
-			BeanUtils.copyProperties(opdoDetail, existDetail, "xdornum", "xrow");
-			long count = opdoService.updateDetail(existDetail);
-			if (count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
-				return responseHelper.getResponse();
-			}
-			responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
-			responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
-			responseHelper.setSuccessStatusAndMessage("Invoice item updated successfully");
-			return responseHelper.getResponse();
-		}
-
-		// if new detail
-		long count = opdoService.saveDetail(opdoDetail);
-		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		responseHelper.setReloadSectionIdWithUrl("opdodetailtable", "/salesninvoice/salesandinvoice/opdodetail/" + opdoDetail.getXdornum());
-		responseHelper.setSecondReloadSectionIdWithUrl("opdoheaderform", "/salesninvoice/salesandinvoice/opdoheaderform/" + opdoDetail.getXdornum());
-		responseHelper.setSuccessStatusAndMessage("Invoice item saved successfully");
-		return responseHelper.getResponse();
-	}
-
 	@PostMapping("{xdornum}/opdodetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteOpdoDetail(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
 		Opdodetail pd = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
@@ -302,9 +380,32 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		Opdoheader oph = opdoService.findOpdoHeaderByXdornum(pd.getXdornum());
+		if(oph == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Invoice");
+			return responseHelper.getResponse();
+		}
+		Oporddetail oporddetail = opordService.findOporddetailByXordernumAndXrow(oph.getXordernum(), pd.getXdorrow());
+		if(oporddetail == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Sales order detail for this item row");
+			return responseHelper.getResponse();
+		}
+		oporddetail.setXqtydel(oporddetail.getXqtydel().subtract(pd.getXqtyord()));
+		long count2 = opordService.updateOpordDetail(oporddetail);
+		if(count2 == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update invoice qty to sales detail");
+			return responseHelper.getResponse();
+		}
+
+		// now update sales order header status
+		if(!updateSalesOrderStatus(oph)) {
+			responseHelper.setErrorStatusAndMessage("Can't update sales order status");
+			return responseHelper.getResponse();
+		}
+
 		long count = opdoService.deleteDetail(pd);
 		if (count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage("Can't delete invoice detail");
 			return responseHelper.getResponse();
 		}
 
@@ -314,73 +415,94 @@ public class SalesAndInvoiceController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/confirmopdo/{xdornum}")
+	@PostMapping("/confirminvoice/{xdornum}")
 	public @ResponseBody Map<String, Object> confirmOpdo(@PathVariable String xdornum) {
-		if (StringUtils.isBlank(xdornum)) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
 		Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
+		if(opdoHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Invoice not found in this system");
+			return responseHelper.getResponse();
+		}
+		
+		// validate
+		if(StringUtils.isBlank(opdoHeader.getXcus())) {
+			responseHelper.setErrorStatusAndMessage("Customer required");
+			return responseHelper.getResponse();
+		}
+		if (!"Open".equalsIgnoreCase(opdoHeader.getXstatusord())) {
+			responseHelper.setErrorStatusAndMessage("Invoice already confirmed");
+			return responseHelper.getResponse();
+		}
+
 		List<Opdodetail> opdoDetailList = opdoService.findOpdoDetailByXdornum(xdornum);
-		Integer grandTot = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt())).intValue();
-
-		if (opdoDetailList.size() == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-		if (!"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
-			Integer paid = ((opdoHeader.getXtotamt().subtract(opdoHeader.getXdiscamt())).add(opdoHeader.getXvatamt()))
-					.intValue();
-			opdoHeader.setXpaid(BigDecimal.valueOf(paid));
-		}
-		Integer xpaid99 = opdoHeader.getXpaid().add(BigDecimal.valueOf(0.99)).intValue();
-
-		if (grandTot > xpaid99 && !"Other".equalsIgnoreCase(opdoHeader.getXpaymenttype())) {
-			responseHelper.setErrorStatusAndMessage("Paid amount not to be less than Receivable!");
+		if(opdoDetailList == null || opdoDetailList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Invoice has no item details");
 			return responseHelper.getResponse();
 		}
 
-		// Opdoheader opdoHeader = opdoService.findOpdoHeaderByXdornum(xdornum);
-		// PogrnHeader pogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(xgrnnum);
+		// stock validation
+		Map<String, BigDecimal> itemMap = new HashMap<>();
+		for(Opdodetail d : opdoDetailList) {
+			if(itemMap.get(d.getXitem() + '|' + opdoHeader.getXwh()) != null) {
+				itemMap.put(d.getXitem() + '|' + opdoHeader.getXwh(), itemMap.get(d.getXitem() + '|' + opdoHeader.getXwh()).add(d.getXqtyord()));
+			} else {
+				itemMap.put(d.getXitem() + '|' + opdoHeader.getXwh(), d.getXqtyord());
+			}
+		}
+
+		boolean hasError = false;
+		StringBuilder ems = new StringBuilder("Stock Not available.");
+		for(Map.Entry<String, BigDecimal> m : itemMap.entrySet()) {
+			String[] key = m.getKey().split("\\|");
+			String xitem = key[0];
+			String xwh = key[1];
+			BigDecimal qty = m.getValue();
+
+			Imstock stock = imstockService.findByXitemAndXwh(xitem, xwh);
+			if(stock == null) continue;
+
+			if(stock.getXavail().compareTo(qty) == -1) {
+				hasError = true;
+				ems.append("<br/>Item [" + xitem + "] - " + xwh + ", Available : " + stock.getXavail() + ", Required : " + qty);
+			}
+		}
+		if(hasError) {
+			responseHelper.setErrorStatusAndMessage(ems.toString());
+			return responseHelper.getResponse();
+		}
 
 		String p_seq;
-		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
-					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			opdoService.procConfirmDO(xdornum, p_seq);
-			// Error check here for procConfrimDo
+		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusord())) {
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procConfirmDO(opdoHeader.getXdornum(), p_seq);
+			//Error check here for procConfrimDo
 			String em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
+			if(StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
 
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
-					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
 			opdoService.procIssuePricing(opdoHeader.getXdocnum(), opdoHeader.getXwh(), p_seq);
-			// Error check here for procIssuePricing
+			//Error check here for procIssuePricing
 			em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
+			if(StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
-
 		}
-		if (!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())) {
-			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(),
-					TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
-			opdoService.procTransferOPtoAR(xdornum, "opdoheader", p_seq);
-			// Error check here for procTransferOPtoAR
+
+		if(!"Confirmed".equalsIgnoreCase(opdoHeader.getXstatusar())){
+			p_seq = xtrnService.generateAndGetXtrnNumber(TransactionCodeType.PROC_ERROR.getCode(), TransactionCodeType.PROC_ERROR.getdefaultCode(), 6);
+			opdoService.procTransferOPtoAR(opdoHeader.getXdornum(), "opdoheader", p_seq);
+			//Error check here for procTransferOPtoAR
 			String em = getProcedureErrorMessages(p_seq);
-			if (StringUtils.isNotBlank(em)) {
+			if(StringUtils.isNotBlank(em)) {
 				responseHelper.setErrorStatusAndMessage(em);
 				return responseHelper.getResponse();
 			}
-
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Invoice Confirmed successfully");
-
 		responseHelper.setRedirectUrl("/salesninvoice/salesandinvoice/" + xdornum);
 		return responseHelper.getResponse();
 	}

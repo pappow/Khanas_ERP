@@ -1,9 +1,11 @@
 package com.asl.service.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Caitem;
+import com.asl.entity.Opdodetail;
+import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.enums.TransactionCodeType;
 import com.asl.mapper.OpordMapper;
 import com.asl.model.BranchesRequisitions;
+import com.asl.model.ResponseHelper;
+import com.asl.model.ServiceException;
+import com.asl.service.OpdoService;
 import com.asl.service.OpordService;
 
 
@@ -26,6 +34,7 @@ import com.asl.service.OpordService;
 public class OpordServiceImpl extends AbstractGenericService implements OpordService {
 
 	@Autowired private OpordMapper opordMapper;
+	@Autowired private OpdoService opdoService;
 
 	@Transactional
 	@Override
@@ -46,6 +55,13 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		long count = opordMapper.updateOpordHeader(opordheader);
 		updateOpordHeaderTotalAmtAndGrandTotalAmt(opordheader.getXordernum());
 		return count;
+	}
+
+	@Transactional
+	@Override
+	public long deleteOpordHeader(String xordernum) {
+		if(StringUtils.isBlank(xordernum)) return 0;
+		return opordMapper.deleteOpordHeader(xordernum, sessionManager.getBusinessId());
 	}
 
 	@Transactional
@@ -272,6 +288,101 @@ public class OpordServiceImpl extends AbstractGenericService implements OpordSer
 		return opordMapper.deleteSubItems(xordernum, xparentrow, xtype, sessionManager.getBusinessId());
 	}
 
-	
+	@Transactional
+	@Override
+	public Map<String, Object> createSalesOrderToInvoice(ResponseHelper responseHelper, String xordernum) throws ServiceException {
+		Opordheader opordHeader = findOpordHeaderByXordernum(xordernum);
+		if(opordHeader == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find Sales order : " + xordernum);
+			return responseHelper.getResponse();
+		}
+		if("Open".equalsIgnoreCase(opordHeader.getXstatusord())) {
+			responseHelper.setErrorStatusAndMessage("Sales order not confirmed");
+			return responseHelper.getResponse();
+		}
+		// check Sales order has item details
+		List<Oporddetail> opordDetailList = findOporddetailByXordernum(xordernum);
+		if(opordDetailList == null || opordDetailList.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("This purchase order has no item");
+			return responseHelper.getResponse();
+		}
+		// check is there is any available item to make Invoice
+		boolean itemavailable = false;
+		for(Oporddetail p : opordDetailList) {
+			if(p.getXqtydel() == null) p.setXqtydel(BigDecimal.ZERO);
+			if(!p.getXqtydel().equals(p.getXqtyord())) itemavailable = true;
+		}
+		if(!itemavailable) {
+			responseHelper.setErrorStatusAndMessage("This Sales order has no item available to make Invoice");
+			return responseHelper.getResponse();
+		}
 
+		// Create Invoice header first
+		Opdoheader opdoHeader = new Opdoheader();
+		opdoHeader.setXordernum(xordernum);
+		opdoHeader.setXtypetrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getCode());
+		opdoHeader.setXtrn(TransactionCodeType.SALES_AND_INVOICE_NUMBER.getdefaultCode());
+		opdoHeader.setXdate(new Date());
+		opdoHeader.setXstatusord("Open");
+		opdoHeader.setXstatusjv("Open");
+		opdoHeader.setXstatusar("Open");
+		opdoHeader.setXtotamt(opordHeader.getXtotamt() == null ? BigDecimal.ZERO : opordHeader.getXtotamt());
+		opdoHeader.setXwh("01");
+		opdoHeader.setXpaymenttype("Other");
+		opdoHeader.setXcus(opordHeader.getXcus());
+		long count = opdoService.save(opdoHeader);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't create Invoice for sales order : " + xordernum);
+			return responseHelper.getResponse();
+		}
+
+		// Create invoice details from purchase details
+		for(Oporddetail p : opordDetailList) {
+			if(p.getXqtydel() == null) p.setXqtydel(BigDecimal.ZERO); 
+			if(p.getXqtyord() == null) p.setXqtyord(BigDecimal.ZERO); 
+
+			Opdodetail detail = new Opdodetail();
+			detail.setXdornum(opdoHeader.getXdornum());
+			detail.setXitem(p.getXitem());
+			detail.setXdorrow(p.getXrow());
+			detail.setXunitsel(p.getXunit());
+			detail.setXqtyord(p.getXqtyord().subtract(p.getXqtydel()));
+			detail.setXrate(p.getXrate() != null ? p.getXrate() : BigDecimal.ZERO);
+			detail.setXlineamt(detail.getXqtyord().multiply(detail.getXrate()));
+			detail.setXcatitem(p.getXcatitem());
+			detail.setXgitem(p.getXgitem());
+
+			// if item has no qty, then it don't need to save
+			if(BigDecimal.ZERO.equals(detail.getXqtyord())) continue;
+
+			// Now save detail
+			long dcount = opdoService.saveDetail(detail);
+			if(dcount == 0) throw new ServiceException("Can't save invoice detail");
+
+			p.setXqtydel(p.getXqtydel().add(detail.getXqtyord()));
+		}
+
+		// now update sales order details with invoice qty
+		for(Oporddetail p : opordDetailList) {
+			long dcount = updateOpordDetail(p);
+			if(dcount == 0) throw new ServiceException("Can't update sales detail");
+		}
+
+		// now update sales order header status
+		opordHeader.setXstatusord("Full Delivered");
+		long phcount = updateOpordHeader(opordHeader);
+		if(phcount == 0) throw new ServiceException("Can't update sales order status");
+
+		responseHelper.setSuccessStatusAndMessage("Invoice created successfully");
+		responseHelper.setRedirectUrl("/salesninvoice/opord/" + opordHeader.getXordernum());
+		return responseHelper.getResponse();
+	}
+
+	@Override
+	public List<Oporddetail> searchSalesOrderAvailableItem(String xordernum, String hint) {
+		if(StringUtils.isBlank(xordernum) || StringUtils.isBlank(hint)) return Collections.emptyList();
+		return opordMapper.searchSalesOrderAvailableItem(xordernum, hint.toUpperCase(), sessionManager.getBusinessId());
+	}
+
+	
 }

@@ -388,9 +388,15 @@ public class SalesOrderChalanController extends ASLAbstractController {
 
 	@PostMapping("/createinvoice/{xordernum}")
 	public @ResponseBody Map<String, Object> createInvoice(@PathVariable String xordernum, Model model){
-		long count = opdoService.createSalesFromChalan(xordernum);
-		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+		try {
+			long count = opdoService.createSalesFromChalan(xordernum);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+		} catch (ServiceException e) {
+			log.error(ERROR, e.getMessage(), e);
+			responseHelper.setErrorStatusAndMessage(e.getMessage());
 			return responseHelper.getResponse();
 		}
 

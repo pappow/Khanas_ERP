@@ -103,4 +103,7 @@ public class Oporddetail extends AbstractModel<String> {
 
 	@Transient
 	private List<Oporddetail> subitems = new ArrayList<>();
+
+	@Transient
+	private String itemname;
 }

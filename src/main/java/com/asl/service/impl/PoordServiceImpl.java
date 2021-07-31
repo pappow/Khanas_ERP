@@ -229,10 +229,14 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			responseHelper.setErrorStatusAndMessage("Can't find purchase order : " + xpornum);
 			return responseHelper.getResponse();
 		}
+		if("Open".equalsIgnoreCase(poordHeader.getXstatuspor())) {
+			responseHelper.setErrorStatusAndMessage("Purchase order not confirmed");
+			return responseHelper.getResponse();
+		}
 
 		// check purchase order has item details
 		List<PoordDetail> poordDetailList = findPoorddetailByXpornum(xpornum);
-		if(poordDetailList.isEmpty()) {
+		if(poordDetailList == null || poordDetailList.isEmpty()) {
 			responseHelper.setErrorStatusAndMessage("This purchase order has no item");
 			return responseHelper.getResponse();
 		}
@@ -268,10 +272,10 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		}
 
 		// Create grn details from purchase details
-		
 		for(int i = 0; i < poordDetailList.size(); i++) {
 			PoordDetail poorddetail = poordDetailList.get(i);
 			if(poorddetail.getXqtygrn() == null) poorddetail.setXqtygrn(BigDecimal.ZERO);
+			if(poorddetail.getXqtyord() == null) poorddetail.setXqtyord(BigDecimal.ZERO);
 
 			PogrnDetail detail = new PogrnDetail();
 			detail.setXgrnnum(pogrnHeader.getXgrnnum());
@@ -280,7 +284,7 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			detail.setXqtygrn(poorddetail.getXqtyord().subtract(poorddetail.getXqtygrn()));
 			detail.setXrate(poorddetail.getXrate());
 			detail.setXunitpur(poorddetail.getXunitpur());
-			detail.setXlineamt(poorddetail.getXlineamt());
+			detail.setXlineamt(poorddetail.getXqtyord().multiply(poorddetail.getXrate()));
 			detail.setZid(sessionManager.getBusinessId());
 			detail.setZauserid(getAuditUser());
 			
