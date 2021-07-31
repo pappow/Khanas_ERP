@@ -435,7 +435,7 @@
 
 
 									<!-- REPORT -->
-									<span th:if="${isCentral and menuProfile.M0700 ne null and menuProfile.M0700.display}">
+									<span sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${isCentral and menuProfile.M0700 ne null and menuProfile.M0700.display}">
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0700.screenprompt}">Report</td>
 										</tr>
