@@ -8,6 +8,7 @@ import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdtransdt;
 
 /**
  * @author Zubayer Ahamed
@@ -69,4 +70,17 @@ public interface PdmstMapper {
 	public List<Pdpromodt> findByPdpromodt(String xstaff, String zid);
 	
 	public Pdpromodt findPdpromodtByXstaffAndXrow(String xstaff, int xrow, String zid);
+	
+	//for HRTransfer
+	public long savePdtransdt(Pdtransdt pdtr);
+	
+	public long updatePdtransdt(Pdtransdt pdtr);
+	
+	public long deletePdtransdt(Pdtransdt pdtr);
+	
+	public List<Pdtransdt> getAllPdtransdt(String zid);
+	
+	public List<Pdtransdt> findByPdtransdt(String xstaff, String zid);
+	
+	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow, String zid);
 }

@@ -23,6 +23,7 @@ import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdtransdt;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -72,6 +73,7 @@ public class HRPersonalInfoController extends ASLAbstractController{
 		model.addAttribute("hrqlist", pdmstService.findByPdeducation(xstaff));
 		model.addAttribute("hrelist", pdmstService.findByPdexperience(xstaff));
 		model.addAttribute("hrplist", pdmstService.findByPdpromodt(xstaff));
+		model.addAttribute("hrtlist", pdmstService.findByPdtransdt(xstaff));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.HR_EMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
@@ -385,6 +387,90 @@ public class HRPersonalInfoController extends ASLAbstractController{
 
 			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 			responseHelper.setReloadSectionIdWithUrl("hrpromotiontable", "/hrpersonal/hrpromotion/" + xstaff);
+			return responseHelper.getResponse();
+		}
+		
+		//start of HRTransfer
+		
+		@GetMapping("/{xstaff}/hrtransfer/{xrow}/show")
+		public String loadHRTransferModal(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			if("new".equalsIgnoreCase(xrow)) {
+				Pdtransdt hrt = new Pdtransdt();
+				hrt.setXstaff(xstaff);
+				model.addAttribute("hrt", hrt);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			else {
+				Pdtransdt hrt = pdmstService.findPdtransdtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+				if(hrt==null) {
+					hrt = new Pdtransdt();
+					
+				}
+				model.addAttribute("hrt", hrt);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			
+			return "pages/hr/hrtransfermodal::hrtransfermodal";
+		}
+		
+		@PostMapping("/hrtransfer/save")
+		public @ResponseBody Map<String, Object> saveHRTransfer(Pdtransdt pdtr) {
+			if (pdtr == null || StringUtils.isBlank(pdtr.getXstaff())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			// if existing
+			Pdtransdt exist = pdmstService.findPdtransdtByXstaffAndXrow(pdtr.getXstaff(), pdtr.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(pdtr, exist,"xstaff");
+				long count = pdmstService.updatePdtransdt(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("hrtransfertable","/hrpersonal/hrtransfer/" + pdtr.getXstaff());
+				responseHelper.setSuccessStatusAndMessage("Transfer History updated successfully");
+				return responseHelper.getResponse();
+			}
+
+			
+			// if new detail
+			long count = pdmstService.savePdtransdt(pdtr);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("hrtransfertable","/hrpersonal/hrtransfer/" + pdtr.getXstaff());
+			responseHelper.setSuccessStatusAndMessage("Transfer History saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		@GetMapping("/hrtransfer/{xstaff}")
+		public String reloadHRTransferTable(@PathVariable String xstaff, Model model) {
+			List<Pdtransdt> hrtList = pdmstService.findByPdtransdt(xstaff);
+			model.addAttribute("hrtlist", hrtList);
+			model.addAttribute("hrinfo", pdmstService.findAllPdmst(xstaff));
+			return "pages/hr/hrpersonal::hrtransfertable";
+		}
+		
+		//delete
+		@PostMapping("{xstaff}/hrtransfer/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteHRTransfer(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			Pdtransdt hrt = pdmstService.findPdtransdtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(hrt == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = pdmstService.deletePdtransdt(hrt);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("hrtransfertable", "/hrpersonal/hrtransfer/" + xstaff);
 			return responseHelper.getResponse();
 		}
 }

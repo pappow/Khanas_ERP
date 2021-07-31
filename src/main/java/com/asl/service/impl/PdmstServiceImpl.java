@@ -12,6 +12,7 @@ import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdtransdt;
 import com.asl.mapper.PdmstMapper;
 import com.asl.service.PdmstService;
 
@@ -213,6 +214,52 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	public Pdpromodt findPdpromodtByXstaffAndXrow(String xstaff, int xrow) {
 		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
 		return pdmstMapper.findPdpromodtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+
+	//for HRTransfer
+	@Transactional
+	@Override
+	public long savePdtransdt(Pdtransdt pdtr) {
+		if (pdtr == null)
+			return 0;
+		pdtr.setZid(sessionManager.getBusinessId());
+		pdtr.setZauserid(getAuditUser());
+		return pdmstMapper.savePdtransdt(pdtr);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdtransdt(Pdtransdt pdtr) {
+		if (pdtr == null)
+			return 0;
+		pdtr.setZid(sessionManager.getBusinessId());
+		pdtr.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdtransdt(pdtr);
+	}
+
+	@Override
+	public long deletePdtransdt(Pdtransdt pdtr) {
+		if(pdtr == null) return 0;
+		long count = pdmstMapper.deletePdtransdt(pdtr);
+		return count;
+	}
+
+	@Override
+	public List<Pdtransdt> getAllPdtransdt(String zid) {
+		return pdmstMapper.getAllPdtransdt(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdtransdt> findByPdtransdt(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdtransdt(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdtransdtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
 	}
 
 	

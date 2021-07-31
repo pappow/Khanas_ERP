@@ -593,6 +593,47 @@
 						</div>
 					</section>
 				</div>
+				
+				<div class="col-md-12">
+					<section th:if="${not #strings.isEmpty(hrinfo.xstaff)}" id="data-maintenance" style="margin-top: 30px;">
+					<div class="section-header sectionbartoggle">
+						<h1>Transfer History of <span th:text="${hrinfo.xstaff}"></span> </h1>			
+					</div>
+						<div class="section-body" style="overflow-y:scroll;height:200px;">
+							<table class="table table-striped table-bordered normal-table" id="hrtransfertable" th:fragment="hrtransfertable">
+								<thead>
+									<tr>
+										<th>SL#</th>
+										<th>Date </th>
+										<th>Dept. Name</th>
+										<th>Transfered Dept.</th>
+										<th>Date Eff</th>
+										<th>Status</th>
+										<th>Note</th>
+										<th data-nosort="Y" style="text-align: right;">
+											<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrtransfer/new/show', data-target-modal='hrtransfermodal'"><i class="fas fa-plus"></i></button>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="d, n : ${hrtlist}">
+										<td th:text="${n.count}"></td>
+										<td th:text="${d.xdate}"></td>
+										<td th:text="${d.xdeptname}"></td>
+										<td th:text="${d.xdepttran}"></td>
+										<td th:text="${d.xdateeff}"></td>
+										<td th:text="${d.xstatus}"></td>
+										<td th:text="${d.xnote}"></td>
+										<td data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrtransfer/' + ${d.xrow} + '/show', data-target-modal='hrtransfermodal'"><i class="fas fa-edit"></i></button>
+											<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/hrpersonal/} + ${hrinfo.xstaff} + '/hrtransfer/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</div>
 	
 	
 				</div>
@@ -602,6 +643,7 @@
 		<div id="hrqualificationmodal-section"></div>
 		<div id="hrexperiencemodal-section"></div>
 		<div id="hrpromotionmodal-section"></div>
+		<div id="hrtransfermodal-section"></div>
 		
 		  <!-- Footer section -->
 		<div class="footer-section" th:include="commons :: footer-section"></div>
