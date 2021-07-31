@@ -1,9 +1,14 @@
 package com.asl.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -15,12 +20,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.asl.entity.LandComEvent;
 import com.asl.entity.LandDagDetails;
+import com.asl.entity.LandDocument;
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
+import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
 import com.asl.entity.Pdtransdt;
@@ -28,12 +37,14 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.LandComEventService;
+import com.asl.service.LandDocumentService;
 import com.asl.service.PdmstService;
 
 @Controller
 @RequestMapping("/hrpersonal")
 public class HRPersonalInfoController extends ASLAbstractController{
 	@Autowired private PdmstService pdmstService;
+	@Autowired private LandDocumentService landDocumentService;
 	@GetMapping
 	public String loadHRPersonalInfoPage(Model model) {
 		model.addAttribute("hrinfo", getDefaultPersonalInfo());
@@ -74,6 +85,7 @@ public class HRPersonalInfoController extends ASLAbstractController{
 		model.addAttribute("hrelist", pdmstService.findByPdexperience(xstaff));
 		model.addAttribute("hrplist", pdmstService.findByPdpromodt(xstaff));
 		model.addAttribute("hrtlist", pdmstService.findByPdtransdt(xstaff));
+		model.addAttribute("hrdlist", pdmstService.findByPdgradedt(xstaff));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.HR_EMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
@@ -473,4 +485,92 @@ public class HRPersonalInfoController extends ASLAbstractController{
 			responseHelper.setReloadSectionIdWithUrl("hrtransfertable", "/hrpersonal/hrtransfer/" + xstaff);
 			return responseHelper.getResponse();
 		}
+		
+		//start of HRDesignation
+		
+		@GetMapping("/{xstaff}/hrdesignation/{xrow}/show")
+		public String loadHRDesignationModal(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			if("new".equalsIgnoreCase(xrow)) {
+				Pdgradedt hrd = new Pdgradedt();
+				hrd.setXstaff(xstaff);
+				model.addAttribute("hrd", hrd);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			else {
+				Pdgradedt hrd = pdmstService.findPdgradedtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+				if(hrd==null) {
+					hrd = new Pdgradedt();
+					
+				}
+				model.addAttribute("hrd", hrd);
+				model.addAttribute("status", xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
+			}
+			
+			return "pages/hr/hrdesignationmodal::hrdesignationmodal";
+		}
+		
+		@PostMapping("/hrdesignation/save")
+		public @ResponseBody Map<String, Object> saveHRDesignation(Pdgradedt pdde) {
+			if (pdde == null || StringUtils.isBlank(pdde.getXstaff())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			// if existing
+			Pdgradedt exist = pdmstService.findPdgradedtByXstaffAndXrow(pdde.getXstaff(), pdde.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(pdde, exist,"xstaff");
+				long count = pdmstService.updatePdgradedt(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("hrdesignationtable","/hrpersonal/hrdesignation/" + pdde.getXstaff());
+				responseHelper.setSuccessStatusAndMessage("Changed Designation Info updated successfully");
+				return responseHelper.getResponse();
+			}
+
+			
+			// if new detail
+			long count = pdmstService.savePdgradedt(pdde);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("hrdesignationtable","/hrpersonal/hrdesignation/" + pdde.getXstaff());
+			responseHelper.setSuccessStatusAndMessage("Changed Designation Info saved successfully");
+			return responseHelper.getResponse();
+		}
+
+		@GetMapping("/hrdesignation/{xstaff}")
+		public String reloadHRDesignationTable(@PathVariable String xstaff, Model model) {
+			List<Pdgradedt> hrdList = pdmstService.findByPdgradedt(xstaff);
+			model.addAttribute("hrdlist", hrdList);
+			model.addAttribute("hrinfo", pdmstService.findAllPdmst(xstaff));
+			return "pages/hr/hrpersonal::hrdesignationtable";
+		}
+		
+		//delete
+		@PostMapping("{xstaff}/hrdesignation/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deleteHRDesignation(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			Pdgradedt hrd = pdmstService.findPdgradedtByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(hrd == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = pdmstService.deletePdgradedt(hrd);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("hrdesignationtable", "/hrpersonal/hrdesignation/" + xstaff);
+			return responseHelper.getResponse();
+		}
+		
+		// For HRDocument
+
+ 
 }

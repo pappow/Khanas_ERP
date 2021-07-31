@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
+import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
 import com.asl.entity.Pdtransdt;
@@ -83,4 +84,17 @@ public interface PdmstMapper {
 	public List<Pdtransdt> findByPdtransdt(String xstaff, String zid);
 	
 	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow, String zid);
+	
+	//for HRDesignation
+	public long savePdgradedt(Pdgradedt pdde);
+	
+	public long updatePdgradedt(Pdgradedt pdde);
+	
+	public long deletePdgradedt(Pdgradedt pdde);
+	
+	public List<Pdgradedt> getAllPdgradedt(String zid);
+	
+	public List<Pdgradedt> findByPdgradedt(String xstaff, String zid);
+	
+	public Pdgradedt findPdgradedtByXstaffAndXrow(String xstaff, int xrow, String zid);
 }

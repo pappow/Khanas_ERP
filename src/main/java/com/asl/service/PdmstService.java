@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
+import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
 import com.asl.entity.Pdtransdt;
@@ -76,9 +77,22 @@ public interface PdmstService {
 	
 	public long deletePdtransdt(Pdtransdt pdtr);
 	
-	public List<Pdtransdt> getAllPdtransdt(String zid);
+	public List<Pdtransdt> getAllPdtransdt();
 	
 	public List<Pdtransdt> findByPdtransdt(String xstaff);
 	
 	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow);
+	
+	//for HRDesignation
+	public long savePdgradedt(Pdgradedt pdde);
+	
+	public long updatePdgradedt(Pdgradedt pdde);
+	
+	public long deletePdgradedt(Pdgradedt pdde);
+	
+	public List<Pdgradedt> getAllPdgradedt();
+	
+	public List<Pdgradedt> findByPdgradedt(String xstaff);
+	
+	public Pdgradedt findPdgradedtByXstaffAndXrow(String xstaff, int xrow);
 }
