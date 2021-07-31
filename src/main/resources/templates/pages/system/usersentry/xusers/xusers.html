@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<title>User Maintenance</title>
 		<meta th:remove="tag" th:include="commons :: common-meta" />
@@ -99,17 +99,12 @@
 														</div>
 													</div>
 
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xphone">Phone</label>
-														<div class="col-md-6">
-															<input type="text" class="form-control" th:field="*{xphone}">
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label col-md-4" for="xmadd">Address</label>
-														<div class="col-md-6">
-															<textarea rows="3" cols="" class="form-control" th:field="*{xmadd}"></textarea>
+													<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" class="form-group input2">
+														<label class="control-label col-sm-4" for="xsetmenu">Admin ?</label>
+														<div class="col-sm-8">
+															<div class="checkbox">
+																<label><input type="checkbox" class="form-control-input2" th:field="*{admin}" value="Y"/></label>
+															</div>
 														</div>
 													</div>
 
@@ -132,8 +127,6 @@
 														<th>Full Name</th>
 														<th>Username</th>
 														<th>Staff ID/Name</th>
-														<th>Phone</th>
-														<th>Address</th>
 														<th>Active?</th>
 													</tr>
 												</thead>
@@ -146,8 +139,6 @@
 														<td>
 															<a th:href="@{/system/staff/} + ${u.xstaff}" th:if="${not #strings.isEmpty(u.xstaff)}" th:text="${u.xstaff} + ' - ' + ${u.staffname}" target="_blank"></a>
 														</td>
-														<td th:text="${u.xphone}"></td>
-														<td th:text="${u.xmadd}"></td>
 														<td th:text="${u.zactive ? 'Y' : 'N'}"></td>
 													</tr>
 												</tbody>

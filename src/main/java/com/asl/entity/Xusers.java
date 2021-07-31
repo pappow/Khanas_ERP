@@ -112,6 +112,9 @@ public class Xusers extends AbstractModel<String> {
 	@Column(name = "systemadmin")
 	private boolean systemadmin;
 
+	@Column(name = "admin")
+	private boolean admin;
+
 	@Column(name = "xstaff")
 	private String xstaff;
 
@@ -121,6 +124,7 @@ public class Xusers extends AbstractModel<String> {
 	public String getRoles() {
 		this.roles = "";
 		if(Boolean.TRUE.equals(systemadmin)) roles += UserRole.SYSTEM_ADMIN.getCode() + ',';
+		if(Boolean.TRUE.equals(admin)) roles += UserRole.ADMIN.getCode() + ',';
 
 		if(StringUtils.isBlank(roles)) return roles;
 

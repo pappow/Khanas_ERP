@@ -32,14 +32,13 @@
 			xtype,
 			xvatregno,
 			xstaff,
+			admin,
+
 			zid,
 			zauserid,
-			zuuserid,
 			zaip,
-			zuip,
 			zactive,
-			ztime,
-			zutime
+			ztime
 		)
 		VALUES
 		(
@@ -69,19 +68,17 @@
 			#{xtype, jdbcType=VARCHAR},
 			#{xvatregno, jdbcType=VARCHAR},
 			#{xstaff, jdbcType=VARCHAR},
+			#{admin, jdbcType=BOOLEAN},
+
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
-			#{zuuserid, jdbcType=VARCHAR},
 			#{zaip, jdbcType=VARCHAR},
-			#{zuip, jdbcType=VARCHAR},
 			#{zactive, jdbcType=VARCHAR},
-			#{ztime, jdbcType=TIMESTAMP},
-			#{zutime, jdbcType=TIMESTAMP}
+			#{ztime, jdbcType=TIMESTAMP}
 		)
 	</insert>
 
-	<update id="update" 
-			parameterType="Xusers">
+	<update id="update" parameterType="Xusers">
 		UPDATE 
 			xusers 
 		SET
@@ -110,11 +107,11 @@
 			xtype=#{xtype, jdbcType=VARCHAR},
 			xvatregno=#{xvatregno, jdbcType=VARCHAR},
 			xstaff=#{xstaff, jdbcType=VARCHAR},
+			admin=#{admin, jdbcType=BOOLEAN},
+
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
-			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
 			zactive=#{zactive, jdbcType=VARCHAR},
-			ztime=#{ztime, jdbcType=TIMESTAMP},
 			zutime=#{zutime, jdbcType=TIMESTAMP}
 		WHERE
 			zemail=#{zemail, jdbcType=VARCHAR}
