@@ -52,7 +52,7 @@
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0100.screenprompt}">System Administration</td>
 										</tr>
-										<tr th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
+										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
 											<td><a th:href="@{/system/xusers}" th:text="${menuProfile.M0102.screenprompt}">User Maintenance</a></td>
 											<td>
 												<a th:href="@{/system/xusers}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
