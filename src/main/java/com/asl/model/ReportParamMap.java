@@ -56,6 +56,9 @@ public class ReportParamMap {
 	public static final Map<String, String> RM0606 = new HashMap<>();
 	public static final Map<String, String> RM0607 = new HashMap<>();
 	public static final Map<String, String> RM0608 = new HashMap<>();
+	public static final Map<String, String> RM0609 = new HashMap<>();
+	public static final Map<String, String> RM0610 = new HashMap<>();
+	public static final Map<String, String> RM0611 = new HashMap<>();
 	
 	//Land
 	public static final Map<String, String> RM0701 = new HashMap<>();
@@ -222,8 +225,9 @@ public class ReportParamMap {
 		RM0504.put("param2", "RAWMET|" + ReportParamDataType.STRING.name());
 		
 		RM0601.put("param1", "ZID|" + ReportParamDataType.STRING.name());
-		RM0601.put("param2", "XITEM|" + ReportParamDataType.STRING.name());
-		RM0601.put("param3", "XWH|" + ReportParamDataType.STRING.name());
+		RM0601.put("param2", "Item Group|" + ReportParamDataType.STRING.name());
+		RM0601.put("param3", "Category|" + ReportParamDataType.STRING.name());
+		RM0601.put("param4", "XITEM|" + ReportParamDataType.STRING.name());
 		
 		RM0602.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0602.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
@@ -268,6 +272,19 @@ public class ReportParamMap {
 		RM0608.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0608.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
 		
+		RM0609.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0609.put("param2", "DPT|" + ReportParamDataType.STRING.name());
+		RM0609.put("param3", "STATUS|" + ReportParamDataType.STRING.name());
+	
+		RM0610.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		
+		RM0611.put("param1", "ZID|" + ReportParamDataType.STRING.name());
+		RM0611.put("param2", "FDATE|" + ReportParamDataType.DATE.name());
+		RM0611.put("param3", "TDATE|" + ReportParamDataType.DATE.name());
+		RM0611.put("param4", "FWH|" + ReportParamDataType.STRING.name());
+		RM0611.put("param5", "TWH|" + ReportParamDataType.STRING.name());
+		RM0611.put("param6", "STATUS|" + ReportParamDataType.STRING.name());
+	
 		RM0701.put("param1", "ZID|" + ReportParamDataType.STRING.name());
 		RM0701.put("param2", "LAND|" + ReportParamDataType.STRING.name());
 		RM0701.put("param3", "CSDAG|" + ReportParamDataType.STRING.name());
