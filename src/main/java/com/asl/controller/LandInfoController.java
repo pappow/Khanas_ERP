@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -688,7 +690,7 @@ public class LandInfoController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xland}")
-	public ResponseEntity<byte[]> printChalan(@PathVariable String xland) {
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xland, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -742,7 +744,7 @@ public class LandInfoController extends ASLAbstractController {
 		}
 
 
-		byte[] byt = getPDFByte(report, "landinforeport.xsl");
+		byte[] byt = getPDFByte(report, "landinforeport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate pdf for Land : " + xland;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

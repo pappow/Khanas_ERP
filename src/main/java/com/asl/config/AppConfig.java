@@ -1,5 +1,8 @@
 package com.asl.config;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +46,18 @@ public class AppConfig {
 	@Value("${default.document-path}")
 	private String documentPath;
 
-	@Value("${default.report.logo}")
+	//@Value("${default.report.logo}")
 	private String reportLogo;
+
+	public String getReportLogo() {
+		try {
+			return new StringBuilder(this.getClass().getClassLoader().getResource("static").toURI().getPath())
+			.append(File.separator).append("img").append(File.separator)
+			.append("khanas_logo.png").toString();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+	}
 }

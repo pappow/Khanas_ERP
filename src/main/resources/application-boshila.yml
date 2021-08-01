@@ -71,3 +71,4 @@ default:
     template-path: D:/BOSHILA/cr-reports
     xsl-path: D:/BOSHILA/xsl
     saved-xml-path: D:/BOSHILA/report/savedxml
+    logo: //static//assets//img//khanas_logo.png

@@ -226,6 +226,24 @@
 											<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${(isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
+										<td><a th:href="@{/employeeinfo}" >Employee Information</a></td>
+										<td>
+											<a th:href="@{/employeeinfo}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0602 ne null and menuProfile.M0602.display}">
+										<td><a th:href="@{/inventory/productissue}" th:text="${menuProfile.M0602.screenprompt}">Product Issue Entry</a></td>
+										<td>
+											<a th:href="@{/inventory/productissue}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
+									<tr th:if="${menuProfile.M0603 ne null and menuProfile.M0603.display}">
+										<td><a th:href="@{/inventory/imtrn}" th:text="${menuProfile.M0603.screenprompt}">Inventory</a></td>
+										<td>
+											<a th:href="@{/inventory/imtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+										</td>
+									</tr>
 								</table>
 							</div>
 						</section>

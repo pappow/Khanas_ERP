@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -481,7 +483,7 @@ public class GRNController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xgrnnum}")
-	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xgrnnum) {
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xgrnnum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -541,7 +543,7 @@ public class GRNController extends ASLAbstractController {
 
 		report.getGrnorders().add(grn);
 
-		byte[] byt = getPDFByte(report, "grnreport.xsl");
+		byte[] byt = getPDFByte(report, "grnreport.xsl", request);
 		if (byt == null) {
 			message = "Can't print report for GRN : " + xgrnnum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

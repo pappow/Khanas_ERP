@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,7 +330,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xpornum}")
-	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xpornum) {
+	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String xpornum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -381,7 +383,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		report.getPurchaseorders().add(purchaseOrder);
 
-		byte[] byt = getPDFByte(report, "purchaseorderreport.xsl");
+		byte[] byt = getPDFByte(report, "purchaseorderreport.xsl", request);
 		if (byt == null) {
 			message = "Can't print report for Purchase Order : " + xpornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

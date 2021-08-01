@@ -533,6 +533,9 @@ li.ckbigmenu-li a:hover .ckbigmenu-icon{
 .dashboard-menu-table td a {
 	margin-left: 20px;
 }
+.dashboard-menu-table td a.sub2 {
+	margin-left: 40px;
+}
 
 ul.ckbigmenu{
 	bacckground: #fff;

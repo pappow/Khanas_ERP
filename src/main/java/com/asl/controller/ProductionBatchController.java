@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -749,7 +751,7 @@ public class ProductionBatchController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xchalan}")
-	public ResponseEntity<byte[]> printChalan(@PathVariable String xchalan) {
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xchalan, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -790,7 +792,7 @@ public class ProductionBatchController extends ASLAbstractController {
 
 		report.getBatches().addAll(batchList);
 
-		byte[] byt = getPDFByte(report, "productionbatch.xsl");
+		byte[] byt = getPDFByte(report, "productionbatch.xsl", request);
 		if(byt == null) {
 			message = "Can't generate report for chalan : " + xchalan;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -801,7 +803,7 @@ public class ProductionBatchController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/dailyproduction/{xchalan}")
-	public ResponseEntity<byte[]> printDailyProductionReport(@PathVariable String xchalan) {
+	public ResponseEntity<byte[]> printDailyProductionReport(@PathVariable String xchalan, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -876,7 +878,7 @@ public class ProductionBatchController extends ASLAbstractController {
 			report.getRawMaterials().add(r.getValue());
 		}
 
-		byte[] byt = getPDFByte(report, "productionbatchreport.xsl");
+		byte[] byt = getPDFByte(report, "productionbatchreport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate report for chalan : " + xchalan;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

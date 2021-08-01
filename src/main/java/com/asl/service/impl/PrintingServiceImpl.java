@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -74,7 +75,7 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 	}
 
 	@Override
-	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template)
+	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template, HttpServletRequest request)
 			throws TransformerFactoryConfigurationError, TransformerException, FOPException {
 		log.info("Start creating pdf bytes using xml doc and template");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -87,9 +88,9 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 		}
 
 		//for image path setting
-		//String serverPath = request.getSession().getServletContext().getRealPath("/");
+		String serverPath = request.getSession().getServletContext().getRealPath("/");
 
-		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+		FopFactory fopFactory = FopFactory.newInstance(new File(serverPath).toURI());
 		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 		Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
 		// Make sure the XSL transformation's result is piped through to FOP
@@ -108,14 +109,14 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 	}
 
 	@Override
-	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException {
-		ByteArrayOutputStream out = getPDFReportByteAttayOutputStream(ob, template);
+	public byte[] getPDFReportByte(Object ob, String template, HttpServletRequest request) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException {
+		ByteArrayOutputStream out = getPDFReportByteAttayOutputStream(ob, template, request);
 		if(out == null) return null;
 		return out.toByteArray();
 	}
 
 	@Override
-	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template)
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template, HttpServletRequest request)
 			throws JAXBException, ParserConfigurationException, SAXException, IOException,
 			TransformerFactoryConfigurationError, TransformerException, ParseException {
 		if(ob == null || StringUtils.isBlank(template)) return null;
@@ -132,7 +133,7 @@ public class PrintingServiceImpl extends AbstractGenericService implements Print
 			return null;
 		}
 
-		ByteArrayOutputStream out = transfromToPDFBytes(doc, template);
+		ByteArrayOutputStream out = transfromToPDFBytes(doc, template, request);
 		if(out == null) return null;
 
 		return out;

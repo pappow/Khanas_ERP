@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -98,7 +100,7 @@ public class ProductionSuggestionController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xordernum}")
-	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -167,7 +169,7 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		rawMap.entrySet().stream().forEach(m -> rmList.add(m.getValue()));
 		report.getRawItems().addAll(rmList);
 		report.setReportLogo(appConfig.getReportLogo());
-		byte[] byt = getPDFByte(report, "productionplanningofchalanreport.xsl");
+		byte[] byt = getPDFByte(report, "productionplanningofchalanreport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate pdf for chalan";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

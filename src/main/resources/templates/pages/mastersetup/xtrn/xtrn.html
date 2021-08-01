@@ -69,7 +69,8 @@
 														<label class="control-label col-md-4" for="xtypetrn">Transaction Type : </label>
 														<div class="col-md-6">
 															<select class="form-control" th:field="*{xtypetrn}" required="required" th:disabled="${not #strings.isEmpty(xtrn.xtrn) and not #strings.isEmpty(xtrn.xtypetrn)}">
-																<option th:each="type : ${T(com.asl.enums.TransactionCodeType).values()}" th:value="${type.code}" th:text="${type.code}"></option>
+																<option th:each="d : ${codetypes}" th:value="${d.listvalue1}" th:text="${d.listvalue1}"></option>
+																<!-- <option th:each="type : ${T(com.asl.enums.TransactionCodeType).values()}" th:value="${type.code}" th:text="${type.code}"></option> -->
 															</select>
 														</div>
 													</div>

@@ -1,5 +1,7 @@
 package com.asl.controller;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.DataList;
 import com.asl.entity.Xtrn;
 import com.asl.enums.ResponseStatus;
 import com.asl.model.ServiceException;
@@ -36,6 +39,8 @@ public class XtrnController extends ASLAbstractController {
 	public String loadXtrnPage(Model model) {
 		model.addAttribute("xtrn", getDefaultXtrn());
 		model.addAttribute("xtrnList", xtrnService.getAllXtrn());
+		List<DataList> lsit = listService.findDataListByListcode("TRNCODES");
+		model.addAttribute("codetypes", lsit == null ? Collections.emptyList() : lsit);
 		return "pages/mastersetup/xtrn/xtrn";
 	}
 
@@ -48,6 +53,8 @@ public class XtrnController extends ASLAbstractController {
 
 		model.addAttribute("xtrn", x);
 		model.addAttribute("xtrnList", xtrnService.getAllXtrn());
+		List<DataList> lsit = listService.findDataListByListcode("TRNCODES");
+		model.addAttribute("codetypes", lsit == null ? Collections.emptyList() : lsit);
 		return "pages/mastersetup/xtrn/xtrn";
 	}
 

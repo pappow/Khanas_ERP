@@ -71,7 +71,6 @@ public enum TransactionCodeType {
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 
 	VOUCHER_NUMBER("Voucher Number", "VCH-",null);
-	
 
 	private String code;
 	private String defaultCode;

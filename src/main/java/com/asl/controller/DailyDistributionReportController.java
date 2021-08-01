@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -57,7 +58,7 @@ public class DailyDistributionReportController extends ASLAbstractController {
 	@Autowired private OpdoService opdoService;
 
 	@GetMapping
-	public ResponseEntity<byte[]> printChalan() throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException, DocumentException {
+	public ResponseEntity<byte[]> printChalan(HttpServletRequest request) throws JAXBException, ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException, DocumentException {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -100,8 +101,8 @@ public class DailyDistributionReportController extends ASLAbstractController {
 
 
 		List<ByteArrayOutputStream> streams = new ArrayList<>();
-		ByteArrayOutputStream b1 = printingService.getPDFReportByteAttayOutputStream(report, appConfig.getXslPath() + "/" + "dailydistributionreport.xsl"); 
-		ByteArrayOutputStream b2 = printingService.getPDFReportByteAttayOutputStream(mr, appConfig.getXslPath() + "/" + "matrixreport.xsl");
+		ByteArrayOutputStream b1 = printingService.getPDFReportByteAttayOutputStream(report, appConfig.getXslPath() + "/" + "dailydistributionreport.xsl", request); 
+		ByteArrayOutputStream b2 = printingService.getPDFReportByteAttayOutputStream(mr, appConfig.getXslPath() + "/" + "matrixreport.xsl", request);
 		if(b1 != null) streams.add(b1);
 		if(b2 != null) streams.add(b2);
 		ByteArrayOutputStream baus = new ByteArrayOutputStream();

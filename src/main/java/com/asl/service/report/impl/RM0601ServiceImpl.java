@@ -17,6 +17,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -74,11 +76,11 @@ public class RM0601ServiceImpl extends AbstractReportService {
 		return fieldsList;
 	}
 
-//	@Override
-//	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
-//			throws JAXBException, ParserConfigurationException, SAXException, IOException,
-//			TransformerFactoryConfigurationError, TransformerException, ParseException {
-//
+	@Override
+	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
+			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+			TransformerFactoryConfigurationError, TransformerException, ParseException {
+
 //		String xitem = (String) reportParams.get("XITEM");
 //		String xwh = (String) reportParams.get("XWH");
 //
@@ -111,4 +113,36 @@ public class RM0601ServiceImpl extends AbstractReportService {
 //		return baos.toByteArray();
 //	}
 
+		String xitem = (String) reportParams.get("XITEM");
+		String xwh = (String) reportParams.get("XWH");
+
+		List<Imstock> stocks = imstockService.search(xwh, xitem);
+		if (stocks == null || stocks.isEmpty())
+			return new byte[0];
+
+		Imstock firstRow = stocks.stream().findFirst().get();
+
+		STOCKLReport report = new STOCKLReport();
+		report.setBusinessName(firstRow.getZorg());
+		report.setBusinessAddress(firstRow.getXmadd());
+		report.setReportName("Stock List Report");
+		report.setPrintDate(SDF.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
+
+		report.getStocks().addAll(stocks);
+
+		String xml = printingService.parseXMLString(report);
+		if (StringUtils.isBlank(xml))
+			return new byte[0];
+
+		Document doc = printingService.getDomSourceForXML(xml);
+		if (doc == null)
+			return new byte[0];
+
+		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+		if (baos == null)
+			return new byte[0];
+
+		return baos.toByteArray();
+	}
 }

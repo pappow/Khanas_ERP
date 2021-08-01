@@ -21,7 +21,6 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
-import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
@@ -30,7 +29,6 @@ public class ACCSupplierOpeningController extends ASLAbstractController{
 	
 	@Autowired private ArhedService arhedService;
 	@Autowired private XcodesService xcodeService;	
-	@Autowired private VataitService vataitService;
 
 	@GetMapping
 	public String loadCusAdjustmentPage(Model model) {
