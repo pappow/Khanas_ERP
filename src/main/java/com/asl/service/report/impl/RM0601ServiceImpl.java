@@ -46,63 +46,69 @@ public class RM0601ServiceImpl extends AbstractReportService {
 
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
+		
+		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
+		List<DropdownOption> Itemgroups = new ArrayList<>();
+		Itemgroups.add(new DropdownOption("", "-- Select --"));
+		groupList.stream().forEach(x -> Itemgroups.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
-		List<DropdownOption> options = new ArrayList<>();
-		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		List<Xcodes> categoryList = xcodesService.findByXtype(CodeType.ITEM_CATEGORY.getCode(), Boolean.TRUE);
+		List<DropdownOption> ItemCategory = new ArrayList<>();
+		ItemCategory.add(new DropdownOption("", "-- Select --"));
+		categoryList.stream().forEach(x -> ItemCategory.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
+		
+		// Item Group
+		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Item Group", Itemgroups, "", false));	
+				
+		// Item Category
+		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Item Category", ItemCategory, "", false));
 
 		// xitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item", "search/report/stock/xitem", "", false));
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item", "search/report/stock/xitem", "", false));
 
-		// xwh
-		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Warehouse", options, " ", false));
-
-//		// xorg
-//		fieldsList.add(FormFieldBuilder.generateInputField(3, "XDESC", "Chicken Wings", true));
-
+		
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
 
-	@Override
-	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
-			throws JAXBException, ParserConfigurationException, SAXException, IOException,
-			TransformerFactoryConfigurationError, TransformerException, ParseException {
+//	@Override
+//	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
+//			throws JAXBException, ParserConfigurationException, SAXException, IOException,
+//			TransformerFactoryConfigurationError, TransformerException, ParseException {
+//
+//		String xitem = (String) reportParams.get("XITEM");
+//		String xwh = (String) reportParams.get("XWH");
+//
+//		List<Imstock> stocks = imstockService.search(xwh, xitem);
+//		if (stocks == null || stocks.isEmpty())
+//			return new byte[0];
+//
+//		Imstock firstRow = stocks.stream().findFirst().get();
+//
+//		STOCKLReport report = new STOCKLReport();
+//		report.setBusinessName(firstRow.getZorg());
+//		report.setBusinessAddress(firstRow.getXmadd());
+//		report.setReportName("Stock List Report");
+//		report.setPrintDate(SDF.format(new Date()));
+//
+//		report.getStocks().addAll(stocks);
+//
+//		String xml = printingService.parseXMLString(report);
+//		if (StringUtils.isBlank(xml))
+//			return new byte[0];
+//
+//		Document doc = printingService.getDomSourceForXML(xml);
+//		if (doc == null)
+//			return new byte[0];
+//
+//		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath);
+//		if (baos == null)
+//			return new byte[0];
+//
+//		return baos.toByteArray();
+//	}
 
-		String xitem = (String) reportParams.get("XITEM");
-		String xwh = (String) reportParams.get("XWH");
-
-		List<Imstock> stocks = imstockService.search(xwh, xitem);
-		if (stocks == null || stocks.isEmpty())
-			return new byte[0];
-
-		Imstock firstRow = stocks.stream().findFirst().get();
-
-		STOCKLReport report = new STOCKLReport();
-		report.setBusinessName(firstRow.getZorg());
-		report.setBusinessAddress(firstRow.getXmadd());
-		report.setReportName("Stock List Report");
-		report.setPrintDate(SDF.format(new Date()));
-		report.setReportLogo(appConfig.getReportLogo());
-
-		report.getStocks().addAll(stocks);
-
-		String xml = printingService.parseXMLString(report);
-		if (StringUtils.isBlank(xml))
-			return new byte[0];
-
-		Document doc = printingService.getDomSourceForXML(xml);
-		if (doc == null)
-			return new byte[0];
-
-		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath);
-		if (baos == null)
-			return new byte[0];
-
-		return baos.toByteArray();
-	}
 }
