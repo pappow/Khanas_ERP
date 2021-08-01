@@ -2,10 +2,13 @@ package com.asl.service;
 
 import java.util.List;
 
+import com.asl.entity.Arhed;
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
+import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdtransdt;
 
 /**
  * @author Zubayer Ahamed
@@ -22,6 +25,12 @@ public interface PdmstService {
 	public List<Pdmst> getAll(Boolean zactive);
 	
 	public List<Pdmst> getAllHRPdmst();
+	
+	public List<Pdmst> getAllPdmstByXtrn(String xtypetrn);
+	
+	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn);
+	
+	public List<Pdmst> getAllKhanasPdmst();
 	
 	public Pdmst findAllPdmst(String xstaff);
 
@@ -67,4 +76,30 @@ public interface PdmstService {
 	public List<Pdpromodt> findByPdpromodt(String xstaff);
 	
 	public Pdpromodt findPdpromodtByXstaffAndXrow(String xstaff, int xrow);
+	
+	//for HRTransfer
+	public long savePdtransdt(Pdtransdt pdtr);
+	
+	public long updatePdtransdt(Pdtransdt pdtr);
+	
+	public long deletePdtransdt(Pdtransdt pdtr);
+	
+	public List<Pdtransdt> getAllPdtransdt();
+	
+	public List<Pdtransdt> findByPdtransdt(String xstaff);
+	
+	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow);
+	
+	//for HRDesignation
+	public long savePdgradedt(Pdgradedt pdde);
+	
+	public long updatePdgradedt(Pdgradedt pdde);
+	
+	public long deletePdgradedt(Pdgradedt pdde);
+	
+	public List<Pdgradedt> getAllPdgradedt();
+	
+	public List<Pdgradedt> findByPdgradedt(String xstaff);
+	
+	public Pdgradedt findPdgradedtByXstaffAndXrow(String xstaff, int xrow);
 }

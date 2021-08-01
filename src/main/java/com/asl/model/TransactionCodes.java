@@ -36,6 +36,8 @@ public class TransactionCodes {
 	public static final Map<String, String> AGENT_TRANSFER_ORDER = new HashMap<>();
 	public static final Map<String, String> GL_VOUCHER = new HashMap<>();
 	public static final Map<String, String> HR_EMPLOYEE_ID= new HashMap<>();
+	public static final Map<String, String> PAYROLL_EMPLOYEE_ID= new HashMap<>();
+	public static final Map<String, String> KEMPLOYEE_ID= new HashMap<>();
 
 	static {
 		

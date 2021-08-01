@@ -40,6 +40,8 @@ public enum TransactionCodeType {
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 
+	KEMPLOYEE_ID("Khanas Employee ID", "EID-", TransactionCodes.KEMPLOYEE_ID),
+	
 	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
 	LANDCOMEVENT_ID("Land Com Event", "EVCM", TransactionCodes.LANDCOMEVENT_ID),
@@ -48,6 +50,7 @@ public enum TransactionCodeType {
 
 	MONEY_RECEIPTS("AR Transactions", "MR--", TransactionCodes.AR_TRANSACTION),
 
+	PAYROLL_EMPLOYEE_ID("Payroll Employee ID", "EID-", TransactionCodes.PAYROLL_EMPLOYEE_ID),
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
 	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
 	PURCHASE_RETURN("Purchase Return", "PR--", null),

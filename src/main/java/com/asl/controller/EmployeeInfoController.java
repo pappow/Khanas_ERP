@@ -22,14 +22,16 @@ import com.asl.service.LandDocumentService;
 import com.asl.service.PdmstService;
 
 @Controller
-@RequestMapping("/paypersonal")
-public class PayPersonalInfoController extends ASLAbstractController{
+@RequestMapping("/employeeinfo")
+public class EmployeeInfoController extends ASLAbstractController{
+	
 	@Autowired private PdmstService pdmstService;
+	@Autowired private LandDocumentService landDocumentService;
 	@GetMapping
-	public String loadPayPersonalInfoPage(Model model) {
-		model.addAttribute("payinfo", getDefaultPersonalInfo());
-		model.addAttribute("allPayinfos", pdmstService.getAllPdmstByXtrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getdefaultCode()));
-		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode(), Boolean.TRUE));
+	public String loadHRPersonalInfoPage(Model model) {
+		model.addAttribute("empinfo", getDefaultPersonalInfo());
+		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode()));
+		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("departmentNames", xcodesService.findByXtype(CodeType.DEPARTMENT.getCode(), Boolean.TRUE));
@@ -43,13 +45,13 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		model.addAttribute("employeeTypes", xcodesService.findByXtype(CodeType.EMPLOYEE_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("weekDays", xcodesService.findByXtype(CodeType.WEEK_DAY.getCode(), Boolean.TRUE));
 		model.addAttribute("holidays", xcodesService.findByXtype(CodeType.HOLIDAY_APPLICABLE.getCode(), Boolean.TRUE));
-		return "pages/hr/paypersonal";
+		return "pages/mastersetup/employeeinfo";
 	}
-		
+	
 	private Pdmst getDefaultPersonalInfo() {
 		Pdmst pd  = new Pdmst();
-		pd.setXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode());
-		pd.setXtrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getdefaultCode());
+		pd.setXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode());
+		pd.setXtrn(TransactionCodeType.KEMPLOYEE_ID.getdefaultCode());
 		pd.setXstatus("Open");
 		return pd;
 	}
@@ -57,12 +59,11 @@ public class PayPersonalInfoController extends ASLAbstractController{
 	@GetMapping("/{xstaff}")
 	public String loadHRPersonalInfoPage(@PathVariable String xstaff, Model model) {
 		Pdmst pdmst = pdmstService.findAllPdmst(xstaff);
-		if (pdmst == null) return "redirect:/paypersonal";
+		if (pdmst == null) return "redirect:/employeeinfo";
 		
-		pdmst.setXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode());
-		model.addAttribute("payinfo", pdmst);
-		model.addAttribute("allPayinfos", pdmstService.getAllPdmstByXtrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getdefaultCode()));
-		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode(), Boolean.TRUE));
+		model.addAttribute("empinfo", pdmst);
+		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode()));
+		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("departmentNames", xcodesService.findByXtype(CodeType.DEPARTMENT.getCode(), Boolean.TRUE));
@@ -76,8 +77,8 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		model.addAttribute("employeeTypes", xcodesService.findByXtype(CodeType.EMPLOYEE_TYPE.getCode(), Boolean.TRUE));
 		model.addAttribute("weekDays", xcodesService.findByXtype(CodeType.WEEK_DAY.getCode(), Boolean.TRUE));
 		model.addAttribute("holidays", xcodesService.findByXtype(CodeType.HOLIDAY_APPLICABLE.getCode(), Boolean.TRUE));
-		return "pages/hr/paypersonal";
-	} 
+		return "pages/mastersetup/employeeinfo";
+	}
 	
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Pdmst pdmst, BindingResult bindingResult) {
@@ -97,7 +98,7 @@ public class PayPersonalInfoController extends ASLAbstractController{
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Personal info updated successfully"); 
-		responseHelper.setRedirectUrl("/paypersonal/" + pi.getXstaff());
+		responseHelper.setRedirectUrl("/employeeinfo/" + pi.getXstaff());
 		return responseHelper.getResponse();
 	}
 	// if new
@@ -107,7 +108,7 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		return responseHelper.getResponse();
 	}
 	responseHelper.setSuccessStatusAndMessage("Personal info saved successfully");
-	responseHelper.setRedirectUrl("/paypersonal/" + pdmst .getXstaff());
+	responseHelper.setRedirectUrl("/employeeinfo/" + pdmst .getXstaff());
 		return responseHelper.getResponse();
 	}
 	
@@ -126,8 +127,8 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
-		responseHelper.setRedirectUrl("/paypersonal/" + xstaff );
+		responseHelper.setRedirectUrl("/employeeinfo/" + xstaff );
 		return responseHelper.getResponse();
-	}
+}
 
 }

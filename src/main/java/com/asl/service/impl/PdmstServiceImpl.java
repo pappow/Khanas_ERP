@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
+import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdtransdt;
 import com.asl.mapper.PdmstMapper;
 import com.asl.service.PdmstService;
 
@@ -52,6 +54,12 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	public List<Pdmst> getAll(Boolean zactive) {
 		return pdmstMapper.getAllPdmst(sessionManager.getBusinessId(), zactive);
 	}
+	
+	@Override
+	public List<Pdmst> getAllPdmstByXtrn(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return null;
+		return pdmstMapper.getAllPdmstByXtrn(xtypetrn, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public Pdmst findByXstaff(String xstaff, Boolean zactive) {
@@ -70,6 +78,11 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		return pdmstMapper.getAllHRPdmst(sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Pdmst> getAllKhanasPdmst() {
+		
+		return pdmstMapper.getAllKhanasPdmst( sessionManager.getBusinessId());
+	}
 	@Override
 	public Pdmst findAllPdmst(String xstaff) {
 		if(StringUtils.isBlank(xstaff)) return null;
@@ -215,7 +228,103 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		return pdmstMapper.findPdpromodtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
 	}
 
-	
+	//for HRTransfer
+	@Transactional
+	@Override
+	public long savePdtransdt(Pdtransdt pdtr) {
+		if (pdtr == null)
+			return 0;
+		pdtr.setZid(sessionManager.getBusinessId());
+		pdtr.setZauserid(getAuditUser());
+		return pdmstMapper.savePdtransdt(pdtr);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdtransdt(Pdtransdt pdtr) {
+		if (pdtr == null)
+			return 0;
+		pdtr.setZid(sessionManager.getBusinessId());
+		pdtr.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdtransdt(pdtr);
+	}
+
+	@Override
+	public long deletePdtransdt(Pdtransdt pdtr) {
+		if(pdtr == null) return 0;
+		long count = pdmstMapper.deletePdtransdt(pdtr);
+		return count;
+	}
+
+	@Override
+	public List<Pdtransdt> getAllPdtransdt() {
+		return pdmstMapper.getAllPdtransdt(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdtransdt> findByPdtransdt(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdtransdt(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdtransdt findPdtransdtByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdtransdtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+
+	//for HRDesignation
+	@Transactional
+	@Override
+	public long savePdgradedt(Pdgradedt pdde) {
+		if (pdde == null)
+			return 0;
+		pdde.setZid(sessionManager.getBusinessId());
+		pdde.setZauserid(getAuditUser());
+		return pdmstMapper.savePdgradedt(pdde);
+	}
+
+	@Transactional
+	@Override
+	public long updatePdgradedt(Pdgradedt pdde) {
+		if (pdde == null)
+			return 0;
+		pdde.setZid(sessionManager.getBusinessId());
+		pdde.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdgradedt(pdde);
+	}
+
+	@Override
+	public long deletePdgradedt(Pdgradedt pdde) {
+		if(pdde == null) return 0;
+		long count = pdmstMapper.deletePdgradedt(pdde);
+		return count;
+	}
+
+	@Override
+	public List<Pdgradedt> getAllPdgradedt() {
+		return pdmstMapper.getAllPdgradedt(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdgradedt> findByPdgradedt(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdgradedt(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdgradedt findPdgradedtByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdgradedtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
+		return pdmstMapper.getAllPdmstByXtypetrn(xtypetrn, sessionManager.getBusinessId());
+	};
 
 	
 }
