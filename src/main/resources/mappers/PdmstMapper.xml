@@ -201,13 +201,37 @@
 		</if>
 	</select>
 	
-	<select id="getAllHRPdmst" resultType="Pdmst">
+	<select id="getAllPdmstByXtypetrn" resultType="Pdmst">
 		SELECT 
 			* 
 		FROM 
 			pdmst 
 		WHERE
-			zid=#{zid} 
+			xtypetrn=#{xtypetrn} 
+			AND zid=#{zid} 
+			AND zactive='1'
+	</select>
+	
+	<select id="getAllPdmstByXtrn" resultType="Pdmst">
+		SELECT 
+			* 
+		FROM 
+			pdmst 
+		WHERE
+			xtypetrn LIKE '%'|| 'Payroll Employee ID' ||'%' 
+			AND zid=#{zid} 
+			AND zactive='1'
+		
+	</select>
+	
+	<select id="getAllKhanasPdmst" resultType="Pdmst">
+		SELECT 
+			* 
+		FROM 
+			pdmst 
+		WHERE
+			xtypetrn LIKE '%'|| 'Khanas Employee ID' ||'%' 
+			AND zid=#{zid} 
 			AND zactive='1'
 		
 	</select>

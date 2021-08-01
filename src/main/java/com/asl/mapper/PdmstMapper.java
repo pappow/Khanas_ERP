@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.asl.entity.Arhed;
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdgradedt;
@@ -22,12 +23,18 @@ public interface PdmstMapper {
 	public long update(Pdmst pdmst);
 	
 	public long delete(Pdmst pdmst);
+	
+	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn, String zid);
 
 	public Pdmst findPdmstByXstaff(String xstaff, String zid, Boolean zactive);
 
 	public List<Pdmst> getAllPdmst(String zid, Boolean zactive);
 	
 	public List<Pdmst> getAllHRPdmst(String zid);
+	
+	public List<Pdmst> getAllPdmstByXtrn(String xtypetrn, String zid);
+	
+	public List<Pdmst> getAllKhanasPdmst(String zid);
 	
 	public Pdmst findAllPdmst(String xstaff, String zid);
 	

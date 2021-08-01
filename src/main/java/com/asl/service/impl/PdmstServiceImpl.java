@@ -54,6 +54,12 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	public List<Pdmst> getAll(Boolean zactive) {
 		return pdmstMapper.getAllPdmst(sessionManager.getBusinessId(), zactive);
 	}
+	
+	@Override
+	public List<Pdmst> getAllPdmstByXtrn(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return null;
+		return pdmstMapper.getAllPdmstByXtrn(xtypetrn, sessionManager.getBusinessId());
+	}
 
 	@Override
 	public Pdmst findByXstaff(String xstaff, Boolean zactive) {
@@ -72,6 +78,11 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		return pdmstMapper.getAllHRPdmst(sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Pdmst> getAllKhanasPdmst() {
+		
+		return pdmstMapper.getAllKhanasPdmst( sessionManager.getBusinessId());
+	}
 	@Override
 	public Pdmst findAllPdmst(String xstaff) {
 		if(StringUtils.isBlank(xstaff)) return null;
@@ -309,7 +320,11 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 		return pdmstMapper.findPdgradedtByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
+		return pdmstMapper.getAllPdmstByXtypetrn(xtypetrn, sessionManager.getBusinessId());
+	};
 
 	
 }

@@ -2,6 +2,7 @@ package com.asl.service;
 
 import java.util.List;
 
+import com.asl.entity.Arhed;
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdgradedt;
@@ -24,6 +25,12 @@ public interface PdmstService {
 	public List<Pdmst> getAll(Boolean zactive);
 	
 	public List<Pdmst> getAllHRPdmst();
+	
+	public List<Pdmst> getAllPdmstByXtrn(String xtypetrn);
+	
+	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn);
+	
+	public List<Pdmst> getAllKhanasPdmst();
 	
 	public Pdmst findAllPdmst(String xstaff);
 
