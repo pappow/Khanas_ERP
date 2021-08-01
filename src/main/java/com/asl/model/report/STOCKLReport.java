@@ -20,15 +20,9 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "stockl")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class STOCKLReport {
+public class STOCKLReport extends AbstractReportModel {
 
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	private String printDate;
-	private String copyrightText;
+	private static final long serialVersionUID = -6294587903964088393L;
 
 	@XmlElementWrapper(name = "stocks")
 	@XmlElement(name = "stock")

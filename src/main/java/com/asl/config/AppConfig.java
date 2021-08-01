@@ -42,4 +42,7 @@ public class AppConfig {
 
 	@Value("${default.document-path}")
 	private String documentPath;
+
+	@Value("${default.report.logo}")
+	private String reportLogo;
 }

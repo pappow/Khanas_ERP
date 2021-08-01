@@ -51,7 +51,7 @@ import com.itextpdf.text.pdf.PdfSmartCopy;
  */
 @Controller
 @RequestMapping("/salesninvoice/ddisr")
-public class DailyDistributionReport extends ASLAbstractController {
+public class DailyDistributionReportController extends ASLAbstractController {
 
 	@Autowired private DailyDistributionService service;
 	@Autowired private OpdoService opdoService;
@@ -83,6 +83,7 @@ public class DailyDistributionReport extends ASLAbstractController {
 		report.setFromDate(sdf.format(new Date()));
 		report.setToDate(sdf.format(new Date()));
 		report.setPrintDate(sdf.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		report.getDistributions().addAll(list);
 
@@ -93,6 +94,8 @@ public class DailyDistributionReport extends ASLAbstractController {
 		mr.setReportName("Branch Wise Item Distribution Report");
 		mr.setFromDate(SDF2.format(new Date()));
 		mr.setPrintDate(SDF2.format(new Date()));
+		mr.setReportLogo(appConfig.getReportLogo());
+
 		generateMatrixData2(new Date(), mr);
 
 

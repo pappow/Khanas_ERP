@@ -38,6 +38,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.asl.config.AppConfig;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.PrintingService;
 import com.asl.service.report.ReportFieldService;
@@ -52,6 +53,7 @@ public abstract class AbstractReportService implements ReportFieldService {
 	@Autowired protected ASLSessionManager sessionManager;
 	@Autowired protected PrintingService printingService;
 	@Autowired protected Environment env;
+	@Autowired protected AppConfig appConfig;
 	
 
 	public boolean isConventionCenter() {

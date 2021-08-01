@@ -22,4 +22,5 @@ public class AbstractReportModel implements Serializable {
 	private String toDate;
 	private String printDate;
 	private String copyrightText = "Powered by ASL © Copyright " + new SimpleDateFormat("yyyy").format(new Date());
+	private String reportLogo;
 }

@@ -786,6 +786,7 @@ public class ProductionBatchController extends ASLAbstractController {
 		report.setFromDate(sdf.format(chalan.getXdate()));
 		report.setToDate(sdf.format(chalan.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		report.getBatches().addAll(batchList);
 
@@ -827,6 +828,7 @@ public class ProductionBatchController extends ASLAbstractController {
 		report.setFromDate(sdf.format(chalan.getXdate()));
 		report.setToDate(sdf.format(chalan.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		Map<String, RawMaterial> group = new HashMap<>();
 		for(DailyProductionBatchDetail b : batchDetails) {
