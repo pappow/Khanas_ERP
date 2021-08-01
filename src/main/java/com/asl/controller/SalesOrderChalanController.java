@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -406,7 +408,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xordernum}")
-	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -459,7 +461,7 @@ public class SalesOrderChalanController extends ASLAbstractController {
 		chalan.getItems().addAll(items);
 		report.getChalans().addAll(chalans);
 
-		byte[] byt = getPDFByte(report, "salesorderchalanitemdetailreport.xsl");
+		byte[] byt = getPDFByte(report, "salesorderchalanitemdetailreport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate pdf for chalan : " + xordernum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

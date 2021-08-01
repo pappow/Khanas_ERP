@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -330,7 +332,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@GetMapping("/print/chalan/{pType}/{xdornum}")
 	public ResponseEntity<byte[]> printChalanWithSalesOrderDetails(@PathVariable String pType,
-			@PathVariable String xdornum) {
+			@PathVariable String xdornum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -414,9 +416,9 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		byte[] byt;
 		if (!"invoices".equalsIgnoreCase(pType))
-			byt = getBatchPDFByte(allReports, "deliverychalanreport.xsl");
+			byt = getBatchPDFByte(allReports, "deliverychalanreport.xsl", request);
 		else
-			byt = getBatchPDFByte(allReports, "deliverychalaninvoicesreport.xsl");
+			byt = getBatchPDFByte(allReports, "deliverychalaninvoicesreport.xsl", request);
 		if (byt == null) {
 			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -428,7 +430,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 	@GetMapping("/print/order/{pType}/{xdornum}")
 	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
-			@PathVariable String xdornum) {
+			@PathVariable String xdornum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -515,9 +517,9 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 
 		byte[] byt;
 		if ("invoice".equalsIgnoreCase(pType))
-			byt = getPDFByte(report, "deliverychalaninvoicesreport.xsl");
+			byt = getPDFByte(report, "deliverychalaninvoicesreport.xsl", request);
 		else
-			byt = getPDFByte(report, "deliverychalanreport.xsl");
+			byt = getPDFByte(report, "deliverychalanreport.xsl", request);
 		if (byt == null) {
 			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

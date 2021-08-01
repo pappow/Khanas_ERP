@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,6 +35,7 @@ import com.asl.model.ResponseHelper;
 import com.asl.model.validator.ModelValidator;
 import com.asl.service.ASLSessionManager;
 import com.asl.service.FormPagingService;
+import com.asl.service.ListService;
 import com.asl.service.PrintingService;
 import com.asl.service.ProcErrorLogService;
 import com.asl.service.ProfileService;
@@ -77,6 +79,7 @@ public class ASLAbstractController {
 	@Autowired protected ProcErrorLogService errorService;
 	@Autowired protected PrintingService printingService;
 	@Autowired protected Environment env;
+	@Autowired protected ListService listService;
 
 	@ModelAttribute("loggedInUser")
 	protected LoggedInUserDetails loggedInUser() {
@@ -202,10 +205,10 @@ public class ASLAbstractController {
 		return message.toString();
 	}
 
-	protected byte[] getPDFByte(Object report, String templateName) {
+	protected byte[] getPDFByte(Object report, String templateName, HttpServletRequest request) {
 		byte[] byt = null;
 		try {
-			byt = printingService.getPDFReportByte(report, appConfig.getXslPath() + "/" + templateName);
+			byt = printingService.getPDFReportByte(report, appConfig.getXslPath() + "/" + templateName, request);
 		} catch (JAXBException | ParserConfigurationException | SAXException | IOException
 				| TransformerFactoryConfigurationError | TransformerException | ParseException e) {
 			log.error(ERROR, e.getMessage(), e);
@@ -214,12 +217,12 @@ public class ASLAbstractController {
 		return byt;
 	}
 
-	protected byte[] getBatchPDFByte(List<? extends Object> report, String templateName) {
+	protected byte[] getBatchPDFByte(List<? extends Object> report, String templateName, HttpServletRequest request) {
 		try {
 			List<ByteArrayOutputStream> streams = new ArrayList<>();
 
 			for(Object ob : report) {
-				ByteArrayOutputStream baos = printingService.getPDFReportByteAttayOutputStream(ob, appConfig.getXslPath() + "/" + templateName);
+				ByteArrayOutputStream baos = printingService.getPDFReportByteAttayOutputStream(ob, appConfig.getXslPath() + "/" + templateName, request);
 				streams.add(baos);
 			}
 

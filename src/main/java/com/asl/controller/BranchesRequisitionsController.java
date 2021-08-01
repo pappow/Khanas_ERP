@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -118,7 +120,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 	}
 
 	@GetMapping("/details/{date}/print")
-	public ResponseEntity<byte[]> printMatrix(@PathVariable String date, Model model) {
+	public ResponseEntity<byte[]> printMatrix(@PathVariable String date, Model model, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -143,7 +145,7 @@ public class BranchesRequisitionsController extends ASLAbstractController {
 		mr.setReportLogo(appConfig.getReportLogo());
 		generateMatrixData2(d, mr, model);
 
-		byte[] byt = getPDFByte(mr, "matrixreport.xsl");
+		byte[] byt = getPDFByte(mr, "matrixreport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate pdf";
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

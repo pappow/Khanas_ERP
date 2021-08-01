@@ -20,6 +20,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -259,7 +261,7 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		if (doc == null)
 			return new byte[0];
 
-		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath);
+		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
 		if (baos == null)
 			return new byte[0];
 

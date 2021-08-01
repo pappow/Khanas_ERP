@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -25,17 +26,17 @@ public interface PrintingService {
 
 	public Document getDomSourceForXML(String xml) throws ParserConfigurationException, SAXException, IOException;
 
-	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template)
+	public ByteArrayOutputStream transfromToPDFBytes(Document doc, String template, HttpServletRequest request)
 			throws TransformerFactoryConfigurationError, TransformerException, FOPException;
 
 	public byte[] getPDFReportByte(String templatePath, Map<String, Object> reportParams)
 			throws JAXBException, ParserConfigurationException, SAXException, IOException,
 			TransformerFactoryConfigurationError, TransformerException, ParseException;
 
-	public byte[] getPDFReportByte(Object ob, String template) throws JAXBException, ParserConfigurationException,
+	public byte[] getPDFReportByte(Object ob, String template, HttpServletRequest request) throws JAXBException, ParserConfigurationException,
 			SAXException, IOException, TransformerFactoryConfigurationError, TransformerException, ParseException;
 
-	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template)
+	public ByteArrayOutputStream getPDFReportByteAttayOutputStream(Object ob, String template, HttpServletRequest request)
 			throws JAXBException, ParserConfigurationException, SAXException, IOException,
 			TransformerFactoryConfigurationError, TransformerException, ParseException;
 }

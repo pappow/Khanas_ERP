@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -576,7 +578,7 @@ public class InvoiceController extends ASLAbstractController {
 
 	@GetMapping("/print/{pType}/{xdornum}")
 	public ResponseEntity<byte[]> printDeliveryOrderWithDetails(@PathVariable String pType,
-			@PathVariable String xdornum) {
+			@PathVariable String xdornum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -656,9 +658,9 @@ public class InvoiceController extends ASLAbstractController {
 
 		byte[] byt;
 		if ("invoice".equalsIgnoreCase(pType))
-			byt = getPDFByte(report, "invoicereport.xsl");
+			byt = getPDFByte(report, "invoicereport.xsl", request);
 		else
-			byt = getPDFByte(report, "deliveryorderreport.xsl");
+			byt = getPDFByte(report, "deliveryorderreport.xsl", request);
 		if (byt == null) {
 			message = "Can't print report for chalan : " + xdornum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);

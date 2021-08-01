@@ -1,6 +1,8 @@
 package com.asl.controller;
 
-import java.util.Map;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;import javax.sound.sampled.DataLine;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.DataList;
 import com.asl.entity.Xcodes;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.XcodesService;
@@ -32,6 +35,10 @@ public class XcodesController extends ASLAbstractController {
 	public String loadXtrnPage(Model model) {
 		model.addAttribute("xcodes", new Xcodes());
 		model.addAttribute("xcodesList", xcodesService.getAllXcodes());
+		
+		List<DataList> lsit = listService.findDataListByListcode("CODES");
+		model.addAttribute("codetypes", lsit == null ? Collections.emptyList() : lsit);
+		
 		return "pages/mastersetup/xcodes/xcodes";
 	}
 
@@ -42,6 +49,8 @@ public class XcodesController extends ASLAbstractController {
 
 		model.addAttribute("xcodes", x);
 		model.addAttribute("xcodesList", xcodesService.getAllXcodes());
+		List<DataList> lsit = listService.findDataListByListcode("CODES");
+		model.addAttribute("codetypes", lsit == null ? Collections.emptyList() : lsit);
 		return "pages/mastersetup/xcodes/xcodes";
 	}
 

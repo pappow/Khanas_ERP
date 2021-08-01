@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -751,7 +753,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 	}
 
 	@GetMapping("/print/{xordernum}")
-	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum) {
+	public ResponseEntity<byte[]> printChalan(@PathVariable String xordernum, HttpServletRequest request) {
 		String message;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("text", "html"));
@@ -832,7 +834,7 @@ public class ConventionHallBookingController extends ASLAbstractController {
 		report.setFacilitiesdetails(facilitiesbookingdetails);
 		// report end
 
-		byte[] byt = getPDFByte(report, "hallbookingreport.xsl");
+		byte[] byt = getPDFByte(report, "hallbookingreport.xsl", request);
 		if(byt == null) {
 			message = "Can't generate pdf for chalan : " + xordernum;
 			return new ResponseEntity<>(message.getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
