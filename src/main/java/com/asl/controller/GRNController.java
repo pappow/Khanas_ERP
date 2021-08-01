@@ -505,6 +505,7 @@ public class GRNController extends ASLAbstractController {
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		GRNOrder grn = new GRNOrder();
 		grn.setOrderNumber(oh.getXgrnnum());

@@ -352,6 +352,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
 		purchaseOrder.setOrderNumber(oh.getXpornum());
@@ -367,7 +368,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			items.stream().forEach(it -> {
 				ItemDetails item = new ItemDetails();
 				item.setItemCode(it.getXitem());
-				item.setItemName(it.getXitemdesc());
+				item.setItemName(it.getItemname());
 				item.setItemQty(it.getXqtyord() != null ? it.getXqtyord().toString() : BigDecimal.ZERO.toString());
 				item.setItemUnit(it.getXunitpur());
 				item.setItemCategory(it.getXcatitem());

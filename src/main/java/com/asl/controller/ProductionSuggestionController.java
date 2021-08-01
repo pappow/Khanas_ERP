@@ -166,7 +166,7 @@ public class ProductionSuggestionController extends ASLAbstractController {
 		List<RawMaterialItems> rmList = new ArrayList<>();
 		rawMap.entrySet().stream().forEach(m -> rmList.add(m.getValue()));
 		report.getRawItems().addAll(rmList);
-
+		report.setReportLogo(appConfig.getReportLogo());
 		byte[] byt = getPDFByte(report, "productionplanningofchalanreport.xsl");
 		if(byt == null) {
 			message = "Can't generate pdf for chalan";

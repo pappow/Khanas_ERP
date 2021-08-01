@@ -87,6 +87,7 @@ public class RM0601ServiceImpl extends AbstractReportService {
 		report.setBusinessAddress(firstRow.getXmadd());
 		report.setReportName("Stock List Report");
 		report.setPrintDate(SDF.format(new Date()));
+		report.setReportLogo(appConfig.getReportLogo());
 
 		report.getStocks().addAll(stocks);
 

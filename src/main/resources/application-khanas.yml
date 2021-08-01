@@ -75,3 +75,4 @@ default:
     template-path: D:/KHANAS/cr-reports
     xsl-path: D:/KHANAS/xsl
     saved-xml-path: D:/KHANAS/report/savedxml
+    logo: src//main//resources//static//assets//img//khanas_logo.png

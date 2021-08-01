@@ -364,7 +364,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 			report.setFromDate(sdf.format(oh.getXdate()));
 			report.setToDate(sdf.format(oh.getXdate()));
 			report.setPrintDate(sdf.format(new Date()));
-			report.setCopyrightText("Copyright © 2021 - ASL");
+			report.setReportLogo(appConfig.getReportLogo());
 
 			report.setChalanNumber(oh.getXdornum());
 			report.setChalanDate(sdf.format(oh.getXdate()));
@@ -470,7 +470,7 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		report.setFromDate(SDF.format(chalan.getXdate()));
 		report.setToDate(SDF.format(chalan.getXdate()));
 		report.setPrintDate(SDF.format(new Date()));
-		report.setCopyrightText("Copyright © 2021 - ASL");
+		report.setReportLogo(appConfig.getReportLogo());
 
 		report.setChalanNumber(chalan.getXdornum());
 		report.setChalanDate(SDF.format(chalan.getXdate()));

@@ -18,15 +18,9 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "chalanreport")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SalesOrderChalanReport {
+public class SalesOrderChalanReport extends AbstractReportModel {
 
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	private String printDate;
-	private String copyrightText;
+	private static final long serialVersionUID = -6282166705159721870L;
 
 	private String chalanNumber;
 	private String chalanDate;

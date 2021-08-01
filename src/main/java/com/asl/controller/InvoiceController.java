@@ -607,7 +607,7 @@ public class InvoiceController extends ASLAbstractController {
 		report.setFromDate(sdf.format(chalan.getXdate()));
 		report.setToDate(sdf.format(chalan.getXdate()));
 		report.setPrintDate(sdf.format(new Date()));
-		report.setCopyrightText("Copyright © 2021 - ASL");
+		report.setReportLogo(appConfig.getReportLogo());
 
 		report.setChalanNumber(chalan.getXdornum());
 		report.setChalanDate(sdf.format(chalan.getXdate()));

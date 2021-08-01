@@ -202,6 +202,7 @@ public class AllSalesOrderController extends ASLAbstractController {
 		mr.setReportName("Branch Wise Item Sales Orders");
 		mr.setFromDate(SDF2.format(d));
 		mr.setPrintDate(SDF2.format(new Date()));
+		mr.setReportLogo(appConfig.getReportLogo());
 		generateMatrixData2(d, mr, model);
 
 		byte[] byt = getPDFByte(mr, "matrixreport.xsl");

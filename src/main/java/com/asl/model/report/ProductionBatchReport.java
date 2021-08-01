@@ -20,15 +20,9 @@ import lombok.Data;
 @Data
 @XmlRootElement(name = "productionbathcreport")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProductionBatchReport {
+public class ProductionBatchReport extends AbstractReportModel {
 
-	private String businessName;
-	private String businessAddress;
-	private String reportName;
-	private String fromDate;
-	private String toDate;
-	private String printDate;
-	private String copyrightText;
+	private static final long serialVersionUID = 37469231367485388L;
 
 	@XmlElementWrapper(name = "batches")
 	@XmlElement(name = "batch")
