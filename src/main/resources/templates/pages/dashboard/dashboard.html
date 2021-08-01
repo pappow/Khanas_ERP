@@ -226,6 +226,12 @@
 											<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 										</td>
 									</tr>
+									<tr th:if="${(isCentral and menuProfile.M0202 ne null and menuProfile.M0202.display) OR (isTcc and menuProfile.M0202 ne null and menuProfile.M0202.display)}">
+											<td><a th:href="@{/employeeinfo}" >Employee Information</a></td>
+											<td>
+												<a th:href="@{/employeeinfo}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
 								</table>
 							</div>
 						</section>
