@@ -6,24 +6,30 @@ package com.asl.enums;
  */
 public enum MenuProfile {
 
-	M0100(9999, "M0100", "100","MASTER", "System Administration", "Y","/system"),
-	M0101(9999, "M0101", "100","M0100", "User & Profile", "Y","/system/userentry"),
-	M0102(9999, "M0102", "100","M0101", "Manage Users", "Y","/system/xusers"),
-	M0103(9999, "M0103", "100","M0101", "Manage Access Profile", "Y","/system/profile"),
-	M0104(9999, "M0104", "100","M0101", "Profile Allocation to User", "Y","/system/profileallocation"),
-	M0105(9999, "M0105", "100","M0100", "List Maintenance", "Y","/system/list"),
-	M0106(9999, "M0106", "100","M0100", "Employee Information", "Y","/employeeinfo"),
+	M0100(9999, "M0100", "100","MASTER", "Administration", "Y","/system"),
+		M0101(9999, "M0101", "100","SUB-MASTER", "Users", "Y", null),
+			M0102(9999, "M0102", "100","M0101", "Manage Users", "Y","/system/xusers"),
+			M0103(9999, "M0103", "100","M0101", "Manage Access Profile", "Y","/system/profile"),
+			M0104(9999, "M0104", "100","M0101", "Profile Allocation to User", "Y","/system/profileallocation"),
+		M0105(9999, "M0105", "100","SUB-MASTER", "System Administration", "Y", null),
+			M0106(9999, "M0106", "100", "M0105", "Codes & Parameters", "Y","/mastersetup/cap"),
+			M0107(9999, "M0107", "100", "M0105", "Transaction Codes", "Y","/mastersetup/xtrn"),
+			M0108(9999, "M0108", "100", "M0105", "List Maintenance", "Y","/system/list"),
+			M0109(9999, "M0109", "100", "M0105", "Business Profile", "Y","/system/businessprof"),
+		M0110(9999, "M0110", "100","SUB-MASTER", "Logs", "Y", null),
+			M0111(9999, "M0111", "100", "M0110", "Error Logs", "Y","/system/aslprocerror"),
+
 
 	M0200(9999, "M0200", "200", "MASTER", "Master Setup", "Y","/mastersetup"),
 	M0201(9999, "M0201", "200", "M0200", "Party Master", "Y","/mastersetup/partymaster"),
 	M0202(9999, "M0202", "200", "M0200", "Item Master", "Y","/mastersetup/itemmaster"),
-	M0203(9999, "M0203", "200", "M0200", "Codes & Parameters", "Y","/mastersetup/cap"),
+	
 	M0204(9999, "M0204", "200", "M0200", "Vat & Tax", "Y","/mastersetup/vataitmaster"),
 	M0205(9999, "M0205", "200", "M0201", "Supplier Master", "Y","/mastersetup/cacus"),
 	M0206(9999, "M0206", "200", "M0201", "Customer Master", "Y","/mastersetup/cacus"),
 	M0207(9999, "M0207", "200", "M0202", "Item Entry", "Y","/mastersetup/caitem"),
 	M0208(9999, "M0208", "200", "M0203", "Codes & Parameters", "Y","/mastersetup/xcodes"),
-	M0209(9999, "M0209", "200", "M0203", "Transaction Codes", "Y","/mastersetup/xtrn"),
+	
 	M0210(9999, "M0210", "200", "M0204", "Vat & Tax Entry", "Y","/mastersetup/vatait"),
 
 	M0300(9999, "M0300", "300", "MASTER", "Procurements", "Y","/purchasing"),

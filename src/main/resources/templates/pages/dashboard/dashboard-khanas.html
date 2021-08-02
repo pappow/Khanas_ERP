@@ -53,8 +53,9 @@
 											<td colspan="2" th:text="${menuProfile.M0100.screenprompt}">Administration</td>
 										</tr>
 
+										<span th:if="${menuProfile.M0101 ne null and menuProfile.M0101.display}">
 										<tr>
-											<td colspan="2" style="padding-left: 30px !important;">Users</td>
+											<td colspan="2" style="padding-left: 30px !important;" th:text="${menuProfile.M0101.screenprompt}">Users</td>
 										</tr>
 										<tr th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
 											<td><a class="sub2" th:href="@{/system/xusers}" th:text="${menuProfile.M0102.screenprompt}">Manage Users</a></td>
@@ -74,6 +75,8 @@
 												<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
+										</span>
+
 
 										<tr>
 											<td colspan="2" style="padding-left: 30px !important;">System Administration</td>
