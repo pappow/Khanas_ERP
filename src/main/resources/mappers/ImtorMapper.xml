@@ -225,8 +225,8 @@
 			y.xdescdet as xtwhdesc
 		FROM 
 			imtorheader 
-			left join xcodes x ON x.xcode = imtorheader.xfwh AND x.zid = imtorheader.zid AND x.zactive='1'
-			left join xcodes y ON y.xcode = imtorheader.xtwh AND y.zid = imtorheader.zid AND y.zactive='1'
+			left join xcodes x ON x.xcode = imtorheader.xfwh AND x.zid = imtorheader.zid AND x.zactive='1' AND x.xtype='Warehouse'
+			left join xcodes y ON y.xcode = imtorheader.xtwh AND y.zid = imtorheader.zid AND y.zactive='1' AND x.xtype='Warehouse'
 		WHERE 
 			imtorheader.xtornum=#{xtornum} 
 			AND imtorheader.zid=#{zid}

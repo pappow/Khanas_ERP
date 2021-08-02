@@ -101,7 +101,6 @@
 														<label class="control-label col-md-4" for="xgitem">Item Group</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xgitem}">
-																<option value="">-- Select --</option>
 																<option th:each="group : ${xitemGroups}" th:value="${group.xcode}" th:text="${group.xcode}"></option>
 															</select>
 														</div>
