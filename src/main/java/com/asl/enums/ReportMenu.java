@@ -16,7 +16,7 @@ public enum ReportMenu {
 	RM0303(999, "300", "Procurements", "Purchase Listing", ReportParamMap.RM0303, "Y", false, false, 1000),
 	RM0304(999, "300", "Procurements", "Purchase Deviation Listing", ReportParamMap.RM0304, "Y", false, false, 1000),
 	RM0305(999, "300", "Procurements", "GRN Listing", ReportParamMap.RM0305, "Y", false, false, 1000),
-	RM0306(999, "300", "Procurements", "GRN Return Listing", ReportParamMap.RM0306, "Y", true, false, 1000),
+	//RM0306(999, "300", "Procurements", "GRN Return Listing", ReportParamMap.RM0306, "Y", true, false, 1000),
 	RM0307(999, "300", "Procurements", "Supplier Ledger Detail", ReportParamMap.RM0307, "Y", false, false, 1000),
 	RM0308(999, "300", "Procurements", "Supplier Ledger Summary", ReportParamMap.RM0308, "Y", false, false, 1000),
 	RM0309(999, "300", "Procurements", "Supplier Payment Listing", ReportParamMap.RM0309, "Y", false, false, 1000),
@@ -26,7 +26,6 @@ public enum ReportMenu {
 	RM0313(999, "300", "Procurements", "Daily Meat Purchasing & Receiving Status", ReportParamMap.RM0313, "Y", false, false, 1000),
 	RM0314(999, "300", "Procurements", "Customer List", ReportParamMap.RM0314, "Y", false, false, 1000),
 	
-
 	// Sales & Invoicing  -- M0400
 	RM0401(999, "400", "Sales & Invoicing", "Sales Order Listing", ReportParamMap.RM0401, "Y", false, false, 1000),
 	RM0402(999, "400", "Sales & Invoicing", "Sales Listing Detail", ReportParamMap.RM0402, "Y", false, false, 1000),
@@ -59,8 +58,6 @@ public enum ReportMenu {
 	RM0610(999, "600", "Inventory", "User Listing Report", ReportParamMap.RM0610, "Y", false, false, 1000),
 	RM0611(999, "600", "Inventory", "Transfer order Listing Report", ReportParamMap.RM0611, "Y", false, false, 1000),
 	 
-	
-	
 	//Land Report --RM0700
 	RM0701(999, "700", "Land Management", "Land Details Report", ReportParamMap.RM0701, "Y", false, false, 1000),
 	RM0702(999, "700", "Land Management", "Land Information Report", ReportParamMap.RM0702, "Y", false, false, 1000),
