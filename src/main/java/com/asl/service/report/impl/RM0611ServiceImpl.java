@@ -271,7 +271,7 @@ public class RM0611ServiceImpl extends AbstractReportService {
 		if (doc == null)
 			return new byte[0];
 
-		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+		ByteArrayOutputStream baos = printingService.transfromToPDFBytes(doc, templatePath);
 		if (baos == null)
 			return new byte[0];
 
