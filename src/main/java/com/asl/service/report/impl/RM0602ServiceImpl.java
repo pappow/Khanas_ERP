@@ -40,6 +40,11 @@ public class RM0602ServiceImpl extends AbstractReportService {
 		List<DropdownOption> ItemCategory = new ArrayList<>();
 		ItemCategory.add(new DropdownOption("", "-- Select --"));
 		categoryList.stream().forEach(x -> ItemCategory.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
+		List<DropdownOption> options = new ArrayList<>();
+		options.add(new DropdownOption("", "-- Select --"));
+		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
@@ -51,13 +56,16 @@ public class RM0602ServiceImpl extends AbstractReportService {
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
 
 		// caitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item Code/Name", "search/caitem", "", true));
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item", "search/caitem", "", true));
 		
 		// Item Group
 		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Group", Itemgroups, "", false));
 		
 		// Item Category
 		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Item Category", ItemCategory, "", false));
+		
+		// xwh
+		fieldsList.add(FormFieldBuilder.generateDropdownField(7, "Warehouse", options, " ", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
