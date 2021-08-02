@@ -1,5 +1,6 @@
 package com.asl.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdmst;
+import com.asl.entity.Pdsalarydetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -62,6 +65,7 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		pdmst.setXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode());
 		model.addAttribute("payinfo", pdmst);
 		model.addAttribute("allPayinfos", pdmstService.getAllPdmstByXtrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getdefaultCode()));
+		model.addAttribute("payslist", pdmstService.findByPdsalarydetail(xstaff));
 		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.PAYROLL_EMPLOYEE_ID.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
@@ -129,5 +133,89 @@ public class PayPersonalInfoController extends ASLAbstractController{
 		responseHelper.setRedirectUrl("/paypersonal/" + xstaff );
 		return responseHelper.getResponse();
 	}
+	
+	//start of Salary Details
+	
+		@GetMapping("/{xstaff}/paysalary/{xrow}/show")
+		public String loadPaySalaryDetailsModal(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			if("new".equalsIgnoreCase(xrow)) {
+				Pdsalarydetail pays = new Pdsalarydetail();
+				pays.setXstaff(xstaff);
+				model.addAttribute("pays", pays);
+				model.addAttribute("salaryType", xcodesService.findByXtype(CodeType.SALARY_TYPE.getCode(), Boolean.TRUE));
+			}
+			else {
+				Pdsalarydetail pays = pdmstService.findPdsalarydetailByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+				if(pays==null) {
+					pays = new Pdsalarydetail();
+					
+				}
+				model.addAttribute("pays", pays);
+				model.addAttribute("salaryType", xcodesService.findByXtype(CodeType.SALARY_TYPE.getCode(), Boolean.TRUE));
+			}
+			
+			return "pages/hr/paysalarymodal::paysalarymodal";
+		}
+		
+		@PostMapping("/paysalary/save")
+		public @ResponseBody Map<String, Object> savePaySalaryDetails(Pdsalarydetail pdsa) {
+			if (pdsa == null || StringUtils.isBlank(pdsa.getXstaff())) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+	
+			// if existing
+			Pdsalarydetail exist = pdmstService.findPdsalarydetailByXstaffAndXrow(pdsa.getXstaff(), pdsa.getXrow());
+			if (exist != null) {
+				BeanUtils.copyProperties(pdsa, exist,"xstaff");
+				long count = pdmstService.updatePdsalarydetail(exist);
+				if (count == 0) {
+					responseHelper.setStatus(ResponseStatus.ERROR);
+					return responseHelper.getResponse();
+				}
+				responseHelper.setReloadSectionIdWithUrl("paysalarytable","/paypersonal/paysalary/" + pdsa.getXstaff());
+				responseHelper.setSuccessStatusAndMessage("Salary Details updated successfully");
+				return responseHelper.getResponse();
+			}
+	
+			
+			// if new detail
+			long count = pdmstService.savePdsalarydetail(pdsa);
+			if (count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+			responseHelper.setReloadSectionIdWithUrl("paysalarytable","/paypersonal/paysalary/" + pdsa.getXstaff());
+			responseHelper.setSuccessStatusAndMessage("Salary Details saved successfully");
+			return responseHelper.getResponse();
+		}
+	
+		@GetMapping("/paysalary/{xstaff}")
+		public String reloadPaySalaryDetailsTable(@PathVariable String xstaff, Model model) {
+			List<Pdsalarydetail> hrqList = pdmstService.findByPdsalarydetail(xstaff);
+			model.addAttribute("hrqlist", hrqList);
+			model.addAttribute("hrinfo", pdmstService.findAllPdmst(xstaff));
+			return "pages/hr/paypersonal::paysalarytable";
+		}
+		
+		//delete
+		@PostMapping("{xstaff}/paysalary/{xrow}/delete")
+		public @ResponseBody Map<String, Object> deletePaySalaryDetails(@PathVariable String xstaff, @PathVariable String xrow, Model model) {
+			Pdsalarydetail pays = pdmstService.findPdsalarydetailByXstaffAndXrow(xstaff, Integer.parseInt(xrow));
+			if(pays == null) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			long count = pdmstService.deletePdsalarydetail(pays);
+			if(count == 0) {
+				responseHelper.setStatus(ResponseStatus.ERROR);
+				return responseHelper.getResponse();
+			}
+
+			responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+			responseHelper.setReloadSectionIdWithUrl("paysalarytable", "/paypersonal/paysalary/" + xstaff);
+			return responseHelper.getResponse();
+		}
 
 }

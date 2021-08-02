@@ -247,10 +247,12 @@
 		FROM 
 			pdmst 
 		WHERE 
-			(UPPER(xstaff) LIKE '%' || #{xstaff} || '%' OR UPPER(xname) LIKE '%' || #{xstaff} || '%'  OR UPPER(xmobile) LIKE '%' || #{xstaff} || '%') 
+		
+			(UPPER(xstaff) LIKE '%' || #{xstaff} || '%' OR UPPER(xname) LIKE '%' || #{xstaff} || '%' ) 
 			AND zid=#{zid} 
+			AND xtypetrn=#{xtypetrn}
 			AND zactive='1'
-			AND allowlogin='1'
+			
 	</select>
 	
 	<!-- For HRQualification-->
@@ -683,5 +685,84 @@
 
 	<delete id="deletePdgradedt" parameterType="Pdgradedt">
 		DELETE FROM pdgradedt WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
+	</delete>
+	
+	<!-- For PayrollSalaryDetails -->
+	<insert id="savePdsalarydetail" parameterType="Pdsalarydetail">
+	
+		<selectKey keyProperty="xrow" resultType="Integer" order="BEFORE">
+			SELECT COALESCE(Max(xrow), 0) + 1 FROM pdsalarydetail WHERE zactive='1' AND zid=#{zid}
+		</selectKey>
+		INSERT INTO pdsalarydetail
+		(
+			xstaff,
+			xrow,
+			xtype,
+			xamount,
+			xsign,
+			zactive,
+			zauserid,
+			zid,
+			ztime,
+			zutime,
+			zuuserid
+		)
+		VALUES
+		(
+			#{xstaff, jdbcType=VARCHAR},
+			#{xrow},
+			#{xtype, jdbcType=VARCHAR},
+			#{xamount, jdbcType=VARCHAR},
+			#{xsign, jdbcType=VARCHAR},
+			#{zactive, jdbcType=VARCHAR},
+			#{zauserid, jdbcType=VARCHAR},
+			#{zid, jdbcType=VARCHAR},
+			#{ztime, jdbcType=TIMESTAMP},
+			#{zutime, jdbcType=TIMESTAMP},
+			#{zuuserid, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updatePdsalarydetail" parameterType="Pdsalarydetail">
+		UPDATE 
+			pdsalarydetail
+		SET
+			xtype=#{xtype, jdbcType=VARCHAR},
+			xamount=#{xamount, jdbcType=VARCHAR},
+			xsign=#{xsign, jdbcType=VARCHAR},
+			zactive=#{zactive, jdbcType=VARCHAR},
+			zauserid=#{zauserid, jdbcType=VARCHAR},
+			zid=#{zid, jdbcType=VARCHAR},
+			ztime=#{ztime, jdbcType=TIMESTAMP},
+			zutime=#{zutime, jdbcType=TIMESTAMP},
+			zuuserid=#{zuuserid, jdbcType=VARCHAR}
+		WHERE
+			xstaff=#{xstaff, jdbcType=VARCHAR}
+			AND xrow=#{xrow, jdbcType=INTEGER}
+			AND zid=#{zid, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getAllPdsalarydetail" resultType="Pdsalarydetail">
+		SELECT 
+			* 
+		FROM 
+			pdsalarydetail 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+		order by 
+			ztime desc
+	</select>
+
+	<select id="findByPdsalarydetail" resultType="Pdsalarydetail">
+	SELECT * FROM pdsalarydetail WHERE xstaff=#{xstaff} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<select id="findPdsalarydetailByXstaffAndXrow" resultType="Pdsalarydetail">
+		SELECT * FROM pdsalarydetail WHERE xstaff=#{xstaff} AND xrow=#{xrow} AND zid=#{zid} AND zactive='1'
+	</select>
+
+	<delete id="deletePdsalarydetail" parameterType="Pdsalarydetail">
+		DELETE FROM pdsalarydetail WHERE xrow=#{xrow} AND xstaff=#{xstaff} AND zactive='1' AND zid=#{zid}
 	</delete>
 </mapper>

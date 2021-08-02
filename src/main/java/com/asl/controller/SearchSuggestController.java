@@ -135,7 +135,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		List<Pdmst> pdmstList = pdmstService.searchStaff(hint);
+		List<Pdmst> pdmstList = pdmstService.searchStaff(hint, "Employee Number");
 		List<SearchSuggestResult> list = new ArrayList<>();
 		pdmstList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXstaff(), c.getXstaff() + " - " + c.getXname())));
 		return list;

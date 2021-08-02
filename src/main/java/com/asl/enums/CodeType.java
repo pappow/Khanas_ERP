@@ -85,6 +85,7 @@ public enum CodeType {
 	RELIGION("Religion"),
 	ROLE_TYPE("Role Type"),
 
+	SALARY_TYPE("Salary Type"),
 	SELLING_UNIT("Selling Unit"),
 	STOCK_TYPE("Stock Type"),
 	STOCKING_UNIT("Stocking Unit"),
