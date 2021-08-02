@@ -35,11 +35,19 @@ public class RM0314ServiceImpl extends AbstractReportService {
 		options.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
+		List<DropdownOption> active = new ArrayList<>();
+		active.add(new DropdownOption("", "-- Select --"));
+		active.add(new DropdownOption("1", "Yes"));
+		active.add(new DropdownOption("0", "No"));
+		
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
 		// xcus
 		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Customer Group", options, "", false));
+		
+		// Status
+		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Active Status", active, "", false));
 
 //		// xorg
 //		fieldsList.add(FormFieldBuilder.generateInputField(3, "XORG", "CP", true));

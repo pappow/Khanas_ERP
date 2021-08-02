@@ -18,46 +18,43 @@ import com.asl.service.XcodesService;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0403Service")
-public class RM0403ServiceImpl extends AbstractReportService {
-
+@Service("RM0609Service")
+public class RM0609ServiceImpl extends AbstractReportService {
+	
 	@Autowired
 	private XcodesService xcodesService;
-	
+
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
 	}
 
 	private List<FormFieldBuilder> generateFields() {
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
-
+		
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.DEPARTMENT.getCode(), Boolean.TRUE);
+		List<DropdownOption> dpt = new ArrayList<>();
+		dpt.add(new DropdownOption("", "-- Select --"));
+		statusList.stream().forEach(x -> dpt.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		
+		
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
-		options.add(new DropdownOption("Open", "Open"));
-		options.add(new DropdownOption("Confirmed", "Confirmed"));		
+		options.add(new DropdownOption("Normal", "Normal"));
+		options.add(new DropdownOption("Resigned", "Resigned"));
+		options.add(new DropdownOption("Closed", "Closed"));
+		options.add(new DropdownOption("Terminated", "Terminated"));
 		
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
-		
-		
-		// From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
 
-		// To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
+		// Department
+		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Department", dpt, "", false));
 
-		// customer
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
-		
-		// xgrnstatus
-		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Status", options, "", false));
-		
-		// DO number
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Do Number", "search/report/opdo/xdornum", "", false));
-		
+		// Status
+		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Status", options, "", false));
+
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}
 }
-  

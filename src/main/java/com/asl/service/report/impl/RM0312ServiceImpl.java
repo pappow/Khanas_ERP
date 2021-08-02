@@ -51,18 +51,16 @@ public class RM0312ServiceImpl extends AbstractReportService {
 		// xitem
 		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Supplier", "search/report/sup", "", false));
 		
-		// status
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Status", "search/report/xstatuscrn", "", false));
-		
-		// Item Code
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item Code", "search/report/stock/xitem", "", false));
-		
-		// Item Name
-		fieldsList.add(FormFieldBuilder.generateSearchField(7, "Item Name", "search/report/caitemname", "", false));
-		
 		// Item Group
-		fieldsList.add(FormFieldBuilder.generateDropdownField(8, "Item Group", group, "", false));
-	
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "Item Group", group, "", false));
+			
+		// Item Code
+		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/report/stock/xitem", "", false));
+				
+		// status
+		fieldsList.add(FormFieldBuilder.generateSearchField(7, "Status", "search/report/xstatuscrn", "", false));
+		
+		
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
 	}

@@ -25,6 +25,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.asl.entity.Xcodes;
+import com.asl.enums.CodeType;
 import com.asl.model.DropdownOption;
 import com.asl.model.FormFieldBuilder;
 import com.asl.model.report.RM0301;
@@ -33,16 +35,19 @@ import com.asl.model.report.RM0301PurchaseOrder;
 import com.asl.model.report.RM0301Report;
 import com.asl.model.report.RM0301Supplier;
 import com.asl.service.PoordService;
+import com.asl.service.XcodesService;
 
 /**
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0301Service")
-public class RM0301ServiceImpl extends AbstractReportService {
+@Service("RM0611Service")
+public class RM0611ServiceImpl extends AbstractReportService {
 
 	@Autowired
 	private PoordService poordService;
+	@Autowired
+	private XcodesService xcodesService;
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -58,6 +63,11 @@ public class RM0301ServiceImpl extends AbstractReportService {
 		options.add(new DropdownOption("GRN Created", "GRN Created"));
 		options.add(new DropdownOption("Full Received", "Full Receipt"));
 		
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
+		List<DropdownOption> wh = new ArrayList<>();
+		wh.add(new DropdownOption("", "-- Select --"));
+		statusList.stream().forEach(x -> wh.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		
 		
 		// ZID
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
@@ -67,15 +77,15 @@ public class RM0301ServiceImpl extends AbstractReportService {
 
 		// To Date
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
+		
+		// fwh
+		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "From Warehouse", wh, "", false));
+		
+		// twh
+		fieldsList.add(FormFieldBuilder.generateDropdownField(5, "To Warehouse", wh, "", false));
 
 		// Status
-		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "", false));
-
-		// xcus - Customer / Supplier
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", false));
-
-		// Item
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/report/stock/xitem", "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Status", options, "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

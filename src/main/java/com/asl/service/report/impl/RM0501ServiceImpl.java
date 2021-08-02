@@ -24,9 +24,12 @@ public class RM0501ServiceImpl extends AbstractReportService {
 
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
-
+		
+		// Item Code
+		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item", "search/report/stock/xitem", "", false));
+		
 		// BOM ID
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "BOM-ID", "search/report/xbomkey", "", false));
+		fieldsList.add(FormFieldBuilder.generateSearchField(3, "BOM-ID", "search/report/xbomkey", "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

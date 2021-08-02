@@ -13,8 +13,8 @@ import com.asl.model.FormFieldBuilder;
  * @author Zubayer Ahamed
  * @since Dec 27, 2020
  */
-@Service("RM0405Service")
-public class RM0405ServiceImpl extends AbstractReportService {
+@Service("RM0610Service")
+public class RM0610ServiceImpl extends AbstractReportService {
 
 	public List<FormFieldBuilder> getReportFields() {
 		return generateFields();
@@ -26,14 +26,6 @@ public class RM0405ServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// From Date
-		fieldsList.add(FormFieldBuilder.generateDateField(2, "From Date", new Date(), true));
-
-		// To Date
-		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
-		
-		// Customer
-		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Customer", "search/report/cus", "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
