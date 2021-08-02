@@ -12,7 +12,7 @@ public enum MenuProfile {
 	M0103(9999, "M0103", "100","M0101", "Manage Access Profile", "Y","/system/profile"),
 	M0104(9999, "M0104", "100","M0101", "Profile Allocation to User", "Y","/system/profileallocation"),
 	M0105(9999, "M0105", "100","M0100", "List Maintenance", "Y","/system/list"),
-	M0106(9999, "M0106", "100","M0100", "Employee Master", "Y","/system/staff"),
+	M0106(9999, "M0106", "100","M0100", "Employee Information", "Y","/employeeinfo"),
 
 	M0200(9999, "M0200", "200", "MASTER", "Master Setup", "Y","/mastersetup"),
 	M0201(9999, "M0201", "200", "M0200", "Party Master", "Y","/mastersetup/partymaster"),

@@ -141,9 +141,9 @@
 											</td>
 										</tr>
 										<tr th:if="${menuProfile.M0106 ne null and menuProfile.M0106.display}">
-											<td><a th:href="@{/system/staff}" th:text="${menuProfile.M0106.screenprompt}">Employee Master</a></td>
+											<td><a th:href="@{/employeeinfo}" th:text="${menuProfile.M0106.screenprompt}">Employee Information</a></td>
 											<td>
-												<a th:href="@{/system/staff}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												<a th:href="@{/employeeinfo}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 										<tr th:if="${isCentral and menuProfile.M0501 ne null and menuProfile.M0501.display}">
