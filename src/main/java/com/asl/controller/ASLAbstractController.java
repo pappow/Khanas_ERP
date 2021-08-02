@@ -1,7 +1,9 @@
 package com.asl.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -208,7 +210,7 @@ public class ASLAbstractController {
 	protected byte[] getPDFByte(Object report, String templateName, HttpServletRequest request) {
 		byte[] byt = null;
 		try {
-			byt = printingService.getPDFReportByte(report, appConfig.getXslPath() + "/" + templateName, request);
+			byt = printingService.getPDFReportByte(report, getOnScreenReportTemplate(templateName), request);
 		} catch (JAXBException | ParserConfigurationException | SAXException | IOException
 				| TransformerFactoryConfigurationError | TransformerException | ParseException e) {
 			log.error(ERROR, e.getMessage(), e);
@@ -222,7 +224,7 @@ public class ASLAbstractController {
 			List<ByteArrayOutputStream> streams = new ArrayList<>();
 
 			for(Object ob : report) {
-				ByteArrayOutputStream baos = printingService.getPDFReportByteAttayOutputStream(ob, appConfig.getXslPath() + "/" + templateName, request);
+				ByteArrayOutputStream baos = printingService.getPDFReportByteAttayOutputStream(ob, getOnScreenReportTemplate(templateName), request);
 				streams.add(baos);
 			}
 
@@ -247,7 +249,17 @@ public class ASLAbstractController {
 		}
 	}
 
-	
+	protected String getOnScreenReportTemplate(String templateName) {
+		StringBuilder template = null;
+		try {
+			template = new StringBuilder(this.getClass().getClassLoader().getResource("static").toURI().getPath())
+							.append(File.separator).append("xsl").append(File.separator)
+							.append(templateName);
+		} catch (URISyntaxException e) {
+			log.error(ERROR, e.getMessage(), e);
+		}
+		return template.toString();
+	}
 
 //	protected ImportExportService getImportExportService(String module) {
 //		if(StringUtils.isBlank(module)) return null;

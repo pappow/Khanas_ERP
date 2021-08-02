@@ -101,8 +101,8 @@ public class DailyDistributionReportController extends ASLAbstractController {
 
 
 		List<ByteArrayOutputStream> streams = new ArrayList<>();
-		ByteArrayOutputStream b1 = printingService.getPDFReportByteAttayOutputStream(report, appConfig.getXslPath() + "/" + "dailydistributionreport.xsl", request); 
-		ByteArrayOutputStream b2 = printingService.getPDFReportByteAttayOutputStream(mr, appConfig.getXslPath() + "/" + "matrixreport.xsl", request);
+		ByteArrayOutputStream b1 = printingService.getPDFReportByteAttayOutputStream(report, getOnScreenReportTemplate("dailydistributionreport.xsl"), request); 
+		ByteArrayOutputStream b2 = printingService.getPDFReportByteAttayOutputStream(mr, getOnScreenReportTemplate("matrixreport.xsl"), request);
 		if(b1 != null) streams.add(b1);
 		if(b2 != null) streams.add(b2);
 		ByteArrayOutputStream baus = new ByteArrayOutputStream();
