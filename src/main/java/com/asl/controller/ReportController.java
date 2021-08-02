@@ -160,7 +160,7 @@ public class ReportController extends ASLAbstractController {
 		}
 
 		// FOP
-		reportName = appConfig.getXslPath() + "/" + rm.name() + ".xsl";
+		reportName = getOnScreenReportTemplate(rm.name() + ".xsl");
 		byte[] byt = null;
 		try {
 			byt = getReportFieldService(rm).getPDFReportByte(reportName, reportParams);
