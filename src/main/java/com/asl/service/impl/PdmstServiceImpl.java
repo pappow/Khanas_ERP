@@ -13,6 +13,7 @@ import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdsalarydetail;
 import com.asl.entity.Pdtransdt;
 import com.asl.mapper.PdmstMapper;
 import com.asl.service.PdmstService;
@@ -68,9 +69,9 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	}
 
 	@Override
-	public List<Pdmst> searchStaff(String hint) {
+	public List<Pdmst> searchStaff(String hint, String xtypetrn) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		return pdmstMapper.searchStaff(hint.toUpperCase(), sessionManager.getBusinessId());
+		return pdmstMapper.searchStaff(hint.toUpperCase(), xtypetrn, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -324,6 +325,49 @@ public class PdmstServiceImpl extends AbstractGenericService implements PdmstSer
 	public List<Pdmst> getAllPdmstByXtypetrn(String xtypetrn) {
 		if(StringUtils.isBlank(xtypetrn)) return Collections.emptyList();
 		return pdmstMapper.getAllPdmstByXtypetrn(xtypetrn, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public long savePdsalarydetail(Pdsalarydetail pdsa) {
+		if (pdsa == null)
+			return 0;
+		pdsa.setZid(sessionManager.getBusinessId());
+		pdsa.setZauserid(getAuditUser());
+		return pdmstMapper.savePdsalarydetail(pdsa);
+	}
+
+	@Override
+	public long updatePdsalarydetail(Pdsalarydetail pdsa) {
+		if (pdsa == null)
+			return 0;
+		pdsa.setZid(sessionManager.getBusinessId());
+		pdsa.setZauserid(getAuditUser());
+		return pdmstMapper.updatePdsalarydetail(pdsa);
+	}
+
+	@Override
+	public long deletePdsalarydetail(Pdsalarydetail pdsa) {
+		if(pdsa == null) return 0;
+		long count = pdmstMapper.deletePdsalarydetail(pdsa);
+		return count;
+	}
+
+	@Override
+	public List<Pdsalarydetail> getAllPdsalarydetail() {
+		return pdmstMapper.getAllPdsalarydetail(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Pdsalarydetail> findByPdsalarydetail(String xstaff) {
+		if (StringUtils.isBlank(xstaff))
+			return null;
+		return pdmstMapper.findByPdsalarydetail(xstaff, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public Pdsalarydetail findPdsalarydetailByXstaffAndXrow(String xstaff, int xrow) {
+		if(StringUtils.isBlank(xstaff) || xrow == 0) return null;
+		return pdmstMapper.findPdsalarydetailByXstaffAndXrow(xstaff,xrow,sessionManager.getBusinessId());
 	};
 
 	

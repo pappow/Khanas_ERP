@@ -10,6 +10,7 @@ import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdgradedt;
 import com.asl.entity.Pdmst;
 import com.asl.entity.Pdpromodt;
+import com.asl.entity.Pdsalarydetail;
 import com.asl.entity.Pdtransdt;
 
 /**
@@ -38,7 +39,7 @@ public interface PdmstMapper {
 	
 	public Pdmst findAllPdmst(String xstaff, String zid);
 	
-	public List<Pdmst> searchStaff(String xstaff, String zid);
+	public List<Pdmst> searchStaff(String xstaff, String xtypetrn, String zid);
 	
 	//for HRQualification
 	public long savePdeducation(Pdeducation pdqua);
@@ -104,4 +105,17 @@ public interface PdmstMapper {
 	public List<Pdgradedt> findByPdgradedt(String xstaff, String zid);
 	
 	public Pdgradedt findPdgradedtByXstaffAndXrow(String xstaff, int xrow, String zid);
+	
+	//for Payroll Salary Details
+	public long savePdsalarydetail(Pdsalarydetail pdsa);
+	
+	public long updatePdsalarydetail(Pdsalarydetail pdsa);
+	
+	public long deletePdsalarydetail(Pdsalarydetail pdsa);
+	
+	public List<Pdsalarydetail> getAllPdsalarydetail(String zid);
+	
+	public List<Pdsalarydetail> findByPdsalarydetail(String xstaff, String zid);
+	
+	public Pdsalarydetail findPdsalarydetailByXstaffAndXrow(String xstaff, int xrow, String zid);
 }
