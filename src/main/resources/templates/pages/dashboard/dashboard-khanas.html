@@ -48,7 +48,7 @@
 							<div class="section-body" th:fragment="mainmenu">
 								<table class="table dashboard-menu-table">
 									<!-- SYSTEM -->
-									<span th:if="${menuProfile.M0100 ne null and menuProfile.M0100.display}">
+									<span sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0100 ne null and menuProfile.M0100.display}">
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0100.screenprompt}">Administration</td>
 										</tr>
@@ -56,19 +56,19 @@
 										<tr>
 											<td colspan="2" style="padding-left: 30px !important;">Users</td>
 										</tr>
-										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
+										<tr th:if="${menuProfile.M0102 ne null and menuProfile.M0102.display}">
 											<td><a class="sub2" th:href="@{/system/xusers}" th:text="${menuProfile.M0102.screenprompt}">Manage Users</a></td>
 											<td>
 												<a th:href="@{/system/xusers}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0103 ne null and menuProfile.M0103.display}">
+										<tr th:if="${menuProfile.M0103 ne null and menuProfile.M0103.display}">
 											<td><a class="sub2" th:href="@{/system/profile}" th:text="${menuProfile.M0103.screenprompt}">Manage Access Profile</a></td>
 											<td>
 												<a th:href="@{/system/profile}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0104 ne null and menuProfile.M0104.display}">
+										<tr th:if="${menuProfile.M0104 ne null and menuProfile.M0104.display}">
 											<td><a class="sub2" th:href="@{/system/profileallocation}" th:text="${menuProfile.M0104.screenprompt}">Profile Allocation to User</a></td>
 											<td>
 												<a th:href="@{/system/profileallocation}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
@@ -78,13 +78,13 @@
 										<tr>
 											<td colspan="2" style="padding-left: 30px !important;">System Administration</td>
 										</tr>
-										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
+										<tr th:if="${menuProfile.M0208 ne null and menuProfile.M0208.display}">
 											<td><a class="sub2" th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0208.screenprompt}">Codes & Parameters</a></td>
 											<td>
 												<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
+										<tr th:if="${menuProfile.M0209 ne null and menuProfile.M0209.display}">
 											<td><a class="sub2" th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0209.screenprompt}">Transaction Codes</a></td>
 											<td>
 												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
@@ -96,14 +96,14 @@
 												<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')">
+										<tr>
 											<td><a class="sub2" th:href="@{/system/businessprof}">Business Profile</a></td>
 											<td>
 												<a th:href="@{/system/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
 
-										<tr>
+										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')">
 											<td colspan="2" style="padding-left: 30px !important;">Logs</td>
 										</tr>
 										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')">
