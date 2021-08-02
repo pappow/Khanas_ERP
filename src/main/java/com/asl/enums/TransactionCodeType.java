@@ -15,15 +15,15 @@ public enum TransactionCodeType {
 	ACCOUNT_OBAR("AR Transactions", "OBAR", TransactionCodes.AR_TRANSACTION),
 	ACCOUNT_ADAP("AR Transactions", "ADAP", TransactionCodes.AR_TRANSACTION),
 	ACCOUNT_ADAR("AR Transactions", "ADAR", TransactionCodes.AR_TRANSACTION),
-	AGENT_TRANSFER_ORDER("Asset Transfer Order", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
+	AGENT_TRANSFER_ORDER("ASTO Number", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
 
-	BOM_NUMBER("BOM Number", "BM--", TransactionCodes.BOM_NUMBER),
+	BOM_NUMBER("BOM Number", "BOM-", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),
 	BANK_CODE("Bank Code","BNK-",null),
 
 	COMMITTEEINFO_ID("Committee ID", "CMT-", TransactionCodes.COMMITTEEINFO_ID),
-	CUSTOMER_NUMBER("Customer", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
-	CHALAN_NUMBER("Chalan Number", "CH--", TransactionCodes.CHALAN_NUMBER),
+	CUSTOMER_NUMBER("Customer Number", "CUS-", TransactionCodes.CUSTOMER_NUMBER),
+	CHALAN_NUMBER("CH Number", "CH--", TransactionCodes.CHALAN_NUMBER),
 
 	DOCUMENT_NAME("Document ID", "DOCM--",TransactionCodes.DOCUMENT_ID),
 
@@ -38,9 +38,9 @@ public enum TransactionCodeType {
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
-	INVENTORY_TRANSFER_ORDER("Stock Transfer Order", "TO-", TransactionCodes.INVENTORY_TRANSFER_ORDER),
+	INVENTORY_TRANSFER_ORDER("TO Number", "TO--", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 
-	KEMPLOYEE_ID("Khanas Employee ID", "EID-", TransactionCodes.KEMPLOYEE_ID),
+	KEMPLOYEE_ID("Employee Number", "EID-", TransactionCodes.KEMPLOYEE_ID),
 	
 	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),
@@ -52,8 +52,8 @@ public enum TransactionCodeType {
 
 	PAYROLL_EMPLOYEE_ID("Payroll Employee ID", "EID-", TransactionCodes.PAYROLL_EMPLOYEE_ID),
 	PERSON_ID("Persone ID", "PRS-", TransactionCodes.PERSON_ID),
-	PURCHASE_ORDER("Purchase Order", "PO--", TransactionCodes.PURCHASE_ORDER),
-	PURCHASE_RETURN("Purchase Return", "PR--", null),
+	PURCHASE_ORDER("PO Number", "PO--", TransactionCodes.PURCHASE_ORDER),
+	PURCHASE_RETURN("PRN Number", "PRN-", null),
 	PROC_ERROR("PROC Error", "ERROR", null),
 	PROFILE_LINE("Profile Line", "PRL-", null),
 	PROFILE_ALLOCATION("Profile Allocation", "PAL-", null),
@@ -61,12 +61,12 @@ public enum TransactionCodeType {
 	REQUISITION_ORDER("Requisition Order", "REQ-", TransactionCodes.REQUISITION_ORDER),
 	ROOM_BOOKING_SALES_ORDER("Room Booking SO", "RBSO-", null),
 
-	SUPPLIER_NUMBER("Supplier", "SU-", TransactionCodes.SUPPLIER_NUMBER),
+	SUPPLIER_NUMBER("Supplier Number", "SUP-", TransactionCodes.SUPPLIER_NUMBER),
 	SURVEYOR_ID("Surveyor ID", "SRVR--", TransactionCodes.LAND_ID),
-	STOCK_TAKE("Stock Take", "TAG-", null),
-	SALES_ORDER("Sales Order", "SO--", TransactionCodes.SALES_ORDER),
-	SALES_AND_INVOICE_NUMBER("Sales & Invoice Number", "DO--", null),
-	SALES_RETURN("Sales Return", "SR--", null),
+	STOCK_TAKE("TAG Number", "TAG-", null),
+	SALES_ORDER("SO Number", "SO--", TransactionCodes.SALES_ORDER),
+	SALES_AND_INVOICE_NUMBER("DO Number", "DO--", null),
+	SALES_RETURN("CRN Number", "SR--", null),
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 

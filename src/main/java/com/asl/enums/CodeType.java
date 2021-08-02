@@ -75,7 +75,7 @@ public enum CodeType {
 	OBJECT_TYPE("Object Type"),
 	OWNER_TYPE("Owner Type"),
 
-	PURCHASE_UNIT("Purchase Unit"),
+	PURCHASE_UNIT("Unit of Measurement"),
 	PURCHASE_ORDER_STATUS("Purchase Order Status"),
 	PAYMENT_TYPE("Payment Type"),
 	PAYMENT_MODE("Payment Mode"),

@@ -200,7 +200,13 @@
 																<label class="control-label col-md-4" for="xempstatus">Employee Status</label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xempstatus}">
-																		<option th:each="d : ${employeeStatus}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																		<option value="Closed">Closed</option>
+																		<option value="Heldup">Heldup</option>
+																		<option value="Inactive">Inactive</option>
+																		<option value="Normal">Normal</option>
+																		<option value="Resigned">Resigned</option>
+																		<option value="Retired">Retired</option>
+																		<option value="Terminated">Terminated</option>
 																	</select>
 																</div>
 															</div>
@@ -262,7 +268,13 @@
 																<label class="control-label col-md-4" for="xbloodgroup">Blood Group</label>
 																<div class="col-md-8">
 																	<select class="form-control" th:field="*{xbloodgroup}">
-																		<option th:each="d : ${bloodGropus}" th:value="${d.xcode}" th:text="${d.xcode}"></option>
+																		<option value="A+">A+</option>
+																		<option value="B+">B+</option>
+																		<option value="O+">O+</option>
+																		<option value="AB+">AB+</option>
+																		<option value="B-">B-</option>
+																		<option value="O-">O-</option>
+																		<option value="AB-">AB-</option>
 																	</select>
 																</div>
 															</div>

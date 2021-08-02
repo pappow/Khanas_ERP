@@ -145,7 +145,6 @@
 														<label class="control-label col-sm-4" for="xgcus">Customer Group </label>
 														<div class="col-sm-8">
 															<select class="form-control" th:field="*{xgcus}" required="required">
-																<option value="">Select</option>
 																<option th:each="cu : ${customerGroups}" th:text="${cu.xcode}" th:value="${cu.xcode}"></option>
 															</select>
 														</div>
