@@ -43,7 +43,7 @@ public class SalesReturnController extends ASLAbstractController {
 		model.addAttribute("opcrnheader", getDefaultOpcrnHeader());
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_RETURN.getCode(), Boolean.TRUE));
 		model.addAttribute("allOpcrnHeader", opcrnService.getAllOpcrnheader());
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 
 		if(isBoshila()) {
 			return "pages/land/salesninvoice/salesreturn/opcrn";
@@ -59,7 +59,7 @@ public class SalesReturnController extends ASLAbstractController {
 		model.addAttribute("opcrnheader", data);
 		model.addAttribute("allOpcrnHeader", opcrnService.getAllOpcrnheader());
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_RETURN.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("opcrnDetailsList", opcrnService.findOpcrnDetailByXcrnnum(xcrnnum));
 		if(isBoshila()) {
 			return "pages/land/salesninvoice/salesreturn/opcrn";

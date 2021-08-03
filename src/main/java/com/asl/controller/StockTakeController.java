@@ -40,7 +40,7 @@ public class StockTakeController extends ASLAbstractController {
 		model.addAttribute("imtag", getDefaultImtag());
 		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode(), Boolean.TRUE));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		return "pages/inventory/stocktake/imtag";
 	}
@@ -53,7 +53,7 @@ public class StockTakeController extends ASLAbstractController {
 		model.addAttribute("imtag", data);
 		model.addAttribute("imtagprefix", xtrnService.findByXtypetrn(TransactionCodeType.STOCK_TAKE.getCode(), Boolean.TRUE));
 		model.addAttribute("allimtags", imtagService.getAllImTag());
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtagDetailsList", imtagService.findImtdetByXtagnum(xtagnum));
 
@@ -207,7 +207,7 @@ public class StockTakeController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("TAG already confirmed");
 			return responseHelper.getResponse();
 		}		
-		Xcodes xcode = xcodeService.findByXtypesAndXcodes(CodeType.WAREHOUSE.getCode(), imtag.getXwh());
+		Xcodes xcode = xcodeService.findByXtypesAndXcodes(CodeType.STORE.getCode(), imtag.getXwh());
 		if(xcode == null) {
 			responseHelper.setErrorStatusAndMessage("A valid warehouse must be selected.");
 			return responseHelper.getResponse();

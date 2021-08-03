@@ -41,7 +41,7 @@ public class RM0605ServiceImpl extends AbstractReportService {
 		ItemCategory.add(new DropdownOption("", "-- Select --"));
 		categoryList.stream().forEach(x -> ItemCategory.add(new DropdownOption(x.getXcode(), x.getXcode())));
 		
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));

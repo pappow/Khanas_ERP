@@ -56,7 +56,7 @@ public class AssetTransferOrderController extends ASLAbstractController{
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		
 		return "pages/inventory/asset/imtor";
 	}
@@ -76,7 +76,7 @@ public class AssetTransferOrderController extends ASLAbstractController{
 		model.addAttribute("imtorheader", data);
 		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		

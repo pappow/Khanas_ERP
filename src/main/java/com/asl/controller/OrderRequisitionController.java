@@ -48,7 +48,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		List<PoordHeader> poordheadersList = poordService.getPoordHeadersByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode());
 		model.addAttribute("allPoordHeader", poordheadersList);
 
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
 		return "pages/purchasing/requisition/poord";
 	}
@@ -61,7 +61,7 @@ public class OrderRequisitionController extends ASLAbstractController {
 		model.addAttribute("poordheader", data);
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.REQUISITION_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		model.addAttribute("postatusList", xcodeService.findByXtype(CodeType.REQUISITION_ORDER_STATUS.getCode()));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 		return "pages/purchasing/requisition/poord";

@@ -49,7 +49,7 @@ public class PurchaseReturnController extends ASLAbstractController {
 		model.addAttribute("allPocrnHeader", pocrnService.getAllPocrnheader());
 
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_RETURN.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 
 		return "pages/procurement/grnreturn/pocrn";
 	}
@@ -62,7 +62,7 @@ public class PurchaseReturnController extends ASLAbstractController {
 		model.addAttribute("pocrnheader", data);
 		model.addAttribute("allPocrnHeader", pocrnService.getAllPocrnheader());
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("pocrnDetailsList", pocrnService.findPocrnDetailByXcrnnum(xcrnnum));
 
 		return "pages/procurement/grnreturn/pocrn";

@@ -59,7 +59,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
@@ -75,7 +75,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poordheader", data);
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 
 		model.addAttribute("grnlist", pogrnService.findPogrnHeaderByXpornum(xpornum));
@@ -102,7 +102,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poordheader", getDefaultPoordHeader());
 		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
 		model.addAttribute("prefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord::poordheaderform";
 		}
@@ -315,7 +315,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 	@GetMapping("/poordheaderform/{xpornum}")
 	public String reloadPoordheaderForm(@PathVariable String xpornum, Model model) {
 		model.addAttribute("poprefix", xtrnService.findByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("postatusList", xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("poordheader", poordService.findPoordHeaderByXpornum(xpornum));
 		return "pages/purchasing/poord/poord::poordheaderform";

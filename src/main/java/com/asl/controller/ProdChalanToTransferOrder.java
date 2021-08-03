@@ -59,7 +59,7 @@ public class ProdChalanToTransferOrder extends ASLAbstractController {
 		imtorHeader.setXchalanref(chalan);
 		model.addAttribute("imtorheader", imtorHeader);
 		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_TRANSFER_ORDER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/inventory/pchtotrord/pchtotrordmodal::pchtotrordmodal";
 	}
 

@@ -63,7 +63,7 @@ public class RM0611ServiceImpl extends AbstractReportService {
 		options.add(new DropdownOption("GRN Created", "GRN Created"));
 		options.add(new DropdownOption("Full Received", "Full Receipt"));
 		
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE);
+		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE);
 		List<DropdownOption> wh = new ArrayList<>();
 		wh.add(new DropdownOption("", "-- Select --"));
 		statusList.stream().forEach(x -> wh.add(new DropdownOption(x.getXcode(), x.getXcode())));
