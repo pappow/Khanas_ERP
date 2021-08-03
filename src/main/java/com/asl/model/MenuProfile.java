@@ -36,6 +36,11 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0104;
 	private ProfileLine M0105;
 	private ProfileLine M0106;
+	private ProfileLine M0107;
+	private ProfileLine M0108;
+	private ProfileLine M0109;
+	private ProfileLine M0110;
+	private ProfileLine M0111;
 
 	private ProfileLine M0200;
 	private ProfileLine M0201;
@@ -44,10 +49,6 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0204;
 	private ProfileLine M0205;
 	private ProfileLine M0206;
-	private ProfileLine M0207;
-	private ProfileLine M0208;
-	private ProfileLine M0209;
-	private ProfileLine M0210;
 
 	private ProfileLine M0300;
 	private ProfileLine M0301;
@@ -56,13 +57,6 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0304;
 	private ProfileLine M0305;
 	private ProfileLine M0306;
-	private ProfileLine M0307;
-	private ProfileLine M0308;
-	private ProfileLine M0309;
-	private ProfileLine M0310;
-	private ProfileLine M0311;
-	private ProfileLine M0312;
-	private ProfileLine M0313;
 
 	private ProfileLine M0400;
 	private ProfileLine M0401;
@@ -80,6 +74,7 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0501;
 	private ProfileLine M0502;
 	private ProfileLine M0503;
+	private ProfileLine M0504;
 
 	private ProfileLine M0600;
 	private ProfileLine M0601;
@@ -87,10 +82,18 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0603;
 	private ProfileLine M0604;
 	private ProfileLine M0605;
-	private ProfileLine M0606;
-	private ProfileLine M0607;
 
 	private ProfileLine M0700;
+
+	private ProfileLine M0800;
+	private ProfileLine M0801;
+	private ProfileLine M0802;
+	private ProfileLine M0803;
+
+	private ProfileLine M0900;
+	private ProfileLine M0901;
+	private ProfileLine M0902;
+	private ProfileLine M0903;
 
 	private List<ProfileLine> profileLines = new ArrayList<>();
 	private static Map<String, Method> profileSetterMethods = new HashMap<>();
@@ -180,6 +183,27 @@ public class MenuProfile implements Serializable {
 		this.M0106 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
+	public void setM0107(ProfileLine profileLine) {
+		this.M0107 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0108(ProfileLine profileLine) {
+		this.M0108 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0109(ProfileLine profileLine) {
+		this.M0109 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0110(ProfileLine profileLine) {
+		this.M0110 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0111(ProfileLine profileLine) {
+		this.M0111 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
 
 	public void setM0200(ProfileLine profileLine) {
 		this.M0200 = profileLine;
@@ -209,22 +233,7 @@ public class MenuProfile implements Serializable {
 		this.M0206 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
-	public void setM0207(ProfileLine profileLine) {
-		this.M0207 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0208(ProfileLine profileLine) {
-		this.M0208 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0209(ProfileLine profileLine) {
-		this.M0209 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0210(ProfileLine profileLine) {
-		this.M0210 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
+
 
 	public void setM0300(ProfileLine profileLine) {
 		this.M0300 = profileLine;
@@ -254,34 +263,8 @@ public class MenuProfile implements Serializable {
 		this.M0306 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
-	public void setM0307(ProfileLine profileLine) {
-		this.M0307 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0308(ProfileLine profileLine) {
-		this.M0308 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0309(ProfileLine profileLine) {
-		this.M0309 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0310(ProfileLine profileLine) {
-		this.M0310 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0311(ProfileLine profileLine) {
-		this.M0311 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0312(ProfileLine profileLine) {
-		this.M0312 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0313(ProfileLine profileLine) {
-		this.M0313 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
+
+
 
 	public void setM0400(ProfileLine profileLine) {
 		this.M0400 = profileLine;
@@ -345,6 +328,10 @@ public class MenuProfile implements Serializable {
 		this.M0503 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
+	public void setM0504(ProfileLine profileLine) {
+		this.M0504 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
 
 
 	public void setM0600(ProfileLine profileLine) {
@@ -371,18 +358,45 @@ public class MenuProfile implements Serializable {
 		this.M0605 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
-	public void setM0606(ProfileLine profileLine) {
-		this.M0606 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-	public void setM0607(ProfileLine profileLine) {
-		this.M0607 = profileLine;
-		addToProfileLineMap(profileLine);
-	}
-
 
 	public void setM0700(ProfileLine profileLine) {
 		this.M0700 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
+
+	public void setM0800(ProfileLine profileLine) {
+		this.M0800 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0801(ProfileLine profileLine) {
+		this.M0801 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0802(ProfileLine profileLine) {
+		this.M0802 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0803(ProfileLine profileLine) {
+		this.M0803 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
+
+	public void setM0900(ProfileLine profileLine) {
+		this.M0900 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0901(ProfileLine profileLine) {
+		this.M0901 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0902(ProfileLine profileLine) {
+		this.M0902 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+	public void setM0903(ProfileLine profileLine) {
+		this.M0903 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
+
 }

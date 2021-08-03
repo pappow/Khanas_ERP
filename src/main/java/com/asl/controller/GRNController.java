@@ -106,11 +106,15 @@ public class GRNController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please Select Supplier");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+			responseHelper.setErrorStatusAndMessage("Bill Number Required");
+			return responseHelper.getResponse();
+		}
 
 		// if existing record
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
 		if (existPogrnHeader != null) {
-			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtypetrn","xtrn","xstatusgrn");
+			BeanUtils.copyProperties(pogrnHeader, existPogrnHeader, "xgrnnum", "xtypetrn","xtrn","xstatusgrn","xpronum","xcus");
 			long count = pogrnService.update(existPogrnHeader);
 			if (count == 0) {
 				responseHelper.setErrorStatusAndMessage("Can't update GRN");
