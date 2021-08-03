@@ -41,7 +41,7 @@ public class CustomerAdjustmentController extends ASLAbstractController{
 		model.addAttribute("allArhed", arhedService.getAllAdars());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAR.getCode()));
 		model.addAttribute("objtypeList", xcodeService.findByXtype(CodeType.OBJECT_TYPE.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));
@@ -62,7 +62,7 @@ public class CustomerAdjustmentController extends ASLAbstractController{
 		model.addAttribute("allArhed", arhedService.getAllAdars());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAR.getCode()));
 		model.addAttribute("objtypeList", xcodeService.findByXcode(CodeType.OBJECT_TYPE.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		model.addAttribute("paymenttypeLiist", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("chequeStatusList", xcodeService.findByXtype(CodeType.CHEQUE_STATUS.getCode()));
 		model.addAttribute("bankstatusList", xcodeService.findByXtype(CodeType.BANK_STATUS.getCode()));

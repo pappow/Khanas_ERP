@@ -39,7 +39,7 @@ public class StockOpeningEntryController extends ASLAbstractController {
 		model.addAttribute("imtrn", getDefaultImtrn());
 		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/inventory/openingentry/imtrn";
 	}
 
@@ -51,7 +51,7 @@ public class StockOpeningEntryController extends ASLAbstractController {
 		model.addAttribute("imtrn", data);
 		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode(), Boolean.TRUE));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/inventory/openingentry/imtrn";
 	}
 

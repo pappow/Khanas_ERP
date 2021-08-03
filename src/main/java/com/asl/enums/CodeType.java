@@ -100,7 +100,7 @@ public enum CodeType {
 	TRANSFER_ORDER_STATUS("Transfer Order Status"),
 	TAG_STATUS("TAG Status"),
 
-	WAREHOUSE("Warehouse"),
+	STORE("Store"),
 	WEEK_DAY("Week Day");
 
 	private String code;

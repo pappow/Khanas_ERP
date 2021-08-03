@@ -38,7 +38,7 @@ public class ImtrnController extends ASLAbstractController{
 		model.addAttribute("imtrn", getDefaultImtrn());
 		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		
 		return "pages/inventory/imtrn/imtrn";
 	}
@@ -52,7 +52,7 @@ public class ImtrnController extends ASLAbstractController{
 		model.addAttribute("imtrn", imtrn);
 		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrn(TransactionCodeType.INVENTORY_NUMBER.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 			
 		return "pages/inventory/imtrn/imtrn";
 	}

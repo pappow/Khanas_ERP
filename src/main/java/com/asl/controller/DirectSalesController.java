@@ -55,7 +55,7 @@ public class DirectSalesController extends ASLAbstractController {
 		model.addAttribute("allOpdoHeader", opdoService.getAllRandomOpdoHeader());
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));		
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));		
 		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("payStatusList", new ArrayList<>());
 		model.addAttribute("arStatusList", new ArrayList<>());		
@@ -77,7 +77,7 @@ public class DirectSalesController extends ASLAbstractController {
 		model.addAttribute("allOpdoHeader", opdoService.getAllRandomOpdoHeader());
 		model.addAttribute("paymentTypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
 		model.addAttribute("jvStatusList", xcodeService.findByXtype(CodeType.JOURNAL_VOUCHER_STATUS.getCode()));
-		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.WAREHOUSE.getCode()));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode()));
 		model.addAttribute("ordStatusList", xcodeService.findByXtype(CodeType.STATUS.getCode()));
 		model.addAttribute("payStatusList", new ArrayList<>());
 		model.addAttribute("arStatusList", new ArrayList<>());		
