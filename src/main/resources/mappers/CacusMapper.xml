@@ -5,7 +5,7 @@
 
 	<insert id="save" parameterType="Cacus">
 		<selectKey keyProperty="xcus" resultType="String" order="BEFORE">
-			SELECT Func_GetTrn('${zid}', '${xtype}', '${xcustype}', 6) FROM DUAL
+			SELECT Func_GetTrn('${zid}', '${xtypetrn}', '${xtrn}', 6) FROM DUAL
 		</selectKey>
 		INSERT INTO Cacus
 		(
@@ -27,6 +27,8 @@
 			xcountry,
 			xcur,
 			xisrandom,
+			xtypetrn,
+			xtrn,
 
 			zid,
 			zauserid,
@@ -57,6 +59,8 @@
 			#{xcountry, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
 			#{xisrandom, jdbcType=BOOLEAN},
+			#{xtypetrn, jdbcType=VARCHAR},
+			#{xtrn, jdbcType=VARCHAR},
 
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
@@ -90,6 +94,8 @@
 			xcountry=#{xcountry, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},
 			xisrandom=#{xisrandom, jdbcType=BOOLEAN},
+			xtypetrn=#{xtypetrn, jdbcType=VARCHAR},
+			xtrn=#{xtrn, jdbcType=VARCHAR},
 
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
@@ -116,8 +122,8 @@
 		SELECT * FROM Cacus WHERE zid=#{zid} AND xphone=#{xphone}
 	</select>
 
-	<select id="findByXtype" resultType="Cacus">
-		SELECT * FROM Cacus WHERE xtype=#{xtype} AND zid=#{zid}
+	<select id="findByXtypetrn" resultType="Cacus">
+		SELECT * FROM Cacus WHERE xtypetrn=#{xtypetrn} AND zid=#{zid}
 	</select>
 
 	<select id="getAllCacus" resultType="Cacus">
@@ -159,6 +165,18 @@
 			CACUS
 		WHERE
 			XCUSZID=#{xcuszid}
+			AND ZID=#{zid}
+			AND ZACTIVE='1'
+	</select>
+	
+	<select id="findCacusByXorg" resultType="Cacus">
+		SELECT 
+			*
+		FROM 
+			CACUS
+		WHERE
+			XORG=#{xorg}
+			AND XCUSZID =#{xcuszid}
 			AND ZID=#{zid}
 			AND ZACTIVE='1'
 	</select>

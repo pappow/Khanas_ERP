@@ -81,9 +81,11 @@ public class CacusController extends ASLAbstractController {
 	private Cacus getDefaultCacus(String cacusType) {
 		Cacus cacus = new Cacus();
 		cacus.setXcrlimit(BigDecimal.ZERO);
-		cacus.setXtype("SUP".equalsIgnoreCase(cacusType) ? TransactionCodeType.SUPPLIER_NUMBER.getCode() : TransactionCodeType.CUSTOMER_NUMBER.getCode());
+		cacus.setXtype("SUP".equalsIgnoreCase(cacusType) ? "Supplier" : "Customer");
+		cacus.setXtypetrn("SUP".equalsIgnoreCase(cacusType) ? TransactionCodeType.SUPPLIER_NUMBER.getCode() : TransactionCodeType.CUSTOMER_NUMBER.getCode());
 		return cacus;
 	}
+	
 
 	private void setOtherDefaultData(String cacusType, Model model) {
 		List<Xcodes> supplierStatus = new ArrayList<>();
@@ -102,12 +104,12 @@ public class CacusController extends ASLAbstractController {
 			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode(), Boolean.TRUE));
 			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE));
 			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode(), Boolean.TRUE));
-			suppliersList.addAll(cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
+			suppliersList.addAll(cacusService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
 		} else if (CacusType.CUS.name().equalsIgnoreCase(cacusType)) {
 			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
 			customerGroups.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_GROUP.getCode(), Boolean.TRUE));
 			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode(), Boolean.TRUE));
-			customersList.addAll(cacusService.findByXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
+			customersList.addAll(cacusService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
 		} else {
 			supplierStatus.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_STATUS.getCode(), Boolean.TRUE));
 			customerStatus.addAll(xcodesService.findByXtype(CodeType.CUSTOMER_STATUS.getCode(), Boolean.TRUE));
@@ -115,8 +117,8 @@ public class CacusController extends ASLAbstractController {
 			supplierGroups.addAll(xcodesService.findByXtype(CodeType.SUPPLIER_GROUP.getCode(), Boolean.TRUE));
 			supplierTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode(), Boolean.TRUE));
 			customerTypes.addAll(xtrnService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode(), Boolean.TRUE));
-			suppliersList.addAll(cacusService.findByXtype(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
-			customersList.addAll(cacusService.findByXtype(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
+			suppliersList.addAll(cacusService.findByXtypetrn(TransactionCodeType.SUPPLIER_NUMBER.getCode()));
+			customersList.addAll(cacusService.findByXtypetrn(TransactionCodeType.CUSTOMER_NUMBER.getCode()));
 		}
 
 		model.addAttribute("supplierStatus", supplierStatus);
@@ -135,37 +137,35 @@ public class CacusController extends ASLAbstractController {
 
 	@PostMapping("/save")
 	public @ResponseBody Map<String, Object> save(Cacus cacus, String cacusType, BindingResult bindingResult){
-		if(cacus == null || StringUtils.isBlank(cacus.getXtype()) || StringUtils.isBlank(cacus.getXcustype())) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
-			return responseHelper.getResponse();
-		}
-
 		if(!"Branch".equalsIgnoreCase(cacus.getXgcus())){
 			cacus.setXcuszid(null);
 		}
 
 		// validation xcuszid
-		if("CUS".equalsIgnoreCase(cacusType) && StringUtils.isNotBlank(cacus.getXcuszid()) && "Branch".equalsIgnoreCase(cacus.getXgcus())) {
-			Cacus ex = cacusService.findCacusByXcuszid(cacus.getXcuszid());
-			if(ex != null) {
-				if(StringUtils.isBlank(cacus.getXcus())) {
-					responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
-					return responseHelper.getResponse();
-				}
-				if(!cacus.getXcus().equalsIgnoreCase(ex.getXcus())) {
-					responseHelper.setErrorStatusAndMessage("Customer already exist with this branch");
-					return responseHelper.getResponse();
-				}
-			}
+		/*
+		 * if("CUS".equalsIgnoreCase(cacusType) &&
+		 * StringUtils.isNotBlank(cacus.getXcuszid()) &&
+		 * "Branch".equalsIgnoreCase(cacus.getXgcus())) { Cacus ex =
+		 * cacusService.findCacusByXcuszid(cacus.getXcuszid()); if(ex != null) {
+		 * if(StringUtils.isBlank(cacus.getXcus())) { responseHelper.
+		 * setErrorStatusAndMessage("Customer already exist with this branch"); return
+		 * responseHelper.getResponse(); }
+		 * if(!cacus.getXcus().equalsIgnoreCase(ex.getXcus())) { responseHelper.
+		 * setErrorStatusAndMessage("Customer already exist with this branch"); return
+		 * responseHelper.getResponse(); } } }
+		 */
+		if(cacusService.findCacusByXorg(cacus.getXorg(), cacus.getXcuszid()) != null) {
+			responseHelper.setErrorStatusAndMessage("Customer " + cacus.getXorg() + " already exist in this branch");
+			return responseHelper.getResponse();
 		}
 
 		// if existing
-		Cacus existingCacus = cacusService.findByXcus(cacus.getXcus());
-		if(existingCacus != null) {
-			BeanUtils.copyProperties(cacus, existingCacus, "xtype", "xcustype", "xcus");
+		if(StringUtils.isNotBlank(cacus.getXcus())) {
+			Cacus existingCacus = cacusService.findByXcus(cacus.getXcus());
+			BeanUtils.copyProperties(cacus, existingCacus, "xtypetrn", "xtrn", "xcus");
 			long count = cacusService.update(existingCacus);
 			if(count == 0) {
-				responseHelper.setStatus(ResponseStatus.ERROR);
+				responseHelper.setErrorStatusAndMessage("Can't update " + cacus.getXtype());
 				return responseHelper.getResponse();
 			}
 			responseHelper.setSuccessStatusAndMessage("Data updated successfully");
@@ -176,11 +176,11 @@ public class CacusController extends ASLAbstractController {
 		// If new
 		long count = cacusService.save(cacus);
 		if(count == 0) {
-			responseHelper.setStatus(ResponseStatus.ERROR);
+			responseHelper.setErrorStatusAndMessage(cacus.getXtype() + " not saved");
 			return responseHelper.getResponse();
 		}
 		responseHelper.setSuccessStatusAndMessage("Data saved successfully");
-		responseHelper.setRedirectUrl("/mastersetup/cacus?cacusType=" + cacusType);
+		responseHelper.setRedirectUrl("/mastersetup/cacus/"  + cacus.getXcus() + "?cacusType=" + cacusType);
 		return responseHelper.getResponse();
 	}
 
