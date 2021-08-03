@@ -38,7 +38,10 @@ public class MenuAccessAuthorizationInterceptor implements AsyncHandlerIntercept
 
 	private boolean hasAccess(String modulePath) {
 		LoggedInUserDetails liud = sessionManager.getLoggedInUserDetails();
-		if(liud != null && liud.getRoles() != null && liud.getRoles().contains(UserRole.SYSTEM_ADMIN.getCode()) && "Y".equalsIgnoreCase(appConfig.getAllowSystemAdmin())) return true;
+		if(liud != null 
+				&& liud.getRoles() != null 
+				&& liud.getRoles().contains(UserRole.SYSTEM_ADMIN.getCode()) 
+				&& "Y".equalsIgnoreCase(appConfig.getAllowSystemAdmin())) return true;
 
 		//MenuProfile mp = profileService.getLoggedInUserMenuProfile();
 		MenuProfile mp = (MenuProfile) sessionManager.getFromMap("menuProfile");
@@ -46,6 +49,7 @@ public class MenuAccessAuthorizationInterceptor implements AsyncHandlerIntercept
 
 		boolean stat = true;
 		for (com.asl.enums.MenuProfile menu : com.asl.enums.MenuProfile.values()) {
+			if("MASTER".equalsIgnoreCase(menu.getParent()) || "SUB-MASTER".equalsIgnoreCase(menu.getParent())) continue;
 			if(modulePath.startsWith(menu.getMenuPath())) {
 				ProfileLine pl = MenuProfile.invokeGetter(mp, menu.getCode());
 				if(pl == null) {
