@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Acdetail;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.PoordDetail;
@@ -78,7 +79,18 @@ public class PurchaseOrderController extends ASLAbstractController {
 		model.addAttribute("poorddetailsList", poordService.findPoorddetailByXpornum(xpornum));
 
 		model.addAttribute("grnlist", pogrnService.findPogrnHeaderByXpornum(xpornum));
-
+		
+		List<PoordDetail> poordDetails = poordService.findPoorddetailByXpornum(xpornum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalNetAmount = BigDecimal.ZERO;
+		if(poordDetails != null && !poordDetails.isEmpty()) {
+			for(PoordDetail pd : poordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalNetAmount = totalNetAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalNetAmount", totalNetAmount);
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}

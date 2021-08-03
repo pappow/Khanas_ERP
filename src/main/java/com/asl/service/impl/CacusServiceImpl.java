@@ -24,7 +24,7 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	@Transactional
 	@Override
 	public long save(Cacus cacus) {
-		if(cacus == null || StringUtils.isBlank(cacus.getXtype()) || StringUtils.isBlank(cacus.getXcustype())) return 0;
+		if(cacus == null) return 0;
 		cacus.setZid(sessionManager.getBusinessId());
 		cacus.setZauserid(getAuditUser());
 		return cacusMapper.save(cacus);
@@ -33,7 +33,7 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	@Transactional
 	@Override
 	public long update(Cacus cacus) {
-		if(cacus == null || StringUtils.isBlank(cacus.getXtype()) || StringUtils.isBlank(cacus.getXcustype())) return 0;
+		if(cacus == null) return 0;
 		cacus.setZid(sessionManager.getBusinessId());
 		cacus.setZuuserid(getAuditUser());
 		return cacusMapper.update(cacus);
@@ -46,9 +46,9 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	}
 
 	@Override
-	public List<Cacus> findByXtype(String xtype) {
-		if(StringUtils.isBlank(xtype)) return null;
-		return cacusMapper.findByXtype(xtype, sessionManager.getBusinessId());
+	public List<Cacus> findByXtypetrn(String xtypetrn) {
+		if(StringUtils.isBlank(xtypetrn)) return null;
+		return cacusMapper.findByXtypetrn(xtypetrn, sessionManager.getBusinessId());
 	}
 
 	@Override
@@ -90,6 +90,13 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 		if(StringUtils.isBlank(xcuszid)) return null;
 		return cacusMapper.findCacusByXcuszid(xcuszid, sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public Cacus findCacusByXorg(String xorg, String xcuszid) {
+		if(StringUtils.isBlank(xorg) || StringUtils.isBlank(xcuszid))   return null;
+		return cacusMapper.findCacusByXorg(xorg,xcuszid, sessionManager.getBusinessId());
+	}
+
 
 	@Transactional
 	@Override
@@ -97,6 +104,8 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 		if(StringUtils.isBlank(xcus)) return 0;
 		return cacusMapper.deleteCacus(xcus, sessionManager.getBusinessId());
 	}
+
+	
 
 	
 

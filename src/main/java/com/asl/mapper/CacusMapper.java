@@ -21,7 +21,7 @@ public interface CacusMapper {
 
 	public Cacus findByXphone(String xphone, String zid);
 
-	public List<Cacus> findByXtype(String xtype, String zid);
+	public List<Cacus> findByXtypetrn(String xtypetrn, String zid);
 
 	public List<Cacus> getAllCacus(String zid);
 
@@ -32,6 +32,8 @@ public interface CacusMapper {
 	public List<Cacus> searchXgcus(String xgcus, String zid);
 
 	public Cacus findCacusByXcuszid(String xcuszid, String zid);
+	
+	public Cacus findCacusByXorg(String xorg, String xcuszid, String zid);
 
 	public long deleteCacus(String xcus, String zid);
 	
