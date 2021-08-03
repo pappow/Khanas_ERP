@@ -69,4 +69,4 @@ default:
     template-path: D:/TCC/cr-reports
     xsl-path: D:/TCC/xsl
     saved-xml-path: D:/TCC/report/savedxml
-    logo: //static//assets//img//khanas_logo.png
+    logo: asl.png
