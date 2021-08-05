@@ -86,23 +86,23 @@ public class DamageIssueEntryController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+
 		if(imtrn.getXqty().compareTo(BigDecimal.ZERO) == 0) {
 			responseHelper.setErrorStatusAndMessage("Please insert Greater than 0 item quantity");
 			return responseHelper.getResponse();
 		}
 		
-		if(imtrn.getXrate() == null) imtrn.setXrate(BigDecimal.ZERO);
+
 		if(imtrn.getXrate().compareTo(BigDecimal.ZERO) == -1) {
 			responseHelper.setErrorStatusAndMessage("Please insert valid rate");
 			return responseHelper.getResponse();
 		}
 		
-		if(imtrn.getXrate() == null) imtrn.setXrate(BigDecimal.ZERO);
 		if(imtrn.getXrate().compareTo(BigDecimal.ZERO) == 0) {
 			responseHelper.setErrorStatusAndMessage("Please insert Greater than 0 item rate");
 			return responseHelper.getResponse();
 		}
-
+		
 		// if existing record
 		Imtrn existImtrn = imtrnService.findImtrnByXimtrnnum(imtrn.getXimtrnnum());
 		if(existImtrn != null) {
@@ -152,4 +152,5 @@ public class DamageIssueEntryController extends ASLAbstractController {
 	public @ResponseBody Caitem getCentralItemDetail(@PathVariable String xitem){
 		return caitemService.findByXitem(xitem);
 	}
+	
 }
