@@ -12,6 +12,7 @@ import com.asl.entity.Imtdet;
 public interface ImtagMapper {
 	public long saveImtag(Imtag imtag);
 	public long updateImtag(Imtag imtag);
+	public long deleteImtag(Imtag imtag);
 	
 	public long saveImtdet(Imtdet imtdet);
 	public long updateImtdet(Imtdet imtdet);

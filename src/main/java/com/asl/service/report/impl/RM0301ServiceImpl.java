@@ -67,15 +67,15 @@ public class RM0301ServiceImpl extends AbstractReportService {
 
 		// To Date
 		fieldsList.add(FormFieldBuilder.generateDateField(3, "To Date", new Date(), true));
+		
+		// xcus - Customer / Supplier
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Supplier", "search/report/sup", "", false));
+		
+		// Item
+		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Item", "search/report/stock/xitem", "", false));
 
 		// Status
-		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Status", options, "", false));
-
-		// xcus - Customer / Supplier
-		fieldsList.add(FormFieldBuilder.generateSearchField(5, "Supplier", "search/report/sup", "", false));
-
-		// Item
-		fieldsList.add(FormFieldBuilder.generateSearchField(6, "Item", "search/report/stock/xitem", "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(6, "Status", options, "", false));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;

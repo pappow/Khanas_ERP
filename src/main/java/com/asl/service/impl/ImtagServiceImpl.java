@@ -35,6 +35,13 @@ public class ImtagServiceImpl extends AbstractGenericService implements ImtagSer
 		imtag.setZuuserid(getAuditUser());
 		return imtagMapper.updateImtag(imtag);
 	}
+	
+	@Override
+	public long deleteImtag(Imtag imtag) {
+		if(imtag == null) return 0;
+		long count = imtagMapper.deleteImtag(imtag);
+		return count;
+	}
 
 	@Override
 	public long saveImtdet(Imtdet imtdet) {

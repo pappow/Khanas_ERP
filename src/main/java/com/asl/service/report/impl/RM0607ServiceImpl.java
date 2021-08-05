@@ -43,14 +43,14 @@ public class RM0607ServiceImpl extends AbstractReportService {
 		// zid
 		fieldsList.add(FormFieldBuilder.generateHiddenField(1, sessionManager.getBusinessId()));
 
-		// caitem
-		fieldsList.add(FormFieldBuilder.generateSearchField(2, "Item", "search/caitem", "", true));
-		
 		// Item Group
-		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Item Group", Itemgroups, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(2, "Item Group", Itemgroups, "", false));
 		
 		// Item Category
-		fieldsList.add(FormFieldBuilder.generateDropdownField(4, "Item Category", ItemCategory, "", false));
+		fieldsList.add(FormFieldBuilder.generateDropdownField(3, "Item Category", ItemCategory, "", false));
+		
+		// caitem
+		fieldsList.add(FormFieldBuilder.generateSearchField(4, "Item", "search/caitem", "", true));
 
 		fieldsList.sort(Comparator.comparing(FormFieldBuilder::getSeqn));
 		return fieldsList;
