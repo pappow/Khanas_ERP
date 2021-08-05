@@ -17,6 +17,8 @@ public interface ArhedService {
 	public List<Arhed> getAllArheds();
 	
 	public List<Arhed> getAllArhedByXtrn(String xtrn);
+	
+	public List<Arhed> getAllArhedByXtype(String xtype);
 
 	// Supplier Opening Entry
 	public Arhed findObapByXcus(String xcus);

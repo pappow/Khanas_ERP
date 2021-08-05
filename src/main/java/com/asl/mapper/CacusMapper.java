@@ -26,6 +26,8 @@ public interface CacusMapper {
 	public List<Cacus> getAllCacus(String zid);
 
 	public List<Cacus> searchCacus(String xtype, String xcus, String zid);
+	
+	public List<Cacus> searchCus(String xtrn, String xcus, String zid);
 
 	public List<Cacus> searchXorg(String xorg, String zid);
 

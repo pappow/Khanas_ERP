@@ -109,7 +109,7 @@
 															<input 	type="text" 
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
-																	th:value="${arhed.xcus}" 
+																	th:value="${#strings.isEmpty(arhed.xcus) ? '' : arhed.xcus + ' - ' + arhed.xorg}" 
 																	th:attr="search-url='search/supplier'"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xcus}"/>
@@ -215,7 +215,9 @@
 														<label class="control-label col-md-4" for="xtyperec">Payment Mode</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xtyperec}">
-																<option th:each="x : ${paymentModeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
+																<option value="Advance">Advance</option>
+																<option value="Normal">"Normal"</option>
+																<!-- <option th:each="x : ${paymentModeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option> -->
 															</select>
 														</div>
 													</div>
@@ -230,7 +232,7 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xprime">Prime Amount</label>
 														<div class="col-md-8">
-															<input type="number" class="form-control" th:field="*{xprime}" >
+															<input type="text" class="form-control" th:field="*{xprime}" >
 														</div>
 													</div> 
 													
@@ -338,8 +340,8 @@
 											<thead>
 												<tr>
 													<th>Voucher Number</th>
-													<th>Date</th>
 													<th>Supplier</th>
+													<th>Date</th>
 													<th>Amount</th>
 													<th>JV Number</th>
 													<th>Status</th>
@@ -350,8 +352,8 @@
 													<td>
 														<a th:href="@{/supopening/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
 													</td>
+													<td th:text="${arhed.xcus} + ' - ' + ${arhed.xorg}"></td>
 													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
-													<td th:text="${arhed.xcus}"></td>
 													<td th:text="${arhed.xprime}"></td>
 													<td th:text="${arhed.xdocnum}"></td>
 													<td th:text="${arhed.xstatus}"></td>
@@ -372,8 +374,8 @@
 											<thead>
 												<tr>
 													<th>Voucher Number</th>
-													<th>Date</th>
 													<th>Supplier</th>
+													<th>Date</th>
 													<th>Amount</th>
 													<th>JV Number</th>
 													<th>Status</th>
@@ -384,8 +386,8 @@
 													<td>
 														<a th:href="@{/supopening/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
 													</td>
+													<td th:text="${arhed.xcus} + ' - ' + ${arhed.xorg}"></td>
 													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
-													<td th:text="${arhed.xcus}"></td>
 													<td th:text="${arhed.xprime}"></td>
 													<td th:text="${arhed.xdocnum}"></td>
 													<td th:text="${arhed.xstatus}"></td>

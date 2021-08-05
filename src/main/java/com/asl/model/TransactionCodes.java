@@ -33,7 +33,7 @@ public class TransactionCodes {
 	public static final Map<String, String> LANDMEMBER_ID = new HashMap<>();
 	public static final Map<String, String> LANDCOMEVENT_ID = new HashMap<>();
 	public static final Map<String, String> LANDOTHEREVENT_ID = new HashMap<>();
-	public static final Map<String, String> AGENT_TRANSFER_ORDER = new HashMap<>();
+	public static final Map<String, String> ASSET_TRANSFER_ORDER = new HashMap<>();
 	public static final Map<String, String> GL_VOUCHER = new HashMap<>();
 	public static final Map<String, String> HR_EMPLOYEE_ID= new HashMap<>();
 	public static final Map<String, String> PAYROLL_EMPLOYEE_ID= new HashMap<>();

@@ -38,7 +38,7 @@ public class ACCCustomerOpeningController extends ASLAbstractController{
 		model.addAttribute("arhed", getDefaultArhed());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.ACCOUNT_OBAR.getCode(),TransactionCodeType.ACCOUNT_OBAR.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("paymentModeList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode(),Boolean.TRUE));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_OBAR.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.ACCOUNT_OBAR.getdefaultCode()));
 		
 		return "pages/salesninvoice/customeropen/cusopening";
 	}
@@ -52,7 +52,7 @@ public class ACCCustomerOpeningController extends ASLAbstractController{
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_OBAR.getCode()));
 		model.addAttribute("paymentModeList", xcodeService.findByXtype(CodeType.PAYMENT_MODE.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_OBAR.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.ACCOUNT_OBAR.getdefaultCode()));
 		
 		return "pages/salesninvoice/customeropen/cusopening";
 	}

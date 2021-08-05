@@ -148,13 +148,20 @@
 	
 	<select id="findArhedByXvoucher" resultType="Arhed">
 		SELECT 
-			* 
+			arhed.*,
+			cacus.xorg,
+			cabank.xname,
+			pdmst.xname as xename
 		FROM 
-			Arhed 
+			arhed 
+			left join cacus on cacus.xcus = arhed.xcus and cacus.zid=arhed.zid and cacus.zactive='1'
+			left join cabank on cabank.xbank = arhed.xbank and cabank.zid=arhed.zid and cacus.zactive='1'
+			left join pdmst on pdmst.xstaff = arhed.xstaff and pdmst.zid=arhed.zid and pdmst.zactive='1'
 		WHERE 
-			xvoucher=#{xvoucher} 
-			AND zid=#{zid}
+			arhed.xvoucher=#{xvoucher} 
+			AND arhed.zid=#{zid}
 	</select>
+	
 
 	<select id="getAllArhed" resultType="Arhed">
 		SELECT 
@@ -227,6 +234,31 @@
 			(UPPER(xvoucher) LIKE #{xtrn} ||'%') 
 			AND zid=#{zid}
 	</select>
+	
+	<!-- <select id="getAllArhedByXtrn" resultType="Arhed">
+		SELECT 
+			arhed.*,
+			cacus.xorg
+		FROM 
+			arhed 
+			left join cacus on cacus.xcus = arhed.xcus and cacus.zid=arhed.zid and cacus.zactive='1'
+		WHERE 
+			(UPPER(arhed.xvoucher)= #{xtrn} ||'%') 
+			AND arhed.zid=#{zid}
+	</select> -->
+	
+	<select id="getAllArhedByXtype" resultType="Arhed">
+		SELECT 
+			arhed.*,
+			cacus.xorg
+		FROM 
+			arhed 
+			left join cacus on cacus.xcus = arhed.xcus and cacus.zid=arhed.zid and cacus.zactive='1'
+		WHERE 
+			arhed.xtype= #{xtype}
+			AND arhed.zid=#{zid}
+	</select>
+	
 	
 	<select id="findByXstaff" resultType="Arhed">
 		SELECT * FROM Arhed WHERE (UPPER(xstaff) LIKE #{xstaff} ||'%') AND zid=#{zid} AND zactive='1'

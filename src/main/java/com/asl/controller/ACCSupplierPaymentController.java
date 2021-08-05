@@ -38,7 +38,7 @@ public class ACCSupplierPaymentController extends ASLAbstractController{
 		model.addAttribute("arhed", getDefaultArhed());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode(),TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode()));
 		
 		return "pages/purchasing/supplierpayment/supplierpayment";
 	}
@@ -52,7 +52,7 @@ public class ACCSupplierPaymentController extends ASLAbstractController{
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_PAYMENT.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.ACCOUNT_PAYMENT.getdefaultCode()));
 		
 		return "pages/purchasing/supplierpayment/supplierpayment";
 	}

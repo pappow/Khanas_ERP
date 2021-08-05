@@ -24,6 +24,8 @@ public interface CacusService {
 	public List<Cacus> getAllCacus();
 
 	public List<Cacus> searchCacus(String xtype, String xcus);
+	
+	public List<Cacus> searchCus(String xtrn, String xcus);
 
 	public Cacus findByXphone(String xphone);
 

@@ -15,7 +15,7 @@ public enum TransactionCodeType {
 	ACCOUNT_OBAR("AR Transactions", "OBAR", TransactionCodes.AR_TRANSACTION),
 	ACCOUNT_ADAP("AR Transactions", "ADAP", TransactionCodes.AR_TRANSACTION),
 	ACCOUNT_ADAR("AR Transactions", "ADAR", TransactionCodes.AR_TRANSACTION),
-	AGENT_TRANSFER_ORDER("ASTO Number", "ASTO", TransactionCodes.AGENT_TRANSFER_ORDER),
+	ASSET_TRANSFER_ORDER("ASTO Number", "ASTO", TransactionCodes.ASSET_TRANSFER_ORDER),
 
 	BOM_NUMBER("BOM Number", "BOM-", TransactionCodes.BOM_NUMBER),
 	BATCH_NUMBER("Batch Number", "BN--", null),

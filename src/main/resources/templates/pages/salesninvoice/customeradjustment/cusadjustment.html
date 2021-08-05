@@ -107,7 +107,9 @@
 														<label class="control-label col-md-4" for="xtypeobj">Adjustment Type</label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xtypeobj}">
-																<option th:each="x : ${adjustmenttypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
+																<option value="Debit">Debit</option>
+																<option value="Cebit">Cebit</option>
+																<!-- <option th:each="x : ${adjustmenttypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option> -->
 															</select>
 														</div>
 													</div>
@@ -118,7 +120,7 @@
 															<input 	type="text" 
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
-																	th:value="${arhed.xcus}" 
+																	th:value="${#strings.isEmpty(arhed.xcus) ? '' : arhed.xcus + ' - ' + arhed.xorg}"
 																	th:attr="search-url='search/customer'"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xcus}"/>
@@ -197,7 +199,7 @@
 															<input 	type="text" 
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
-																	th:value="${arhed.xbank}" 
+																	th:value="${#strings.isEmpty(arhed.xbank) ? '' : arhed.xbank + ' - ' + arhed.xname}" 
 																	th:attr="search-url='search/bank'"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xbank}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xbank}"/>
@@ -207,16 +209,26 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xprime">Adjustment Amount</label>
 														<div class="col-md-8">
-															<input type="number" class="form-control" th:field="*{xprime}" min="0" required="required">
+															<input type="text" class="form-control" th:field="*{xprime}" min="0" required="required">
 														</div>
 													</div>
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtypeadj">Adjustment With</label>
 														<div class="col-md-8">
-															<select class="form-control" th:field="*{xtypeadj}">
+															
+															<div class="radio">
+																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}"  th:value="AR"  checked="checked"/>AR</label>
+															</div>
+															<div class="radio">
+																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}" th:value="AP" />AP</label>
+															</div>
+															<div class="radio">
+																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}"  th:value="Ledger" />Ledger</label>
+															</div>
+															<!-- <select class="form-control" th:field="*{xtypeadj}">
 																<option th:each="x : ${adjustmentwithList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
-															</select>
+															</select> -->
 														</div>
 													</div>
 													
@@ -336,9 +348,9 @@
 										<table class="table table-striped table-bordered datatable nowrap">
 											<thead>
 												<tr>
-													<th>Voucher Number</th>
-													<th>Date</th>
+													<th>Customer Adjustment</th>
 													<th>Customer</th>
+													<th>Date</th>
 													<th>Amount</th>
 													<th>JV Number</th>
 													<th>Status</th>
@@ -349,8 +361,8 @@
 													<td>
 														<a th:href="@{/cusadjustment/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
 													</td>
+													<td th:text="${arhed.xcus} + ' - ' + ${arhed.xorg}"></td>
 													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
-													<td th:text="${arhed.xcus}"></td>
 													<td th:text="${arhed.xprime}"></td>
 													<td th:text="${arhed.xdocnum}"></td>
 													<td th:text="${arhed.xstatus}"></td>
@@ -370,9 +382,9 @@
 										<table class="table table-striped table-bordered datatable nowrap">
 											<thead>
 												<tr>
-													<th>Voucher Number</th>
-													<th>Date</th>
+													<th>Customer Adjustment</th>
 													<th>Customer</th>
+													<th>Date</th>
 													<th>Amount</th>
 													<th>JV Number</th>
 													<th>Status</th>
@@ -383,8 +395,8 @@
 													<td>
 														<a th:href="@{/cusadjustment/} + ${arhed.xvoucher}" th:text="${arhed.xvoucher}"></a>
 													</td>
+													<td th:text="${arhed.xcus} + ' - ' + ${arhed.xorg}"></td>
 													<td th:text="${#dates.format(arhed.xdate, df)}"></td>
-													<td th:text="${arhed.xcus}"></td>
 													<td th:text="${arhed.xprime}"></td>
 													<td th:text="${arhed.xdocnum}"></td>
 													<td th:text="${arhed.xstatus}"></td>

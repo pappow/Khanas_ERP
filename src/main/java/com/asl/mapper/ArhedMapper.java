@@ -18,6 +18,8 @@ public interface ArhedMapper {
 	public List<Arhed> getAllArhed(String zid);
 	
 	public List<Arhed> getAllArhedByXtrn(String xtrn, String zid);
+	
+	public List<Arhed> getAllArhedByXtype(String xtype, String zid);
 
 	// Supplier Opening Entry
 	public Arhed findObapByXcus(String xcus, String xtrn, String zid);

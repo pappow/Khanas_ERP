@@ -141,5 +141,11 @@ public class Arhed extends AbstractModel<String> {
 	
 	@Transient
 	private String xorg;
+	
+	@Transient
+	private String xname;
+	
+	@Transient
+	private String xename;
 
 }
