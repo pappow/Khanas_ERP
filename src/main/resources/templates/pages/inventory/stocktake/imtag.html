@@ -56,8 +56,9 @@
 										<a th:if="${#strings.isEmpty(imtag.xtagnum)}" th:href="@{/inventory/stocktake}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.xstatustag != 'Confirmed' and imtag.zactive == true}" th:href="@{/inventory/stocktake/confirmstocktake/} + ${imtag.xtagnum}" class="btn btn-sm btn-primary confirm-btn-link"><i class="fas fa-paper-plane"></i> Confirm</a>
-										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" th:href="@{/inventory/stocktake/archive/} + ${imtag.xtagnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
-										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == false}" th:href="@{/inventory/stocktake/restore/} + ${imtag.xtagnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>
+										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" th:href="@{/inventory/stocktake/delete/} + ${imtag.xtagnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
+										<!--<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == true}" th:href="@{/inventory/stocktake/archive/} + ${imtag.xtagnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Archive</a>
+										<a th:if="${not #strings.isEmpty(imtag.xtagnum) and imtag.zactive == false}" th:href="@{/inventory/stocktake/restore/} + ${imtag.xtagnum}" class="btn btn-sm btn-success restore-btn-link"><i class="fas fa-trash-restore-alt"></i> Restore</a>-->
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/inventory/stocktake/save}" th:object="${imtag}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
@@ -92,20 +93,6 @@
 																	name="xdate"
 																	required="required"
 																	th:value="${imtag.xdate == null ? #dates.format(#dates.createNow(), df) : #dates.format(imtag.xdate, df)}"/>
-															<div class="input-group-addon">
-																<span class="glyphicon glyphicon-calendar"></span>
-															</div>
-														</div>
-													</div>
-
-													<div class="form-group datepicker">
-														<label class="control-label col-md-4" for="xdatecom">Date Complete: </label>
-														<div class="input-group date col-md-4 datepicker">
-															<input 	type="datepicker" 
-																	class="form-control" 
-																	id="xdatecom"
-																	name="xdatecom"
-																	th:value="${imtag.xdatecom == null ? #dates.format(#dates.createNow(), df) : #dates.format(imtag.xdatecom, df)}"/>
 															<div class="input-group-addon">
 																<span class="glyphicon glyphicon-calendar"></span>
 															</div>
@@ -152,7 +139,7 @@
 										<table class="table table-striped table-bordered datatable nowrap">
 											<thead>
 												<tr>
-													<th>Entry Number</th>
+													<th>TAG Number</th>
 													<th>Date</th>
 													<th>Warehouse</th>
 													<th>Status</th>
@@ -190,6 +177,7 @@
 										<tr>
 											<th>Row</th>
 											<th>Item Code</th>
+											<th>Unit</th>
 											<th>Qty</th>
 											<th data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/inventory/stocktake/} + ${imtag.xtagnum} + '/imtagdetail/new/show', data-target-modal='imtagdetailmodal'"><i class="fas fa-plus"></i></button>
@@ -202,6 +190,7 @@
 											<td>
 												<a th:href="@{/mastersetup/caitem/} + ${d.xitem}" target="_blank" th:text="${d.xitem} + ' - ' + ${d.xdesc}"></a>
 											</td>
+											<td th:text="${d.xunit}"></td>
 											<td th:text="${d.xqty}"></td>
 											<td data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/inventory/stocktake/} + ${imtag.xtagnum} + '/imtagdetail/' + ${d.xrow} + '/show', data-target-modal='imtagdetailmodal'"><i class="fas fa-edit"></i></button>

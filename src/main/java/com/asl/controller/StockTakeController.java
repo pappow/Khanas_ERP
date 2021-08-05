@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asl.entity.Cacus;
 import com.asl.entity.Imtag;
 import com.asl.entity.Imtdet;
 import com.asl.entity.Xcodes;
@@ -232,6 +233,26 @@ public class StockTakeController extends ASLAbstractController {
 		responseHelper.setRedirectUrl("/inventory/stocktake/" + imtag.getXtagnum());
 		return responseHelper.getResponse();
 	}
+	
+	
+	@PostMapping("/delete/{xtagnum}")
+	public @ResponseBody Map<String, Object> deleteOtherEvent(@PathVariable String xtagnum,  Model model) {
+		Imtag data = imtagService.findImtagByXtagnum(xtagnum);
+		if(data == null) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		long count = imtagService.deleteImtag(data);
+		if(count == 0) {
+			responseHelper.setStatus(ResponseStatus.ERROR);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
+		responseHelper.setRedirectUrl("/inventory/stocktake/" + xtagnum );
+		return responseHelper.getResponse();
+}
 	
 
 }

@@ -136,6 +136,10 @@
 			AND zid=#{zid, jdbcType=VARCHAR}
 	</update>
 	
+	<delete id="deleteImtag" parameterType="Imtag">
+		DELETE FROM Imtag WHERE xtagnum=#{xtagnum} AND zid=#{zid} AND zactive='1'
+	</delete>
+	
 	<delete id="deleteImtdet" parameterType="Imtdet">
 		DELETE FROM Imtdet WHERE xtagnum=#{xtagnum} AND xrow=#{xrow} AND zactive='1' AND zid=#{zid}
 	</delete>
