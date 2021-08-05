@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Cacus;
 import com.asl.entity.Imtag;
 import com.asl.entity.Imtdet;
+import com.asl.entity.PoordDetail;
 import com.asl.entity.Xcodes;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -58,6 +59,14 @@ public class StockTakeController extends ASLAbstractController {
 		model.addAttribute("imtagstatusList", xcodeService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtagDetailsList", imtagService.findImtdetByXtagnum(xtagnum));
 
+		List<Imtdet> imtagDetails = imtagService.findImtdetByXtagnum(xtagnum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		if(imtagDetails != null && !imtagDetails.isEmpty()) {
+			for(Imtdet id : imtagDetails) {
+				totalQuantity = totalQuantity.add(id.getXqty() == null ? BigDecimal.ZERO : id.getXqty());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
 		return "pages/inventory/stocktake/imtag";
 	}
 

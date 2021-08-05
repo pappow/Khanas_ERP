@@ -85,6 +85,18 @@ public class GRNController extends ASLAbstractController {
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
+		
+		List<PogrnDetail> details = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+		BigDecimal totalQuantityReceived = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(details != null && !details.isEmpty()) {
+			for(PogrnDetail pd : details) {
+				totalQuantityReceived = totalQuantityReceived.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantityReceived", totalQuantityReceived);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 
 		return "pages/purchasing/pogrn/pogrn";
 	}

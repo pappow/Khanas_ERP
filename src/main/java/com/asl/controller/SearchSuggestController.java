@@ -251,6 +251,15 @@ public class SearchSuggestController extends ASLAbstractController {
 	 * list; }
 	 */
 
+	@GetMapping("/cus/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getCus(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cacus> cusList = cacusService.searchCus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		cusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		return list;
+	}
+	
 	@GetMapping("/branchCustomer/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getBranchCustomers(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();

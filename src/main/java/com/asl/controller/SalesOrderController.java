@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.asl.entity.Caitem;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordDetail;
 import com.asl.entity.Vatait;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -65,6 +66,18 @@ public class SalesOrderController extends ASLAbstractController {
 
 		model.addAttribute("invoicelist", opdoService.findOpdoheaderByXordernum(xordernum));
 
+		List<Oporddetail> opordDetails = opordService.findOporddetailByXordernum(xordernum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(opordDetails != null && !opordDetails.isEmpty()) {
+			for(Oporddetail pd : opordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
+		
 		return "pages/salesninvoice/salesorder/salesorder";
 	}
 

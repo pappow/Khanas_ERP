@@ -63,6 +63,12 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 	}
 	
 	@Override
+	public List<Cacus> searchCus(String xtrn, String xcus){
+		if(StringUtils.isBlank(xtrn) || StringUtils.isBlank(xcus)) return Collections.emptyList();
+		return cacusMapper.searchCacus(xtrn, xcus.toUpperCase(), sessionManager.getBusinessId());
+	}
+	
+	@Override
 	public List<Cacus> searchCustomer(String xtype, String xcus) {
 		if(StringUtils.isBlank(xtype) || StringUtils.isBlank(xcus)) return Collections.emptyList();
 		return cacusMapper.searchCustomer(xtype, xcus.toUpperCase(), sessionManager.getBusinessId());

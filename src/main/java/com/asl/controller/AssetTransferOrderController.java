@@ -25,6 +25,7 @@ import com.asl.entity.ImtorDetail;
 import com.asl.entity.ImtorHeader;
 import com.asl.entity.LandInfo;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -53,8 +54,8 @@ public class AssetTransferOrderController extends ASLAbstractController{
 		 * imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.
 		 * AGENT_TRANSFER_ORDER.getCode()));
 		 */
-		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
-		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode()));
+		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXcode(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		
@@ -74,19 +75,30 @@ public class AssetTransferOrderController extends ASLAbstractController{
 		}
 
 		model.addAttribute("imtorheader", data);
-		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode()));
-		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode()));
+		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode(), Boolean.TRUE));
+		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
+		model.addAttribute("allImtorHeaders", imtorService.getAllImtorHeaderbyPrefix(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode()));
+		model.addAttribute("imtorprefix", xtrnService.findByXtypetrn(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
+		List<ImtorDetail> imtorDetails = imtorService.findImtorDetailByXtornum(xtornum); 
+		BigDecimal totalQuantity = BigDecimal.ZERO; 
+		if(imtorDetails != null && !imtorDetails.isEmpty()) {
+		 for(ImtorDetail pd : imtorDetails) { 
+			 totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord()); } } 
+		model.addAttribute("totalQuantity", totalQuantity);
+		 
 		
 		return "pages/inventory/asset/imtor";
 	}
 
+
 	private ImtorHeader getDefaultImtorHeader() {
 		ImtorHeader imtorHeader = new ImtorHeader();
-		imtorHeader.setXtypetrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getCode());
-		imtorHeader.setXtrn(TransactionCodeType.AGENT_TRANSFER_ORDER.getdefaultCode());
+		imtorHeader.setXtypetrn(TransactionCodeType.ASSET_TRANSFER_ORDER.getCode());
+		imtorHeader.setXtrn(TransactionCodeType.ASSET_TRANSFER_ORDER.getdefaultCode());
 		imtorHeader.setXstatustor("Open");
 		return imtorHeader;
 	}

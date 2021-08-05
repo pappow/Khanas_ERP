@@ -39,7 +39,7 @@ public class ACCMoneyReceiptController extends ASLAbstractController{
 		model.addAttribute("arhed", getDefaultArhed());
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.MONEY_RECEIPTS.getCode(),TransactionCodeType.MONEY_RECEIPTS.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode(), Boolean.TRUE));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
 		if(isBoshila()) {
 			return "pages/accounts/moneyreceipt";
 		}
@@ -51,11 +51,11 @@ public class ACCMoneyReceiptController extends ASLAbstractController{
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
-		data.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
+		
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode()));
 		model.addAttribute("paymenttypeList", xcodeService.findByXtype(CodeType.PAYMENT_TYPE.getCode()));
-		model.addAttribute("allArhed", arhedService.getAllArhedByXtrn(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
+		model.addAttribute("allArhed", arhedService.getAllArhedByXtype(TransactionCodeType.MONEY_RECEIPTS.getdefaultCode()));
 		if(isBoshila()) {
 			return "pages/accounts/moneyreceipt";
 		}
@@ -65,6 +65,8 @@ public class ACCMoneyReceiptController extends ASLAbstractController{
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
 
+		arhed.setXtype(TransactionCodeType.MONEY_RECEIPTS.getCode());
+		arhed.setXtypetrn(TransactionCodeType.MONEY_RECEIPTS.getCode());
 		arhed.setXtrntype(TransactionCodeType.MONEY_RECEIPTS.getCode());
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);

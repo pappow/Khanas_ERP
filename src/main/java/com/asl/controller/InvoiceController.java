@@ -35,6 +35,7 @@ import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
+import com.asl.entity.PoordDetail;
 import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
@@ -113,8 +114,20 @@ public class InvoiceController extends ASLAbstractController {
 				}
 			}
 		}
+		
 		model.addAttribute("opdoDetailsList", mainitems);
 
+		List<Opdodetail> invoiceDetails = opdoService.findOpdoDetailByXdornum(xdornum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
+			for(Opdodetail pd : invoiceDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		if(isBoshila()) return "pages/land/salesninvoice/opdo";
 		return "pages/salesninvoice/salesandinvoice/opdo";
 	}

@@ -139,11 +139,33 @@
 	</select>
 
 	<select id="searchCacus" resultType="Cacus">
-		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT 
+			* 
+		FROM 
+			Cacus 
+		WHERE 
+		(UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' ) 
+		AND (xtype LIKE '%'|| #{xcus} ||'%') 
+		AND (xtrn LIKE '%'|| #{xcus} ||'%') 
+		AND zid=#{zid} AND zactive='1'
+	</select>
+	
+	<select id="searchCus" resultType="Cacus">
+		SELECT 
+			*
+		FROM 
+			Cacus 
+		WHERE 
+			(UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') 
+			AND (xtype LIKE '%'|| 'Customer' ||'%') 
+			AND xtrn=#{xtrn} 
+			AND zid=#{zid} 
+			AND zactive='1'
 	</select>
 	
 	<select id="searchCustomer" resultType="Cacus">
-		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND (xgcus LIKE '%'|| 'Branch' ||'%') AND xtype=#{xtype} AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND (xgcus LIKE '%'|| 'Branch' ||'%') AND (xtype LIKE '%'|| #{xcus} ||'%') 
+		AND (xtrn LIKE '%'|| #{xcus} ||'%')  AND zid=#{zid} AND zactive='1'
 	</select>
 	
 	<!-- <select id="searchCustomer" resultType="Cacus">
