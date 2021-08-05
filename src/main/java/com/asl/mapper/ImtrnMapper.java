@@ -16,6 +16,8 @@ public interface ImtrnMapper {
 	public Imtrn findImtrnByXimtrnnum(String ximtrnnum, String zid);
 
 	public List<Imtrn> getAllImtrn(String zid);
+	
+	public List<Imtrn> getAllImtrnlist(String zid);
 
 	public long deleteByXimtrnnum(String ximtrnnum, String zid);
 }

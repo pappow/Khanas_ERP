@@ -55,6 +55,11 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	public List<Imtrn> getAllImtrn() {
 		return imtrnMapper.getAllImtrn(sessionManager.getBusinessId());
 	}
+	
+	@Override
+	public List<Imtrn> getAllImtrnlist() {
+		return imtrnMapper.getAllImtrnlist(sessionManager.getBusinessId());
+	}
 
 	@Override
 	public long deleteByXimtrnnum(String ximtrnnum) {
