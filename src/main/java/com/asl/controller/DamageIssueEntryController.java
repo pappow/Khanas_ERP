@@ -27,8 +27,8 @@ import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
 @Controller
-@RequestMapping("/inventory/openingentry")
-public class StockOpeningEntryController extends ASLAbstractController {
+@RequestMapping("/inventory/issueentry")
+public class DamageIssueEntryController extends ASLAbstractController {
 
 	@Autowired private ImtrnService imtrnService;
 	@Autowired private XtrnService xtrnService;
@@ -38,10 +38,10 @@ public class StockOpeningEntryController extends ASLAbstractController {
 	@GetMapping
 	public String loadStockOpeningEntryPage(Model model) {
 		model.addAttribute("imtrn", getDefaultImtrn());
-		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
-		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION2.getCode(),TransactionCodeType.INVENTORY_TRANSACTION2.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist());
+		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION3.getCode(),TransactionCodeType.INVENTORY_TRANSACTION3.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
-		return "pages/inventory/openingentry/imtrn";
+		return "pages/inventory/issueentry/imtrn";
 	}
 
 	@GetMapping("/{ximtrnnum}")
@@ -50,22 +50,22 @@ public class StockOpeningEntryController extends ASLAbstractController {
 		if(data == null) data = getDefaultImtrn();
 
 		model.addAttribute("imtrn", data);
-		model.addAttribute("allImtrn", imtrnService.getAllImtrn());
-		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION2.getCode(),TransactionCodeType.INVENTORY_TRANSACTION2.getdefaultCode(), Boolean.TRUE));
+		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist());
+		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION3.getCode(),TransactionCodeType.INVENTORY_TRANSACTION3.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
-		return "pages/inventory/openingentry/imtrn";
+		return "pages/inventory/issueentry/imtrn";
 	}
 
 	private Imtrn getDefaultImtrn() {
 		Imtrn imtrn = new Imtrn();
-		imtrn.setXtype(TransactionCodeType.INVENTORY_TRANSACTION2.getCode());
-		imtrn.setXtrn(TransactionCodeType.INVENTORY_TRANSACTION2.getdefaultCode());
+		imtrn.setXtype(TransactionCodeType.INVENTORY_TRANSACTION3.getCode());
+		imtrn.setXtrn(TransactionCodeType.INVENTORY_TRANSACTION3.getdefaultCode());
 		imtrn.setXqty(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		imtrn.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		imtrn.setXval(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 		imtrn.setXunit("");
-		imtrn.setXnote("Inventory Upload");
-		return imtrn;
+		imtrn.setXnote("Inventory Issue");
+		return imtrn;	
 	}
 
 	@PostMapping("/save")
@@ -112,22 +112,20 @@ public class StockOpeningEntryController extends ASLAbstractController {
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
-			responseHelper.setSuccessStatusAndMessage("Opening Entry updated successfully");
-			responseHelper.setRedirectUrl("/inventory/openingentry/" + imtrn.getXimtrnnum());
+			responseHelper.setSuccessStatusAndMessage("Issue Entry updated successfully");
+			responseHelper.setRedirectUrl("/inventory/issueentry/" + imtrn.getXimtrnnum());
 			return responseHelper.getResponse();
 		}
 
 		// If new
-		imtrn.setXsign(1);
-		imtrn.setXdocrow(0);
-		imtrn.setXstatusjv("Open");
+		imtrn.setXsign(-1);
 		long count = imtrnService.save(imtrn);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
 			return responseHelper.getResponse();
 		}
-		responseHelper.setSuccessStatusAndMessage("Opening Entry created successfully");
-		responseHelper.setRedirectUrl("/inventory/openingentry/" + imtrn.getXimtrnnum());
+		responseHelper.setSuccessStatusAndMessage("Issue Entry created successfully");
+		responseHelper.setRedirectUrl("/inventory/issueentry/" + imtrn.getXimtrnnum());
 		return responseHelper.getResponse();
 	}
 
@@ -135,18 +133,18 @@ public class StockOpeningEntryController extends ASLAbstractController {
 	public @ResponseBody Map<String, Object> delete(@PathVariable String ximtrnnum){
 		Imtrn imtrn = imtrnService.findImtrnByXimtrnnum(ximtrnnum);
 		if(imtrn == null) {
-			responseHelper.setErrorStatusAndMessage("Can't find opening entry : " + ximtrnnum);
+			responseHelper.setErrorStatusAndMessage("Can't find Issue entry : " + ximtrnnum);
 			return responseHelper.getResponse();
 		}
 
 		long count = imtrnService.deleteByXimtrnnum(ximtrnnum);
 		if(count == 0) {
-			responseHelper.setErrorStatusAndMessage("Can't delete opening entry : " + ximtrnnum);
+			responseHelper.setErrorStatusAndMessage("Can't delete Issue entry : " + ximtrnnum);
 			return responseHelper.getResponse();
 		}
 
-		responseHelper.setSuccessStatusAndMessage("Opening Entry deleted successfully");
-		responseHelper.setRedirectUrl("/inventory/openingentry/");
+		responseHelper.setSuccessStatusAndMessage("Issue Entry deleted successfully");
+		responseHelper.setRedirectUrl("/inventory/issueentry/");
 		return responseHelper.getResponse();
 	}
 

@@ -18,6 +18,8 @@ public interface ImtrnService {
 	public Imtrn findImtrnByXimtrnnum(String ximtrnnum);
 
 	public List<Imtrn> getAllImtrn();
+	
+	public List<Imtrn> getAllImtrnlist();
 
 	public long deleteByXimtrnnum(String ximtrnnum);
 }

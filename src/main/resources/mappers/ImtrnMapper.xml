@@ -122,6 +122,19 @@
 		WHERE 
 			zid=#{zid} 
 			AND zactive='1'
+			AND ximtrnnum like 'RE-%'
+	</select>
+	
+	<select id="getAllImtrnlist" resultType="Imtrn">
+		SELECT 
+			imtrn.*,
+			Func_GetItemName(xitem, zid) as itemdes
+		FROM 
+			imtrn 
+		WHERE 
+			zid=#{zid} 
+			AND zactive='1'
+			AND ximtrnnum like 'DMIS%'
 	</select>
 
 </mapper>

@@ -38,6 +38,8 @@ public enum TransactionCodeType {
 	ITEM_NUMBER("Item Number", "IC-", TransactionCodes.ITEM_NUMBER),
 	INVENTORY_NUMBER("Inventory Number", "IMT-", TransactionCodes.INVENTORY_NUMBER),
 	INVENTORY_TRANSACTION("Inventory Transaction", "PO--", TransactionCodes.INVENTORY_TRANSACTION),
+	INVENTORY_TRANSACTION2("Inventory Transaction", "RE--", TransactionCodes.INVENTORY_TRANSACTION),
+	INVENTORY_TRANSACTION3("Inventory Transaction", "DMIS", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("TO Number", "TO--", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 
 	KEMPLOYEE_ID("Employee Number", "EID-", TransactionCodes.KEMPLOYEE_ID),
