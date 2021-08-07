@@ -74,3 +74,4 @@ default:
     template-path: D:/ASL/cr-reports
     xsl-path: D:/ASL/xsl
     saved-xml-path: D:/ASL/report/savedxml
+    logo: asl.png

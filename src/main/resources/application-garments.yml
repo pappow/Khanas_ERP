@@ -72,4 +72,4 @@ default:
     template-path: D:/GARMENTS/cr-reports
     xsl-path: D:/GARMENTS/xsl
     saved-xml-path: D:/GARMENTS/report/savedxml
-    logo: //static//assets//img//khanas_logo.png
+    logo: asl.png
