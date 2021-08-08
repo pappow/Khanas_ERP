@@ -363,4 +363,15 @@ public class OpdoServiceImpl extends AbstractGenericService implements OpdoServi
 		return opdoMapper.findOpdoheaderByXordernum(xordernum, sessionManager.getBusinessId());
 	}
 
+	@Override
+	public List<Opdoheader> getAllDirectOpdoHeader() {
+		return opdoMapper.getAllDirectOpdoHeader(sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<Opdoheader> findAllDirectOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn) {
+		if(StringUtils.isBlank(xtypetrn) || StringUtils.isBlank(xtrn)) return Collections.emptyList();
+		return opdoMapper.findAllDirectOpdoHeaderByXtypetrnAndXtrn(xtypetrn, xtrn, sessionManager.getBusinessId());
+	}
+
 }

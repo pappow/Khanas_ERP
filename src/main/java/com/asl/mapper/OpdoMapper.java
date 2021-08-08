@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.PogrnHeader;
 import com.asl.model.BranchesRequisitions;
 
 @Mapper
@@ -24,6 +25,7 @@ public interface OpdoMapper {
 	public Opdoheader findOpdoHeaderByXdornum(String xdornum, String zid);
 	public List<Opdoheader> getAllOpdoHeader(String zid);
 	public List<Opdoheader> getAllRandomOpdoHeader(String zid);	
+	public List<Opdoheader> getAllDirectOpdoHeader(String zid);
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow, String zid);
 	public Opdodetail findOpdoDetailByXdornumAndXitem(String xdornum, String xitem, String zid);
@@ -37,7 +39,7 @@ public interface OpdoMapper {
 	public List<Opdoheader> findAllInvoiceOrder(String xtypetrn, String xtrn, String xstatusord, String xdate, String zid);
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref, String zid);
 	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn,  String zid);
-	
+	public List<Opdoheader> findAllDirectOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn,  String zid);
 	//Procedure Calls
 	public void procConfirmDO(String zid, String user, String xdornum, String p_seq);
 	public void procIssuePricing(String zid, String user, String xdocnum, String xwh, String p_seq);

@@ -36,6 +36,8 @@ public interface OpdoService {
 	public List<Opdoheader> getAllOpdoHeader();
 
 	public List<Opdoheader> getAllRandomOpdoHeader();
+	
+	public List<Opdoheader> getAllDirectOpdoHeader();
 
 	public Opdodetail findOpdoDetailByXdornumAndXrow(String xdornum, int xrow);
 
@@ -50,6 +52,8 @@ public interface OpdoService {
 	public List<Opdoheader> findAllInvoiceOrderByChalan(String xtypetrn, String xtrn, String xchalanref);
 
 	public List<Opdoheader> findAllOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
+	
+	public List<Opdoheader> findAllDirectOpdoHeaderByXtypetrnAndXtrn(String xtypetrn, String xtrn);
 
 	public List<Opdoheader> searchOpdoHeader(String xtypetrn, String xdornum);
 
