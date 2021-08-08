@@ -64,10 +64,7 @@ public class ACCCustomerOpeningController extends ASLAbstractController{
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
-		arhed.setXstatusjv("Open");
 		
-		
-
 		return arhed;
 	}
 
@@ -78,13 +75,17 @@ public class ACCCustomerOpeningController extends ASLAbstractController{
 			responseHelper.setErrorStatusAndMessage("Customer required");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(arhed.getXbank())) {
+			responseHelper.setErrorStatusAndMessage("Bank required");
+			return responseHelper.getResponse();
+		}
 		if(arhed.getXprime().compareTo(BigDecimal.ZERO) == -1 || arhed.getXprime().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid amount");
 			return responseHelper.getResponse();
 		}
 
 		//Modify transaction codes for arhed
-		
+		arhed.setXstatusjv("Open");
 		arhed.setXtypetrn("Sale");
 		arhed.setXstatusjv("Open");
 		arhed.setXbase(arhed.getXprime());

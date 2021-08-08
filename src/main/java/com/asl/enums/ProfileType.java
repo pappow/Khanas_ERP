@@ -13,7 +13,12 @@ public enum ProfileType {
 	
 	//for pos business
 	C("C", "Casual Dine"),
-	F("F", "Fine Dine");
+	F("F", "Fine Dine"),
+	
+	//for Adjustment With
+	AP("AP", "AP"),
+	AR("AR", "AR"),
+	LE("LE", "Ledger");
 
 	private String code;
 	private String description;

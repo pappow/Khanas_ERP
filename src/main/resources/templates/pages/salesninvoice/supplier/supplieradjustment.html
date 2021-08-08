@@ -108,7 +108,7 @@
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xtypeobj}">
 																<option value="Debit">Debit</option>
-																<option value="Cebit">Cebit</option>
+																<option value="Credit">Credit</option>
 																<!-- <option th:each="x : ${adjustmenttypeList}" th:value="${x.xcode}" th:text="${x.xcode}"></option> -->
 															</select>
 														</div>
@@ -121,7 +121,8 @@
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
 																	th:value="${#strings.isEmpty(arhed.xcus) ? '' : arhed.xcus + ' - ' + arhed.xorg}" 
-																	th:attr="search-url='search/supplier'"/>
+																	th:attr="search-url='search/supplier'"
+																	required="required"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xcus}"/>
 														</div>
@@ -194,7 +195,8 @@
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
 																	th:value="${#strings.isEmpty(arhed.xbank) ? '' : arhed.xbank + ' - ' + arhed.xname}" 
-																	th:attr="search-url='search/bank'"/>
+																	th:attr="search-url='search/bank'"
+																	required="required"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xbank}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xbank}"/>
 														</div>
@@ -217,7 +219,8 @@
 														<label class="control-label col-md-4" for="xtypeadj">Adjustment With</label>
 														<div class="col-md-8">
 															<div class="radio">
-																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}"  value="AR"  checked/>AR</label>
+															 <div>
+																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}"  value="AR"  checked="true"/>AR</label>
 															</div>
 															<div class="radio">
 																<label><input type="radio" class="form-control-input2" th:field="*{xtypeadj}" value="AP" />AP</label>
@@ -228,8 +231,10 @@
 															<!-- <select class="form-control" th:field="*{xtypeadj}">
 																<option th:each="x : ${adjustmentwithList}" th:value="${x.xcode}" th:text="${x.xcode}"></option>
 															</select> -->
+															</div>
 														</div>
 													</div>
+												
 													
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xtrn">Voucher Type</label>

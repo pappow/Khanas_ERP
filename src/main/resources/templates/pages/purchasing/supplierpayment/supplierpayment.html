@@ -110,7 +110,8 @@
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
 																	th:value="${#strings.isEmpty(arhed.xcus) ? '' : arhed.xcus + ' - ' + arhed.xorg}" 
-																	th:attr="search-url='search/supplier'"/>
+																	th:attr="search-url='search/supplier'"
+																	required="required"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xcus}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xcus}"/>
 														</div>
@@ -129,7 +130,8 @@
 																	class="form-control searchsuggest" 
 																	placeholder="Search..." 
 																	th:value="${#strings.isEmpty(arhed.xbank) ? '' : arhed.xbank + ' - ' + arhed.xname}" 
-																	th:attr="search-url='search/bank'"/>
+																	th:attr="search-url='search/bank'"
+																	required="required"/>
 															<input type="hidden" class="required" id="search-val" th:field="*{xbank}" value=""/>
 															<input type="hidden" id="search-des" th:value="*{xbank}"/>
 														</div>

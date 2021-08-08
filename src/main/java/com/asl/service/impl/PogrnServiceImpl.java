@@ -125,7 +125,7 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	}
 
 	@Override
-	public List<PogrnHeader> getAllPogrnHeaders() {
+	public List<PogrnHeader> getAllPogrnHeader() {
 		return pogrnMapper.getAllPogrnHeader(sessionManager.getBusinessId());
 	}
 
@@ -176,6 +176,11 @@ public class PogrnServiceImpl extends AbstractGenericService implements PogrnSer
 	public List<PogrnHeader> searchGrn(String hint, String xstatusgrn) {
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		return pogrnMapper.searchGrn(hint.toUpperCase(), xstatusgrn, sessionManager.getBusinessId());
+	}
+
+	@Override
+	public List<PogrnHeader> getAllDirectPogrnHeader() {
+		return pogrnMapper.getAllDirectPogrnHeader(sessionManager.getBusinessId());
 	}
 
 

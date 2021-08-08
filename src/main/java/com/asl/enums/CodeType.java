@@ -46,7 +46,7 @@ public enum CodeType {
 	EXPERIENCE_TYPE("Experience type"),
 	//Land Experience Person End
 	
-	DEPARTMENT("Department"),
+	DEPARTMENT("Department Name"),
 	DESIGNATION("Designation"),
 	DISTRICT("District"),
 	//Land Document Start

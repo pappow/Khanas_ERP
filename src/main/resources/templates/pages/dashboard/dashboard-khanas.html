@@ -238,6 +238,12 @@
 												<a th:href="@{/procurements/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
+										<tr th:if="${isCentral and menuProfile.M0307 ne null and menuProfile.M0307.display}">
+											<td><a th:href="@{/procurements/pogrndirect}" th:text="${menuProfile.M0307.screenprompt}">Direct Purchase</a></td>
+											<td>
+												<a th:href="@{/procurements/pogrndirect}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
 										<tr th:if="${isCentral and menuProfile.M0303 ne null and menuProfile.M0303.display}">
 											<td><a th:href="@{/procurements/purchasereturn}" th:text="${menuProfile.M0303.screenprompt}">Purchase Return</a></td>
 											<td>

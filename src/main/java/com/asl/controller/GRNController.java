@@ -66,7 +66,7 @@ public class GRNController extends ASLAbstractController {
 
 		model.addAttribute("pogrnheader", getDefaultPogrnHeader());
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
-		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
+		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeader());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 
 		return "pages/purchasing/pogrn/pogrn";
@@ -81,7 +81,7 @@ public class GRNController extends ASLAbstractController {
 
 		model.addAttribute("pogrnheader", data);
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
-		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeaders());
+		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeader());
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));

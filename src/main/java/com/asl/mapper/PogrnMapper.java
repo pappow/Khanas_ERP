@@ -32,6 +32,8 @@ public interface PogrnMapper {
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum, String zid);
 
 	public List<PogrnHeader> getAllPogrnHeader(String zid);
+	
+	public List<PogrnHeader> getAllDirectPogrnHeader(String zid);
 
 	public void procInventory(String zid, String user, String xgrnnum, String xpornum, String p_seq);
 

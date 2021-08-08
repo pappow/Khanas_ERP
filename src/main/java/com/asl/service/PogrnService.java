@@ -38,7 +38,9 @@ public interface PogrnService {
 
 	public List<PogrnDetail> findPogrnDetailByXgrnnum(String xgrnnum);
 
-	public List<PogrnHeader> getAllPogrnHeaders();
+	public List<PogrnHeader> getAllPogrnHeader();
+	
+	public List<PogrnHeader> getAllDirectPogrnHeader();
 
 	// Procedure Call
 	public void procInventory(String xgrnnum, String xpornum, String p_seq);

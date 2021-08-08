@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Arhed;
 import com.asl.enums.CodeType;
+import com.asl.enums.ProfileType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
@@ -49,6 +50,7 @@ public class ACCCustomerAdjustmentController extends ASLAbstractController{
 		Arhed data = arhedService.findArhedByXvoucher(xvoucher);
 		if(data == null) data = getDefaultArhed();
 
+		
 		data.setXtypetrn(TransactionCodeType.ACCOUNT_ADAR.getCode());
 		model.addAttribute("arhed", data);
 		model.addAttribute("arhedprefix", xtrnService.findByXtypetrn(TransactionCodeType.ACCOUNT_ADAR.getCode()));
@@ -62,11 +64,11 @@ public class ACCCustomerAdjustmentController extends ASLAbstractController{
 	private Arhed getDefaultArhed() {
 		Arhed arhed = new Arhed();
 
+		arhed.setXtypeadj("AR");
 		arhed.setXtrntype(TransactionCodeType.ACCOUNT_ADAR.getCode());
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
-		arhed.setXstatusjv("Open");
 		arhed.setXtrn("JV--");
 		
 
@@ -80,13 +82,17 @@ public class ACCCustomerAdjustmentController extends ASLAbstractController{
 			responseHelper.setErrorStatusAndMessage("Customer required");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(arhed.getXbank())) {
+			responseHelper.setErrorStatusAndMessage("Bank required");
+			return responseHelper.getResponse();
+		}
 		if(arhed.getXprime().compareTo(BigDecimal.ZERO) == -1 || arhed.getXprime().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid amount");
 			return responseHelper.getResponse();
 		}
 
 		//Modify transaction codes for arhed
-		
+		arhed.setXstatusjv("Open");
 		arhed.setXtypetrn("Sale");
 		arhed.setXpaymentterm("Credit");
 		arhed.setXwh("01");
@@ -108,9 +114,13 @@ public class ACCCustomerAdjustmentController extends ASLAbstractController{
 				responseHelper.setStatus(ResponseStatus.ERROR);
 				return responseHelper.getResponse();
 			}
+			
+			
 			responseHelper.setSuccessStatusAndMessage("Customer Adjustment updated successfully");
 			responseHelper.setRedirectUrl("/cusadjustment/" + arhed.getXvoucher());
 			return responseHelper.getResponse();
+			
+			
 		}
 
 		// If new

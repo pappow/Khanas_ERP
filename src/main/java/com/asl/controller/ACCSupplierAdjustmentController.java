@@ -65,7 +65,8 @@ public class ACCSupplierAdjustmentController extends ASLAbstractController{
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
-		arhed.setXstatusjv("Open");
+		arhed.setXtypeadj("AP");
+		
 		
 
 		return arhed;
@@ -78,12 +79,17 @@ public class ACCSupplierAdjustmentController extends ASLAbstractController{
 			responseHelper.setErrorStatusAndMessage("Supplier required");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(arhed.getXbank())) {
+			responseHelper.setErrorStatusAndMessage("Bank required");
+			return responseHelper.getResponse();
+		}
 		if(arhed.getXprime().compareTo(BigDecimal.ZERO) == -1 || arhed.getXprime().equals(BigDecimal.ZERO)) {
 			responseHelper.setErrorStatusAndMessage("Invalid amount");
 			return responseHelper.getResponse();
 		}
 
 		//Modify transaction codes for arhed
+		arhed.setXstatusjv("Open");
 		arhed.setXcur("BDT");
 		arhed.setXtypetrn("Purchase");
 		arhed.setXpaymentterm("Credit");
