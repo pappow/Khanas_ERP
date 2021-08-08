@@ -64,8 +64,6 @@ public class ACCSupplierPaymentController extends ASLAbstractController{
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
-		arhed.setXstatusjv("Open");
-
 		return arhed;
 	}
 
@@ -74,6 +72,10 @@ public class ACCSupplierPaymentController extends ASLAbstractController{
 		// Validate
 		if(StringUtils.isBlank(arhed.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Supplier required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(arhed.getXbank())) {
+			responseHelper.setErrorStatusAndMessage("Bank required");
 			return responseHelper.getResponse();
 		}
 		if(arhed.getXprime().compareTo(BigDecimal.ZERO) == -1 || arhed.getXprime().equals(BigDecimal.ZERO)) {
@@ -88,6 +90,7 @@ public class ACCSupplierPaymentController extends ASLAbstractController{
 		arhed.setXwh("01");
 		arhed.setXstatusbnk("Open");
 		arhed.setXbase(arhed.getXprime());
+		arhed.setXstatusjv("Open");
 
 		// if existing record
 		if(StringUtils.isNotBlank(arhed.getXvoucher())) {

@@ -83,7 +83,7 @@
 			#{xpaymentterm, jdbcType=DECIMAL},
 			#{xtypeobj, jdbcType=DECIMAL},
 			#{xsub, jdbcType=DECIMAL},
-			#{xtypeadj, jdbcType=DECIMAL},
+			#{xtypeadj, jdbcType=VARCHAR},
 			#{xtyperec, jdbcType=VARCHAR},
 			#{xinvnum, jdbcType=VARCHAR},
 			#{xcur, jdbcType=VARCHAR},
@@ -102,6 +102,7 @@
 		UPDATE 
 			Arhed 
 		SET
+			xdate=#{xdate, jdbcType=DATE},
 			xcus=#{xcus, jdbcType=VARCHAR},
 			xbank=#{xbank, jdbcType=VARCHAR},
 			xwh=#{xwh, jdbcType=VARCHAR},
@@ -130,7 +131,7 @@
 			xpaymentterm=#{xpaymentterm, jdbcType=DECIMAL},
 			xtypeobj=#{xtypeobj, jdbcType=DECIMAL},
 			xsub=#{xsub, jdbcType=DECIMAL},
-			xtypeadj=#{xtypeadj, jdbcType=DECIMAL},
+			xtypeadj=#{xtypeadj, jdbcType=VARCHAR},
 			xtyperec=#{xtyperec, jdbcType=VARCHAR},
 			xinvnum=#{xinvnum, jdbcType=VARCHAR},
 			xcur=#{xcur, jdbcType=VARCHAR},

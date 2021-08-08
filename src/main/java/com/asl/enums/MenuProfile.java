@@ -36,6 +36,7 @@ public enum MenuProfile {
 		M0304(9999, "M0304", "300", "M0300", "Purchase Requisition", "Y","/procurement/requisition"),
 		M0305(9999, "M0305", "300", "M0300", "Packaging Item Requisition", "Y","/procurement/requisition?reqtype=Packaging Item"),
 		M0306(9999, "M0306", "300", "M0300", "All Order Requisitions", "Y","/procurement/requisition/allrequisition"),
+		M0307(9999, "M0307", "300", "M0300", "Direct Purchase", "Y","/procurements/pogrndirect"),
 
 
 	M0400(9999, "M0400", "400", "MASTER", "Sales & Invoice", "Y","/salesninvoice"),

@@ -62,10 +62,7 @@ public class ACCSupplierOpeningController extends ASLAbstractController{
 		arhed.setXdate(new Date());
 		arhed.setXprime(BigDecimal.ZERO);
 		arhed.setXstatus("Open");
-		arhed.setXstatusjv("Open");
 		
-		
-
 		return arhed;
 	}
 
@@ -82,7 +79,7 @@ public class ACCSupplierOpeningController extends ASLAbstractController{
 		}
 
 		//Modify transaction codes for arhed
-		
+		arhed.setXstatusjv("Open");
 		arhed.setXtypetrn("Purchase");
 		arhed.setXstatusjv("Open");
 		arhed.setXbase(arhed.getXprime());

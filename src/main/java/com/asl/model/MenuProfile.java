@@ -57,6 +57,7 @@ public class MenuProfile implements Serializable {
 	private ProfileLine M0304;
 	private ProfileLine M0305;
 	private ProfileLine M0306;
+	private ProfileLine M0307;
 
 	private ProfileLine M0400;
 	private ProfileLine M0401;
