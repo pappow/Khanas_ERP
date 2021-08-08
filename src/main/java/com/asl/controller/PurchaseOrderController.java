@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.asl.entity.Acdetail;
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
 import com.asl.entity.PoordDetail;
@@ -114,6 +113,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		poord.setXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode());
 		poord.setXstatuspor("Open");
 		poord.setXtotamt(BigDecimal.ZERO);
+		poord.setXtype("PO");
 		return poord;
 	}
 
@@ -217,6 +217,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 
 		responseHelper.setReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + ph.getXpornum());
+		responseHelper.setSecondReloadSectionIdWithUrl("poordheadertable", "/procurements/poord/poordheadertable");
 		responseHelper.setSuccessStatusAndMessage("Purchase order confirmed successfully");
 		return responseHelper.getResponse();
 	}
@@ -275,7 +276,6 @@ public class PurchaseOrderController extends ASLAbstractController {
 		if(caitem.getXvatrate() == null) caitem.setXvatrate(BigDecimal.ZERO);
 
 		poordDetail.setXlineamt(poordDetail.getXqtyord().multiply(poordDetail.getXrate().setScale(2, RoundingMode.DOWN)));
-		poordDetail.setXlineamt(poordDetail.getXlineamt().add((poordDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		PoordDetail existDetail = poordService.findPoorddetailByXpornumAndXrow(poordDetail.getXpornum(), poordDetail.getXrow());
@@ -288,6 +288,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 			}
 			responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + poordDetail.getXpornum());
 			responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + poordDetail.getXpornum());
+			responseHelper.setThirdReloadSectionIdWithUrl("poordheadertable", "/procurements/poord/poordheadertable");
 			responseHelper.setSuccessStatusAndMessage("Order detail updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -300,6 +301,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		}
 		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + poordDetail.getXpornum());
 		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + poordDetail.getXpornum());
+		responseHelper.setThirdReloadSectionIdWithUrl("poordheadertable", "/procurements/poord/poordheadertable");
 		responseHelper.setSuccessStatusAndMessage("Order detail saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -321,6 +323,12 @@ public class PurchaseOrderController extends ASLAbstractController {
 		return "pages/purchasing/poord/poord::poordheaderform";
 	}
 
+	@GetMapping("/poordheadertable")
+	public String reloadPoordHeaderTable(Model model) {
+		model.addAttribute("allPoordHeader", poordService.getPoordHeadersByXtypetrn(TransactionCodeType.PURCHASE_ORDER.getCode()));
+		return "pages/purchasing/poord/poord::poordheadertable";
+	}
+
 	@PostMapping("{xpornum}/poorddetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xpornum, @PathVariable String xrow, Model model) {
 		PoordDetail pd = poordService.findPoorddetailByXpornumAndXrow(xpornum, Integer.parseInt(xrow));
@@ -338,6 +346,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("poorddetailtable", "/procurements/poord/poorddetail/" + xpornum);
 		responseHelper.setSecondReloadSectionIdWithUrl("poordheaderform", "/procurements/poord/poordheaderform/" + xpornum);
+		responseHelper.setThirdReloadSectionIdWithUrl("poordheadertable", "/procurements/poord/poordheadertable");
 		return responseHelper.getResponse();
 	}
 
@@ -365,7 +374,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		report.setReportName("Purchase Order Report");
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
-		report.setPrintDate(sdf.format(new Date()));
+		report.setPrintDate(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date()));
 		report.setReportLogo(appConfig.getReportLogo());
 
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -376,6 +385,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		purchaseOrder.setWarehouse(oh.getXwh());
 		purchaseOrder.setDate(sdf.format(oh.getXdate()));
 		purchaseOrder.setTotalAmount(oh.getXtotamt() != null ? oh.getXtotamt().toString() : BigDecimal.ZERO.toString());
+		purchaseOrder.setTotalQty(BigDecimal.ZERO);
 
 		List<PoordDetail> items = poordService.findPoorddetailByXpornum(oh.getXpornum());
 		if (items != null && !items.isEmpty()) {
@@ -389,6 +399,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 				item.setItemGroup(it.getXgitem());
 				item.setItemRate(it.getXrate() != null ? it.getXrate().toString() : BigDecimal.ZERO.toString());
 				item.setItemTotalAmount(it.getXlineamt() != null ? it.getXlineamt().toString() : BigDecimal.ZERO.toString());
+				purchaseOrder.setTotalQty(purchaseOrder.getTotalQty().add(BigDecimal.valueOf(Double.valueOf(item.getItemQty()))));
 				purchaseOrder.getItems().add(item);
 			});
 		}
