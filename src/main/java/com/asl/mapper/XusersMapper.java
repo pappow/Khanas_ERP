@@ -28,4 +28,6 @@ public interface XusersMapper {
 	public List<Xusers> findByZemailAndXpassword(String zemail, String xpassword);
 
 	public Xusers findUserByXstaff(String xstaff, String zid);
+
+	public Xusers findUserByXcus(String xcus, String zid);
 }

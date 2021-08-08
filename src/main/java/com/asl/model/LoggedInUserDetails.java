@@ -20,10 +20,16 @@ public class LoggedInUserDetails {
 	private String businessId;
 	private List<String> roles = new ArrayList<>();
 	private String ipAddress;
+	private String xwh;
+	private String storename;
+	private String xcus;
+	private String partyname;
+	private String xstaff;
+	private String staffname;
 
 	public UserAuditRecord getAuditRecord(LoggedInUserDetails liud) {
 		UserAuditRecord uar = new UserAuditRecord();
-		uar.setUserId(liud.getUsername());
+		uar.setUserId(liud.getXstaff() == null ? liud.getUsername() : liud.getXstaff());
 		uar.setBusinessId(liud.getBusinessId());
 		uar.setIpAddress(liud.getIpAddress());
 		return uar;

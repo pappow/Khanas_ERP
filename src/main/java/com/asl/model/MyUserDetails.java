@@ -38,8 +38,20 @@ public class MyUserDetails implements UserDetails {
 	private boolean enabled;
 	private String roles;
 	private List<GrantedAuthority> authorities;
+	private String xcus;
+	private String xwh;
+	private String xstaff;
+	private String partyname;
+	private String staffname;
+	private String storename;
 
 	public MyUserDetails(Xusers user, Zbusiness zbusiness) {
+		this.xcus = user.getXcus();
+		this.partyname = user.getPartyname();
+		this.xwh = user.getXwh();
+		this.storename = user.getStorename();
+		this.xstaff = user.getXstaff();
+		this.staffname = user.getStaffname();
 		this.fullName = user.getXname();
 		this.username = user.getZemail();
 		this.password = user.getXpassword();
@@ -110,4 +122,31 @@ public class MyUserDetails implements UserDetails {
 		return this.zbusiness;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getXcus() {
+		return xcus;
+	}
+
+	public String getXwh() {
+		return xwh;
+	}
+
+	public String getXstaff() {
+		return xstaff;
+	}
+
+	public String getStaffname() {
+		return staffname;
+	}
+
+	public String getStorename() {
+		return storename;
+	}
+
+	public String getPartyname() {
+		return partyname;
+	}
 }

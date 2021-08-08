@@ -212,6 +212,17 @@
 			AND ZID=#{zid}
 	</delete>
 	
-	
+	<select id="searchParty" resultType="Cacus">
+		SELECT 
+			*
+		FROM 
+			cacus 
+		WHERE 
+			(UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%')  
+			AND zid=#{zid} 
+			AND zactive='1'
+		ORDER BY
+			xtype ASC, xcus ASC
+	</select>
 	
 </mapper>

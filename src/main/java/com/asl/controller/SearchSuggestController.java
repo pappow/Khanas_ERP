@@ -135,7 +135,7 @@ public class SearchSuggestController extends ASLAbstractController {
 	@GetMapping("/staff/{hint}")
 	public @ResponseBody List<SearchSuggestResult> getStaff(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
-		List<Pdmst> pdmstList = pdmstService.searchStaff(hint, "Employee Number");
+		List<Pdmst> pdmstList = pdmstService.searchStaff(hint, TransactionCodeType.EMPLOYEE_NUMBER.getCode());
 		List<SearchSuggestResult> list = new ArrayList<>();
 		pdmstList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXstaff(), c.getXstaff() + " - " + c.getXname())));
 		return list;
@@ -164,6 +164,15 @@ public class SearchSuggestController extends ASLAbstractController {
 	public @ResponseBody List<SearchSuggestResult> getCustomers(@PathVariable String hint){
 		if(StringUtils.isBlank(hint)) return Collections.emptyList();
 		List<Cacus> cacusList = cacusService.searchCacus(TransactionCodeType.CUSTOMER_NUMBER.getCode(), hint);
+		List<SearchSuggestResult> list = new ArrayList<>();
+		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
+		return list;
+	}
+
+	@GetMapping("/party/{hint}")
+	public @ResponseBody List<SearchSuggestResult> getParty(@PathVariable String hint){
+		if(StringUtils.isBlank(hint)) return Collections.emptyList();
+		List<Cacus> cacusList = cacusService.searchParty(hint);
 		List<SearchSuggestResult> list = new ArrayList<>();
 		cacusList.stream().forEach(c -> list.add(new SearchSuggestResult(c.getXcus(), c.getXcus() + " - " + c.getXorg())));
 		return list;

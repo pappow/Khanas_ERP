@@ -30,8 +30,8 @@ public class EmployeeInfoController extends ASLAbstractController{
 	@GetMapping
 	public String loadHRPersonalInfoPage(Model model) {
 		model.addAttribute("empinfo", getDefaultPersonalInfo());
-		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode()));
-		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode(), Boolean.TRUE));
+		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.EMPLOYEE_NUMBER.getCode()));
+		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.EMPLOYEE_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("departmentNames", xcodesService.findByXtype(CodeType.DEPARTMENT.getCode(), Boolean.TRUE));
@@ -50,8 +50,8 @@ public class EmployeeInfoController extends ASLAbstractController{
 	
 	private Pdmst getDefaultPersonalInfo() {
 		Pdmst pd  = new Pdmst();
-		pd.setXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode());
-		pd.setXtrn(TransactionCodeType.KEMPLOYEE_ID.getdefaultCode());
+		pd.setXtypetrn(TransactionCodeType.EMPLOYEE_NUMBER.getCode());
+		pd.setXtrn(TransactionCodeType.EMPLOYEE_NUMBER.getdefaultCode());
 		pd.setXstatus("Open");
 		return pd;
 	}
@@ -62,8 +62,8 @@ public class EmployeeInfoController extends ASLAbstractController{
 		if (pdmst == null) return "redirect:/employeeinfo";
 		
 		model.addAttribute("empinfo", pdmst);
-		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode()));
-		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.KEMPLOYEE_ID.getCode(), Boolean.TRUE));
+		model.addAttribute("allEmpinfos", pdmstService.getAllPdmstByXtypetrn(TransactionCodeType.EMPLOYEE_NUMBER.getCode()));
+		model.addAttribute("prefixes", xtrnService.findByXtypetrn(TransactionCodeType.EMPLOYEE_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("sexTypes", xcodesService.findByXtype(CodeType.SEX.getCode(), Boolean.TRUE));
 		model.addAttribute("maritalStatus", xcodesService.findByXtype(CodeType.MARITAL_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("departmentNames", xcodesService.findByXtype(CodeType.DEPARTMENT.getCode(), Boolean.TRUE));

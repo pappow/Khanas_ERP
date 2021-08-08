@@ -111,11 +111,10 @@ public class CacusServiceImpl extends AbstractGenericService implements CacusSer
 		return cacusMapper.deleteCacus(xcus, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public List<Cacus> searchParty(String xcus) {
+		if(StringUtils.isBlank(xcus)) return Collections.emptyList();
+		return cacusMapper.searchParty(xcus.toUpperCase(), sessionManager.getBusinessId());
+	}
 
-	
-
-	
-
-	
 }

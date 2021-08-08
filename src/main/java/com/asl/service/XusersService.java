@@ -30,4 +30,6 @@ public interface XusersService {
 	public String modifyZemail(String zemail);
 
 	public Xusers findUserByXstaff(String xstaff);
+	
+	public Xusers findUserByXcus(String xcus);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Xusers;
+import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.service.XusersService;
 
@@ -28,6 +29,10 @@ public class XusersController extends ASLAbstractController{
 	public String loadUserpage(Model model) {
 		model.addAttribute("xusers", new Xusers());
 		model.addAttribute("xusersList", xusersService.getAllXusers());
+		model.addAttribute("stores", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
+		
+		model.addAttribute("systemadminuser", sessionManager.getLoggedInUserDetails().getRoles().contains("SYSTEM_ADMIN"));
+		
 		return "pages/system/usersentry/xusers/xusers";
 	}
 
@@ -38,6 +43,9 @@ public class XusersController extends ASLAbstractController{
 
 		model.addAttribute("xusers", xuser);
 		model.addAttribute("xusersList", xusersService.getAllXusers());
+		model.addAttribute("stores", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
+		
+		model.addAttribute("systemadminuser", sessionManager.getLoggedInUserDetails().getRoles().contains("ROLE_SYSTEM_ADMIN"));
 		return "pages/system/usersentry/xusers/xusers";
 	}
 
@@ -52,14 +60,20 @@ public class XusersController extends ASLAbstractController{
 		xusers.setZemail(xusersService.modifyZemail(xusers.getZemail()));
 
 		// validation
-		if(StringUtils.isBlank(xusers.getXstaff())) {
-			responseHelper.setErrorStatusAndMessage("Staff ID required");
-			return responseHelper.getResponse();
+		if(StringUtils.isNotBlank(xusers.getXstaff())) {
+			Xusers xs = xusersService.findUserByXstaff(xusers.getXstaff());
+			if(xs != null && !xs.getZemail().equalsIgnoreCase(xusers.getZemail())) {
+				responseHelper.setErrorStatusAndMessage("Staff ID alredy assigned with user : " + xs.getZemail());
+				return responseHelper.getResponse();
+			}
 		}
-		Xusers xs = xusersService.findUserByXstaff(xusers.getXstaff());
-		if(xs != null && !xs.getZemail().equalsIgnoreCase(xusers.getZemail())) {
-			responseHelper.setErrorStatusAndMessage("Staff ID alredy assigned with user : " + xs.getZemail());
-			return responseHelper.getResponse();
+
+		if(StringUtils.isNotBlank(xusers.getXcus())) {
+			Xusers xs = xusersService.findUserByXcus(xusers.getXcus());
+			if(xs != null && !xs.getZemail().equalsIgnoreCase(xusers.getZemail())) {
+				responseHelper.setErrorStatusAndMessage("Party alredy assigned with user : " + xs.getZemail());
+				return responseHelper.getResponse();
+			}
 		}
 
 		// Validate xusers data
