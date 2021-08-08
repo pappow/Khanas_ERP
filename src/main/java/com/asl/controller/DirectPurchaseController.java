@@ -3,7 +3,6 @@ package com.asl.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,21 +27,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Cacus;
 import com.asl.entity.Caitem;
-import com.asl.entity.Pocrndetail;
-import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
-import com.asl.entity.PoordHeader;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.model.ServiceException;
 import com.asl.model.report.GRNOrder;
 import com.asl.model.report.GrnReport;
 import com.asl.model.report.ItemDetails;
-import com.asl.model.report.PurchaseOrder;
-import com.asl.model.report.PurchaseReport;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
 import com.asl.service.PocrnService;
@@ -105,8 +97,7 @@ public class DirectPurchaseController extends ASLAbstractController {
 		BigDecimal totalLineAmount = BigDecimal.ZERO;
 		if (details != null && !details.isEmpty()) {
 			for (PogrnDetail pd : details) {
-				totalQuantityReceived = totalQuantityReceived
-						.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
+				totalQuantityReceived = totalQuantityReceived.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
 				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
 			}
 		}
@@ -195,25 +186,33 @@ public class DirectPurchaseController extends ASLAbstractController {
 
 	//Start of Details Section
 
-	@GetMapping("{xgrnnum}/pogrndetail/{xrow}/show")
+	@GetMapping("{xgrnnum}/pogrndirectdetail/{xrow}/show")
 	public String openPogrnDetailModal(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
 
 		model.addAttribute("purchaseUnit", xcodesService.findByXtype(CodeType.PURCHASE_UNIT.getCode()));
 		if("new".equalsIgnoreCase(xrow)) {
 			PogrnDetail detail = new PogrnDetail();
 			detail.setXgrnnum(xgrnnum);
-			detail.setPrevqty(BigDecimal.ZERO);
+			detail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			detail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			detail.setXlineamt(detail.getXqtygrn().multiply(detail.getXrate()));
 			model.addAttribute("pogrndetail", detail);
 		} else {
 			PogrnDetail detail = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
-			detail.setPrevqty(detail.getXqtygrn() == null ? BigDecimal.ZERO : detail.getXqtygrn());
+			if(detail == null) {
+			detail = new PogrnDetail();
+			detail.setXgrnnum(xgrnnum);
+			detail.setXqtygrn(BigDecimal.ONE.setScale(2, RoundingMode.DOWN));
+			detail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
+			
+			}
 			model.addAttribute("pogrndetail", detail);
 		}
 
 		return "pages/purchasing/pogrndirect/pogrndirectdetailmodal::pogrndirectdetailmodal";
 	}
 
-	@PostMapping("/pogrndetail/save")
+	@PostMapping("/pogrndirectdetail/save")
 	public @ResponseBody Map<String, Object> savePogrndetail(PogrnDetail pogrnDetail){
 		if(pogrnDetail == null || StringUtils.isBlank(pogrnDetail.getXgrnnum())) {
 			responseHelper.setStatus(ResponseStatus.ERROR);
@@ -269,7 +268,7 @@ public class DirectPurchaseController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
-	@GetMapping("/pogrndetail/{xgrnnum}")
+	@GetMapping("/pogrndirectdetail/{xgrnnum}")
 	public String reloadPoordDetailTabble(@PathVariable String xgrnnum, Model model) {
 		List<PogrnDetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
 		model.addAttribute("pogrnDetailsList", detailList);
@@ -286,7 +285,7 @@ public class DirectPurchaseController extends ASLAbstractController {
 		return "pages/purchasing/pogrndirect/pogrndirect::pogrnheaderform";
 	}
 
-	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
+	@PostMapping("{xgrnnum}/pogrndirectdetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deletePoordDetail(@PathVariable String xgrnnum, @PathVariable String xrow, Model model) {
 		PogrnDetail pd = pogrnService.findPogrnDetailByXgrnnumAndXrow(xgrnnum, Integer.parseInt(xrow));
 		if(pd == null) {

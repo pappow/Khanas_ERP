@@ -145,9 +145,14 @@
 			Cacus 
 		WHERE 
 		(UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' ) 
-		AND xtypetrn=#{xtypetrn} 
 		AND zid=#{zid} 
 		AND zactive='1'
+		<if test="xtypetrn == 'Customer Number'">
+			AND xtype in ('Customer','Both','Buyer')
+		</if>
+		<if test="xtypetrn == 'Supplier Number'">
+			AND xtype in ('Supplier','Both')
+		</if>
 	</select>
 	
 	<select id="searchCus" resultType="Cacus">

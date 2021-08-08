@@ -22,6 +22,7 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
@@ -64,6 +65,18 @@ public class PurchaseReturnController extends ASLAbstractController {
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("pocrnDetailsList", pocrnService.findPocrnDetailByXcrnnum(xcrnnum));
+		
+		List<Pocrndetail> details = pocrnService.findPocrnDetailByXcrnnum(xcrnnum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(details != null && !details.isEmpty()) {
+			for(Pocrndetail pd : details) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 
 		return "pages/procurement/grnreturn/pocrn";
 	}

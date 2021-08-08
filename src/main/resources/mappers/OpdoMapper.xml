@@ -289,6 +289,19 @@
 		ORDER BY oh.xdornum DESC
 	</select>
 
+	<select id="getAllDirectOpdoHeader" resultType="Opdoheader">
+		SELECT
+			oh.*,
+			c.xorg
+		FROM
+			Opdoheader oh
+			left join cacus c on c.xcus = oh.xcus AND c.zid = oh.zid and c.zactive='1'
+		WHERE
+			oh.zid=#{zid}
+			AND oh.xtype='Direct'
+		ORDER BY
+			oh.xdornum DESC
+	</select>
 	<select id="findOpdoDetailByXdornumAndXrow" resultType="Opdodetail">
 		SELECT 
 			opdodetail.*,
@@ -362,6 +375,20 @@
 			AND OPDOHEADER.XTRN=#{xtrn}
 		ORDER BY
 			OPDOHEADER.xstatusord DESC, OPDOHEADER.xdornum  DESC
+	</select>
+	
+	<select id="findAllDirectOpdoHeaderByXtypetrnAndXtrn" resultType="Opdoheader">
+		SELECT
+			oh.*,
+			c.xorg
+		FROM
+			Opdoheader oh
+			left join cacus c on c.xcus = oh.xcus AND c.zid = oh.zid and c.zactive='1'
+		WHERE
+			oh.zid=#{zid}
+			AND oh.xtype='Direct'
+		ORDER BY
+			oh.xdornum DESC
 	</select>
 
 	<select id="findAllInvoiceOrder" resultType="Opdoheader">

@@ -49,7 +49,8 @@ public enum MenuProfile {
 		M0407(9999, "M0407", "400", "M0400", "Delivery Chalan (Group)", "Y","/salesninvoice/deliveryorderchalan"),
 		M0408(9999, "M0408", "400", "M0400", "Sales Return", "Y","/salesninvoice/salesreturn"),
 		M0409(9999, "M0409", "400","SUB-MASTER", "Report", "Y", null),
-			M0410(9999, "M0410", "400", "M0409", "Daily Distribution Report", "Y","/salesninvoice/ddisr"),
+		M0410(9999, "M0410", "400", "M0409", "Daily Distribution Report", "Y","/salesninvoice/ddisr"),
+		M0411(9999, "M0411", "400", "M0400", "Direct Sales", "Y","/salesninvoice/directsales"),
 
 	M0500(9999, "M0500", "500", "MASTER", "Production", "Y","/production"),
 		M0502(9999, "M0502", "500", "M0500", "Production Planning", "Y","/production/suggestion"),

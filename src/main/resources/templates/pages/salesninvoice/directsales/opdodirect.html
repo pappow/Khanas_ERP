@@ -240,13 +240,13 @@
 															</div>
 														</div> -->
 
-														<!-- <div class="form-group">
+														<div class="form-group">
 															<label class="control-label col-md-4" for="xordernum">Sales Order</label>
 															<div class="col-md-8">
 																<input type="hidden" class="form-control" th:field="*{xordernum}">
 																<input type="text" class="form-control" th:value="*{xordernum}" disabled="disabled">
 															</div>
-														</div> -->
+														</div>
 
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xtotamt">Total Amount</label>
@@ -330,7 +330,7 @@
 							<div class="col-md-6">
 								<section id="list-manager" style="margin-top: 30px;">
 									<div class="section-header sectionbartoggle">
-										<h1>Direct Sales List</h1>
+										<h1>Invoice List</h1>
 									</div>
 									<div class="section-body">
 										<table class="table table-striped table-bordered datatable nowrap">
@@ -367,7 +367,7 @@
 						<section th:if="${not #strings.isEmpty(opdoheader.xdornum)}" id="data-maintenance" style="margin-top: 30px;">
 							<a id="listlines-url" th:href="@{/salesninvoice/directsales/opdodetail/} + ${opdoheader.xdornum}"></a>
 							<div class="section-header sectionbartoggle">
-								<h1>Item Details of <span th:text="${opdoheader.xdornum}"></span></h1>
+								<h1>Invoice Details of <span th:text="${opdoheader.xdornum}"></span></h1>
 							</div>
 							<div class="section-body">
 								<table class="table table-striped table-bordered normal-table nowrap" id="opdodetailtable" th:fragment="opdodetailtable">

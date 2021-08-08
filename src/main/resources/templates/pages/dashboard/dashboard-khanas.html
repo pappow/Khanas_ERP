@@ -315,6 +315,12 @@
 													<a th:href="@{/salesninvoice/salesandinvoice}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 												</td>
 											</tr>
+											<tr th:if="${menuProfile.M0411 ne null and menuProfile.M0411.display}">
+												<td><a th:href="@{/salesninvoice/directsales}" th:text="${menuProfile.M0411.screenprompt}">Direct Sales</a></td>
+												<td>
+													<a th:href="@{/salesninvoice/directsales}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												</td>
+											</tr>
 											<tr th:if="${menuProfile.M0407 ne null and menuProfile.M0407.display}">
 												<td><a th:href="@{/salesninvoice/deliveryorderchalan}" th:text="${menuProfile.M0407.screenprompt}">Delivery Chalan (Group)</a></td>
 												<td>
