@@ -95,6 +95,13 @@
 													</div>
 
 													<div class="form-group">
+														<label class="control-label col-md-4" for="xswiftcode">Swift Code</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" th:field="*{xswiftcode}">
+														</div>
+													</div>
+
+													<div class="form-group">
 														<label class="control-label col-md-4" for="xmadd">Address</label>
 														<div class="col-md-8">
 															<textarea class="form-control" rows="3" th:field="*{xmadd}"></textarea>
@@ -115,7 +122,18 @@
 															<input type="hidden" id="search-des" th:value="*{xacc}"/>
 														</div>
 													</div>
+
+													<div class="form-group input2">
+														<label class="control-label col-sm-4" for="zactive">Is Active ?</label>
+														<div class="col-sm-8">
+															<div class="checkbox">
+																<label><input type="checkbox" class="form-control-input2" th:field="*{zactive}" value="Y"/></label>
+															</div>
+														</div>
+													</div>
 												</div>
+
+												
 
 											</div>
 										</form>
@@ -134,8 +152,10 @@
 													<th>Bank Code</th>
 													<th>Bank Name</th>
 													<th>Branch</th>
+													<th>Swift Code</th>
 													<th>Address</th>
 													<th>GL Account</th>
+													<th>Is Active?</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -145,8 +165,10 @@
 													</td>
 													<td th:text="${b.xname}"></td>
 													<td th:text="${b.xbranch}"></td>
+													<td th:text="${b.xswiftcode}"></td>
 													<td th:text="${b.xmadd}"></td>
 													<td th:text="${#strings.isEmpty(b.xacc) ? '' : b.xacc + ' - ' + b.accountname}"></td>
+													<td th:text="${b.zactive ? 'Y' : 'N'}"></td>
 												</tr>
 											</tbody>
 										</table>
