@@ -39,6 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(xuser == null || StringUtils.isBlank(xuser.getZid())) throw  new UsernameNotFoundException("User not found in the system");
 		Zbusiness zbusiness = zbusinessService.findBById(xuser.getZid());
 		if(zbusiness == null || Boolean.FALSE.equals(zbusiness.getZactive())) throw  new UsernameNotFoundException("Your Business is currently inactive");
+
 		return new MyUserDetails(xuser, zbusiness);
 	}
 

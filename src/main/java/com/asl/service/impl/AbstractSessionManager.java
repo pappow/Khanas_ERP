@@ -38,7 +38,13 @@ public abstract class AbstractSessionManager implements ASLSessionManager {
 			user.setUsername(mud.getUsername());
 			user.setEmailAddress(mud.getEmailAddress());
 			user.setBusinessId(mud.getBusinessId());
-			user.setFullName(mud.getFullName());
+			user.setFullName(mud.getStaffname() == null ? mud.getUsername() : mud.getStaffname());
+			user.setXstaff(mud.getXstaff());
+			user.setXcus(mud.getXcus());
+			user.setXwh(mud.getXwh());
+			user.setStaffname(mud.getStaffname());
+			user.setStorename(mud.getStorename());
+			user.setPartyname(mud.getPartyname());
 			Arrays.stream(mud.getRoles().split(",")).forEach(role -> user.getRoles().add(role));
 		}
 

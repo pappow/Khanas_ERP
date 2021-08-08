@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Xusers;
 import com.asl.mapper.XusersMapper;
@@ -21,6 +22,7 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 	@Autowired
 	private XusersMapper userMapper;
 
+	@Transactional
 	@Override
 	public long save(Xusers xusers) {
 		if (xusers == null) return 0;
@@ -30,6 +32,7 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 		return userMapper.save(xusers);
 	}
 
+	@Transactional
 	@Override
 	public long update(Xusers user) {
 		if (user == null) return 0;
@@ -89,6 +92,10 @@ public class UserServiceImpl extends AbstractGenericService implements XusersSer
 		return userMapper.findUserByXstaff(xstaff, sessionManager.getBusinessId());
 	}
 
-	
+	@Override
+	public Xusers findUserByXcus(String xcus) {
+		if(StringUtils.isBlank(xcus)) return null;
+		return userMapper.findUserByXcus(xcus, sessionManager.getBusinessId());
+	}
 
 }

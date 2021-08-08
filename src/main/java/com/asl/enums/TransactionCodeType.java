@@ -42,7 +42,7 @@ public enum TransactionCodeType {
 	INVENTORY_TRANSACTION3("Inventory Transaction", "DMIS", TransactionCodes.INVENTORY_TRANSACTION),
 	INVENTORY_TRANSFER_ORDER("TO Number", "TO--", TransactionCodes.INVENTORY_TRANSFER_ORDER),
 
-	KEMPLOYEE_ID("Employee Number", "EID-", TransactionCodes.KEMPLOYEE_ID),
+	EMPLOYEE_NUMBER("Employee Number", "EID-", TransactionCodes.KEMPLOYEE_ID),
 	
 	LAND_ID("Land ID", "LND-", TransactionCodes.LAND_ID),
 	LANDMEMBER_ID("Land Member ID", "MEM-", TransactionCodes.LAND_ID),

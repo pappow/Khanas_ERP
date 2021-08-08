@@ -139,4 +139,10 @@ public class Xusers extends AbstractModel<String> {
 
 	@Transient
 	private String staffname;
+
+	@Transient
+	private String partyname;
+
+	@Transient
+	private String storename;
 }

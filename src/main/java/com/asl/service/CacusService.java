@@ -40,4 +40,6 @@ public interface CacusService {
 	public long deleteCacus(String xcus);
 	
 	public List<Cacus> searchCustomer(String xtype, String xcus);
+	
+	public List<Cacus> searchParty(String xcus);
 }
