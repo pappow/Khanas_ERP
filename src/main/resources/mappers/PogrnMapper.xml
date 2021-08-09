@@ -11,6 +11,7 @@
 		(
 		xgrnnum,
 		xdate,
+		xdategl,
 		xcus,
 		xtype,
 		xwh,
@@ -45,6 +46,7 @@
 		(
 		#{xgrnnum},
 		#{xdate, jdbcType=DATE},
+		#{xdategl, jdbcType=DATE},
 		#{xcus, jdbcType=VARCHAR},
 		#{xtype, jdbcType=VARCHAR},
 		#{xwh, jdbcType=VARCHAR},
@@ -82,6 +84,7 @@
 		pogrnheader
 		SET
 		xdate=#{xdate, jdbcType=DATE},
+		xdategl=#{xdategl, jdbcType=DATE},
 		xcus=#{xcus, jdbcType=VARCHAR},
 		xtype=#{xtype, jdbcType=VARCHAR},
 		xwh=#{xwh, jdbcType=VARCHAR},
@@ -306,16 +309,18 @@
 
 	<select id="getAllPogrnHeader" resultType="PogrnHeader">
 		SELECT
-		ph.*,
-		c.xorg
+			ph.*,
+			c.xorg,
+			x.xdescdet as storename
 		FROM
-		pogrnheader ph
-		left join cacus c on c.xcus = ph.xcus AND c.zid = ph.zid and c.zactive='1'
+			pogrnheader ph
+			left join cacus c on c.xcus = ph.xcus AND c.zid = ph.zid and c.zactive='1'
+			left join xcodes x on x.xcode = ph.xwh AND x.zid = ph.zid AND x.zactive='1'
 		WHERE
-		ph.zid=#{zid}
-		AND ph.xtype !='Direct'
+			ph.zid=#{zid}
+			AND ph.xtype = 'PO'
 		ORDER BY
-		ph.xgrnnum DESC
+			ph.xgrnnum DESC
 	</select>
 
 	<select id="getAllDirectPogrnHeader" resultType="PogrnHeader">

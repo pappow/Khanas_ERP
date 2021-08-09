@@ -12,7 +12,7 @@
 			<!-- PAGE SETUP -->
 			<fo:layout-master-set>
 				<!-- PAGE MASTER -->
-				<fo:simple-page-master master-name="A4" page-height="21cm" page-width="29.02cm" margin-top="6mm" margin-bottom="6mm" margin-left="6mm" margin-right="6mm">
+				<fo:simple-page-master master-name="A4" page-height="29.02cm" page-width="21cm" margin-top="6mm" margin-bottom="6mm" margin-left="6mm" margin-right="6mm">
 					<fo:region-body margin-top="18mm" margin-left="0mm" margin-right="0mm" margin-bottom="5mm" />
 					<fo:region-before region-name="header-first" extent="18mm"/>
 					<fo:region-after region-name="footer-pagenumber" extent="4.5mm"/>
@@ -66,17 +66,17 @@
 
 				<!-- FOOTER PAGE NUMBER -->
 				<fo:static-content flow-name="footer-pagenumber">
-					<fo:block-container position="absolute" width="20%">
+					<fo:block-container position="absolute" width="30%">
 						<fo:block text-align="left" font-size="8px">
 							Page <fo:page-number/> of <fo:page-number-citation ref-id="{$pageid}"/>
 						</fo:block>
 					</fo:block-container>
-					<fo:block-container position="absolute" left="20%" width="60%">
+					<fo:block-container position="absolute" left="30%" width="40%">
 						<fo:block text-align="center" font-size="8px">
 							<xsl:value-of select="copyrightText"/>
 						</fo:block>
 					</fo:block-container>
-					<fo:block-container position="absolute" left="80%" width="20%">
+					<fo:block-container position="absolute" left="70%" width="30%">
 						<fo:block text-align="right" font-size="8px">
 							Printed Date : <xsl:value-of select="printDate"/>
 						</fo:block>
@@ -109,20 +109,15 @@
 
 				<fo:block font-size="8px" padding-top="30px" padding-bottom="5px" text-align="left">
 					<fo:table table-layout="fixed" width="100%" border-collapse="collapse" >
-						<fo:table-column column-width="8%"/>
+						<fo:table-column column-width="12%"/>
 						<fo:table-column column-width="2%" />
-						<fo:table-column column-width="90%" />
+						<fo:table-column column-width="86%" />
 
 						<fo:table-body>
 							<fo:table-row>
 								<fo:table-cell><fo:block font-weight="bold">GRN Number</fo:block></fo:table-cell>
 								<fo:table-cell><fo:block>:</fo:block></fo:table-cell>
 								<fo:table-cell><fo:block font-weight="bold"><xsl:value-of select="orderNumber"/></fo:block></fo:table-cell>
-							</fo:table-row>
-							<fo:table-row>
-								<fo:table-cell><fo:block>Date</fo:block></fo:table-cell>
-								<fo:table-cell><fo:block>:</fo:block></fo:table-cell>
-								<fo:table-cell><fo:block><xsl:value-of select="date"/></fo:block></fo:table-cell>
 							</fo:table-row>
 							<fo:table-row>
 								<fo:table-cell><fo:block>Supplier</fo:block></fo:table-cell>
@@ -155,12 +150,12 @@
 				<!-- Item table -->
 				<fo:block>
 					<fo:table table-layout="fixed" width="100%" border-collapse="collapse" >
+						<fo:table-column column-width="25%"/>
 						<fo:table-column column-width="30%"/>
-						<fo:table-column column-width="30%"/>
 						<fo:table-column column-width="10%"/>
 						<fo:table-column column-width="10%"/>
 						<fo:table-column column-width="10%"/>
-						<fo:table-column column-width="10%"/>
+						<fo:table-column column-width="15%"/>
 
 						<!-- Table header -->
 						<fo:table-header xsl:use-attribute-sets="table.font.size">
@@ -186,7 +181,7 @@
 							</fo:table-row>
 						</fo:table-header>
 
-					<!-- table body -->
+						<!-- table body -->
 						<fo:table-body>
 							<xsl:if test="items/item">
 								<xsl:apply-templates select="items/item"/>
@@ -198,82 +193,27 @@
 									</fo:table-cell>
 								</fo:table-row>
 							</xsl:if>
+							<fo:table-row>
+								<fo:table-cell xsl:use-attribute-sets="client.table.td" text-align="right" font-weight="bold" number-columns-spanned="2">
+									<fo:block>Total</fo:block>
+								</fo:table-cell>
+								<fo:table-cell xsl:use-attribute-sets="client.table.td" text-align="right" font-weight="bold">
+									<fo:block><xsl:value-of select="totalQty"/></fo:block>
+								</fo:table-cell>
+								<fo:table-cell xsl:use-attribute-sets="client.table.td" text-align="right" font-weight="bold">
+									<fo:block></fo:block>
+								</fo:table-cell>
+								<fo:table-cell xsl:use-attribute-sets="client.table.td" text-align="right" font-weight="bold">
+									<fo:block></fo:block>
+								</fo:table-cell>
+								<fo:table-cell xsl:use-attribute-sets="client.table.td" text-align="right" font-weight="bold">
+									<fo:block><xsl:value-of select="totalAmount"/></fo:block>
+								</fo:table-cell>
+							</fo:table-row>
 						</fo:table-body>
 					</fo:table>
 				</fo:block>
 
-				<fo:block-container width="100%" margin-top="10px">
-					<fo:block>
-						<fo:table table-layout="fixed" width="100%" border-collapse="collapse" xsl:use-attribute-sets="table.font.size">
-							<fo:table-column column-width="92%" />
-							<fo:table-column column-width="2%" />
-							<fo:table-column column-width="6%" />
-
-							<fo:table-body>
-								<fo:table-row>
-									<fo:table-cell text-align="right">
-										<fo:block font-weight="bold">Total</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="center">
-										<fo:block>:</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="right">
-										<fo:block color="black"><xsl:value-of select="totalAmount"/></fo:block>
-									</fo:table-cell>
-								</fo:table-row>
-
-								<!--<fo:table-row>
-									<fo:table-cell text-align="right">
-										<fo:block font-weight="bold">Vat</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="center">
-										<fo:block>:</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="right">
-										<fo:block><xsl:value-of select="vatAmount"/></fo:block>
-									</fo:table-cell>
-								</fo:table-row>
-
-								<fo:table-row>
-									<fo:table-cell text-align="right">
-										<fo:block font-weight="bold">Tax</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="center">
-										<fo:block>:</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="right">
-										<fo:block><xsl:value-of select="taxAmount"/></fo:block>
-									</fo:table-cell>
-								</fo:table-row>
-
-								<fo:table-row>
-									<fo:table-cell text-align="right">
-										<fo:block font-weight="bold">Discount</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="center">
-										<fo:block>:</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="right">
-										<fo:block><xsl:value-of select="discountAmount"/></fo:block>
-									</fo:table-cell>
-								</fo:table-row>
-
-								<fo:table-row>
-									<fo:table-cell text-align="right">
-										<fo:block font-weight="bold">Grand Total</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="center">
-										<fo:block>:</fo:block>
-									</fo:table-cell>
-									<fo:table-cell text-align="right">
-										<fo:block><xsl:value-of select="grandTotalAmount"/></fo:block>
-									</fo:table-cell>
-								</fo:table-row>-->
-
-							</fo:table-body>
-						</fo:table>
-					</fo:block>
-				</fo:block-container>
 			</fo:table-cell>
 		</fo:table-row>
 	</xsl:template>

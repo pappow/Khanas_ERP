@@ -371,7 +371,7 @@ public class PurchaseOrderController extends ASLAbstractController {
 		PurchaseReport report = new PurchaseReport();
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-		report.setReportName("Purchase Order Report");
+		report.setReportName("Purchase Order");
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
 		report.setPrintDate(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date()));

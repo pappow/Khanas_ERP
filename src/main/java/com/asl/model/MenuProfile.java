@@ -265,6 +265,10 @@ public class MenuProfile implements Serializable {
 		this.M0306 = profileLine;
 		addToProfileLineMap(profileLine);
 	}
+	public void setM0307(ProfileLine profileLine) {
+		this.M0307 = profileLine;
+		addToProfileLineMap(profileLine);
+	}
 
 
 
