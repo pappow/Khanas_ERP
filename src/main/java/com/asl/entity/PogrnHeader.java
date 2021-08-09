@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import lombok.Data;
@@ -33,8 +35,13 @@ public class PogrnHeader extends AbstractModel<String> {
 	@Column(name = "xgrnnum")
 	private String xgrnnum;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "xdate")
 	private Date xdate;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "xdategl")
+	private Date xdategl;
 
 	@Column(name = "xcus")
 	private String xcus;
@@ -107,5 +114,8 @@ public class PogrnHeader extends AbstractModel<String> {
 
 	@Transient
 	private String xorg;
+
+	@Transient 
+	private String storename;
 
 }

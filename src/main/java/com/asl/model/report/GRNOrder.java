@@ -1,6 +1,7 @@
 package com.asl.model.report;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class GRNOrder implements Serializable {
 	private String grandTotalAmount;
 	private String returnNumber;
 	private String vatAit;
+	private BigDecimal totalQty;
 
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")

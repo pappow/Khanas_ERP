@@ -1,5 +1,6 @@
 package com.asl.model.report;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class PurchaseOrder {
 	private String vatAmount;
 	private String discountAmount;
 	private String grandTotalAmount;
+	private BigDecimal totalQty;
 	
 	@XmlElementWrapper(name = "items")
 	@XmlElement(name = "item")

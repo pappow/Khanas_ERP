@@ -259,11 +259,16 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 		pogrnHeader.setXtrn(TransactionCodeType.GRN_NUMBER.getdefaultCode());
 		pogrnHeader.setXdate(new Date());
 		pogrnHeader.setXstatusgrn("Open");
-		pogrnHeader.setXtotamt(poordHeader.getXtotamt());
+		pogrnHeader.setXtotamt(BigDecimal.ZERO);
 		pogrnHeader.setXwh(poordHeader.getXwh());
 		pogrnHeader.setXcus(poordHeader.getXcus());
 		pogrnHeader.setZid(sessionManager.getBusinessId());
 		pogrnHeader.setZauserid(getAuditUser());
+		pogrnHeader.setXstatusap("Open");
+		pogrnHeader.setXstatusjv("Open");
+		pogrnHeader.setXdategl(pogrnHeader.getXdate());
+		pogrnHeader.setXtype("PO");
+		pogrnHeader.setXnote(poordHeader.getXnote());
 
 		long count = pogrnMapper.savePogrnHeader(pogrnHeader);
 		if(count == 0) {
@@ -295,6 +300,9 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			if(dcount == 0) throw new ServiceException("Can't save detail");
 
 			poorddetail.setXqtygrn(poorddetail.getXqtygrn().add(detail.getXqtygrn()));
+			
+			// update grn total amt
+			pogrnHeader.setXtotamt(pogrnHeader.getXtotamt().add(detail.getXlineamt()));
 		}
 
 		// now update poorddetails with grn qty
@@ -302,6 +310,13 @@ public class PoordServiceImpl extends AbstractGenericService implements PoordSer
 			PoordDetail poorddetail = poordDetailList.get(i);
 			long dcount = updateDetail(poorddetail);
 			if(dcount == 0) throw new ServiceException("Can't update purchase detail");
+		}
+
+		// now update pogrnheader with total amount
+		long countupdate = pogrnMapper.updatePogrnHeader(pogrnHeader);
+		if(countupdate == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't update GRN total amount for purchase order : " + xpornum);
+			return responseHelper.getResponse();
 		}
 
 		// now update poordheader status

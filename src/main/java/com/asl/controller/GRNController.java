@@ -107,6 +107,9 @@ public class GRNController extends ASLAbstractController {
 		pogrn.setXdate(new Date());
 		pogrn.setXstatusgrn("Open");
 		pogrn.setXtotamt(BigDecimal.ZERO);
+		pogrn.setXstatusap("Open");
+		pogrn.setXstatusjv("Open");
+		pogrn.setXtype("PO");
 		return pogrn;
 	}
 
@@ -115,13 +118,43 @@ public class GRNController extends ASLAbstractController {
 
 		// Validate
 		if (StringUtils.isBlank(pogrnHeader.getXcus())) {
-			responseHelper.setErrorStatusAndMessage("Please Select Supplier");
+			responseHelper.setErrorStatusAndMessage("Supplier selection required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXpornum())) {
+			responseHelper.setErrorStatusAndMessage("Purchase Order Number not found");
 			return responseHelper.getResponse();
 		}
 		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
-			responseHelper.setErrorStatusAndMessage("Bill Number Required");
+			responseHelper.setErrorStatusAndMessage("Supplier Bill No. required");
 			return responseHelper.getResponse();
 		}
+		if(StringUtils.isBlank(pogrnHeader.getXwh())) {
+			responseHelper.setErrorStatusAndMessage("Warehouse Required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXtype())) {
+			responseHelper.setErrorStatusAndMessage("Purchase Type Required");
+			return responseHelper.getResponse();
+		}
+		// check date
+		if(pogrnHeader.getXdate() == null) {
+			responseHelper.setErrorStatusAndMessage("GRN date Required");
+			return responseHelper.getResponse();
+		}
+		PoordHeader po = poordService.findPoordHeaderByXpornum(pogrnHeader.getXpornum());
+		if(po == null) {
+			responseHelper.setErrorStatusAndMessage("Can't find purchae order for this GRN");
+			return responseHelper.getResponse();
+		}
+		if(pogrnHeader.getXdate().before(po.getXdate())) {
+			responseHelper.setErrorStatusAndMessage("GRN date can't be before purchase order date");
+			return responseHelper.getResponse();
+		}
+
+		
+		// Hidden data
+		pogrnHeader.setXdategl(pogrnHeader.getXdate());
 
 		// if existing record
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());
@@ -252,7 +285,6 @@ public class GRNController extends ASLAbstractController {
 		// split item from other data
 		pogrnDetail.setXitem(pogrnDetail.getXitem().split("\\|")[0]);
 		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
-		//pogrnDetail.setXlineamt(pogrnDetail.getXlineamt().add((pogrnDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
@@ -272,6 +304,7 @@ public class GRNController extends ASLAbstractController {
 
 			responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/procurements/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
 			responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/procurements/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
+			responseHelper.setThirdReloadSectionIdWithUrl("pogrnheadertable", "/procurements/pogrn/poordheadertable");
 			responseHelper.setSuccessStatusAndMessage("GRN details updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -291,6 +324,7 @@ public class GRNController extends ASLAbstractController {
 
 		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/procurements/pogrn/pogrndetail/" + pogrnDetail.getXgrnnum());
 		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/procurements/pogrn/pogrnheaderform/" + pogrnDetail.getXgrnnum());
+		responseHelper.setThirdReloadSectionIdWithUrl("pogrnheadertable", "/procurements/pogrn/poordheadertable");
 		responseHelper.setSuccessStatusAndMessage("GRN details saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -326,6 +360,12 @@ public class GRNController extends ASLAbstractController {
 		model.addAttribute("grnprefix", xtrnService.findByXtypetrn(TransactionCodeType.GRN_NUMBER.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/purchasing/pogrn/pogrn::pogrnheaderform";
+	}
+
+	@GetMapping("/poordheadertable")
+	public String reloadPogrnHeaderTable(Model model) {
+		model.addAttribute("allPogrnHeader", pogrnService.getAllPogrnHeader());
+		return "pages/purchasing/pogrn/pogrn::pogrnheadertable";
 	}
 
 	@PostMapping("{xgrnnum}/pogrndetail/{xrow}/delete")
@@ -369,6 +409,7 @@ public class GRNController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("pogrndetailtable", "/procurements/pogrn/pogrndetail/" + xgrnnum);
 		responseHelper.setSecondReloadSectionIdWithUrl("pogrnheaderform", "/procurements/pogrn/pogrnheaderform/" + xgrnnum);
+		responseHelper.setThirdReloadSectionIdWithUrl("pogrnheadertable", "/procurements/pogrn/poordheadertable");
 		return responseHelper.getResponse();
 	}
 
@@ -381,8 +422,24 @@ public class GRNController extends ASLAbstractController {
 		}
 
 		// Validate
+		if(pogrnHeader.getXdate() == null) {
+			responseHelper.setErrorStatusAndMessage("GRN date required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXwh())) {
+			responseHelper.setErrorStatusAndMessage("Warehouse required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXinvnum())) {
+			responseHelper.setErrorStatusAndMessage("Supplier Bill No. required");
+			return responseHelper.getResponse();
+		}
 		if (StringUtils.isBlank(pogrnHeader.getXcus())) {
 			responseHelper.setErrorStatusAndMessage("Supplier required");
+			return responseHelper.getResponse();
+		}
+		if(StringUtils.isBlank(pogrnHeader.getXtype())) {
+			responseHelper.setErrorStatusAndMessage("Purchase Type Required");
 			return responseHelper.getResponse();
 		}
 		if (!"Open".equalsIgnoreCase(pogrnHeader.getXstatusgrn())) {
@@ -519,10 +576,10 @@ public class GRNController extends ASLAbstractController {
 		GrnReport report = new GrnReport();
 		report.setBusinessName(sessionManager.getZbusiness().getZorg());
 		report.setBusinessAddress(sessionManager.getZbusiness().getXmadd());
-		report.setReportName("Good Receipt Note");
+		report.setReportName("Goods Receipt Note");
 		report.setFromDate(sdf.format(oh.getXdate()));
 		report.setToDate(sdf.format(oh.getXdate()));
-		report.setPrintDate(sdf.format(new Date()));
+		report.setPrintDate(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date()));
 		report.setReportLogo(appConfig.getReportLogo());
 
 		GRNOrder grn = new GRNOrder();
@@ -540,6 +597,7 @@ public class GRNController extends ASLAbstractController {
 		grn.setTaxAmount(oh.getXaitamt() != null ? oh.getXaitamt().toString() : BigDecimal.ZERO.toString());
 		grn.setDiscountAmount(oh.getXdiscprime() != null ? oh.getXdiscprime().toString() : BigDecimal.ZERO.toString());
 		grn.setGrandTotalAmount(oh.getXgrandtot() != null ? oh.getXgrandtot().toString() : BigDecimal.ZERO.toString());
+		grn.setTotalQty(BigDecimal.ZERO);
 
 		List<PogrnDetail> items = pogrnService.findPogrnDetailByXgrnnum(oh.getXgrnnum());
 		if (items != null && !items.isEmpty()) {
@@ -554,6 +612,8 @@ public class GRNController extends ASLAbstractController {
 				item.setItemCategory(it.getXcatitem());
 				item.setItemGroup(it.getXgitem());
 				grn.getItems().add(item);
+				
+				grn.setTotalQty(grn.getTotalQty().add(BigDecimal.valueOf(Double.valueOf(item.getItemQty()))));
 			});
 		}
 
