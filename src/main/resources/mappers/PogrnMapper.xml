@@ -319,6 +319,7 @@
 		WHERE
 			ph.zid=#{zid}
 			AND ph.xtype = 'PO'
+			
 		ORDER BY
 			ph.xgrnnum DESC
 	</select>
@@ -332,7 +333,7 @@
 			left join cacus c on c.xcus = ph.xcus AND c.zid = ph.zid and c.zactive='1'
 		WHERE
 			ph.zid=#{zid}
-			AND ph.xtype='Direct'
+			AND ph.xtype='Cash'
 		ORDER BY
 			ph.xgrnnum DESC
 	</select>

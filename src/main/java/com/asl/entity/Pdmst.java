@@ -182,4 +182,7 @@ public class Pdmst extends AbstractModel<String> {
 
 	@Transient
 	private String password;
+	
+	@Transient
+	private String xbname;
 }

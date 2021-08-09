@@ -47,6 +47,37 @@
 							</div>
 							<div class="section-body" th:fragment="mainmenu">
 								<table class="table dashboard-menu-table">
+									
+									<span th:if="${menuProfile.M0105 ne null and menuProfile.M0105.display}">
+										<tr>
+											<td colspan="2" style="padding-left: 30px !important;" th:text="${menuProfile.M0105.screenprompt}">System Administration</td>
+										</tr>
+										<tr th:if="${menuProfile.M0106 ne null and menuProfile.M0106.display}">
+											<td><a class="sub2" th:href="@{/mastersetup/xcodes}" th:text="${menuProfile.M0106.screenprompt}">Codes & Parameters</a></td>
+											<td>
+												<a th:href="@{/mastersetup/xcodes}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0107 ne null and menuProfile.M0107.display}">
+											<td><a class="sub2" th:href="@{/mastersetup/xtrn}" th:text="${menuProfile.M0107.screenprompt}">Transaction Codes</a></td>
+											<td>
+												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0108 ne null and menuProfile.M0108.display}">
+											<td><a class="sub2" th:href="@{/system/list}" th:text="${menuProfile.M0108.screenprompt}">List Maintenance</a></td>
+											<td>
+												<a th:href="@{/system/list}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										<tr th:if="${menuProfile.M0109 ne null and menuProfile.M0109.display}">
+											<td><a class="sub2" th:href="@{/system/businessprof}" th:text="${menuProfile.M0109.screenprompt}">Business Profile</a></td>
+											<td>
+												<a th:href="@{/system/businessprof}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
+										</span>
+										
 									<span th:if="${menuProfile.M0200 ne null and menuProfile.M0200.display}">
 										<tr>
 											<td colspan="2" th:text="${menuProfile.M0200.screenprompt}">Master Setup</td>
@@ -144,12 +175,12 @@
 												<a th:href="@{/purchasing/pogrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
-										<tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
+										<!-- <tr th:if="${isCentral and menuProfile.M0310 ne null and menuProfile.M0310.display}">
 											<td><a th:href="@{/procurement/grnreturn}">Purchase Return</a></td>
 											<td>
 												<a th:href="@{/procurement/grnreturn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
-										</tr>
+										</tr> -->
 									</span>
 
 
@@ -750,7 +781,7 @@
 											<td><a th:href="@{/posdashboard}"> POS Dashboard</a></td>	
 										</tr>	
 									</span>
-<<<<<<< Upstream, based on pappo-upstream/develop
+
 
 									<span th:if="${isBoshila or isDev}">
 										<tr>
@@ -776,11 +807,6 @@
 											</td>
 										</tr>
 									</span>
-=======
-	
-									
->>>>>>> 1b597c1 27-06-2021
-										
 									<span th:if="${isBoshila or isDev}">
 										<tr>
 											<td colspan="2">Sales And Invoice</td>

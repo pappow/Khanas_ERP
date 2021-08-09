@@ -169,8 +169,10 @@
 	</select>
 	
 	<select id="searchCustomer" resultType="Cacus">
-		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND (xgcus LIKE '%'|| 'Branch' ||'%') AND (xtype LIKE '%'|| #{xcus} ||'%') 
-		AND (xtrn LIKE '%'|| #{xcus} ||'%')  AND zid=#{zid} AND zactive='1'
+		SELECT * FROM Cacus WHERE (UPPER(xcus) LIKE '%' || #{xcus} || '%' OR UPPER(xorg) LIKE '%' || #{xcus} || '%' OR xphone LIKE '%' || #{xcus} || '%') AND (xgcus LIKE '%'|| 'Branch' ||'%') 
+		AND xtypetrn=#{xtypetrn}
+		AND zid=#{zid} 
+		AND zactive='1'
 	</select>
 	
 	<!-- <select id="searchCustomer" resultType="Cacus">

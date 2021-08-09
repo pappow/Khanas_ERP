@@ -141,7 +141,8 @@ public class DirectSalesController extends ASLAbstractController {
 		opdoheader.setXstatusord("Open");
 		opdoheader.setXtotamt(BigDecimal.ZERO);
 		opdoheader.setXwh("01");
-		opdoheader.setXpaymenttype("Other");
+		opdoheader.setXpaymenttype("Credit");
+		
 		return opdoheader;
 	}
 
@@ -153,6 +154,7 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		opdoHeader.setXtype("Direct");
+		
 
 		Vatait vatait = vataitService.findVataitByXvatait(opdoHeader.getXvatait());
 		if(opdoHeader.getXtotamt() == null) opdoHeader.setXtotamt(BigDecimal.ZERO);
@@ -178,6 +180,7 @@ public class DirectSalesController extends ASLAbstractController {
 		// If new
 		opdoHeader.setXstatusar("Open");
 		opdoHeader.setXstatusjv("Open");
+		opdoHeader.setXpaymenttype("Credit");
 
 		// if existing record
 		if (StringUtils.isNotBlank(opdoHeader.getXdornum())) {
@@ -329,8 +332,22 @@ public class DirectSalesController extends ASLAbstractController {
 
 	@GetMapping("/opdodetail/{xdornum}")
 	public String reloadOpdoDetailTable(@PathVariable String xdornum, Model model) {
-		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
+		List<Opdodetail> invoiceDetails = opdoService.findOpdoDetailByXdornum(xdornum);
+		model.addAttribute("opdoDetailsList", invoiceDetails);
 		model.addAttribute("opdoheader", opdoService.findOpdoHeaderByXdornum(xdornum));
+		
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
+			for(Opdodetail pd : invoiceDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
+
 		return "pages/salesninvoice/directsales/opdo::opdodetailtable";
 	}
 

@@ -237,7 +237,15 @@
 	</select>
 	
 	<select id="findAllPdmst" resultType="Pdmst">
-		SELECT * FROM pdmst WHERE xstaff=#{xstaff} AND zid=#{zid} 
+		SELECT 
+			pdmst.*,
+			cabank.xname as xbname
+		FROM 
+			pdmst 
+			left join cabank on cabank.xbank = pdmst.xbank and cabank.zid=pdmst.zid and cabank.zactive='1'
+		WHERE 
+			pdmst.xstaff=#{xstaff} 
+			AND pdmst.zid=#{zid} 
 		
 	</select>
 

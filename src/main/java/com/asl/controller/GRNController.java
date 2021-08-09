@@ -86,18 +86,6 @@ public class GRNController extends ASLAbstractController {
 
 		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
 		
-		List<PogrnDetail> details = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
-		BigDecimal totalQuantityReceived = BigDecimal.ZERO;
-		BigDecimal totalLineAmount = BigDecimal.ZERO;
-		if(details != null && !details.isEmpty()) {
-			for(PogrnDetail pd : details) {
-				totalQuantityReceived = totalQuantityReceived.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
-				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
-			}
-		}
-		model.addAttribute("totalQuantityReceived", totalQuantityReceived);
-		model.addAttribute("totalLineAmount", totalLineAmount);
-
 		return "pages/purchasing/pogrn/pogrn";
 	}
 
@@ -348,8 +336,20 @@ public class GRNController extends ASLAbstractController {
 
 	@GetMapping("/pogrndetail/{xgrnnum}")
 	public String reloadPogrnDetailTable(@PathVariable String xgrnnum, Model model) {
-		model.addAttribute("pogrnDetailsList", pogrnService.findPogrnDetailByXgrnnum(xgrnnum));
+		List<PogrnDetail> details = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
+		model.addAttribute("pogrnDetailsList", details);
 		model.addAttribute("pogrnheader", pogrnService.findPogrnHeaderByXgrnnum(xgrnnum));
+		
+		BigDecimal totalQuantityReceived = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(details != null && !details.isEmpty()) {
+			for(PogrnDetail pd : details) {
+				totalQuantityReceived = totalQuantityReceived.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantityReceived", totalQuantityReceived);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		return "pages/purchasing/pogrn/pogrn::pogrndetailtable";
 	}
 
