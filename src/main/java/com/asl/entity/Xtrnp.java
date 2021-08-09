@@ -41,8 +41,14 @@ public class Xtrnp extends AbstractModel<String> {
 
 	@Column(name = "zemail")
 	private String zemail;
-
+	
+	@Column(name = "xrel")
+	private String xrel;
+	
 	@Column(name = "xref")
 	private String xref;
+	
+	@Column(name = "xlong")
+	private String xlong;
 
 }

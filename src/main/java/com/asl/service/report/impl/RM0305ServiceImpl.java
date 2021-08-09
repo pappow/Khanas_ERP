@@ -41,10 +41,10 @@ public class RM0305ServiceImpl extends AbstractReportService {
 
 		List<FormFieldBuilder> fieldsList = new ArrayList<>();
 
-		List<Xcodes> statusList = xcodesService.findByXtype(CodeType.STATUS.getCode(), Boolean.TRUE);
 		List<DropdownOption> options = new ArrayList<>();
 		options.add(new DropdownOption("", "-- Select --"));
-		statusList.stream().forEach(x -> options.add(new DropdownOption(x.getXcode(), x.getXcode())));
+		options.add(new DropdownOption("Open", "Open"));
+		options.add(new DropdownOption("Confirmed", "Confirmed"));
 		
 		List<Xcodes> groupList = xcodesService.findByXtype(CodeType.ITEM_GROUP.getCode(), Boolean.TRUE);
 		List<DropdownOption> group = new ArrayList<>();
