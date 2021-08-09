@@ -93,6 +93,12 @@
 												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
 											</td>
 										</tr>
+										<tr th:if="${menuProfile.M0107 ne null and menuProfile.M0107.display}">
+											<td><a class="sub2" th:href="@{/mastersetup/xtrnp}">Related Transaction Codes</a></td>
+											<td>
+												<a th:href="@{/mastersetup/xtrn}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+											</td>
+										</tr>
 										<tr sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" th:if="${menuProfile.M0108 ne null and menuProfile.M0108.display}">
 											<td><a class="sub2" th:href="@{/system/list}" th:text="${menuProfile.M0108.screenprompt}">List Maintenance</a></td>
 											<td>

@@ -8,6 +8,7 @@ import com.asl.entity.Xtrnp;
 public interface XtrnpMapper {
 	public long save(Xtrnp xtrnp);
 	public long update(Xtrnp xtrnp);
+	public long delete(Xtrnp xtrnp);
 	
 	public Xtrnp findXtrnpByXvoucher(String xtypetrn, String xtrn, String xtyperel,  String zid);
 	public List<Xtrnp> getAllXtrnp(String zid);

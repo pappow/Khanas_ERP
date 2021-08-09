@@ -13,6 +13,8 @@
 			xtyperel,
 			zemail,
 			xref,
+			xrel,
+			xlong,
 			zid,
 			zauserid,
 			zuuserid,
@@ -28,7 +30,9 @@
 			#{xtrn, jdbcType=VARCHAR},
 			#{xtyperel, jdbcType=VARCHAR},
 			#{zemail, jdbcType=VARCHAR},
-			#{xref, jdbcType=VARCHAR},	
+			#{xref, jdbcType=VARCHAR},
+			#{xrel, jdbcType=VARCHAR},
+			#{xlong, jdbcType=VARCHAR},	
 			#{zid, jdbcType=VARCHAR},
 			#{zauserid, jdbcType=VARCHAR},
 			#{zuuserid, jdbcType=VARCHAR},
@@ -46,6 +50,8 @@
 		SET
 			zemail=#{zemail, jdbcType=VARCHAR},
 			xref=#{xref, jdbcType=VARCHAR},	
+			xrel=#{xrel, jdbcType=VARCHAR},
+			xlong=#{xlong, jdbcType=VARCHAR},
 			zuuserid=#{zuuserid, jdbcType=VARCHAR},
 			zaip=#{zaip, jdbcType=VARCHAR},
 			zuip=#{zuip, jdbcType=VARCHAR},
@@ -64,6 +70,11 @@
 	</select>
 	
 	<select id="getAllXtrnp" resultType="Xtrnp">
-		SELECT * FROM Xtrnp WHERE zid=#{zid} AND zactive='1'
+		SELECT * FROM Xtrnp WHERE zid=#{zid} AND zactive='1' order by zutime desc
 	</select>
+	
+	<delete id="delete" parameterType="Xtrnp">
+		DELETE FROM Xtrnp WHERE xtypetrn=#{xtypetrn} AND xtrn=#{xtrn} AND xtyperel=#{xtyperel} AND zid=#{zid} AND zactive='1'
+	</delete>
+	
 </mapper>
