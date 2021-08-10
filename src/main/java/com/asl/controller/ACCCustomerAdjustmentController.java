@@ -18,20 +18,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asl.entity.Arhed;
 import com.asl.enums.CodeType;
-import com.asl.enums.ProfileType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
-import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
 @RequestMapping("/cusadjustment")
 public class ACCCustomerAdjustmentController extends ASLAbstractController{
-	
+
 	@Autowired private ArhedService arhedService;
 	@Autowired private XcodesService xcodeService;	
-	@Autowired private VataitService vataitService;
 
 	@GetMapping
 	public String loadCusAdjustmentPage(Model model) {

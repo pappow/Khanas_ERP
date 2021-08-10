@@ -22,7 +22,6 @@ import com.asl.entity.Pocrndetail;
 import com.asl.entity.Pocrnheader;
 import com.asl.entity.PogrnDetail;
 import com.asl.entity.PogrnHeader;
-import com.asl.entity.PoordDetail;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;

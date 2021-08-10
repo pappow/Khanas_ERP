@@ -36,7 +36,6 @@ import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
-import com.asl.entity.PoordDetail;
 import com.asl.entity.Vatait;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;

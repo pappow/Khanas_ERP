@@ -138,6 +138,11 @@ public class ASLAbstractController {
 		return Arrays.asList(env.getActiveProfiles()).contains("dev");
 	}
 
+	@ModelAttribute("isPg")
+	public boolean isPg() {
+		return Arrays.asList(env.getActiveProfiles()).contains("pg");
+	}
+
 	@ModelAttribute("logoName")
 	protected String defaultLogoName() {
 		return appConfig.getDefaultLogoFileName();

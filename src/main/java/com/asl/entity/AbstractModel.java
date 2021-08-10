@@ -66,7 +66,7 @@ public abstract class AbstractModel<U> implements Serializable {
 	private Date zutime = new Date();
 
 	@Transient
-	private String copyId;
+	private String copyid;
 
 	@Transient
 	private String centralzid;

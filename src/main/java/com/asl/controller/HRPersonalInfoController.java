@@ -1,14 +1,7 @@
 package com.asl.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,13 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.asl.entity.LandComEvent;
-import com.asl.entity.LandDagDetails;
-import com.asl.entity.LandDocument;
 import com.asl.entity.Pdeducation;
 import com.asl.entity.Pdexperience;
 import com.asl.entity.Pdgradedt;
@@ -36,7 +24,6 @@ import com.asl.entity.Pdtransdt;
 import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
-import com.asl.service.LandComEventService;
 import com.asl.service.LandDocumentService;
 import com.asl.service.PdmstService;
 

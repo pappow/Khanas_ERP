@@ -3,8 +3,10 @@
 
 <mapper namespace="com.asl.mapper.UserAuditRecordMapper">
 
-	<insert id="save" 
-			parameterType="UserAuditRecord" >
+	<insert id="save" parameterType="UserAuditRecord" >
+		<selectKey keyProperty="recordId" resultType="Long" order="BEFORE">
+			SELECT COALESCE(Max(recordId), 0) + 1 FROM UserAuditRecord
+		</selectKey>
 		INSERT INTO UserAuditRecord
 		(
 			recordId,
@@ -18,7 +20,7 @@
 		)
 		VALUES
 		(
-			USER_AUDIT_RECORD_SEQ.nextval,
+			#{recordId},
 			#{userId, jdbcType=VARCHAR},
 			#{businessId, jdbcType=VARCHAR},
 			#{unAuthorizedAccessMessage, jdbcType=VARCHAR},

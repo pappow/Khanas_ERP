@@ -37,15 +37,10 @@ import com.asl.model.report.GrnReport;
 import com.asl.model.report.ItemDetails;
 import com.asl.service.CacusService;
 import com.asl.service.CaitemService;
-import com.asl.service.PocrnService;
 import com.asl.service.PogrnService;
-import com.asl.service.PoordService;
 import com.asl.service.XcodesService;
 import com.asl.service.XtrnService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 @RequestMapping("/procurements/pogrndirect")
 public class DirectPurchaseController extends ASLAbstractController {
@@ -53,15 +48,11 @@ public class DirectPurchaseController extends ASLAbstractController {
 	@Autowired
 	private PogrnService pogrnService;
 	@Autowired
-	private PocrnService pocrnService;
-	@Autowired
 	private XcodesService xcodeService;
 	@Autowired
 	private XtrnService xtrnService;
 	@Autowired
 	private CacusService cacusService;
-	@Autowired
-	private PoordService poordService;
 	
 	@Autowired private CaitemService caitemService;
 

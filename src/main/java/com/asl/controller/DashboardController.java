@@ -15,7 +15,7 @@ public class DashboardController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadDashboard(Model model) {
-		if(isKhanas()) {
+		if(isKhanas() || isPg()) {
 			return "pages/dashboard/dashboard-khanas";
 		} else if (isTCC()) {
 			return "pages/dashboard/dashboard-tcc";

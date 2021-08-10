@@ -21,7 +21,6 @@ import com.asl.enums.CodeType;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.service.ArhedService;
-import com.asl.service.VataitService;
 import com.asl.service.XcodesService;
 
 @Controller
@@ -29,8 +28,7 @@ import com.asl.service.XcodesService;
 public class ACCSupplierPaymentController extends ASLAbstractController{
 	
 	@Autowired private ArhedService arhedService;
-	@Autowired private XcodesService xcodeService;	
-	@Autowired private VataitService vataitService;
+	@Autowired private XcodesService xcodeService;
 
 	@GetMapping
 	public String loadMoneyReceiptPage(Model model) {
