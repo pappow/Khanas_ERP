@@ -44,7 +44,7 @@ public class SalesRequisitionController extends ASLAbstractController {
 
 	@GetMapping
 	public String loadSalesOrderPage(Model model) {
-
+		sessionManager.getLoggedInUserDetails().getXcus();
 		model.addAttribute("opreqheader", getDefaultOpordHeader());
 		model.addAttribute("allOpreqHeader", opreqService.getAllOpreqheader());
 		model.addAttribute("allOpenOpreqHeader", opreqService.getAllStatusOpenOpreqheader());
@@ -218,7 +218,7 @@ public class SalesRequisitionController extends ASLAbstractController {
 				return responseHelper.getResponse();
 			}
 			responseHelper.setReloadSectionIdWithUrl("opreqdetailtable", "/salesninvoice/opreq/opreqdetail/" + opreqdetail.getXdoreqnum());
-			//responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + opreqDetail.getXdoreqnum());
+			responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + opreqdetail.getXdoreqnum());
 			responseHelper.setSuccessStatusAndMessage("Sales Order item updated successfully");
 			return responseHelper.getResponse();
 		}
@@ -230,7 +230,7 @@ public class SalesRequisitionController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		responseHelper.setReloadSectionIdWithUrl("opreqdetailtable", "/salesninvoice/opreq/opreqdetail/" + opreqdetail.getXdoreqnum());
-		//responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + opreqDetail.getXdoreqnum());
+		responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + opreqdetail.getXdoreqnum());
 		responseHelper.setSuccessStatusAndMessage("Sales Order item saved successfully");
 		return responseHelper.getResponse();
 	}
@@ -238,20 +238,35 @@ public class SalesRequisitionController extends ASLAbstractController {
 	 
 	@GetMapping("/opreqdetail/{xdoreqnum}")
 	public String reloadOpordDetailTable(@PathVariable String xdoreqnum, Model model) {
-		model.addAttribute("opreqDetailsList", opreqService.findOpreqDetailByXdoreqnum(xdoreqnum));
-		return "pages/salesninvoice/reqorder/opreqdetailmodal::opreqdetailmodal";
+		Opreqheader data = opreqService.findOpreqHeaderByXdoreqnum(xdoreqnum);
+		if (data == null) return "redirect:/salesninvoice/opreq";
+		List<Opreqdetail> opreqDetails = opreqService.findOpreqDetailByXdoreqnum(xdoreqnum);
+		model.addAttribute("opreqheader", data);
+		model.addAttribute("opreqDetailsList", opreqDetails);
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(opreqDetails != null && !opreqDetails.isEmpty()) {
+			for(Opreqdetail pd : opreqDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
+		return "pages/salesninvoice/reqorder/reqorder::opreqdetailtable";
 	}
 
-//	@GetMapping("/opreqheaderform/{xdoreqnum}")
-//	public String reloadOpdoheaderform(@PathVariable String xdoreqnum, Model model) {
-//		Opreqheader data = opreqService.findOpreqHeaderByXdoreqnum(xdoreqnum);
-//		if (data == null) return "redirect:/salesninvoice/opord";
-//
-//		model.addAttribute("opreqheader", data);
-//		model.addAttribute("opreqprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_REQUESTION_ORDER.getCode(), Boolean.TRUE));
-//
-//		return "pages/salesninvoice/reqorder/reqorder::opreqheaderform";
-//	}
+	@GetMapping("/opreqheaderform/{xdoreqnum}")
+	public String reloadOpdoheaderform(@PathVariable String xdoreqnum, Model model) {
+		Opreqheader data = opreqService.findOpreqHeaderByXdoreqnum(xdoreqnum);
+		
+		if (data == null) return "redirect:/salesninvoice/opord";
+		model.addAttribute("opreqheader", data);
+		model.addAttribute("opreqprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_REQUESTION_ORDER.getCode(), Boolean.TRUE));
+
+		return "pages/salesninvoice/reqorder/reqorder::opreqheaderform";
+	}
 	
 	@PostMapping("{xdoreqnum}/opreqdetail/{xrow}/delete")
 	public @ResponseBody Map<String, Object> deleteOpreqDetail(@PathVariable String xdoreqnum, @PathVariable String xrow, Model model) {
@@ -269,7 +284,7 @@ public class SalesRequisitionController extends ASLAbstractController {
 
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("opreqdetailtable", "/salesninvoice/opreq/opreqdetail/" + xdoreqnum);
-		//responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + xdoreqnum);
+		responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + xdoreqnum);
 		return responseHelper.getResponse();
 	}
 	

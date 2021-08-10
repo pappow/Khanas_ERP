@@ -48,17 +48,18 @@
 							<div class="col-md-6">
 								<!-- Section list head -->
 								<section id="data-maintenance" style="margin-top: 30px;">
-									<div class="section-header sectionbartoggle"></div>
+								<div id="opreqheaderform" th:fragment="opreqheaderform">
+									<div class="section-header sectionbartoggle"></div>							
 									<div class="form-action-button">
 										<a th:href="@{/salesninvoice/opreq}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(opreqheader.xdoreqnum)}" th:href="@{/salesninvoice/opreq}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(opreqheader.xdoreqnum) and opreqheader.xstatus eq 'Open'}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(opreqheader.xdoreqnum) and opreqheader.xstatus eq 'Open'}" th:href="@{/salesninvoice/opreq/archive/} + ${opreqheader.xdoreqnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
-										<a th:if="${not #strings.isEmpty(opreqheader.xdoreqnum) and opreqheader.xstatus eq 'Open'}" th:href="@{/salesninvoice/opreq/confirm/} + ${opreqheader.xdoreqnum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-check-square"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(opreqheader.xdoreqnum) and opreqheader.xstatus eq 'Open'}" th:href="@{/salesninvoice/opreq/confirm/} + ${opreqheader.xdoreqnum}" class="btn btn-sm btn-success confirm-btn-link"><i class="fas fa-check-square"></i> Confirm</a>
+										<a th:if="${not #strings.isEmpty(opreqheader.xdoreqnum) and opreqheader.xstatus eq 'Confirmed'}" href="#" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-check-square"></i> Create SRQ</a>
 										<!--<a th:if="${not #strings.isEmpty(opreqheader.xordernum) and opreqheader.xstatus ne 'Open'}" th:href="@{/salesninvoice/opreq/createinvoice/} + ${opordheader.xordernum}" class="btn btn-sm btn-warning confirm-btn-link"><i class="fas fa-check-square"></i> Create Invoice</a>-->
 									</div>
 									<div class="section-body section-border">
-										<div id="opreqheaderform" th:fragment="opreqheaderform">
 											<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/opreq/save}" th:object="${opreqheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 												<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
 												<input th:if="${not #strings.isEmpty(opreqheader.xdoreqnum)}" type="hidden" class="form-control" th:field="*{xtrn}"/>
@@ -205,7 +206,7 @@
 												</thead>
 												<tbody th:with="df=${'E, dd-MMM-yyyy'}">
 													<tr th:each="opreq : ${allOpreqHeader}">
-														<td th:text="${opreq.xdoreqnum}"></td>
+														<td><a th:href="@{/salesninvoice/opreq/} + ${opreq.xdoreqnum}" th:text="${opreq.xdoreqnum}"></a></td>
 														<td th:text="${#dates.format(opreq.xdate, df)}"></td>
 														<td th:text="${opreq.xorg}"></td>
 														<td th:text="${opreq.xstatus}"></td>
@@ -232,10 +233,10 @@
 										<tr>
 											<th>Row</th>
 											<th>Item Code</th>
-											<th>Qty</th>
-											<th>Rate</th>
-											<th>Unit</th>
-											<th>Line Amount</th>
+											<th class="text-right">Qty</th>
+											<th class="text-right">Rate</th>
+											<th class="text-center">Unit</th>
+											<th class="text-right">Line Amount</th>
 											<th>Note</th>
 											<th th:if="${opreqheader.xstatus eq 'Open'}" data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/opreq/} + ${opreqheader.xdoreqnum} + '/opreqdetail/new/show', data-target-modal='opreqdetailmodal'"><i class="fas fa-plus"></i></button>
@@ -246,10 +247,10 @@
 										<tr th:each="d, n : ${opreqDetailsList}">
 											<td th:text="${d.xrow}"></td>
 											<td th:text="${d.xitem} +' - '+ ${d.xdesc}"></a></td>
-											<td th:text="${d.xqtyord}"></td>
-											<td th:text="${d.xrate}"></td>
-											<td th:text="${d.xunitpur}"></td>
-											<td th:text="${d.xlineamt}"></td>
+											<td class="text-right" th:text="${d.xqtyord}"></td>
+											<td class="text-right" th:text="${d.xrate}"></td>
+											<td class="text-center" th:text="${d.xunitpur}"></td>
+											<td class="text-right" th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xnote}"></td>
 											<td th:if="${opreqheader.xstatus eq 'Open'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/opreq/} + ${opreqheader.xdoreqnum} + '/opreqdetail/' + ${d.xrow} + '/show', data-target-modal='opreqdetailmodal'"><i class="fas fa-edit"></i></button>
