@@ -56,18 +56,19 @@
 										<a th:href="@{/system/xusers}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(xusers.zemail)}" th:href="@{/system/xusers}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${(not #strings.isEmpty(xusers.zemail) and xusers.systemadmin ne true) OR (not #strings.isEmpty(xusers.zemail) and systemadminuser)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/system/xusers/save}" th:object="${xusers}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
+											<input type="hidden" th:field="*{systemadmin}"/>
+											<input type="hidden" name="newflag" id="newflag" th:value="${#strings.isEmpty(xusers.zemail) ? 'Y' : 'N'}"/>
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
 														<label class="control-label col-md-4" for="zemail">User ID</label>
 														<div class="col-md-6">
-															<input th:if="${not #strings.isEmpty(xusers.zemail)}" type="hidden" th:field="*{zemail}"/>
-															<input type="hidden" name="newflag" id="newflag" th:value="${#strings.isEmpty(xusers.zemail) ? 'Y' : 'N'}"/>
-															<input type="text" class="form-control" th:field="*{zemail}" required="required" th:disabled="${not #strings.isEmpty(xusers.zemail)}">
+															<input type="hidden" th:field="*{zemail}" th:if="${not #strings.isEmpty(xusers.zemail)}"/>
+															<input type="text" class="form-control" th:field="*{zemail}" required="required" th:if="${#strings.isEmpty(xusers.zemail)}">
+															<input type="text" class="form-control" th:value="*{zemail}" th:if="${not #strings.isEmpty(xusers.zemail)}" disabled="disabled">
 														</div>
 													</div>
 
