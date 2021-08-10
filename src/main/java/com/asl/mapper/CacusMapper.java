@@ -39,7 +39,7 @@ public interface CacusMapper {
 
 	public long deleteCacus(String xcus, String zid);
 	
-	public List<Cacus> searchCustomer(String xtype, String xcus, String zid);
+	public List<Cacus> searchCustomer(String xtypetrn, String xcus, String zid);
 
 	public List<Cacus> searchParty(String xcus, String zid);
 }

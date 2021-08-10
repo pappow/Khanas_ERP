@@ -113,6 +113,7 @@ public class DirectPurchaseController extends ASLAbstractController {
 		pogrn.setXdate(new Date());
 		pogrn.setXstatusgrn("Open");
 		pogrn.setXtotamt(BigDecimal.ZERO);
+		pogrn.setXvoucher("");
 		return pogrn;
 	}
 
@@ -129,7 +130,7 @@ public class DirectPurchaseController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		
-		pogrnHeader.setXtype("Direct");
+		pogrnHeader.setXtype("Cash");
 
 		// if existing record
 		PogrnHeader existPogrnHeader = pogrnService.findPogrnHeaderByXgrnnum(pogrnHeader.getXgrnnum());

@@ -130,10 +130,11 @@
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xpaymenttype">Payment Type</label>
 															<div class="col-md-8">
-																<select class="form-control" th:field="*{xpaymenttype}">
+																<input type="text" class="form-control" th:value="Credit" disabled="disabled">
+																<!-- <select class="form-control" th:field="*{xpaymenttype}">
 																	<option value="Cash">Cash</option>
 																	<option value="Other">Other</option>
-																</select>
+																</select> -->
 															</div>
 														</div>
 
@@ -146,6 +147,14 @@
 																</select>
 															</div>
 														</div> -->
+
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xstatusord">DO Status</label>
+															<div class="col-md-8">
+																<input type="hidden" class="form-control" th:field="*{xstatusord}">
+																<input type="text" class="form-control" th:value="*{xstatusord}" disabled="disabled">
+															</div>
+														</div>
 
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xref">Ref</label>
@@ -252,17 +261,11 @@
 															<label class="control-label col-md-4" for="xtotamt">Total Amount</label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xtotamt}">
-																<input type="text" class="form-control xtotamt" th:value="*{xtotamt}" disabled="disabled">
+																<input type="text" class="form-control " th:value="*{xtotamt}" disabled="disabled">
 															</div>
 														</div>
 
-														<div class="form-group">
-															<label class="control-label col-md-4" for="xstatusord">DO Status</label>
-															<div class="col-md-8">
-																<input type="hidden" class="form-control" th:field="*{xstatusord}">
-																<input type="text" class="form-control" th:value="*{xstatusord}" disabled="disabled">
-															</div>
-														</div>
+														
 
 														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xvatait">Vat Tax ID</label>
@@ -273,13 +276,13 @@
 															</div>
 														</div> -->
 
-														<!-- <div class="form-group">
+														<div class="form-group">
 															<label class="control-label col-md-4" for="xvatamt">Vat Amount</label>
 															<div class="col-md-6">
 																<input type="hidden" class="form-control" th:field="*{xvatamt}"/>
-																<input type="text" class="form-control" th:value="*{xvatamt}" disabled="disabled">
+																<input type="text" class="form-control xvatamt" th:value="*{xvatamt}" disabled="disabled">
 															</div>
-														</div> -->
+														</div>
 
 														<!-- <div class="form-group">
 															<label class="control-label col-md-4" for="xait">Tax Amount</label>
@@ -289,21 +292,21 @@
 															</div>
 														</div> -->
 
-														<!-- <div class="form-group">
-															<label class="control-label col-md-4" for="xdiscamt">Discount</label>
+														<div class="form-group">
+															<label class="control-label col-md-4" for="xdiscamt">Discount Amount</label>
 															<div class="col-md-6">
 																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xdiscamt}" min="0">
 															</div>
 														</div>
 
 														<div class="form-group">
-															<label class="control-label col-md-4" for="xgrandtot">Total Amount</label>
+															<label class="control-label col-md-4" for="xgrandtot">Grand Amount</label>
 															<div class="col-md-6">
 																<input type="text" class="form-control xgrandtot" th:field="*{xgrandtot}" disabled="disabled">
 															</div>
-														</div> -->
+														</div> 
 
-														<!-- <div class="form-group">
+														<div class="form-group">
 															<label class="control-label col-md-4" for="xpaid">Paid Amount</label>
 															<div class="col-md-8">
 																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xpaid}">
@@ -315,7 +318,7 @@
 															<div class="col-md-8">
 																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xchange}">
 															</div>
-														</div> -->
+														</div>
 
 														
 
@@ -424,7 +427,7 @@
 	<div class="footer-section" th:include="commons :: footer-section"></div>
 </body>
 
-<script>
+	 <script>
 		$(document).ready(function(){
 			$(".vatait-select").on("change", function(){
 				var vataitId = $(".vatait-select").val()
@@ -439,11 +442,15 @@
 						var aitPercent = parseFloat(data.xait);
 						var vatAmount = (parseFloat($("input[name='xtotamt']").val()) * vatPercent)/100;
 						var aitAmount = (parseFloat($("input[name='xtotamt']").val()) * aitPercent)/100;
+						var xgrandtot = parseFloat($("input[name='xgrandtot']").val());
 						
+						var net1 = (xtotamt+xvatamt)-xdiscamt;
 						$('input[name="xvatamt"]').val(vatAmount);
 						$('input.xvatamt-show').val(vatAmount);
 						$('input[name="xaitamt"]').val(aitAmount);
 						$('input.xaitamt-show').val(aitAmount);
+						
+						$('input[name="xgrandtot"]').val(net1);
 					},
 					error : function(jqXHR, status, errorThrown){
 						showMessage(status, "Something went wrong .... ");
@@ -455,4 +462,34 @@
 			
 		});
 	</script>
+	
+	<!-- <script>
+			$(document).ready(function(){
+				$("input[name='xtotamt'], input[name='xvatamt'],  input[name='xdiscamt'], input[name='xgrandtot'], input[name='xpaid'], input[name='xchange'], input[name='xqtygrn'], input[name='xrate'], input[name='xvatrate'] ").off('blur').on('blur', function(e){
+					if($(this).val() == '' || isNaN($(this).val())){
+						$(this).val(0);
+					}
+					calculate();
+				});
+
+				function calculate(){
+					var xqtygrn = parseFloat($("input[name='xqtygrn']").val());
+					var xrate = parseFloat($("input[name='xrate']").val());
+					var xvatrate = parseFloat($("input[name='xvatrate']").val());
+					var xtotamt = parseFloat($("input[name='xtotamt']").val());
+					var xvatamt =parseFloat($("input[name='xvatamt']").val());
+					var xdiscamt =parseFloat($("input[name='xdiscamt']").val());
+					var xgrandtot =parseFloat($("input[name='xgrandtot']").val());
+					var xpaid =parseFloat($("input[name='xpaid']").val());
+					var xchange = parseFloat($("input[name='xchange']").val());
+					var net1 = xqtygrn * xrate;
+					var net2 = xtotamt - xdiscamt;
+					$('input[name="xtotamt"]').val(net);
+					$('input[name="xgrandtot"]').val(net2);
+					
+				}
+
+				calculate();
+			});
+		</script> -->
 </html>

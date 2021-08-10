@@ -156,7 +156,7 @@
 		FROM 
 			arhed 
 			left join cacus on cacus.xcus = arhed.xcus and cacus.zid=arhed.zid and cacus.zactive='1'
-			left join cabank on cabank.xbank = arhed.xbank and cabank.zid=arhed.zid and cacus.zactive='1'
+			left join cabank on cabank.xbank = arhed.xbank and cabank.zid=arhed.zid and cabank.zactive='1'
 			left join pdmst on pdmst.xstaff = arhed.xstaff and pdmst.zid=arhed.zid and pdmst.zactive='1'
 		WHERE 
 			arhed.xvoucher=#{xvoucher} 
