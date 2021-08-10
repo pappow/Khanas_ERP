@@ -67,5 +67,6 @@
 		<mapper resource="mappers/AcMapper.xml"/>
 		<mapper resource="mappers/AcsubviewMapper.xml"/>
 		<mapper resource="mappers/AcsubMapper.xml"/>
+		<mapper resource="mappers/OpreqMapper.xml"/>
 	</mappers>
 </configuration>

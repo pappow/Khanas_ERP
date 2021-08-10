@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,4 +67,7 @@ public class Opreqdetail extends AbstractModel<String> {
 
 	@Column(name = "xgitem")
 	private String xgitem;
+	
+	@Transient
+	private String xdesc;
 }

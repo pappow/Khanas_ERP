@@ -1,5 +1,6 @@
 package com.asl.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -57,8 +58,9 @@ public class ImtrnServiceImpl extends AbstractGenericService implements ImtrnSer
 	}
 	
 	@Override
-	public List<Imtrn> getAllImtrnlist() {
-		return imtrnMapper.getAllImtrnlist(sessionManager.getBusinessId());
+	public List<Imtrn> getAllImtrnlist(String xtype) {
+		if(StringUtils.isBlank(xtype)) return Collections.emptyList();
+		return imtrnMapper.getAllImtrnlist(xtype,sessionManager.getBusinessId());
 	}
 
 	@Override
