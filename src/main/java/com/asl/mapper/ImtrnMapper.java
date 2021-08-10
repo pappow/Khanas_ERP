@@ -17,7 +17,7 @@ public interface ImtrnMapper {
 
 	public List<Imtrn> getAllImtrn(String zid);
 	
-	public List<Imtrn> getAllImtrnlist(String zid);
+	public List<Imtrn> getAllImtrnlist(String xtype,String zid);
 
 	public long deleteByXimtrnnum(String ximtrnnum, String zid);
 }

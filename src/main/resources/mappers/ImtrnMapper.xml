@@ -50,7 +50,7 @@
 			#{xrate, jdbcType=DECIMAL},
 			#{xref, jdbcType=VARCHAR},
 			#{xval, jdbcType=DECIMAL},
-			#{xdocnum, jdbcType=VARCHAR},
+			#{ximtrnnum},
 			#{xstatus, jdbcType=VARCHAR},
 			#{xdocrow, jdbcType=INTEGER},
 			#{xstatusjv, jdbcType=VARCHAR},
@@ -127,14 +127,19 @@
 	
 	<select id="getAllImtrnlist" resultType="Imtrn">
 		SELECT 
+			distinct
 			imtrn.*,
-			Func_GetItemName(xitem, zid) as itemdes
-		FROM 
-			imtrn 
+			caitem.xitem||'-'||caitem.xdesc as itemdes,
+			imtrn.xwh||'-'||x.xdescdet as xdescdet
+		FROM
+			imtrn
+			left join caitem on caitem.xitem = imtrn.xitem and caitem.zid=imtrn.zid and caitem.zactive='1'
+			left join xcodes x ON x.xcode = imtrn.xwh AND x.zid = imtrn.zid AND x.zactive='1'
 		WHERE 
-			zid=#{zid} 
-			AND zactive='1'
-			AND ximtrnnum like 'DMIS%'
+			imtrn.xtype=#{xtype}
+            and imtrn.ximtrnnum like 'DMIS%'
+			AND imtrn.zid=#{zid}
+			order by imtrn.ximtrnnum desc
 	</select>
 
 </mapper>

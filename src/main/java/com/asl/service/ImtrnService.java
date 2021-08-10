@@ -19,7 +19,7 @@ public interface ImtrnService {
 
 	public List<Imtrn> getAllImtrn();
 	
-	public List<Imtrn> getAllImtrnlist();
+	public List<Imtrn> getAllImtrnlist(String xtype);
 
 	public long deleteByXimtrnnum(String ximtrnnum);
 }

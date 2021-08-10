@@ -303,7 +303,14 @@
 												</td>
 											</tr>
 											</span>
-
+											
+											<tr th:if="${menuProfile.M0404 ne null and menuProfile.M0404.display}">
+												<td><a th:href="@{/salesninvoice/opreq}">Sales Requisition Order</a></td>
+												<td>
+													<a th:href="@{/salesninvoice/opreq}" class="btn btn-sm btn-default pull-right"> <i class="fas fa-chevron-right"></i></a>
+												</td>
+											</tr>
+											
 											<tr th:if="${menuProfile.M0404 ne null and menuProfile.M0404.display}">
 												<td><a th:href="@{/salesninvoice/opord}" th:text="${menuProfile.M0404.screenprompt}">Sales Order</a></td>
 												<td>

@@ -61,8 +61,8 @@
 										<h1>Damage/Issue Entry</h1>
 									</div>
 									<div class="form-action-button">
-										<a th:href="@{/inventory/issueentry}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> New</a>
-										<a th:if="${#strings.isEmpty(imtrn.ximtrnnum)}" th:href="@{/inventory/issueentry}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Add</a>
+										<a th:href="@{/inventory/issueentry}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
+										<a th:if="${#strings.isEmpty(imtrn.ximtrnnum)}" th:href="@{/inventory/issueentry}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == true}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
 										<a th:if="${not #strings.isEmpty(imtrn.ximtrnnum) and imtrn.zactive == true}" th:href="@{/inventory/issueentry/archive/} + ${imtrn.ximtrnnum}" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
@@ -107,7 +107,7 @@
 														<label class="control-label col-md-4" for="xwh">Warehouse : </label>
 														<div class="col-md-8">
 															<select class="form-control" th:field="*{xwh}">
-																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}+'-'+${wh.xdescdet}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
+																<option th:each="wh : ${warehouses}" th:value="${wh.xcode}" th:text="${wh.xcode}+'-'+${wh.xdescdet}"></option>
 															</select>
 														</div>
 													</div>
@@ -152,7 +152,8 @@
 													<div class="form-group">
 														<label class="control-label col-md-4" for="xrate">Rate : </label>
 														<div class="col-md-5">
-															<input type="text" class="form-control" onblur="multiply()" id="cost" th:field="*{xrate}" min="1">
+															<input type="hidden" class="form-control" id="cost" th:field="*{xrate}"/>
+															<input type="text" class="form-control" onblur="multiply()" id="cost" th:field="*{xrate}" disabled="disabled"/>
 														</div>
 													</div>
 													<div class="form-group">
@@ -198,7 +199,6 @@
 													<th>Item</th>
 													<th>Warehouse</th>
 													<th>Qty</th>
-													<th>Rate</th>
 													<th>Unit</th>
 												</tr>
 											</thead>
@@ -211,9 +211,8 @@
 													<td>
 														<a th:href="@{/mastersetup/caitem/} + ${imtrn.xitem}" th:text="${imtrn.itemdes}" target="_blank"></a>
 													</td>
-													<td th:text="${imtrn.xwh}"></td>
+													<td th:text="${imtrn.xdescdet}"></td>
 													<td th:text="${imtrn.xqty}"></td>
-													<td th:text="${imtrn.xrate}"></td>
 													<td th:text="${imtrn.xunit}"></td>
 												</tr>
 											</tbody>

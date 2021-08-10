@@ -57,7 +57,7 @@
 										<a th:href="@{/mastersetup/xtrnp}" class="btn btn-sm btn-default"><i class="fas fa-redo-alt"></i> Clear</a>
 										<a th:if="${#strings.isEmpty(xtrnp.xtrn)}" class="btn btn-sm btn-success confirm-btn"><i class="fas fa-save"></i> Save</a>
 										<a th:if="${not #strings.isEmpty(xtrnp.xtrn)}" href="#" class="btn btn-sm btn-success update-btn"><i class="fas fa-edit"></i> Update</a>
-										<a th:if="${not #strings.isEmpty(xtrnp.xtrn)}" th:href="@{/mastersetup/xtrnp/} + ${xtrnp.xtypetrn} + '/' + ${xtrnp.xtrn} + '/' + ${xtrnp.xtyperel} + '/delete'" class="btn btn-sm btn-danger update-btn"><i class="fas fa-trash-alt"></i> Delete</a>
+										<a th:if="${not #strings.isEmpty(xtrnp.xtrn)}" th:href="@{/mastersetup/xtrnp/} + ${xtrnp.xtypetrn} + '/' + ${xtrnp.xtrn} + '/' + ${xtrnp.xtyperel} + '/delete'" class="btn btn-sm btn-danger archive-btn-link"><i class="fas fa-trash-alt"></i> Delete</a>
 									</div>
 									<div class="section-body section-border">
 										<form id="mainform" class="form-horizontal" th:action="@{/mastersetup/xtrnp/save}" th:object="${xtrnp}" method="post">

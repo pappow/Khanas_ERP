@@ -96,6 +96,9 @@ public class Imtrn extends AbstractModel<String> {
 
 	@Transient
 	private String itemdes;
+	
+	@Transient
+	private String xdescdet;
 
 	@Column(name = "xvalpost")
 	private BigDecimal xvalpost;

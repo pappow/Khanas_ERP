@@ -86,6 +86,9 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "invoicecreated")
 	private boolean invoicecreated;
+	
+	@Column(name = "xreqnum")
+	private String xreqnum;
 
 	// Following variables are added for Convention Management
 
@@ -120,6 +123,7 @@ public class Opordheader extends AbstractModel<String> {
 
 	@Column(name = "xadvamt")
 	private BigDecimal xadvamt;
+	
 
 	// Following variables are added for Convention Management (Room Booking)
 

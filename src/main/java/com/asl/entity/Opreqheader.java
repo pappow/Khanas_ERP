@@ -1,5 +1,6 @@
 package com.asl.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,11 +52,11 @@ public class Opreqheader extends AbstractModel<String> {
 	@Column(name = "xwh")
 	private String xwh;
 
-	@Column(name = "xqotnum")
-	private String xqotnum;
+	@Column(name = "xstaff")
+	private String xstaff;
 
-	@Column(name = "xtornum")
-	private String xtornum;
+	@Column(name = "xamount")
+	private BigDecimal xamount;
 
 	@Column(name = "xtype")
 	private String xtype;
@@ -68,14 +70,11 @@ public class Opreqheader extends AbstractModel<String> {
 	@Column(name = "xstatus")
 	private String xstatus;
 
-	@Column(name = "xtwh")
-	private String xtwh;
-
 	@Column(name = "xcus")
 	private String xcus;
 
-	@Column(name = "xfwh")
-	private String xfwh;
+	@Column(name = "xref")
+	private String xref;
 
 	@Column(name = "xsignreject")
 	private String xsignreject;
@@ -99,4 +98,10 @@ public class Opreqheader extends AbstractModel<String> {
 	@Column(name = "xapreparertime")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date xapreparertime;
+	
+	@Transient
+	private String xorg;
+	
+	@Transient
+	private String xdesc;
 }

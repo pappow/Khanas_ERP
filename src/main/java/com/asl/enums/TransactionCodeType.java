@@ -69,6 +69,7 @@ public enum TransactionCodeType {
 	SALES_ORDER("SO Number", "SO--", TransactionCodes.SALES_ORDER),
 	SALES_AND_INVOICE_NUMBER("DO Number", "DO--", null),
 	SALES_RETURN("CRN Number", "SR--", null),
+	SALES_REQUESTION_ORDER("Sales Requisition Number", "SRQ-", TransactionCodes.SALES_REQUESTION_ORDER),
 
 	TRANSACTION_TRANSFER("Transfer Transaction", "PROD", null),
 

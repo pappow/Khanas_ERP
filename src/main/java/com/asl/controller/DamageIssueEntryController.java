@@ -38,7 +38,7 @@ public class DamageIssueEntryController extends ASLAbstractController {
 	@GetMapping
 	public String loadStockOpeningEntryPage(Model model) {
 		model.addAttribute("imtrn", getDefaultImtrn());
-		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist());
+		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist(TransactionCodeType.INVENTORY_TRANSACTION3.getCode()));
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION3.getCode(),TransactionCodeType.INVENTORY_TRANSACTION3.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/inventory/issueentry/imtrn";
@@ -50,7 +50,7 @@ public class DamageIssueEntryController extends ASLAbstractController {
 		if(data == null) data = getDefaultImtrn();
 
 		model.addAttribute("imtrn", data);
-		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist());
+		model.addAttribute("allImtrnlist", imtrnService.getAllImtrnlist(TransactionCodeType.INVENTORY_TRANSACTION3.getCode()));
 		model.addAttribute("imtrnprefix", xtrnService.findByXtypetrnAndXtrn(TransactionCodeType.INVENTORY_TRANSACTION3.getCode(),TransactionCodeType.INVENTORY_TRANSACTION3.getdefaultCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodeService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		return "pages/inventory/issueentry/imtrn";
@@ -90,23 +90,12 @@ public class DamageIssueEntryController extends ASLAbstractController {
 			responseHelper.setErrorStatusAndMessage("Please insert Greater than 0 item quantity");
 			return responseHelper.getResponse();
 		}
-		
-
-		if(imtrn.getXrate().compareTo(BigDecimal.ZERO) == -1) {
-			responseHelper.setErrorStatusAndMessage("Please insert valid rate");
-			return responseHelper.getResponse();
-		}
-		
-
-		if(imtrn.getXrate().compareTo(BigDecimal.ZERO) == 0) {
-			responseHelper.setErrorStatusAndMessage("Please insert Greater than 0 item rate");
-			return responseHelper.getResponse();
-		}
-
+		 
 		// if existing record
 		Imtrn existImtrn = imtrnService.findImtrnByXimtrnnum(imtrn.getXimtrnnum());
 		if(existImtrn != null) {
-			BeanUtils.copyProperties(imtrn, existImtrn, "xtype","xtrn","xitem","xsign");
+			BeanUtils.copyProperties(imtrn, existImtrn, "xtype","xtrn","xitem","xsign", "xdocnum");
+			
 			long count = imtrnService.update(existImtrn);
 			if(count == 0) {
 				responseHelper.setStatus(ResponseStatus.ERROR);
@@ -119,6 +108,9 @@ public class DamageIssueEntryController extends ASLAbstractController {
 
 		// If new
 		imtrn.setXsign(-1);
+		imtrn.setXrate(BigDecimal.ZERO);
+		imtrn.setXval(BigDecimal.ZERO);
+		
 		long count = imtrnService.save(imtrn);
 		if(count == 0) {
 			responseHelper.setStatus(ResponseStatus.ERROR);

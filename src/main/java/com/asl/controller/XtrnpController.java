@@ -112,7 +112,7 @@ public class XtrnpController extends ASLAbstractController {
 		}
 
 		responseHelper.setSuccessStatusAndMessage("Related Transaction deleted successfully");
-		responseHelper.setRedirectUrl("/mastersetup/xtrnp/" + xtypetrn + "/" + xtrn + "/" + xtyperel);
+		responseHelper.setRedirectUrl("/mastersetup/xtrnp/");
 		return responseHelper.getResponse();
 	}
 
