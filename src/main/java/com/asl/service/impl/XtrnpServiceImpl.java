@@ -51,7 +51,7 @@ public class XtrnpServiceImpl extends AbstractGenericService implements XtrnpSer
 		return xtrnpMapper.findXtrnpByXvoucher(xtypetrn, xtrn,xtyperel, sessionManager.getBusinessId());
 	}
 
-
+	@Transactional
 	@Override
 	public long delete(Xtrnp xtrnp) {
 		if(StringUtils.isBlank(xtrnp.getXtypetrn()) || StringUtils.isBlank(xtrnp.getXtrn()) || StringUtils.isBlank(xtrnp.getXtyperel())) return 0;

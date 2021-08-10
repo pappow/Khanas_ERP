@@ -291,5 +291,14 @@
 			XROW DESC
 	</select>
 	
-
+	<update id="updateOpreqHeaderTotalAmtAndGrandTotalAmt">
+		UPDATE 
+			opreqheader oph
+		SET
+			oph.xamount=NVL(Func_GetTotalAmtOpreqDetails(oph.xdoreqnum, oph.zid), 0)
+		WHERE
+			oph.xdoreqnum=#{xdoreqnum}
+			AND oph.zid=#{zid} 
+	</update>
+	
 </mapper>

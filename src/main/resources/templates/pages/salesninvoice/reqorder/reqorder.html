@@ -113,7 +113,7 @@
 															<label class="control-label col-md-4" for="xcus">Customer: </label>
 															<div class="col-md-8">
 																<input type="hidden" th:field="*{xcus}"/>
-																<input type="text" class="form-control" th:value="${opreqheader.xcus}" disabled="disabled">
+																<input type="text" class="form-control" th:value="${#strings.isEmpty(opreqheader.xcus) ? '' : opreqheader.xcus + ' - ' + opreqheader.xorg}" disabled="disabled">
 															</div>
 														</div>
 
@@ -237,7 +237,7 @@
 											<th>Unit</th>
 											<th>Line Amount</th>
 											<th>Note</th>
-											<th th:if="${opreqheader.xstatusreq eq 'Open'}" data-nosort="Y" style="text-align: right;">
+											<th th:if="${opreqheader.xstatus eq 'Open'}" data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/opreq/} + ${opreqheader.xdoreqnum} + '/opreqdetail/new/show', data-target-modal='opreqdetailmodal'"><i class="fas fa-plus"></i></button>
 											</th>
 										</tr>
@@ -251,19 +251,19 @@
 											<td th:text="${d.xunitpur}"></td>
 											<td th:text="${d.xlineamt}"></td>
 											<td th:text="${d.xnote}"></td>
-											<td th:if="${opreqheader.xstatusreq eq 'Open'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
+											<td th:if="${opreqheader.xstatus eq 'Open'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/opreq/} + ${opreqheader.xdoreqnum} + '/opreqdetail/' + ${d.xrow} + '/show', data-target-modal='opreqdetailmodal'"><i class="fas fa-edit"></i></button>
 												<button type="button" class="btn btn-danger btn-delete editmode" th:attr="data-url=@{/salesninvoice/opreq/} + ${opreqheader.xdoreqnum} + '/opreqdetail/' + ${d.xrow} + '/delete'"><i class="fas fa-trash"></i></button>
 											</td>
 										</tr>
 									</tbody>
-								<!--	<tfoot>
+									<tfoot>
 										<th colspan="2" class="text-right">Total</th>
 										<th class="text-right" th:text="${totalQuantity}">0</th>
 										<th colspan="2"></th>
 										<th class="text-right" th:text="${totalLineAmount}">0</th>
 										
-									</tfoot>-->
+									</tfoot>
 								</table>
 							</div>
 						</section>

@@ -37,5 +37,6 @@ public interface OpreqService {
 		
 		public Opreqdetail findOpreqdetailByXdoreqnumAndXitem(String xdoreqnum, String xitem);
 		
+		public long updateOpreqHeaderTotalAmtAndGrandTotalAmt(String xdoreqnum);
 		
 }

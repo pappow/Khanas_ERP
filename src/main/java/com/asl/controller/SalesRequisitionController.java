@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import com.asl.entity.Caitem;
+import com.asl.entity.Oporddetail;
+import com.asl.entity.Opordheader;
 import com.asl.entity.Opreqdetail;
 import com.asl.entity.Opreqheader;
 import com.asl.enums.ResponseStatus;
@@ -200,9 +202,10 @@ public class SalesRequisitionController extends ASLAbstractController {
 		}
 
 		// modify line amount
-		opreqdetail.setXdesc(caitem.getXdesc());
+		opreqdetail.setXitemdesc(caitem.getXdesc());
 		opreqdetail.setXcatitem(caitem.getXcatitem());
 		opreqdetail.setXgitem(caitem.getXgitem());
+		
 		opreqdetail.setXlineamt(opreqdetail.getXqtyord().multiply(opreqdetail.getXrate()).setScale(2, RoundingMode.DOWN));
 
 		// if existing
@@ -267,6 +270,39 @@ public class SalesRequisitionController extends ASLAbstractController {
 		responseHelper.setSuccessStatusAndMessage("Deleted successfully");
 		responseHelper.setReloadSectionIdWithUrl("opreqdetailtable", "/salesninvoice/opreq/opreqdetail/" + xdoreqnum);
 		//responseHelper.setSecondReloadSectionIdWithUrl("opreqheaderform", "/salesninvoice/opreq/opreqheaderform/" + xdoreqnum);
+		return responseHelper.getResponse();
+	}
+	
+	@PostMapping("/confirm/{xdoreqnum}")
+	public @ResponseBody Map<String, Object> confirm(@PathVariable String xdoreqnum){
+
+		Opreqheader oh = opreqService.findOpreqHeaderByXdoreqnum(xdoreqnum);
+		if(oh == null) {
+			responseHelper.setErrorStatusAndMessage("Sales Requisition order " + xdoreqnum + " not found");
+			return responseHelper.getResponse();
+		}
+
+		if(!"Open".equalsIgnoreCase(oh.getXstatus())) {
+			responseHelper.setErrorStatusAndMessage("Sales Requisition order " + xdoreqnum + " is not Open");
+			return responseHelper.getResponse();
+		}
+
+		// check sales order has details
+		List<Opreqdetail> details = opreqService.findOpreqDetailByXdoreqnum(xdoreqnum);
+		if(details == null || details.isEmpty()) {
+			responseHelper.setErrorStatusAndMessage("Sales Requisition order details is empty");
+			return responseHelper.getResponse();
+		}
+
+		oh.setXstatus("Confirmed");
+		long count = opreqService.updateOpreqheader(oh);
+		if(count == 0) {
+			responseHelper.setErrorStatusAndMessage("Can't Confirmed sales Requisition order " + xdoreqnum);
+			return responseHelper.getResponse();
+		}
+
+		responseHelper.setRedirectUrl("/salesninvoice/opreq/" + xdoreqnum);
+		responseHelper.setSuccessStatusAndMessage("Order Confirmed successfully");
 		return responseHelper.getResponse();
 	}
 

@@ -39,4 +39,6 @@ public interface OpreqMapper {
 	
 	public Opreqdetail findOpreqdetailByXdoreqnumAndXitem(String xdoreqnum, String xitem, String zid);
 	
+	public long updateOpreqHeaderTotalAmtAndGrandTotalAmt(String xdoreqnum, String zid);
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.asl.entity.Oporddetail;
 import com.asl.entity.Opordheader;
@@ -24,6 +25,7 @@ public class OpreqServiceImpl extends AbstractGenericService implements OpreqSer
 
 	@Autowired private OpreqMapper opreqMapper;
 
+	@Transactional
 	@Override
 	public long saveOpreqheader(Opreqheader opreqheader) {
 		if(opreqheader == null) return 0;
@@ -33,15 +35,18 @@ public class OpreqServiceImpl extends AbstractGenericService implements OpreqSer
 		return opreqMapper.saveOpreqheader(opreqheader);
 	}
 
+	@Transactional
 	@Override
 	public long updateOpreqheader(Opreqheader opreqheader) {
 		if(opreqheader == null) return 0;
 		opreqheader.setZid(sessionManager.getBusinessId());
 		opreqheader.setZuuserid(getAuditUser());
 		long count = opreqMapper.updateOpreqheader(opreqheader);
+		updateOpreqHeaderTotalAmtAndGrandTotalAmt(opreqheader.getXdoreqnum());
 		return count;
 	}
 
+	@Transactional
 	@Override
 	public long deleteOpreqheader(String xdoreqnum) {
 		if(StringUtils.isBlank(xdoreqnum)) return 0;
@@ -64,30 +69,43 @@ public class OpreqServiceImpl extends AbstractGenericService implements OpreqSer
 		return opreqMapper.getAllStatusOpenOpreqheader(sessionManager.getBusinessId());
 	}
 	
+	@Transactional
 	@Override
 	public long saveOpreqdetail(Opreqdetail opreqdetail) {
 		if(opreqdetail == null) return 0;
 		opreqdetail.setZid(sessionManager.getBusinessId());
 		opreqdetail.setZauserid(getAuditUser());
-		return opreqMapper.saveOpreqdetail(opreqdetail);
-		
+		long count = opreqMapper.saveOpreqdetail(opreqdetail);
+		if(count != 0) {
+		updateOpreqHeaderTotalAmtAndGrandTotalAmt(opreqdetail.getXdoreqnum());
+		}
+		return count;
 	}
 
+	@Transactional
 	@Override
 	public long updateOpreqdetail(Opreqdetail opreqdetail) {
 		if(opreqdetail == null) return 0;
 		opreqdetail.setZid(sessionManager.getBusinessId());
 		opreqdetail.setZuuserid(getAuditUser());
-		return opreqMapper.updateOpreqdetail(opreqdetail);
-	
+		long count = opreqMapper.updateOpreqdetail(opreqdetail);
+		if(count != 0) {
+			updateOpreqHeaderTotalAmtAndGrandTotalAmt(opreqdetail.getXdoreqnum());
+			}
+		return count;
 	}
 
+	@Transactional
 	@Override
 	public long deleteOpreqdetail(Opreqdetail opreqdetail) {
 		if(opreqdetail == null) return 0;
+		String opdoreqnum = opreqdetail.getXdoreqnum();
 		opreqdetail.setZid(sessionManager.getBusinessId());
-		return opreqMapper.deleteOpreqdetail(opreqdetail);
-	
+		long count = opreqMapper.deleteOpreqdetail(opreqdetail);
+		if(count != 0) {
+			updateOpreqHeaderTotalAmtAndGrandTotalAmt(opdoreqnum);
+			}
+		return count;
 	}
 
 	@Override
@@ -108,5 +126,11 @@ public class OpreqServiceImpl extends AbstractGenericService implements OpreqSer
 		return opreqMapper.findOpreqdetailByXdoreqnumAndXitem(xdoreqnum, xitem, sessionManager.getBusinessId());
 	}
 	
+	@Transactional
+	@Override
+	public long updateOpreqHeaderTotalAmtAndGrandTotalAmt(String xdoreqnum) {
+		if(StringUtils.isBlank(xdoreqnum)) return 0;
+		return opreqMapper.updateOpreqHeaderTotalAmtAndGrandTotalAmt(xdoreqnum, sessionManager.getBusinessId());
+	}
 	
 }
