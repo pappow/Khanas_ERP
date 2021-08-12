@@ -88,7 +88,6 @@ public class AssetTransferOrderController extends ASLAbstractController{
 			 totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord()); } } 
 		model.addAttribute("totalQuantity", totalQuantity);
 		 
-		
 		return "pages/inventory/asset/imtor";
 	}
 
@@ -301,8 +300,15 @@ public class AssetTransferOrderController extends ASLAbstractController{
 
 	@GetMapping("/imtordetail/{xtornum}")
 	public String reloadImtorDetailTabble(@PathVariable String xtornum, Model model) {
-		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
+		List<ImtorDetail> imtorDetails = imtorService.findImtorDetailByXtornum(xtornum); 
+		model.addAttribute("imtordetailsList", imtorDetails);
 		model.addAttribute("imtorheader", imtorService.findImtorHeaderByXtornum(xtornum));
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO; 
+		if(imtorDetails != null && !imtorDetails.isEmpty()) {
+		 for(ImtorDetail pd : imtorDetails) { 
+			 totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord()); } } 
+		model.addAttribute("totalQuantity", totalQuantity);
 		return "pages/inventory/asset/imtor::imtordetailtable";
 	}
 

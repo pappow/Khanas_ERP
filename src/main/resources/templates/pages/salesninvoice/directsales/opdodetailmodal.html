@@ -13,6 +13,8 @@
 						<input type="hidden" th:field="*{xdornum}"/>
 						<input type="hidden" th:field="*{xrow}"/>
 						<input type="hidden" th:field="*{prevqty}"/>
+						<input type="hidden" th:field="*{prevrate}"/>
+						<input type="hidden" th:field="*{forupdate}"/>
 						<div class="col-md-6">
 							<div class="form-group" th:if="${opdodetail.xrow == 0}">
 								<label class="control-label col-sm-4" for="xitem">Item</label>
@@ -55,7 +57,21 @@
 								</div>
 							</div>
 						</div>
+						
+						
 						<div class="col-md-6">
+							
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="xcomtype">Issue Type</label>
+								<div class="col-sm-8">
+									<select class="form-control vatait-select" th:field="*{xcomtype}">
+										<option value="">-- Select --</option>
+										<option value="Bonus">Bonus</option>
+										<!-- <option th:each="s : ${issueList}" th:text="${s.xcomtype}" th:value="${s.xcomtype}"></option> -->
+									</select>
+								</div>
+							</div>
+							
 							<div class="form-group">
 								<label class="control-label col-sm-4" for="xlong">Note</label>
 								<div class="col-sm-8">
@@ -76,6 +92,20 @@
 			$(document).ready(function(){
 				// Init ui for modal
 				ck.ui.config.buttonevent();
+				 
+				$("select[name='xcomtype']").off('change').on('change', function(e){
+					if($('select[name="xcomtype"]').val() == 'Bonus'){
+						$('input[name="xrate"]').val(0);
+					}
+				});
+
+				$('input[name="xrate"]').off('keyup').on('keyup', function(){
+					if($('select[name="xcomtype"]').val() == 'Bonus'){
+						$('input[name="xrate"]').val(0);
+					}
+				});
+				
+
 
 				$('.xitemsearch').on('blur', function(){
 					setTimeout(() => {
@@ -86,7 +116,8 @@
 							$("#xqtyord").val(0);
 							return;
 						}
-
+						
+						
 						loadingMask2.show();
 						$.ajax({
 							url : getBasepath() + '/mastersetup/caitem/itemdetail/' + $('input[name="xitem"]').val().split("|")[0],

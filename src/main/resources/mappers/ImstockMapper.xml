@@ -19,12 +19,9 @@
 		SELECT
 			distinct
 			IM.*,
-			Z.ZORG,
-			Z.XMADD,
 			xcodes.xdescdet
 		FROM
 			IMSTOCK IM
-			LEFT JOIN ZBUSINESS Z ON Z.ZID=IM.ZID
 			LEFT JOIN xcodes on xcodes.xcode = IM.xwh AND xcodes.zid = IM.zid AND xcodes.zactive='1'
 		WHERE
 			IM.ZID=#{zid}

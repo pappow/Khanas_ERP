@@ -231,7 +231,6 @@ public class DirectPurchaseController extends ASLAbstractController {
 		if(caitem.getXvatrate() == null) caitem.setXvatrate(BigDecimal.ZERO);
 
 		pogrnDetail.setXlineamt(pogrnDetail.getXqtygrn().multiply(pogrnDetail.getXrate().setScale(2, RoundingMode.DOWN)));
-		pogrnDetail.setXlineamt(pogrnDetail.getXlineamt().add((pogrnDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
 
 		// if existing
 		PogrnDetail existDetail = pogrnService.findPogrnDetailByXgrnnumAndXrow(pogrnDetail.getXgrnnum(), pogrnDetail.getXrow());
@@ -265,6 +264,17 @@ public class DirectPurchaseController extends ASLAbstractController {
 		List<PogrnDetail> detailList = pogrnService.findPogrnDetailByXgrnnum(xgrnnum);
 		model.addAttribute("pogrnDetailsList", detailList);
 		model.addAttribute("pogrnheader", pogrnService.findPogrnHeaderByXgrnnum(xgrnnum));
+		
+		BigDecimal totalQuantityReceived = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if (detailList != null && !detailList.isEmpty()) {
+			for (PogrnDetail pd : detailList) {
+				totalQuantityReceived = totalQuantityReceived.add(pd.getXqtygrn() == null ? BigDecimal.ZERO : pd.getXqtygrn());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantityReceived", totalQuantityReceived);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		return "pages/purchasing/pogrndirect/pogrndirect::pogrndirectdetailtable";
 	}
 

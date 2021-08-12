@@ -68,7 +68,6 @@ public class StockTransferOrderController extends ASLAbstractController {
 		model.addAttribute("torstatusList", xcodeService.findByXtype(CodeType.TRANSFER_ORDER_STATUS.getCode(), Boolean.TRUE));
 		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
 		
-		
 		List<ImtorDetail> imtorDetails = imtorService.findImtorDetailByXtornum(xtornum);
 		BigDecimal totalQuantity = BigDecimal.ZERO;
 		if(imtorDetails != null && !imtorDetails.isEmpty()) {
@@ -270,8 +269,17 @@ public class StockTransferOrderController extends ASLAbstractController {
 
 	@GetMapping("/imtordetail/{xtornum}")
 	public String reloadImtorDetailTabble(@PathVariable String xtornum, Model model) {
-		model.addAttribute("imtordetailsList", imtorService.findImtorDetailByXtornum(xtornum));
+		List<ImtorDetail> imtorDetails = imtorService.findImtorDetailByXtornum(xtornum);
+		model.addAttribute("imtordetailsList", imtorDetails);
 		model.addAttribute("imtorheader", imtorService.findImtorHeaderByXtornum(xtornum));
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		if(imtorDetails != null && !imtorDetails.isEmpty()) {
+			for(ImtorDetail pd : imtorDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
 		return "pages/inventory/transferorder/imtor::imtordetailtable";
 	}
 

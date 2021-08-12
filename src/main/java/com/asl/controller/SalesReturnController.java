@@ -61,6 +61,18 @@ public class SalesReturnController extends ASLAbstractController {
 		model.addAttribute("crnprefix", xtrnService.findByXtypetrn(TransactionCodeType.SALES_RETURN.getCode(), Boolean.TRUE));
 		model.addAttribute("warehouses", xcodesService.findByXtype(CodeType.STORE.getCode(), Boolean.TRUE));
 		model.addAttribute("opcrnDetailsList", opcrnService.findOpcrnDetailByXcrnnum(xcrnnum));
+		
+		List<Opcrndetail> invoiceDetails = opcrnService.findOpcrnDetailByXcrnnum(xcrnnum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
+			for(Opcrndetail pd : invoiceDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		if(isBoshila()) {
 			return "pages/land/salesninvoice/salesreturn/opcrn";
 		}
@@ -257,6 +269,18 @@ public class SalesReturnController extends ASLAbstractController {
 	public String reloadOpcrnDetailTable(@PathVariable String xcrnnum, Model model) {
 		model.addAttribute("opcrnDetailsList", opcrnService.findOpcrnDetailByXcrnnum(xcrnnum));
 		model.addAttribute("opcrnheader", opcrnService.findOpcrnHeaderByXcrnnum(xcrnnum));
+		
+		List<Opcrndetail> invoiceDetails = opcrnService.findOpcrnDetailByXcrnnum(xcrnnum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
+			for(Opcrndetail pd : invoiceDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		return "pages/salesninvoice/salesreturn/opcrn::opcrndetailtable";
 	}
 
