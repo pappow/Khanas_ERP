@@ -32,6 +32,7 @@ import com.asl.entity.Cacus;
 import com.asl.entity.Imstock;
 import com.asl.entity.Opdodetail;
 import com.asl.entity.Opdoheader;
+import com.asl.entity.PoordDetail;
 import com.asl.enums.ResponseStatus;
 import com.asl.enums.TransactionCodeType;
 import com.asl.model.report.ItemDetails;
@@ -80,6 +81,16 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 		model.addAttribute("openinvoiceorders", allOpenAndConfirmesSalesOrders);
 
 		model.addAttribute("chalandetails", opdoService.findAssignedOpdoDetailByChalan(xdornum));
+		
+		List<Opdodetail> poordDetails = opdoService.findAssignedOpdoDetailByChalan(xdornum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		if(poordDetails != null && !poordDetails.isEmpty()) {
+			for(Opdodetail pd : poordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan";
 	}
 
@@ -228,6 +239,15 @@ public class DeliveryOrderChalanController extends ASLAbstractController {
 	public String reloadChalanDetailSection(@PathVariable String xdornum, Model model) {
 		model.addAttribute("deliveryorderchalan", opdoService.findOpdoHeaderByXdornum(xdornum));
 		model.addAttribute("chalandetails", opdoService.findAssignedOpdoDetailByChalan(xdornum));
+		
+		List<Opdodetail> poordDetails = opdoService.findAssignedOpdoDetailByChalan(xdornum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		if(poordDetails != null && !poordDetails.isEmpty()) {
+			for(Opdodetail pd : poordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
 		return "pages/salesninvoice/deliveryorderchalan/deliveryorderchalan::deliveryorderchalandetailtable";
 	}
 

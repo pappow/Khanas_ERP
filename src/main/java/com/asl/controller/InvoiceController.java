@@ -367,8 +367,20 @@ public class InvoiceController extends ASLAbstractController {
 
 	@GetMapping("/opdodetail/{xdornum}")
 	public String reloadOpdoDetailTable(@PathVariable String xdornum, Model model) {
-		model.addAttribute("opdoDetailsList", opdoService.findOpdoDetailByXdornum(xdornum));
+		List<Opdodetail> invoiceDetails = opdoService.findOpdoDetailByXdornum(xdornum);
+		model.addAttribute("opdoDetailsList", invoiceDetails);
 		model.addAttribute("opdoheader", opdoService.findOpdoHeaderByXdornum(xdornum));
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
+			for(Opdodetail pd : invoiceDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		if(isBoshila()) return "pages/land/salesninvoice/opdo::opdodetailtable";
 		return "pages/salesninvoice/salesandinvoice/opdo::opdodetailtable";
 	}

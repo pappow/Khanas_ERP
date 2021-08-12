@@ -302,21 +302,23 @@
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xgrandtot">Grand Amount</label>
 															<div class="col-md-6">
-																<input type="text" class="form-control xgrandtot" th:field="*{xgrandtot}" disabled="disabled">
+																<input type="hidden" class="form-control xgrandtot" th:field="*{xgrandtot}">
+																<input type="text" class="form-control xgrandtot" th:value="*{xgrandtot}" disabled="disabled" >
 															</div>
 														</div> 
 
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xpaid">Paid Amount</label>
-															<div class="col-md-8">
+															<div class="col-md-6">
 																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xpaid}">
 															</div>
 														</div>
 
 														<div class="form-group">
 															<label class="control-label col-md-4" for="xchange">Change Amount</label>
-															<div class="col-md-8">
-																<input type="text" data-smk-type="decimal" class="form-control" th:field="*{xchange}">
+															<div class="col-md-6">
+																<input type="hidden" class="form-control xchange" th:field="*{xchange}">
+																<input type="text" class="form-control xchange" th:value="*{xchange}" disabled="disabled" >
 															</div>
 														</div>
 
@@ -382,6 +384,7 @@
 											<th>Qty</th>
 											<th>Rate</th>
 											<th>Line Amount</th>
+											<th>Vat</th>
 											<th>Note</th>
 											<th th:if="${opdoheader.xstatusord != 'Confirmed'}" data-nosort="Y" style="text-align: right;">
 												<button type="button" class="btn btn-success btn-add" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/new/show', data-target-modal='opdodetailmodal'"><i class="fas fa-plus"></i></button>
@@ -398,6 +401,7 @@
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:text="${d.xlineamt}"></td>
+											<td th:text="${d.xvatrate}"></td>
 											<td th:text="${d.xlong}"></td>
 											<td th:if="${opdoheader.xstatusord != 'Confirmed'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/show', data-target-modal='opdodetailmodal'"><i class="fas fa-edit"></i></button>
@@ -406,9 +410,9 @@
 										</tr>
 									</tbody>
 									<tfoot>
-										<th colspan="2" class="text-right">Total</th>
+										<th colspan="3" class="text-right">Total</th>
 										<th class="text-right" th:text="${totalQuantity}">0</th>
-										<th colspan="2"></th>
+										<th colspan="1"></th>
 										<th class="text-right" th:text="${totalLineAmount}">0</th>
 										
 									</tfoot>
@@ -427,7 +431,7 @@
 	<div class="footer-section" th:include="commons :: footer-section"></div>
 </body>
 
-	 <script>
+	 <!-- <script>
 		$(document).ready(function(){
 			$(".vatait-select").on("change", function(){
 				var vataitId = $(".vatait-select").val()
@@ -461,9 +465,9 @@
 			
 			
 		});
-	</script>
+	</script> -->
 	
-	<!-- <script>
+	<script>
 			$(document).ready(function(){
 				$("input[name='xtotamt'], input[name='xvatamt'],  input[name='xdiscamt'], input[name='xgrandtot'], input[name='xpaid'], input[name='xchange'], input[name='xqtygrn'], input[name='xrate'], input[name='xvatrate'] ").off('blur').on('blur', function(e){
 					if($(this).val() == '' || isNaN($(this).val())){
@@ -472,6 +476,7 @@
 					calculate();
 				});
 
+				
 				function calculate(){
 					var xqtygrn = parseFloat($("input[name='xqtygrn']").val());
 					var xrate = parseFloat($("input[name='xrate']").val());
@@ -482,14 +487,17 @@
 					var xgrandtot =parseFloat($("input[name='xgrandtot']").val());
 					var xpaid =parseFloat($("input[name='xpaid']").val());
 					var xchange = parseFloat($("input[name='xchange']").val());
-					var net1 = xqtygrn * xrate;
-					var net2 = xtotamt - xdiscamt;
-					$('input[name="xtotamt"]').val(net);
-					$('input[name="xgrandtot"]').val(net2);
+					
+					var grandTotal = (xtotamt + xvatamt) - xdiscamt;
+					var net = grandTotal - xpaid;
+					
+					
+					$('input.xgrandtot').val(grandTotal);
+					$('input.xchange').val(net);
 					
 				}
 
 				calculate();
 			});
-		</script> -->
+		</script>
 </html>

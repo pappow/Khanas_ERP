@@ -80,6 +80,12 @@ public class Opdodetail extends AbstractModel<String> {
 
 	@Column(name = "xland")
 	private String xland;
+	
+	@Column(name = "xvatrate")
+	private BigDecimal xvatrate;
+	
+	@Column(name = "xvatamt")
+	private BigDecimal xvatamt;
 
 	@Transient
 	private String xdesc;
@@ -89,9 +95,16 @@ public class Opdodetail extends AbstractModel<String> {
 	private String xcatitem;
 	
 	@Transient
-	private BigDecimal prevqty;
-	@Transient
 	private String xitemdesc;
+	
+	@Transient
+	private BigDecimal prevqty;
+	
+	@Transient
+	private BigDecimal prevrate;
+	
+	@Transient
+	private boolean forupdate;
 
 	@Transient
 	private List<Opdodetail> subitems = new ArrayList<>();

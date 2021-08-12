@@ -146,7 +146,7 @@ public class Opdoheader extends AbstractModel<String> {
 
 	@Transient
 	private String xphone;
-
+	
 	@Transient
 	private List<Opdodetail> salesDetails = new ArrayList<>();
 }

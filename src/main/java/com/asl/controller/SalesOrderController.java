@@ -299,8 +299,20 @@ public class SalesOrderController extends ASLAbstractController {
 
 	@GetMapping("/oporddetail/{xordernum}")
 	public String reloadOpordDetailTable(@PathVariable String xordernum, Model model) {
-		model.addAttribute("opordDetailsList", opordService.findOporddetailByXordernum(xordernum));
+		List<Oporddetail> opordDetails = opordService.findOporddetailByXordernum(xordernum);
+		model.addAttribute("opordDetailsList", opordDetails);
 		model.addAttribute("opordheader", opordService.findOpordHeaderByXordernum(xordernum));
+		
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		if(opordDetails != null && !opordDetails.isEmpty()) {
+			for(Oporddetail pd : opordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalLineAmount", totalLineAmount);
 		return "pages/salesninvoice/salesorder/salesorder::oporddetailtable";
 	}
 

@@ -79,7 +79,17 @@ public class PurchaseOrderController extends ASLAbstractController {
 
 		model.addAttribute("grnlist", pogrnService.findPogrnHeaderByXpornum(xpornum));
 		
-		
+		List<PoordDetail> poordDetails = poordService.findPoorddetailByXpornum(xpornum);
+		BigDecimal totalQuantity = BigDecimal.ZERO;
+		BigDecimal totalNetAmount = BigDecimal.ZERO;
+		if(poordDetails != null && !poordDetails.isEmpty()) {
+			for(PoordDetail pd : poordDetails) {
+				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
+				totalNetAmount = totalNetAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+			}
+		}
+		model.addAttribute("totalQuantity", totalQuantity);
+		model.addAttribute("totalNetAmount", totalNetAmount);
 		if(isBoshila()) {
 			return "pages/land/purchasing/poord";
 		}
