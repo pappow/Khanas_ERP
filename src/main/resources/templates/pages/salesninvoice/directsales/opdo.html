@@ -63,6 +63,9 @@
 										<div id="opdoheaderform" th:fragment="opdoheaderform">
 											<form id="mainform" class="form-horizontal" th:action="@{/salesninvoice/directsales/save}" th:object="${opdoheader}" method="post" th:with="df=${'E, dd-MMM-yyyy'}">
 												<input type="hidden" class="form-control" th:field="*{xtypetrn}"/>
+												<input type="hidden" th:field="*{prevqty}"/>
+												<input type="hidden" th:field="*{prevrate}"/>
+												<input type="hidden" th:field="*{forupdate}"/>
 
 												<div class="row">
 													<div class="col-md-6">
@@ -401,7 +404,7 @@
 											<td th:text="${d.xqtyord}"></td>
 											<td th:text="${d.xrate}"></td>
 											<td th:text="${d.xlineamt}"></td>
-											<td th:text="${d.xvatrate}"></td>
+											<td th:text="${d.xvatamt}"></td>
 											<td th:text="${d.xlong}"></td>
 											<td th:if="${opdoheader.xstatusord != 'Confirmed'}" data-nosort="Y" style="text-align: right; font-size: 11px;">
 												<button type="button" class="btn btn-default btn-edit editmode" th:attr="data-url=@{/salesninvoice/directsales/} + ${opdoheader.xdornum} + '/opdodetail/' + ${d.xrow} + '/show', data-target-modal='opdodetailmodal'"><i class="fas fa-edit"></i></button>
@@ -414,6 +417,7 @@
 										<th class="text-right" th:text="${totalQuantity}">0</th>
 										<th colspan="1"></th>
 										<th class="text-right" th:text="${totalLineAmount}">0</th>
+										<th class="text-right" th:text="${totalVat}">0</th>
 										
 									</tfoot>
 								</table>

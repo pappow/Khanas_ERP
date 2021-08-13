@@ -127,15 +127,19 @@ public class DirectSalesController extends ASLAbstractController {
 		List<Opdodetail> invoiceDetails = opdoService.findOpdoDetailByXdornum(xdornum);
 		BigDecimal totalQuantity = BigDecimal.ZERO;
 		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		BigDecimal totalVat = BigDecimal.ZERO;
+
 		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
 			for(Opdodetail pd : invoiceDetails) {
 				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
 				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+				totalVat = totalVat.add(pd.getXvatamt() == null ? BigDecimal.ZERO : pd.getXvatamt());
 			}
 		}
 		model.addAttribute("totalQuantity", totalQuantity);
 		model.addAttribute("totalLineAmount", totalLineAmount);
-		
+		model.addAttribute("totalVat", totalVat);
+
 		return "pages/salesninvoice/directsales/opdo";
 	}
 
@@ -160,14 +164,14 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		opdoHeader.setXtype("Direct");
-		
 
 		// If new
 		opdoHeader.setXstatusar("Open");
 		opdoHeader.setXstatusjv("Open");
 		opdoHeader.setXpaymenttype("Credit");
+		
 
-		// if existing record
+		// if existing 
 		if (StringUtils.isNotBlank(opdoHeader.getXdornum())) {
 			Opdoheader exist = opdoService.findOpdoHeaderByXdornum(opdoHeader.getXdornum());
 			if(exist == null) {
@@ -220,6 +224,7 @@ public class DirectSalesController extends ASLAbstractController {
 		return responseHelper.getResponse();
 	}
 
+	//Detail Page
 	@GetMapping("/{xdornum}/opdodetail/{xrow}/show")
 	public String openOpdoDetailModal(@PathVariable String xdornum, @PathVariable String xrow, Model model) {
 
@@ -230,6 +235,8 @@ public class DirectSalesController extends ASLAbstractController {
 
 		if ("new".equalsIgnoreCase(xrow)) {
 			Opdodetail opdodetail = new Opdodetail();
+			Caitem caitem = new Caitem();
+			caitem.setPrevrate(BigDecimal.ZERO);
 			opdodetail.setXdornum(xdornum);
 			opdodetail.setXrate(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
 			opdodetail.setXqtyord(BigDecimal.ZERO.setScale(2, RoundingMode.DOWN));
@@ -238,6 +245,8 @@ public class DirectSalesController extends ASLAbstractController {
 			model.addAttribute("opdodetail", opdodetail);
 		} else {
 			Opdodetail opdodetail = opdoService.findOpdoDetailByXdornumAndXrow(xdornum, Integer.parseInt(xrow));
+			Caitem caitem = caitemService.findByXitem(opdodetail.getXitem());
+			caitem.setPrevrate(caitem.getXrate() == null ? BigDecimal.ZERO : caitem.getXrate());
 			opdodetail.setPrevqty(opdodetail.getXqtyord() == null ? BigDecimal.ZERO : opdodetail.getXqtyord());
 			opdodetail.setPrevrate(opdodetail.getXrate() == null ? BigDecimal.ZERO : opdodetail.getXrate());
 			opdodetail.setForupdate(true);
@@ -268,11 +277,8 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		if(caitem.getXvatrate() == null) caitem.setXvatrate(BigDecimal.ZERO);
-
 		opdoDetail.setXlineamt(opdoDetail.getXqtyord().multiply(opdoDetail.getXrate().setScale(2, RoundingMode.DOWN)));
 		
-		//opdoDetail.setXlineamt(opdoDetail.getXlineamt().add((opdoDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100))));
-
 		//Vat
 		Opdoheader header = opdoService.findOpdoHeaderByXdornum(opdoDetail.getXdornum());
 		if(header == null) {
@@ -280,20 +286,39 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		if(header.getXvatamt() == null) header.setXvatamt(BigDecimal.ZERO);
-
-		if(opdoDetail.isForupdate()) {
-			BigDecimal prevvat = ((opdoDetail.getPrevqty().multiply(opdoDetail.getPrevrate())).multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100));
-			header.setXvatamt(header.getXvatamt().subtract(prevvat));
-			
-			//BigDecimal grand = (header.getXtotamt().add(header.getXvatamt())).subtract(header.getXdiscamt());
-			//BigDecimal change = grand.subtract(header.getXpaid());
-		}
-
-		BigDecimal vat = (opdoDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100));
-		header.setXvatamt(header.getXvatamt().add(vat));
 		
 		if(opdoDetail.getXvatamt() == null) opdoDetail.setXvatamt(BigDecimal.ZERO);
-		opdoDetail.setXvatamt(opdoDetail.getXvatamt().add(vat));
+
+		/*
+		 * if(opdoDetail.isForupdate()) {
+		 * 
+		 * if(opdoDetail.getXcomtype()== " ") { BigDecimal prevvat =
+		 * ((opdoDetail.getPrevqty().multiply(opdoDetail.getPrevrate())).multiply(caitem
+		 * .getXvatrate())).divide(BigDecimal.valueOf(100));
+		 * header.setXvatamt(header.getXvatamt().subtract(prevvat));
+		 * opdoDetail.setXvatamt(opdoDetail.getXvatamt().subtract(prevvat)); } else {
+		 * BigDecimal prevvat =
+		 * ((opdoDetail.getPrevqty().multiply(caitem.getPrevrate())).multiply(opdoDetail
+		 * .getXvatrate())).divide(BigDecimal.valueOf(100));
+		 * header.setXvatamt(header.getXvatamt().subtract(prevvat));
+		 * opdoDetail.setXvatamt(opdoDetail.getXvatamt().subtract(prevvat)); }
+		 * 
+		 * //BigDecimal grand =
+		 * (header.getXtotamt().add(header.getXvatamt())).subtract(header.getXdiscamt())
+		 * ; //BigDecimal change = grand.subtract(header.getXpaid()); }
+		 */
+
+		if(opdoDetail.getXcomtype()== " ") {
+			BigDecimal vat = (opdoDetail.getXlineamt().multiply(caitem.getXvatrate())).divide(BigDecimal.valueOf(100));
+			header.setXvatamt(header.getXvatamt().add(vat));
+			opdoDetail.setXvatamt(opdoDetail.getXvatamt().add(vat));
+		}
+		
+		else {
+			BigDecimal vat = (opdoDetail.getXqtyord().multiply(caitem.getXrate().multiply(caitem.getXvatrate()))).divide(BigDecimal.valueOf(100));
+			header.setXvatamt(header.getXvatamt().add(vat));
+			opdoDetail.setXvatamt(opdoDetail.getXvatamt().add(vat));
+		}
 		
 		long counth = opdoService.update(header);
 		if(counth == 0) {
@@ -301,8 +326,8 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 		
+		long countd = opdoService.updateDetail(opdoDetail);
 		
-
 		// if existing
 		Opdodetail existDetail = opdoService.findOpdoDetailByXdornumAndXrow(opdoDetail.getXdornum(), opdoDetail.getXrow());
 		if (existDetail != null) {
@@ -358,14 +383,18 @@ public class DirectSalesController extends ASLAbstractController {
 		
 		BigDecimal totalQuantity = BigDecimal.ZERO;
 		BigDecimal totalLineAmount = BigDecimal.ZERO;
+		BigDecimal totalVat = BigDecimal.ZERO;
+
 		if(invoiceDetails != null && !invoiceDetails.isEmpty()) {
 			for(Opdodetail pd : invoiceDetails) {
 				totalQuantity = totalQuantity.add(pd.getXqtyord() == null ? BigDecimal.ZERO : pd.getXqtyord());
 				totalLineAmount = totalLineAmount.add(pd.getXlineamt() == null ? BigDecimal.ZERO : pd.getXlineamt());
+				totalVat = totalVat.add(pd.getXvatamt() == null ? BigDecimal.ZERO : pd.getXvatamt());
 			}
 		}
 		model.addAttribute("totalQuantity", totalQuantity);
 		model.addAttribute("totalLineAmount", totalLineAmount);
+		model.addAttribute("totalVat", totalVat);
 
 		return "pages/salesninvoice/directsales/opdo::opdodetailtable";
 	}
@@ -422,6 +451,10 @@ public class DirectSalesController extends ASLAbstractController {
 			return responseHelper.getResponse();
 		}
 
+		if(pd.getXvatamt() == null) pd.setXvatamt(BigDecimal.ZERO);
+		pd.setXvatamt(pd.getXvatamt().subtract(vat));
+		long countd = opdoService.updateDetail(pd);
+		
 		long count = opdoService.deleteDetail(pd);
 		if (count == 0) {
 			responseHelper.setErrorStatusAndMessage("Can't delete invoice detail");

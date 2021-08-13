@@ -148,5 +148,14 @@ public class Opdoheader extends AbstractModel<String> {
 	private String xphone;
 	
 	@Transient
+	private BigDecimal prevqty;
+	
+	@Transient
+	private BigDecimal prevrate;
+	
+	@Transient
+	private boolean forupdate;
+	
+	@Transient
 	private List<Opdodetail> salesDetails = new ArrayList<>();
 }
